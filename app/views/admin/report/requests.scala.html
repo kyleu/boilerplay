@@ -1,0 +1,63 @@
+@(
+  userCounts: Seq[(java.util.UUID, Option[String], Int)],
+  userAgentCounts: Seq[(String, Int)],
+  pathCounts: Seq[(String, Int)],
+  referrerCounts: Seq[(String, Int)]
+)(implicit session: Session, flash: Flash)
+
+@renderTable(label: String, counts: Seq[(String, Int)]) = {
+  <h5>Top 10 @{label}s</h5>
+  <table class="table table-bordered table-striped">
+    <thead>
+      <tr>
+        <th>@label</th>
+        <th>Requests</th>
+      </tr>
+    </thead>
+    <tbody>
+    @for(row <- counts.take(10)) {
+      <tr>
+        <td>@row._1</td>
+        <td>@utils.Formatter.withCommas(row._2)</td>
+      </tr>
+    }
+    </tbody>
+  </table>
+}
+
+@layout.admin(
+  utils.Config.projectName + " Request Report",
+  "reports",
+  scripts = Seq(routes.Assets.versioned("lib/d3/d3.js").url, routes.Assets.versioned("lib/d3/nv.d3.js").url),
+  stylesheets = Seq(routes.Assets.versioned("lib/d3/nv.d3.css").url)
+) {
+
+  <h3>@utils.Config.projectName Request Report</h3>
+  <h4>Displaying metrics for @utils.Formatter.withCommas(userCounts.map(_._3).sum) requests.</h4>
+
+  @renderTable("Path", pathCounts)
+
+  @renderTable("Referrer", referrerCounts)
+
+  <h5>Top 10 Users</h5>
+  <table class="table table-bordered table-striped">
+    <thead>
+      <tr>
+        <th>User ID</th>
+        <th>Username</th>
+        <th>Requests</th>
+      </tr>
+    </thead>
+    <tbody>
+    @for(u <- userCounts.take(10)) {
+      <tr>
+        <td><a href="@controllers.admin.routes.UserController.userDetail(u._1)">@u._1</a></td>
+        <td>@u._2</td>
+        <td>@utils.Formatter.withCommas(u._3)</td>
+      </tr>
+    }
+    </tbody>
+  </table>
+
+  @renderTable("User Agent", userAgentCounts)
+}

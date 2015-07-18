@@ -1,0 +1,31 @@
+@(sortBy: String, requests: Seq[models.history.RequestLog])
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      @utils.play.ViewUtils.th("request-id", "Request ID", sortBy)
+      @utils.play.ViewUtils.th("request-user", "User", sortBy)
+      @utils.play.ViewUtils.th("request-method", "Method", sortBy)
+      @utils.play.ViewUtils.th("request-host", "Host", sortBy)
+      @utils.play.ViewUtils.th("request-path", "Path", sortBy)
+      @utils.play.ViewUtils.th("request-lang", "Lang", sortBy)
+      @utils.play.ViewUtils.th("request-referrer", "Referrer", sortBy)
+      @utils.play.ViewUtils.th("request-started", "Started", sortBy)
+      @utils.play.ViewUtils.th("request-duration", "Duration", sortBy)
+    </tr>
+  </thead>
+  <tbody>
+  @for(r <- requests) {
+    <tr>
+      <td title="@r.id">@r.id.toString.substring(0, 8)</td>
+      <td title="@r.userId"><a href="@controllers.admin.routes.UserController.userDetail(r.userId)">@r.userId.toString.substring(0, 8)</a></td>
+      <td title="@r.userAgent">@r.method</td>
+      <td>@r.host</td>
+      <td>@r.path</td>
+      <td>@r.lang</td>
+      <td title="@r.referrer">...</td>
+      <td>@r.started.toString("yyyy-MM-dd HH:mm:ss")</td>
+      <td>@{r.duration}ms</td>
+    </tr>
+  }
+  </tbody>
+</table>
