@@ -1,0 +1,47 @@
+body, html {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  cursor: default;
+}
+
+body {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  background-color: #607d8b;
+  color: #ffffff;
+  min-width: 300px;
+}
+
+.noscroll {
+  overflow: hidden;
+}
+
+.invisible {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.display-none {
+  display: none;
+}
+
+.fade-in {
+  opacity: 1;
+  transition: opacity 1s ease-out;
+}
+
+.fade-out {
+  opacity: 0;
+  transition: opacity 1s ease-out;
+}
+
+.clear {
+  clear: both;
+}
+
+@import "_home";
+@import "_auth";
+@import "_profile";
+@import "_feedback";

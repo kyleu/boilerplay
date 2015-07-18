@@ -1,0 +1,98 @@
+.profile {
+  width: 80%;
+  margin: auto;
+  padding: 20px;
+
+  a {
+    text-decoration: none;
+    color: #333;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  .avatar-image {
+    float: left;
+    margin-right: 20px;
+    margin-bottom: 10px;
+  }
+
+  #username-label {
+    font-weight: bold;
+    font-size: 130%;
+    cursor: pointer;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .avatar-image img {
+    height: 64px;
+    width: 64px;
+    border-radius: 4px;
+  }
+
+  .provider {
+    display: inline-block;
+    width: 64px;
+    height: 64px;
+    margin-right: 10px;
+    border-radius: 4px;
+    outline: none;
+    vertical-align: top;
+  }
+
+  .local {
+    border: 1px solid #fff;
+    width: 62px;
+    height: 62px;
+  }
+
+  .logout {
+    float: right;
+    .sign-out-link {
+      color: #ffffff;
+    }
+  }
+}
+
+.profile-detail {
+  height: 64px;
+  margin-top: 20px;
+  border-radius: 5px;
+  padding: 10px;
+  clear: both;
+  background-color: #fff;
+  color: #000;
+
+  .profile-links {
+    display: inline-block;
+  }
+}
+
+#username-container {
+  #username-edit {
+    display: none;
+  }
+  #username-input {
+    border: none;
+    font-size: 130%;
+  }
+  #username-edit-confirm, #username-edit-cancel {
+    cursor: pointer;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.facebook {
+  background: #3B5998;
+}
+.google {
+  background: #D14836;
+}
+.twitter {
+  background: #00ACED;
+}
