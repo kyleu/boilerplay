@@ -1,0 +1,29 @@
+@(sortBy: String, traces: Seq[models.audit.ClientTraceResult])
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      @utils.play.ViewUtils.th("trace-id", "Trace ID", sortBy)
+      @utils.play.ViewUtils.th("player", "Player", sortBy)
+      @utils.play.ViewUtils.th("data", "Data", sortBy)
+      @utils.play.ViewUtils.th("created", "Created", sortBy)
+    </tr>
+  </thead>
+  <tbody>
+  @for(t <- traces) {
+    <tr>
+      @defining(controllers.admin.routes.ClientTraceController.traceDetail(t.id)) { url =>
+        <td>
+          <a href="@url" title="@t.id">@t.id.toString.substring(0, 8)</a>
+        </td>
+      }
+      @defining(controllers.admin.routes.UserController.userDetail(t.player)) { url =>
+        <td>
+          <a href="@url" title="@t.player">@t.player.toString.substring(0, 8)</a>
+        </td>
+      }
+      <td><pre>@play.api.libs.json.Json.prettyPrint(t.data)</pre></td>
+      <td>@t.created.toString("yyyy-MM-dd HH:mm:ss")</td>
+    </tr>
+  }
+  </tbody>
+</table>

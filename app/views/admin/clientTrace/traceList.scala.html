@@ -1,0 +1,9 @@
+@(q: String, sortBy: String, count: Int, page: Int, traces: Seq[models.audit.ClientTraceResult])(implicit session: Session, flash: Flash)
+@views.html.admin.list(
+  "trace", "Traces", "explore", count, page, traces.size, q,
+  searchAction = controllers.admin.routes.ClientTraceController.traceList(),
+  prevLink = controllers.admin.routes.ClientTraceController.traceList(q, sortBy, page - 1),
+  nextLink = controllers.admin.routes.ClientTraceController.traceList(q, sortBy, page + 1)
+) {
+  @traceListTable(sortBy, traces)
+}
