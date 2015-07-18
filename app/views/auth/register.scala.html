@@ -1,0 +1,44 @@
+@(user: models.user.User, form: Form[models.user.RegistrationData])(
+  implicit request: Request[AnyContent], session: Session, flash: Flash, messages: Messages
+)@layout.bootstrap(title = Messages("registration.title", utils.Config.projectName)) {
+  @views.html.layout.menu(user)
+
+  <div class="sign-up">
+    @flash.get("error").map { e =>
+      <div class="error">@e</div>
+    }
+
+    <h4>@Messages("registration.call.to.action")</h4>
+    <form method="post" action="@controllers.auth.routes.RegistrationController.register()">
+      <input type="text" class="form-control" name="username" value="@form("username").value" placeholder="Username" />
+      @if(form.error("username").isDefined) {
+        <em>@Messages(form.error("username").get.message)</em>
+      }
+      <input type="email" class="form-control" name="email" value="@form("email").value" placeholder="Email" />
+      @if(form.error("email").isDefined) {
+        <em>@Messages(form.error("email").get.message)</em>
+      }
+      <input type="password" class="form-control" name="password" value="" placeholder="Password" />
+      @if(form.error("password").isDefined) {
+        <em>@Messages(form.error("password").get.message)</em>
+      }
+      <br/>
+      <input type="submit" class="submit" value="Register" />
+    </form>
+
+    @defining(services.user.SocialAuthProviders.providers) { providers =>
+      @if(providers.nonEmpty) {
+        <div>
+          <p>@Messages("registration.social.sign.in")</p>
+          <div>
+          @for(p <- providers if p._1 != "credentials") {
+            <a title="Sign in with @p._2" href="@controllers.auth.routes.AuthenticationController.authenticateSocial(p._1)" class="provider @p._1">
+              <img src="@routes.Assets.versioned(s"images/providers/${p._1}.png")">
+            </a>
+          }
+          </div>
+        </div>
+      }
+    }
+  </div>
+}
