@@ -1,8 +1,11 @@
 GET         /                                  controllers.HomeController.index
-GET         /about                             controllers.HomeController.about
+GET         /ping                              controllers.HomeController.ping(timestamp: Long)
 
 # Utility
 GET         /*path/                            controllers.HomeController.untrail(path: String)
+
+# Websocket
+GET         /websocket                         controllers.WebsocketController.connect()
 
 # Feedback
 GET         /feedback                          controllers.FeedbackController.feedbackForm

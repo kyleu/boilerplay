@@ -1,6 +1,9 @@
 @(user: models.user.User)(
   implicit request: Request[AnyContent], session: Session, flash: Flash, messages: Messages
-)@layout.bootstrap(title = utils.Config.projectName) {
+)@layout.bootstrap(
+  title = utils.Config.projectName,
+  scripts = Seq(routes.Assets.versioned("javascripts/index.js").url)
+) {
   @layout.menu(user)
 
   <div class="container">
@@ -56,11 +59,20 @@
           <div class="panel-body">
             <strong>Require.js</strong>
             <span title="This test uses the sbt-web pipeline to deliver optimized Javascript." class="glyphicon glyphicon-question-sign"></span>
-            <div id="">Starting</div>
+            <div id="require-content">Starting</div>
           </div>
         </div>
       </div>
     </div>
-
   </div>
+
+  <!-- Scala.js output -->
+  @if(play.api.Play.isProd(play.api.Play.current)) {
+    <script src="@routes.Assets.versioned("client-opt.js")" type="text/javascript"></script>
+  } else {
+    <script src="@routes.Assets.versioned("client-fastopt.js")" type="text/javascript"></script>
+  }
+
+  <!-- Require.js entrypoint -->
+  <script data-main="/assets/javascripts/main.js?build=@utils.BuildInfo.buildinfoBuildnumber" src="/assets/lib/requirejs/require.min.js"></script>
 }
