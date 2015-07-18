@@ -1,0 +1,36 @@
+@(results: Seq[(Int, models.test.TestResult)])(implicit session: Session, flash: Flash)
+
+@layout.admin(utils.Config.projectName + " Test Results", "tests") {
+  <h4>@utils.Config.projectName Test Results</h4>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th class="th-test-result"></th>
+        <th class="th-test-id">Test</th>
+        <th>Result</th>
+        <th class="th-test-timing">Time</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for(t <- results) {
+        <tr>
+          <td>@if(t._2.ex.isEmpty) {
+            <span class="glyphicon glyphicon-ok text-success"></span>
+          } else {
+            <span class="glyphicon glyphicon-remove text-danger"></span>
+          }</td>
+          <td>@for(i <- 0 until t._1) {&nbsp;&nbsp;&nbsp;&nbsp;}@t._2.id</td>
+          <td>@t._2.ex.map { x =>
+            @x.getClass.getSimpleName: @x.getMessage
+          }.getOrElse {
+            @t._2.value.map {
+              case s: String => {@s}
+              case x => {@x.getClass.getSimpleName}
+            }
+          }</td>
+          <td>@{t._2.executionMs}ms</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+}

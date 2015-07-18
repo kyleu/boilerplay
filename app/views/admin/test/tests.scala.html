@@ -1,0 +1,15 @@
+@()(implicit session: Session, flash: Flash)@layout.admin(utils.Config.projectName + " Tests", "tests") {
+  <h3>@utils.Config.projectName Tests</h3>
+  <div class="row">
+    <div class="col-md-12">
+      <h4><a href="@controllers.admin.routes.TestController.runTest("all").url">All Tests</a></h4>
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <ul>
+            <li><a href="@controllers.admin.routes.TestController.runTest("basic").url">Basic Tests</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+}
