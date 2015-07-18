@@ -1,0 +1,14 @@
+@(path: String, ex: Option[Throwable])(implicit session: Session, flash: Flash)@layout.basic("Server Error") {
+  <div class="text-centered">
+    <h1>@path</h1>
+    <div class="text-large"><em>Exception Encountered</em></div>
+  </div>
+  @if(utils.Config.debug) {
+    @ex.map { e =>
+      @defining(e.getCause.getStackTrace.map(x => s"  " + x + "\n")) { s =>
+<pre>@e.getClass.getName: @e.getMessage
+@s</pre>
+      }
+    }
+  }
+}

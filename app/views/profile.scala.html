@@ -1,0 +1,75 @@
+@(user: models.user.User, profiles: Seq[com.mohiva.play.silhouette.impl.providers.CommonSocialProfile])(
+  implicit request: Request[AnyContent], session: Session, flash: Flash, messages: Messages
+)@layout.bootstrap(
+  title = utils.Config.projectName + " Profile",
+  scripts = Seq(routes.Assets.versioned("javascripts/profile.js").url)
+) {
+  @layout.menu(user)
+
+  <div class="profile">
+    @if(user.isGuest) {
+      <p>
+        You're playing as a guest. Why not
+        <a href="@controllers.auth.routes.RegistrationController.registrationForm()">register</a> or
+        <a href="@controllers.auth.routes.AuthenticationController.signInForm()">sign in</a>
+        ?
+      </p>
+    } else {
+      @if(user.preferences.avatar.startsWith("http")) {
+        <div class="avatar-image">
+          <img src="@user.preferences.avatar" />
+        </div>
+      }
+
+      <div class="logout">
+        <a class="sign-out-link" href="@controllers.auth.routes.AuthenticationController.signOut">@Messages("profile.sign.out")</a>
+      </div>
+
+      <div id="username-container">
+        <span id="username-label">@user.username.getOrElse(Messages("profile.set.username"))</span>
+        <div id="username-edit">
+          <input id="username-input" /><br/>
+          <span id="username-edit-confirm">Save</span>
+          <span id="username-edit-cancel">Cancel</span>
+          <div id="username-edit-error"></div>
+        </div>
+      </div>
+
+      @defining(profiles.find(_.loginInfo.providerID == "credentials")) { credentials =>
+        <div class="profile-detail">
+          @if(credentials.isDefined) {
+            <em>@credentials.get.email</em>
+          } else {
+            <a href="@controllers.auth.routes.RegistrationController.registrationForm()">@Messages("profile.create.account")</a>
+          }
+        </div>
+      }
+      @services.user.SocialAuthProviders.providers.map { provider =>
+        @defining(profiles.find(_.loginInfo.providerID == provider._1)) { profile =>
+          <div class="profile-detail">
+            @if(profile.isDefined) {
+              <div class="provider @provider._1">
+                <img src="@routes.Assets.versioned("images/providers/" + provider._1 + ".png")">
+              </div>
+              <div class="profile-links">
+                <strong>@profile.get.fullName</strong><br/>
+                @profile.get.email<br/>
+                <a href="@routes.ProfileController.setOption("avatar", provider._1)">@Messages("profile.use.image.as.avatar", provider._2)</a>
+              </div>
+            } else {
+              @defining(controllers.auth.routes.AuthenticationController.authenticateSocial(provider._1)) { url =>
+                <a href="@url" class="provider @provider._1">
+                  <img src="@routes.Assets.versioned("images/providers/" + provider._1 + ".png")">
+                </a>
+                <div class="profile-links">
+                  <a href="@url">@Messages("profile.connect.account", provider._2)</a>
+                </div>
+              }
+            }
+            <div class="clear"></div>
+          </div>
+        }
+      }
+    }
+  </div>
+}

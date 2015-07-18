@@ -18,7 +18,6 @@ registration.email.taken = That email address is already in use.
 
 # Index Page
 index.welcome = Welcome to Boilerplay!
-index.tagline = Thanks for checking out my progress!
 
 # Feedback
 feedback.prompt = Feedback is always appreciated. Thanks for sharing yours.

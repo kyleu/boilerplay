@@ -1,0 +1,66 @@
+@(user: models.user.User)(
+  implicit request: Request[AnyContent], session: Session, flash: Flash, messages: Messages
+)@layout.bootstrap(title = utils.Config.projectName) {
+  @layout.menu(user)
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <h1>@Messages("index.welcome")</h1>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="panel panel-default">
+          <div class="panel-body">
+          @if(user.isAdmin) {
+            You're an admin, head over to the <a href="@controllers.admin.routes.AdminController.index()">admin section</a>!
+          } else {
+            To get started, <a href="@controllers.auth.routes.RegistrationController.registrationForm()">register an account</a>,
+            then make youself an admin with <a href="@controllers.admin.routes.AdminController.enable()">this link</a>.
+          }
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-3">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <strong>Websocket</strong>
+            <span title="This test sends a strongly typed ping message via WebSocket every second, and displays the round-trip time in milliseconds." class="glyphicon glyphicon-question-sign"></span>
+            <div id="websocket-content">Not Connected</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <strong>AJAX Call</strong>
+            <span title="This test sends a GET request to /ajax-test, and displays the result." class="glyphicon glyphicon-question-sign"></span>
+            <div id="ajax-content">Not Started</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <strong>Scala.js</strong>
+            <span title="This test sends asynchronous messages from javascript to a Scala.js app, and displays the received message." class="glyphicon glyphicon-question-sign"></span>
+            <div id="scalajs-content">Not Ready</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <strong>Require.js</strong>
+            <span title="This test uses the sbt-web pipeline to deliver optimized Javascript." class="glyphicon glyphicon-question-sign"></span>
+            <div id="">Starting</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+}

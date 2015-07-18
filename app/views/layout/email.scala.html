@@ -1,0 +1,15 @@
+@(title: String, color: String)(content: Html)<!DOCTYPE html>
+@defining(utils.play.CssEmailStyles(color)) { css =>
+<html>
+  <head>
+    <title>@title</title>
+    <meta charset="utf-8" />
+  </head>
+  <body style="@css.body">
+    <div style="@css.body">
+      <div><img src="@css.logoSource" style="@css.logo" /></div>
+      @content
+    </div>
+  </body>
+</html>
+}
