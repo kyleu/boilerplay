@@ -1,0 +1,69 @@
+@(
+  d: org.joda.time.LocalDate,
+  color: String,
+  metrics: Map[models.audit.DailyMetric.Metric, Long],
+  totals: Map[models.audit.DailyMetric.Metric, Long],
+  tableCounts: Seq[(String, Long)]
+)
+@import models.audit.DailyMetric._
+
+@metricsTable(title: String, m: Map[models.audit.DailyMetric.Metric, Long], css: utils.play.CssEmailStyles, isTotals: Boolean = false) = {
+  <table style="@css.table">
+    <thead>
+      <tr style="@css.tr">
+        <th style="@css.th" colspan="2">@title</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="@css.tr">
+        <td style="@css.td">Users signed up</td>
+        <td style="@css.td@css.alignRight">@m(Signups)</td>
+      </tr>
+      <tr style="@css.tr">
+        <td style="@css.td">Html requests</td>
+        <td style="@css.td@css.alignRight">@m(Requests)</td>
+      </tr>
+      @if(!isTotals) {
+      <tr style="@css.tr">
+        <td style="@css.td">Server free space</td>
+        <td style="@css.td@css.alignRight">@m(ServerFreeSpace)%</td>
+      </tr>
+      }
+    </tbody>
+  </table>
+}
+
+@layout.email(utils.Config.projectName + " Report", color) {
+  @defining(utils.play.CssEmailStyles(color)) { css =>
+  <div style="@css.title">@utils.Config.projectName</div>
+  <div style="@css.subtitle">Daily Report for @d</div>
+
+  <div style="@css.module">
+    @metricsTable(s"Statistics for $d", metrics, css)
+  </div>
+
+  <div style="@css.module">
+    @metricsTable(s"Totals as of $d", totals, css, isTotals = true)
+  </div>
+
+  <div style="@css.module">
+    <table style="@css.table">
+      <thead>
+        <tr style="@css.tr">
+          <th style="@css.th">Table</th>
+          <th style="@css.th@css.alignRight">Count</th>
+        </tr>
+      </thead>
+      <tbody>
+      @for(table <- tableCounts) {
+        <tr style="@css.tr">
+          <td style="@css.td">@table._1</td>
+          <td style="@css.td@css.alignRight">@utils.Formatter.withCommas(table._2)</td>
+        </tr>
+      }
+      </tbody>
+    </table>
+  </div>
+  }
+  <br/><br/><br/>
+}
