@@ -1,0 +1,43 @@
+@(user: models.user.User, requestCount: Int)(
+  implicit session: Session, flash: Flash
+)@layout.admin(s"${utils.Config.projectName} User Detail", "explore") {
+  <div class="panel panel-default">
+    <div class="panel-body">
+      @user.username.map { un => <h4>@un</h4> }
+      <h5>@user.id</h5>
+      <em>@requestCount requests</em>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <h5>Preferences</h5>
+      <table class="table">
+        <tr>
+          <td>Username</td>
+          <td>@user.username</td>
+        </tr>
+        <tr>
+          <td>Avatar</td>
+          <td>@user.preferences.avatar</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <h5>Profiles</h5>
+      <table class="table">
+      @if(user.profiles.isEmpty) {
+        <tr><td>Guest User</td></tr>
+      } else {
+        <tr><th>Provider</th><td>Key</td></tr>
+        @for(profile <- user.profiles) {
+          <tr><td>@profile.providerID</td><td>@profile.providerKey</td></tr>
+        }
+      }
+      </table>
+    </div>
+  </div>
+}

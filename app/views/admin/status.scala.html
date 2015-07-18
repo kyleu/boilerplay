@@ -1,0 +1,43 @@
+@(status: SystemStatus)(implicit session: Session, flash: Flash)@layout.admin("Server Status", "activity") {
+  <div class="row">
+    <div class="col-md-12">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <h5>@status.connections.size Connections</h5>
+          <div class="list-panel">
+            <table class="table table-bordered">
+              <tr>
+                <th>Connection ID</th>
+                <th>Username</th>
+                <th></th>
+              </tr>
+              @for(connection <- status.connections) {
+                <tr>
+                  <td>
+                    <a href="@controllers.admin.routes.TraceController.traceConnection(connection._1)" class="trace-link">@connection._1</a>
+                  </td>
+                  <td>@connection._2</td>
+                  <td>
+                    <a href="@controllers.admin.routes.TraceController.traceClient(connection._1)" class="trace-link"><span class="glyphicon glyphicon-cloud-download"></span></a>
+                  </td>
+                </tr>
+              }
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <div id="trace-content">
+            Select an option from above.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+}

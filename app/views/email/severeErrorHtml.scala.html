@@ -1,0 +1,15 @@
+@(msg: String, ctx: String, ex: Option[Throwable], user: Option[models.user.User], d: org.joda.time.LocalDateTime)<html>
+  <body>
+    <h3>Severe error occurred at [@d.toString("yyyy-MM-dd HH:mm:ss")]</h3>
+
+    <p>Message: @msg</p>
+    <p>Context: @ctx</p>
+    @user.map { u => <p>Caused by <strong>@u.username</strong> [@u.id]</p> }
+    @ex.map { t =>
+      @defining(new java.io.StringWriter) { sw =>
+        @t.printStackTrace(new java.io.PrintWriter(sw))
+        <pre>@sw</pre>
+      }
+    }
+  </body>
+</html>

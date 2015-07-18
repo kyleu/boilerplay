@@ -1,0 +1,59 @@
+@(
+  model: String,
+  modelProper: String,
+  section: String,
+  totalCount: Int,
+  page: Int,
+  recordCount: Int,
+  searchQuery: String,
+  searchAction: Call,
+  prevLink: Call = Call("GET", "/"),
+  nextLink: Call = Call("GET", "/")
+)(table: Html)(implicit session: Session, flash: Flash)
+@layout.admin(s"${utils.Config.projectName} $modelProper", section) {
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <div class="pull-right">
+        <form id="search-form" action="@searchAction" class="form-inline">
+          <div class="form-group">
+            <div class="input-group">
+              <input type="text" class="form-control" name="q" id="searchInput" placeholder="Search @modelProper" value="@searchQuery">
+              <div class="input-group-addon" id="search-button"><span class="glyphicon glyphicon-search"></span></div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="text-large">
+        @if(searchQuery.isEmpty) {
+          @utils.Formatter.withCommas(totalCount) @model@if(totalCount != 1){s} found.
+        } else {
+          @utils.Formatter.withCommas(totalCount) @model@if(totalCount != 1){s} found for [@searchQuery].
+        }
+      </div>
+    </div>
+  </div>
+
+  @if(recordCount == 0) {
+    <div class="panel panel-default">
+      <div class="panel-body">
+        No @{model}s found.
+      </div>
+    </div>
+  } else {
+    @if(recordCount < totalCount) {
+      <div class="pagination-nav">
+        @if(page > 0) {
+          <a href="@prevLink" class="prev btn-xs btn btn-default">Previous</a>
+        }
+        @if((page * utils.Config.pageSize) + recordCount < totalCount) {
+          <a href="@nextLink" class="next btn-xs btn btn-default">Next</a>
+        }
+        <strong>
+          @utils.Formatter.withCommas((page * utils.Config.pageSize) + 1)-@utils.Formatter.withCommas((page * utils.Config.pageSize) + recordCount)
+          of @utils.Formatter.withCommas(totalCount) @model@if(totalCount != 1){s}
+        </strong>
+      </div>
+    }
+    @table
+  }
+}

@@ -1,0 +1,37 @@
+@(
+  q: String, sortBy: String, count: Int, page: Int, users: Seq[models.user.User], requestCounts: Map[java.util.UUID, Int]
+)(implicit session: Session, flash: Flash)@views.html.admin.list(
+  "user", "Users", "explore", count, page, users.size, q,
+  searchAction = controllers.admin.routes.UserController.userList(),
+  prevLink = controllers.admin.routes.UserController.userList(q, sortBy, page - 1),
+  nextLink = controllers.admin.routes.UserController.userList(q, sortBy, page + 1)
+) {
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        @utils.play.ViewUtils.th("id", "User ID", sortBy)
+        @utils.play.ViewUtils.th("username", "Username", sortBy)
+        @utils.play.ViewUtils.th("requests", "Requests", sortBy)
+        @utils.play.ViewUtils.th("roles", "Roles", sortBy)
+        @utils.play.ViewUtils.th("profiles", "Profiles", sortBy, link = false)
+        @utils.play.ViewUtils.th("created", "Created", sortBy)
+        @utils.play.ViewUtils.th("actions", "", sortBy)
+      </tr>
+    </thead>
+    <tbody>
+      @for(u <- users) {
+        <tr>
+          <td><a href="@controllers.admin.routes.UserController.userDetail(u.id)">@u.id</a></td>
+          <td>@u.username</td>
+          <td>@utils.Formatter.withCommas(requestCounts.getOrElse(u.id, 0))</td>
+          <td>@Html(u.roles.map(_.name).mkString(",<br/>"))</td>
+          <td>@Html(u.profiles.map(x => s"${x.providerID}:${x.providerKey}").mkString(",<br/>"))</td>
+          <td>@u.created.toString("yyyy-MM-dd HH:mm:ss")</td>
+          <td>
+            <a href="@controllers.admin.routes.UserController.removeUser(u.id)" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-remove"></span></a>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+}

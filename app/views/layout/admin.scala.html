@@ -1,0 +1,76 @@
+@(title: String, section: String, scripts: Seq[String] = Nil, stylesheets: Seq[String] = Nil)(content: Html)(implicit session: Session, flash: Flash)@bootstrap(
+  title,
+  scripts = Seq(routes.Assets.versioned("javascripts/admin.js").url),
+  stylesheets = Seq(routes.Assets.versioned("stylesheets/admin.min.css").url) ++ stylesheets
+) {
+  <nav class="navbar navbar-default navbar-static-top">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand navbar-logo" href="@routes.HomeController.index()"><img alt="@utils.Config.projectName" src="@routes.Assets.versioned("images/ui/favicon/favicon.png")"></a>
+        <a class="navbar-brand" href="@controllers.admin.routes.AdminController.index()">@utils.Config.projectName Admin</a>
+      </div>
+      <div class="collapse navbar-collapse" id="navbar-collapse">
+        <ul class="nav navbar-nav">
+          <li @if(section == "activity") { class="active" }>
+            <a href="@controllers.admin.routes.AdminController.status()">Activity</a>
+          </li>
+          <li @if(section == "explore") { class="active" }>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Explore <span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="@controllers.admin.routes.FeedbackController.feedbackList()">Feedback</a></li>
+              <li><a href="@controllers.admin.routes.UserController.userList()">Users</a></li>
+              <li><a href="@controllers.admin.routes.RequestLogController.requestList()">Requests</a></li>
+              <li><a href="@controllers.admin.routes.ClientTraceController.traceList()">Client Traces</a></li>
+            </ul>
+          </li>
+          <li @if(section == "tests") { class="active" }>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Tests <span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="@controllers.admin.routes.TestController.tests()">Overview</a></li>
+              <li><a href="@controllers.admin.routes.TestController.runTest("all")">All Tests</a></li>
+            </ul>
+          </li>
+          <li @if(section == "reports") { class="active" }>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Reports <span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="@controllers.admin.routes.ReportController.trend()">Trend</a></li>
+              <li><a href="@controllers.admin.routes.ReportController.requests()">Requests</a></li>
+              <li><a href="@controllers.admin.routes.ReportController.email()">Email</a></li>
+              <li><a href="@controllers.admin.routes.AdHocQueryController.queryList(None)">Ad-Hoc</a></li>
+            </ul>
+          </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Kyle <span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="@controllers.admin.routes.SandboxController.defaultSandbox()"><strong>Sandboxes</strong></a></li>
+              @controllers.admin.SandboxController.sandboxes.map { sandbox =>
+                <li><a href="@controllers.admin.routes.SandboxController.sandbox(sandbox._1)" title="@sandbox._2">@sandbox._1</a></li>
+              }
+              <li class="divider"></li>
+              <li><a href="#">Sign Out</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <div class="container">
+    @flash.get("error").map { msg => <div class="alert alert-danger alert-dismissable">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+      @msg
+    </div> }@flash.get("info").map { msg => <div class="alert alert-info alert-dismissable">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+      @msg
+    </div> }@flash.get("success").map { msg => <div class="alert alert-success alert-dismissable">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+      @msg
+    </div> }@content
+  </div> }
