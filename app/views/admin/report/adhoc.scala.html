@@ -1,0 +1,74 @@
+@(
+  selectedQuery: Option[java.util.UUID],
+  sql: String,
+  data: (Seq[String], Seq[Seq[Any]]),
+  executionTime: Int,
+  queries: Seq[models.database.queries.adhoc.AdHocQuery]
+)(implicit session: Session, flash: Flash)@layout.admin(utils.Config.projectName + " Ad-hoc Queries", "reports") {
+  @defining(selectedQuery.flatMap(x => queries.find(_.id == x))) { q =>
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div class="pull-right">
+          <form class="form-inline" action="@controllers.admin.routes.AdHocQueryController.queryList(None)">
+            <select class="form-control" name="query">
+              @if(queries.isEmpty) {
+                <option value="">No queries available</option>
+              } else {
+                <option value="">Select a saved query</option>
+                @for(query <- queries) {
+                  <option @if(selectedQuery.contains(query.id)) { selected="selected" } value="@query.id">@query.title</option>
+                }
+              }
+            </select>
+            <button type="submit" name="action" value="load" class="btn btn-primary">Load</button>
+            <button type="submit" name="action" value="delete" class="btn btn-primary">Delete</button>
+          </form>
+        </div>
+        <h4>@if(q.isDefined) { @q.get.title } else { Ad-hoc Queries }</h4>
+      </div>
+    </div>
+
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <form class="form" action="@controllers.admin.routes.AdHocQueryController.run" method="post">
+          <textarea class="form-control" name="sql" rows="10" placeholder="select * from foo">@sql</textarea>
+          <br />
+          <div class="pull-right">
+            <button type="submit" name="action" value="run" class="btn btn-primary">Run</button>
+          </div>
+          <div class="pull-left">
+            <button type="submit" name="action" value="save" class="btn btn-primary">Save</button>
+            <input type="text" name="title" placeholder="Query Title" value="@if(q.isDefined) {@q.get.title}" />
+            <input type="hidden" name="id" value="@if(selectedQuery.isDefined) {@selectedQuery.get.toString}" />
+          </div>
+        </form>
+      </div>
+    </div>
+
+    @if(data._2.nonEmpty) {
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <div>Returned [@data._2.size] row@if(data._2.size != 1) {s} in [@{executionTime}ms].</div>
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                @for(col <- data._1) {
+                  <th>@col</th>
+                }
+              </tr>
+            </thead>
+            <tbody>
+              @for(row <- data._2) {
+                <tr>
+                  @for(cell <- row) {
+                    <td>@cell</td>
+                  }
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    }
+  }
+}

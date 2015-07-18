@@ -1,0 +1,40 @@
+@(sortBy: String, feedbacks: Seq[models.audit.UserFeedback], notes: Seq[models.audit.UserFeedback.FeedbackNote])
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      @utils.play.ViewUtils.th("feedback-id", "ID", sortBy)
+      @utils.play.ViewUtils.th("feedback-user", "User", sortBy)
+      @utils.play.ViewUtils.th("feedback-feedback", "Feedback", sortBy)
+      @utils.play.ViewUtils.th("feedback-occurred", "Occurred", sortBy)
+      @utils.play.ViewUtils.th("actions-two", "", sortBy)
+    </tr>
+  </thead>
+  <tbody>
+  @for(f <- feedbacks) {
+    <tr>
+      <td title="@f.id">@f.id.toString.substring(0, 8)</td>
+      <td title="@f.userId"><a href="@controllers.admin.routes.UserController.userDetail(f.userId)">@f.userId.toString.substring(0, 8)</a></td>
+      <td>
+        <div>@f.feedback</div>
+        @defining(notes.filter(_.feedbackId == f.id)) { n =>
+          @if(n.nonEmpty) {
+            <strong>Notes</strong>
+            <ul>
+            @n.map { note =>
+              <li class="feedback-note">
+                @note
+              </li>
+            }
+            </ul>
+          }
+        }
+      </td>
+      <td>@f.occurred.toString("yyyy-MM-dd HH:mm:ss")</td>
+      <td>
+        <a href="@controllers.admin.routes.FeedbackController.feedbackNoteForm(f.id)" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil"></span></a>
+        <a href="@controllers.admin.routes.FeedbackController.removeFeedback(f.id)" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-remove"></span></a>
+      </td>
+    </tr>
+  }
+  </tbody>
+</table>
