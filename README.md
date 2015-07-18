@@ -4,17 +4,6 @@ Using the latest technology in the Scala ecosystem, Boilerplay is a reactive web
 It provides a good starting point for whatever you want to build.
 
 
-## Running the app
-
-```shell
-$ sbt
-> run
-$ open http://localhost:9000
-```
-
-Once you've signed up, visit http://localhost:9000/admin/enable to bootstrap your account as an admin. 
-
-
 ## Features
 
 * Social sign-in and local credentials support.
@@ -26,20 +15,31 @@ Once you've signed up, visit http://localhost:9000/admin/enable to bootstrap you
 * Websocket-driven actor support, with monitoring and tracing.
 
 
-## Projects
-
-* `server` Main web application.
-* `sharedJvm` Core game logic and rules definitions, for JVM projects.
-* `sharedJs` Shared classes, compiled to Scala.js JavaScript.
-* `client` Barebones Scala.js app.
-
-
 ## Technology
 
 The Play application communicates over a WebSocket to a pool of Akka actors managing connections. 
 Serialization is handled by Play Json, and all database communication runs via postgres-async. Scala.js compiles the
 shared code and provides an in-browser component. You can sign in with Facebook, Google, or Twitter thanks to Play Silhouette. 
 Websocket communication is handled via Play and Akka.
+
+
+## Running the app
+
+```shell
+$ sbt
+> run
+$ open http://localhost:9000
+```
+
+Once you've signed up, visit http://localhost:9000/admin/enable to bootstrap your account as an admin. 
+
+
+## Projects
+
+* `server` Main web application.
+* `sharedJvm` Core game logic and rules definitions, for JVM projects.
+* `sharedJs` Shared classes, compiled to Scala.js JavaScript.
+* `client` Barebones Scala.js app.
 
 
 ## Metrics
