@@ -1,0 +1,38 @@
+guest.name = Guest
+
+# Authentication
+authentication.call.to.action = Sign in to {0}
+authentication.sign.in = Sign In
+authentication.form.username = Email or username
+authentication.form.password = Password
+authentication.invalid.credentials = Invalid credentials.
+authentication.invalid.provider = Cannot authenticate with unknown social provider [{0}].
+authentication.service.error = Couldn''t authenticate with provider [{0}].
+
+# Registration
+registration.title = Sign up for {0}
+registration.call.to.action = Welcome! Go ahead and sign up.
+registration.social.sign.in = Or, sign in using these providers
+registration.username.taken = That username is already in use.
+registration.email.taken = That email address is already in use.
+
+# Index Page
+index.welcome = Welcome to Boilerplay!
+index.tagline = Thanks for checking out my progress!
+
+# Feedback
+feedback.prompt = Feedback is always appreciated. Thanks for sharing yours.
+feedback.submit = Submit Feedback
+
+# Profile
+profile.set.username = Set username
+profile.create.account = Create a local account
+profile.sign.out = Sign Out
+profile.use.image.as.avatar = Use your {0} profile image as your avatar
+profile.connect.account = Connect your {0} account
+
+# Email
+email.from = Boilerplay <admin@localhost>
+email.welcome.subject = Welcome to {0}!
+email.welcome.body.html = <em>Welcome to <strong>Boilerplay</strong>!</em><br>We're so glad you're here.
+email.welcome.body.text = Welcome to Boilerplay! We're so glad you're here.

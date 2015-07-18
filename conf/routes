@@ -1,0 +1,62 @@
+GET         /                                  controllers.HomeController.index
+GET         /about                             controllers.HomeController.about
+
+# Utility
+GET         /*path/                            controllers.HomeController.untrail(path: String)
+
+# Feedback
+GET         /feedback                          controllers.FeedbackController.feedbackForm
+POST        /feedback                          controllers.FeedbackController.submitFeedback
+
+# Authentication
+GET         /signup                            controllers.auth.RegistrationController.registrationForm
+POST        /signup                            controllers.auth.RegistrationController.register
+GET         /signin                            controllers.auth.AuthenticationController.signInForm
+POST        /signin                            controllers.auth.AuthenticationController.authenticateCredentials
+GET         /signin/:provider                  controllers.auth.AuthenticationController.authenticateSocial(provider)
+GET         /signout                           controllers.auth.AuthenticationController.signOut
+
+# Profile
+GET         /profile                           controllers.ProfileController.profile
+GET         /options/set/:option/:value        controllers.ProfileController.setOption(option, value)
+
+# Admin
+GET         /admin                             controllers.admin.AdminController.index()
+GET         /admin/enable                      controllers.admin.AdminController.enable()
+GET         /admin/sandbox                     controllers.admin.SandboxController.defaultSandbox()
+GET         /admin/sandbox/:key                controllers.admin.SandboxController.sandbox(key)
+
+GET         /admin/status                      controllers.admin.AdminController.status
+GET         /admin/wipe                        controllers.admin.AdminController.wipeSchema(key)
+
+GET         /admin/trace/connection/:id        controllers.admin.TraceController.traceConnection(id: java.util.UUID)
+GET         /admin/trace/client/:id            controllers.admin.TraceController.traceClient(id: java.util.UUID)
+
+GET         /admin/test                        controllers.admin.TestController.tests
+GET         /admin/test/:test                  controllers.admin.TestController.runTest(test)
+
+GET         /admin/users                       controllers.admin.UserController.userList(q ?= "", sortBy ?= "created", page: Int ?= 0)
+GET         /admin/users/:id                   controllers.admin.UserController.userDetail(id: java.util.UUID)
+GET         /admin/users/:id/remove            controllers.admin.UserController.removeUser(id: java.util.UUID)
+
+GET         /admin/traces                      controllers.admin.ClientTraceController.traceList(q ?= "", sortBy ?= "created", page: Int ?= 0)
+GET         /admin/traces/:id                  controllers.admin.ClientTraceController.traceDetail(id: java.util.UUID)
+GET         /admin/traces/:id/remove           controllers.admin.ClientTraceController.removeTrace(id: java.util.UUID)
+
+GET         /admin/requests                    controllers.admin.RequestLogController.requestList(q ?= "", sortBy ?= "started", page: Int ?= 0)
+
+GET         /admin/feedback                    controllers.admin.FeedbackController.feedbackList(q ?= "", sortBy ?= "occurred", page: Int ?= 0)
+GET         /admin/feedback/:id/note           controllers.admin.FeedbackController.feedbackNoteForm(id: java.util.UUID)
+GET         /admin/feedback/:id/remove         controllers.admin.FeedbackController.removeFeedback(id: java.util.UUID)
+
+GET         /admin/report/trend                controllers.admin.ReportController.trend()
+GET         /admin/report/requests             controllers.admin.ReportController.requests()
+GET         /admin/report/email                controllers.admin.ReportController.email()
+GET         /admin/report/ad-hoc               controllers.admin.AdHocQueryController.queryList(query: Option[java.util.UUID] ?= None, action: Option[String] ?= None)
+POST        /admin/report/ad-hoc/run           controllers.admin.AdHocQueryController.run()
+
+# Assets
+GET         /favicon.ico                       controllers.Assets.at(path = "/public", file = "images/ui/favicon/favicon.ico")
+GET         /apple-touch-icon.png              controllers.Assets.at(path = "/public", file = "images/ui/favicon/favicon.png")
+
+GET         /assets/*file                      controllers.Assets.versioned(path="/public", file: Asset)
