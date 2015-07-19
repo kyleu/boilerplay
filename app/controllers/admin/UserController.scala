@@ -19,8 +19,6 @@ class UserController @javax.inject.Inject() (override val messagesApi: MessagesA
     for {
       count <- Database.query(UserQueries.searchCount(q))
       users <- Database.query(UserQueries.search(q, getOrderClause(sortBy), Some(page)))
-      gameCounts <- Database.query(new ReportQueries.GameCountForUsers(users.map(_.id)))
-      winCounts <- Database.query(new ReportQueries.WinCountForUsers(users.map(_.id)))
       requestCounts <- Database.query(new ReportQueries.RequestCountForUsers(users.map(_.id)))
     } yield Ok(views.html.admin.user.userList(q, sortBy, count, page, users, requestCounts))
   }

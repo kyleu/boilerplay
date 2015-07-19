@@ -37,7 +37,7 @@ Once you've signed up, visit http://localhost:9000/admin/enable to bootstrap you
 ## Projects
 
 * `server` Main web application.
-* `sharedJvm` Core game logic and rules definitions, for JVM projects.
+* `sharedJvm` Core Scala logic and rules definitions, for JVM projects.
 * `sharedJs` Shared classes, compiled to Scala.js JavaScript.
 * `client` Barebones Scala.js app.
 

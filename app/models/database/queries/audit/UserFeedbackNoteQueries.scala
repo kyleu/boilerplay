@@ -16,7 +16,11 @@ object UserFeedbackNoteQueries extends BaseQueries[UserFeedback.FeedbackNote] {
   val insert = Insert
 
   case class GetUserFeedbackNotes(feedbackIds: Seq[UUID]) extends Query[List[UserFeedback.FeedbackNote]] {
-    override val sql = getSql(whereClause = Some(s"feedback_id in (${feedbackIds.map(x => "?").mkString(", ")})"))
+    override val sql = getSql(whereClause = Some(if(feedbackIds.nonEmpty) {
+      s"feedback_id in (${feedbackIds.map(x => "?").mkString(", ")})"
+    } else {
+      "1 = 1"
+    }))
     override val values = feedbackIds
     override def reduce(rows: Iterator[Row]) = rows.map(fromRow).toList
   }

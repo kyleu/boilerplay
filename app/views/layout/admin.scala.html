@@ -1,6 +1,6 @@
 @(title: String, section: String, scripts: Seq[String] = Nil, stylesheets: Seq[String] = Nil)(content: Html)(implicit session: Session, flash: Flash)@bootstrap(
   title,
-  scripts = Seq(routes.Assets.versioned("javascripts/admin.js").url),
+  scripts = Seq(routes.Assets.versioned("javascripts/admin.js").url) ++ scripts,
   stylesheets = Seq(routes.Assets.versioned("stylesheets/admin.min.css").url) ++ stylesheets
 ) {
   <nav class="navbar navbar-default navbar-static-top">
