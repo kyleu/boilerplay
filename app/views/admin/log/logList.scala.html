@@ -1,0 +1,25 @@
+@(files: Seq[(String, Int)])(implicit session: Session, flash: Flash)
+@layout.admin(s"${utils.Config.projectName} Logs", "explore") {
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <div class="text-large">@utils.Formatter.withCommas(files.size) log files</div>
+    </div>
+  </div>
+
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th nowrap="nowrap" class="th-log-file">Log File</th>
+        <th nowrap="nowrap" class="th-log-size">Size</th>
+      </tr>
+    </thead>
+    <tbody>
+    @for(file <- files) {
+      <tr>
+        <td><a href="@controllers.admin.routes.LogController.view(file._1)">@file._1</a></td>
+        <td>@utils.Formatter.withCommas(file._2)B</td>
+      </tr>
+    }
+    </tbody>
+  </table>
+}

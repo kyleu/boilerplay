@@ -1,0 +1,37 @@
+@(name: String, logs: Seq[models.audit.ServerLog])(implicit session: Session, flash: Flash)
+@layout.admin(s"${utils.Config.projectName} Logs", "explore") {
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <div class="text-large">[@name]</div>
+      <div>@utils.Formatter.withCommas(logs.size) log entries</div>
+    </div>
+  </div>
+
+  <table class="table table-bordered table-striped">
+    <thead>
+      <tr>
+        <th nowrap="nowrap" class="th-log-level">Level</th>
+        <th nowrap="nowrap" class="th-log-line">Line</th>
+        <th nowrap="nowrap" class="th-log-logger">Logger</th>
+        <th nowrap="nowrap" class="th-log-thread">Thread</th>
+        <th nowrap="nowrap" class="th-log-occurred">Occurred</th>
+      </tr>
+    </thead>
+    <tbody>
+    @for(log <- logs.reverse) {
+      <tr>
+        <td>@log.level.toHtml</td>
+        <td>@log.line</td>
+        <td>@log.logger</td>
+        <td>@log.thread</td>
+        <td>@log.occurred.toString("yyyy-MM-dd HH:mm:ss.SSS")</td>
+      </tr>
+      <tr>
+        <td colspan="5">@log.message.split("\\n").map { l =>
+          <div>@l</div>
+        }</td>
+      </tr>
+    }
+    </tbody>
+  </table>
+}

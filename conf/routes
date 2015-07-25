@@ -52,6 +52,9 @@ GET         /admin/feedback                    controllers.admin.FeedbackControl
 GET         /admin/feedback/:id/note           controllers.admin.FeedbackController.feedbackNoteForm(id: java.util.UUID)
 GET         /admin/feedback/:id/remove         controllers.admin.FeedbackController.removeFeedback(id: java.util.UUID)
 
+GET         /admin/logs                        controllers.admin.LogController.list()
+GET         /admin/logs/:name                  controllers.admin.LogController.view(name)
+
 GET         /admin/report/trend                controllers.admin.ReportController.trend()
 GET         /admin/report/requests             controllers.admin.ReportController.requests()
 GET         /admin/report/email                controllers.admin.ReportController.email()
