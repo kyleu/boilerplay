@@ -32,6 +32,7 @@ object UserCache {
       }
     }
     CacheService.remove(s"user.$id")
+    CacheService.remove(s"user.anonymous:$id")
   }
 
   def cacheSession(session: CookieAuthenticator) = {
