@@ -64,5 +64,4 @@ The project is built on SBT, and can be opened by IntelliJ directly.
 
 ## License
 
-Copyright 2015 Kyle Unverferth
-All rights reserved, for now.
+The code is licensed under [Apache License v2.0](http://www.apache.org/licenses/LICENSE-2.0).
