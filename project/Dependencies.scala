@@ -17,9 +17,9 @@ object Dependencies {
   }
 
   object WebJars {
-    val requireJs = "org.webjars" % "requirejs" % "2.1.18"
+    val requireJs = "org.webjars" % "requirejs" % "2.1.19"
     val bootstrap = "org.webjars" % "bootstrap" % "3.3.5"
-    val d3 = "org.webjars" % "d3js" % "3.5.5-1"
+    val d3 = "org.webjars" % "d3js" % "3.5.5"
     val nvd3 = "org.webjars" % "nvd3-community" % "1.7.0"
   }
 
@@ -28,7 +28,7 @@ object Dependencies {
   }
 
   object Authentication {
-    val silhouette = "com.mohiva" %% "play-silhouette" % "3.0.0-RC2"
+    val silhouette = "com.mohiva" %% "play-silhouette" % "3.0.0"
   }
 
   object Metrics {

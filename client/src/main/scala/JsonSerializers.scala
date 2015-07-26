@@ -1,21 +1,22 @@
 import models._
 import upickle._
+import upickle.legacy._
 
 object JsonSerializers {
-  private implicit val stringOptionWriter = upickle.Writer[Option[String]] {
+  private implicit val stringOptionWriter = Writer[Option[String]] {
     case Some(s) => Js.Str(s)
     case None => Js.Null
   }
-  private implicit val intOptionWriter = upickle.Writer[Option[Int]] {
+  private implicit val intOptionWriter = Writer[Option[Int]] {
     case Some(i) => Js.Num(i)
     case None => Js.Null
   }
-  private implicit val boolOptionWriter = upickle.Writer[Option[Boolean]] {
+  private implicit val boolOptionWriter = Writer[Option[Boolean]] {
     case Some(b) => if (b) { Js.True } else { Js.False }
     case None => Js.Null
   }
 
-  private implicit val responseMessageWriter: Writer[ResponseMessage] = upickle.Writer[ResponseMessage] {
+  private implicit val responseMessageWriter: Writer[ResponseMessage] = Writer[ResponseMessage] {
     case rm =>
       val jsVal = rm match {
         case vr: VersionResponse => writeJs(vr)
