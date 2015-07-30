@@ -1,6 +1,5 @@
 scalacOptions ++= Seq( "-unchecked", "-deprecation" )
 
-resolvers += Resolver.jcenterRepo
 resolvers += "Typesafe repository" at "https://repo.typesafe.com/typesafe/releases/"
 
 // The Play plugin

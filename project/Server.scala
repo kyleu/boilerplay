@@ -41,6 +41,7 @@ object Server {
     scalacOptions ++= Shared.compileOptions,
     scalacOptions in Test ++= Seq("-Yrangepos"),
 
+    resolvers += Resolver.jcenterRepo,
     libraryDependencies ++= dependencies,
 
     routesGenerator := InjectedRoutesGenerator,

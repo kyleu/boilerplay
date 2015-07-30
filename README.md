@@ -25,6 +25,9 @@ Websocket communication is handled via Play and Akka.
 
 ## Running the app
 
+First, either create a Postgres role and database named "boilerplay", or change the application.conf to use your existing database.
+
+Then,
 ```shell
 $ sbt
 > run
