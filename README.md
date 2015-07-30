@@ -27,6 +27,8 @@ Websocket communication is handled via Play and Akka.
 
 First, either create a Postgres role and database named "boilerplay", or change the application.conf to use your existing database.
 
+You'll either need Node.js available as "node" on the path, or change project/Server.scala's EngineType to Rhino.
+
 Then,
 ```shell
 $ sbt
