@@ -10,6 +10,8 @@ import org.joda.time.format.DateTimeFormat
 import scala.io.Source
 
 object LogService {
+  private[this] val logStartPhrases = Seq("[TRACE]", "[DEBUG]", "[INFO] ", "[WARN] ", "[ERROR]", "[FATAL]")
+
   val logDir = new File("logs")
   if(!logDir.exists) {
     throw new IllegalStateException("Log directory does not exist.")
@@ -24,7 +26,7 @@ object LogService {
     var pendingLog: Option[ServerLog] = None
     getLines(name).zipWithIndex.foreach {
       case blank if blank._1.isEmpty => // noop, ignore
-      case main if main._1.startsWith("[") =>
+      case main if logStartPhrases.contains(main._1.take(7)) =>
         pendingLog match {
           case Some(log) => ret += log
           case None => // no op, ignore
