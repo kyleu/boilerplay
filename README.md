@@ -27,14 +27,30 @@ Websocket communication is handled via Play and Akka.
 
 First, either create a Postgres role and database named "boilerplay", or change the application.conf to use your existing database.
 
+```sql
+CREATE ROLE boilerplay WITH LOGIN PASSWORD 'password';
+CREATE DATABASE boilerplay;
+GRANT ALL PRIVILEGES ON DATABASE boilerplay TO boilerplay;
+```
+
 You'll either need Node.js available as "node" on the path, or change project/Server.scala's EngineType to Rhino.
 
-Then,
+Then you'll need to change the SMTP and Silhouette settings in application.conf to use your mail server and social apps.
+
+For Twitter, visit https://apps.twitter.com/ and create a new app.
+
+For Facebook, visit https://developers.facebook.com/products/ads/? and choose My Apps > Add a new app
+
+For Google, visit https://console.developers.google.com/, create a project and credentials.
+
+Now, finally,
 ```shell
 $ sbt
 > run
 $ open http://localhost:9000
 ```
+
+As the application starts, it will create database tables and seed data. If you see any SQL errors, restart (as the table creation has a race condition I'm working to fix).
 
 Once you've signed up, visit http://localhost:9000/admin/enable to bootstrap your account as an admin. 
 
