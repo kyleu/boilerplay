@@ -31,17 +31,21 @@ object Schema extends Logging {
   )
 
   def update() = {
-    Future.sequence(tables.map { t =>
-      Database.query(DdlQueries.DoesTableExist(t._1)).flatMap { exists =>
-        if (exists) {
-          Future.successful(Unit)
-        } else {
-          log.info(s"Creating missing table [${t._1}].")
-          val name = s"CreateTable-${t._1}"
-          Database.raw(name, t._2.sql).map(x => Unit)
+    val tableFuture = tables.foldLeft(Future.successful(Unit)) { (f, t) =>
+      f.flatMap { u =>
+        Database.query(DdlQueries.DoesTableExist(t._1)).flatMap { exists =>
+          if (exists) {
+            Future.successful(Unit)
+          } else {
+            log.info(s"Creating missing table [${t._1}].")
+            val name = s"CreateTable-${t._1}"
+            Database.raw(name, t._2.sql).map(x => Unit)
+          }
         }
       }
-    }).flatMap { ok =>
+    }
+
+    tableFuture.flatMap { ok =>
       createUser(Database.query(DdlQueries.DoesTestUserExist), DdlQueries.InsertTestUser)
     }
   }
