@@ -31,7 +31,7 @@ profile.use.image.as.avatar = Use your {0} profile image as your avatar
 profile.connect.account = Connect your {0} account
 
 # Email
-email.from = Boilerplay <admin@localhost>
+email.from = Boilerplay <admin@127.0.0.1>
 email.welcome.subject = Welcome to {0}!
 email.welcome.body.html = <em>Welcome to <strong>Boilerplay</strong>!</em><br>We're so glad you're here.
 email.welcome.body.text = Welcome to Boilerplay! We're so glad you're here.

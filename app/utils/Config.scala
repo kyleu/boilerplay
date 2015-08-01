@@ -18,7 +18,7 @@ object Config {
 
   // Database
   val databaseConfiguration = new Configuration(
-    host = Option(cnf.getString("db.host")).getOrElse("localhost"),
+    host = Option(cnf.getString("db.host")).getOrElse("127.0.0.1"),
     port = 5432,
     database = Option(cnf.getString("db.database")),
     username = Option(cnf.getString("db.username")).getOrElse(projectId),

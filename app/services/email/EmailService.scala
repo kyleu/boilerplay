@@ -10,7 +10,7 @@ import utils.{ Config, DateUtils }
 
 @javax.inject.Singleton
 class EmailService @javax.inject.Inject() (mailerClient: MailerClient) {
-  private[this] val adminFrom = s"${Config.projectName} <admin@localhost>"
+  private[this] val adminFrom = s"${Config.projectName} <admin@127.0.0.1>"
   private[this] val adminTextMessage = "You should really use HTML mail."
 
   def sendWelcomeMessage(toName: String, toAddress: String)(implicit messages: Messages) = {

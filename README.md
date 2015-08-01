@@ -47,12 +47,12 @@ Now, finally,
 ```shell
 $ sbt
 > run
-$ open http://localhost:9000
+$ open http://127.0.0.1:9000
 ```
 
 As the application starts, it will create database tables and seed data. If you see any SQL errors, restart (as the table creation has a race condition I'm working to fix).
 
-Once you've signed up, visit http://localhost:9000/admin/enable to bootstrap your account as an admin. 
+Once you've signed up, visit http://127.0.0.1:9000/admin/enable to bootstrap your account as an admin. 
 
 
 ## Projects
@@ -66,7 +66,7 @@ Once you've signed up, visit http://localhost:9000/admin/enable to bootstrap you
 ## Metrics
 
 All meaningful operations are tracked through Scala Metrics, and are exposed through JMX, or via a servlet available on port 9001.
-Reporting to Graphite can be enabled through application.conf, and reports to localhost:2003 by default.
+Reporting to Graphite can be enabled through application.conf, and reports to 127.0.0.1:2003 by default.
 Metrics exposes all actors, queries, logs, requests, and jvm info.
 
 
