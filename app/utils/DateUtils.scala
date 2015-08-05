@@ -13,7 +13,4 @@ object DateUtils {
 
   def toMillis(ldt: LocalDateTime) = ldt.toDateTime(DateTimeZone.UTC).getMillis
   def fromMillis(millis: Long) = new LocalDateTime(millis, DateTimeZone.UTC)
-
-  def toSqlTimestamp(ldt: LocalDateTime) = new java.sql.Timestamp(ldt.toDateTime(DateTimeZone.UTC).getMillis)
-  def toSqlDate(day: LocalDate) = new java.sql.Date(day.toDateTimeAtStartOfDay(DateTimeZone.UTC).getMillis)
 }

@@ -34,5 +34,5 @@ object UserFeedbackNoteQueries extends BaseQueries[UserFeedback.FeedbackNote] {
     UserFeedback.FeedbackNote(id, feedbackId, userId, content, occurred)
   }
 
-  override protected def toDataSeq(f: UserFeedback.FeedbackNote) = Seq[Any](f.id, f.authorId, f.content, DateUtils.toSqlTimestamp(f.occurred))
+  override protected def toDataSeq(f: UserFeedback.FeedbackNote) = Seq[Any](f.id, f.authorId, f.content, f.occurred)
 }
