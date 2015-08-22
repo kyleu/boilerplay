@@ -77,9 +77,6 @@ longer than 140 characters, and all warnings are treated as errors. Tests are pa
 
 JavaScript is verified by Require.js and UglifyJS. Any Javascript errors or warnings will be treated as compile errors. 
 
-Security filters are in place, and are configured so that resources (css, js, etc) can only be loaded from the configured host.
-Inline styles and scripts are prohibited.
-
 The project is built on SBT, and can be opened by IntelliJ directly.
 
 
