@@ -31,7 +31,7 @@ object ReportQueries {
     override def sql = s"select player, count(*) as c from games${playerClause("player", userIds)} group by player"
     override def values = userIds
     override def reduce(rows: Iterator[Row]) = rows.map { row =>
-      UUID.fromString(row.as[String]("player")) -> row.as[Long]("c").toInt
+      row.as[UUID]("player") -> row.as[Long]("c").toInt
     }.toMap
   }
 
@@ -39,7 +39,7 @@ object ReportQueries {
     override def sql = s"select player, count(*) as c from games${playerClause("player", userIds)} and status = 'win' group by player"
     override def values = userIds
     override def reduce(rows: Iterator[Row]) = rows.map { row =>
-      UUID.fromString(row.as[String]("player")) -> row.as[Long]("c").toInt
+      row.as[UUID]("player") -> row.as[Long]("c").toInt
     }.toMap
   }
 
@@ -47,7 +47,7 @@ object ReportQueries {
     override def sql = s"select user_id, count(*) as c from requests${playerClause("user_id", userIds)} group by user_id"
     override def values = userIds
     override def reduce(rows: Iterator[Row]) = rows.map { row =>
-      UUID.fromString(row.as[String]("user_id")) -> row.as[Long]("c").toInt
+      row.as[UUID]("user_id") -> row.as[Long]("c").toInt
     }.toMap
   }
 }

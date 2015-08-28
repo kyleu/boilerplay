@@ -48,7 +48,6 @@ object Server {
 
     scalaJSProjects := Seq(Client.client),
 
-
     // Prevent Scaladoc
     doc in Compile <<= target.map(_ / "none"),
     sources in (Compile, doc) := Seq.empty,

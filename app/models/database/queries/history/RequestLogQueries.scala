@@ -41,7 +41,7 @@ object RequestLogQueries extends BaseQueries[RequestLog] {
       order by c desc;
     """
     override def reduce(rows: Iterator[Row]) = rows.map { row =>
-      (UUID.fromString(row.as[String]("id")), row.asOpt[String]("un"), row.as[Long]("c").toInt)
+      (row.as[UUID]("id"), row.asOpt[String]("un"), row.as[Long]("c").toInt)
     }.toSeq
   }
 
@@ -58,8 +58,8 @@ object RequestLogQueries extends BaseQueries[RequestLog] {
   }
 
   override protected def fromRow(row: Row) = {
-    val id = UUID.fromString(row.as[String]("id"))
-    val userId = UUID.fromString(row.as[String]("user_id"))
+    val id = row.as[UUID]("id")
+    val userId = row.as[UUID]("user_id")
     val authProvider = row.as[String]("auth_provider")
     val authKey = row.as[String]("auth_key")
     val remoteAddress = row.as[String]("remote_address")

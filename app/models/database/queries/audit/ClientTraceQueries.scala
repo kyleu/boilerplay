@@ -20,8 +20,8 @@ object ClientTraceQueries extends BaseQueries[ClientTraceResult] {
   def searchCount(q: String, groupBy: Option[String] = None) = new SearchCount(q, groupBy)
 
   override protected def fromRow(row: Row) = {
-    val id = UUID.fromString(row.as[String]("id"))
-    val player = UUID.fromString(row.as[String]("player"))
+    val id = row.as[UUID]("id")
+    val player = row.as[UUID]("player")
     val data = Json.parse(row.as[String]("data")).as[JsObject]
     val created = row.as[LocalDateTime]("created")
     ClientTraceResult(id, player, data, created)

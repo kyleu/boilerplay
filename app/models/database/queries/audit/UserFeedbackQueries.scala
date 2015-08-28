@@ -25,8 +25,8 @@ object UserFeedbackQueries extends BaseQueries[UserFeedback] {
   }
 
   override protected def fromRow(row: Row) = {
-    val id = UUID.fromString(row.as[String]("id"))
-    val userId = UUID.fromString(row.as[String]("user_id"))
+    val id = row.as[UUID]("id")
+    val userId = row.as[UUID]("user_id")
     val feedback = row.as[String]("feedback")
     val occurred = row.as[LocalDateTime]("occurred")
     UserFeedback(id, userId, feedback, occurred)

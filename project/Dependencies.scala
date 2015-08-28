@@ -6,7 +6,7 @@ object Dependencies {
   }
 
   object Database {
-    val postgresAsync = "com.github.mauricio" %% "postgresql-async" % "0.2.16"
+    val postgresAsync = "com.github.mauricio" %% "postgresql-async" % "0.2.18"
   }
 
   object Play {
@@ -17,9 +17,9 @@ object Dependencies {
   }
 
   object WebJars {
-    val requireJs = "org.webjars" % "requirejs" % "2.1.19"
+    val requireJs = "org.webjars" % "requirejs" % "2.1.20"
     val bootstrap = "org.webjars" % "bootstrap" % "3.3.5"
-    val d3 = "org.webjars" % "d3js" % "3.5.5"
+    val d3 = "org.webjars" % "d3js" % "3.5.6"
     val nvd3 = "org.webjars" % "nvd3-community" % "1.7.0"
   }
 
@@ -28,7 +28,7 @@ object Dependencies {
   }
 
   object Authentication {
-    val silhouette = "com.mohiva" %% "play-silhouette" % "3.0.0"
+    val silhouette = "com.mohiva" %% "play-silhouette" % "3.0.1"
   }
 
   object Metrics {

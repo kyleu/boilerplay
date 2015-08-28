@@ -19,7 +19,7 @@ addSbtPlugin("com.typesafe.sbt" % "sbt-gzip" % "1.0.0")
 // Scala.js
 addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.4")
 
-addSbtPlugin("com.vmunier" % "sbt-play-scalajs" % "0.2.6")
+addSbtPlugin("com.vmunier" % "sbt-play-scalajs" % "0.2.7")
 
 // Build Info
 addSbtPlugin("com.eed3si9n" % "sbt-buildinfo" % "0.3.2")

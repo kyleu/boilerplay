@@ -67,7 +67,7 @@ object UserQueries extends BaseQueries[User] {
   }
 
   override protected def fromRow(row: Row) = {
-    val id = UUID.fromString(row.as[String]("id"))
+    val id = row.as[UUID]("id")
     val profiles = row.as[collection.mutable.ArrayBuffer[_]]("profiles").map { l =>
       val info = l.toString
       val delimiter = info.indexOf(':')

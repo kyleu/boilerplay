@@ -44,9 +44,9 @@ object AdHocQueries extends BaseQueries[AdHocQuery] {
   }
 
   override protected def fromRow(row: Row) = {
-    val id = UUID.fromString(row.as[String]("id"))
+    val id = row.as[UUID]("id")
     val title = row.as[String]("title")
-    val author = UUID.fromString(row.as[String]("author"))
+    val author = row.as[UUID]("author")
     val sql = row.as[String]("sql")
     val created = row.as[LocalDateTime]("created")
     val updated = row.as[LocalDateTime]("updated")
