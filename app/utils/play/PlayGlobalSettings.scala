@@ -15,13 +15,13 @@ import services.database.{ Database, Schema }
 import services.scheduled.ScheduledTask
 import services.supervisor.ActorSupervisor
 import utils.metrics.Instrumented
-import utils.{ Config, BuildInfo, Logging }
+import utils.{ Config, Logging }
 
 import scala.concurrent.Future
 
 object PlayGlobalSettings extends WithFilters(PlayLoggingFilter, new GzipFilter()) with GlobalSettings with Logging {
   override def onStart(app: Application) {
-    log.info(s"${utils.Config.projectName} build [${BuildInfo.buildinfoBuildnumber}] is starting on [${utils.Config.hostname}].")
+    log.info(s"${utils.Config.projectName} is starting on [${utils.Config.hostname}].")
 
     SharedMetricRegistries.remove("default")
     SharedMetricRegistries.add("default", Instrumented.metricRegistry)

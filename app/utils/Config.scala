@@ -7,7 +7,7 @@ import _root_.play.api.Play
 object Config {
   private[this] val cnf = ConfigFactory.load()
 
-  val projectId = utils.BuildInfo.name
+  val projectId = "boilerplay"
   val projectName = "Boilerplay"
   val version = "0.1"
   val hostname = cnf.getString("host")

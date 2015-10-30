@@ -13,7 +13,7 @@ object Dependencies {
     val playFilters = play.sbt.PlayImport.filters
     val playWs = play.sbt.PlayImport.ws
     val playJson = play.sbt.PlayImport.json
-    val playTest = "com.typesafe.play" %% "play-test" % "2.4.2"
+    val playTest = "com.typesafe.play" %% "play-test" % "2.4.3"
   }
 
   object WebJars {
@@ -28,11 +28,11 @@ object Dependencies {
   }
 
   object Authentication {
-    val silhouette = "com.mohiva" %% "play-silhouette" % "3.0.1"
+    val silhouette = "com.mohiva" %% "play-silhouette" % "3.0.4"
   }
 
   object Metrics {
-    val metrics = "nl.grons" %% "metrics-scala" % "3.5.1" withSources()
+    val metrics = "nl.grons" %% "metrics-scala" % "3.5.2" withSources()
     val jvm = "io.dropwizard.metrics" % "metrics-jvm" % "3.1.2" withSources()
     val ehcache = "io.dropwizard.metrics" % "metrics-ehcache" % "3.1.2" withSources() intransitive()
     val healthChecks = "io.dropwizard.metrics" % "metrics-healthchecks" % "3.1.2" withSources() intransitive()
@@ -45,6 +45,6 @@ object Dependencies {
   }
 
   object Testing {
-    val akkaTestkit = "com.typesafe.akka" %% "akka-testkit" % "2.3.11"
+    val akkaTestkit = "com.typesafe.akka" %% "akka-testkit" % "2.3.14"
   }
 }

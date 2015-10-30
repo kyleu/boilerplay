@@ -17,7 +17,6 @@ import com.typesafe.sbt.web.SbtWeb
 import play.routes.compiler.InjectedRoutesGenerator
 import play.sbt.routes.RoutesKeys.routesGenerator
 
-import sbtbuildinfo.Plugin._
 import com.sksamuel.scapegoat.sbt.ScapegoatSbtPlugin.autoImport._
 import com.typesafe.sbt.SbtScalariform.{ ScalariformKeys, defaultScalariformSettings }
 import net.virtualvoid.sbt.graph.Plugin.graphSettings
@@ -61,23 +60,6 @@ object Server {
     LessKeys.compress in Assets := true,
     JshintKeys.config := Some(new java.io.File("conf/.jshintrc")),
 
-    // Build Info
-    sourceGenerators in Compile <+= buildInfo,
-    buildInfoKeys := Seq[BuildInfoKey](
-      name,
-      version,
-      scalaVersion,
-      sbtVersion,
-      buildInfoBuildNumber,
-      "builtAtMillis" -> System.currentTimeMillis,
-      "builtAt" -> {
-        val dtf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-        dtf.setTimeZone(java.util.TimeZone.getTimeZone("UTC"))
-        dtf.format(new java.util.Date())
-      }
-    ),
-    buildInfoPackage := "utils",
-
     // Code Quality
     scapegoatIgnoredFiles := Seq(".*/Row.scala", ".*/Routes.scala", ".*/ReverseRoutes.scala", ".*/JavaScriptReverseRoutes.scala", ".*/*.template.scala"),
     scapegoatDisabledInspections := Seq("DuplicateImport"),
@@ -91,7 +73,6 @@ object Server {
     .enablePlugins(SbtWeb)
     .enablePlugins(play.sbt.PlayScala)
     .enablePlugins(GitVersioning)
-    .settings(buildInfoSettings: _*)
     .settings(serverSettings: _*)
     .aggregate(projectToRef(Client.client))
     .aggregate(Shared.sharedJvm)

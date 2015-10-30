@@ -74,5 +74,5 @@
   }
 
   <!-- Require.js entrypoint -->
-  <script data-main="/assets/javascripts/main.js?build=@utils.BuildInfo.buildinfoBuildnumber" src="/assets/lib/requirejs/require.min.js"></script>
+  <script data-main="@routes.Assets.versioned("javascripts/main.js")" src="@routes.Assets.versioned("lib/requirejs/require.min.js")"></script>
 }
