@@ -10,7 +10,6 @@ object Config {
   val projectId = "boilerplay"
   val projectName = "Boilerplay"
   val version = "0.1"
-  val hostname = cnf.getString("host")
 
   val debug = !Play.isProd(Play.current)
 
