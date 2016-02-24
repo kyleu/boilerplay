@@ -25,7 +25,8 @@ object Server {
   private[this] val dependencies = {
     import Dependencies._
     Seq(
-      Cache.ehCache, Database.postgresAsync, Testing.akkaTestkit, Mail.mailer,
+      Cache.ehCache, Database.postgresAsync, Mail.mailer,
+      Akka.actor, Akka.logging, Akka.testkit,
       Play.playFilters, Play.playWs, Play.playTest, Authentication.silhouette,
       Metrics.metrics, Metrics.healthChecks, Metrics.json, Metrics.jvm, Metrics.ehcache, Metrics.jettyServlet, Metrics.servlets, Metrics.graphite,
       WebJars.requireJs, WebJars.bootstrap, WebJars.d3, WebJars.nvd3
@@ -63,6 +64,7 @@ object Server {
     // Code Quality
     scapegoatIgnoredFiles := Seq(".*/Row.scala", ".*/Routes.scala", ".*/ReverseRoutes.scala", ".*/JavaScriptReverseRoutes.scala", ".*/*.template.scala"),
     scapegoatDisabledInspections := Seq("DuplicateImport"),
+    scapegoatVersion := Dependencies.scapegoatVersion,
     ScalariformKeys.preferences := ScalariformKeys.preferences.value
   ) ++ graphSettings ++ defaultScalariformSettings
 

@@ -1,3 +1,4 @@
+import com.sksamuel.scapegoat.sbt.ScapegoatSbtPlugin.autoImport._
 import com.typesafe.sbt.{ GitBranchPrompt, GitVersioning }
 import sbt._
 import sbt.Keys._
@@ -34,7 +35,8 @@ object Shared {
 
   lazy val sharedJvm = (project in file("shared")).settings(
     scalaVersion := Versions.scala,
-    ScalariformKeys.preferences := ScalariformKeys.preferences.value
+    ScalariformKeys.preferences := ScalariformKeys.preferences.value,
+    scapegoatVersion := Dependencies.scapegoatVersion
   )
     .enablePlugins(GitVersioning)
     .enablePlugins(GitBranchPrompt)
