@@ -18,7 +18,7 @@ class FeedbackController @javax.inject.Inject() (override val messagesApi: Messa
       count <- Database.query(UserFeedbackQueries.searchCount(q))
       feedbacks <- Database.query(UserFeedbackQueries.search(q, getOrderClause(sortBy), Some(page)))
       notes <- Database.query(UserFeedbackNoteQueries.GetUserFeedbackNotes(feedbacks.map(_.id)))
-    } yield Ok(views.html.admin.feedback.feedbackList(q, sortBy, count, page, feedbacks, notes))
+    } yield Ok(views.html.admin.feedback.feedbackList(request.identity, q, sortBy, count, page, feedbacks, notes))
   }
 
   def feedbackNoteForm(feedbackId: UUID) = withAdminSession("note.form") { implicit request =>

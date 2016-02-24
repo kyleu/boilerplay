@@ -27,7 +27,7 @@ class ReportController @javax.inject.Inject() (override val messagesApi: Message
 
   def trend() = withAdminSession("trend") { implicit request =>
     DailyMetricService.getAllMetrics.map { metrics =>
-      Ok(views.html.admin.report.trend(metrics, toChartData(metrics)))
+      Ok(views.html.admin.report.trend(request.identity, metrics, toChartData(metrics)))
     }
   }
 
@@ -37,7 +37,7 @@ class ReportController @javax.inject.Inject() (override val messagesApi: Message
       userAgentCounts <- Database.query(RequestLogQueries.GetCounts("user_agent"))
       pathCounts <- Database.query(RequestLogQueries.GetCounts("path"))
       referrerCounts <- Database.query(RequestLogQueries.GetCounts("referrer"))
-    } yield Ok(views.html.admin.report.requests(userCounts, userAgentCounts, pathCounts, referrerCounts))
+    } yield Ok(views.html.admin.report.requests(request.identity, userCounts, userAgentCounts, pathCounts, referrerCounts))
   }
 
   private[this] def toChartData(metrics: Seq[(org.joda.time.LocalDate, Map[models.audit.DailyMetric.Metric, Long])]) = {

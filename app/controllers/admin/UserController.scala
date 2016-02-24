@@ -20,14 +20,14 @@ class UserController @javax.inject.Inject() (override val messagesApi: MessagesA
       count <- Database.query(UserQueries.searchCount(q))
       users <- Database.query(UserQueries.search(q, getOrderClause(sortBy), Some(page)))
       requestCounts <- Database.query(new ReportQueries.RequestCountForUsers(users.map(_.id)))
-    } yield Ok(views.html.admin.user.userList(q, sortBy, count, page, users, requestCounts))
+    } yield Ok(views.html.admin.user.userList(request.identity, q, sortBy, count, page, users, requestCounts))
   }
 
   def userDetail(id: UUID) = withAdminSession("detail") { implicit request =>
     env.identityService.retrieve(id).flatMap {
       case Some(user) => for {
         requestCount <- RequestHistoryService.getCountByUser(id)
-      } yield Ok(views.html.admin.user.userDetail(user, requestCount))
+      } yield Ok(views.html.admin.user.userDetail(request.identity, user, requestCount))
       case None => Future.successful(NotFound(s"User [$id] not found."))
     }
   }

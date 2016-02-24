@@ -13,12 +13,12 @@ class ClientTraceController @javax.inject.Inject() (override val messagesApi: Me
   def traceList(q: String, sortBy: String, page: Int) = withAdminSession("list") { implicit request =>
     for {
       (count, traces) <- ClientTraceService.searchTraces(q, sortBy, page)
-    } yield Ok(views.html.admin.clientTrace.traceList(q, sortBy, count, page, traces))
+    } yield Ok(views.html.admin.clientTrace.traceList(request.identity, q, sortBy, count, page, traces))
   }
 
   def traceDetail(id: UUID) = withAdminSession("detail") { implicit request =>
     ClientTraceService.getTrace(id).map {
-      case Some(trace) => Ok(views.html.admin.clientTrace.traceDetail(trace))
+      case Some(trace) => Ok(views.html.admin.clientTrace.traceDetail(request.identity, trace))
       case None => NotFound(s"User [$id] not found.")
     }
   }

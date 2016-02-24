@@ -1,4 +1,5 @@
 @(
+  user: models.user.User,
   model: String,
   modelProper: String,
   section: String,
@@ -10,7 +11,7 @@
   prevLink: Call = Call("GET", "/"),
   nextLink: Call = Call("GET", "/")
 )(table: Html)(implicit session: Session, flash: Flash)
-@layout.admin(s"${utils.Config.projectName} $modelProper", section) {
+@layout.admin(user, s"${utils.Config.projectName} $modelProper", section) {
   <div class="panel panel-default">
     <div class="panel-body">
       <div class="pull-right">

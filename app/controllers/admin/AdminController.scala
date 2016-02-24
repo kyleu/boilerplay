@@ -23,7 +23,7 @@ class AdminController @javax.inject.Inject() (
   implicit val timeout = Timeout(10.seconds)
 
   def index = withAdminSession("index") { implicit request =>
-    Future.successful(Ok(views.html.admin.index()))
+    Future.successful(Ok(views.html.admin.index(request.identity)))
   }
 
   def enable = withSession("admin.enable") { implicit request =>
@@ -34,7 +34,7 @@ class AdminController @javax.inject.Inject() (
 
   def status = withAdminSession("status") { implicit request =>
     (ActorSupervisor.instance ask GetSystemStatus).map {
-      case x: SystemStatus => Ok(views.html.admin.status(x))
+      case x: SystemStatus => Ok(views.html.admin.status(request.identity, x))
     }
   }
 

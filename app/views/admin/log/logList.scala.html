@@ -1,5 +1,5 @@
-@(files: Seq[(String, Int)])(implicit session: Session, flash: Flash)
-@layout.admin(s"${utils.Config.projectName} Logs", "explore") {
+@(user: models.user.User, files: Seq[(String, Int)])(implicit session: Session, flash: Flash)
+@layout.admin(user, s"${utils.Config.projectName} Logs", "explore") {
   <div class="panel panel-default">
     <div class="panel-body">
       <div class="text-large">@utils.Formatter.withCommas(files.size) log files</div>

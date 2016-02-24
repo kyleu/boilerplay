@@ -10,7 +10,7 @@ import services.user.AuthenticationEnvironment
 class RequestLogController @javax.inject.Inject() (override val messagesApi: MessagesApi, override val env: AuthenticationEnvironment) extends BaseController {
   def requestList(q: String, sortBy: String, page: Int) = withAdminSession("list") { implicit request =>
     RequestHistoryService.searchRequests(q, getOrderClause(sortBy), page).map { result =>
-      Ok(views.html.admin.request.requestList(q, sortBy, result._1, page, result._2))
+      Ok(views.html.admin.request.requestList(request.identity, q, sortBy, result._1, page, result._2))
     }
   }
 

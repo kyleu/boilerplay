@@ -1,4 +1,5 @@
 @(
+  user: models.user.User,
   userCounts: Seq[(java.util.UUID, Option[String], Int)],
   userAgentCounts: Seq[(String, Int)],
   pathCounts: Seq[(String, Int)],
@@ -26,6 +27,7 @@
 }
 
 @layout.admin(
+  user,
   utils.Config.projectName + " Request Report",
   "reports",
   scripts = Seq(routes.Assets.versioned("lib/d3/d3.js").url, routes.Assets.versioned("lib/d3/nv.d3.js").url),

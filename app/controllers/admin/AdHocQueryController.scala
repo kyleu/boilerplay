@@ -38,7 +38,7 @@ class AdHocQueryController @javax.inject.Inject() (
     if (action.contains("load")) {
       Database.query(AdHocQueries.search("", "title", None)).map { queries =>
         val q = query.flatMap(x => queries.find(_.id == x))
-        Ok(views.html.admin.report.adhoc(query, q.map(_.sql).getOrElse(""), Seq.empty -> Seq.empty, 0, queries))
+        Ok(views.html.admin.report.adhoc(request.identity, query, q.map(_.sql).getOrElse(""), Seq.empty -> Seq.empty, 0, queries))
       }
     } else if (action.contains("delete")) {
       Database.execute(AdHocQueries.removeById(Seq(query.getOrElse(throw new IllegalStateException())))).map { ok =>
@@ -46,7 +46,7 @@ class AdHocQueryController @javax.inject.Inject() (
       }
     } else {
       Database.query(AdHocQueries.search("", "title", None)).map { queries =>
-        Ok(views.html.admin.report.adhoc(query, "", Seq.empty -> Seq.empty, 0, queries))
+        Ok(views.html.admin.report.adhoc(request.identity, query, "", Seq.empty -> Seq.empty, 0, queries))
       }
     }
   }
@@ -62,7 +62,7 @@ class AdHocQueryController @javax.inject.Inject() (
           Database.execute(AdHocQueries.insert(q)).flatMap { ok =>
             Database.query(AdHocQueries.search("", "title", None)).map { queries =>
               val newId = queries.sortBy(_.created).headOption.map(_.id)
-              Ok(views.html.admin.report.adhoc(newId, form.sql, Seq.empty -> Seq.empty, 0, queries))
+              Ok(views.html.admin.report.adhoc(request.identity, newId, form.sql, Seq.empty -> Seq.empty, 0, queries))
             }
           }
         } else {
@@ -70,7 +70,7 @@ class AdHocQueryController @javax.inject.Inject() (
           val q = AdHocQueries.UpdateAdHocQuery(queryId.getOrElse(throw new IllegalStateException()), form.title, request.identity.id, form.sql)
           Database.execute(q).flatMap { ok =>
             Database.query(AdHocQueries.search("", "title", None)).map { queries =>
-              Ok(views.html.admin.report.adhoc(queryId, form.sql, Seq.empty -> Seq.empty, 0, queries))
+              Ok(views.html.admin.report.adhoc(request.identity, queryId, form.sql, Seq.empty -> Seq.empty, 0, queries))
             }
           }
         }
@@ -80,7 +80,7 @@ class AdHocQueryController @javax.inject.Inject() (
             Database.query(AdHocQueries.AdHocQueryExecute(form.sql, Seq.empty)).map { result =>
               val executionTime = (System.currentTimeMillis - startTime).toInt
               val queryId = form.id.map(UUID.fromString)
-              Ok(views.html.admin.report.adhoc(queryId, form.sql, result, executionTime, queries))
+              Ok(views.html.admin.report.adhoc(request.identity, queryId, form.sql, result, executionTime, queries))
             }
           }
         case x => throw new IllegalStateException(x)

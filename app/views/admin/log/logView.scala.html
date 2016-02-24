@@ -1,5 +1,5 @@
-@(name: String, logs: Seq[models.audit.ServerLog])(implicit session: Session, flash: Flash)
-@layout.admin(s"${utils.Config.projectName} Logs", "explore") {
+@(user: models.user.User, name: String, logs: Seq[models.audit.ServerLog])(implicit session: Session, flash: Flash)
+@layout.admin(user, s"${utils.Config.projectName} Logs", "explore") {
   <div class="panel panel-default">
     <div class="panel-body">
       <div class="text-large">[@name]</div>

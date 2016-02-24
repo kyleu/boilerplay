@@ -1,6 +1,6 @@
-@(results: Seq[(Int, models.test.TestResult)])(implicit session: Session, flash: Flash)
+@(user: models.user.User, results: Seq[(Int, models.test.TestResult)])(implicit session: Session, flash: Flash)
 
-@layout.admin(utils.Config.projectName + " Test Results", "tests") {
+@layout.admin(user, utils.Config.projectName + " Test Results", "tests") {
   <h4>@utils.Config.projectName Test Results</h4>
   <table class="table table-bordered">
     <thead>

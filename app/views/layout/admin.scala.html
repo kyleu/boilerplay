@@ -1,4 +1,6 @@
-@(title: String, section: String, scripts: Seq[String] = Nil, stylesheets: Seq[String] = Nil)(content: Html)(implicit session: Session, flash: Flash)@bootstrap(
+@(
+  user: models.user.User, title: String, section: String, scripts: Seq[String] = Nil, stylesheets: Seq[String] = Nil
+)(content: Html)(implicit session: Session, flash: Flash)@bootstrap(
   title,
   scripts = Seq(routes.Assets.versioned("javascripts/admin.js").url) ++ scripts,
   stylesheets = Seq(routes.Assets.versioned("stylesheets/admin.min.css").url) ++ stylesheets
@@ -49,7 +51,7 @@
         </ul>
         <ul class="nav navbar-nav navbar-right">
           <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Kyle <span class="caret"></span></a>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">@user.username.getOrElse("Admin") <span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
               <li><a href="@controllers.admin.routes.SandboxController.defaultSandbox()"><strong>Sandboxes</strong></a></li>
               @controllers.admin.SandboxController.sandboxes.map { sandbox =>

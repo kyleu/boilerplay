@@ -11,7 +11,7 @@ import play.api.libs.concurrent.Execution.Implicits.defaultContext
 @javax.inject.Singleton
 class TestController @javax.inject.Inject() (override val messagesApi: MessagesApi, override val env: AuthenticationEnvironment) extends BaseController {
   def tests = withAdminSession("list") { implicit request =>
-    Future.successful(Ok(views.html.admin.test.tests()))
+    Future.successful(Ok(views.html.admin.test.tests(request.identity)))
   }
 
   def runTest(test: String) = withAdminSession("run." + test) { implicit request =>
@@ -24,7 +24,7 @@ class TestController @javax.inject.Inject() (override val messagesApi: MessagesA
 
       val resultTree = TestService.run(testTree)
 
-      Ok(views.html.admin.test.testResults(resultTree.toSeq()))
+      Ok(views.html.admin.test.testResults(request.identity, resultTree.toSeq()))
     }
   }
 }

@@ -1,7 +1,7 @@
 @(
-  q: String, sortBy: String, count: Int, page: Int, users: Seq[models.user.User], requestCounts: Map[java.util.UUID, Int]
+  user: models.user.User, q: String, sortBy: String, count: Int, page: Int, users: Seq[models.user.User], requestCounts: Map[java.util.UUID, Int]
 )(implicit session: Session, flash: Flash)@views.html.admin.list(
-  "user", "Users", "explore", count, page, users.size, q,
+  user, "user", "Users", "explore", count, page, users.size, q,
   searchAction = controllers.admin.routes.UserController.userList(),
   prevLink = controllers.admin.routes.UserController.userList(q, sortBy, page - 1),
   nextLink = controllers.admin.routes.UserController.userList(q, sortBy, page + 1)

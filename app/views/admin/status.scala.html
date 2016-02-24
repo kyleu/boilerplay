@@ -1,4 +1,4 @@
-@(status: SystemStatus)(implicit session: Session, flash: Flash)@layout.admin("Server Status", "activity") {
+@(user: models.user.User, status: SystemStatus)(implicit session: Session, flash: Flash)@layout.admin(user, "Server Status", "activity") {
   <div class="row">
     <div class="col-md-12">
       <div class="panel panel-default">

@@ -1,4 +1,5 @@
 @(
+  user: models.user.User,
   q: String,
   sortBy: String,
   count: Int,
@@ -6,7 +7,7 @@
   feedback: Seq[models.audit.UserFeedback],
   notes: Seq[models.audit.UserFeedback.FeedbackNote]
 )(implicit session: Session, flash: Flash)@views.html.admin.list(
-  "feedback", "Feedback", "explore", count, page, feedback.size, q,
+  user, "feedback", "Feedback", "explore", count, page, feedback.size, q,
   searchAction = controllers.admin.routes.FeedbackController.feedbackList(),
   prevLink = controllers.admin.routes.FeedbackController.feedbackList(q, sortBy, page - 1),
   nextLink = controllers.admin.routes.FeedbackController.feedbackList(q, sortBy, page + 1)
