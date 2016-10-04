@@ -1,4 +1,4 @@
-package utils.play
+package utils.web
 
 import _root_.play.twirl.api.Html
 import utils.cache.TemplateCache

@@ -1,4 +1,4 @@
-package utils.play
+package utils.web
 
 import java.util.TimeZone
 

@@ -8,7 +8,7 @@ import play.api.mvc.{ AnyContentAsEmpty, Request, WebSocket }
 import services.connection.ConnectionService
 import services.supervisor.ActorSupervisor
 import services.user.AuthenticationEnvironment
-import utils.play.MessageFrameFormatter
+import utils.web.MessageFrameFormatter
 
 import scala.concurrent.Future
 

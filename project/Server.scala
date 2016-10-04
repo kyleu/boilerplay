@@ -65,7 +65,9 @@ object Server {
     scapegoatIgnoredFiles := Seq(".*/Row.scala", ".*/Routes.scala", ".*/ReverseRoutes.scala", ".*/JavaScriptReverseRoutes.scala", ".*/*.template.scala"),
     scapegoatDisabledInspections := Seq("DuplicateImport"),
     scapegoatVersion := Dependencies.scapegoatVersion,
-    ScalariformKeys.preferences := ScalariformKeys.preferences.value
+    ScalariformKeys.preferences := ScalariformKeys.preferences.value,
+
+    publishMavenStyle := false
   ) ++ graphSettings ++ defaultScalariformSettings
 
   lazy val server = Project(

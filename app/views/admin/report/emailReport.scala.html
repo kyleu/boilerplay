@@ -7,7 +7,7 @@
 )
 @import models.audit.DailyMetric._
 
-@metricsTable(title: String, m: Map[models.audit.DailyMetric.Metric, Long], css: utils.play.CssEmailStyles, isTotals: Boolean = false) = {
+@metricsTable(title: String, m: Map[models.audit.DailyMetric.Metric, Long], css: utils.web.CssEmailStyles, isTotals: Boolean = false) = {
   <table style="@css.table">
     <thead>
       <tr style="@css.tr">
@@ -34,7 +34,7 @@
 }
 
 @layout.email(utils.Config.projectName + " Report", color) {
-  @defining(utils.play.CssEmailStyles(color)) { css =>
+  @defining(utils.web.CssEmailStyles(color)) { css =>
   <div style="@css.title">@utils.Config.projectName</div>
   <div style="@css.subtitle">Daily Report for @d</div>
 

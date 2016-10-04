@@ -1,4 +1,4 @@
-package utils.play
+package utils.web
 
 import com.codahale.metrics.Meter
 import play.api.http.Status

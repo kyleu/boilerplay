@@ -1,4 +1,4 @@
-package utils.play
+package utils.web
 
 import models.{ MalformedRequest, MessageSet, RequestMessage, ResponseMessage }
 import play.api.libs.json._

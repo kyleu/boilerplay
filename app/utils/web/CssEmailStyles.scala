@@ -1,4 +1,4 @@
-package utils.play
+package utils.web
 
 case class CssEmailStyles(colorId: String) {
   val colorHex = "#dddddd"
