@@ -1,37 +1,237 @@
-guest.name = Guest
+# General
+general.back.title = Back to Connection List
+general.sql = SQL
+general.error = Error
+general.about = About
+general.save = Save
+general.cancel = Cancel
+general.delete = Delete
+general.ok = OK
+general.edit = Edit
+
+# Table Headers
+th.columns = Cols
+th.connection = Connection
+th.created = Created
+th.duration = Dur
+th.edition = Edition
+th.elapsed = Elapsed
+th.email = Email
+th.export = Export
+th.first = 1st
+th.import = Import
+th.issued = Issued
+th.last.accessed = Last Accessed
+th.name = Name
+th.occurred = Occurred
+th.owner = Owner
+th.role = Role
+th.rows = Rows
+th.status = Status
+th.table = Table
+th.theme = Theme
+th.type = Type
+th.username = Username
+
+# Index Page
+index.no.connections = Add your first connection by clicking the link below.
+index.new.connection = New Connection
+
+# License
+license.new.form = License Details
+license.paste = Please paste your license in the form below.
+license.error = Unable to parse license. Please make sure you've copied the entire text.
+license.missing = Missing license content.
+license.success = License updated successfully.
+license.register = Please create a local account to use with {0}.
+license.configure = Please configure your license for {0}.
+
+# Registration
+registration.title = Register
+registration.call.to.action = Register for {0}
+registration.notice = You''re creating an account for this local installation of {0}. No information leaves your server.
+registration.register = Sign Up
+registration.email.taken = That email address is already in use
+registration.form.username = Name
+registration.form.email = Email Address
+registration.form.password = Password
+registration.form.password.confirm = Confirm Password
+registration.passwords.do.not.match = Passwords do not match
+registration.already.member = Already a member?
+registration.disabled = You cannot sign up at this time. Contact your administrator.
 
 # Authentication
 authentication.call.to.action = Sign in to {0}
+authentication.notice = This account is only for this installation of {0}. No information leaves your server, this is only a local account.
 authentication.sign.in = Sign In
-authentication.form.username = Email or username
+authentication.sign.out = Sign Out
+authentication.form.email = Email Address
 authentication.form.password = Password
-authentication.invalid.credentials = Invalid credentials.
-authentication.invalid.provider = Cannot authenticate with unknown social provider [{0}].
-authentication.service.error = Couldn''t authenticate with provider [{0}].
-
-# Registration
-registration.title = Sign up for {0}
-registration.call.to.action = Welcome! Go ahead and sign up.
-registration.social.sign.in = Or, sign in using these providers
-registration.username.taken = That username is already in use.
-registration.email.taken = That email address is already in use.
-
-# Index Page
-index.welcome = Welcome to Boilerplay!
-
-# Feedback
-feedback.prompt = Feedback is always appreciated. Thanks for sharing yours.
-feedback.submit = Submit Feedback
+authentication.invalid.credentials = Invalid credentials
+authentication.not.member = Not a member?
+authentication.registration.disabled = Registration is disabled on this server. Contact your administrator to get an account.
 
 # Profile
-profile.set.username = Set username
-profile.create.account = Create a local account
-profile.sign.out = Sign Out
-profile.use.image.as.avatar = Use your {0} profile image as your avatar
-profile.connect.account = Connect your {0} account
+profile.title = Profile
+profile.save = Save Changes
+profile.cancel = Cancel
+profile.change.password = Change Password
+profile.change.password.old = Old Password
+profile.change.password.new = New Password
+profile.change.password.confirm = Confirm New Password
+profile.form.username = Username
+profile.form.language = Language
+profile.form.theme = Theme
 
-# Email
-email.from = Boilerplay <admin@127.0.0.1>
-email.welcome.subject = Welcome to {0}!
-email.welcome.body.html = <em>Welcome to <strong>Boilerplay</strong>!</em><br>We're so glad you're here.
-email.welcome.body.text = Welcome to Boilerplay! We're so glad you're here.
+# Activity
+activity.title = Activity
+activity.profile.title = User Activity
+activity.admin.title = System Activity
+activity.no.results = No activity recorded in database.
+activity.load.more = Load {0} More
+activity.remove.confirm = Removed activity [{0}]
+activity.remove.all = Remove All Activity
+activity.remove.ok = Removed activity [{0}].
+activity.remove.all.confirm = Removed all system activity.
+activity.remove.all.user.confirm = Removed all user activity.
+activity.confirm.remove.user = Are you sure you wish to remove all your activity?
+activity.confirm.remove.all = Are you sure you wish to all activity from the system?
+
+# Permissions
+permissions.everyone = Everyone
+permissions.registered.users = Registered Users
+permissions.administrators = Administrators
+permissions.only.myself = Only Myself
+
+permissions.visitor.text = by everyone
+permissions.user.text = by all registered users
+permissions.administrators.text = by administrators
+permissions.private.text = only by you
+
+
+# Connection Form
+connection.permissions.available.to = Available To
+connection.permissions.editable.by = Editable By
+connection.name = Connection Name
+connection.engine = Database Engine
+connection.username = Username
+connection.password = Password
+connection.url = URL
+connection.fields = Fields
+connection.host = Host
+connection.port = Port
+connection.db.name = Database Name
+connection.jdbc.url = Jdbc URL
+connection.description = Description
+connection.new.title = New Connection
+connection.permission.denied = You do not have permission to add a database connection.
+
+# Query
+query.title = Query
+query.loading = Loading {0}...
+query.search = Search
+query.tx.begin = Begin Transaction
+query.tx.none = No active transaction.
+query.tx.commit = Commit Transaction
+query.tx.rollback = Rollback
+query.sidenav.loading = Loading...
+query.sidenav.new = New Query
+query.sidenav.history = Query History
+query.sidenav.refresh = Refresh Schema
+query.sidenav.saved.queries = Saved Queries
+query.sidenav.shared.results = Shared Results
+query.sidenav.tables = Tables
+query.sidenav.views = Views
+query.sidenav.procedures = Stored Procedures
+query.sidenav.help = Help
+query.sidenav.feedback = Feedback
+query.sidenav.about = About {0}
+query.share = Share
+query.insert = Insert Row
+
+# Query Results
+result.remove.confirm = Removed result [{0}].
+result.remove.orphan = Remove orphan table [{0}].
+
+# Shared Results
+shared.results.title = Shared Results
+shared.results.personal.title = My Shared Results
+shared.results.public.title = Public Shared Results
+shared.results.public.none = No public shared results available.
+
+# Socket Service
+socket.connect.error = Error attempting to connect to database.
+socket.connect.failed = Connection Failed
+socket.too.many.users = Personal Edition allows only one user to connect at a time, and [{0}] is already connected.
+socket.duplicate.transaction = Already in a transaction.
+socket.no.transaction = Not currently in a transaction.
+
+# Modals
+modal.confirm.prompt = Are you sure?
+modal.export.action = Export
+modal.export.csv = Comma Separated Values
+modal.export.excel = Microsoft Excel
+modal.reconnect.prompt = Connection error. Would you like to retry?
+modal.reconnect.action = Reconnect
+modal.save.query.name = Query Name
+modal.save.description = Description
+modal.save.available.from = Available From
+modal.save.all.databases = All Databases
+modal.save.this.database = This Database Only
+modal.share.results.title = Title
+modal.share.results.description = Description
+
+# User
+user.password.changed = Password changed.
+user.password.check.fail = Old password does not match ({0}).
+
+# Admin
+admin.title = Settings
+admin.back.title = Back
+
+admin.index.title = {0} Administration
+admin.index.prompt = Use the menu above or the links below to get started!
+
+admin.status.link = Status
+admin.status.title = {0} Status
+admin.status.description = View license details and system status.
+admin.status.metrics.title = System Metrics
+admin.status.no.license = No license configured. You have {0} days remaining in your trial.
+admin.status.file.loaded = Loaded from {0}
+admin.status.db.loaded = {0} databse, loaded from {1}
+
+admin.settings.link = Preferences
+admin.settings.title = System Preferences
+admin.settings.description = Edit system preferences.
+admin.settings.invalid = Attempt to save invalid setting [{0}].
+
+admin.users.link = Users
+admin.users.title = User Management
+admin.users.description = Manage the users of the system.
+
+admin.results.link = Results
+admin.results.title = Cached Query Results
+admin.results.description = View cached query results that have been saved.
+
+admin.activity.link = Activity
+admin.activity.title = User Activity
+admin.activity.description = Show system activity for all users in the system.
+
+admin.users.new = New User
+admin.users.confirm = Are you certain you want to delete this user ({0})?
+
+# Server Errors
+error.admin.required = You must have admin rights to access that page.
+error.not.logged.in = Somehow not logged in.
+error.must.sign.in = You must sign in or register before accessing {0}.
+error.missing.parameter = Missing [{0}] parameter.
+error.unknown.format = Unknown format [{0}].
+error.exception.encountered = Unable to export query: [{0}: {1}].
+error.missing.user = Couldn't find user {0}.
+error.cannot.sign.up = Unable to sign up at this time. Contact your administrator.
+error.empty = {0} is required.
+error.invalid.user = Invalid user [{0}].
+error.remove.self = You cannot remove your own admin role.
+
+# Static
+static.copyright = © 2016 {0}

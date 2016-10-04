@@ -1,15 +1,11 @@
 package models.database
 
 import com.github.mauricio.async.db.ResultSet
-import services.database.Database
-
-import scala.concurrent.Future
 
 trait RawQuery[A] {
   def sql: String
   def values: Seq[Any] = Seq.empty
   def handle(results: ResultSet): A
-  def apply(): Future[A] = Database.query(this)
 }
 
 trait Query[A] extends RawQuery[A] {

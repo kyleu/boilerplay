@@ -1,30 +1,25 @@
+import Dependencies.{ Serialization, Utils }
 import com.sksamuel.scapegoat.sbt.ScapegoatSbtPlugin.autoImport._
-import com.typesafe.sbt.{ GitBranchPrompt, GitVersioning }
-import com.typesafe.sbt.SbtScalariform.{ ScalariformKeys, defaultScalariformSettings }
-import net.virtualvoid.sbt.graph.Plugin.graphSettings
 import org.scalajs.sbtplugin.ScalaJSPlugin
 import org.scalajs.sbtplugin.ScalaJSPlugin.autoImport._
-import playscalajs.ScalaJSPlay
-import playscalajs.ScalaJSPlay.autoImport._
+import webscalajs.ScalaJSWeb
 import sbt.Keys._
 import sbt._
 
 object Client {
-  lazy val client = (project in file("client")).settings(
-    scalaVersion := Shared.Versions.scala,
+  private[this] val clientSettings = Shared.commonSettings ++ Seq(
     persistLauncher := false,
-    sourceMapsDirectories += Shared.sharedJs.base / "..",
-    unmanagedSourceDirectories in Compile := Seq((scalaSource in Compile).value),
-    libraryDependencies ++= Seq("com.lihaoyi" %%% "upickle" % "0.3.8"),
+    libraryDependencies ++= Seq(
+      "be.doeraene" %%% "scalajs-jquery" % "0.9.0",
+      "com.lihaoyi" %%% "scalatags" % "0.6.0"
+    ),
+    testFrameworks += new TestFramework("utest.runner.Framework"),
     scalaJSStage in Global := FastOptStage,
-    scapegoatIgnoredFiles := Seq(".*/JsonUtils.scala", ".*/JsonSerializers.scala"),
-    scapegoatVersion := Dependencies.scapegoatVersion,
-    ScalariformKeys.preferences := ScalariformKeys.preferences.value
+    scapegoatIgnoredFiles := Seq(".*/JsonUtils.scala", ".*/JsonSerializers.scala")
   )
-    .enablePlugins(GitVersioning)
-    .enablePlugins(GitBranchPrompt)
-    .settings(graphSettings: _*)
-    .settings(defaultScalariformSettings: _*)
-    .enablePlugins(ScalaJSPlugin, ScalaJSPlay)
+
+  lazy val client = (project in file("client"))
+    .settings(clientSettings: _*)
+    .enablePlugins(ScalaJSPlugin, ScalaJSWeb)
     .dependsOn(Shared.sharedJs)
 }

@@ -1,0 +1,15 @@
+@(user: Option[models.user.User])(implicit messages: Messages)<ul id="dropdown-user" class="dropdown-content">
+  @if(user.isEmpty) {
+  @if(services.settings.SettingsService.allowRegistration) { <li>
+    <a class="theme-text" href="@controllers.auth.routes.RegistrationController.registrationForm()">@messages("registration.register")</a>
+  </li> }
+  <li><a class="theme-text" href="@controllers.auth.routes.AuthenticationController.signInForm()">@messages("authentication.sign.in")</a></li>
+  } else {
+  @if(user.exists(_.role == models.user.Role.Admin)) {
+  <li><a class="theme-text" href="@controllers.admin.routes.AdminController.index()">@messages("admin.title")</a></li>
+  }
+  <li><a class="theme-text" href="@controllers.routes.ProfileController.view()">@messages("profile.title")</a></li>
+  <li><a class="theme-text" href="@controllers.auth.routes.AuthenticationController.signOut()">@messages("authentication.sign.out")</a></li>
+  }
+  <li><a class="theme-text" href="@utils.Config.projectUrl" target="_blank">@messages("general.about")</a></li>
+</ul>

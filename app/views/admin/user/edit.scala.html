@@ -1,0 +1,58 @@
+@(self: models.user.User, user: models.user.User)(
+    implicit request: Request[AnyContent], session: Session, flash: Flash, messages: Messages
+)@layout.admin(self, "users", messages("admin.users.title")) {
+  <form action="@controllers.admin.routes.UserEditController.save(user.id)" method="post">
+    <div class="content-panel">
+      <div class="panel-title">
+        <i class="fa @models.template.Icons.user"></i>
+        Edit @user.username
+        @if(self.id == user.id) { <span>(You)</span> }
+      </div>
+
+      <div class="z-depth-1 padded horizontal">
+        <div class="row">
+          <div class="input-field col s12">
+            <input id="input-username" type="text" class="form-control validate" name="username" value="@user.username" />
+            <label for="input-username">@messages("registration.form.username")</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <input id="input-email" type="email" class="form-control validate" name="email" value="@user.profile.providerKey" />
+            <label for="input-email">@messages("registration.form.email")</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <input id="input-password" type="password" class="form-control validate" name="password" value="original" />
+            <label for="input-password">@messages("registration.form.password")</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <p>
+              @if(user.role == models.user.Role.Admin) {
+                <input type="radio" name="role" value="admin" id="admin-radio" checked="checked" />
+              } else {
+                <input type="radio" name="role" value="admin" id="admin-radio" />
+              }
+              <label for="admin-radio">Administrator</label>
+
+              @if(user.role == models.user.Role.User) {
+                <input type="radio" name="role" id="user-radio" value="user" checked="checked" />
+              } else {
+                <input type="radio" name="role" id="user-radio" value="user" />
+              }
+              <label for="user-radio">Normal User</label>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="panel-action padded">
+      <button class="right btn theme waves-effect waves-light" type="submit">Save</button>
+      <a class="right btn-flat theme-text" href="@controllers.admin.routes.UserEditController.view(user.id)">Cancel</a>
+      <div class="clear"></div>
+    </div>
+  </form>
+}

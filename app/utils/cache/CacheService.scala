@@ -1,6 +1,6 @@
 package utils.cache
 
-import net.sf.ehcache.{ CacheManager, Element }
+import net.sf.ehcache.{CacheManager, Element}
 import org.apache.commons.lang3.reflect.TypeUtils
 import utils.Config
 
@@ -18,7 +18,7 @@ object CacheService {
   }
 
   def keys() = {
-    import collection.JavaConverters._
+    import scala.collection.JavaConverters._
     cache.getKeys.asScala.map({
       case s: String => s
       case x => x.toString
@@ -54,4 +54,6 @@ object CacheService {
   }
 
   def remove(key: String) = cache.remove(key)
+
+  def clear() = cache.removeAll()
 }

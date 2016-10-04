@@ -1,43 +1,20 @@
-@(user: models.user.User, status: SystemStatus)(implicit session: Session, flash: Flash)@layout.admin(user, "Server Status", "activity") {
-  <div class="row">
-    <div class="col-md-12">
-      <div class="panel panel-default">
-        <div class="panel-body">
-          <h5>@status.connections.size Connections</h5>
-          <div class="list-panel">
-            <table class="table table-bordered">
-              <tr>
-                <th>Connection ID</th>
-                <th>Username</th>
-                <th></th>
-              </tr>
-              @for(connection <- status.connections) {
-                <tr>
-                  <td>
-                    <a href="@controllers.admin.routes.TraceController.traceConnection(connection._1)" class="trace-link">@connection._1</a>
-                  </td>
-                  <td>@connection._2</td>
-                  <td>
-                    <a href="@controllers.admin.routes.TraceController.traceClient(connection._1)" class="trace-link"><span class="glyphicon glyphicon-cloud-download"></span></a>
-                  </td>
-                </tr>
-              }
-            </table>
-          </div>
-        </div>
+@(user: models.user.User)(implicit request: Request[AnyContent], session: Session, flash: Flash, messages: Messages)
+@layout.admin(user, "status", messages("admin.status.title", utils.Config.projectName)) {
+  <div class="content-panel">
+    <div class="panel-title"><i class="fa @models.template.Icons.settings"></i> @messages("admin.status.title", utils.Config.projectName)</div>
+
+    <div class="row">
+      <div class="col s12">
+        <ul class="collection">
+          <li class="collection-item">
+            <a href="@controllers.admin.routes.MetricsController.showMetrics()" class="theme-text">Configuration</a>
+            <div>@messages("admin.status")</div>
+          </li>
+        </ul>
       </div>
     </div>
   </div>
-
-  <div class="row">
-    <div class="col-md-12">
-      <div class="panel panel-default">
-        <div class="panel-body">
-          <div id="trace-content">
-            Select an option from above.
-          </div>
-        </div>
-      </div>
-    </div>
+  <div class="panel-action">
+    <a class="theme-text" href="@controllers.admin.routes.AdminController.index()">@messages("admin.back.title")</a>
   </div>
 }

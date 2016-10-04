@@ -1,78 +1,11 @@
 @(user: models.user.User)(
-  implicit request: Request[AnyContent], session: Session, flash: Flash, messages: Messages
-)@layout.bootstrap(
-  title = utils.Config.projectName,
-  scripts = Seq(routes.Assets.versioned("javascripts/index.js").url)
-) {
-  @layout.menu(user)
-
-  <div class="container">
-    <div class="row">
-      <div class="col-md-12">
-        <h1>@Messages("index.welcome")</h1>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-12">
-        <div class="panel panel-default">
-          <div class="panel-body">
-          @if(user.isAdmin) {
-            You're an admin, head over to the <a href="@controllers.admin.routes.AdminController.index()">admin section</a>!
-          } else {
-            To get started, <a href="@controllers.auth.routes.RegistrationController.registrationForm()">register an account</a>,
-            then make youself an admin with <a href="@controllers.admin.routes.AdminController.enable()">this link</a>.
-          }
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-3">
-        <div class="panel panel-default">
-          <div class="panel-body">
-            <strong>Websocket</strong>
-            <span title="This test sends a strongly typed ping message via WebSocket every few seconds, and displays the round-trip time in milliseconds." class="glyphicon glyphicon-question-sign"></span>
-            <div id="websocket-content">Not Connected</div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="panel panel-default">
-          <div class="panel-body">
-            <strong>AJAX Call</strong>
-            <span title="This test sends a GET request to /ping every few seconds, and displays the result." class="glyphicon glyphicon-question-sign"></span>
-            <div id="ajax-content">Not Started</div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="panel panel-default">
-          <div class="panel-body">
-            <strong>Scala.js</strong>
-            <span title="This test sends asynchronous messages from javascript to a Scala.js app, and displays the received message." class="glyphicon glyphicon-question-sign"></span>
-            <div id="scalajs-content">Not Ready</div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="panel panel-default">
-          <div class="panel-body">
-            <strong>Require.js</strong>
-            <span title="This test uses the sbt-web pipeline to deliver optimized JavaScript." class="glyphicon glyphicon-question-sign"></span>
-            <div id="require-content">Starting</div>
-          </div>
-        </div>
+    implicit request: Request[AnyContent], session: Session, flash: Flash, messages: Messages
+)@layout.simple(Some(user), utils.Config.projectName) {
+  <div class="row">
+    <div class="col s12">
+      <div class="panel-content">
+        @messages("index.no.connections")
       </div>
     </div>
   </div>
-
-  <!-- Scala.js output -->
-  @if(play.api.Play.isProd(play.api.Play.current)) {
-    <script src="@routes.Assets.versioned("client-opt.js")" type="text/javascript"></script>
-  } else {
-    <script src="@routes.Assets.versioned("client-fastopt.js")" type="text/javascript"></script>
-  }
-
-  <!-- Require.js entrypoint -->
-  <script data-main="@routes.Assets.versioned("javascripts/main.js")" src="@routes.Assets.versioned("lib/requirejs/require.min.js")"></script>
 }

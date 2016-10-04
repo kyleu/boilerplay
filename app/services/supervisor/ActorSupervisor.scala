@@ -3,33 +3,25 @@ package services.supervisor
 import java.util.UUID
 
 import akka.actor.SupervisorStrategy.Stop
-import akka.actor._
+import akka.actor.{ActorRef, OneForOneStrategy, SupervisorStrategy}
 import models._
 import models.user.User
 import org.joda.time.LocalDateTime
-import play.api.libs.concurrent.Akka
-import utils.{ DateUtils, Logging }
-import utils.metrics.{ InstrumentedActor, MetricsServletActor }
+import utils.metrics.{InstrumentedActor, MetricsServletActor}
+import utils.{ApplicationContext, DateUtils, Logging}
 
-object ActorSupervisor extends Logging {
-  lazy val instance = {
-    import play.api.Play.current
-    val instanceRef = Akka.system.actorOf(Props[ActorSupervisor], "supervisor")
-    log.info(s"Actor Supervisor [${instanceRef.path.toString}] started for [${utils.Config.projectId}].")
-    instanceRef
-  }
-
-  case class ConnectionRecord(userId: UUID, name: String, actorRef: ActorRef, var activeGame: Option[UUID], started: LocalDateTime)
+object ActorSupervisor {
+  case class SocketRecord(userId: UUID, name: String, actorRef: ActorRef, started: LocalDateTime)
+  protected val sockets = collection.mutable.HashMap.empty[UUID, SocketRecord]
 }
 
-class ActorSupervisor extends InstrumentedActor with  Logging {
-  import ActorSupervisor.ConnectionRecord
+class ActorSupervisor(val ctx: ApplicationContext) extends InstrumentedActor with Logging {
+  import services.supervisor.ActorSupervisor._
 
-  protected[this] val connections = collection.mutable.HashMap.empty[UUID, ConnectionRecord]
-  protected[this] val connectionsCounter = metrics.counter("active-connections")
+  protected[this] val socketsCounter = metrics.counter("active-connections")
 
   override def preStart() {
-    context.actorOf(Props[MetricsServletActor], "metrics-servlet")
+    context.actorOf(MetricsServletActor.props(ctx.config.metrics), "metrics-servlet")
   }
 
   override def supervisorStrategy: SupervisorStrategy = OneForOneStrategy() {
@@ -37,44 +29,44 @@ class ActorSupervisor extends InstrumentedActor with  Logging {
   }
 
   override def receiveRequest = {
-    case cs: ConnectionStarted => timeReceive(cs) { handleConnectionStarted(cs.user, cs.connectionId, cs.conn) }
-    case cs: ConnectionStopped => timeReceive(cs) { handleConnectionStopped(cs.connectionId) }
+    case ss: SocketStarted => timeReceive(ss) { handleSocketStarted(ss.user, ss.socketId, ss.conn) }
+    case ss: SocketStopped => timeReceive(ss) { handleSocketStopped(ss.socketId) }
 
     case GetSystemStatus => timeReceive(GetSystemStatus) { handleGetSystemStatus() }
-    case ct: ConnectionTrace => timeReceive(ct) { handleConnectionTrace(ct) }
-    case ct: ClientTrace => timeReceive(ct) { handleClientTrace(ct) }
+    case ct: SendSocketTrace => timeReceive(ct) { handleSendSocketTrace(ct) }
+    case ct: SendClientTrace => timeReceive(ct) { handleSendClientTrace(ct) }
 
-    case sm: InternalMessage => log.warn(s"Unhandled internal message [${sm.getClass.getSimpleName}] received.")
+    case im: InternalMessage => log.warn(s"Unhandled internal message [${im.getClass.getSimpleName}] received.")
     case x => log.warn(s"ActorSupervisor encountered unknown message: ${x.toString}")
   }
 
   private[this] def handleGetSystemStatus() = {
-    val connectionStatuses = connections.toList.sortBy(_._2.name).map(x => x._1 -> x._2.name)
+    val connectionStatuses = ActorSupervisor.sockets.toList.sortBy(_._2.name).map(x => x._1 -> x._2.name)
     sender() ! SystemStatus(connectionStatuses)
   }
 
-  private[this] def handleConnectionTrace(ct: ConnectionTrace) = connections.find(_._1 == ct.id) match {
-    case Some(g) => g._2.actorRef forward ct
-    case None => sender() ! ServerError("Unknown Connection", ct.id.toString)
+  private[this] def handleSendSocketTrace(ct: SendSocketTrace) = ActorSupervisor.sockets.find(_._1 == ct.id) match {
+    case Some(c) => c._2.actorRef forward ct
+    case None => sender() ! ServerError("Unknown Socket", ct.id.toString)
   }
 
-  private[this] def handleClientTrace(ct: ClientTrace) = connections.find(_._1 == ct.id) match {
-    case Some(g) => g._2.actorRef forward ct
-    case None => sender() ! ServerError("Unknown Client", ct.id.toString)
+  private[this] def handleSendClientTrace(ct: SendClientTrace) = ActorSupervisor.sockets.find(_._1 == ct.id) match {
+    case Some(c) => c._2.actorRef forward ct
+    case None => sender() ! ServerError("Unknown Client Socket", ct.id.toString)
   }
 
-  protected[this] def handleConnectionStarted(user: User, connectionId: UUID, conn: ActorRef) {
-    log.debug(s"Connection [$connectionId] registered to [${user.username.getOrElse(user.id)}] with path [${conn.path}].")
-    connections(connectionId) = ConnectionRecord(user.id, user.username.getOrElse("Guest"), conn, None, DateUtils.now)
-    connectionsCounter.inc()
+  protected[this] def handleSocketStarted(user: User, socketId: UUID, socket: ActorRef) {
+    log.debug(s"Socket [$socketId] registered to [${user.username}] with path [${socket.path}].")
+    ActorSupervisor.sockets(socketId) = SocketRecord(user.id, user.username, socket, DateUtils.now)
+    socketsCounter.inc()
   }
 
-  protected[this] def handleConnectionStopped(id: UUID) {
-    connections.remove(id) match {
-      case Some(conn) =>
-        connectionsCounter.dec()
-        log.debug(s"Connection [$id] [${conn.actorRef.path}] stopped.")
-      case None => log.warn(s"Connection [$id] stopped but is not registered.")
+  protected[this] def handleSocketStopped(id: UUID) {
+    ActorSupervisor.sockets.remove(id) match {
+      case Some(sock) =>
+        socketsCounter.dec()
+        log.debug(s"Connection [$id] [${sock.actorRef.path}] stopped.")
+      case None => log.warn(s"Socket [$id] stopped but is not registered.")
     }
   }
 }

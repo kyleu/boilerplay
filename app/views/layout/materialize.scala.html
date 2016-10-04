@@ -1,0 +1,12 @@
+@(user: Option[models.user.User], title: String, scripts: Seq[String] = Nil, stylesheets: Seq[String] = Nil)(content: Html)(implicit session: Session, flash: Flash)@basic(
+  user,
+  title,
+  scripts = Seq(
+    routes.Assets.versioned("lib/jquery/jquery.js").url,
+    routes.Assets.versioned("lib/materializecss/js/materialize.js").url
+  ) ++ scripts,
+  stylesheets = Seq(
+    routes.Assets.versioned("lib/font-awesome/css/font-awesome.css").url,
+    routes.Assets.versioned("lib/materializecss/css/materialize.css").url
+  ) ++ stylesheets
+)(content)

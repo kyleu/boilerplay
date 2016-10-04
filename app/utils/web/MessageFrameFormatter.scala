@@ -1,50 +1,42 @@
 package utils.web
 
-import models.{ MalformedRequest, MessageSet, RequestMessage, ResponseMessage }
-import play.api.libs.json._
-import play.api.mvc.WebSocket.FrameFormatter
-import utils.Config
-import utils.json.RequestMessageSerializers._
-import utils.json.ResponseMessageSerializers._
-import utils.json.{ RequestMessageSerializers, ResponseMessageSerializers }
+import models.{MalformedRequest, RequestMessage, ResponseMessage}
+import play.api.mvc.WebSocket.MessageFlowTransformer
+import upickle.{Js, json}
+import utils.{JsonSerializers, Logging}
 
-object MessageFrameFormatter {
-  private[this] def requestToJson(r: RequestMessage): JsValue = {
-    throw new IllegalArgumentException(s"Attempted to serialize RequestMessage [$r] on server.")
+import scala.util.control.NonFatal
+
+class MessageFrameFormatter(debug: Boolean) extends Logging {
+  private[this] def requestFromJsValue(json: Js.Value): RequestMessage = try {
+    JsonSerializers.readRequestMessage(json)
+  } catch {
+    case NonFatal(x) => MalformedRequest(s"Invalid Request [${x.getClass.getSimpleName}]", json.toString)
   }
 
-  private[this] def requestFromJson(json: JsValue): RequestMessage = Json.fromJson[RequestMessage](json) match {
-    case rm: JsSuccess[RequestMessage @unchecked] => rm.get
-    case e: JsError => MalformedRequest(e.errors.map(x => s"$x._1: [${x._2.mkString(" :: ")}").mkString(", "), Json.stringify(json))
-  }
+  private[this] def responseToJsValue(r: ResponseMessage): Js.Value = JsonSerializers.writeResponseMessageJs(r)
 
-  private[this] def responseToJson(r: ResponseMessage): JsValue = {
-    r match {
-      case ms: MessageSet =>
-        messageSetWrites.writes(ms)
-      case _ =>
-        Json.toJson(r)
+  private[this] def jsValueToString(v: Js.Value) =
+    if (debug) {
+      json.write(v, indent = 2)
+    } else {
+      json.write(v)
+    }
+
+  private[this] def jsValueFromString(s: String) = {
+    try {
+      json.read(s)
+    } catch {
+      case NonFatal(x) => Js.Arr(Js.Str("models.MalformedRequest"), Js.Obj(
+        "reason" -> Js.Str("Invalid JSON"),
+        "content" -> Js.Str(s)
+      ))
     }
   }
-  private[this] def responseFromJson(json: JsValue): ResponseMessage = {
-    throw new IllegalArgumentException(s"Attempted to deserialize ResponseMessage [$json] on server.")
-  }
 
-  private[this] val jsValueFrame: FrameFormatter[JsValue] = {
-    val toStr = if (Config.debug) { Json.prettyPrint _ } else { Json.stringify _ }
-    FrameFormatter.stringFrame.transform(toStr, { (s: String) =>
-      val ret = try {
-        Json.parse(s)
-      } catch {
-        case x: Exception => JsObject(Seq("c" -> JsString("MalformedRequest"), "v" -> JsObject(Seq(
-          "reason" -> JsString("Invalid JSON"),
-          "content" -> JsString(s)
-        ))))
-      }
-      ret
-    })
+  val transformer = MessageFlowTransformer.stringMessageFlowTransformer.map { s =>
+    requestFromJsValue(jsValueFromString(s))
+  }.contramap { m: ResponseMessage =>
+    jsValueToString(responseToJsValue(m))
   }
-
-  implicit val requestFormatter = jsValueFrame.transform(requestToJson, requestFromJson)
-  implicit val responseFormatter = jsValueFrame.transform(responseToJson, responseFromJson)
 }

@@ -13,26 +13,19 @@ object UserCache {
 
   def cacheUser(user: User) = {
     CacheService.set(s"user.${user.id}", user)
+    CacheService.set(s"user.${user.profile.providerKey}", user)
     user
   }
 
-  def cacheUserForLoginInfo(user: User, loginInfo: LoginInfo) = {
-    CacheService.set(s"user.${user.id}", user)
-    CacheService.set(s"user.${loginInfo.providerID}:${loginInfo.providerKey}", user)
-  }
-
   def getUserByLoginInfo(loginInfo: LoginInfo) = {
-    CacheService.getAs[User](s"user.${loginInfo.providerID}:${loginInfo.providerKey}")
+    CacheService.getAs[User](s"user.${loginInfo.providerKey}")
   }
 
   def removeUser(id: UUID) = {
     CacheService.getAs[User](s"user.$id").foreach { u =>
-      for (p <- u.profiles) {
-        CacheService.remove(s"user.${p.providerID}:${p.providerKey}")
-      }
+      CacheService.remove(s"user.${u.profile.providerKey}")
     }
     CacheService.remove(s"user.$id")
-    CacheService.remove(s"user.anonymous:$id")
   }
 
   def cacheSession(session: CookieAuthenticator) = {

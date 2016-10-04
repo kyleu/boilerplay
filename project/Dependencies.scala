@@ -1,60 +1,83 @@
 import sbt._
 
 object Dependencies {
-  val scapegoatVersion = "1.2.0"
-
   object Cache {
     val ehCache = "net.sf.ehcache" % "ehcache-core" % "2.6.11"
   }
 
-  object Database {
-    val postgresAsync = "com.github.mauricio" %% "postgresql-async" % "0.2.18"
+  object Logging {
+    val slf4jApi = "org.slf4j" % "slf4j-api" % "1.7.21"
   }
 
   object Play {
-    private[this] val version = "2.4.6"
+    private[this] val version = "2.5.8"
+    val playLib = "com.typesafe.play" %% "play" % version
     val playFilters = play.sbt.PlayImport.filters
     val playWs = play.sbt.PlayImport.ws
-    val playJson = play.sbt.PlayImport.json
-    val playTest = "com.typesafe.play" %% "play-test" % version
+    val playTest = "com.typesafe.play" %% "play-test" % version % "test"
+    val playMailer = "com.typesafe.play" %% "play-mailer" % "5.0.0"
   }
 
   object Akka {
-    private[this] val version = "2.4.2"
+    private[this] val version = "2.4.11"
     val actor = "com.typesafe.akka" %% "akka-actor" % version
     val remote = "com.typesafe.akka" %% "akka-remote" % version
     val logging = "com.typesafe.akka" %% "akka-slf4j" % version
     val cluster = "com.typesafe.akka" %% "akka-cluster" % version
     val clusterMetrics = "com.typesafe.akka" %% "akka-cluster-metrics" % version
     val clusterTools = "com.typesafe.akka" %% "akka-cluster-tools" % version
-    val testkit = "com.typesafe.akka" %% "akka-testkit" % version
-  }
-
-  object WebJars {
-    val requireJs = "org.webjars" % "requirejs" % "2.1.22"
-    val bootstrap = "org.webjars" % "bootstrap" % "3.3.6"
-    val d3 = "org.webjars" % "d3js" % "3.5.12"
-    val nvd3 = "org.webjars" % "nvd3-community" % "1.7.0"
-  }
-
-  object Mail {
-    val mailer = "com.typesafe.play" %% "play-mailer" % "3.0.1"
+    val testkit = "com.typesafe.akka" %% "akka-testkit" % version % "test"
   }
 
   object Authentication {
-    val silhouette = "com.mohiva" %% "play-silhouette" % "3.0.4"
+    private[this] val version = "4.0.0"
+    val silhouette = "com.mohiva" %% "play-silhouette" % version
+    val hasher = "com.mohiva" %% "play-silhouette-password-bcrypt" % version
+    val persistence = "com.mohiva" %% "play-silhouette-persistence" % version
+    val crypto = "com.mohiva" %% "play-silhouette-crypto-jca" % version
+  }
+
+  object Database {
+    val postgres = "com.github.mauricio" %% "postgresql-async" % "0.2.20"
+  }
+
+  object Serialization {
+    val version = "0.4.2"
+    val uPickle = "com.lihaoyi" %% "upickle" % version
+  }
+
+  object WebJars {
+    val fontAwesome = "org.webjars" % "font-awesome" % "4.6.3"
+    val jquery = "org.webjars" % "jquery" % "2.2.4"
+    val materialize = "org.webjars" % "materializecss" % "0.97.7"
+    val moment = "org.webjars" % "momentjs" % "2.15.0"
+    val mousetrap = "org.webjars" % "mousetrap" % "1.6.0"
   }
 
   object Metrics {
-    val metrics = "nl.grons" %% "metrics-scala" % "3.5.2" withSources()
-    val jvm = "io.dropwizard.metrics" % "metrics-jvm" % "3.1.2" withSources()
-    val ehcache = "io.dropwizard.metrics" % "metrics-ehcache" % "3.1.2" withSources() intransitive()
-    val healthChecks = "io.dropwizard.metrics" % "metrics-healthchecks" % "3.1.2" withSources() intransitive()
+    val metrics = "nl.grons" %% "metrics-scala" % "3.5.5"
+    val jvm = "io.dropwizard.metrics" % "metrics-jvm" % "3.1.2"
+    val ehcache = "io.dropwizard.metrics" % "metrics-ehcache" % "3.1.2" intransitive()
+    val healthChecks = "io.dropwizard.metrics" % "metrics-healthchecks" % "3.1.2" intransitive()
+    val json = "io.dropwizard.metrics" % "metrics-json" % "3.1.2"
+    val jettyServlet = "org.eclipse.jetty" % "jetty-servlet" % "9.3.11.v20160721"
+    val servlets = "io.dropwizard.metrics" % "metrics-servlets" % "3.1.2" intransitive()
+    val graphite = "io.dropwizard.metrics" % "metrics-graphite" % "3.1.2" intransitive()
+  }
 
-    val json = "io.dropwizard.metrics" % "metrics-json" % "3.1.2" withSources()
+  object Utils {
+    val scapegoatVersion = "1.2.1"
+    val enumeratumVersion = "1.4.15"
 
-    val jettyServlet = "org.eclipse.jetty" % "jetty-servlet" % "9.3.7.v20160115" withSources()
-    val servlets = "io.dropwizard.metrics" % "metrics-servlets" % "3.1.2" withSources() intransitive()
-    val graphite = "io.dropwizard.metrics" % "metrics-graphite" % "3.1.2" withSources() intransitive()
+    val commonsIo = "commons-io" % "commons-io" % "2.5"
+    val crypto = "xyz.wiedenhoeft" %% "scalacrypt" % "0.4.0"
+    val enumeratum = "com.beachape" %% "enumeratum-upickle" % enumeratumVersion
+    val scalaGuice = "net.codingwell" %% "scala-guice" % "4.1.0"
+  }
+
+  object Testing {
+    val scalaTest = "org.scalatest" %% "scalatest" % "3.0.0" % "test"
+    val gatlingCore = "io.gatling" % "gatling-test-framework" % "2.1.7" % "test"
+    val gatlingCharts = "io.gatling.highcharts" % "gatling-charts-highcharts" % "2.1.7" % "test"
   }
 }

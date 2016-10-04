@@ -1,31 +1,23 @@
-import java.util.UUID
+import org.scalajs.jquery.{jQuery => $}
+import services.{InitService, NotificationService}
 
-import models._
-
-import scala.scalajs.js
 import scala.scalajs.js.annotation.JSExport
 
-object Boilerplay extends js.JSApp {
-  override def main(): Unit = {}
+@JSExport
+class Boilerplay extends NetworkHelper with ResponseMessageHelper {
+  val debug = true
 
-  private[this] var sendCallback: js.Function1[String, Unit] = _
+  InitService.init(sendMessage, connect)
 
-  @JSExport
-  def register(callback: js.Function1[String, Unit]) = {
-    sendCallback = callback
-  }
-
-  @JSExport
-  def receive(c: String, v: js.Dynamic): Unit = {
-    c match {
-      case "GetVersion" => send(VersionResponse("0.0"))
-      case "Ping" => send(Pong(JsonUtils.getLong(v.timestamp)))
-      case _ => throw new IllegalStateException(s"Invalid message [$c].")
+  protected[this] def handleServerError(reason: String, content: String) = {
+    val lp = $("#loading-panel")
+    val isLoading = lp.css("display") == "block"
+    if (isLoading) {
+      $("#tab-loading").text("Connection Error")
+      val c = $("#loading-content", lp)
+      c.text(s"Error loading database ($reason): $content")
+    } else {
+      NotificationService.error(reason, content)
     }
-  }
-
-  protected def send(rm: ResponseMessage): Unit = {
-    val json = JsonSerializers.write(rm)
-    sendCallback(JsonSerializers.write(json))
   }
 }

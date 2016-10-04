@@ -1,0 +1,62 @@
+@(user: models.user.User)(implicit request: Request[AnyContent], session: Session, flash: Flash, messages: Messages)
+@import models.settings.SettingKey._
+
+@settingPanel(key: models.settings.SettingKey, colWidth: Int = 12)(content: Html) = {
+  <div class="col s12 m@colWidth">
+    <div class="z-depth-1 setting-panel">
+      <strong>@key.title</strong>
+      <div class="setting-input">@content</div>
+      <em>@key.description</em>
+    </div>
+  </div>
+}
+
+@roleRadio(name: String, r: models.user.Role, selected: models.user.Role, title: String) = {
+  <div>
+    <input type="radio" id="role-@name-@r" name="@name" value="@r" @if(selected == r) { checked="checked" }></input>
+    <label for="role-@name-@r">@title</label>
+  </div>
+}
+
+@layout.admin(user, "settings", messages("admin.settings.title")) {
+  <form action="@controllers.admin.routes.SettingsController.saveSettings()" method="post">
+    <div class="content-panel">
+      <div class="panel-title"><i class="fa @models.template.Icons.settings"></i> @messages("admin.settings.title")</div>
+
+      <div class="row">
+        @settingPanel(AllowRegistration) {
+          <div class="row">
+            <div class="col s12">
+            @defining(services.settings.SettingsService.allowRegistration) { allowRegistration =>
+              <div>
+                <input type="radio" id="@AllowRegistration.id-true" name="@AllowRegistration.id" value="true" @if(allowRegistration) { checked="checked" }></input>
+                <label for="@AllowRegistration.id-true">Yes</label>
+              </div>
+              <div>
+                <input type="radio" id="@AllowRegistration.id-false" name="@AllowRegistration.id" value="false" @if(!allowRegistration) { checked="checked" }></input>
+                <label for="@AllowRegistration.id-false">No</label>
+              </div>
+            }
+            </div>
+          </div>
+        }
+
+        @settingPanel(DefaultNewUserRole) {
+          <div class="row">
+            <div class="col s12">
+            @defining(models.user.Role.withName(services.settings.SettingsService(DefaultNewUserRole))) { newUserRole =>
+              @roleRadio(DefaultNewUserRole.id, models.user.Role.User, newUserRole, messages("permissions.registered.users"))
+              @roleRadio(DefaultNewUserRole.id, models.user.Role.Admin, newUserRole, messages("permissions.administrators"))
+            }
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+    <div class="panel-action">
+      <button class="right btn theme waves-effect waves-light" type="submit">@messages("general.save")</button>
+      <a class="right theme-text btn-flat" href="@controllers.admin.routes.AdminController.index()">@messages("general.cancel")</a>
+      <div style="clear: both;"></div>
+    </div>
+  </form>
+}

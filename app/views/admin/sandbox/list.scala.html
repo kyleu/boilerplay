@@ -1,0 +1,19 @@
+@(user: models.user.User)(implicit request: Request[AnyContent], session: Session, flash: Flash, message: Messages)
+@layout.simple(Some(user), "Sandbox List") {
+  <div class="row">
+    <div class="col s12">
+      <div class="content-panel">
+        <span class="panel-title">Sandbox Actions</span>
+
+        <ul class="collection">
+        @services.sandbox.SandboxTask.values.map { s =>
+          <li class="collection-item">
+            <a class="theme-text" href="@controllers.admin.routes.SandboxController.sandbox(s.id)">@s.name</a>
+            <div>@s.description</div>
+          </li>
+        }
+        </ul>
+      </div>
+    </div>
+  </div>
+}

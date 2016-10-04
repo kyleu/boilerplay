@@ -1,0 +1,44 @@
+@(user: models.user.User, users: Seq[models.user.User])(
+    implicit request: Request[AnyContent], session: Session, flash: Flash, messages: Messages
+)@layout.admin(user, "users", messages("admin.users.title")) {
+  <div class="content-panel">
+    <div class="panel-title"><i class="fa @models.template.Icons.user"></i> @messages("admin.users.title")</div>
+
+    <div class="row">
+      <table class="z-depth-1">
+        <thead>
+          <tr>
+            <th>@messages("th.username")</th>
+            <th>@messages("th.email")</th>
+            <th>@messages("th.theme")</th>
+            <th>@messages("th.role")</th>
+            <th>@messages("th.created")</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @users.map { u =>
+            <tr>
+              <td>
+                <a class="theme-text" href="@controllers.admin.routes.UserEditController.view(u.id)">@u.username</a>
+              </td>
+              <td>@u.profile.providerKey</td>
+              <td><div class="theme-swatch" style="background-color: @u.preferences.theme.color"></div></td>
+              <td>@u.role</td>
+              <td>@utils.DateUtils.niceDate(u.created.toLocalDate)</td>
+              <td>
+                @defining(s"return confirm('${messages("admin.users.confirm", u.username)}');") { onClick =>
+                  <a class="theme-text" onclick="@onClick" href="@controllers.admin.routes.UserEditController.remove(u.id)"><i class="fa fa-close"></i></a>
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="panel-action">
+    <a class="right-link theme-text" href="@controllers.admin.routes.UserCreateController.newUser()">@messages("admin.users.new")</a>
+    <a class="theme-text" href="@controllers.admin.routes.AdminController.index()">@messages("admin.back.title")</a>
+  </div>
+}

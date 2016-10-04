@@ -1,3 +1,26 @@
-@(user: models.user.User)(implicit request: Request[AnyContent], session: Session, flash: Flash)@layout.admin(user, utils.Config.projectName + " Admin", "") {
-  Select an option from the menu above.
+@(user: models.user.User)(implicit request: Request[AnyContent], session: Session, flash: Flash, messages: Messages)
+@layout.admin(user, "", messages("admin.index.title", utils.Config.projectName)) {
+  <div class="content-panel">
+    <div class="panel-title">@messages("admin.index.title", utils.Config.projectName)</div>
+
+    @messages("admin.index.prompt")
+
+    <ul class="collection">
+      <li class="collection-item">
+        <a class="theme-text" href="@controllers.admin.routes.SettingsController.settings()">@messages("admin.settings.title")</a>
+        <div><em>@messages("admin.settings.description")</em></div>
+      </li>
+      <li class="collection-item">
+        <a class="theme-text" href="@controllers.admin.routes.UserEditController.users()">@messages("admin.users.title")</a>
+        <div><em>@messages("admin.users.description")</em></div>
+      </li>
+      <li class="collection-item">
+        <a class="theme-text" href="@controllers.admin.routes.AdminController.status()">@messages("admin.status.title", utils.Config.projectName)</a>
+        <div><em>@messages("admin.status.description")</em></div>
+      </li>
+    </ul>
+  </div>
+  <div class="panel-action">
+    <a class="theme-text" href="@controllers.routes.HomeController.home()">@messages("general.back.title")</a>
+  </div>
 }

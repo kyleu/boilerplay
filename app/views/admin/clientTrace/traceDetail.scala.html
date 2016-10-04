@@ -1,7 +1,0 @@
-@(user: models.user.User, clientTrace: models.audit.ClientTraceResult)(implicit session: Session, flash: Flash)@layout.admin(user, s"${utils.Config.projectName} Trace Detail", "explore") {
-  <div class="panel panel-default">
-    <div class="panel-body">
-      <pre>@clientTrace</pre>
-    </div>
-  </div>
-}

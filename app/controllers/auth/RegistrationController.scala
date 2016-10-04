@@ -1,76 +1,85 @@
 package controllers.auth
 
-import com.mohiva.play.silhouette.api.{ LoginEvent, LoginInfo, SignUpEvent }
-import com.mohiva.play.silhouette.impl.providers.{ CommonSocialProfile, CredentialsProvider }
+import java.util.UUID
+
+import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
+import com.mohiva.play.silhouette.api.util.PasswordHasher
+import com.mohiva.play.silhouette.api.{LoginEvent, LoginInfo, SignUpEvent}
+import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
 import controllers.BaseController
-import models.user.{ RegistrationData, UserForms }
-import play.api.i18n.{ Messages, MessagesApi }
+import models.settings.SettingKey
+import models.user._
+import play.api.i18n.Messages
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
-import play.api.mvc.AnyContent
-import services.user.AuthenticationEnvironment
+import services.settings.SettingsService
+import services.user.{UserSearchService, UserService}
+import utils.ApplicationContext
 
 import scala.concurrent.Future
 
 @javax.inject.Singleton
 class RegistrationController @javax.inject.Inject() (
-    override val messagesApi: MessagesApi,
-    override val env: AuthenticationEnvironment
+    override val ctx: ApplicationContext,
+    userService: UserService,
+    userSearchService: UserSearchService,
+    authInfoRepository: AuthInfoRepository,
+    hasher: PasswordHasher
 ) extends BaseController {
-
-  def registrationForm = withSession("form") { implicit request =>
-    Future.successful(Ok(views.html.auth.register(request.identity, UserForms.registrationForm)))
+  def registrationForm(email: Option[String] = None) = withoutSession("form") { implicit request =>
+    if (SettingsService.allowRegistration) {
+      val form = UserForms.registrationForm.fill(RegistrationData(
+        username = email.map(e => if (e.contains('@')) { e.substring(0, e.indexOf('@')) } else { "" }).getOrElse(""),
+        email = email.getOrElse("")
+      ))
+      Future.successful(Ok(views.html.auth.register(request.identity, form)))
+    } else {
+      Future.successful(Redirect(controllers.routes.HomeController.home()).flashing("error" -> messagesApi("registration.disabled")))
+    }
   }
 
-  def register = withSession("register") { implicit request =>
+  def register = withoutSession("register") { implicit request =>
+    if (!SettingsService.allowRegistration) {
+      throw new IllegalStateException(messagesApi("error.cannot.sign.up"))
+    }
     UserForms.registrationForm.bindFromRequest.fold(
       form => Future.successful(BadRequest(views.html.auth.register(request.identity, form))),
       data => {
-        env.identityService.retrieve(LoginInfo(CredentialsProvider.ID, data.email)).flatMap {
-          case Some(user) => Future.successful {
-            Ok(views.html.auth.register(request.identity, UserForms.registrationForm.fill(data))).flashing("error" -> Messages("registration.email.taken"))
-          }
-          case None => env.identityService.retrieve(data.username) flatMap {
-            case Some(user) => Future.successful {
-              Ok(views.html.auth.register(request.identity, UserForms.registrationForm.fill(data))).flashing("error" -> Messages("registration.username.taken"))
+        val loginInfo = LoginInfo(CredentialsProvider.ID, data.email.toLowerCase)
+        userSearchService.retrieve(loginInfo).flatMap {
+          case _ if data.password != data.passwordConfirm => Future.successful(
+            Redirect(controllers.auth.routes.RegistrationController.register()).flashing("error" -> Messages("registration.passwords.do.not.match"))
+          )
+          case Some(user) => Future.successful(
+            Redirect(controllers.auth.routes.RegistrationController.register()).flashing("error" -> Messages("registration.email.taken"))
+          )
+          case None =>
+            val authInfo = hasher.hash(data.password)
+            val role = Role.withName(SettingsService(SettingKey.DefaultNewUserRole))
+            val user = User(
+              id = UUID.randomUUID,
+              username = data.username,
+              preferences = UserPreferences.empty,
+              profile = loginInfo,
+              role = role
+            )
+            val userSavedFuture = userService.save(user)
+            val result = request.session.get("returnUrl") match {
+              case Some(url) => Redirect(url).withSession(request.session - "returnUrl")
+              case None => Redirect(controllers.routes.HomeController.home())
             }
-            case None => saveProfile(data)
-          }
+            for {
+              authInfo <- authInfoRepository.add(loginInfo, authInfo)
+              authenticator <- ctx.silhouette.env.authenticatorService.create(loginInfo)
+              value <- ctx.silhouette.env.authenticatorService.init(authenticator)
+              result <- ctx.silhouette.env.authenticatorService.embed(value, result)
+              userSaved <- userSavedFuture
+            } yield {
+              ctx.silhouette.env.eventBus.publish(SignUpEvent(userSaved, request))
+              ctx.silhouette.env.eventBus.publish(LoginEvent(userSaved, request))
+              result.flashing("success" -> "You're all set!")
+            }
         }
       }
     )
-  }
-
-  private[this] def saveProfile(data: RegistrationData)(implicit request: SecuredRequest[AnyContent]) = {
-    if (request.identity.profiles.exists(_.providerID == "credentials")) {
-      throw new IllegalStateException("You're already registered.") // TODO Fix?
-    }
-
-    val loginInfo = LoginInfo(CredentialsProvider.ID, data.email)
-    val authInfo = env.hasher.hash(data.password)
-    val user = request.identity.copy(
-      username = if (data.username.isEmpty) { request.identity.username } else { Some(data.username) },
-      profiles = request.identity.profiles :+ loginInfo
-    )
-    val profile = CommonSocialProfile(
-      loginInfo = loginInfo,
-      email = Some(data.email)
-    )
-    val r = Redirect(controllers.routes.HomeController.index())
-    for {
-      avatar <- env.avatarService.retrieveURL(data.email)
-      profile <- env.userService.create(user, profile.copy(avatarURL = avatar.orElse(Some("default"))))
-      u <- env.userService.save(
-        user.copy(preferences = user.preferences.copy(avatar = avatar.getOrElse(user.preferences.avatar))),
-        update = true
-      )
-      authInfo <- env.authInfoService.save(loginInfo, authInfo)
-      authenticator <- env.authenticatorService.create(loginInfo)
-      value <- env.authenticatorService.init(authenticator)
-      result <- env.authenticatorService.embed(value, r)
-    } yield {
-      env.eventBus.publish(SignUpEvent(u, request, request2Messages))
-      env.eventBus.publish(LoginEvent(u, request, request2Messages))
-      result
-    }
   }
 }

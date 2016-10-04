@@ -1,0 +1,60 @@
+@(theme: models.template.Theme)<style type="text/css">
+  .tabs .tab a { color: @theme.color; }
+  .tabs .tab a:hover { color: @theme.color; }
+  .tabs .tab.disabled a { color: @theme.color; }
+  .tabs .indicator { background-color: @theme.color; }
+
+  ul#main-menu li.search .search-wrapper input#search:focus { border-bottom: 2px solid @theme.color !important; }
+
+  [type="radio"]:checked+label:after {
+    border-color: @theme.color;
+    background-color: @theme.color;
+  }
+
+  .input-field label {
+    color: #000;
+  }
+  .input-field input[type=text]:focus + label, .input-field input[type=password]:focus + label, .input-field input[type=email]:focus + label {
+    color: @theme.color;
+  }
+  .input-field input[type=text]:focus, .input-field input[type=password]:focus, .input-field input[type=email]:focus {
+    border-bottom: 1px solid @theme.color;
+    box-shadow: 0 1px 0 0 @theme.color;
+  }
+  .input-field .prefix.active {
+    color: @theme.color;
+  }
+
+  .dropdown-content.select-dropdown span {
+    color: @theme.color !important;
+  }
+
+  .theme {
+    background-color: @theme.color !important;
+  }
+  .theme-text {
+    color: @theme.color !important;
+  }
+  .theme-text.active {
+    color: #ffffff !important;
+  }
+  a.theme-text:hover {
+    color: #999 !important;
+  }
+
+  .collection .collection-item.active {
+    background-color: @theme.color;
+  }
+
+  [type="checkbox"]:checked + label:before {
+    border-right: 2px solid @theme.color;
+    border-bottom: 2px solid @theme.color;
+  }
+
+  .tree li .node:hover+ul li::after,
+  .tree li .node:hover+ul li::before,
+  .tree li .node:hover+ul::before,
+  .tree li .node:hover+ul ul::before{
+    border-color: @theme.color;
+  }
+</style>

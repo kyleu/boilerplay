@@ -1,0 +1,12 @@
+@(s: Seq[(String, Seq[(String, String)])])@simple("Translation Services") {
+  @s.map { x =>
+    <div>
+      @x._1:
+      <ul>
+      @x._2.map { y =>
+        <li><em>@y._1</em>: @y._2</li>
+      }
+      </ul>
+    </div>
+  }
+}

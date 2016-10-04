@@ -1,42 +1,54 @@
-@(user: models.user.User, form: Form[com.mohiva.play.silhouette.api.util.Credentials])(
+@(user: Option[models.user.User], form: Form[com.mohiva.play.silhouette.api.util.Credentials])(
   implicit request: Request[AnyContent], session: Session, flash: Flash, messages: Messages
-)@layout.bootstrap(title = Messages("authentication.sign.in", utils.Config.projectName)) {
-  @views.html.layout.menu(user)
+)@layout.simple(user = user, title = messages("authentication.sign.in", utils.Config.projectName)) {
+  <form method="post" action="@controllers.auth.routes.AuthenticationController.authenticateCredentials()">
+    <div class="row">
+      <div class="col s12">
+        <div class="card">
+          <div class="card-content">
+            <span class="card-title">
+              @messages("authentication.call.to.action", utils.Config.projectName)
+            </span>
+            <p>@messages("authentication.notice", utils.Config.projectName)</p>
+            <div class="row">
+              <div class="input-field col s12">
+                <input id="input-email" type="email" class="form-control validate" name="email" value="@form("email").value" />
+                <label for="input-email">@messages("authentication.form.email")</label>
+              </div>
+              @form.error("email").map { e =>
+                <div><em>@messages(e.message)</em></div>
+              }
+            </div>
 
-  <div class="sign-in">
-    @if(flash.get("error").isDefined) {
-      <div class="flash-error">@flash("error")</div>
-    }
-    <h4>@Messages("authentication.call.to.action", utils.Config.projectName)</h4>
-    <form method="post" action="@controllers.auth.routes.AuthenticationController.authenticateCredentials()">
-      <input type="text" class="form-control" name="email" value="@form("email").value" placeholder="@Messages("authentication.form.username")" />
-      @if(form.error("email").isDefined) {
-        <em>@Messages(form.error("email").get.message)</em>
-      }
-      <input type="password" class="form-control" name="password" placeholder="@Messages("authentication.form.password")" />
-      @if(form.error("password").isDefined) {
-        <em>@Messages(form.error("password").get.message)</em>
-      }
-      <input type="submit" class="submit" value="@Messages("authentication.sign.in")" />
-    </form>
-
-    <div>
-      <p>Not a member? <a href="@controllers.auth.routes.RegistrationController.registrationForm()">Sign up now</a></p>
-    </div>
-
-    @defining(services.user.SocialAuthProviders.providers) { providers =>
-      @if(providers.nonEmpty) {
-        <div>
-          <p>Or sign in using these providers</p>
-          <div>
-          @for(p <- providers if p._1 != "credentials") {
-            <a title="Sign in with @p._2" href="@controllers.auth.routes.AuthenticationController.authenticateSocial(p._1)" class="provider @p._1">
-              <img src="@routes.Assets.versioned(s"images/providers/${p._1}.png")">
-            </a>
-          }
+            <div class="row">
+              <div class="input-field col s12">
+                <input id="input-password" type="password" class="form-control validate" name="password" value="@form("password").value" />
+                <label for="input-password">@messages("authentication.form.password")</label>
+              </div>
+              @form.error("password").map { e =>
+                <div><em>@messages(e.message)</em></div>
+              }
+            </div>
+          </div>
+          <div class="card-action">
+            <button class="right btn blue-grey waves-effect waves-light" type="submit">@messages("authentication.sign.in")</button>
+            <div style="clear: both;"></div>
           </div>
         </div>
-      }
-    }
-  </div>
+        <div>
+          <p style="text-align: center;">
+            @if(services.settings.SettingsService.allowRegistration) {
+              @messages("authentication.not.member")
+              <a class="theme-text" href="@controllers.auth.routes.RegistrationController.registrationForm()">
+                @messages("registration.register")
+              </a>.
+            } else {
+              @messages("authentication.registration.disabled")
+
+            }
+          </p>
+        </div>
+      </div>
+    </div>
+  </form>
 }

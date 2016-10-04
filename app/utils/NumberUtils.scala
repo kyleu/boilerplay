@@ -1,9 +1,13 @@
 package utils
 
-import _root_.play.api.i18n.Messages
-
 object NumberUtils {
-  def toWords(i: Int, properCase: Boolean = false)(implicit messages: Messages) = if (messages.lang.language == "en") {
+  private[this] val numFormatter = java.text.NumberFormat.getNumberInstance(java.util.Locale.US)
+
+  def withCommas(i: Int) = numFormatter.format(i.toLong)
+  def withCommas(l: Long) = numFormatter.format(l)
+  def withCommas(d: Double) = numFormatter.format(d)
+
+  def toWords(i: Int, properCase: Boolean = false) = {
     val ret = i match {
       case 0 => "zero"
       case 1 => "one"
@@ -25,7 +29,5 @@ object NumberUtils {
     } else {
       ret
     }
-  } else {
-    i.toString
   }
 }

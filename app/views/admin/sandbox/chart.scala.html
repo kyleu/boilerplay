@@ -1,0 +1,27 @@
+@(debug: Boolean)
+<script src="@routes.Assets.versioned("lib/plotly/plotly.min.js")" defer="defer"></script>
+@if(debug) {
+<script src="@controllers.routes.Assets.versioned("charting-fastopt.js")" type="text/javascript" defer="defer"></script>
+} else {
+<script src="@controllers.routes.Assets.versioned("charting-opt.js")" type="text/javascript" defer="defer"></script>
+}
+
+<script>
+  $(function() {
+    var charting = new Charting();
+    charting.init();
+    charting.test('00000000-0000-0000-0000-000000000000', 'histogram');
+  });
+</script>
+
+<style>
+  #chart {
+    height: 768px;
+  }
+</style>
+
+<div id="00000000-0000-0000-0000-000000000000">
+  <div id="chart-container">
+    <div class="chart-panel"></div>
+  </div>
+</div>

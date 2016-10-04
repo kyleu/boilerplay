@@ -1,0 +1,7 @@
+@(user: models.user.User, json: String)(implicit request: Request[AnyContent], session: Session, flash: Flash, messages: Messages)
+@layout.admin(user, "status", messages("admin.status.metrics.title", utils.Config.projectName)) {
+  <div class="content-panel">
+    <span class="panel-title">@messages("admin.status.metrics.title", utils.Config.projectName)</span>
+    <pre class="z-depth-1" style="padding: 15px;">@json</pre>
+  </div>
+}

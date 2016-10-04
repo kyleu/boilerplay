@@ -1,0 +1,18 @@
+GET         /                           controllers.admin.AdminController.index
+GET         /status                     controllers.admin.AdminController.status
+GET         /metrics                    controllers.admin.MetricsController.showMetrics
+
+GET         /users/new                  controllers.admin.UserCreateController.newUser()
+POST        /users/new                  controllers.admin.UserCreateController.saveNewUser()
+
+GET         /users                      controllers.admin.UserEditController.users
+GET         /users/:id                  controllers.admin.UserEditController.view(id: java.util.UUID)
+GET         /users/:id/edit             controllers.admin.UserEditController.edit(id: java.util.UUID)
+POST        /users/:id/edit             controllers.admin.UserEditController.save(id: java.util.UUID)
+GET         /users/:id/remove           controllers.admin.UserEditController.remove(id: java.util.UUID)
+
+GET         /settings                   controllers.admin.SettingsController.settings
+POST        /settings                   controllers.admin.SettingsController.saveSettings
+
+GET         /sandbox                    controllers.admin.SandboxController.list
+GET         /sandbox/:key               controllers.admin.SandboxController.sandbox(key)

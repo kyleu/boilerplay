@@ -1,0 +1,165 @@
+// General Styles
+body {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  background-color: #fcfcfc;
+}
+
+main {
+  flex: 1 0 auto;
+  .static-container {
+    margin-top: 16px;
+  }
+}
+
+// Helper Classes
+.initially-hidden {
+  display: none;
+}
+
+.black {
+  background-color: #555 !important;
+}
+
+.pre-wrap {
+  white-space: pre-wrap;
+  font-family: 'roboto-mono';
+}
+
+.clear {
+  clear: both;
+}
+
+// Materialize Tweaks
+.flash-error, .flash-success {
+  text-align: center;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.flash-error {
+  background-color: #ffffff;
+  color: #8b0000;
+}
+
+footer.page-footer {
+  margin: 0;
+  padding: 0;
+  .footer-copyright {
+    height: 48px;
+    line-height: 48px;
+    padding: 0 10px;
+  }
+}
+
+.right-link {
+  float: right !important;
+  margin-right: 0 !important;
+}
+
+.flash {
+  padding: 20px;
+  margin-bottom: 10px;
+}
+
+.btn, .btn-flat {
+  text-transform: none !important;
+}
+
+// Navbar
+nav {
+  a {
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+.nb-container {
+  height: 48px;
+}
+
+#topnav {
+  height: 48px;
+  line-height: 48px;
+
+  #user-dropdown-toggle {
+    height: 48px;
+    line-height: 48px;
+  }
+
+  .button-collapse i {
+    height: 48px;
+    line-height: 48px;
+  }
+
+  .brand-logo {
+    margin: 0 14px;
+    font-size: 1.6rem;
+
+    &.center {
+      margin: 0;
+    }
+
+    i {
+      height: 48px;
+      line-height: 48px;
+      margin-right: 6px;
+    }
+  }
+
+  @media only screen and (max-width: 992px) {
+    .brand-logo {
+      margin: 0;
+    }
+  }
+
+  @media only screen and (max-width: 600px) {
+    .fa-search {
+      margin-top: 20px;
+    }
+  }
+
+  .menu-toggle {
+    font-size: 190%;
+    margin-left: 12px;
+    float: left;
+  }
+}
+
+// Profile
+.profile-container {
+  margin: 12px 0;
+  padding: 0 12px;
+}
+
+#theme-choices {
+  padding: 12px;
+  text-align: center;
+  .swatch {
+    height: 50px;
+    width: 50px;
+    cursor: pointer;
+    margin: 5px;
+    display: inline-block;
+    .indicator {
+      font-size: 2.5rem;
+      margin-top: 8px;
+      visibility: hidden;
+    }
+    &.active {
+      .indicator {
+        visibility: visible;
+      }
+    }
+  }
+}
+
+.theme-swatch {
+  height: 20px;
+  width: 20px;
+}
+
+.setting-panel {
+  margin-bottom: 10px;
+  padding: 10px;
+}
