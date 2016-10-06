@@ -2,7 +2,7 @@ package utils
 
 object Config {
   val projectId = "boilerplay"
-  val projectName = "Boilerplay Project"
+  val projectName = "Boilerplay"
   val projectUrl = "https://boilerplay.com"
   val adminEmail = "admin@boilerplay.com"
   val version = "0.1"
