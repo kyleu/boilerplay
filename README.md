@@ -1,26 +1,23 @@
 # Boilerplay
 
-Using the latest technology in the Scala ecosystem, Boilerplay is a reactive web application built on Play 2.4, ScalaJS, Silhouette, and postgres-async. 
+Using the latest technology in the Scala ecosystem, Boilerplay is a reactive web application built on Play 2.5, ScalaJS, Silhouette 4, Akka, and postgres-async.
 It provides a good starting point for whatever you want to build.
-
 
 ## Features
 
-* Social sign-in and local credentials support.
+* Local sign-in, profile, and change password support.
 * Role based security, with normal and admin roles.
 * Full admin suite for user management, reporting, and real-time session observation.
 * Ad-hoc queries, nightly activity reports, and other pretty charts and graphs.
-* Sophisticated asset pipeline using Require.js and UglifyJS for minified/uglifed/compressed resources.
-* Scala source that is shared between the client and server.
+* Scala source that is shared between the client and server via Scala.js.
 * Websocket-driven actor support, with monitoring and tracing.
 
 
 ## Technology
 
-The Play application communicates over a WebSocket to a pool of Akka actors managing connections. 
+The Play application communicates over a WebSocket to a pool of Akka actors managing connections.
 Serialization is handled by Play Json, and all database communication runs via postgres-async. Scala.js compiles the
-shared code and provides an in-browser component. You can sign in with Facebook, Google, or Twitter thanks to Play Silhouette. 
-Websocket communication is handled via Play and Akka.
+shared code and provides an in-browser component. Websocket communication is handled via Play and Akka.
 
 
 ## Running the app
@@ -37,12 +34,6 @@ You'll either need Node.js available as "node" on the path, or change project/Se
 
 Then you'll need to change the SMTP and Silhouette settings in application.conf to use your mail server and social apps.
 
-For Twitter, visit https://apps.twitter.com/ and create a new app.
-
-For Facebook, visit https://developers.facebook.com/products/ads/? and choose My Apps > Add a new app
-
-For Google, visit https://console.developers.google.com/, create a project and credentials.
-
 Now, finally,
 ```shell
 $ sbt
@@ -50,9 +41,9 @@ $ sbt
 $ open http://127.0.0.1:9000
 ```
 
-As the application starts, it will create database tables and seed data. If you see any SQL errors, restart (as the table creation has a race condition I'm working to fix).
+As the application starts, it will create database tables and seed data.
 
-Once you've signed up, visit http://127.0.0.1:9000/admin/enable to bootstrap your account as an admin. 
+The first account to sign up is created as an Admin, all subsequent users will have a normal user role.
 
 
 ## Projects
@@ -72,12 +63,33 @@ Metrics exposes all actors, queries, logs, requests, and jvm info.
 
 ## Contributing
 
-All Scala code is formatted by Scalariform, and passes all checks from Scalastyle and Scapegoat. No Scala file is longer than 100 lines, no line 
+All Scala code is formatted by Scalariform, and passes all checks from Scalastyle and Scapegoat. No Scala file is longer than 100 lines, no line
 longer than 140 characters, and all warnings are treated as errors. Tests are part of the main source tree so they can be run from the browser.
 
-JavaScript is verified by Require.js and UglifyJS. Any Javascript errors or warnings will be treated as compile errors. 
+JavaScript is verified by Require.js and UglifyJS. Any Javascript errors or warnings will be treated as compile errors.
 
 The project is built on SBT, and can be opened by IntelliJ directly.
+
+
+## Technology
+
+Boilerplay relies on a whole lot of tremendous open source projects. Here's a few of them.
+
+* [Scala](http://www.scala-lang.org/)
+* [Scala.js](https://www.scala-js.org/)
+* [Play Framework](https://www.playframework.com/)
+* [Akka](http://akka.io/)
+* [Materialize CSS](http://materializecss.com/)
+* [Enumeratum](https://github.com/lloydmeta/enumeratum)
+* [uPickle](https://github.com/lihaoyi/upickle-pprint)
+* [Scalatags](https://github.com/lihaoyi/scalatags)
+* [Postgres-async](https://github.com/mauricio/postgresql-async)
+* [Silhouette](http://silhouette.mohiva.com/)
+* [Dropwizard Metrics](http://metrics.dropwizard.io/)
+* [Netty](http://netty.io/)
+* [ScalaCrypt](https://github.com/Richard-W/scalacrypt)
+* [Font Awesome](http://fontawesome.io/)
+* [JQuery](https://jquery.com/)
 
 
 ## License

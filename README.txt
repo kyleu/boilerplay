@@ -1,3 +1,0 @@
-# Boilerplay
-
-A thing.
