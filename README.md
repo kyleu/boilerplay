@@ -1,6 +1,6 @@
 # Boilerplay
 
-Using the latest technology in the Scala ecosystem, Boilerplay is a reactive web application built on Play 2.5, ScalaJS, Silhouette 4, Akka, and postgres-async.
+Using the latest technology in the Scala ecosystem, Boilerplay is a pure Scala reactive web application built on Play 2.5, ScalaJS, Silhouette 4, Akka, and postgres-async.
 It provides a good starting point for whatever you want to build.
 
 ## Features
@@ -65,8 +65,6 @@ Metrics exposes all actors, queries, logs, requests, and jvm info.
 
 All Scala code is formatted by Scalariform, and passes all checks from Scalastyle and Scapegoat. No Scala file is longer than 100 lines, no line
 longer than 140 characters, and all warnings are treated as errors. Tests are part of the main source tree so they can be run from the browser.
-
-JavaScript is verified by Require.js and UglifyJS. Any Javascript errors or warnings will be treated as compile errors.
 
 The project is built on SBT, and can be opened by IntelliJ directly.
 
