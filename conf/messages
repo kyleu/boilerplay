@@ -1,50 +1,23 @@
 # General
-general.back.title = Back to Connection List
-general.sql = SQL
+general.back.title = Back
 general.error = Error
 general.about = About
 general.save = Save
 general.cancel = Cancel
-general.delete = Delete
 general.ok = OK
-general.edit = Edit
 
 # Table Headers
-th.columns = Cols
-th.connection = Connection
 th.created = Created
-th.duration = Dur
-th.edition = Edition
-th.elapsed = Elapsed
 th.email = Email
-th.export = Export
-th.first = 1st
-th.import = Import
-th.issued = Issued
-th.last.accessed = Last Accessed
 th.name = Name
-th.occurred = Occurred
-th.owner = Owner
 th.role = Role
-th.rows = Rows
 th.status = Status
-th.table = Table
 th.theme = Theme
 th.type = Type
 th.username = Username
 
 # Index Page
-index.no.connections = Add your first connection by clicking the link below.
-index.new.connection = New Connection
-
-# License
-license.new.form = License Details
-license.paste = Please paste your license in the form below.
-license.error = Unable to parse license. Please make sure you've copied the entire text.
-license.missing = Missing license content.
-license.success = License updated successfully.
-license.register = Please create a local account to use with {0}.
-license.configure = Please configure your license for {0}.
+index.welcome = Welcome to {0}!
 
 # Registration
 registration.title = Register
@@ -108,78 +81,14 @@ permissions.user.text = by all registered users
 permissions.administrators.text = by administrators
 permissions.private.text = only by you
 
-
-# Connection Form
-connection.permissions.available.to = Available To
-connection.permissions.editable.by = Editable By
-connection.name = Connection Name
-connection.engine = Database Engine
-connection.username = Username
-connection.password = Password
-connection.url = URL
-connection.fields = Fields
-connection.host = Host
-connection.port = Port
-connection.db.name = Database Name
-connection.jdbc.url = Jdbc URL
-connection.description = Description
-connection.new.title = New Connection
-connection.permission.denied = You do not have permission to add a database connection.
-
-# Query
-query.title = Query
-query.loading = Loading {0}...
-query.search = Search
-query.tx.begin = Begin Transaction
-query.tx.none = No active transaction.
-query.tx.commit = Commit Transaction
-query.tx.rollback = Rollback
-query.sidenav.loading = Loading...
-query.sidenav.new = New Query
-query.sidenav.history = Query History
-query.sidenav.refresh = Refresh Schema
-query.sidenav.saved.queries = Saved Queries
-query.sidenav.shared.results = Shared Results
-query.sidenav.tables = Tables
-query.sidenav.views = Views
-query.sidenav.procedures = Stored Procedures
-query.sidenav.help = Help
-query.sidenav.feedback = Feedback
-query.sidenav.about = About {0}
-query.share = Share
-query.insert = Insert Row
-
-# Query Results
-result.remove.confirm = Removed result [{0}].
-result.remove.orphan = Remove orphan table [{0}].
-
-# Shared Results
-shared.results.title = Shared Results
-shared.results.personal.title = My Shared Results
-shared.results.public.title = Public Shared Results
-shared.results.public.none = No public shared results available.
-
 # Socket Service
-socket.connect.error = Error attempting to connect to database.
+socket.connect.error = Error attempting to connect.
 socket.connect.failed = Connection Failed
-socket.too.many.users = Personal Edition allows only one user to connect at a time, and [{0}] is already connected.
-socket.duplicate.transaction = Already in a transaction.
-socket.no.transaction = Not currently in a transaction.
 
 # Modals
 modal.confirm.prompt = Are you sure?
-modal.export.action = Export
-modal.export.csv = Comma Separated Values
-modal.export.excel = Microsoft Excel
 modal.reconnect.prompt = Connection error. Would you like to retry?
 modal.reconnect.action = Reconnect
-modal.save.query.name = Query Name
-modal.save.description = Description
-modal.save.available.from = Available From
-modal.save.all.databases = All Databases
-modal.save.this.database = This Database Only
-modal.share.results.title = Title
-modal.share.results.description = Description
 
 # User
 user.password.changed = Password changed.
@@ -196,9 +105,6 @@ admin.status.link = Status
 admin.status.title = {0} Status
 admin.status.description = View license details and system status.
 admin.status.metrics.title = System Metrics
-admin.status.no.license = No license configured. You have {0} days remaining in your trial.
-admin.status.file.loaded = Loaded from {0}
-admin.status.db.loaded = {0} databse, loaded from {1}
 
 admin.settings.link = Preferences
 admin.settings.title = System Preferences
@@ -226,7 +132,7 @@ error.not.logged.in = Somehow not logged in.
 error.must.sign.in = You must sign in or register before accessing {0}.
 error.missing.parameter = Missing [{0}] parameter.
 error.unknown.format = Unknown format [{0}].
-error.exception.encountered = Unable to export query: [{0}: {1}].
+error.exception.encountered = Exception encountered: [{0}: {1}].
 error.missing.user = Couldn't find user {0}.
 error.cannot.sign.up = Unable to sign up at this time. Contact your administrator.
 error.empty = {0} is required.

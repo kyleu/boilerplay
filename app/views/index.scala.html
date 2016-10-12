@@ -1,11 +1,24 @@
-@(user: models.user.User)(
+@(user: models.user.User, debug: Boolean)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, messages: Messages
 )@layout.simple(Some(user), utils.Config.projectName) {
   <div class="row">
     <div class="col s12">
       <div class="panel-content">
-        @messages("index.no.connections")
+        @messages("index.welcome", utils.Config.projectName)
       </div>
     </div>
   </div>
+
+  @if(debug) {
+    <script src="@controllers.routes.Assets.versioned("client-fastopt.js")" type="text/javascript" defer="defer"></script>
+  } else {
+    <script src="@controllers.routes.Assets.versioned("client-opt.js")" type="text/javascript" defer="defer"></script>
+  }
+
+  <script>
+    $(function() {
+      window.boilerplay = new Boilerplay();
+    });
+  </script>
+
 }

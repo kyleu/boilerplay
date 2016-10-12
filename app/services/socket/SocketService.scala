@@ -11,13 +11,13 @@ import utils.metrics.InstrumentedActor
 object SocketService {
   type i18n = (String, Seq[Any]) => String
 
-  def props(id: Option[UUID], supervisor: ActorRef, connectionId: UUID, user: User, out: ActorRef, sourceAddress: String, messages: i18n) = {
-    Props(SocketService(id.getOrElse(UUID.randomUUID), supervisor, connectionId, user, out, sourceAddress, messages))
+  def props(id: Option[UUID], supervisor: ActorRef, user: User, out: ActorRef, sourceAddress: String, messages: i18n) = {
+    Props(SocketService(id.getOrElse(UUID.randomUUID), supervisor, user, out, sourceAddress, messages))
   }
 }
 
 case class SocketService(
-    id: UUID, supervisor: ActorRef, connectionId: UUID, user: User, out: ActorRef, sourceAddress: String, messages: SocketService.i18n
+    id: UUID, supervisor: ActorRef, user: User, out: ActorRef, sourceAddress: String, messages: SocketService.i18n
 ) extends InstrumentedActor with RequestMessageHelper with DetailHelper with Logging {
 
   protected[this] var pendingDebugChannel: Option[ActorRef] = None
