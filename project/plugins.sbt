@@ -17,6 +17,11 @@ addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.12")
 
 addSbtPlugin("com.vmunier" % "sbt-play-scalajs" % "0.3.0" exclude("org.scala-js", "sbt-scalajs"))
 
+// App Packaging
+addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.1.2")
+
+addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "0.14.3")
+
 // Benchmarking
 addSbtPlugin("pl.project13.scala" % "sbt-jmh" % "0.2.11")
 

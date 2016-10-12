@@ -18,12 +18,6 @@ object SandboxTask extends Enum[SandboxTask] {
     }
   }
 
-  case object ChartSandbox extends SandboxTask("charts", "Charting Sandbox", "Just toying with some graphing libraries.") {
-    override def run(ctx: ApplicationContext) = {
-      Future.successful(views.html.admin.sandbox.chart(ctx.config.debug))
-    }
-  }
-
   case object Testbed extends SandboxTask("testbed", "Testbed", "A simple sandbox for messin' around.") {
     override def run(ctx: ApplicationContext) = {
       Future.successful(Html("Hello!"))

@@ -9,7 +9,7 @@
     <nav id="topnav" class="theme">
       <a href="@controllers.routes.HomeController.home()" class="brand-logo center">@utils.Config.projectName</a>
       <ul class="right hide-on-small-only">
-        <li><a class="dropdown-button" href="#" data-activates="dropdown-user">
+        <li><a class="dropdown-button" href="@routes.ProfileController.view()" data-activates="dropdown-user">
           @user.map(_.username).getOrElse("Guest") <i id="user-dropdown-toggle" class="fa @models.template.Icons.dropdownToggle right"></i>
         </a></li>
       </ul>

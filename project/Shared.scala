@@ -9,7 +9,7 @@ import sbt._
 
 object Shared {
   val projectId = "boilerplay"
-  val projectName = "Boilerplay Project"
+  val projectName = "Boilerplay"
 
   lazy val commonSettings = Seq(
     version := Shared.Versions.app,

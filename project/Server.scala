@@ -4,15 +4,25 @@ import com.typesafe.sbt.gzip.Import._
 import com.typesafe.sbt.jse.JsEngineImport.JsEngineKeys
 import com.typesafe.sbt.less.Import._
 import com.typesafe.sbt.packager.Keys._
+import com.typesafe.sbt.packager.archetypes.JavaAppPackaging
+import com.typesafe.sbt.packager.debian.DebianPlugin
+import com.typesafe.sbt.packager.docker.DockerPlugin
+import com.typesafe.sbt.packager.jdkpackager.JDKPackagerPlugin
+import com.typesafe.sbt.packager.linux.LinuxPlugin
+import com.typesafe.sbt.packager.rpm.RpmPlugin
+import com.typesafe.sbt.packager.universal.UniversalPlugin
+import com.typesafe.sbt.packager.windows.WindowsPlugin
 import com.typesafe.sbt.web.Import._
 import com.typesafe.sbt.web.SbtWeb
 import play.routes.compiler.InjectedRoutesGenerator
+import play.sbt.PlayImport.PlayKeys
 import play.sbt.routes.RoutesKeys.routesGenerator
 import play.sbt.PlayImport.PlayKeys._
 import playscalajs.PlayScalaJS.autoImport._
 import sbt.Keys._
 import sbt.Project.projectToRef
 import sbt._
+import sbtassembly.AssemblyPlugin.autoImport._
 
 object Server {
   private[this] val dependencies = {
@@ -44,6 +54,9 @@ object Server {
     excludeFilter in (Assets, LessKeys.less) := "_*.less",
     LessKeys.compress in Assets := true,
 
+    fullClasspath in assembly += Attributed.blank(PlayKeys.playPackageAssets.value),
+    mainClass in assembly := Some(Shared.projectName),
+
     // Code Quality
     scapegoatIgnoredFiles := Seq(".*/Routes.scala", ".*/ReverseRoutes.scala", ".*/JavaScriptReverseRoutes.scala", ".*/*.template.scala")
   )
@@ -52,7 +65,10 @@ object Server {
     val ret = Project(
       id = Shared.projectId,
       base = file(".")
-    ).enablePlugins(SbtWeb, play.sbt.PlayScala).settings(serverSettings: _*).aggregate(projectToRef(Client.client))
+    ).enablePlugins(
+      SbtWeb, play.sbt.PlayScala, JavaAppPackaging,
+      UniversalPlugin, LinuxPlugin, DebianPlugin, RpmPlugin, DockerPlugin, WindowsPlugin, JDKPackagerPlugin
+    ).settings(serverSettings: _*).aggregate(projectToRef(Client.client)).settings(Packaging.settings: _*)
 
     Shared.withProjects(ret, Seq(Shared.sharedJvm, Utilities.metrics))
   }
