@@ -1,10 +1,7 @@
 package models.benchmark
 
-import java.util.UUID
 import java.util.concurrent.TimeUnit
 import org.openjdk.jmh.annotations._
-
-import scala.util.Random
 
 class TestBenchmark {
   @Benchmark

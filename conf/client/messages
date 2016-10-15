@@ -6,120 +6,17 @@ general.cancel = Cancel
 general.close = Close
 general.previous = Previous
 general.next = Next
-general.coming.soon = Coming Soon
 
 # Table Headers
 th.cancel = Cancel
-th.column = Type
-th.columns = Columns
-th.connection = Connection
-th.cost = Cost
 th.default = Default
-th.definition = Definition
 th.delete = Delete
 th.description = Description
 th.edit = Edit
-th.filter = Filter
-th.foreign.keys = Foreign Keys
-th.indexes = Indexes
 th.name = Name
-th.not.null = Not Null
 th.occurred = Occurred
-th.output = Output
-th.owner = Owner
-th.parameters = Parameters
-th.primary.key = Primary Key
-th.properties = Properties
-th.read = Read
-th.returns.result = Returns Result
-th.rows = Rows
 th.save = Save
 th.save.new = Save as New
 th.settings = Settings
-th.source.columns = Source Columns
-th.sql = SQL
 th.status = Status
-th.target.columns = Target Columns
-th.target.table = Target Table
 th.title = Title
-th.type = Type
-th.unique = Unique
-th.unknown = Unknown
-
-# History
-history.title = Query History
-history.remove.all = Remove All History
-history.no.records = It looks like you haven''t run any queries for this database. Get started!
-
-# Query
-query.explain = Explain
-query.analyze = Analyze
-query.export = Export
-query.share = Share
-query.chart = Chart
-query.data = Data
-query.run = Run
-query.run.all = Run All
-query.run.active = Run Active
-query.run.selection = Run Selection
-query.call = Call Procedure
-query.active.filter = Active Filter
-query.no.rows.returned = No rows returned
-query.insert = Add New Row
-query.view.first = View First 100 Rows
-query.load.more = Load {0} More Rows
-query.no.more.rows = No more rows available
-query.plan = Query Plan
-query.raw.plan = View Raw Plan
-query.plan.estimated.rows = Est Rows
-query.error = Query Error
-query.plan.error = Plan Error
-query.unsaved.changes = This query has unsaved changes.
-query.default.name = Unsaved Query {0}
-query.open.relation = Open [{0}] table filtered where [{1}].
-query.index.error = Error encountered at index {0}.
-query.chart.loading = Loading chart options...
-
-# Feedback
-feedback.title = Feedback
-feedback.notice = Thanks for your feedback. This will send your message directly to the creators of {0}. If you''d like to be notified when we reply, please include an email address.
-feedback.email = Email Address
-feedback.prompt = Enter your feedback
-feedback.submit = Submit Feedback
-
-# Model Lists
-list.saved.queries = Saved Queries
-list.shared.results = Shared Results
-list.tables = Tables
-list.views = Views
-list.procedures = Procedures
-list.this.connection = This Connection
-list.unknown.connection = Unknown Connection
-list.all.connections = All Connections
-list.filter = Filter {0}
-
-# Help
-help.title = {0} Help
-help.global.shortcuts = Global Shortcuts
-help.editor.shortcuts = Editor Shortcuts
-help.tips.and.tricks = Tips and Tricks
-help.connection.status = Connected, with a latency of [{0}ms]. We''ve sent {1} and received {2} messages.
-
-help.hotkey.save.query = Save Query
-help.hotkey.run.active.query = Run Active Query
-help.hotkey.run.all.queries = Run All Queries
-help.hotkey.leave.editor = Leave Editor
-help.hotkey.help = Help
-help.hotkey.search = Search
-help.hotkey.refresh.schema = Refresh Schema
-help.hotkey.new.query = New Query
-help.hotkey.focus.editor = Focus SQL Editor
-help.hotkey.close.tab = Close Tab
-help.hotkey.next.tab = Select Next Tab
-help.hotkey.previous.tab = Select Previous Tab
-
-help.tip.theme = You can change the color scheme of {0} from your profile once signed in.
-help.tip.hotkey.search = Press [/] or click in the search box to start filtering database objects.
-help.tip.hotkey.new = Press [+] when outside of a sql editor to start a new query.
-help.tip.hotkey.switch = Press [ or ] when outside of a sql editor to switch between tabs.
-help.tip.new.tab = Almost all the links in {0} can be opened in new browser tabs for easy side-by-side comparisons.
