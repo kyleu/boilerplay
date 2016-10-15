@@ -65,6 +65,11 @@ object Dependencies {
     val graphite = "io.dropwizard.metrics" % "metrics-graphite" % "3.1.2" intransitive()
   }
 
+  object ScalaJS {
+    val jQueryVersion = "0.9.0"
+    val scalaTagsVersion = "0.6.1"
+  }
+
   object Utils {
     val scapegoatVersion = "1.2.1"
     val enumeratumVersion = "1.4.15"

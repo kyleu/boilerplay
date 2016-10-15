@@ -54,6 +54,7 @@ object Server {
     excludeFilter in (Assets, LessKeys.less) := "_*.less",
     LessKeys.compress in Assets := true,
 
+    // Fat-Jar Assembly
     fullClasspath in assembly += Attributed.blank(PlayKeys.playPackageAssets.value),
     mainClass in assembly := Some(Shared.projectName),
 

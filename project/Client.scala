@@ -10,8 +10,8 @@ object Client {
   private[this] val clientSettings = Shared.commonSettings ++ Seq(
     persistLauncher := false,
     libraryDependencies ++= Seq(
-      "be.doeraene" %%% "scalajs-jquery" % "0.9.0",
-      "com.lihaoyi" %%% "scalatags" % "0.6.0"
+      "be.doeraene" %%% "scalajs-jquery" % Dependencies.ScalaJS.jQueryVersion,
+      "com.lihaoyi" %%% "scalatags" % Dependencies.ScalaJS.scalaTagsVersion
     ),
     testFrameworks += new TestFramework("utest.runner.Framework"),
     scalaJSStage in Global := FastOptStage,
