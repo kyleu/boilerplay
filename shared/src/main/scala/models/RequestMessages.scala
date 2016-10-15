@@ -1,7 +1,5 @@
 package models
 
-import java.util.UUID
-
 sealed trait RequestMessage
 
 case class MalformedRequest(reason: String, content: String) extends RequestMessage
