@@ -10,7 +10,7 @@ object Dependencies {
   }
 
   object Play {
-    private[this] val version = "2.5.8"
+    private[this] val version = "2.5.9"
     val playLib = "com.typesafe.play" %% "play" % version
     val playFilters = play.sbt.PlayImport.filters
     val playWs = play.sbt.PlayImport.ws
@@ -42,7 +42,7 @@ object Dependencies {
   }
 
   object Serialization {
-    val version = "0.4.2"
+    val version = "0.4.3"
     val uPickle = "com.lihaoyi" %% "upickle" % version
   }
 
@@ -67,12 +67,12 @@ object Dependencies {
 
   object ScalaJS {
     val jQueryVersion = "0.9.0"
-    val scalaTagsVersion = "0.6.1"
+    val scalaTagsVersion = "0.6.2"
   }
 
   object Utils {
     val scapegoatVersion = "1.2.1"
-    val enumeratumVersion = "1.4.15"
+    val enumeratumVersion = "1.4.17"
 
     val commonsIo = "commons-io" % "commons-io" % "2.5"
     val crypto = "xyz.wiedenhoeft" %% "scalacrypt" % "0.4.0"
