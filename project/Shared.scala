@@ -24,9 +24,9 @@ object Shared {
     publishMavenStyle := false,
 
     // Prevent Scaladoc
-    doc in Compile <<= target.map(_ / "none"),
-    sources in (Compile, doc) := Seq.empty,
     publishArtifact in (Compile, packageDoc) := false,
+    publishArtifact in packageDoc := false,
+    sources in (Compile,doc) := Seq.empty,
 
     // Code Quality
     scapegoatVersion := Utils.scapegoatVersion,

@@ -19,7 +19,7 @@ object Dependencies {
   }
 
   object Akka {
-    private[this] val version = "2.4.11"
+    private[this] val version = "2.4.12"
     val actor = "com.typesafe.akka" %% "akka-actor" % version
     val remote = "com.typesafe.akka" %% "akka-remote" % version
     val logging = "com.typesafe.akka" %% "akka-slf4j" % version
@@ -50,7 +50,7 @@ object Dependencies {
     val fontAwesome = "org.webjars" % "font-awesome" % "4.6.3"
     val jquery = "org.webjars" % "jquery" % "2.2.4"
     val materialize = "org.webjars" % "materializecss" % "0.97.7"
-    val moment = "org.webjars" % "momentjs" % "2.15.0"
+    val moment = "org.webjars" % "momentjs" % "2.15.1"
     val mousetrap = "org.webjars" % "mousetrap" % "1.6.0"
   }
 
@@ -66,7 +66,7 @@ object Dependencies {
   }
 
   object ScalaJS {
-    val jQueryVersion = "0.9.0"
+    val jQueryVersion = "0.9.1"
     val scalaTagsVersion = "0.6.2"
   }
 
