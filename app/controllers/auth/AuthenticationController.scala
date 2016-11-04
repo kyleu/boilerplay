@@ -6,7 +6,6 @@ import com.mohiva.play.silhouette.impl.exceptions.IdentityNotFoundException
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
 import controllers.BaseController
 import models.user.UserForms
-import play.api.i18n.{Lang, Messages}
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import services.user.UserSearchService
 import utils.ApplicationContext
@@ -20,7 +19,7 @@ class AuthenticationController @javax.inject.Inject() (
     credentialsProvider: CredentialsProvider
 ) extends BaseController {
   def signInForm = withoutSession("form") { implicit request =>
-    val src = request.headers.get("Referer").filter(_.contains(request.host))
+    //val src = request.headers.get("Referer").filter(_.contains(request.host))
     val resp = Ok(views.html.auth.signin(request.identity, UserForms.signInForm))
     Future.successful(resp)
   }
@@ -40,14 +39,14 @@ class AuthenticationController @javax.inject.Inject() (
               ctx.silhouette.env.authenticatorService.create(loginInfo).flatMap { authenticator =>
                 ctx.silhouette.env.eventBus.publish(LoginEvent(user, request))
                 ctx.silhouette.env.authenticatorService.init(authenticator).flatMap { v =>
-                  ctx.silhouette.env.authenticatorService.embed(v, result.withLang(Lang(user.preferences.language.code)))
+                  ctx.silhouette.env.authenticatorService.embed(v, result)
                 }
               }
-            case None => Future.failed(new IdentityNotFoundException(messagesApi("error.missing.user", loginInfo.providerID)))
+            case None => Future.failed(new IdentityNotFoundException(s"Couldn't find user [${loginInfo.providerID}]."))
           }
         }.recover {
           case e: ProviderException =>
-            Redirect(controllers.auth.routes.AuthenticationController.signInForm()).flashing("error" -> Messages("authentication.invalid.credentials"))
+            Redirect(controllers.auth.routes.AuthenticationController.signInForm()).flashing("error" -> "Invalid credentials")
         }
       }
     )
@@ -57,6 +56,6 @@ class AuthenticationController @javax.inject.Inject() (
     implicit val result = Redirect(controllers.routes.HomeController.home())
 
     ctx.silhouette.env.eventBus.publish(LogoutEvent(request.identity, request))
-    ctx.silhouette.env.authenticatorService.discard(request.authenticator, result.clearingLang)
+    ctx.silhouette.env.authenticatorService.discard(request.authenticator, result)
   }
 }

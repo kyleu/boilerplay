@@ -1,10 +1,10 @@
-@(errors: Seq[FormError])(implicit messages: Messages)@if(errors.nonEmpty) {
+@(errors: Seq[FormError])@if(errors.nonEmpty) {
   <div class="col s12">
     <div class="card">
       <div class="card-content">
         @errors.map { error =>
           <div>
-            @error.key: @messages(error.message, error.args: _*)
+            @error.key: @error.message
           </div>
         }
       </div>

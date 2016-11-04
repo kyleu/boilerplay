@@ -1,10 +1,10 @@
 @(user: models.user.User, debug: Boolean)(
-    implicit request: Request[AnyContent], session: Session, flash: Flash, messages: Messages
+    implicit request: Request[AnyContent], session: Session, flash: Flash
 )@layout.simple(Some(user), utils.Config.projectName) {
   <div class="row">
     <div class="col s12">
       <div class="panel-content">
-        @messages("index.welcome", utils.Config.projectName)
+        Welcome to @utils.Config.projectName!
       </div>
     </div>
   </div>

@@ -1,6 +1,6 @@
 @(self: models.user.User, user: models.user.User)(
-    implicit request: Request[AnyContent], session: Session, flash: Flash, messages: Messages
-)@layout.admin(self, "users", messages("admin.users.title")) {
+    implicit request: Request[AnyContent], session: Session, flash: Flash
+)@layout.admin(self, "users", "Edit User") {
   <form action="@controllers.admin.routes.UserEditController.save(user.id)" method="post">
     <div class="content-panel">
       <div class="panel-title">
@@ -13,19 +13,19 @@
         <div class="row">
           <div class="input-field col s12">
             <input id="input-username" type="text" class="form-control validate" name="username" value="@user.username" />
-            <label for="input-username">@messages("registration.form.username")</label>
+            <label for="input-username">Username</label>
           </div>
         </div>
         <div class="row">
           <div class="input-field col s12">
             <input id="input-email" type="email" class="form-control validate" name="email" value="@user.profile.providerKey" />
-            <label for="input-email">@messages("registration.form.email")</label>
+            <label for="input-email">Email</label>
           </div>
         </div>
         <div class="row">
           <div class="input-field col s12">
             <input id="input-password" type="password" class="form-control validate" name="password" value="original" />
-            <label for="input-password">@messages("registration.form.password")</label>
+            <label for="input-password">Password</label>
           </div>
         </div>
         <div class="row">

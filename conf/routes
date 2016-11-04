@@ -3,8 +3,6 @@ GET         /ping                                    controllers.HomeController.
 GET         /connect                                 controllers.HomeController.connect()
 GET         /robots.txt                              controllers.HomeController.robots
 
-GET         /strings.js                              controllers.MessagesController.strings()
-
 # Admin
 ->          /admin                                   admin.Routes
 

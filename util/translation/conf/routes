@@ -1,8 +1,0 @@
-GET        /                    controllers.TranslationController.index
-
-GET        /client              controllers.TranslationController.client
-GET        /server              controllers.TranslationController.server
-GET        /site                controllers.TranslationController.site
-GET        /test                controllers.TranslationController.test
-
-GET        /assets/*file        controllers.Assets.versioned(path="/public", file: Asset)

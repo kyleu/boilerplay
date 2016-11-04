@@ -1,50 +1,48 @@
 @(user: Option[models.user.User], form: Form[com.mohiva.play.silhouette.api.util.Credentials])(
-  implicit request: Request[AnyContent], session: Session, flash: Flash, messages: Messages
-)@layout.simple(user = user, title = messages("authentication.sign.in", utils.Config.projectName)) {
+  implicit request: Request[AnyContent], session: Session, flash: Flash
+)@layout.simple(user = user, title = "Sign in to " + utils.Config.projectName) {
   <form method="post" action="@controllers.auth.routes.AuthenticationController.authenticateCredentials()">
     <div class="row">
       <div class="col s12">
         <div class="card">
           <div class="card-content">
-            <span class="card-title">
-              @messages("authentication.call.to.action", utils.Config.projectName)
-            </span>
-            <p>@messages("authentication.notice", utils.Config.projectName)</p>
+            <span class="card-title">Sign in to @utils.Config.projectName)</span>
+            <p>
+              This account is only for this installation of @utils.Config.projectName.
+              No information leaves your server, this is only a local account.
+            </p>
             <div class="row">
               <div class="input-field col s12">
                 <input id="input-email" type="email" class="form-control validate" name="email" value="@form("email").value" />
-                <label for="input-email">@messages("authentication.form.email")</label>
+                <label for="input-email">Email</label>
               </div>
               @form.error("email").map { e =>
-                <div><em>@messages(e.message)</em></div>
+                <div><em>@e.message</em></div>
               }
             </div>
 
             <div class="row">
               <div class="input-field col s12">
                 <input id="input-password" type="password" class="form-control validate" name="password" value="@form("password").value" />
-                <label for="input-password">@messages("authentication.form.password")</label>
+                <label for="input-password">Password</label>
               </div>
               @form.error("password").map { e =>
-                <div><em>@messages(e.message)</em></div>
+                <div><em>@e.message</em></div>
               }
             </div>
           </div>
           <div class="card-action">
-            <button class="right btn blue-grey waves-effect waves-light" type="submit">@messages("authentication.sign.in")</button>
+            <button class="right btn blue-grey waves-effect waves-light" type="submit">Sign In</button>
             <div style="clear: both;"></div>
           </div>
         </div>
         <div>
           <p style="text-align: center;">
             @if(services.settings.SettingsService.allowRegistration) {
-              @messages("authentication.not.member")
-              <a class="theme-text" href="@controllers.auth.routes.RegistrationController.registrationForm()">
-                @messages("registration.register")
-              </a>.
+              Not a member?
+              <a class="theme-text" href="@controllers.auth.routes.RegistrationController.registrationForm()">Sign Up</a>.
             } else {
-              @messages("authentication.registration.disabled")
-
+              Registration is disabled on this server. Contact your administrator to get an account.
             }
           </p>
         </div>

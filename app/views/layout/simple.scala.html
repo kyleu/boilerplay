@@ -1,5 +1,5 @@
 @(user: Option[models.user.User], title: String, mainDivClass: String = "static-container container", scripts: Seq[String] = Nil)(content: Html)(
-    implicit request: Request[AnyContent], session: Session, flash: Flash, messages: Messages
+    implicit request: Request[AnyContent], session: Session, flash: Flash
 )@layout.materialize(user, title, scripts = scripts) {
   <header>
     @views.html.layout.themeStyles(user.map(_.preferences.theme).getOrElse(models.template.Theme.BlueGrey))
@@ -20,21 +20,13 @@
     <div class="@mainDivClass">
       @flash.get("error").map { err => <div class="flash-error z-depth-1">@Html(err)</div> }
       @flash.get("success").map { success => <div class="flash-success z-depth-1">@Html(success)</div> }
-      @flash.get("lang").map { lang =>
-        @if(lang != "en") {
-          <div class="flash lang-warning z-depth-1">
-            Please note that all languages other than English are machine-translated, and are almost certainly incorrect.
-            If you'd like to help translate, please send a mail to <a href="mailto:@utils.Config.adminEmail">@utils.Config.adminEmail</a>.
-          </div>
-        }
-      }
       @content
     </div>
   </main>
 
   <footer class="page-footer theme">
     <div class="footer-copyright">
-      @messages("static.copyright", utils.Config.projectName)
+      © 2016 @utils.Config.projectName
       <a class="grey-text text-lighten-4 right" href="@utils.Config.projectUrl">About</a>
     </div>
   </footer>

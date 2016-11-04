@@ -1,61 +1,62 @@
 @(user: Option[models.user.User], form: Form[models.user.RegistrationData])(
-    implicit request: Request[AnyContent], session: Session, flash: Flash, messages: Messages
-)@layout.simple(user = user, title = messages("registration.title", utils.Config.projectName)) {
+    implicit request: Request[AnyContent], session: Session, flash: Flash
+)@layout.simple(user = user, title = "Register for " + utils.Config.projectName) {
   <form method="post" action="@controllers.auth.routes.RegistrationController.register()">
     <div class="row">
       <div class="col s12">
         <div class="card">
           <div class="card-content">
-            <div class="card-title">@messages("registration.call.to.action", utils.Config.projectName)</div>
-            <p>@messages("registration.notice", utils.Config.projectName)</p>
+            <div class="card-title">Register for @utils.Config.projectName</div>
+            <p>
+              You're creating an account for this local installation of @utils.Config.projectName.
+              No information leaves your server.
+            </p>
             <div class="row">
               <div class="input-field col s12">
                 <input id="input-username" type="text" class="form-control validate" name="username" value="@form("username").value" />
-                <label for="input-username">@messages("registration.form.username")</label>
+                <label for="input-username">Username</label>
               </div>
-              @form.error("email").map { e =>
-                <div><em>@messages(e.message)</em></div>
+              @form.error("username").map { e =>
+                <div><em>e.message</em></div>
               }
             </div>
             <div class="row">
               <div class="input-field col s12">
                 <input id="input-email" type="email" class="form-control validate" name="email" value="@form("email").value" />
-                <label for="input-email">@messages("registration.form.email")</label>
+                <label for="input-email">Email</label>
               </div>
               @form.error("email").map { e =>
-                <div><em>@messages(e.message)</em></div>
+                <div><em>@e.message</em></div>
               }
             </div>
             <div class="row">
               <div class="input-field col s12">
                 <input id="input-password" type="password" class="form-control validate" name="password" value="@form("password").value" />
-                <label for="input-password">@messages("registration.form.password")</label>
+                <label for="input-password">Password</label>
               </div>
               @form.error("password").map { e =>
-                <div><em>@messages(e.message)</em></div>
+                <div><em>@e.message</em></div>
               }
             </div>
             <div class="row">
               <div class="input-field col s12">
                 <input id="input-passwordConfirm" type="password" class="form-control validate" name="passwordConfirm" value="@form("password").value" />
-                <label for="input-passwordConfirm">@messages("registration.form.password.confirm")</label>
+                <label for="input-passwordConfirm">Confirm Password</label>
               </div>
               @form.error("password").map { e =>
-                <div><em>@messages(e.message)</em></div>
+                <div><em>@e.message</em></div>
               }
             </div>
           </div>
           <div class="card-action">
-            <button class="right btn blue-grey waves-effect waves-light" type="submit">@messages("registration.register")</button>
+            <button class="right btn blue-grey waves-effect waves-light" type="submit">Register</button>
             <div style="clear: both;"></div>
           </div>
         </div>
         <div>
           <p style="text-align: center;">
-            @messages("registration.already.member")
-            <a class="theme-text" href="@controllers.auth.routes.AuthenticationController.signInForm()">
-              @messages("authentication.sign.in")
-            </a>
+            Already a member?
+            <a class="theme-text" href="@controllers.auth.routes.AuthenticationController.signInForm()">Sign In</a>
           </p>
         </div>
       </div>

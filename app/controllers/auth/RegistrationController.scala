@@ -9,7 +9,6 @@ import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
 import controllers.BaseController
 import models.settings.SettingKey
 import models.user._
-import play.api.i18n.Messages
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import services.settings.SettingsService
 import services.user.{UserSearchService, UserService}
@@ -33,13 +32,13 @@ class RegistrationController @javax.inject.Inject() (
       ))
       Future.successful(Ok(views.html.auth.register(request.identity, form)))
     } else {
-      Future.successful(Redirect(controllers.routes.HomeController.home()).flashing("error" -> messagesApi("registration.disabled")))
+      Future.successful(Redirect(controllers.routes.HomeController.home()).flashing("error" -> "You cannot sign up at this time. Contact your administrator."))
     }
   }
 
   def register = withoutSession("register") { implicit request =>
     if (!SettingsService.allowRegistration) {
-      throw new IllegalStateException(messagesApi("error.cannot.sign.up"))
+      throw new IllegalStateException("You cannot sign up at this time. Contact your administrator.")
     }
     UserForms.registrationForm.bindFromRequest.fold(
       form => Future.successful(BadRequest(views.html.auth.register(request.identity, form))),
@@ -47,10 +46,10 @@ class RegistrationController @javax.inject.Inject() (
         val loginInfo = LoginInfo(CredentialsProvider.ID, data.email.toLowerCase)
         userSearchService.retrieve(loginInfo).flatMap {
           case _ if data.password != data.passwordConfirm => Future.successful(
-            Redirect(controllers.auth.routes.RegistrationController.register()).flashing("error" -> Messages("registration.passwords.do.not.match"))
+            Redirect(controllers.auth.routes.RegistrationController.register()).flashing("error" -> "Passwords do not match.")
           )
           case Some(user) => Future.successful(
-            Redirect(controllers.auth.routes.RegistrationController.register()).flashing("error" -> Messages("registration.email.taken"))
+            Redirect(controllers.auth.routes.RegistrationController.register()).flashing("error" -> "That email address is already in use.")
           )
           case None =>
             val authInfo = hasher.hash(data.password)

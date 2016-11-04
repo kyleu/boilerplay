@@ -27,12 +27,11 @@ class HomeController @javax.inject.Inject() (
 
   def connect() = WebSocket.acceptOrResult[RequestMessage, ResponseMessage] { request =>
     implicit val req = Request(request, AnyContentAsEmpty)
-    def messages(key: String, args: Any*) = messagesApi.apply(key, args: _*)
     ctx.silhouette.SecuredRequestHandler { securedRequest =>
       Future.successful(HandlerResult(Ok, Some(securedRequest.identity)))
     }.map {
       case HandlerResult(r, Some(user)) => Right(ActorFlow.actorRef { out =>
-        SocketService.props(None, ctx.supervisor, user, out, request.remoteAddress, messages)
+        SocketService.props(None, ctx.supervisor, user, out, request.remoteAddress)
       })
     }
   }

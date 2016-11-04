@@ -1,4 +1,4 @@
-@(user: models.user.User)(implicit request: Request[AnyContent], session: Session, flash: Flash, messages: Messages)
+@(user: models.user.User)(implicit request: Request[AnyContent], session: Session, flash: Flash)
 @import models.settings.SettingKey._
 
 @settingPanel(key: models.settings.SettingKey, colWidth: Int = 12)(content: Html) = {
@@ -18,10 +18,10 @@
   </div>
 }
 
-@layout.admin(user, "settings", messages("admin.settings.title")) {
+@layout.admin(user, "settings", "System Preferences") {
   <form action="@controllers.admin.routes.SettingsController.saveSettings()" method="post">
     <div class="content-panel">
-      <div class="panel-title"><i class="fa @models.template.Icons.settings"></i> @messages("admin.settings.title")</div>
+      <div class="panel-title"><i class="fa @models.template.Icons.settings"></i> System Preferences</div>
 
       <div class="row">
         @settingPanel(AllowRegistration) {
@@ -45,8 +45,8 @@
           <div class="row">
             <div class="col s12">
             @defining(models.user.Role.withName(services.settings.SettingsService(DefaultNewUserRole))) { newUserRole =>
-              @roleRadio(DefaultNewUserRole.id, models.user.Role.User, newUserRole, messages("permissions.registered.users"))
-              @roleRadio(DefaultNewUserRole.id, models.user.Role.Admin, newUserRole, messages("permissions.administrators"))
+              @roleRadio(DefaultNewUserRole.id, models.user.Role.User, newUserRole, "Registered Users")
+              @roleRadio(DefaultNewUserRole.id, models.user.Role.Admin, newUserRole, "Administrators")
             }
             </div>
           </div>
@@ -54,8 +54,8 @@
       </div>
     </div>
     <div class="panel-action">
-      <button class="right btn theme waves-effect waves-light" type="submit">@messages("general.save")</button>
-      <a class="right theme-text btn-flat" href="@controllers.admin.routes.AdminController.index()">@messages("general.cancel")</a>
+      <button class="right btn theme waves-effect waves-light" type="submit">Save</button>
+      <a class="right theme-text btn-flat" href="@controllers.admin.routes.AdminController.index()">Cancel</a>
       <div style="clear: both;"></div>
     </div>
   </form>

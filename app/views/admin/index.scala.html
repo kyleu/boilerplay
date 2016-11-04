@@ -1,26 +1,26 @@
-@(user: models.user.User)(implicit request: Request[AnyContent], session: Session, flash: Flash, messages: Messages)
-@layout.admin(user, "", messages("admin.index.title", utils.Config.projectName)) {
+@(user: models.user.User)(implicit request: Request[AnyContent], session: Session, flash: Flash)
+@layout.admin(user, "", utils.Config.projectName + " Administration") {
   <div class="content-panel">
-    <div class="panel-title">@messages("admin.index.title", utils.Config.projectName)</div>
+    <div class="panel-title">@utils.Config.projectName Administration</div>
 
-    @messages("admin.index.prompt")
+    Use the menu above or the links below to get started!
 
     <ul class="collection">
       <li class="collection-item">
-        <a class="theme-text" href="@controllers.admin.routes.SettingsController.settings()">@messages("admin.settings.title")</a>
-        <div><em>@messages("admin.settings.description")</em></div>
+        <a class="theme-text" href="@controllers.admin.routes.SettingsController.settings()">System Preferences</a>
+        <div><em>Edit system preferences.</em></div>
       </li>
       <li class="collection-item">
-        <a class="theme-text" href="@controllers.admin.routes.UserEditController.users()">@messages("admin.users.title")</a>
-        <div><em>@messages("admin.users.description")</em></div>
+        <a class="theme-text" href="@controllers.admin.routes.UserEditController.users()">User Management</a>
+        <div><em>Manage the users of the system.</em></div>
       </li>
       <li class="collection-item">
-        <a class="theme-text" href="@controllers.admin.routes.AdminController.status()">@messages("admin.status.title", utils.Config.projectName)</a>
-        <div><em>@messages("admin.status.description")</em></div>
+        <a class="theme-text" href="@controllers.admin.routes.AdminController.status()">@utils.Config.projectName Status</a>
+        <div><em>View server details and system status.</em></div>
       </li>
     </ul>
   </div>
   <div class="panel-action">
-    <a class="theme-text" href="@controllers.routes.HomeController.home()">@messages("general.back.title")</a>
+    <a class="theme-text" href="@controllers.routes.HomeController.home()">Back</a>
   </div>
 }

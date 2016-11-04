@@ -10,6 +10,4 @@ lazy val server = Server.server
 
 lazy val metrics = Utilities.metrics
 
-lazy val translation = Utilities.translation
-
 lazy val benchmarking = Utilities.benchmarking

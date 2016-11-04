@@ -19,7 +19,7 @@ class SettingsController @javax.inject.Inject() (override val ctx: ApplicationCo
     form.foreach { x =>
       SettingKey.withNameOption(x._1) match {
         case Some(settingKey) => SettingsService.set(settingKey, x._2)
-        case None => log.warn(messagesApi("admin.settings.invalid", x._1))
+        case None => log.warn(s"Attempt to save invalid setting [${x._1}].")
       }
     }
     Future.successful(Redirect(controllers.routes.HomeController.home()))

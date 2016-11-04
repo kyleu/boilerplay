@@ -20,14 +20,6 @@ object Utilities {
     .settings(graphSettings: _*)
     .settings(scalariformSettings: _*)
 
-  lazy val translation = (project in file("util/translation"))
-    .settings(ScalariformKeys.preferences := ScalariformKeys.preferences.value)
-    .enablePlugins(SbtWeb, play.sbt.PlayScala)
-    .settings(libraryDependencies ++= Seq(Utils.enumeratum, Play.playWs))
-    .settings(Shared.commonSettings: _*)
-    .settings(graphSettings: _*)
-    .settings(scalariformSettings: _*)
-
   lazy val benchmarking = (project in file("util/benchmarking"))
     .settings(ScalariformKeys.preferences := ScalariformKeys.preferences.value)
     .settings(libraryDependencies ++= Seq(Testing.gatlingCore, Testing.gatlingCharts))

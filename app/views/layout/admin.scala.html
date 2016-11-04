@@ -1,10 +1,6 @@
 @(user: models.user.User, activeSection: String, title: String, scripts: Seq[String] = Nil)(content: Html)(
-    implicit request: Request[AnyContent], session: Session, flash: Flash, messages: Messages
-)@layout.materialize(
-  user = Some(user),
-  title = title,
-  scripts = scripts
-) {
+    implicit request: Request[AnyContent], session: Session, flash: Flash
+)@layout.materialize(user = Some(user), title = title, scripts = scripts) {
   <header>
     @views.html.layout.themeStyles(user.preferences.theme)
 
@@ -15,19 +11,19 @@
 
       <ul class="left hide-on-small-only">
         @if(activeSection == "settings") {
-          <li class="active"><a href="@controllers.admin.routes.SettingsController.settings()">@messages("admin.settings.link")</a></li>
+          <li class="active"><a href="@controllers.admin.routes.SettingsController.settings()">Settings</a></li>
         } else {
-          <li><a href="@controllers.admin.routes.SettingsController.settings()">@messages("admin.settings.link")</a></li>
+          <li><a href="@controllers.admin.routes.SettingsController.settings()">Settings</a></li>
         }
         @if(activeSection == "users") {
-          <li class="active"><a href="@controllers.admin.routes.UserEditController.users()">@messages("admin.users.link")</a></li>
+          <li class="active"><a href="@controllers.admin.routes.UserEditController.users()">Users</a></li>
         } else {
-          <li><a href="@controllers.admin.routes.UserEditController.users()">@messages("admin.users.link")</a></li>
+          <li><a href="@controllers.admin.routes.UserEditController.users()">Users</a></li>
         }
         @if(activeSection == "status") {
-          <li class="active"><a href="@controllers.admin.routes.AdminController.status()">@messages("admin.status.link")</a></li>
+          <li class="active"><a href="@controllers.admin.routes.AdminController.status()">Status</a></li>
         } else {
-          <li><a href="@controllers.admin.routes.AdminController.status()">@messages("admin.status.link")</a></li>
+          <li><a href="@controllers.admin.routes.AdminController.status()">Status</a></li>
         }
       </ul>
 
@@ -57,8 +53,8 @@
 
   <footer class="page-footer theme lighten-2">
     <div class="footer-copyright">
-      @messages("static.copyright", utils.Config.projectName)
-      <a class="grey-text text-lighten-4 right" href="@utils.Config.projectUrl">@messages("general.about")</a>
+      © 2016 @utils.Config.projectName
+      <a class="grey-text text-lighten-4 right" href="@utils.Config.projectUrl">About</a>
     </div>
   </footer>
 }

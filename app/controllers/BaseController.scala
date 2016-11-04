@@ -2,7 +2,6 @@ package controllers
 
 import com.mohiva.play.silhouette.api.actions.{SecuredRequest, UserAwareRequest}
 import models.auth.AuthEnv
-import play.api.i18n.I18nSupport
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.mvc._
 import services.user.UserService
@@ -11,10 +10,8 @@ import utils.{ApplicationContext, Logging}
 
 import scala.concurrent.Future
 
-abstract class BaseController() extends Controller with I18nSupport with Instrumented with Logging {
+abstract class BaseController() extends Controller with Instrumented with Logging {
   def ctx: ApplicationContext
-
-  override def messagesApi = ctx.messagesApi
 
   def withAdminSession(action: String)(block: (SecuredRequest[AuthEnv, AnyContent]) => Future[Result]) = {
     ctx.silhouette.SecuredAction.async { implicit request =>
@@ -22,7 +19,7 @@ abstract class BaseController() extends Controller with I18nSupport with Instrum
         if (request.identity.isAdmin) {
           block(request)
         } else {
-          Future.successful(Redirect(controllers.routes.HomeController.home()).flashing("error" -> messagesApi("error.admin.required")))
+          Future.successful(Redirect(controllers.routes.HomeController.home()).flashing("error" -> "You must have admin rights to access that page."))
         }
       }
     }
@@ -40,7 +37,7 @@ abstract class BaseController() extends Controller with I18nSupport with Instrum
     ctx.silhouette.UserAwareAction.async { implicit request =>
       request.identity match {
         case Some(u) => metrics.timer(action).timeFuture {
-          val auth = request.authenticator.getOrElse(throw new IllegalStateException(messagesApi("error.not.logged.in")))
+          val auth = request.authenticator.getOrElse(throw new IllegalStateException("Somehow, you're not logged in."))
           block(SecuredRequest(u, auth, request))
         }
         case None =>
@@ -53,7 +50,7 @@ abstract class BaseController() extends Controller with I18nSupport with Instrum
           }).getOrElse(Future.successful(Redirect(controllers.auth.routes.AuthenticationController.signInForm())))
 
           val flashed = result.map(_.flashing(
-            "error" -> messagesApi("error.must.sign.in", utils.Config.projectName)
+            "error" -> s"You must sign in or register before accessing ${utils.Config.projectName}."
           ))
 
           flashed.map { r =>

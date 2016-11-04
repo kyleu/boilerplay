@@ -10,7 +10,6 @@ import models.database.Database
 import models.ddl.MasterDdl
 import org.joda.time.DateTimeZone
 import play.api.Environment
-import play.api.i18n.MessagesApi
 import play.api.inject.ApplicationLifecycle
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.libs.ws.WSClient
@@ -26,7 +25,6 @@ object ApplicationContext {
 
 @javax.inject.Singleton
 class ApplicationContext @javax.inject.Inject() (
-    val messagesApi: MessagesApi,
     val config: Configuration,
     val lifecycle: ApplicationLifecycle,
     val playEnv: Environment,

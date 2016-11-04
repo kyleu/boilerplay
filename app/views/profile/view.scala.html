@@ -1,5 +1,5 @@
 @(user: models.user.User)(
-    implicit request: Request[AnyContent], session: Session, flash: Flash, messages: Messages
+    implicit request: Request[AnyContent], session: Session, flash: Flash
 )@layout.simple(Some(user), utils.Config.projectName) {
   <form id="profile-form" action="" method="post">
     <div class="row">
@@ -7,32 +7,18 @@
         <div class="">
           <div class="content-panel">
             <div class="right">
-              <a class="theme-text" href="@controllers.routes.ProfileController.changePasswordForm">@messages("profile.change.password")</a>
+              <a class="theme-text" href="@controllers.routes.ProfileController.changePasswordForm">Change Password</a>
             </div>
-            <span class="panel-title"><i class="fa @models.template.Icons.user"></i> @messages("profile.title")</span>
+            <span class="panel-title"><i class="fa @models.template.Icons.user"></i> Profile</span>
             <div class="profile-container z-depth-1">
               <div class="row">
                 <div class="input-field col s12">
                   <input id="input-username" type="text" class="form-control validate" name="username" value="@user.username" />
-                  <label for="input-username" class="theme-text">@messages("profile.form.username")</label>
-                </div>
-              </div>
-              <div class="row">
-                <div class="input-field col s12">
-                  <select id="input-language" name="language">
-                    @models.user.Language.values.map { l =>
-                      @if(user.preferences.language == l) {
-                        <option selected="selected" value="@l.code">@l</option>
-                      } else {
-                        <option value="@l.code">@l</option>
-                      }
-                    }
-                  </select>
-                  <label for="input-language" class="theme-text">@messages("profile.form.language")</label>
+                  <label for="input-username" class="theme-text">Username</label>
                 </div>
               </div>
               <input id="input-theme" type="hidden" class="" name="theme" value="@user.preferences.theme" />
-              <label for="input-theme" class="theme-text">@messages("profile.form.theme")</label>
+              <label for="input-theme" class="theme-text">Theme</label>
               <div id="theme-choices">
                 @models.template.Theme.values.map { t =>
                   <div id="swatch-@t.id" class="swatch z-depth-1" data-name="@t.id" data-color="@t.color" style="background-color : @t.color;">
@@ -43,8 +29,8 @@
             </div>
           </div>
           <div class="panel-action">
-            <button id="save-button" class="right btn theme waves-effect waves-light" type="submit">@messages("profile.save")</button>
-            <a class="right btn-flat theme-text" href="@controllers.routes.HomeController.home()">@messages("profile.cancel")</a>
+            <button id="save-button" class="right btn theme waves-effect waves-light" type="submit">Save</button>
+            <a class="right btn-flat theme-text" href="@controllers.routes.HomeController.home()">Cancel</a>
             <div style="clear: both;"></div>
           </div>
         </div>

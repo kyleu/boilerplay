@@ -1,20 +1,20 @@
-@(user: models.user.User)(implicit request: Request[AnyContent], session: Session, flash: Flash, messages: Messages)
-@layout.admin(user, "status", messages("admin.status.title", utils.Config.projectName)) {
+@(user: models.user.User)(implicit request: Request[AnyContent], session: Session, flash: Flash)
+@layout.admin(user, "status", utils.Config.projectName + " Status") {
   <div class="content-panel">
-    <div class="panel-title"><i class="fa @models.template.Icons.settings"></i> @messages("admin.status.title", utils.Config.projectName)</div>
+    <div class="panel-title"><i class="fa @models.template.Icons.settings"></i> @utils.Config.projectName Status</div>
 
     <div class="row">
       <div class="col s12">
         <ul class="collection">
           <li class="collection-item">
             <a href="@controllers.admin.routes.MetricsController.showMetrics()" class="theme-text">Configuration</a>
-            <div>@messages("admin.status")</div>
+            <div>Metrics</div>
           </li>
         </ul>
       </div>
     </div>
   </div>
   <div class="panel-action">
-    <a class="theme-text" href="@controllers.admin.routes.AdminController.index()">@messages("admin.back.title")</a>
+    <a class="theme-text" href="@controllers.admin.routes.AdminController.index()">Back</a>
   </div>
 }
