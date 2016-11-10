@@ -10,7 +10,7 @@ trait BaseQueries[T] {
   protected def tableName: String = "_invalid_"
   protected def idColumns = Seq("id")
   protected def columns: Seq[String]
-  protected def searchColumns: Seq[String]
+  protected def searchColumns: Seq[String] = Nil
 
   protected def fromRow(row: Row): T
   protected def toDataSeq(t: T): Seq[Any]

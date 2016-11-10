@@ -6,13 +6,12 @@ import akka.actor.{ActorSystem, Props}
 import com.codahale.metrics.SharedMetricRegistries
 import com.mohiva.play.silhouette.api.Silhouette
 import models.auth.AuthEnv
-import models.database.Database
-import models.ddl.MasterDdl
 import org.joda.time.DateTimeZone
 import play.api.Environment
 import play.api.inject.ApplicationLifecycle
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.libs.ws.WSClient
+import services.database.{Database, MasterDdl}
 import services.settings.SettingsService
 import services.supervisor.ActorSupervisor
 import utils.metrics.Instrumented
@@ -54,7 +53,7 @@ class ApplicationContext @javax.inject.Inject() (
     lifecycle.addStopHook(() => Future.successful(stop()))
 
     Database.open(config.cnf)
-    MasterDdl.update().map { ok =>
+    MasterDdl.init().map { ok =>
       SettingsService.load()
     }
   }

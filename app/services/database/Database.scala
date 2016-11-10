@@ -1,12 +1,13 @@
-package models.database
+package services.database
 
 import com.github.mauricio.async.db.pool.{ConnectionPool, PoolConfiguration}
 import com.github.mauricio.async.db.postgresql.PostgreSQLConnection
 import com.github.mauricio.async.db.postgresql.pool.PostgreSQLConnectionFactory
 import com.github.mauricio.async.db.{Configuration, Connection, QueryResult}
+import models.database.{RawQuery, Statement}
 import org.slf4j.LoggerFactory
-
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
+
 import scala.concurrent.duration._
 import scala.concurrent.{Await, Future}
 

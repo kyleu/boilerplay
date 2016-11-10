@@ -4,10 +4,10 @@ import java.util.UUID
 
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.services.IdentityService
-import models.database.Database
 import models.queries.auth.UserQueries
 import models.user.User
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import services.database.Database
 import utils.Logging
 import utils.cache.UserCache
 

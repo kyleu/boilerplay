@@ -1,9 +1,9 @@
 package services.settings
 
-import models.database.Database
 import models.queries.settings.SettingQueries
 import models.settings.{Setting, SettingKey}
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import services.database.Database
 
 object SettingsService {
   private[this] var settings = Seq.empty[Setting]

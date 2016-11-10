@@ -5,10 +5,10 @@ import java.util.UUID
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.util.PasswordHasher
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
-import models.database.Database
 import models.queries.auth._
 import models.user.{Role, User}
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import services.database.Database
 import utils.Logging
 import utils.cache.UserCache
 
