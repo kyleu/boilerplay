@@ -38,11 +38,11 @@ object Dependencies {
   }
 
   object Database {
-    val postgres = "com.github.mauricio" %% "postgresql-async" % "0.2.20"
+    val postgres = "com.github.mauricio" %% "postgresql-async" % "0.2.20" exclude("io.netty", "netty-all")
   }
 
   object Serialization {
-    val version = "0.4.3"
+    val version = "0.4.4"
     val uPickle = "com.lihaoyi" %% "upickle" % version
   }
 
@@ -72,7 +72,7 @@ object Dependencies {
 
   object Utils {
     val scapegoatVersion = "1.2.1"
-    val enumeratumVersion = "1.4.17"
+    val enumeratumVersion = "1.4.18"
 
     val commonsIo = "commons-io" % "commons-io" % "2.5"
     val crypto = "xyz.wiedenhoeft" %% "scalacrypt" % "0.4.0"
@@ -81,7 +81,7 @@ object Dependencies {
   }
 
   object Testing {
-    val scalaTest = "org.scalatest" %% "scalatest" % "3.0.0" % "test"
+    val scalaTest = "org.scalatest" %% "scalatest" % "3.0.1" % "test"
     val gatlingCore = "io.gatling" % "gatling-test-framework" % "2.1.7" % "test"
     val gatlingCharts = "io.gatling.highcharts" % "gatling-charts-highcharts" % "2.1.7" % "test"
   }
