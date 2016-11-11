@@ -38,7 +38,7 @@ object Dependencies {
   }
 
   object Database {
-    val postgres = "com.github.mauricio" %% "postgresql-async" % "0.2.20"
+    val postgres = "com.github.mauricio" %% "postgresql-async" % "0.2.20" exclude("io.netty", "netty-all")
   }
 
   object Serialization {

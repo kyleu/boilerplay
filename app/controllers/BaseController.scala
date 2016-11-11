@@ -35,32 +35,33 @@ abstract class BaseController() extends Controller with Instrumented with Loggin
 
   def withSession(action: String)(block: (SecuredRequest[AuthEnv, AnyContent]) => Future[Result]) = {
     ctx.silhouette.UserAwareAction.async { implicit request =>
-      request.identity match {
-        case Some(u) => metrics.timer(action).timeFuture {
-          val auth = request.authenticator.getOrElse(throw new IllegalStateException("Somehow, you're not logged in."))
-          block(SecuredRequest(u, auth, request))
+      metrics.timer(action).timeFuture {
+        request.identity match {
+          case Some(u) =>
+            val auth = request.authenticator.getOrElse(throw new IllegalStateException("Somehow, you're not logged in."))
+            block(SecuredRequest(u, auth, request))
+          case None =>
+            val result = UserService.instance.map(_.userCount.map { count =>
+              if (count == 0) {
+                Redirect(controllers.auth.routes.RegistrationController.registrationForm())
+              } else {
+                Redirect(controllers.auth.routes.AuthenticationController.signInForm())
+              }
+            }).getOrElse(Future.successful(Redirect(controllers.auth.routes.AuthenticationController.signInForm())))
+
+            val flashed = result.map(_.flashing(
+              "error" -> s"You must sign in or register before accessing ${utils.Config.projectName}."
+            ))
+
+            flashed.map { r =>
+              if (!request.uri.contains("signin")) {
+                r.withSession(r.session + ("returnUrl" -> request.uri))
+              } else {
+                log.info(s"Skipping returnUrl for external url [${request.uri}].")
+                r
+              }
+            }
         }
-        case None =>
-          val result = UserService.instance.map(_.userCount.map { count =>
-            if (count == 0) {
-              Redirect(controllers.auth.routes.RegistrationController.registrationForm())
-            } else {
-              Redirect(controllers.auth.routes.AuthenticationController.signInForm())
-            }
-          }).getOrElse(Future.successful(Redirect(controllers.auth.routes.AuthenticationController.signInForm())))
-
-          val flashed = result.map(_.flashing(
-            "error" -> s"You must sign in or register before accessing ${utils.Config.projectName}."
-          ))
-
-          flashed.map { r =>
-            if (!request.uri.contains("signin")) {
-              r.withSession(r.session + ("returnUrl" -> request.uri))
-            } else {
-              log.info(s"Skipping returnUrl for external url [${request.uri}].")
-              r
-            }
-          }
       }
     }
   }
