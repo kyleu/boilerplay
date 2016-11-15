@@ -3,13 +3,13 @@ package controllers.admin
 import controllers.BaseController
 import models.settings.SettingKey
 import services.settings.SettingsService
-import utils.ApplicationContext
+import utils.Application
 import utils.web.FormUtils
 
 import scala.concurrent.Future
 
 @javax.inject.Singleton
-class SettingsController @javax.inject.Inject() (override val ctx: ApplicationContext) extends BaseController {
+class SettingsController @javax.inject.Inject() (override val app: Application) extends BaseController {
   def settings = withAdminSession("admin-settings") { implicit request =>
     Future.successful(Ok(views.html.admin.settings(request.identity)))
   }

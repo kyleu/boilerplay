@@ -7,14 +7,14 @@ import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
 import models.user.UserForms
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import services.user.UserService
-import utils.ApplicationContext
+import utils.Application
 import utils.web.FormUtils
 
 import scala.concurrent.Future
 
 @javax.inject.Singleton
 class ProfileController @javax.inject.Inject() (
-    override val ctx: ApplicationContext,
+    override val app: Application,
     userService: UserService,
     authInfoRepository: AuthInfoRepository,
     credentialsProvider: CredentialsProvider,
@@ -57,8 +57,8 @@ class ProfileController @javax.inject.Inject() (
             val okResponse = Redirect(controllers.routes.ProfileController.view()).flashing("success" -> "Password changed.")
             for {
               _ <- authInfoRepository.update(loginInfo, hasher.hash(changePass.newPassword))
-              authenticator <- ctx.silhouette.env.authenticatorService.create(loginInfo)
-              result <- ctx.silhouette.env.authenticatorService.renew(authenticator, okResponse)
+              authenticator <- app.silhouette.env.authenticatorService.create(loginInfo)
+              result <- app.silhouette.env.authenticatorService.renew(authenticator, okResponse)
             } yield result
           }.recover {
             case e: ProviderException => errorResponse(s"Old password does not match (${e.getMessage}).")

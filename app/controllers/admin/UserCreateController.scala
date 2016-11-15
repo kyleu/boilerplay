@@ -10,14 +10,14 @@ import controllers.BaseController
 import models.user.{Role, User, UserPreferences}
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import services.user.UserService
-import utils.ApplicationContext
+import utils.Application
 import utils.web.FormUtils
 
 import scala.concurrent.Future
 
 @javax.inject.Singleton
 class UserCreateController @javax.inject.Inject() (
-    override val ctx: ApplicationContext,
+    override val app: Application,
     userService: UserService,
     authInfoRepository: AuthInfoRepository,
     hasher: PasswordHasher
@@ -52,11 +52,11 @@ class UserCreateController @javax.inject.Inject() (
       val authInfo = hasher.hash(form("password"))
       for {
         authInfo <- authInfoRepository.add(loginInfo, authInfo)
-        authenticator <- ctx.silhouette.env.authenticatorService.create(loginInfo)
-        value <- ctx.silhouette.env.authenticatorService.init(authenticator)
+        authenticator <- app.silhouette.env.authenticatorService.create(loginInfo)
+        value <- app.silhouette.env.authenticatorService.init(authenticator)
         userSaved <- userSavedFuture
       } yield {
-        ctx.silhouette.env.eventBus.publish(SignUpEvent(userSaved, request))
+        app.silhouette.env.eventBus.publish(SignUpEvent(userSaved, request))
         Redirect(controllers.admin.routes.UserEditController.view(id)).flashing("success" -> s"User [${form("email")}] added.")
       }
     }

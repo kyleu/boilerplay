@@ -8,13 +8,13 @@ import controllers.BaseController
 import models.user.UserForms
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import services.user.UserSearchService
-import utils.ApplicationContext
+import utils.Application
 
 import scala.concurrent.Future
 
 @javax.inject.Singleton
 class AuthenticationController @javax.inject.Inject() (
-    override val ctx: ApplicationContext,
+    override val app: Application,
     userSearchService: UserSearchService,
     credentialsProvider: CredentialsProvider
 ) extends BaseController {
@@ -36,10 +36,10 @@ class AuthenticationController @javax.inject.Inject() (
           }
           userSearchService.retrieve(loginInfo).flatMap {
             case Some(user) =>
-              ctx.silhouette.env.authenticatorService.create(loginInfo).flatMap { authenticator =>
-                ctx.silhouette.env.eventBus.publish(LoginEvent(user, request))
-                ctx.silhouette.env.authenticatorService.init(authenticator).flatMap { v =>
-                  ctx.silhouette.env.authenticatorService.embed(v, result)
+              app.silhouette.env.authenticatorService.create(loginInfo).flatMap { authenticator =>
+                app.silhouette.env.eventBus.publish(LoginEvent(user, request))
+                app.silhouette.env.authenticatorService.init(authenticator).flatMap { v =>
+                  app.silhouette.env.authenticatorService.embed(v, result)
                 }
               }
             case None => Future.failed(new IdentityNotFoundException(s"Couldn't find user [${loginInfo.providerID}]."))
@@ -54,8 +54,7 @@ class AuthenticationController @javax.inject.Inject() (
 
   def signOut = withSession("signout") { implicit request =>
     implicit val result = Redirect(controllers.routes.HomeController.home())
-
-    ctx.silhouette.env.eventBus.publish(LogoutEvent(request.identity, request))
-    ctx.silhouette.env.authenticatorService.discard(request.authenticator, result)
+    app.silhouette.env.eventBus.publish(LogoutEvent(request.identity, request))
+    app.silhouette.env.authenticatorService.discard(request.authenticator, result)
   }
 }

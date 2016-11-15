@@ -6,14 +6,14 @@ import controllers.BaseController
 import models.user.Role
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import services.user.{UserSearchService, UserService}
-import utils.ApplicationContext
+import utils.Application
 import utils.web.FormUtils
 
 import scala.concurrent.Future
 
 @javax.inject.Singleton
 class UserEditController @javax.inject.Inject() (
-    override val ctx: ApplicationContext,
+    override val app: Application,
     userService: UserService,
     userSearchService: UserSearchService
 ) extends BaseController {

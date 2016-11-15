@@ -6,15 +6,15 @@ import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.mvc._
 import services.user.UserService
 import utils.metrics.Instrumented
-import utils.{ApplicationContext, Logging}
+import utils.{Application, Logging}
 
 import scala.concurrent.Future
 
 abstract class BaseController() extends Controller with Instrumented with Logging {
-  def ctx: ApplicationContext
+  def app: Application
 
   def withAdminSession(action: String)(block: (SecuredRequest[AuthEnv, AnyContent]) => Future[Result]) = {
-    ctx.silhouette.SecuredAction.async { implicit request =>
+    app.silhouette.SecuredAction.async { implicit request =>
       metrics.timer(action).timeFuture {
         if (request.identity.isAdmin) {
           block(request)
@@ -26,7 +26,7 @@ abstract class BaseController() extends Controller with Instrumented with Loggin
   }
 
   def withoutSession(action: String)(block: UserAwareRequest[AuthEnv, AnyContent] => Future[Result]) = {
-    ctx.silhouette.UserAwareAction.async { implicit request =>
+    app.silhouette.UserAwareAction.async { implicit request =>
       metrics.timer(action).timeFuture {
         block(request)
       }
@@ -34,7 +34,7 @@ abstract class BaseController() extends Controller with Instrumented with Loggin
   }
 
   def withSession(action: String)(block: (SecuredRequest[AuthEnv, AnyContent]) => Future[Result]) = {
-    ctx.silhouette.UserAwareAction.async { implicit request =>
+    app.silhouette.UserAwareAction.async { implicit request =>
       metrics.timer(action).timeFuture {
         request.identity match {
           case Some(u) =>

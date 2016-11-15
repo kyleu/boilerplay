@@ -8,20 +8,20 @@ import models._
 import models.user.User
 import org.joda.time.LocalDateTime
 import utils.metrics.{InstrumentedActor, MetricsServletActor}
-import utils.{ApplicationContext, DateUtils, Logging}
+import utils.{Application, DateUtils, Logging}
 
 object ActorSupervisor {
   case class SocketRecord(userId: UUID, name: String, actorRef: ActorRef, started: LocalDateTime)
   protected val sockets = collection.mutable.HashMap.empty[UUID, SocketRecord]
 }
 
-class ActorSupervisor(val ctx: ApplicationContext) extends InstrumentedActor with Logging {
+class ActorSupervisor(val app: Application) extends InstrumentedActor with Logging {
   import services.supervisor.ActorSupervisor._
 
   protected[this] val socketsCounter = metrics.counter("active-connections")
 
   override def preStart() {
-    context.actorOf(MetricsServletActor.props(ctx.config.metrics), "metrics-servlet")
+    context.actorOf(MetricsServletActor.props(app.config.metrics), "metrics-servlet")
   }
 
   override def supervisorStrategy: SupervisorStrategy = OneForOneStrategy() {

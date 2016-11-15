@@ -18,12 +18,12 @@ import utils.metrics.Instrumented
 
 import scala.concurrent.Future
 
-object ApplicationContext {
+object Application {
   var initialized = false
 }
 
 @javax.inject.Singleton
-class ApplicationContext @javax.inject.Inject() (
+class Application @javax.inject.Inject() (
     val config: Configuration,
     val lifecycle: ApplicationLifecycle,
     val playEnv: Environment,
@@ -31,7 +31,7 @@ class ApplicationContext @javax.inject.Inject() (
     val silhouette: Silhouette[AuthEnv],
     val ws: WSClient
 ) extends Logging {
-  if (ApplicationContext.initialized) {
+  if (Application.initialized) {
     log.info("Skipping initialization after failure.")
   } else {
     start()
@@ -42,7 +42,7 @@ class ApplicationContext @javax.inject.Inject() (
 
   private[this] def start() = {
     log.info(s"${Config.projectName} is starting.")
-    ApplicationContext.initialized = true
+    Application.initialized = true
 
     DateTimeZone.setDefault(DateTimeZone.UTC)
     TimeZone.setDefault(TimeZone.getTimeZone("UTC"))

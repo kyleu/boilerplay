@@ -12,13 +12,13 @@ import models.user._
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import services.settings.SettingsService
 import services.user.{UserSearchService, UserService}
-import utils.ApplicationContext
+import utils.Application
 
 import scala.concurrent.Future
 
 @javax.inject.Singleton
 class RegistrationController @javax.inject.Inject() (
-    override val ctx: ApplicationContext,
+    override val app: Application,
     userService: UserService,
     userSearchService: UserSearchService,
     authInfoRepository: AuthInfoRepository,
@@ -68,13 +68,13 @@ class RegistrationController @javax.inject.Inject() (
             }
             for {
               authInfo <- authInfoRepository.add(loginInfo, authInfo)
-              authenticator <- ctx.silhouette.env.authenticatorService.create(loginInfo)
-              value <- ctx.silhouette.env.authenticatorService.init(authenticator)
-              result <- ctx.silhouette.env.authenticatorService.embed(value, result)
+              authenticator <- app.silhouette.env.authenticatorService.create(loginInfo)
+              value <- app.silhouette.env.authenticatorService.init(authenticator)
+              result <- app.silhouette.env.authenticatorService.embed(value, result)
               userSaved <- userSavedFuture
             } yield {
-              ctx.silhouette.env.eventBus.publish(SignUpEvent(userSaved, request))
-              ctx.silhouette.env.eventBus.publish(LoginEvent(userSaved, request))
+              app.silhouette.env.eventBus.publish(SignUpEvent(userSaved, request))
+              app.silhouette.env.eventBus.publish(LoginEvent(userSaved, request))
               result.flashing("success" -> "You're all set!")
             }
         }
