@@ -7,6 +7,7 @@ import utils.metrics.MetricsConfig
 @javax.inject.Singleton
 class Configuration @javax.inject.Inject() (val cnf: play.api.Configuration, env: Environment) {
   val debug = env.mode == Mode.Dev
+  val dataDir = new java.io.File(cnf.getString("data.directory").getOrElse("./data"))
 
   // Metrics
   val jmxEnabled = cnf.getBoolean("metrics.jmx.enabled").getOrElse(true)

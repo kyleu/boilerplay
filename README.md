@@ -1,6 +1,6 @@
 # Boilerplay
 
-Using the latest technology in the Scala ecosystem, Boilerplay is a pure Scala reactive web application built on Play 2.5, ScalaJS, Silhouette 4, Akka, and postgres-async.
+Using the latest technology in the Scala ecosystem, Boilerplay is a pure Scala reactive web application built on Play 2.5, ScalaJS, Silhouette 4, Akka, Sangria, and postgres-async.
 It provides a good starting point for whatever you want to build.
 
 ## Features
@@ -8,7 +8,7 @@ It provides a good starting point for whatever you want to build.
 * Local sign-in, profile, and change password support.
 * Role based security, with normal and admin roles.
 * Full admin suite for user management, reporting, and real-time session observation.
-* Ad-hoc queries, nightly activity reports, and other pretty charts and graphs.
+* GraphQL schema and query interface, with shared queries and mutations.
 * Scala source that is shared between the client and server via Scala.js.
 * Websocket-driven actor support, with monitoring and tracing.
 
@@ -17,8 +17,11 @@ It provides a good starting point for whatever you want to build.
 
 The Play application communicates over a WebSocket to a pool of Akka actors managing connections.
 Serialization is handled by Play Json, and all database communication runs via postgres-async. Scala.js compiles the
-shared code and provides an in-browser component. Websocket communication is handled via Play and Akka.
+shared code and provides an in-browser component. 
 
+The index page opens a websocket connection for bidirectional communication, handled via Play and Akka.
+
+A GraphQL schema is provided, accessible in the administration section.
 
 ## Running the app
 
@@ -32,7 +35,7 @@ GRANT ALL PRIVILEGES ON DATABASE boilerplay TO boilerplay;
 
 You'll either need Node.js available as "node" on the path, or change project/Server.scala's EngineType to Rhino.
 
-Then you'll need to change the SMTP and Silhouette settings in application.conf to use your mail server and social apps.
+Then you'll need to change the SMTP and Silhouette sections in application.conf to use your mail server and authentication settings.
 
 Now, finally,
 ```shell
@@ -77,6 +80,7 @@ Boilerplay relies on a whole lot of tremendous open source projects. Here's a fe
 * [Scala.js](https://www.scala-js.org/)
 * [Play Framework](https://www.playframework.com/)
 * [Akka](http://akka.io/)
+* [Sangria](http://sangria-graphql.org/)
 * [Materialize CSS](http://materializecss.com/)
 * [Enumeratum](https://github.com/lloydmeta/enumeratum)
 * [uPickle](https://github.com/lihaoyi/upickle-pprint)

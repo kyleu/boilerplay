@@ -1,3 +1,4 @@
+@import models.sandbox.SandboxTask
 @(user: models.user.User)(implicit request: Request[AnyContent], session: Session, flash: Flash)
 @layout.simple(Some(user), "Sandbox List") {
   <div class="row">
@@ -6,7 +7,7 @@
         <span class="panel-title">Sandbox Actions</span>
 
         <ul class="collection">
-        @services.sandbox.SandboxTask.values.map { s =>
+        @SandboxTask.values.map { s =>
           <li class="collection-item">
             <a class="theme-text" href="@controllers.admin.routes.SandboxController.sandbox(s.id)">@s.name</a>
             <div>@s.description</div>

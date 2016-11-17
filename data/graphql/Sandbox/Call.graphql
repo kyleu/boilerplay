@@ -1,0 +1,10 @@
+mutation CallSandbox {
+  sandbox {
+    call(task: testbed) {
+      task
+      status
+      result
+      elapsed
+    }
+  }
+}

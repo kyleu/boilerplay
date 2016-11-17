@@ -24,7 +24,6 @@
 
     @for(script <- scripts) {<script src="@script"></script>}
     @for(stylesheet <- stylesheets) {<link rel="stylesheet" media="screen" href="@stylesheet" />}
-    <link rel="stylesheet" media="screen" href="@controllers.routes.Assets.versioned("stylesheets/boilerplay.min.css")" />
   </head>
   <body>@content
   </body>

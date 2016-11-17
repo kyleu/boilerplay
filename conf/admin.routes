@@ -1,18 +1,24 @@
-GET         /                           controllers.admin.AdminController.index
-GET         /status                     controllers.admin.AdminController.status
-GET         /metrics                    controllers.admin.MetricsController.showMetrics
+GET         /                        controllers.admin.AdminController.index
+GET         /status                  controllers.admin.AdminController.status
+GET         /metrics                 controllers.admin.MetricsController.showMetrics
 
-GET         /users/new                  controllers.admin.UserCreateController.newUser()
-POST        /users/new                  controllers.admin.UserCreateController.saveNewUser()
+GET         /graphql                 controllers.admin.GraphQLController.graphql(query: Option[String])
+POST        /graphql                 controllers.admin.GraphQLController.graphqlBody
+GET         /graphql/load            controllers.admin.GraphQLController.load(dir: Option[String], name)
+POST        /graphql/save            controllers.admin.GraphQLController.save
+GET         /schema                  controllers.admin.GraphQLController.renderSchema
 
-GET         /users                      controllers.admin.UserEditController.users
-GET         /users/:id                  controllers.admin.UserEditController.view(id: java.util.UUID)
-GET         /users/:id/edit             controllers.admin.UserEditController.edit(id: java.util.UUID)
-POST        /users/:id/edit             controllers.admin.UserEditController.save(id: java.util.UUID)
-GET         /users/:id/remove           controllers.admin.UserEditController.remove(id: java.util.UUID)
+GET         /users/new               controllers.admin.UserCreateController.newUser()
+POST        /users/new               controllers.admin.UserCreateController.saveNewUser()
 
-GET         /settings                   controllers.admin.SettingsController.settings
-POST        /settings                   controllers.admin.SettingsController.saveSettings
+GET         /users                   controllers.admin.UserEditController.users
+GET         /users/:id               controllers.admin.UserEditController.view(id: java.util.UUID)
+GET         /users/:id/edit          controllers.admin.UserEditController.edit(id: java.util.UUID)
+POST        /users/:id/edit          controllers.admin.UserEditController.save(id: java.util.UUID)
+GET         /users/:id/remove        controllers.admin.UserEditController.remove(id: java.util.UUID)
 
-GET         /sandbox                    controllers.admin.SandboxController.list
-GET         /sandbox/:key               controllers.admin.SandboxController.sandbox(key)
+GET         /settings                controllers.admin.SettingsController.settings
+POST        /settings                controllers.admin.SettingsController.saveSettings
+
+GET         /sandbox                 controllers.admin.SandboxController.list
+GET         /sandbox/:key            controllers.admin.SandboxController.sandbox(key)

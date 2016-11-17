@@ -41,6 +41,11 @@ object Dependencies {
     val postgres = "com.github.mauricio" %% "postgresql-async" % "0.2.20" exclude("io.netty", "netty-all")
   }
 
+  object GraphQL {
+    val sangria = "org.sangria-graphql" %% "sangria" % "1.0.0-RC3"
+    val sangriaPlayJson = "org.sangria-graphql" %% "sangria-play-json" % "0.3.3"
+  }
+
   object Serialization {
     val version = "0.4.4"
     val uPickle = "com.lihaoyi" %% "upickle" % version

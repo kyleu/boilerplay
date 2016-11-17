@@ -10,6 +10,11 @@
       <a href="@controllers.routes.HomeController.home()" class="brand-logo center">@utils.Config.projectName</a>
 
       <ul class="left hide-on-small-only">
+        @if(activeSection == "graphql") {
+          <li class="active"><a href="@controllers.admin.routes.GraphQLController.graphql(None)">GraphQL</a></li>
+        } else {
+          <li><a href="@controllers.admin.routes.GraphQLController.graphql(None)">GraphQL</a></li>
+        }
         @if(activeSection == "settings") {
           <li class="active"><a href="@controllers.admin.routes.SettingsController.settings()">Settings</a></li>
         } else {

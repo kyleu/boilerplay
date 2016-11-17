@@ -1,0 +1,61 @@
+@(user: models.user.User, queries: (Seq[String], Seq[(String, Seq[String])]))(implicit request: Request[AnyContent], session: Session, flash: Flash)
+@layout.basic(Some(user), "GraphQL", scripts = Seq(
+  routes.Assets.versioned("lib/graphiql/fetch.min.js").url,
+  routes.Assets.versioned("lib/graphiql/react.min.js").url,
+  routes.Assets.versioned("lib/graphiql/react-dom.min.js").url,
+  routes.Assets.versioned("lib/graphiql/graphiql.min.js").url,
+  routes.Assets.versioned("lib/jquery/jquery.js").url,
+  routes.Assets.versioned("javascripts/app-graphiql.js").url
+), stylesheets = Seq(routes.Assets.versioned("lib/graphiql/graphiql.css").url)) {
+  <style>
+    body {
+      height: 100%;
+      margin: 0;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    #graphiql {
+      height: 100vh;
+    }
+
+    .graphiql-container .topBar {
+      background: #607d8b;
+      color: #fff;
+    }
+
+    .graphiql-container .docExplorerShow {
+      background: #607d8b;
+      color: #fff;
+      border-left: none;
+    }
+
+    .graphiql-container .docExplorerShow:before {
+      border-left: 2px solid #fff;
+      border-top: 2px solid #fff;
+    }
+
+    .graphiql-container .CodeMirror-lines {
+      padding: 0;
+    }
+
+    .graphiql-container .execute-button-wrap {
+      margin: 0 12px;
+    }
+
+    .graphiql-container .execute-button {
+      box-shadow: none;
+    }
+
+    .graphiql-container .toggle-button {
+      float: left;
+      font-size: 1.3rem;
+      margin: -4px 14px 0 -4px;
+      cursor: pointer;
+    }
+  </style>
+
+  @views.html.admin.graphql.options(queries._1, queries._2)
+  <div id="graphiql">Loading...</div>
+  <script>renderGraphiql(document.getElementById('graphiql'))</script>
+}

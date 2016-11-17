@@ -12,6 +12,7 @@ import play.api.inject.ApplicationLifecycle
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.libs.ws.WSClient
 import services.database.{Database, MasterDdl}
+import services.file.FileService
 import services.settings.SettingsService
 import services.supervisor.ActorSupervisor
 import utils.metrics.Instrumented
@@ -51,6 +52,8 @@ class Application @javax.inject.Inject() (
     SharedMetricRegistries.add("default", Instrumented.metricRegistry)
 
     lifecycle.addStopHook(() => Future.successful(stop()))
+
+    FileService.setRootDir(config.dataDir)
 
     Database.open(config.cnf)
     MasterDdl.init().map { ok =>

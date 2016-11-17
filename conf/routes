@@ -33,7 +33,7 @@ GET         /apple-touch-icon.png                    controllers.Assets.at(path 
 GET         /favicon-16x16.png                       controllers.Assets.at(path = "/public", file = "images/ui/favicon/favicon-16x16.png")
 GET         /favicon-32x32.png                       controllers.Assets.at(path = "/public", file = "images/ui/favicon/favicon-32x32.png")
 GET         /favicon.ico                             controllers.Assets.at(path = "/public", file = "images/ui/favicon/favicon.ico")
-GET         /icon-blue-grey@2x.png                   controllers.Assets.at(path = "/public", file = "images/ui/favicon/icon-blue-grey@2x.png")
+GET         /favicon.png                             controllers.Assets.at(path = "/public", file = "images/ui/favicon/favicon.png")
 GET         /mstile-144x144.png                      controllers.Assets.at(path = "/public", file = "images/ui/favicon/mstile-144x144.png")
 GET         /mstile-150x150.png                      controllers.Assets.at(path = "/public", file = "images/ui/favicon/mstile-150x150.png")
 GET         /mstile-310x150.png                      controllers.Assets.at(path = "/public", file = "images/ui/favicon/mstile-310x150.png")
