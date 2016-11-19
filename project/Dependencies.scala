@@ -10,7 +10,7 @@ object Dependencies {
   }
 
   object Play {
-    private[this] val version = "2.5.9"
+    private[this] val version = "2.5.10"
     val playLib = "com.typesafe.play" %% "play" % version
     val playFilters = play.sbt.PlayImport.filters
     val playWs = play.sbt.PlayImport.ws
@@ -19,7 +19,7 @@ object Dependencies {
   }
 
   object Akka {
-    private[this] val version = "2.4.12"
+    private[this] val version = "2.4.13"
     val actor = "com.typesafe.akka" %% "akka-actor" % version
     val remote = "com.typesafe.akka" %% "akka-remote" % version
     val logging = "com.typesafe.akka" %% "akka-slf4j" % version
@@ -52,10 +52,10 @@ object Dependencies {
   }
 
   object WebJars {
-    val fontAwesome = "org.webjars" % "font-awesome" % "4.6.3"
+    val fontAwesome = "org.webjars" % "font-awesome" % "4.7.0"
     val jquery = "org.webjars" % "jquery" % "2.2.4"
     val materialize = "org.webjars" % "materializecss" % "0.97.7"
-    val moment = "org.webjars" % "momentjs" % "2.15.1"
+    val moment = "org.webjars" % "momentjs" % "2.16.0"
     val mousetrap = "org.webjars" % "mousetrap" % "1.6.0"
   }
 

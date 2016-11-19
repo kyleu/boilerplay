@@ -31,6 +31,7 @@ object Shared {
     // Code Quality
     scapegoatVersion := Utils.scapegoatVersion,
     scapegoatDisabledInspections := Seq("MethodNames", "MethodReturningAny", "DuplicateImport"),
+    scapegoatIgnoredFiles := Seq(".*/JsonSerializers.scala"),
     ScalariformKeys.preferences := ScalariformKeys.preferences.value
   ) ++ graphSettings ++ scalariformSettings
 

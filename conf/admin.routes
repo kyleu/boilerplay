@@ -2,7 +2,7 @@ GET         /                        controllers.admin.AdminController.index
 GET         /status                  controllers.admin.AdminController.status
 GET         /metrics                 controllers.admin.MetricsController.showMetrics
 
-GET         /graphql                 controllers.admin.GraphQLController.graphql(query: Option[String])
+GET         /graphql                 controllers.admin.GraphQLController.graphql(query: Option[String] ?= None, dir: Option[String] ?= None, name: Option[String] ?= None, variables: Option[String] ?= None)
 POST        /graphql                 controllers.admin.GraphQLController.graphqlBody
 GET         /graphql/load            controllers.admin.GraphQLController.load(dir: Option[String], name)
 POST        /graphql/save            controllers.admin.GraphQLController.save

@@ -17,20 +17,23 @@ import scala.concurrent.Future
 
 @javax.inject.Singleton
 class GraphQLController @javax.inject.Inject() (override val app: Application, system: ActorSystem) extends BaseController {
+  import system.dispatcher
 
   def renderSchema = withAdminSession("graphql.schema") { implicit request =>
     Future.successful(Ok(SchemaRenderer.renderSchema(Schema.schema)))
   }
 
-  def graphql(query: Option[String]) = withAdminSession("graphql.ui") { implicit request =>
-    val queries = GraphQLFileService.list()
-
-    Future.successful(Ok(views.html.admin.graphql.graphiql(request.identity, queries)))
+  def graphql(query: Option[String], dir: Option[String], name: Option[String], variables: Option[String]) = {
+    withAdminSession("graphql.ui") { implicit request =>
+      val vars = variables.getOrElse("{}")
+      log.debug(s"Executing GraphQL query [${query.getOrElse("")}] (${dir.getOrElse("-")}:${name.getOrElse("-")}) with [$vars] as variables.")
+      Future.successful(Ok(views.html.admin.graphql.graphiql(request.identity, GraphQLFileService.list())))
+    }
   }
 
   def load(dir: Option[String], name: String) = withAdminSession("graphql.load") { implicit request =>
     val q = GraphQLFileService.load(dir, name)
-    Future.successful(Redirect(controllers.admin.routes.GraphQLController.graphql(Some(q)).url + s"&dir=${dir.getOrElse("")}&name=$name"))
+    Future.successful(Redirect(controllers.admin.routes.GraphQLController.graphql(query = Some(q), dir = dir, name = Some(name)).url))
   }
 
   def save = withAdminSession("graphql.save") { implicit request =>
@@ -39,11 +42,11 @@ class GraphQLController @javax.inject.Inject() (override val app: Application, s
     val name = form.getOrElse("name", throw new IllegalStateException("Missing [name]."))
     val body = form.getOrElse("body", throw new IllegalStateException("Missing [body]."))
     GraphQLFileService.save(dir, name, body)
-    Future.successful(Redirect(controllers.admin.routes.GraphQLController.graphql(Some(body))))
+    Future.successful(Redirect(controllers.admin.routes.GraphQLController.graphql(query = Some(body), dir = dir, name = Some(name))))
   }
 
   def graphqlBody = withAdminSession("graphql.post") { implicit request =>
-    val body = request.body.asJson.get
+    val body = request.body.asJson.getOrElse(throw new IllegalStateException("Missing JSON body."))
     val query = (body \ "query").as[String]
     val operation = (body \ "operationName").asOpt[String]
 
