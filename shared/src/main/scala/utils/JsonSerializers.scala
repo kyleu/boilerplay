@@ -1,7 +1,5 @@
 package utils
 
-import java.util.UUID
-
 import enumeratum.UPickler
 import models.template.Theme
 import models.{RequestMessage, ResponseMessage}

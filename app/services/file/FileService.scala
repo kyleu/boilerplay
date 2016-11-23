@@ -1,13 +1,16 @@
 package services.file
 
-object FileService {
+import utils.Logging
+
+object FileService extends Logging {
   private[this] var dataDir: Option[java.io.File] = None
 
   def setRootDir(d: java.io.File) = {
     dataDir = Some(d)
 
     if ((!d.exists) || (!d.isDirectory)) {
-      throw new IllegalStateException(s"Cannot load data directory [${d.getAbsolutePath}].")
+      log.warn(s"Cannot load data directory [${d.getAbsolutePath}].")
+      log.warn(s"To set an alternate file cache directory, set [data.directory] in your configuration.")
     }
   }
 
