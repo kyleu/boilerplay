@@ -12,7 +12,7 @@ addSbtPlugin("com.orrsella" % "sbt-stats" % "1.0.5") // stats
 
 addSbtPlugin("net.virtual-void" % "sbt-dependency-graph" % "0.8.2") // dependencyGraph
 
-addSbtPlugin("com.timushev.sbt" % "sbt-updates" % "0.1.10") // dependencyUpdates
+addSbtPlugin("com.timushev.sbt" % "sbt-updates" % "0.3.0") // dependencyUpdates
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-scalariform" % "1.3.0") // scalariformFormat
 
