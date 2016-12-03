@@ -10,7 +10,7 @@ object FileService extends Logging {
 
     if ((!d.exists) || (!d.isDirectory)) {
       log.warn(s"Cannot load data directory [${d.getAbsolutePath}].")
-      log.warn(s"To set an alternate file cache directory, set [data.directory] in your configuration.")
+      log.warn("To set an alternate file cache directory, set [data.directory] in your configuration.")
     }
   }
 
