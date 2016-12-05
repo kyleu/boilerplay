@@ -28,7 +28,7 @@ A GraphQL schema is provided, accessible in the administration section.
 First, either create a Postgres role and database named "boilerplay", or change the application.conf to use your existing database.
 
 ```sql
-CREATE ROLE boilerplay WITH LOGIN PASSWORD 'password';
+CREATE ROLE boilerplay WITH LOGIN PASSWORD 'boilerplay';
 CREATE DATABASE boilerplay;
 GRANT ALL PRIVILEGES ON DATABASE boilerplay TO boilerplay;
 ```
