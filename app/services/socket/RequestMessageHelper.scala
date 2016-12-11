@@ -10,7 +10,6 @@ trait RequestMessageHelper extends InstrumentedActor { this: SocketService =>
 
     case p: Ping => timeReceive(p) { out ! Pong(p.timestamp) }
     case GetVersion => timeReceive(GetVersion) { out ! VersionResponse(Config.version) }
-    case dr: DebugInfo => timeReceive(dr) { handleDebugInfo(dr.data) }
 
     case im: InternalMessage => handleInternalMessage(im)
     case rm: ResponseMessage => out ! rm
@@ -18,8 +17,6 @@ trait RequestMessageHelper extends InstrumentedActor { this: SocketService =>
   }
 
   private[this] def handleInternalMessage(im: InternalMessage) = im match {
-    case ct: SendSocketTrace => timeReceive(ct) { handleSocketTrace() }
-    case ct: SendClientTrace => timeReceive(ct) { handleClientTrace() }
     case x => throw new IllegalArgumentException(s"Unhandled internal message [${x.getClass.getSimpleName}].")
   }
 }

@@ -10,7 +10,7 @@ import utils.DateUtils
 object PasswordInfoQueries extends BaseQueries[PasswordInfo] {
   override protected val tableName = "password_info"
   override protected val columns = Seq("provider", "key", "hasher", "password", "salt", "created")
-  override protected def idColumns = Seq("provider", "key")
+  override protected val idColumns = Seq("provider", "key")
   override protected val searchColumns = Seq("key")
 
   val getById = GetById

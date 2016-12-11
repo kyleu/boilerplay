@@ -63,6 +63,10 @@ All meaningful operations are tracked through Scala Metrics, and are exposed thr
 Reporting to Graphite can be enabled through application.conf, and reports to 127.0.0.1:2003 by default.
 Metrics exposes all actors, queries, logs, requests, and jvm info.
 
+## Make it your own
+
+To start your own project, you can change every instance of the word "boilerplay" to your project's id, and 
+change every instance of "Boilerplay" to your project's name. Don't worry, there's only a few. 
 
 ## Contributing
 

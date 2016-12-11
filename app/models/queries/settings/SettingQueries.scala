@@ -6,7 +6,7 @@ import models.settings.{Setting, SettingKey}
 
 object SettingQueries extends BaseQueries[Setting] {
   override protected val tableName = "setting_values"
-  override protected def idColumns: Seq[String] = Seq("k")
+  override protected val idColumns = Seq("k")
   override protected val columns = Seq("k", "v")
   override protected val searchColumns = columns
 

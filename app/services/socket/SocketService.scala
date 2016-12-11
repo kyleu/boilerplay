@@ -16,7 +16,7 @@ object SocketService {
 
 case class SocketService(
     id: UUID, supervisor: ActorRef, user: User, out: ActorRef, sourceAddress: String
-) extends InstrumentedActor with RequestMessageHelper with DetailHelper with Logging {
+) extends InstrumentedActor with RequestMessageHelper with Logging {
 
   protected[this] var pendingDebugChannel: Option[ActorRef] = None
 

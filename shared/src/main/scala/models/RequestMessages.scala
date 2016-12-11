@@ -6,4 +6,3 @@ case class MalformedRequest(reason: String, content: String) extends RequestMess
 
 case class Ping(timestamp: Long) extends RequestMessage
 case object GetVersion extends RequestMessage
-case class DebugInfo(data: String) extends RequestMessage
