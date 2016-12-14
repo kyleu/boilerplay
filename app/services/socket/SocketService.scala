@@ -18,8 +18,6 @@ case class SocketService(
     id: UUID, supervisor: ActorRef, user: User, out: ActorRef, sourceAddress: String
 ) extends InstrumentedActor with RequestMessageHelper with Logging {
 
-  protected[this] var pendingDebugChannel: Option[ActorRef] = None
-
   override def preStart() = {
     log.info(s"Starting connection for user [${user.id}: ${user.username}].")
     supervisor ! SocketStarted(user, id, self)
