@@ -8,7 +8,7 @@ object InitService {
     Logging.installErrorHandler()
     NetworkMessage.register(sendMessage)
 
-    Logging.debug("Database Flow has started.")
+    Logging.debug("Boilerplay has started.")
     connect()
   }
 }
