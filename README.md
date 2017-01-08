@@ -40,7 +40,7 @@ $ ./start_postgres.sh
 
 You'll either need Node.js available as "node" on the path, or change project/Server.scala's EngineType to Rhino.
 
-Then you'll need to change the SMTP and Silhouette sections in application.conf to use your mail server and authentication settings.
+Then you'll need to change the Silhouette sections in application.conf to use your authentication settings.
 
 Now, finally,
 ```shell
