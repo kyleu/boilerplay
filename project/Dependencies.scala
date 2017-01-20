@@ -42,8 +42,9 @@ object Dependencies {
   }
 
   object GraphQL {
-    val sangria = "org.sangria-graphql" %% "sangria" % "1.0.0-RC5"
-    val sangriaPlayJson = "org.sangria-graphql" %% "sangria-play-json" % "0.3.3"
+    val version = "1.0.0"
+    val sangria = "org.sangria-graphql" %% "sangria" % version
+    val sangriaPlayJson = "org.sangria-graphql" %% "sangria-play-json" % version
   }
 
   object Serialization {
