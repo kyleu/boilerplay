@@ -38,7 +38,7 @@ object Dependencies {
   }
 
   object Database {
-    val postgres = "com.github.mauricio" %% "postgresql-async" % "0.2.20" exclude("io.netty", "netty-all")
+    val postgres = "com.github.mauricio" %% "postgresql-async" % "0.2.21" exclude("io.netty", "netty-all")
   }
 
   object GraphQL {
@@ -56,7 +56,7 @@ object Dependencies {
     val fontAwesome = "org.webjars" % "font-awesome" % "4.7.0"
     val jquery = "org.webjars" % "jquery" % "2.2.4"
     val materialize = "org.webjars" % "materializecss" % "0.97.7"
-    val moment = "org.webjars" % "momentjs" % "2.16.0"
+    val moment = "org.webjars" % "momentjs" % "2.17.1"
     val mousetrap = "org.webjars" % "mousetrap" % "1.6.0"
   }
 
@@ -78,7 +78,7 @@ object Dependencies {
 
   object Utils {
     val scapegoatVersion = "1.3.0"
-    val enumeratumVersion = "1.5.3"
+    val enumeratumVersion = "1.5.6"
 
     val commonsIo = "commons-io" % "commons-io" % "2.5"
     val crypto = "xyz.wiedenhoeft" %% "scalacrypt" % "0.4.0"

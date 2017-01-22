@@ -34,7 +34,7 @@ object Packaging {
 
     // Windows settings
     mappings in Windows := (mappings in Windows).value.filterNot(isConf),
-    makeBatScript := Some(file(s"./src/deploy/package/windows/${Shared.projectId}.bat")),
+    //makeBatScript := Some(file(s"./src/deploy/package/windows/${Shared.projectId}.bat")),
     topLevelDirectory in Windows := Some(Shared.projectName),
     wixProductId := "5fee44ae-0989-429b-9b1a-de8ec7dd9af5",
     wixProductUpgradeId := "6d353c6a-6f39-48f1-afa8-2c5eb726a8b8",
@@ -81,13 +81,13 @@ object Packaging {
       desc = "Update PATH environment variables (requires restart).",
       components = Seq(AddDirectoryToPath("bin"))
     )
-    val menuLinks = WindowsFeature(
-      id = "AddConfigLinks",
-      title = "Start Menu Links",
-      desc = "Adds start menu shortcuts.",
-      components = Seq(AddShortCuts(Seq(s"bin\\${Shared.projectId}.bat")))
-    )
+    // val menuLinks = WindowsFeature(
+    //   id = "AddConfigLinks",
+    // title = "Start Menu Links",
+    // desc = "Adds start menu shortcuts.",
+    // components = Seq(AddShortCuts(Seq(s"bin\\${Shared.projectId}.bat")))
+    // )
 
-    Seq(corePackage, addBinToPath, menuLinks)
+    Seq(corePackage, addBinToPath/* , menuLinks */)
   }
 }
