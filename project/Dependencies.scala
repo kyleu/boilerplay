@@ -19,7 +19,7 @@ object Dependencies {
   }
 
   object Akka {
-    private[this] val version = "2.4.16"
+    private[this] val version = "2.4.17"
     val actor = "com.typesafe.akka" %% "akka-actor" % version
     val remote = "com.typesafe.akka" %% "akka-remote" % version
     val logging = "com.typesafe.akka" %% "akka-slf4j" % version
@@ -73,12 +73,12 @@ object Dependencies {
 
   object ScalaJS {
     val jQueryVersion = "0.9.1"
-    val scalaTagsVersion = "0.6.2"
+    val scalaTagsVersion = "0.6.3"
   }
 
   object Utils {
     val scapegoatVersion = "1.3.0"
-    val enumeratumVersion = "1.5.6"
+    val enumeratumVersion = "1.5.7"
 
     val commonsIo = "commons-io" % "commons-io" % "2.5"
     val crypto = "xyz.wiedenhoeft" %% "scalacrypt" % "0.4.0"
