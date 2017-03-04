@@ -42,9 +42,8 @@ object Dependencies {
   }
 
   object GraphQL {
-    val version = "1.0.0"
-    val sangria = "org.sangria-graphql" %% "sangria" % version
-    val sangriaPlayJson = "org.sangria-graphql" %% "sangria-play-json" % version
+    val sangria = "org.sangria-graphql" %% "sangria" % "1.0.0"
+    val sangriaPlayJson = "org.sangria-graphql" %% "sangria-play-json" % "1.0.0"
   }
 
   object Serialization {
@@ -55,20 +54,21 @@ object Dependencies {
   object WebJars {
     val fontAwesome = "org.webjars" % "font-awesome" % "4.7.0"
     val jquery = "org.webjars" % "jquery" % "2.2.4"
-    val materialize = "org.webjars" % "materializecss" % "0.97.7"
+    val materialize = "org.webjars" % "materializecss" % "0.98.0"
     val moment = "org.webjars" % "momentjs" % "2.17.1"
     val mousetrap = "org.webjars" % "mousetrap" % "1.6.0"
   }
 
   object Metrics {
-    val metrics = "nl.grons" %% "metrics-scala" % "3.5.5"
-    val jvm = "io.dropwizard.metrics" % "metrics-jvm" % "3.1.2"
-    val ehcache = "io.dropwizard.metrics" % "metrics-ehcache" % "3.1.2" intransitive()
-    val healthChecks = "io.dropwizard.metrics" % "metrics-healthchecks" % "3.1.2" intransitive()
-    val json = "io.dropwizard.metrics" % "metrics-json" % "3.1.2"
+    val version = "3.2.0"
+    val metrics = "nl.grons" %% "metrics-scala" % "3.5.6"
+    val jvm = "io.dropwizard.metrics" % "metrics-jvm" % version
+    val ehcache = "io.dropwizard.metrics" % "metrics-ehcache" % version intransitive()
+    val healthChecks = "io.dropwizard.metrics" % "metrics-healthchecks" % version intransitive()
+    val json = "io.dropwizard.metrics" % "metrics-json" % version
     val jettyServlet = "org.eclipse.jetty" % "jetty-servlet" % "9.3.11.v20160721"
-    val servlets = "io.dropwizard.metrics" % "metrics-servlets" % "3.1.2" intransitive()
-    val graphite = "io.dropwizard.metrics" % "metrics-graphite" % "3.1.2" intransitive()
+    val servlets = "io.dropwizard.metrics" % "metrics-servlets" % version intransitive()
+    val graphite = "io.dropwizard.metrics" % "metrics-graphite" % version intransitive()
   }
 
   object ScalaJS {
@@ -78,7 +78,7 @@ object Dependencies {
 
   object Utils {
     val scapegoatVersion = "1.3.0"
-    val enumeratumVersion = "1.5.7"
+    val enumeratumVersion = "1.5.8"
 
     val commonsIo = "commons-io" % "commons-io" % "2.5"
     val crypto = "xyz.wiedenhoeft" %% "scalacrypt" % "0.4.0"
