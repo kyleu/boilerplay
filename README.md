@@ -95,7 +95,7 @@ Boilerplay relies on a whole lot of tremendous open source projects. Here's a fe
 * [uPickle](https://github.com/lihaoyi/upickle-pprint)
 * [Scalatags](https://github.com/lihaoyi/scalatags)
 * [Postgres-async](https://github.com/mauricio/postgresql-async)
-* [Silhouette](http://silhouette.mohiva.com/)
+* [Silhouette](https://www.silhouette.rocks/)
 * [Dropwizard Metrics](http://metrics.dropwizard.io/)
 * [Netty](http://netty.io/)
 * [ScalaCrypt](https://github.com/Richard-W/scalacrypt)
