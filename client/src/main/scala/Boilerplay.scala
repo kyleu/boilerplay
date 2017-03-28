@@ -1,9 +1,9 @@
 import org.scalajs.jquery.{jQuery => $}
 import services.{InitService, NotificationService}
 
-import scala.scalajs.js.annotation.JSExport
+import scala.scalajs.js.annotation.JSExportTopLevel
 
-@JSExport
+@JSExportTopLevel("Boilerplay")
 class Boilerplay extends NetworkHelper with ResponseMessageHelper {
   val debug = true
 
