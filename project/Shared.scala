@@ -44,22 +44,16 @@ object Shared {
     proj.aggregate(inc).dependsOn(inc)
   }
 
-  lazy val shared = (crossProject.crossType(CrossType.Pure) in file("shared")).settings(commonSettings: _*)
-    .settings(
+  lazy val shared = (crossProject.crossType(CrossType.Pure) in file("shared")).settings(commonSettings: _*).jsSettings(
+    libraryDependencies ++= Seq(
+      "com.lihaoyi" %%% "upickle" % Serialization.version,
+      "com.beachape" %%% "enumeratum-upickle" % Utils.enumeratumVersion
     )
-    .enablePlugins(ScalaJSPlay)
-    .settings(scalaJSStage in Global := FastOptStage)
-    .jsSettings(
-      libraryDependencies ++= Seq(
-        "com.lihaoyi" %%% "upickle" % Serialization.version,
-        "com.beachape" %%% "enumeratum-upickle" % Utils.enumeratumVersion
-      )
-    )
-    .jvmSettings(
-      libraryDependencies ++= Seq(Dependencies.Serialization.uPickle, Dependencies.Utils.enumeratum)
-    )
+  ).jvmSettings(
+    libraryDependencies ++= Seq(Dependencies.Serialization.uPickle, Dependencies.Utils.enumeratum)
+  )
 
-  lazy val sharedJs = shared.js
+  lazy val sharedJs = shared.js.enablePlugins(ScalaJSPlay).settings(scalaJSStage in Global := FastOptStage)
 
   lazy val sharedJvm = shared.jvm
 }
