@@ -13,7 +13,7 @@ object Shared {
 
   object Versions {
     val app = "1.0.0"
-    val scala = "2.11.10"
+    val scala = "2.11.11"
   }
 
   lazy val commonSettings = Seq(

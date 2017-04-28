@@ -54,7 +54,7 @@ object Dependencies {
   object WebJars {
     val fontAwesome = "org.webjars" % "font-awesome" % "4.7.0"
     val jquery = "org.webjars" % "jquery" % "2.2.4"
-    val materialize = "org.webjars" % "materializecss" % "0.98.0"
+    val materialize = "org.webjars" % "materializecss" % "0.98.2"
     val moment = "org.webjars" % "momentjs" % "2.17.1"
     val mousetrap = "org.webjars" % "mousetrap" % "1.6.0"
   }
@@ -87,7 +87,7 @@ object Dependencies {
   }
 
   object Testing {
-    val scalaTest = "org.scalatest" %% "scalatest" % "3.0.1" % "test"
+    val scalaTest = "org.scalatest" %% "scalatest" % "3.0.2" % "test"
     val gatlingCore = "io.gatling" % "gatling-test-framework" % "2.1.7" % "test"
     val gatlingCharts = "io.gatling.highcharts" % "gatling-charts-highcharts" % "2.1.7" % "test"
   }

@@ -9,24 +9,15 @@ class Configuration @javax.inject.Inject() (val cnf: play.api.Configuration, env
   val debug = env.mode == Mode.Dev
   val dataDir = new java.io.File(cnf.getString("data.directory").getOrElse("./data"))
 
-  // Metrics
-  val jmxEnabled = cnf.getBoolean("metrics.jmx.enabled").getOrElse(true)
-  val graphiteEnabled = cnf.getBoolean("metrics.graphite.enabled").getOrElse(false)
-  val graphiteServer = cnf.getString("metrics.graphite.server").getOrElse("127.0.0.1")
-  val graphitePort = cnf.getInt("metrics.graphite.port").getOrElse(2003)
-  val servletEnabled = cnf.getBoolean("metrics.servlet.enabled").getOrElse(true)
-  val servletPort = cnf.getInt("metrics.servlet.port").getOrElse(9001)
-
   val metrics: MetricsConfig = MetricsConfig(
-    jmxEnabled,
-    graphiteEnabled,
-    graphiteServer,
-    graphitePort,
-    servletEnabled,
-    servletPort
+    jmxEnabled = cnf.getBoolean("metrics.jmx.enabled").getOrElse(true),
+    graphiteEnabled = cnf.getBoolean("metrics.graphite.enabled").getOrElse(false),
+    graphiteServer = cnf.getString("metrics.graphite.server").getOrElse("127.0.0.1"),
+    graphitePort = cnf.getInt("metrics.graphite.port").getOrElse(2003),
+    servletEnabled = cnf.getBoolean("metrics.servlet.enabled").getOrElse(true),
+    servletPort = cnf.getInt("metrics.servlet.port").getOrElse(9001)
   )
 
-  // Authentication
   val cookieAuthSettings = {
     import scala.concurrent.duration._
     val cfg = cnf.getConfig("silhouette.authenticator.cookie").getOrElse {
