@@ -19,7 +19,7 @@ object Dependencies {
   }
 
   object Akka {
-    private[this] val version = "2.4.17"
+    private[this] val version = "2.4.18"
     val actor = "com.typesafe.akka" %% "akka-actor" % version
     val remote = "com.typesafe.akka" %% "akka-remote" % version
     val logging = "com.typesafe.akka" %% "akka-slf4j" % version
@@ -42,7 +42,7 @@ object Dependencies {
   }
 
   object GraphQL {
-    val sangria = "org.sangria-graphql" %% "sangria" % "1.0.0"
+    val sangria = "org.sangria-graphql" %% "sangria" % "1.2.0"
     val sangriaPlayJson = "org.sangria-graphql" %% "sangria-play-json" % "1.0.0"
   }
 
@@ -55,7 +55,7 @@ object Dependencies {
     val fontAwesome = "org.webjars" % "font-awesome" % "4.7.0"
     val jquery = "org.webjars" % "jquery" % "2.2.4"
     val materialize = "org.webjars" % "materializecss" % "0.98.2"
-    val moment = "org.webjars" % "momentjs" % "2.17.1"
+    val moment = "org.webjars" % "momentjs" % "2.18.1"
     val mousetrap = "org.webjars" % "mousetrap" % "1.6.0"
   }
 
@@ -73,12 +73,12 @@ object Dependencies {
 
   object ScalaJS {
     val jQueryVersion = "0.9.1"
-    val scalaTagsVersion = "0.6.3"
+    val scalaTagsVersion = "0.6.5"
   }
 
   object Utils {
     val scapegoatVersion = "1.3.0"
-    val enumeratumVersion = "1.5.10"
+    val enumeratumVersion = "1.5.11"
 
     val commonsIo = "commons-io" % "commons-io" % "2.5"
     val crypto = "xyz.wiedenhoeft" %% "scalacrypt" % "0.4.0"
@@ -87,7 +87,7 @@ object Dependencies {
   }
 
   object Testing {
-    val scalaTest = "org.scalatest" %% "scalatest" % "3.0.2" % "test"
+    val scalaTest = "org.scalatest" %% "scalatest" % "3.0.3" % "test"
     val gatlingCore = "io.gatling" % "gatling-test-framework" % "2.1.7" % "test"
     val gatlingCharts = "io.gatling.highcharts" % "gatling-charts-highcharts" % "2.1.7" % "test"
   }
