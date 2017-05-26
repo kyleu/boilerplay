@@ -17,4 +17,4 @@ case class SendSocketTrace(id: UUID) extends InternalMessage
 case class SocketTraceResponse(id: UUID, userId: UUID, username: String) extends InternalMessage
 
 case class SendClientTrace(id: UUID) extends InternalMessage
-case class ClientTraceResponse(id: UUID, data: upickle.Js.Value) extends InternalMessage
+case class ClientTraceResponse(id: UUID, data: String) extends InternalMessage

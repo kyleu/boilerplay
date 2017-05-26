@@ -38,4 +38,10 @@ object CommonSchema {
     description = Some(description),
     values = values.map(t => EnumValue(name = t._1.toString, value = t._1, description = Some(t._2))).toList
   )
+
+  def deriveStringEnumeratumType[T <: enumeratum.values.StringEnumEntry](name: String, description: String, values: Seq[(T, String)]) = EnumType(
+    name = name,
+    description = Some(description),
+    values = values.map(t => EnumValue(name = t._1.toString, value = t._1, description = Some(t._2))).toList
+  )
 }

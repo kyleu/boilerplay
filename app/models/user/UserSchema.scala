@@ -14,7 +14,7 @@ object UserSchema {
     values = Role.values.map(t => t -> t.entryName).toList
   )
 
-  implicit val themeEnum = CommonSchema.deriveEnumeratumType(
+  implicit val themeEnum = CommonSchema.deriveStringEnumeratumType(
     name = "Theme",
     description = "The selected theme color.",
     values = Theme.values.map(t => t -> t.color).toList

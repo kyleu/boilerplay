@@ -1,31 +1,31 @@
 package utils
 
-import enumeratum.UPickler
-import models.template.Theme
+import io.circe.generic.extras.Configuration
+import io.circe.generic.extras.auto._
+import io.circe.parser._
+import io.circe.syntax._
+
+import models.user.UserPreferences
 import models.{RequestMessage, ResponseMessage}
-import upickle.Js
-import upickle.default._
 
 object JsonSerializers {
-  // Enumerations
-  implicit val themeReader = UPickler.reader(Theme)
-  implicit val themeWriter = UPickler.writer(Theme)
+  private[this] implicit val config = Configuration.default.withDefaults
 
-  // Wire messages
-  def readRequestMessage(json: Js.Value) = readJs[RequestMessage](json)
-  def writeRequestMessage(rm: RequestMessage, debug: Boolean = false) = if (debug) {
-    write(rm, indent = 2)
-  } else {
-    write(rm)
+  def readPreferences(s: String) = decode[UserPreferences](s) match {
+    case Right(x) => x
+    case Left(_) => UserPreferences.empty
   }
+  def writePreferences(p: UserPreferences, indent: Boolean = true) = if(indent) { p.asJson.spaces2 } else { p.asJson.noSpaces }
 
-  def readResponseMessage(json: String) = read[ResponseMessage](json)
-  def writeResponseMessageJs(rm: ResponseMessage) = {
-    writeJs(rm)
+  def readRequestMessage(s: String) = decode[RequestMessage](s) match {
+    case Right(x) => x
+    case Left(err) => throw err
   }
-  def writeResponseMessage(rm: ResponseMessage, debug: Boolean = false) = if (debug) {
-    write(rm, indent = 2)
-  } else {
-    write(rm)
+  def writeRequestMessage(sm: RequestMessage, debug: Boolean = false) = if (debug) { sm.asJson.spaces2 } else { sm.asJson.noSpaces }
+
+  def readResponseMessage(s: String) = decode[ResponseMessage](s) match {
+    case Right(x) => x
+    case Left(err) => throw err
   }
+  def writeResponseMessage(sm: ResponseMessage, debug: Boolean = false) = if (debug) { sm.asJson.spaces2 } else { sm.asJson.noSpaces }
 }

@@ -1,14 +1,14 @@
 package models.template
 
-import enumeratum._
+import enumeratum.values._
 
 import scala.util.Random
 
-sealed abstract class Theme(val id: String, val color: String) extends EnumEntry {
-  override def toString: String = id
+sealed abstract class Theme(val value: String, val color: String) extends StringEnumEntry {
+  override def toString: String = value
 }
 
-object Theme extends Enum[Theme] {
+object Theme extends StringEnum[Theme] {
   case object Red extends Theme("red", "#c62828")
   case object Pink extends Theme("pink", "#d81b60")
   case object Purple extends Theme("purple", "#8e24aa")
