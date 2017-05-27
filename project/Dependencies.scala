@@ -19,7 +19,7 @@ object Dependencies {
   }
 
   object Akka {
-    private[this] val version = "2.5.1"
+    private[this] val version = "2.5.2"
     val actor = "com.typesafe.akka" %% "akka-actor" % version
     val remote = "com.typesafe.akka" %% "akka-remote" % version
     val logging = "com.typesafe.akka" %% "akka-slf4j" % version
@@ -42,7 +42,7 @@ object Dependencies {
   }
 
   object GraphQL {
-    val sangria = "org.sangria-graphql" %% "sangria" % "1.2.0"
+    val sangria = "org.sangria-graphql" %% "sangria" % "1.2.1"
     val sangriaPlayJson = "org.sangria-graphql" %% "sangria-play-json" % "1.0.0"
   }
 
@@ -77,7 +77,7 @@ object Dependencies {
 
   object Utils {
     val scapegoatVersion = "1.3.0"
-    val enumeratumVersion = "1.5.11"
+    val enumeratumVersion = "1.5.14"
 
     val commonsIo = "commons-io" % "commons-io" % "2.5"
     val crypto = "xyz.wiedenhoeft" %% "scalacrypt" % "0.4.0"
