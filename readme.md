@@ -68,10 +68,12 @@ All meaningful operations are tracked through Scala Metrics, and are exposed thr
 Reporting to Graphite can be enabled through application.conf, and reports to 127.0.0.1:2003 by default.
 Metrics exposes all actors, queries, logs, requests, and jvm info.
 
+
 ## Make it your own
 
 To start your own project, you can change every instance of the word "boilerplay" to your project's id, and 
 change every instance of "Boilerplay" to your project's name. Don't worry, there's only a few. 
+
 
 ## Contributing
 
@@ -85,21 +87,21 @@ The project is built on SBT, and can be opened by IntelliJ directly.
 
 Boilerplay relies on a whole lot of tremendous open source projects. Here's a few of them.
 
-* [Scala](http://www.scala-lang.org/)
-* [Scala.js](https://www.scala-js.org/)
-* [Play Framework](https://www.playframework.com/)
-* [Akka](http://akka.io/)
-* [Sangria](http://sangria-graphql.org/)
-* [Materialize CSS](http://materializecss.com/)
+* [Scala](http://www.scala-lang.org)
+* [Scala.js](https://www.scala-js.org)
+* [Play Framework](https://www.playframework.com)
+* [Akka](http://akka.io)
+* [Sangria](http://sangria-graphql.org)
+* [Materialize CSS](http://materializecss.com)
 * [Enumeratum](https://github.com/lloydmeta/enumeratum)
 * [circe](https://circe.github.io/circe)
 * [Scalatags](https://github.com/lihaoyi/scalatags)
 * [Postgres-async](https://github.com/mauricio/postgresql-async)
-* [Silhouette](http://silhouette.mohiva.com/)
-* [Dropwizard Metrics](http://metrics.dropwizard.io/)
-* [Netty](http://netty.io/)
+* [Silhouette](https://www.silhouette.rocks)
+* [Dropwizard Metrics](http://metrics.dropwizard.io)
+* [Netty](http://netty.io)
 * [ScalaCrypt](https://github.com/Richard-W/scalacrypt)
-* [Font Awesome](http://fontawesome.io/)
+* [Font Awesome](http://fontawesome.io)
 * [JQuery](https://jquery.com/)
 
 
