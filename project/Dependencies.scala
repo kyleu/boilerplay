@@ -11,11 +11,12 @@ object Dependencies {
 
   object Play {
     private[this] val version = "2.5.15"
-    val playLib = "com.typesafe.play" %% "play" % version
-    val playFilters = play.sbt.PlayImport.filters
-    val playWs = play.sbt.PlayImport.ws
-    val playTest = "com.typesafe.play" %% "play-test" % version % "test"
-    val playMailer = "com.typesafe.play" %% "play-mailer" % "5.0.0"
+
+    val lib = "com.typesafe.play" %% "play" % version
+    val filters = play.sbt.PlayImport.filters
+    val ws = play.sbt.PlayImport.ws
+    val test = "com.typesafe.play" %% "play-test" % version % "test"
+    val mailer = "com.typesafe.play" %% "play-mailer" % "5.0.0"
   }
 
   object Akka {
@@ -80,7 +81,6 @@ object Dependencies {
     val enumeratumVersion = "1.5.14"
 
     val commonsIo = "commons-io" % "commons-io" % "2.5"
-    val crypto = "xyz.wiedenhoeft" %% "scalacrypt" % "0.4.0"
     val scalaGuice = "net.codingwell" %% "scala-guice" % "4.1.0"
   }
 

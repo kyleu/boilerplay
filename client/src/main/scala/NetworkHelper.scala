@@ -5,7 +5,7 @@ import utils.{JsonSerializers, Logging, NetworkMessage, NetworkSocket}
 import scala.scalajs.js.timers._
 
 trait NetworkHelper { this: Boilerplay =>
-  private[this] val socket = new NetworkSocket(onSocketConnect, onSocketMessage, onSocketError, onSocketClose)
+  private[this] val socket = new NetworkSocket(onSocketConnect _, onSocketMessage, onSocketError, onSocketClose _)
 
   protected[this] var latencyMs: Option[Int] = None
 
