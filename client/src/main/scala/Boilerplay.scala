@@ -7,7 +7,7 @@ import scala.scalajs.js.annotation.JSExportTopLevel
 class Boilerplay extends NetworkHelper with ResponseMessageHelper {
   val debug = true
 
-  InitService.init(sendMessage, connect)
+  InitService.init(sendMessage, connect _)
 
   protected[this] def handleServerError(reason: String, content: String) = {
     val lp = $("#loading-panel")

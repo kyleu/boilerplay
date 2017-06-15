@@ -10,12 +10,13 @@ object Dependencies {
   }
 
   object Play {
-    private[this] val version = "2.5.15"
-    val playLib = "com.typesafe.play" %% "play" % version
-    val playFilters = play.sbt.PlayImport.filters
-    val playWs = play.sbt.PlayImport.ws
-    val playTest = "com.typesafe.play" %% "play-test" % version % "test"
-    val playMailer = "com.typesafe.play" %% "play-mailer" % "5.0.0"
+    private[this] val version = "2.6.0-RC2"
+    val lib = "com.typesafe.play" %% "play" % version
+    val filters = play.sbt.PlayImport.filters
+    val ws = play.sbt.PlayImport.ws
+    val json = "com.typesafe.play" %% "play-json" % version
+    val test = "com.typesafe.play" %% "play-test" % version % "test"
+    val mailer = "com.typesafe.play" %% "play-mailer" % "6.0.0-M1"
   }
 
   object Akka {
@@ -30,7 +31,7 @@ object Dependencies {
   }
 
   object Authentication {
-    private[this] val version = "4.0.0"
+    private[this] val version = "5.0.0-SNAPSHOT"
     val silhouette = "com.mohiva" %% "play-silhouette" % version
     val hasher = "com.mohiva" %% "play-silhouette-password-bcrypt" % version
     val persistence = "com.mohiva" %% "play-silhouette-persistence" % version
@@ -43,7 +44,7 @@ object Dependencies {
 
   object GraphQL {
     val sangria = "org.sangria-graphql" %% "sangria" % "1.2.1"
-    val sangriaPlayJson = "org.sangria-graphql" %% "sangria-play-json" % "1.0.0"
+    val sangriaPlayJson = "org.sangria-graphql" %% "sangria-play-json" % "1.0.1"
   }
 
   object Serialization {
@@ -80,7 +81,6 @@ object Dependencies {
     val enumeratumVersion = "1.5.14"
 
     val commonsIo = "commons-io" % "commons-io" % "2.5"
-    val crypto = "xyz.wiedenhoeft" %% "scalacrypt" % "0.4.0"
     val scalaGuice = "net.codingwell" %% "scala-guice" % "4.1.0"
   }
 
