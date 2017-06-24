@@ -9,7 +9,7 @@ import models.auth.AuthEnv
 import org.joda.time.DateTimeZone
 import play.api.Environment
 import play.api.inject.ApplicationLifecycle
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import utils.FutureUtils.defaultContext
 import play.api.libs.ws.WSClient
 import services.database.{Database, MasterDdl}
 import services.file.FileService

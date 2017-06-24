@@ -6,7 +6,7 @@ import com.github.mauricio.async.db.postgresql.pool.PostgreSQLConnectionFactory
 import com.github.mauricio.async.db.{Configuration, Connection, QueryResult}
 import models.database.{RawQuery, Statement}
 import org.slf4j.LoggerFactory
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import utils.FutureUtils.defaultContext
 import utils.metrics.Instrumented
 
 import scala.concurrent.duration._

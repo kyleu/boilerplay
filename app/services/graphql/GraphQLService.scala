@@ -2,7 +2,7 @@ package services.graphql
 
 import models.graphql.{GraphQLContext, Schema}
 import models.user.User
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import utils.FutureUtils.defaultContext
 import play.api.libs.json.{JsObject, Json}
 import sangria.execution.{Executor, HandledException}
 import sangria.marshalling.playJson._

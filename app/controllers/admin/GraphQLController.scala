@@ -11,7 +11,7 @@ import sangria.parser.SyntaxError
 import sangria.renderer.SchemaRenderer
 import services.graphql.{GraphQLFileService, GraphQLService}
 import utils.Application
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import utils.FutureUtils.defaultContext
 
 import scala.concurrent.Future
 

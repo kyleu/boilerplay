@@ -2,7 +2,7 @@ package controllers
 
 import com.mohiva.play.silhouette.api.actions.{SecuredRequest, UserAwareRequest}
 import models.auth.AuthEnv
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import utils.FutureUtils.defaultContext
 import play.api.mvc._
 import services.user.UserService
 import utils.metrics.Instrumented
@@ -10,7 +10,7 @@ import utils.{Application, Logging}
 
 import scala.concurrent.Future
 
-abstract class BaseController() extends Controller with Instrumented with Logging {
+abstract class BaseController() extends InjectedController with Instrumented with Logging {
   def app: Application
 
   def withAdminSession(action: String)(block: (SecuredRequest[AuthEnv, AnyContent]) => Future[Result]) = {

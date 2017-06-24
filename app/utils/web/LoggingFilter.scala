@@ -5,7 +5,7 @@ import javax.inject.Inject
 import akka.stream.Materializer
 import com.codahale.metrics.Meter
 import play.api.http.Status
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import utils.FutureUtils.defaultContext
 import play.api.mvc._
 import utils.Logging
 import utils.metrics.Instrumented

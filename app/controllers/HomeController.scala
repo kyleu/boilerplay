@@ -4,7 +4,7 @@ import akka.actor.ActorSystem
 import akka.stream.Materializer
 import com.mohiva.play.silhouette.api.HandlerResult
 import models.{RequestMessage, ResponseMessage}
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import utils.FutureUtils.defaultContext
 import play.api.libs.streams.ActorFlow
 import play.api.mvc.{Action, AnyContentAsEmpty, Request, WebSocket}
 import services.socket.SocketService

@@ -7,7 +7,7 @@ import models.ddl.{DdlFile, DdlQueries}
 import org.apache.commons.io.FileUtils
 import org.joda.time.LocalDateTime
 import utils.Logging
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import utils.FutureUtils.defaultContext
 
 import scala.concurrent.duration._
 import scala.concurrent.{Await, Future}

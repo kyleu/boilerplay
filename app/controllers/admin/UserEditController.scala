@@ -4,7 +4,7 @@ import java.util.UUID
 
 import controllers.BaseController
 import models.user.Role
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import utils.FutureUtils.defaultContext
 import services.user.{UserSearchService, UserService}
 import utils.Application
 import utils.web.FormUtils
