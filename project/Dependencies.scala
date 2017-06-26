@@ -14,6 +14,7 @@ object Dependencies {
     val lib = "com.typesafe.play" %% "play" % version
     val filters = play.sbt.PlayImport.filters
     val ws = play.sbt.PlayImport.ws
+    val guice = play.sbt.PlayImport.guice
     val json = "com.typesafe.play" %% "play-json" % version
     val test = "com.typesafe.play" %% "play-test" % version % "test"
   }

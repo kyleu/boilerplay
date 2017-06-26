@@ -6,7 +6,7 @@ import com.mohiva.play.silhouette.api.HandlerResult
 import models.{RequestMessage, ResponseMessage}
 import utils.FutureUtils.defaultContext
 import play.api.libs.streams.ActorFlow
-import play.api.mvc.{Action, AnyContentAsEmpty, Request, WebSocket}
+import play.api.mvc.{AnyContentAsEmpty, Request, WebSocket}
 import services.socket.SocketService
 import utils.Application
 import utils.web.MessageFrameFormatter
@@ -33,6 +33,7 @@ class HomeController @javax.inject.Inject() (
       case HandlerResult(r, Some(user)) => Right(ActorFlow.actorRef { out =>
         SocketService.props(None, app.supervisor, user, out, request.remoteAddress)
       })
+      case HandlerResult(r, None) => Left(Redirect(controllers.routes.HomeController.home()))
     }
   }
 

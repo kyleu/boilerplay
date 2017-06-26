@@ -21,7 +21,7 @@ object Database extends Instrumented {
   private[this] def prependComment(obj: Object, sql: String) = s"/* ${obj.getClass.getSimpleName.replace("$", "")} */ $sql"
 
   def open(cfg: play.api.Configuration): Unit = {
-    def get(k: String) = cfg.getString("database." + k).getOrElse(throw new IllegalStateException(s"Missing config for [$k]."))
+    def get(k: String) = cfg.get[Option[String]]("database." + k).getOrElse(throw new IllegalStateException(s"Missing config for [$k]."))
     open(get("username"), get("host"), get("port").toInt, Some(get("password")), Some(get("database")))
   }
 
@@ -34,9 +34,7 @@ object Database extends Instrumented {
     pool = new ConnectionPool(factory, poolConfig)
 
     val healthCheck = pool.sendQuery("select now()")
-    healthCheck.onFailure {
-      case x => throw new IllegalStateException("Cannot connect to database.", x)
-    }
+    healthCheck.failed.foreach(x => throw new IllegalStateException("Cannot connect to database.", x))
     Await.result(healthCheck.map(r => r.rowsAffected == 1.toLong), 5.seconds)
   }
 
@@ -48,9 +46,7 @@ object Database extends Instrumented {
     val ret = metrics.timer(s"execute.$name").timeFuture {
       conn.getOrElse(pool).sendPreparedStatement(prependComment(statement, statement.sql), statement.values).map(_.rowsAffected.toInt)
     }
-    ret.onFailure {
-      case x: Throwable => log.error(s"Error [${x.getClass.getSimpleName}] encountered while executing statement [$name].", x)
-    }
+    ret.failed.foreach(x => log.error(s"Error [${x.getClass.getSimpleName}] encountered while executing statement [$name].", x))
     ret
   }
 
@@ -62,9 +58,7 @@ object Database extends Instrumented {
         query.handle(r.rows.getOrElse(throw new IllegalStateException()))
       }
     }
-    ret.onFailure {
-      case x: Throwable => log.error(s"Error [${x.getClass.getSimpleName}] encountered while executing query [$name].", x)
-    }
+    ret.failed.foreach(x => log.error(s"Error [${x.getClass.getSimpleName}] encountered while executing query [$name].", x))
     ret
   }
 
@@ -73,9 +67,7 @@ object Database extends Instrumented {
     val ret = metrics.timer(s"raw.$name").timeFuture {
       conn.getOrElse(pool).sendQuery(prependComment(name, sql))
     }
-    ret.onFailure {
-      case x: Throwable => log.error(s"Error [${x.getClass.getSimpleName}] encountered while executing raw query [$name].", x)
-    }
+    ret.failed.foreach(x => log.error(s"Error [${x.getClass.getSimpleName}] encountered while executing raw query [$name].", x))
     ret
   }
 

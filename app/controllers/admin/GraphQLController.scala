@@ -10,7 +10,7 @@ import sangria.marshalling.playJson._
 import sangria.parser.SyntaxError
 import sangria.renderer.SchemaRenderer
 import services.graphql.{GraphQLFileService, GraphQLService}
-import utils.Application
+import utils.{Application, FutureUtils}
 import utils.FutureUtils.defaultContext
 
 import scala.concurrent.Future
@@ -62,10 +62,10 @@ class GraphQLController @javax.inject.Inject() (override val app: Application, s
   def executeQuery(query: String, variables: Option[JsObject], operation: Option[String], user: User) = {
     try {
       val f = GraphQLService.executeQuery(app, query, variables, operation, user)
-      f.map(Ok(_)).recover {
+      f.map(Ok(_))(FutureUtils.defaultContext).recover {
         case error: QueryAnalysisError => BadRequest(error.resolveError)
         case error: ErrorWithResolver => InternalServerError(error.resolveError)
-      }
+      }(FutureUtils.defaultContext)
     } catch {
       case error: SyntaxError => Future.successful(BadRequest(Json.obj(
         "syntaxError" -> error.getMessage,
