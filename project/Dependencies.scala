@@ -20,7 +20,7 @@ object Dependencies {
   }
 
   object Akka {
-    private[this] val version = "2.5.2"
+    private[this] val version = "2.5.3"
     val actor = "com.typesafe.akka" %% "akka-actor" % version
     val remote = "com.typesafe.akka" %% "akka-remote" % version
     val logging = "com.typesafe.akka" %% "akka-slf4j" % version
@@ -43,8 +43,8 @@ object Dependencies {
   }
 
   object GraphQL {
-    val sangria = "org.sangria-graphql" %% "sangria" % "1.2.1"
-    val sangriaPlayJson = "org.sangria-graphql" %% "sangria-play-json" % "1.0.1"
+    val sangria = "org.sangria-graphql" %% "sangria" % "1.2.2"
+    val sangriaPlayJson = "org.sangria-graphql" %% "sangria-play-json" % "1.0.2"
   }
 
   object Serialization {
@@ -61,7 +61,7 @@ object Dependencies {
 
   object Metrics {
     val version = "3.2.2"
-    val metrics = "nl.grons" %% "metrics-scala" % "3.5.6"
+    val metrics = "nl.grons" %% "metrics-scala" % "3.5.8"
     val jvm = "io.dropwizard.metrics" % "metrics-jvm" % version
     val ehcache = "io.dropwizard.metrics" % "metrics-ehcache" % version intransitive()
     val healthChecks = "io.dropwizard.metrics" % "metrics-healthchecks" % version intransitive()
@@ -77,7 +77,7 @@ object Dependencies {
   }
 
   object Utils {
-    val scapegoatVersion = "1.3.0"
+    val scapegoatVersion = "1.3.1"
     val enumeratumVersion = "1.5.14"
 
     val commonsIo = "commons-io" % "commons-io" % "2.5"
