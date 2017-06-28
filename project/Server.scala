@@ -28,7 +28,8 @@ object Server {
   private[this] val dependencies = {
     import Dependencies._
     Seq(
-      Cache.ehCache, Akka.actor, Akka.logging, Play.filters, Play.guice, Play.ws, Play.json, Database.postgres, GraphQL.sangria, GraphQL.sangriaPlayJson,
+      Cache.ehCache, Akka.actor, Akka.logging, Play.filters, Play.guice, Play.ws, Play.json, Play.twirl,
+      Database.postgres, GraphQL.sangria, GraphQL.sangriaPlayJson,
       Authentication.silhouette, Authentication.hasher, Authentication.persistence, Authentication.crypto,
       WebJars.jquery, WebJars.fontAwesome, WebJars.materialize, WebJars.moment, WebJars.mousetrap,
       Utils.scalaGuice, Utils.commonsIo, Akka.testkit, Play.test, Testing.scalaTest

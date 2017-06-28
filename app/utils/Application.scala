@@ -15,6 +15,7 @@ import services.database.{Database, MasterDdl}
 import services.file.FileService
 import services.settings.SettingsService
 import services.supervisor.ActorSupervisor
+import utils.cache.CacheService
 import utils.metrics.Instrumented
 
 import scala.concurrent.Future
@@ -63,6 +64,7 @@ class Application @javax.inject.Inject() (
 
   private[this] def stop() = {
     Database.close()
+    CacheService.close()
     SharedMetricRegistries.remove("default")
   }
 }

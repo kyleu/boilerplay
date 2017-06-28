@@ -35,18 +35,18 @@ class AuthenticationController @javax.inject.Inject() (
             case None => Redirect(controllers.routes.HomeController.home())
           }
           userSearchService.retrieve(loginInfo).flatMap {
-            case Some(user) =>
-              app.silhouette.env.authenticatorService.create(loginInfo).flatMap { authenticator =>
-                app.silhouette.env.eventBus.publish(LoginEvent(user, request))
-                app.silhouette.env.authenticatorService.init(authenticator).flatMap { v =>
-                  app.silhouette.env.authenticatorService.embed(v, result)
+            case Some(user) => app.silhouette.env.authenticatorService.create(loginInfo).flatMap { authenticator =>
+              app.silhouette.env.eventBus.publish(LoginEvent(user, request))
+              app.silhouette.env.authenticatorService.init(authenticator).flatMap { v =>
+                app.silhouette.env.authenticatorService.embed(v, result).map { x =>
+                  x
                 }
               }
+            }
             case None => Future.failed(new IdentityNotFoundException(s"Couldn't find user [${loginInfo.providerID}]."))
           }
         }.recover {
-          case e: ProviderException =>
-            Redirect(controllers.auth.routes.AuthenticationController.signInForm()).flashing("error" -> "Invalid credentials")
+          case e: ProviderException => Redirect(controllers.auth.routes.AuthenticationController.signInForm()).flashing("error" -> "Invalid credentials")
         }
       }
     )

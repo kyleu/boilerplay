@@ -56,4 +56,6 @@ object CacheService {
   def remove(key: String) = cache.remove(key)
 
   def clear() = cache.removeAll()
+
+  def close() = manager.removeCache(Config.projectId)
 }
