@@ -42,6 +42,7 @@ object Server {
     description := "Boilerplay",
 
     resolvers += Resolver.jcenterRepo,
+    resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/",
     libraryDependencies ++= dependencies,
 
     scalaJSProjects := Seq(Client.client),
