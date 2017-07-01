@@ -1,10 +1,6 @@
 import sbt._
 
 object Dependencies {
-  object Logging {
-    val slf4jApi = "org.slf4j" % "slf4j-api" % "1.7.21"
-  }
-
   object Play {
     private[this] val version = "2.6.0"
     val lib = "com.typesafe.play" %% "play" % version

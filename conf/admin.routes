@@ -1,13 +1,18 @@
+# Admin
 GET         /                        controllers.admin.AdminController.index
 GET         /status                  controllers.admin.AdminController.status
 GET         /metrics                 controllers.admin.MetricsController.showMetrics
 
-GET         /graphql                 controllers.admin.GraphQLController.graphql(query: Option[String] ?= None, dir: Option[String] ?= None, name: Option[String] ?= None, variables: Option[String] ?= None)
-POST        /graphql                 controllers.admin.GraphQLController.graphqlBody
-GET         /graphql/load            controllers.admin.GraphQLController.load(dir: Option[String], name)
-POST        /graphql/save            controllers.admin.GraphQLController.save
-GET         /schema                  controllers.admin.GraphQLController.renderSchema
+# GraphQL
+GET         /schema                  controllers.admin.graphql.SchemaController.renderSchema()
+GET         /voyager                 controllers.admin.graphql.SchemaController.voyager()
 
+GET         /graphql                 controllers.admin.graphql.GraphQLController.graphql(query: Option[String] ?= None, dir: Option[String] ?= None, name: Option[String] ?= None, variables: Option[String] ?= None)
+POST        /graphql                 controllers.admin.graphql.GraphQLController.graphqlBody
+GET         /graphql/load            controllers.admin.graphql.GraphQLQueryController.load(dir: Option[String], name)
+POST        /graphql/save            controllers.admin.graphql.GraphQLQueryController.save
+
+# Users
 GET         /users/new               controllers.admin.UserCreateController.newUser()
 POST        /users/new               controllers.admin.UserCreateController.saveNewUser()
 
@@ -17,8 +22,10 @@ GET         /users/:id/edit          controllers.admin.UserEditController.edit(i
 POST        /users/:id/edit          controllers.admin.UserEditController.save(id: java.util.UUID)
 GET         /users/:id/remove        controllers.admin.UserEditController.remove(id: java.util.UUID)
 
+# Settings
 GET         /settings                controllers.admin.SettingsController.settings
 POST        /settings                controllers.admin.SettingsController.saveSettings
 
+# Sandboxes
 GET         /sandbox                 controllers.admin.SandboxController.list
 GET         /sandbox/:key            controllers.admin.SandboxController.sandbox(key)

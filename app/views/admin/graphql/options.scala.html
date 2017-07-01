@@ -46,7 +46,7 @@
   <div class="options-header">File Options</div>
 
   <div class="save-container">
-    <form action="@controllers.admin.routes.GraphQLController.save" method="post">
+    <form action="@controllers.admin.graphql.routes.GraphQLQueryController.save" method="post">
       <input class="save-body-input" name="body" type="hidden" />
       <input class="save-dir-input" name="dir" type="text" maxlength="64" placeholder="Directory" />
       <input class="save-name-input" name="name" type="text" maxlength="64" placeholder="Query Name" />
@@ -57,14 +57,14 @@
   <div class="query-list">
     <ul>
       @parent.map { q =>
-        <li><a class="query-link" href="@controllers.admin.routes.GraphQLController.load(None, q)">@q</a></li>
+        <li><a class="query-link" href="@controllers.admin.graphql.routes.GraphQLQueryController.load(None, q)">@q</a></li>
       }
     </ul>
     @children.map { files =>
       <div class="section-header">@files._1</div>
       <ul>
         @files._2.map { q =>
-          <li><a class="query-link" href="@controllers.admin.routes.GraphQLController.load(Some(files._1), q)">@q</a></li>
+          <li><a class="query-link" href="@controllers.admin.graphql.routes.GraphQLQueryController.load(Some(files._1), q)">@q</a></li>
         }
       </ul>
     }

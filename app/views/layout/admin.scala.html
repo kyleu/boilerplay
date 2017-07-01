@@ -11,9 +11,9 @@
 
       <ul class="left hide-on-small-only">
         @if(activeSection == "graphql") {
-          <li class="active"><a href="@controllers.admin.routes.GraphQLController.graphql(None)">GraphQL</a></li>
+          <li class="active"><a href="@controllers.admin.graphql.routes.GraphQLController.graphql(None)">GraphQL</a></li>
         } else {
-          <li><a href="@controllers.admin.routes.GraphQLController.graphql(None)">GraphQL</a></li>
+          <li><a href="@controllers.admin.graphql.routes.GraphQLController.graphql(None)">GraphQL</a></li>
         }
         @if(activeSection == "settings") {
           <li class="active"><a href="@controllers.admin.routes.SettingsController.settings()">Settings</a></li>
