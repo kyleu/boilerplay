@@ -1,11 +1,11 @@
 @()<!DOCTYPE html>
 <html>
   <head>
-    <script src="https://cdn.jsdelivr.net/react/15.4.2/react.js"></script>
-    <script src="https://cdn.jsdelivr.net/react/15.4.2/react-dom.js"></script>
+    <script src="@routes.Assets.versioned("lib/graphql/react.min.js").url"></script>
+    <script src="@routes.Assets.versioned("lib/graphql/react-dom.min.js").url"></script>
 
-    <link rel="stylesheet" href="https://apis.guru/graphql-voyager/releases/v1.x/voyager.css" />
-    <script src="https://apis.guru/graphql-voyager/releases/v1.x/voyager.min.js"></script>
+    <link rel="stylesheet" href="@routes.Assets.versioned("lib/graphql/voyager.css").url" />
+    <script src="@routes.Assets.versioned("lib/graphql/voyager.min.js").url"></script>
     <style>
         .title-area, .type-doc>.doc-navigation {
           display: none;

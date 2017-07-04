@@ -1,12 +1,12 @@
 @(user: models.user.User, queries: (Seq[String], Seq[(String, Seq[String])]))(implicit request: Request[AnyContent], session: Session, flash: Flash)
 @layout.basic(Some(user), "GraphQL", scripts = Seq(
-  routes.Assets.versioned("lib/graphiql/fetch.min.js").url,
-  routes.Assets.versioned("lib/graphiql/react.min.js").url,
-  routes.Assets.versioned("lib/graphiql/react-dom.min.js").url,
-  routes.Assets.versioned("lib/graphiql/graphiql.min.js").url,
+  routes.Assets.versioned("lib/graphql/fetch.min.js").url,
+  routes.Assets.versioned("lib/graphql/react.min.js").url,
+  routes.Assets.versioned("lib/graphql/react-dom.min.js").url,
+  routes.Assets.versioned("lib/graphql/graphiql.min.js").url,
   routes.Assets.versioned("lib/jquery/jquery.js").url,
-  routes.Assets.versioned("lib/graphiql/app-graphiql.js").url
-), stylesheets = Seq(routes.Assets.versioned("lib/graphiql/graphiql.css").url)) {
+  routes.Assets.versioned("lib/graphql/app-graphiql.js").url
+), stylesheets = Seq(routes.Assets.versioned("lib/graphql/graphiql.css").url)) {
   <style>
     body {
       height: 100%;
