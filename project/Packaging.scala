@@ -61,7 +61,7 @@ object Packaging {
   )
 
   private[this] def makeWindowsFeatures(mappings: Seq[(File, String)]): Seq[windows.WindowsFeature] = {
-    import windows._
+    import com.typesafe.sbt.packager.windows._
 
     val files = for {
       (file, name) <- mappings

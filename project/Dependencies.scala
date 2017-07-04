@@ -9,7 +9,7 @@ object Dependencies {
     val guice = play.sbt.PlayImport.guice
     val cache = play.sbt.PlayImport.ehcache
     val twirl = "com.typesafe.play" %% "twirl-api" % "1.3.3"
-    val json = "com.typesafe.play" %% "play-json" % version
+    val json = "com.typesafe.play" %% "play-json" % "2.6.1"
     val test = "com.typesafe.play" %% "play-test" % version % "test"
   }
 
@@ -48,25 +48,25 @@ object Dependencies {
   object WebJars {
     val fontAwesome = "org.webjars" % "font-awesome" % "4.7.0"
     val jquery = "org.webjars" % "jquery" % "2.2.4"
-    val materialize = "org.webjars" % "materializecss" % "0.98.2"
+    val materialize = "org.webjars" % "materializecss" % "0.99.0"
     val moment = "org.webjars" % "momentjs" % "2.18.1"
     val mousetrap = "org.webjars" % "mousetrap" % "1.6.0"
   }
 
   object Metrics {
-    val version = "3.2.2"
-    val metrics = "nl.grons" %% "metrics-scala" % "3.5.8"
+    val version = "3.2.3"
+    val metrics = "nl.grons" %% "metrics-scala" % "3.5.9"
     val jvm = "io.dropwizard.metrics" % "metrics-jvm" % version
     val ehcache = "io.dropwizard.metrics" % "metrics-ehcache" % version intransitive()
     val healthChecks = "io.dropwizard.metrics" % "metrics-healthchecks" % version intransitive()
     val json = "io.dropwizard.metrics" % "metrics-json" % version
-    val jettyServlet = "org.eclipse.jetty" % "jetty-servlet" % "9.4.5.v20170502"
+    val jettyServlet = "org.eclipse.jetty" % "jetty-servlet" % "9.4.6.v20170531"
     val servlets = "io.dropwizard.metrics" % "metrics-servlets" % version intransitive()
     val graphite = "io.dropwizard.metrics" % "metrics-graphite" % version intransitive()
   }
 
   object ScalaJS {
-    val jQueryVersion = "0.9.1"
+    val jQueryVersion = "0.9.2"
     val scalaTagsVersion = "0.6.5"
   }
 
