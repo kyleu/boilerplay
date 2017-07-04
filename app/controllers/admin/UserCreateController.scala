@@ -51,9 +51,9 @@ class UserCreateController @javax.inject.Inject() (
       val userSavedFuture = userService.save(user)
       val authInfo = hasher.hash(form("password"))
       for {
-        authInfo <- authInfoRepository.add(loginInfo, authInfo)
+        _ <- authInfoRepository.add(loginInfo, authInfo)
         authenticator <- app.silhouette.env.authenticatorService.create(loginInfo)
-        value <- app.silhouette.env.authenticatorService.init(authenticator)
+        _ <- app.silhouette.env.authenticatorService.init(authenticator)
         userSaved <- userSavedFuture
       } yield {
         app.silhouette.env.eventBus.publish(SignUpEvent(userSaved, request))

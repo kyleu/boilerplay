@@ -30,7 +30,7 @@ object SandboxSchema {
     name = "sandboxes",
     fieldType = ListType(sandboxTaskType),
     description = Some("Returns a list of one-off sandbox tests."),
-    resolve = c => SandboxTask.values
+    resolve = _ => SandboxTask.values
   ))
 
   class SandboxApi(ctx: GraphQLContext) {

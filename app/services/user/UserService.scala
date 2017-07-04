@@ -37,7 +37,7 @@ class UserService @javax.inject.Inject() (hasher: PasswordHasher) extends Loggin
     } else {
       UserQueries.insert(user)
     }
-    Database.execute(statement).map { x =>
+    Database.execute(statement).map { _ =>
       UserCache.cacheUser(user)
       user
     }
@@ -52,11 +52,11 @@ class UserService @javax.inject.Inject() (hasher: PasswordHasher) extends Loggin
   def remove(userId: UUID) = Database.transaction { conn =>
     val startTime = System.nanoTime
     val f = getById(userId).flatMap {
-      case Some(user) => Database.execute(PasswordInfoQueries.removeById(Seq(user.profile.providerID, user.profile.providerKey)))
+      case Some(user) => Database.execute(PasswordInfoQueries.removeById(Seq(user.profile.providerID, user.profile.providerKey)), Some(conn))
       case None => throw new IllegalStateException("Invalid User")
     }
     f.flatMap { _ =>
-      Database.execute(UserQueries.removeById(Seq(userId))).map { users =>
+      Database.execute(UserQueries.removeById(Seq(userId)), Some(conn)).map { users =>
         UserCache.removeUser(userId)
         val timing = ((System.nanoTime - startTime) / 1000000).toInt
         Map("users" -> users, "timing" -> timing)
@@ -81,7 +81,7 @@ class UserService @javax.inject.Inject() (hasher: PasswordHasher) extends Loggin
       } else {
         Future.successful(0)
       }
-      emailUpdated.flatMap { ok =>
+      emailUpdated.flatMap { _ =>
         password match {
           case Some(p) =>
             val loginInfo = LoginInfo(CredentialsProvider.ID, email)

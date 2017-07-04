@@ -9,14 +9,16 @@ object BaseQueries {
 trait BaseQueries[T] {
   protected def tableName: String = "_invalid_"
   protected def idColumns = Seq("id")
+
   protected def columns: Seq[String]
   protected def searchColumns: Seq[String] = Nil
-  protected lazy val quotedColumns = columns.map("\"" + _ + "\"").mkString(", ")
 
   protected def fromRow(row: Row): T
   protected def toDataSeq(t: T): Seq[Any]
 
-  protected lazy val insertSql = s"insert into $tableName ($quotedColumns) values (${columns.map(x => "?").mkString(", ")})"
+  protected lazy val quotedColumns = columns.map("\"" + _ + "\"").mkString(", ")
+  protected lazy val columnPlaceholders = columns.map(_ => "?").mkString(", ")
+  protected lazy val insertSql = s"insert into $tableName ($quotedColumns) values ($columnPlaceholders)"
 
   protected def updateSql(updateColumns: Seq[String], additionalUpdates: Option[String] = None) = BaseQueries.trim(s"""
     update $tableName set ${updateColumns.map(x => s"$x = ?").mkString(", ")}${additionalUpdates.map(x => s", $x").getOrElse("")} where $idWhereClause
@@ -53,7 +55,7 @@ trait BaseQueries[T] {
   }
 
   protected case class InsertBatch(models: Seq[T]) extends Statement {
-    private[this] val valuesClause = models.map(m => s"(${columns.map(x => "?").mkString(", ")})").mkString(", ")
+    private[this] val valuesClause = models.map(_ => s"($columnPlaceholders)").mkString(", ")
     override val sql = s"insert into $tableName ($quotedColumns) values $valuesClause"
     override val values: Seq[Any] = models.flatMap(toDataSeq)
   }
@@ -69,12 +71,12 @@ trait BaseQueries[T] {
   protected class SearchCount(q: String, groupBy: Option[String] = None) extends Count(sql = {
     val searchWhere = if (q.isEmpty) { "" } else { "where " + searchColumns.map(c => s"lower($c) like lower(?)").mkString(" or ") }
     s"select count(*) as c from $tableName $searchWhere ${groupBy.map(x => s" group by $x").getOrElse("")}"
-  }, values = if (q.isEmpty) { Seq.empty[Any] } else { searchColumns.map(c => s"%$q%") })
+  }, values = if (q.isEmpty) { Seq.empty[Any] } else { searchColumns.map(_ => "%" + q + "%") })
 
   protected case class Search(q: String, orderBy: String, limit: Option[Int], offset: Option[Int]) extends Query[List[T]] {
     private[this] val whereClause = if (q.isEmpty) { None } else { Some(searchColumns.map(c => s"lower($c) like lower(?)").mkString(" or ")) }
     override val sql = getSql(whereClause, None, Some(orderBy), limit, offset)
-    override val values = if (q.isEmpty) { Seq.empty } else { searchColumns.map(c => s"%$q%") }
+    override val values = if (q.isEmpty) { Seq.empty } else { searchColumns.map(_ => "%" + q + "%") }
     override def reduce(rows: Iterator[Row]) = rows.map(fromRow).toList
   }
 

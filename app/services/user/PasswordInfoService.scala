@@ -30,9 +30,9 @@ class PasswordInfoService @javax.inject.Inject() () extends DelegableAuthInfoDAO
   }
 
   override def save(loginInfo: LoginInfo, authInfo: PasswordInfo) = Database.transaction { conn =>
-    Database.execute(PasswordInfoQueries.UpdatePasswordInfo(loginInfo, authInfo)).flatMap { rowsAffected =>
+    Database.execute(PasswordInfoQueries.UpdatePasswordInfo(loginInfo, authInfo), Some(conn)).flatMap { rowsAffected =>
       if (rowsAffected == 0) {
-        Database.execute(PasswordInfoQueries.CreatePasswordInfo(loginInfo, authInfo)).map { _ => authInfo }
+        Database.execute(PasswordInfoQueries.CreatePasswordInfo(loginInfo, authInfo), Some(conn)).map { _ => authInfo }
       } else {
         Future.successful(authInfo)
       }

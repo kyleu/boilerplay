@@ -12,7 +12,7 @@ import org.eclipse.jetty.servlet.ServletContextHandler
 import utils.Logging
 
 object MetricsServletActor {
-  def props(cfg: MetricsConfig) = Props(classOf[MetricsServletActor], cfg)
+  def props(cfg: MetricsConfig) = Props(new MetricsServletActor(cfg))
 }
 
 class MetricsServletActor(cfg: MetricsConfig) extends InstrumentedActor with Logging {

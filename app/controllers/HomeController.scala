@@ -30,10 +30,10 @@ class HomeController @javax.inject.Inject() (
     app.silhouette.SecuredRequestHandler { securedRequest =>
       Future.successful(HandlerResult(Ok, Some(securedRequest.identity)))
     }.map {
-      case HandlerResult(r, Some(user)) => Right(ActorFlow.actorRef { out =>
+      case HandlerResult(_, Some(user)) => Right(ActorFlow.actorRef { out =>
         SocketService.props(None, app.supervisor, user, out, request.remoteAddress)
       })
-      case HandlerResult(r, None) => Left(Redirect(controllers.routes.HomeController.home()))
+      case HandlerResult(_, None) => Left(Redirect(controllers.routes.HomeController.home()))
     }
   }
 

@@ -48,7 +48,7 @@ class RegistrationController @javax.inject.Inject() (
           case _ if data.password != data.passwordConfirm => Future.successful(
             Redirect(controllers.auth.routes.RegistrationController.register()).flashing("error" -> "Passwords do not match.")
           )
-          case Some(user) => Future.successful(
+          case Some(_) => Future.successful(
             Redirect(controllers.auth.routes.RegistrationController.register()).flashing("error" -> "That email address is already in use.")
           )
           case None =>
@@ -67,7 +67,7 @@ class RegistrationController @javax.inject.Inject() (
               case None => Redirect(controllers.routes.HomeController.home())
             }
             for {
-              authInfo <- authInfoRepository.add(loginInfo, authInfo)
+              _ <- authInfoRepository.add(loginInfo, authInfo)
               authenticator <- app.silhouette.env.authenticatorService.create(loginInfo)
               value <- app.silhouette.env.authenticatorService.init(authenticator)
               result <- app.silhouette.env.authenticatorService.embed(value, result)

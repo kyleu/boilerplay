@@ -30,9 +30,9 @@ object SettingsService {
       Database.execute(SettingQueries.removeById(key))
     } else {
       Database.transaction { conn =>
-        Database.query(SettingQueries.getById(key)).map {
-          case Some(setting) => Database.execute(SettingQueries.Update(s))
-          case None => Database.execute(SettingQueries.insert(s))
+        Database.query(SettingQueries.getById(key), Some(conn)).map {
+          case Some(_) => Database.execute(SettingQueries.Update(s), Some(conn))
+          case None => Database.execute(SettingQueries.insert(s), Some(conn))
         }
       }
       settingsMap = settingsMap + (key -> value)

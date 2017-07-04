@@ -13,7 +13,7 @@ import scala.util.{Failure, Success}
 
 object GraphQLService {
   private[this] val exceptionHandler: Executor.ExceptionHandler = {
-    case (m, e: IllegalStateException) => HandledException(e.getMessage)
+    case (_, e: IllegalStateException) => HandledException(e.getMessage)
   }
 
   def executeQuery(app: Application, query: String, variables: Option[JsObject], operation: Option[String], user: User) = {

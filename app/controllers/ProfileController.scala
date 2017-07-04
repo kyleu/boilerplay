@@ -26,7 +26,7 @@ class ProfileController @javax.inject.Inject() (
 
   def save = withSession("view") { implicit request =>
     UserForms.profileForm.bindFromRequest.fold(
-      form => Future.successful(BadRequest(views.html.profile.view(request.identity))),
+      _ => Future.successful(BadRequest(views.html.profile.view(request.identity))),
       profileData => {
         val newPrefs = request.identity.preferences.copy(
           theme = profileData.theme

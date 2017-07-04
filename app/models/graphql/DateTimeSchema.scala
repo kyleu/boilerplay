@@ -65,7 +65,7 @@ object DateTimeSchema {
   implicit val localTimeType = ScalarType[LocalTime](
     name = "Time",
     description = Some("A string representing the time, in format [HH:mm:ss]."),
-    coerceOutput = (t, caps) => t.toString("HH:mm:ss"),
+    coerceOutput = (t, _) => t.toString("HH:mm:ss"),
     coerceUserInput = {
       case s: String => parseLocalTime(s)
       case _ => Left(LocalDateCoercionViolation)

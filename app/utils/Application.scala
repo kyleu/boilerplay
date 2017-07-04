@@ -57,7 +57,7 @@ class Application @javax.inject.Inject() (
     FileService.setRootDir(config.dataDir)
 
     Database.open(config.cnf)
-    MasterDdl.init().map { ok =>
+    MasterDdl.init().map { _ =>
       SettingsService.load()
     }
   }
