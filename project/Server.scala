@@ -18,7 +18,7 @@ import play.routes.compiler.InjectedRoutesGenerator
 import play.sbt.PlayImport.PlayKeys
 import play.sbt.routes.RoutesKeys.routesGenerator
 import play.sbt.PlayImport.PlayKeys._
-import playscalajs.PlayScalaJS.autoImport._
+import webscalajs.WebScalaJS.autoImport._
 import sbt.Keys._
 import sbt.Project.projectToRef
 import sbt._
@@ -51,7 +51,8 @@ object Server {
 
     // Sbt-Web
     JsEngineKeys.engineType := JsEngineKeys.EngineType.Node,
-    pipelineStages := Seq(scalaJSProd, digest, gzip),
+    pipelineStages in Assets := Seq(scalaJSPipeline),
+    pipelineStages := Seq(digest, gzip),
     includeFilter in (Assets, LessKeys.less) := "*.less",
     excludeFilter in (Assets, LessKeys.less) := "_*.less",
     LessKeys.compress in Assets := true,
