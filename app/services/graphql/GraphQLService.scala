@@ -1,13 +1,14 @@
 package services.graphql
 
+import io.circe.Json
+import io.circe.parser._
 import models.graphql.{GraphQLContext, Schema}
 import models.user.User
-import utils.FutureUtils.defaultContext
-import play.api.libs.json.{JsObject, Json}
 import sangria.execution.{Executor, HandledException}
-import sangria.marshalling.playJson._
+import sangria.marshalling.circe._
 import sangria.parser.QueryParser
 import utils.Application
+import utils.FutureUtils.defaultContext
 
 import scala.util.{Failure, Success}
 
@@ -16,7 +17,7 @@ object GraphQLService {
     case (_, e: IllegalStateException) => HandledException(e.getMessage)
   }
 
-  def executeQuery(app: Application, query: String, variables: Option[JsObject], operation: Option[String], user: User) = {
+  def executeQuery(app: Application, query: String, variables: Option[Json], operation: Option[String], user: User) = {
     val ctx = GraphQLContext(app, user)
     QueryParser.parse(query) match {
       case Success(ast) => Executor.execute(
@@ -36,6 +37,6 @@ object GraphQLService {
   def parseVariables(variables: String) = if (variables.trim == "" || variables.trim == "null") {
     Json.obj()
   } else {
-    Json.parse(variables).as[JsObject]
+    parse(variables).right.get
   }
 }

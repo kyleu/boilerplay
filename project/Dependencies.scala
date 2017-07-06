@@ -25,7 +25,7 @@ object Dependencies {
   }
 
   object Authentication {
-    private[this] val version = "5.0.0-SNAPSHOT"
+    private[this] val version = "5.0.0-RC2"
     val silhouette = "com.mohiva" %% "play-silhouette" % version
     val hasher = "com.mohiva" %% "play-silhouette-password-bcrypt" % version
     val persistence = "com.mohiva" %% "play-silhouette-persistence" % version
@@ -38,7 +38,8 @@ object Dependencies {
 
   object GraphQL {
     val sangria = "org.sangria-graphql" %% "sangria" % "1.2.2"
-    val sangriaPlayJson = "org.sangria-graphql" %% "sangria-play-json" % "1.0.2"
+    val playJson = "org.sangria-graphql" %% "sangria-play-json" % "1.0.2"
+    val circe = "org.sangria-graphql" %% "sangria-circe" % "1.1.0"
   }
 
   object Serialization {
