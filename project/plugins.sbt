@@ -5,7 +5,7 @@ resolvers += Resolver.typesafeRepo("releases")
 resolvers += Resolver.url("jetbrains-bintray", url("http://dl.bintray.com/jetbrains/sbt-plugins/"))(Resolver.ivyStylePatterns)
 
 // The Play plugin
-addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.6.0")
+addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.6.1")
 
 // SBT-Web plugins
 addSbtPlugin("com.typesafe.sbt" % "sbt-less" % "1.0.0")

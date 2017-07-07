@@ -8,7 +8,7 @@ object InitService {
     Logging.installErrorHandler()
     NetworkMessage.register(sendMessage)
 
-    Logging.debug("Boilerplay has started.")
+    Logging.debug(utils.Config.projectName + " has started.")
     connect()
   }
 }
