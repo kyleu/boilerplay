@@ -8,7 +8,6 @@ object Dependencies {
     val ws = play.sbt.PlayImport.ws
     val guice = play.sbt.PlayImport.guice
     val cache = play.sbt.PlayImport.ehcache
-    val twirl = "com.typesafe.play" %% "twirl-api" % "1.3.3"
     val json = "com.typesafe.play" %% "play-json" % "2.6.2"
     val test = "com.typesafe.play" %% "play-test" % version % "test"
   }
