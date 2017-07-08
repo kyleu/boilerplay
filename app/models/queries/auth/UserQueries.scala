@@ -17,7 +17,7 @@ object UserQueries extends BaseQueries[User] {
   val insert = Insert
   val getById = GetById
   def getAll(orderBy: String = "email") = GetAll(orderBy = Some(orderBy))
-  val count = Count(s"""select count(*) as c from "$tableName" """)
+  val count = new Count(s"""select count(*) as c from "$tableName" """)
   val search = Search
   val removeById = RemoveById
 

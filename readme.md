@@ -33,14 +33,7 @@ CREATE DATABASE boilerplay;
 GRANT ALL PRIVILEGES ON DATABASE boilerplay TO boilerplay;
 ```
 
-Alternatively, start Postgres in a Docker container using the script provided:
-```shell
-$ ./start_postgres.sh
-```
-
 You'll either need Node.js available as "node" on the path, or change project/Server.scala's EngineType to Rhino.
-
-Then you'll need to change the Silhouette sections in application.conf to use your authentication settings.
 
 Now, finally,
 ```shell

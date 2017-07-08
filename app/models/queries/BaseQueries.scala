@@ -44,8 +44,8 @@ trait BaseQueries[T] {
     override def flatMap(row: Row) = Some(fromRow(row))
   }
 
-  protected case class GetAll(orderBy: Option[String] = None) extends Query[Seq[T]] {
-    override val sql = s"select $quotedColumns from $tableName${orderBy.map(" order by " + _).getOrElse("")}"
+  protected case class GetAll(orderBy: Option[String] = None, limit: Option[Int] = None, offset: Option[Int] = None) extends Query[Seq[T]] {
+    override val sql = getSql(orderBy = orderBy, limit = limit, offset = offset)
     override def reduce(rows: Iterator[Row]) = rows.map(fromRow).toList
   }
 
@@ -64,18 +64,28 @@ trait BaseQueries[T] {
     override val sql = s"delete from $tableName where $idWhereClause"
   }
 
-  protected case class Count(override val sql: String, override val values: Seq[Any] = Nil) extends SingleRowQuery[Int] {
+  protected class SeqQuery(additionalSql: String, override val values: Seq[Any] = Nil) extends Query[Seq[T]] {
+    override val sql = s"select $quotedColumns from $tableName $additionalSql"
+    override def reduce(rows: Iterator[Row]) = rows.map(fromRow).toList
+  }
+
+  protected abstract class OptQuery(additionalSql: String, override val values: Seq[Any] = Nil) extends FlatSingleRowQuery[T] {
+    override val sql = s"select $quotedColumns from $tableName $additionalSql"
+    override def flatMap(row: Row) = Some(fromRow(row))
+  }
+
+  protected class Count(override val sql: String, override val values: Seq[Any] = Nil) extends SingleRowQuery[Int] {
     override def map(row: Row) = row.as[Long]("c").toInt
   }
 
-  protected class SearchCount(q: String, groupBy: Option[String] = None) extends Count(sql = {
+  protected case class SearchCount(q: String, groupBy: Option[String] = None) extends Count(sql = {
     val searchWhere = if (q.isEmpty) { "" } else { "where " + searchColumns.map(c => s"lower($c) like lower(?)").mkString(" or ") }
     s"select count(*) as c from $tableName $searchWhere ${groupBy.map(x => s" group by $x").getOrElse("")}"
   }, values = if (q.isEmpty) { Seq.empty[Any] } else { searchColumns.map(_ => "%" + q + "%") })
 
-  protected case class Search(q: String, orderBy: String, limit: Option[Int], offset: Option[Int]) extends Query[List[T]] {
+  protected case class Search(q: String, orderBy: Option[String], limit: Option[Int], offset: Option[Int]) extends Query[List[T]] {
     private[this] val whereClause = if (q.isEmpty) { None } else { Some(searchColumns.map(c => s"lower($c) like lower(?)").mkString(" or ")) }
-    override val sql = getSql(whereClause, None, Some(orderBy), limit, offset)
+    override val sql = getSql(whereClause, None, orderBy, limit, offset)
     override val values = if (q.isEmpty) { Seq.empty } else { searchColumns.map(_ => "%" + q + "%") }
     override def reduce(rows: Iterator[Row]) = rows.map(fromRow).toList
   }

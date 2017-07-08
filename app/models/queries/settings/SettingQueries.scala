@@ -14,7 +14,7 @@ object SettingQueries extends BaseQueries[Setting] {
   def removeById(k: SettingKey) = RemoveById(Seq(k.toString))
   val getAll = GetAll()
   def getById(k: SettingKey) = GetById(Seq(k.toString))
-  val search = Search
+  def search(q: String, orderBy: Option[String], limit: Option[Int] = None, offset: Option[Int] = None) = Search(q, orderBy, limit, offset)
 
   case class Update(s: Setting) extends Statement {
     override val sql = {
