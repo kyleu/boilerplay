@@ -50,7 +50,7 @@ object UserQueries extends BaseQueries[User] {
   }
 
   case class SetRole(id: UUID, role: Role) extends Statement {
-    override val sql = s"""update \"$tableName\" set \"role\" = ? where \"id\" = ?"""
+    override val sql = s"""update "$tableName" set \"role\" = ? where \"id\" = ?"""
     override val values = Seq(role.toString, id)
   }
 

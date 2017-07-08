@@ -35,7 +35,7 @@ object PasswordInfoQueries extends BaseQueries[PasswordInfo] {
   override protected def toDataSeq(p: PasswordInfo) = Seq(p.hasher, p.password, p.salt, DateUtils.now)
 
   case class UpdateEmail(originalEmail: String, email: String) extends Statement {
-    override val sql = s"""update $tableName set "key" = ? where "key" = ? and "provider" = ?"""
+    override val sql = s"""update "$tableName" set "key" = ? where "key" = ? and "provider" = ?"""
     override val values = Seq(email, originalEmail, CredentialsProvider.ID)
   }
 }

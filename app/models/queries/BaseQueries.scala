@@ -18,10 +18,10 @@ trait BaseQueries[T] {
 
   protected lazy val quotedColumns = columns.map("\"" + _ + "\"").mkString(", ")
   protected lazy val columnPlaceholders = columns.map(_ => "?").mkString(", ")
-  protected lazy val insertSql = s"insert into $tableName ($quotedColumns) values ($columnPlaceholders)"
+  protected lazy val insertSql = s"""insert into "$tableName" ($quotedColumns) values ($columnPlaceholders)"""
 
   protected def updateSql(updateColumns: Seq[String], additionalUpdates: Option[String] = None) = BaseQueries.trim(s"""
-    update $tableName set ${updateColumns.map(x => s"$x = ?").mkString(", ")}${additionalUpdates.map(x => s", $x").getOrElse("")} where $idWhereClause
+    update "$tableName" set ${updateColumns.map(x => s"$x = ?").mkString(", ")}${additionalUpdates.map(x => s", $x").getOrElse("")} where $idWhereClause
   """)
 
   protected def getSql(
@@ -31,7 +31,7 @@ trait BaseQueries[T] {
     limit: Option[Int] = None,
     offset: Option[Int] = None
   ) = BaseQueries.trim(s"""
-    select $quotedColumns from $tableName
+    select $quotedColumns from "$tableName"
     ${whereClause.map(x => s" where $x").getOrElse("")}
     ${groupBy.map(x => s" group by $x").getOrElse("")}
     ${orderBy.map(x => s" order by $x").getOrElse("")}
@@ -40,7 +40,7 @@ trait BaseQueries[T] {
   """)
 
   protected case class GetById(override val values: Seq[Any]) extends FlatSingleRowQuery[T] {
-    override val sql = s"select $quotedColumns from $tableName where $idWhereClause"
+    override val sql = s"""select $quotedColumns from "$tableName" where $idWhereClause"""
     override def flatMap(row: Row) = Some(fromRow(row))
   }
 
@@ -56,21 +56,21 @@ trait BaseQueries[T] {
 
   protected case class InsertBatch(models: Seq[T]) extends Statement {
     private[this] val valuesClause = models.map(_ => s"($columnPlaceholders)").mkString(", ")
-    override val sql = s"insert into $tableName ($quotedColumns) values $valuesClause"
+    override val sql = s"""insert into "$tableName" ($quotedColumns) values $valuesClause"""
     override val values: Seq[Any] = models.flatMap(toDataSeq)
   }
 
   protected case class RemoveById(override val values: Seq[Any]) extends Statement {
-    override val sql = s"delete from $tableName where $idWhereClause"
+    override val sql = s"""delete from "$tableName" where $idWhereClause"""
   }
 
   protected class SeqQuery(additionalSql: String, override val values: Seq[Any] = Nil) extends Query[Seq[T]] {
-    override val sql = s"select $quotedColumns from $tableName $additionalSql"
+    override val sql = s"""select $quotedColumns from "$tableName" $additionalSql"""
     override def reduce(rows: Iterator[Row]) = rows.map(fromRow).toList
   }
 
   protected abstract class OptQuery(additionalSql: String, override val values: Seq[Any] = Nil) extends FlatSingleRowQuery[T] {
-    override val sql = s"select $quotedColumns from $tableName $additionalSql"
+    override val sql = s"""select $quotedColumns from "$tableName" $additionalSql"""
     override def flatMap(row: Row) = Some(fromRow(row))
   }
 
@@ -80,7 +80,7 @@ trait BaseQueries[T] {
 
   protected case class SearchCount(q: String, groupBy: Option[String] = None) extends Count(sql = {
     val searchWhere = if (q.isEmpty) { "" } else { "where " + searchColumns.map(c => s"lower($c) like lower(?)").mkString(" or ") }
-    s"select count(*) as c from $tableName $searchWhere ${groupBy.map(x => s" group by $x").getOrElse("")}"
+    s"""select count(*) as c from "$tableName" $searchWhere ${groupBy.map(x => s" group by $x").getOrElse("")}"""
   }, values = if (q.isEmpty) { Seq.empty[Any] } else { searchColumns.map(_ => "%" + q + "%") })
 
   protected case class Search(q: String, orderBy: Option[String], limit: Option[Int], offset: Option[Int]) extends Query[List[T]] {
