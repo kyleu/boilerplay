@@ -26,7 +26,7 @@ object GraphQLService {
         userContext = ctx,
         operationName = operation,
         variables = variables.getOrElse(Json.obj()),
-        //deferredResolver = new GraphQLResolver(ctx),
+        deferredResolver = Schema.resolver,
         exceptionHandler = exceptionHandler,
         maxQueryDepth = Some(10)
       )

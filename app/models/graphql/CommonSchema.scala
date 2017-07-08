@@ -11,7 +11,9 @@ import scala.util.{Failure, Success, Try}
 object CommonSchema {
   val idArg = Argument("id", OptionInputType(IntType), description = "Returns model matching the provided id.")
   val keyArg = Argument("key", StringType, description = "Returns the model matching provided key.")
+  val queryArg = Argument("q", OptionInputType(StringType), description = "Limits the returned results to those matching the provided value.")
   val limitArg = Argument("limit", OptionInputType(IntType), description = "Caps the number of returned results.")
+  val offsetArg = Argument("offset", OptionInputType(IntType), description = "Offsets the returned results.")
 
   case object ShortCoercionViolation extends ValueCoercionViolation("Short value expected in the range of a 16-bit number.")
   case object UuidCoercionViolation extends ValueCoercionViolation("UUID value expected in format [00000000-0000-0000-0000-000000000000].")

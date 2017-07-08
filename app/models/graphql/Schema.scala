@@ -2,9 +2,12 @@ package models.graphql
 
 import models.sandbox.SandboxSchema
 import models.user.UserSchema
+import sangria.execution.deferred.DeferredResolver
 import sangria.schema._
 
 object Schema {
+  val resolver: DeferredResolver[GraphQLContext] = DeferredResolver.fetchers()
+
   val queryFields = UserSchema.queryFields ++ SandboxSchema.queryFields // ++ others
 
   val queryType = ObjectType(
