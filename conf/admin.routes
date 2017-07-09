@@ -7,10 +7,8 @@ GET         /metrics                 controllers.admin.MetricsController.showMet
 GET         /schema                  controllers.admin.graphql.SchemaController.renderSchema()
 GET         /voyager                 controllers.admin.graphql.SchemaController.voyager()
 
-GET         /graphql                 controllers.admin.graphql.GraphQLController.graphql(query: Option[String] ?= None, dir: Option[String] ?= None, name: Option[String] ?= None, variables: Option[String] ?= None)
+GET         /graphql                 controllers.admin.graphql.GraphQLController.graphql(query: Option[String] ?= None, variables: Option[String] ?= None)
 POST        /graphql                 controllers.admin.graphql.GraphQLController.graphqlBody
-GET         /graphql/load            controllers.admin.graphql.GraphQLQueryController.load(dir: Option[String], name)
-POST        /graphql/save            controllers.admin.graphql.GraphQLQueryController.save
 
 # Users
 GET         /users/new               controllers.admin.UserCreateController.newUser()

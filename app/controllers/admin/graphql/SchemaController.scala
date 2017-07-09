@@ -13,7 +13,7 @@ class SchemaController @javax.inject.Inject() (override val app: Application) ex
     Future.successful(Ok(SchemaRenderer.renderSchema(Schema.schema)))
   }
 
-  def voyager() = withSession("schema.render") { implicit request =>
-    Future.successful(Ok(views.html.admin.graphql.voyager()))
+  def voyager() = withAdminSession("schema.render") { implicit request =>
+    Future.successful(Ok(views.html.admin.graphql.voyager(request.identity)))
   }
 }

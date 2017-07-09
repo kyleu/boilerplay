@@ -1,46 +1,43 @@
-@()<!DOCTYPE html>
-<html>
-  <head>
-    <script src="@routes.Assets.versioned("lib/graphql/react.min.js").url"></script>
-    <script src="@routes.Assets.versioned("lib/graphql/react-dom.min.js").url"></script>
-    <title>GraphQL Voyager</title>
-    <link rel="stylesheet" href="@routes.Assets.versioned("lib/graphql/voyager.css").url" />
-    <script src="@routes.Assets.versioned("lib/graphql/voyager.min.js").url"></script>
-    <style>
-      .title-area, .type-doc>.doc-navigation {
-        display: none;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="voyager">Loading...</div>
-    <script>
-        function introspectionProvider(introspectionQuery) {
-          // This example expects a GraphQL server at the path /graphql.
-          // Change this to point wherever you host your GraphQL server.
-          return fetch('/admin/graphql', {
-            method: 'post',
-            headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({query: introspectionQuery}),
-            credentials: 'include'
-          }).then(function (response) {
-            return response.text();
-          }).then(function (responseBody) {
-            try {
-              return JSON.parse(responseBody);
-            } catch (error) {
-              return responseBody;
-            }
-          });
-        }
+@(user: models.user.User)(
+    implicit request: Request[AnyContent], session: Session, flash: Flash
+)@views.html.layout.basic(Some(user), utils.Config.projectName + " Schema", scripts = Seq(
+  routes.Assets.versioned("lib/graphql/react.min.js").url,
+  routes.Assets.versioned("lib/graphql/react-dom.min.js").url,
+  routes.Assets.versioned("lib/graphql/voyager.min.js").url
+), stylesheets = Seq(
+  routes.Assets.versioned("lib/graphql/voyager.css").url
+)) {
+  <style>
+    .title-area, .type-doc>.doc-navigation {
+      display: none;
+    }
+  </style>
 
-        // Render <Voyager />
-        GraphQLVoyager.init(document.getElementById('voyager'), {
-          introspection: introspectionProvider
-        })
-    </script>
-  </body>
-</html>
+  <main id="voyager">Loading...</main>
+  <script>
+    function introspectionProvider(introspectionQuery) {
+      return fetch('/admin/graphql', {
+        method: 'post',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({query: introspectionQuery}),
+        credentials: 'include'
+      }).then(function (response) {
+        return response.text();
+      }).then(function (responseBody) {
+        try {
+          return JSON.parse(responseBody);
+        } catch (error) {
+          console.log(error);
+          return responseBody;
+        }
+      });
+    }
+
+    GraphQLVoyager.init(document.getElementById('voyager'), {
+      introspection: introspectionProvider
+    })
+  </script>
+}

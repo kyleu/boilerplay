@@ -1,13 +1,15 @@
-@(user: models.user.User, queries: (Seq[String], Seq[(String, Seq[String])]))(implicit request: Request[AnyContent], session: Session, flash: Flash)
-@layout.basic(Some(user), "GraphQL", scripts = Seq(
+@(user: models.user.User)(
+    implicit request: Request[AnyContent], session: Session, flash: Flash
+)@views.html.layout.basic(Some(user), utils.Config.projectName + " GraphQL", scripts = Seq(
   routes.Assets.versioned("lib/graphql/fetch.min.js").url,
   routes.Assets.versioned("lib/graphql/react.min.js").url,
   routes.Assets.versioned("lib/graphql/react-dom.min.js").url,
-  routes.Assets.versioned("lib/graphql/graphiql.min.js").url,
-  routes.Assets.versioned("lib/jquery/jquery.js").url,
-  routes.Assets.versioned("lib/graphql/app-graphiql.js").url
-), stylesheets = Seq(routes.Assets.versioned("lib/graphql/graphiql.css").url)) {
-  <style>
+  routes.Assets.versioned("lib/jquery/jquery.min.js").url,
+  routes.Assets.versioned("lib/graphql/graphiql.min.js").url
+), stylesheets = Seq(
+  routes.Assets.versioned("lib/graphql/graphiql.css").url
+)) {
+  <style type="text/css">
     body {
       height: 100%;
       margin: 0;
@@ -17,17 +19,6 @@
 
     #graphiql {
       height: 100vh;
-    }
-
-    .graphiql-container .topBar {
-      background: #607d8b;
-      color: #fff;
-    }
-
-    .graphiql-container .docExplorerShow {
-      background: #607d8b;
-      color: #fff;
-      border-left: none;
     }
 
     .graphiql-container .docExplorerShow:before {
@@ -47,20 +38,94 @@
       box-shadow: none;
     }
 
-    .graphiql-container .toggle-button {
-      float: left;
-      font-size: 1.3rem;
-      margin: -4px 14px 0 -4px;
-      cursor: pointer;
-    }
-
     .graphiql-container .title-link {
-      color: #fff;
       text-decoration: none;
+      font-weight: 300;
     }
   </style>
 
-  @views.html.admin.graphql.options(queries._1, queries._2)
+  <script>
+    $(function() {
+      var search = window.location.search;
+      var parameters = {};
+      search.substr(1).split('&').forEach(function(entry) {
+        var eq = entry.indexOf('=');
+        if(eq >= 0) {
+          parameters[decodeURIComponent(entry.slice(0, eq))] =
+            decodeURIComponent(entry.slice(eq + 1).replace(/\+/g, '%20'));
+        }
+      });
+
+      if(parameters.variables) {
+        try {
+          parameters.variables = JSON.stringify(JSON.parse(query.variables), null, 2);
+        } catch(e) {
+          console.log('Cannot parse parameters.', e);
+        }
+      }
+
+      function onEditQuery(newQuery) {
+        parameters.query = newQuery;
+
+        $('.save-body-input').val(newQuery);
+      }
+
+      function onEditVariables(newVariables) {
+        parameters.variables = newVariables;
+      }
+
+      function graphQLFetcher(graphQLParams) {
+        return fetch(window.location.origin + '/admin/graphql', {
+          method: 'post',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(graphQLParams),
+          credentials: 'include'
+        }).then(function(response) {
+          return response.text();
+        }).then(function(responseBody) {
+          try {
+            return JSON.parse(responseBody);
+          } catch(error) {
+            console.log(error);
+            return responseBody;
+          }
+        });
+      }
+
+      $('html > head').append($('<style>.variable-editor {display: none !important}</style>'));
+
+      function renderGraphiql(elem) {
+        $('.save-body-input').val(parameters.query);
+        $('.save-dir-input').val(parameters.dir);
+        $('.save-name-input').val(parameters.name);
+
+        var gqlChildren = [
+          React.createElement(GraphiQL.Logo, {}, [
+            React.createElement("a", { "href": "/", "className": "title-link" }, "@utils.Config.projectName GraphQL")
+          ])
+        ];
+
+        var gqlProps = {
+          fetcher: graphQLFetcher,
+          query: parameters.query,
+          variables: parameters.variables,
+          response: parameters.response,
+          onEditQuery: onEditQuery,
+          onEditVariables: onEditVariables,
+          defaultQuery: "query FirstQuery {\n  schema {\n    tables {\n      name\n    }\n  }\n}"
+        };
+
+        var gql = React.createElement(GraphiQL, gqlProps, gqlChildren);
+
+        ReactDOM.render(gql, elem);
+      }
+
+      renderGraphiql(document.getElementById('graphiql'));
+    });
+  </script>
+
   <div id="graphiql">Loading...</div>
-  <script>renderGraphiql(document.getElementById('graphiql'))</script>
 }

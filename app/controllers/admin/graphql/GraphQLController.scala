@@ -7,33 +7,32 @@ import sangria.execution.{ErrorWithResolver, QueryAnalysisError}
 import sangria.marshalling.circe._
 import sangria.marshalling.MarshallingUtil._
 import sangria.parser.SyntaxError
-import services.graphql.{GraphQLFileService, GraphQLService}
+import services.graphql.GraphQLService
 import utils.{Application, FutureUtils}
 
 import scala.concurrent.Future
 
 @javax.inject.Singleton
 class GraphQLController @javax.inject.Inject() (override val app: Application) extends BaseController {
-  def graphql(query: Option[String], dir: Option[String], name: Option[String], variables: Option[String]) = {
+  def graphql(query: Option[String], variables: Option[String]) = {
     withAdminSession("graphql.ui") { implicit request =>
       val vars = variables.getOrElse("{}")
-      log.debug(s"Executing GraphQL query [${query.getOrElse("")}] (${dir.getOrElse("-")}:${name.getOrElse("-")}) with [$vars] as variables.")
-      Future.successful(Ok(views.html.admin.graphql.graphiql(request.identity, GraphQLFileService.list())))
+      Future.successful(Ok(views.html.admin.graphql.graphiql(request.identity)))
     }
   }
 
   def graphqlBody = withAdminSession("graphql.post") { implicit request =>
-    val playJson = request.body.asJson.getOrElse(play.api.libs.json.JsObject.empty)
     val json = {
       import sangria.marshalling.playJson._
+      val playJson = request.body.asJson.getOrElse(play.api.libs.json.JsObject.empty)
       playJson.convertMarshaled[Json]
     }
-    val body = json.asObject.get.toMap
+    val body = json.asObject.get.filter(x => x._1 != "variables").toMap
     val query = body("query").as[String].getOrElse("{}")
     val operation = body.get("operationName").flatMap(_.asString)
 
     val variables = body.get("variables").map { x =>
-      x.asString.map(s => GraphQLService.parseVariables(s)).getOrElse(x)
+      x.asString.map(GraphQLService.parseVariables).getOrElse(x)
     }
 
     executeQuery(query, variables, operation, request.identity)
