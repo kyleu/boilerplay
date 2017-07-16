@@ -1,6 +1,6 @@
 import models._
 import ui.UserManager
-import utils.{Logging, NetworkMessage}
+import util.{Logging, NetworkMessage}
 
 trait ResponseMessageHelper { this: Boilerplay =>
   protected[this] def handleMessage(rm: ResponseMessage) = rm match {

@@ -4,10 +4,10 @@ import java.util.UUID
 
 import controllers.BaseController
 import models.user.Role
-import utils.FutureUtils.defaultContext
+import util.FutureUtils.defaultContext
 import services.user.{UserSearchService, UserService}
-import utils.Application
-import utils.web.FormUtils
+import util.Application
+import util.web.FormUtils
 
 import scala.concurrent.Future
 

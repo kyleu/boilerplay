@@ -1,14 +1,14 @@
 @(user: Option[models.user.User], form: Form[models.user.RegistrationData])(
     implicit request: Request[AnyContent], session: Session, flash: Flash
-)@layout.simple(user = user, title = "Register for " + utils.Config.projectName) {
+)@layout.simple(user = user, title = "Register for " + util.Config.projectName) {
   <form method="post" action="@controllers.auth.routes.RegistrationController.register()">
     <div class="row">
       <div class="col s12">
         <div class="card">
           <div class="card-content">
-            <div class="card-title">Register for @utils.Config.projectName</div>
+            <div class="card-title">Register for @util.Config.projectName</div>
             <p>
-              You're creating an account for this local installation of @utils.Config.projectName.
+              You're creating an account for this local installation of @util.Config.projectName.
               No information leaves your server.
             </p>
             <div class="row">

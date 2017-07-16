@@ -25,7 +25,7 @@
               <td>@u.profile.providerKey</td>
               <td><div class="theme-swatch" style="background-color: @u.preferences.theme.color"></div></td>
               <td>@u.role</td>
-              <td>@utils.DateUtils.niceDate(u.created.toLocalDate)</td>
+              <td>@util.DateUtils.niceDate(u.created.toLocalDate)</td>
               <td>
                 @defining(s"return confirm('Are you certain you want to delete this user (${u.username})?');") { onClick =>
                   <a class="theme-text" onclick="@onClick" href="@controllers.admin.routes.UserEditController.remove(u.id)"><i class="fa fa-close"></i></a>

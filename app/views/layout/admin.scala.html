@@ -7,7 +7,7 @@
     @views.html.components.userDropdown(Some(user))
 
     <nav id="topnav" class="theme">
-      <a href="@controllers.routes.HomeController.home()" class="brand-logo center">@utils.Config.projectName</a>
+      <a href="@controllers.routes.HomeController.home()" class="brand-logo center">@util.Config.projectName</a>
 
       <ul class="left hide-on-small-only">
         @if(activeSection == "graphql") {

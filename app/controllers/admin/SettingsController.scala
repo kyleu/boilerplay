@@ -3,8 +3,8 @@ package controllers.admin
 import controllers.BaseController
 import models.settings.SettingKey
 import services.settings.SettingsService
-import utils.Application
-import utils.web.FormUtils
+import util.Application
+import util.web.FormUtils
 
 import scala.concurrent.Future
 

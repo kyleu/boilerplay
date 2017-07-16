@@ -7,7 +7,7 @@ import models.database._
 import models.queries.BaseQueries
 import models.user.{Role, User, UserPreferences}
 import org.joda.time.LocalDateTime
-import utils.JsonSerializers
+import util.JsonSerializers
 
 object UserQueries extends BaseQueries[User] {
   override protected val tableName = "users"

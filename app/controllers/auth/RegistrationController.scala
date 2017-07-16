@@ -9,10 +9,10 @@ import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
 import controllers.BaseController
 import models.settings.SettingKey
 import models.user._
-import utils.FutureUtils.defaultContext
+import util.FutureUtils.defaultContext
 import services.settings.SettingsService
 import services.user.{UserSearchService, UserService}
-import utils.Application
+import util.Application
 
 import scala.concurrent.Future
 

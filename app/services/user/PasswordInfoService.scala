@@ -4,7 +4,7 @@ import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.util.PasswordInfo
 import com.mohiva.play.silhouette.persistence.daos.DelegableAuthInfoDAO
 import models.queries.auth.PasswordInfoQueries
-import utils.FutureUtils.defaultContext
+import util.FutureUtils.defaultContext
 import services.database.Database
 
 import scala.concurrent.Future

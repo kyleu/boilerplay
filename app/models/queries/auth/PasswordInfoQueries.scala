@@ -5,7 +5,7 @@ import com.mohiva.play.silhouette.api.util.PasswordInfo
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
 import models.queries.BaseQueries
 import models.database.{Row, Statement}
-import utils.DateUtils
+import util.DateUtils
 
 object PasswordInfoQueries extends BaseQueries[PasswordInfo] {
   override protected val tableName = "password_info"

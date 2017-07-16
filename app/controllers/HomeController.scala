@@ -4,12 +4,12 @@ import akka.actor.ActorSystem
 import akka.stream.Materializer
 import com.mohiva.play.silhouette.api.HandlerResult
 import models.{RequestMessage, ResponseMessage}
-import utils.FutureUtils.defaultContext
+import util.FutureUtils.defaultContext
 import play.api.libs.streams.ActorFlow
 import play.api.mvc.{AnyContentAsEmpty, Request, WebSocket}
 import services.socket.SocketService
-import utils.Application
-import utils.web.MessageFrameFormatter
+import util.Application
+import util.web.MessageFrameFormatter
 
 import scala.concurrent.Future
 

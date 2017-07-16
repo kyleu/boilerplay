@@ -7,8 +7,8 @@ import akka.actor.{ActorRef, OneForOneStrategy, SupervisorStrategy}
 import models._
 import models.user.User
 import org.joda.time.LocalDateTime
-import utils.metrics.{InstrumentedActor, MetricsServletActor}
-import utils.{Application, DateUtils, Logging}
+import util.metrics.{InstrumentedActor, MetricsServletActor}
+import util.{Application, DateUtils, Logging}
 
 object ActorSupervisor {
   case class SocketRecord(userId: UUID, name: String, actorRef: ActorRef, started: LocalDateTime)

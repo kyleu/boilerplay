@@ -7,8 +7,8 @@ import models.user.User
 import sangria.execution.{Executor, HandledException}
 import sangria.marshalling.circe._
 import sangria.parser.QueryParser
-import utils.Application
-import utils.FutureUtils.defaultContext
+import util.Application
+import util.FutureUtils.defaultContext
 
 import scala.util.{Failure, Success}
 

@@ -8,6 +8,6 @@
   stylesheets = Seq(
     controllers.routes.Assets.versioned("lib/font-awesome/css/font-awesome.css").url,
     controllers.routes.Assets.versioned("lib/materializecss/css/materialize.css").url,
-    controllers.routes.Assets.versioned(s"stylesheets/${utils.Config.projectId}.min.css").url
+    controllers.routes.Assets.versioned(s"stylesheets/${util.Config.projectId}.min.css").url
   ) ++ stylesheets
 )(content)

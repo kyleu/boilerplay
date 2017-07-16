@@ -1,8 +1,8 @@
 package services.socket
 
 import models._
-import utils.Config
-import utils.metrics.InstrumentedActor
+import util.Config
+import util.metrics.InstrumentedActor
 
 trait RequestMessageHelper extends InstrumentedActor { this: SocketService =>
   override def receiveRequest = {

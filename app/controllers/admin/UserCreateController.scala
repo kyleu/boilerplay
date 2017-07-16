@@ -8,10 +8,10 @@ import com.mohiva.play.silhouette.api.{LoginInfo, SignUpEvent}
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
 import controllers.BaseController
 import models.user.{Role, User, UserPreferences}
-import utils.FutureUtils.defaultContext
+import util.FutureUtils.defaultContext
 import services.user.UserService
-import utils.Application
-import utils.web.FormUtils
+import util.Application
+import util.web.FormUtils
 
 import scala.concurrent.Future
 

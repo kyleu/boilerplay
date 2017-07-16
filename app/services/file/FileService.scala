@@ -1,6 +1,6 @@
 package services.file
 
-import utils.Logging
+import util.Logging
 
 object FileService extends Logging {
   private[this] var dataDir: Option[java.io.File] = None

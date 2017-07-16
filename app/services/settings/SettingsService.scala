@@ -2,7 +2,7 @@ package services.settings
 
 import models.queries.settings.SettingQueries
 import models.settings.{Setting, SettingKey}
-import utils.FutureUtils.defaultContext
+import util.FutureUtils.defaultContext
 import services.database.Database
 
 object SettingsService {

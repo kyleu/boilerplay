@@ -2,11 +2,11 @@ package controllers
 
 import com.mohiva.play.silhouette.api.actions.{SecuredRequest, UserAwareRequest}
 import models.auth.AuthEnv
-import utils.FutureUtils.defaultContext
+import util.FutureUtils.defaultContext
 import play.api.mvc._
 import services.user.UserService
-import utils.metrics.Instrumented
-import utils.{Application, Logging}
+import util.metrics.Instrumented
+import util.{Application, Logging}
 
 import scala.concurrent.Future
 
@@ -50,7 +50,7 @@ abstract class BaseController() extends InjectedController with Instrumented wit
             }).getOrElse(Future.successful(Redirect(controllers.auth.routes.AuthenticationController.signInForm())))
 
             val flashed = result.map(_.flashing(
-              "error" -> s"You must sign in or register before accessing ${utils.Config.projectName}."
+              "error" -> s"You must sign in or register before accessing ${util.Config.projectName}."
             ))
 
             flashed.map { r =>

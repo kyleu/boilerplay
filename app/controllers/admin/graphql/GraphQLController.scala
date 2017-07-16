@@ -8,7 +8,7 @@ import sangria.marshalling.circe._
 import sangria.marshalling.MarshallingUtil._
 import sangria.parser.SyntaxError
 import services.graphql.GraphQLService
-import utils.{Application, FutureUtils}
+import util.{Application, FutureUtils}
 
 import scala.concurrent.Future
 

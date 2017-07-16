@@ -5,8 +5,8 @@ import java.util.UUID
 import akka.actor.{ActorRef, Props}
 import models._
 import models.user.User
-import utils.Logging
-import utils.metrics.InstrumentedActor
+import util.Logging
+import util.metrics.InstrumentedActor
 
 object SocketService {
   def props(id: Option[UUID], supervisor: ActorRef, user: User, out: ActorRef, sourceAddress: String) = {

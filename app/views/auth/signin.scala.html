@@ -1,14 +1,14 @@
 @(user: Option[models.user.User], form: Form[com.mohiva.play.silhouette.api.util.Credentials])(
   implicit request: Request[AnyContent], session: Session, flash: Flash
-)@layout.simple(user = user, title = "Sign in to " + utils.Config.projectName) {
+)@layout.simple(user = user, title = "Sign in to " + util.Config.projectName) {
   <form method="post" action="@controllers.auth.routes.AuthenticationController.authenticateCredentials()">
     <div class="row">
       <div class="col s12">
         <div class="card">
           <div class="card-content">
-            <span class="card-title">Sign in to @utils.Config.projectName</span>
+            <span class="card-title">Sign in to @util.Config.projectName</span>
             <p>
-              This account is only for this installation of @utils.Config.projectName.
+              This account is only for this installation of @util.Config.projectName.
               No information leaves your server, this is only a local account.
             </p>
             <div class="row">

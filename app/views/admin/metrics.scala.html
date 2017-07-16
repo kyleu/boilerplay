@@ -1,7 +1,7 @@
 @(user: models.user.User, json: String)(implicit request: Request[AnyContent], session: Session, flash: Flash)
-@layout.admin(user, "status", utils.Config.projectName + " Metrics") {
+@layout.admin(user, "status", util.Config.projectName + " Metrics") {
   <div class="content-panel">
-    <span class="panel-title">@utils.Config.projectName Metrics</span>
+    <span class="panel-title">@util.Config.projectName Metrics</span>
     <pre class="z-depth-1" style="padding: 15px;">@json</pre>
   </div>
 }

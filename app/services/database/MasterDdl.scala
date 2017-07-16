@@ -6,8 +6,8 @@ import models.ddl.DdlQueries.DdlStatement
 import models.ddl.{DdlFile, DdlQueries}
 import org.apache.commons.io.FileUtils
 import org.joda.time.LocalDateTime
-import utils.Logging
-import utils.FutureUtils.defaultContext
+import util.Logging
+import util.FutureUtils.defaultContext
 
 import scala.concurrent.duration._
 import scala.concurrent.{Await, Future}
