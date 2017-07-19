@@ -6,7 +6,7 @@ object BaseQueries {
   def trim(s: String) = s.replaceAll("""[\s]+""", " ").trim
 }
 
-trait BaseQueries[T] {
+trait BaseQueries[T] extends JodaDateUtils {
   protected def tableName: String = "_invalid_"
   protected def idColumns = Seq("id")
 
