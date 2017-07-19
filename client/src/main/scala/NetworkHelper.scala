@@ -1,6 +1,6 @@
 import models.{Ping, RequestMessage}
 import services.NavigationService
-import util.{JsonSerializers, Logging, NetworkMessage, NetworkSocket}
+import util._
 
 import scala.scalajs.js.timers._
 
@@ -15,7 +15,7 @@ trait NetworkHelper { this: Boilerplay =>
 
   private def sendPing(): Unit = {
     if (socket.isConnected) {
-      NetworkMessage.sendMessage(Ping(System.currentTimeMillis))
+      NetworkMessage.sendMessage(Ping(DateUtils.now))
     }
     setTimeout(10000)(sendPing())
   }

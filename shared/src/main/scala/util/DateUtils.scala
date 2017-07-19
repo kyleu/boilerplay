@@ -25,9 +25,6 @@ object DateUtils {
   def niceTime(t: LocalTime) = niceTimeFmt.format(t)
   def niceDateTime(dt: LocalDateTime) = s"${niceDate(dt.toLocalDate)} ${niceTime(dt.toLocalTime)} UTC"
 
-  def toJoda(ldt: LocalDateTime) = new org.joda.time.LocalDateTime(toMillis(ldt))
-  def fromJoda(ldt: org.joda.time.LocalDateTime) = fromMillis(ldt.toDateTime(org.joda.time.DateTimeZone.UTC).getMillis)
-
   private[this] val dFmt = new SimpleDateFormat("yyyy-MM-dd")
   def sqlDateFromString(s: String) = new java.sql.Date(dFmt.parse(s).getTime)
 

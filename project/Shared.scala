@@ -57,8 +57,11 @@ object Shared {
       "io.circe" %%% "circe-generic" % Dependencies.Serialization.circeVersion,
       "io.circe" %%% "circe-generic-extras" % Dependencies.Serialization.circeVersion,
       "io.circe" %%% "circe-parser" % Dependencies.Serialization.circeVersion,
+      "io.circe" %%% "circe-java8" % Dependencies.Serialization.circeVersion,
       "com.beachape" %%% "enumeratum-circe" % Dependencies.Utils.enumeratumVersion
     )
+  ).jsSettings(
+    libraryDependencies += "org.scala-js" %%% "scalajs-java-time" % "0.2.2"
   )
 
   lazy val sharedJs = shared.js.enablePlugins(ScalaJSWeb).settings(scalaJSStage in Global := FastOptStage)

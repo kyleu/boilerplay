@@ -3,7 +3,7 @@ package models.ddl
 import models.database.{Row, SingleRowQuery, Statement}
 import models.queries.BaseQueries
 
-import util.DateUtils
+import util.JodaDateUtils
 
 object DdlQueries extends BaseQueries[DdlFile] {
   override protected val tableName = "ddl"
@@ -30,9 +30,9 @@ object DdlQueries extends BaseQueries[DdlFile] {
   case class DdlStatement(override val sql: String) extends Statement
 
   override protected def fromRow(row: Row) = DdlFile(
-    row.as[Int]("id"), row.as[String]("name"), row.as[String]("sql"), DateUtils.fromJoda(row.as[org.joda.time.LocalDateTime]("applied"))
+    row.as[Int]("id"), row.as[String]("name"), row.as[String]("sql"), JodaDateUtils.fromJoda(row.as[org.joda.time.LocalDateTime]("applied"))
   )
   override protected def toDataSeq(f: DdlFile) = Seq(
-    f.id, f.name, f.sql, DateUtils.toJoda(f.applied)
+    f.id, f.name, f.sql, JodaDateUtils.toJoda(f.applied)
   )
 }

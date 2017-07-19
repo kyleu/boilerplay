@@ -7,7 +7,7 @@ import models.database._
 import models.queries.BaseQueries
 import models.user.{Role, User, UserPreferences}
 
-import util.{DateUtils, JsonSerializers}
+import util.{JodaDateUtils, JsonSerializers}
 
 object UserQueries extends BaseQueries[User] {
   override protected val tableName = "users"
@@ -83,11 +83,11 @@ object UserQueries extends BaseQueries[User] {
     val preferences = JsonSerializers.readPreferences(prefsString)
     val profile = LoginInfo("credentials", row.as[String]("email"))
     val role = Role.withName(row.as[String]("role").trim)
-    val created = DateUtils.fromJoda(row.as[org.joda.time.LocalDateTime]("created"))
+    val created = JodaDateUtils.fromJoda(row.as[org.joda.time.LocalDateTime]("created"))
     User(id, username, preferences, profile, role, created)
   }
 
   override protected def toDataSeq(u: User) = {
-    Seq(u.id, u.username, JsonSerializers.writePreferences(u.preferences), u.profile.providerKey, u.role.toString, DateUtils.toJoda(u.created))
+    Seq(u.id, u.username, JsonSerializers.writePreferences(u.preferences), u.profile.providerKey, u.role.toString, JodaDateUtils.toJoda(u.created))
   }
 }
