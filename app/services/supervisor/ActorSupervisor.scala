@@ -6,7 +6,7 @@ import akka.actor.SupervisorStrategy.Stop
 import akka.actor.{ActorRef, OneForOneStrategy, SupervisorStrategy}
 import models._
 import models.user.User
-import org.joda.time.LocalDateTime
+import java.time.LocalDateTime
 import util.metrics.{InstrumentedActor, MetricsServletActor}
 import util.{Application, DateUtils, Logging}
 

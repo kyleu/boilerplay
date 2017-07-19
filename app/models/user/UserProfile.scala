@@ -3,7 +3,7 @@ package models.user
 import java.util.UUID
 
 import models.template.Theme
-import org.joda.time.LocalDateTime
+import java.time.LocalDateTime
 
 case class UserProfile(
   id: UUID,

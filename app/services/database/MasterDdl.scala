@@ -5,7 +5,7 @@ import java.nio.charset.Charset
 import models.ddl.DdlQueries.DdlStatement
 import models.ddl.{DdlFile, DdlQueries}
 import org.apache.commons.io.FileUtils
-import org.joda.time.LocalDateTime
+import java.time.LocalDateTime
 import util.Logging
 import util.FutureUtils.defaultContext
 
@@ -17,7 +17,7 @@ object MasterDdl extends Logging {
 
   lazy val files = if (dir.isDirectory) {
     dir.listFiles.filter(_.getName.endsWith(".sql")).map { f =>
-      val now = new LocalDateTime()
+      val now = LocalDateTime.now()
       val split = f.getName.stripSuffix(".sql").split('_')
       if (split.length != 2) {
         throw new IllegalStateException(s"Invalid filename [${f.getName}].")

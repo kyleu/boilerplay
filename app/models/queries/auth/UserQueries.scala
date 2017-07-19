@@ -6,8 +6,8 @@ import com.mohiva.play.silhouette.api.LoginInfo
 import models.database._
 import models.queries.BaseQueries
 import models.user.{Role, User, UserPreferences}
-import org.joda.time.LocalDateTime
-import util.JsonSerializers
+
+import util.{DateUtils, JsonSerializers}
 
 object UserQueries extends BaseQueries[User] {
   override protected val tableName = "users"
@@ -71,6 +71,11 @@ object UserQueries extends BaseQueries[User] {
     override def map(row: Row) = row.as[Long]("c").toInt
   }
 
+  case class UpdateFields(id: UUID, username: String, email: String, role: Role) extends Statement {
+    override val sql = s"""update "$tableName" set "username" = ?, "email" = ?, "role" = ? where "id" = ?"""
+    override val values = Seq(username, email, role.toString, id)
+  }
+
   override protected def fromRow(row: Row) = {
     val id = row.as[UUID]("id")
     val username = row.as[String]("username")
@@ -78,16 +83,11 @@ object UserQueries extends BaseQueries[User] {
     val preferences = JsonSerializers.readPreferences(prefsString)
     val profile = LoginInfo("credentials", row.as[String]("email"))
     val role = Role.withName(row.as[String]("role").trim)
-    val created = row.as[LocalDateTime]("created")
+    val created = DateUtils.fromJoda(row.as[org.joda.time.LocalDateTime]("created"))
     User(id, username, preferences, profile, role, created)
   }
 
   override protected def toDataSeq(u: User) = {
-    Seq(u.id, u.username, JsonSerializers.writePreferences(u.preferences), u.profile.providerKey, u.role.toString, u.created)
-  }
-
-  case class UpdateFields(id: UUID, username: String, email: String, role: Role) extends Statement {
-    override val sql = s"""update "$tableName" set "username" = ?, "email" = ?, "role" = ? where "id" = ?"""
-    override val values = Seq(username, email, role.toString, id)
+    Seq(u.id, u.username, JsonSerializers.writePreferences(u.preferences), u.profile.providerKey, u.role.toString, DateUtils.toJoda(u.created))
   }
 }

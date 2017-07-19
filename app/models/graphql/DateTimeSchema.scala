@@ -1,7 +1,6 @@
 package models.graphql
 
-import org.joda.time.format.ISODateTimeFormat
-import org.joda.time.{LocalDate, LocalDateTime, LocalTime}
+import java.time._
 import sangria.marshalling.DateSupport
 import sangria.schema._
 import sangria.validation.ValueCoercionViolation
@@ -10,8 +9,14 @@ import scala.util.{Failure, Success, Try}
 
 object DateTimeSchema {
   case object LocalDateTimeCoercionViolation extends ValueCoercionViolation("Date/time value expected in format [yyyy-MM-dd HH:mm:ss].")
+  case object LocalDateCoercionViolation extends ValueCoercionViolation("Date value expected in format [yyyy-MM-dd].")
+  case object LocalTimeCoercionViolation extends ValueCoercionViolation("Time value expected in format [HH:mm:ss].")
 
-  private[this] def parseLocalDateTime(s: String) = Try(new LocalDateTime(s)) match {
+  private[this] val fmtLocalDateTime = format.DateTimeFormatter.ISO_LOCAL_DATE_TIME
+  private[this] val fmtLocalDate = format.DateTimeFormatter.ISO_LOCAL_DATE
+  private[this] val fmtLocalTime = format.DateTimeFormatter.ISO_LOCAL_TIME
+
+  private[this] def parseLocalDateTime(s: String) = Try(LocalDateTime.parse(s, fmtLocalDateTime)) match {
     case Success(date) => Right(date)
     case Failure(_) => Left(LocalDateTimeCoercionViolation)
   }
@@ -19,10 +24,10 @@ object DateTimeSchema {
   implicit val localDateTimeType = ScalarType[LocalDateTime](
     name = "DateTime",
     description = Some("A string representing a date, in format [yyyy-MM-dd HH:mm:ss]."),
-    coerceOutput = (d, caps) => if (caps.contains(DateSupport)) {
-      d.toDate
+    coerceOutput = (dt, caps) => if (caps.contains(DateSupport)) {
+      java.util.Date.from(dt.atZone(ZoneId.systemDefault()).toInstant)
     } else {
-      ISODateTimeFormat.dateTime().print(d)
+      fmtLocalDateTime.format(dt)
     },
     coerceUserInput = {
       case s: String => parseLocalDateTime(s)
@@ -34,9 +39,7 @@ object DateTimeSchema {
     }
   )
 
-  case object LocalDateCoercionViolation extends ValueCoercionViolation("Date value expected in format [yyyy-MM-dd].")
-
-  private[this] def parseLocalDate(s: String) = Try(new LocalDate(s)) match {
+  private[this] def parseLocalDate(s: String) = Try(LocalDate.parse(s, fmtLocalDate)) match {
     case Success(date) => Right(date)
     case Failure(_) => Left(LocalDateCoercionViolation)
   }
@@ -44,7 +47,11 @@ object DateTimeSchema {
   implicit val localDateType = ScalarType[LocalDate](
     name = "Date",
     description = Some("A string representing a date, in format [yyyy-MM-dd]."),
-    coerceOutput = (d, caps) => if (caps.contains(DateSupport)) { d.toDate } else { d.toString("yyyy-MM-dd") },
+    coerceOutput = (d, caps) => if (caps.contains(DateSupport)) {
+      java.util.Date.from(d.atStartOfDay.atZone(ZoneId.systemDefault()).toInstant)
+    } else {
+      fmtLocalDate.format(d)
+    },
     coerceUserInput = {
       case s: String => parseLocalDate(s)
       case _ => Left(LocalDateCoercionViolation)
@@ -55,9 +62,7 @@ object DateTimeSchema {
     }
   )
 
-  case object LocalTimeCoercionViolation extends ValueCoercionViolation("Time value expected in format [HH:mm:ss].")
-
-  private[this] def parseLocalTime(s: String) = Try(new LocalTime(s)) match {
+  private[this] def parseLocalTime(s: String) = Try(LocalTime.parse(s, fmtLocalTime)) match {
     case Success(date) => Right(date)
     case Failure(_) => Left(LocalDateCoercionViolation)
   }
@@ -65,7 +70,7 @@ object DateTimeSchema {
   implicit val localTimeType = ScalarType[LocalTime](
     name = "Time",
     description = Some("A string representing the time, in format [HH:mm:ss]."),
-    coerceOutput = (t, _) => t.toString("HH:mm:ss"),
+    coerceOutput = (t, _) => fmtLocalTime.format(t),
     coerceUserInput = {
       case s: String => parseLocalTime(s)
       case _ => Left(LocalDateCoercionViolation)

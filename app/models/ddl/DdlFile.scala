@@ -1,6 +1,6 @@
 package models.ddl
 
-import org.joda.time.LocalDateTime
+import java.time.LocalDateTime
 
 object DdlFile {
   def split(sql: String, delimiter: Char = ';') = {

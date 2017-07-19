@@ -3,7 +3,7 @@ package models.user
 import java.util.UUID
 
 import com.mohiva.play.silhouette.api.{Identity, LoginInfo}
-import org.joda.time.LocalDateTime
+import java.time.LocalDateTime
 import util.DateUtils
 
 object User {
