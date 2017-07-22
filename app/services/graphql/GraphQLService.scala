@@ -37,6 +37,9 @@ object GraphQLService {
   def parseVariables(variables: String) = if (variables.trim == "" || variables.trim == "null") {
     Json.obj()
   } else {
-    parse(variables).right.get
+    parse(variables) match {
+      case Right(x) => x
+      case Left(x) => Json.obj()
+    }
   }
 }

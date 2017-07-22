@@ -14,11 +14,8 @@ import scala.concurrent.Future
 
 @javax.inject.Singleton
 class GraphQLController @javax.inject.Inject() (override val app: Application) extends BaseController {
-  def graphql(query: Option[String], variables: Option[String]) = {
-    withAdminSession("graphql.ui") { implicit request =>
-      val vars = variables.getOrElse("{}")
-      Future.successful(Ok(views.html.admin.graphql.graphiql(request.identity)))
-    }
+  def graphql(query: Option[String], variables: Option[String]) = withAdminSession("graphql.ui") { implicit request =>
+    Future.successful(Ok(views.html.admin.graphql.graphiql(request.identity)))
   }
 
   def graphqlBody = withAdminSession("graphql.post") { implicit request =>
@@ -28,7 +25,7 @@ class GraphQLController @javax.inject.Inject() (override val app: Application) e
       playJson.convertMarshaled[Json]
     }
 
-    val body = json.asObject.get.toMap
+    val body = json.asObject.getOrElse(throw new IllegalStateException(s"Invalid json [$json].")).filter(x => x._1 != "variables").toMap
     val query = body("query").as[String].getOrElse("{}")
     val variables = body.get("variables").map(x => GraphQLService.parseVariables(x.asString.getOrElse("{}")))
     val operation = body.get("operationName").flatMap(_.asString)

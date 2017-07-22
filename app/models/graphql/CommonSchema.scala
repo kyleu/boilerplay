@@ -55,7 +55,7 @@ object CommonSchema {
   implicit val byteArrayType = ScalarType[Array[Byte]](
     name = "Base64",
     description = Some("A binary array of bytes, encoded with Base64."),
-    coerceOutput = (u, _) => u.toString,
+    coerceOutput = (u, _) => Base64.encodeBase64(u),
     coerceUserInput = {
       case s: String => Right(Base64.decodeBase64(s))
       case _ => Left(Base64CoercionViolation)

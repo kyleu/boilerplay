@@ -44,7 +44,8 @@ object Shared {
     scapegoatVersion := Utils.scapegoatVersion,
     scapegoatDisabledInspections := Seq("MethodNames", "MethodReturningAny", "DuplicateImport"),
     scapegoatIgnoredFiles := Seq(".*/JsonSerializers.scala"),
-    ScalariformKeys.preferences := ScalariformKeys.preferences.value
+    ScalariformKeys.preferences := ScalariformKeys.preferences.value,
+    scapegoatDisabledInspections := Seq("FinalModifierOnCaseClass")
   ) ++ graphSettings ++ scalariformSettings
 
   def withProjects(p: Project, includes: Seq[Project]) = includes.foldLeft(p) { (proj, inc) =>
