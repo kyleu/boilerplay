@@ -50,7 +50,8 @@ addSbtPlugin("com.typesafe.sbt" % "sbt-scalariform" % "1.3.0") // scalariformFor
 
 addSbtPlugin("com.github.xuwei-k" % "sbt-class-diagram" % "0.2.1")
 
-addSbtPlugin("ch.epfl.scala" % "sbt-scalafix" % "0.4.2")
+// Broken on Windows
+// addSbtPlugin("ch.epfl.scala" % "sbt-scalafix" % "0.4.2")
 
 // IDE Integration
 addSbtPlugin("org.jetbrains" % "sbt-ide-settings" % "0.1.2")
