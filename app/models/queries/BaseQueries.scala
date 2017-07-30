@@ -93,5 +93,5 @@ trait BaseQueries[T] extends JodaDateUtils {
     override def reduce(rows: Iterator[Row]) = rows.map(fromRow).toList
   }
 
-  private def idWhereClause = idColumns.map(c => s"$c = ?").mkString(" and ")
+  private def idWhereClause = idColumns.map(c => s""""$c" = ?""").mkString(" and ")
 }
