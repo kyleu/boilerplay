@@ -1,29 +1,34 @@
 # Admin
-GET         /                        controllers.admin.AdminController.index
-GET         /status                  controllers.admin.AdminController.status
-GET         /metrics                 controllers.admin.MetricsController.showMetrics
+GET         /                                  controllers.admin.AdminController.index
+GET         /status                            controllers.admin.AdminController.status
+GET         /metrics                           controllers.admin.MetricsController.showMetrics
 
-# GraphQL
-GET         /schema                  controllers.admin.graphql.SchemaController.renderSchema()
-GET         /voyager                 controllers.admin.graphql.SchemaController.voyager()
+# Explore
+GET         /explore                           controllers.admin.AdminController.explore
 
-GET         /graphql                 controllers.admin.graphql.GraphQLController.graphql(query: Option[String] ?= None, variables: Option[String] ?= None)
-POST        /graphql                 controllers.admin.graphql.GraphQLController.graphqlBody
+# Other models...
 
 # Users
-GET         /users/new               controllers.admin.UserCreateController.newUser()
-POST        /users/new               controllers.admin.UserCreateController.saveNewUser()
+GET         /users/new                         controllers.admin.UserCreateController.newUser()
+POST        /users/new                         controllers.admin.UserCreateController.saveNewUser()
 
-GET         /users                   controllers.admin.UserEditController.users
-GET         /users/:id               controllers.admin.UserEditController.view(id: java.util.UUID)
-GET         /users/:id/edit          controllers.admin.UserEditController.edit(id: java.util.UUID)
-POST        /users/:id/edit          controllers.admin.UserEditController.save(id: java.util.UUID)
-GET         /users/:id/remove        controllers.admin.UserEditController.remove(id: java.util.UUID)
+GET         /users                             controllers.admin.UserEditController.users
+GET         /users/:id                         controllers.admin.UserEditController.view(id: java.util.UUID)
+GET         /users/:id/edit                    controllers.admin.UserEditController.edit(id: java.util.UUID)
+POST        /users/:id/edit                    controllers.admin.UserEditController.save(id: java.util.UUID)
+GET         /users/:id/remove                  controllers.admin.UserEditController.remove(id: java.util.UUID)
+
+# GraphQL
+GET         /schema                            controllers.admin.graphql.SchemaController.renderSchema()
+GET         /voyager                           controllers.admin.graphql.SchemaController.voyager()
+
+GET         /graphql                           controllers.admin.graphql.GraphQLController.graphql(query: Option[String] ?= None, variables: Option[String] ?= None)
+POST        /graphql                           controllers.admin.graphql.GraphQLController.graphqlBody
 
 # Settings
-GET         /settings                controllers.admin.SettingsController.settings
-POST        /settings                controllers.admin.SettingsController.saveSettings
+GET         /settings                          controllers.admin.SettingsController.settings
+POST        /settings                          controllers.admin.SettingsController.saveSettings
 
 # Sandboxes
-GET         /sandbox                 controllers.admin.SandboxController.list
-GET         /sandbox/:key            controllers.admin.SandboxController.sandbox(key)
+GET         /sandbox                           controllers.admin.SandboxController.list
+GET         /sandbox/:key                      controllers.admin.SandboxController.sandbox(key)

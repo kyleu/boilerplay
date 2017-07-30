@@ -1,6 +1,6 @@
 @(user: models.user.User, users: Seq[models.user.User])(
     implicit request: Request[AnyContent], session: Session, flash: Flash
-)@layout.admin(user, "users", "User Management") {
+)@layout.admin(user, "explore", "User Management") {
   <div class="content-panel">
     <div class="panel-title"><i class="fa @models.template.Icons.user"></i> User Management</div>
 

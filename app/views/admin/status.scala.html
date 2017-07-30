@@ -7,8 +7,12 @@
       <div class="col s12">
         <ul class="collection">
           <li class="collection-item">
-            <a href="@controllers.admin.routes.MetricsController.showMetrics()" class="theme-text">Configuration</a>
-            <div>Metrics</div>
+            <a class="theme-text" href="@controllers.admin.routes.SettingsController.settings()">System Preferences</a>
+            <div><em>Edit system preferences.</em></div>
+          </li>
+          <li class="collection-item">
+            <a class="theme-text" href="@controllers.admin.routes.MetricsController.showMetrics()">Configuration</a>
+            <div>View system metrics.</div>
           </li>
         </ul>
       </div>

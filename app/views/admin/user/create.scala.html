@@ -1,6 +1,6 @@
 @(self: models.user.User)(
     implicit request: Request[AnyContent], session: Session, flash: Flash
-)@layout.admin(self, "users", "New User") {
+)@layout.admin(self, "explore", "New User") {
   <form action="@controllers.admin.routes.UserCreateController.newUser()" method="post">
     <div class="content-panel">
       <div class="panel-title">

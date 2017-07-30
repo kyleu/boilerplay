@@ -1,6 +1,6 @@
 @(self: models.user.User, user: models.user.User)(
     implicit request: Request[AnyContent], session: Session, flash: Flash
-)@layout.admin(self, "users", "Edit User") {
+)@layout.admin(self, "explore", "Edit User") {
   <form action="@controllers.admin.routes.UserEditController.save(user.id)" method="post">
     <div class="content-panel">
       <div class="panel-title">
