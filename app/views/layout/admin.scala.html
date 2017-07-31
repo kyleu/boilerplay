@@ -4,17 +4,15 @@
   @views.html.layout.adminMenu(user, activeSection)
 
   <main>
-    <div class="static-container container">
-      @flash.get("error").map { err =>
-        <div class="flash-error z-depth-1">@err</div>
-      }
-      @flash.get("success").map { success =>
-        <div class="flash-success z-depth-1">@success</div>
-      }
-      <div class="row">
-        <div class="col s12">
-          @content
-        </div>
+    @flash.get("error").map { err =>
+      <div class="flash-error z-depth-1">@err</div>
+    }
+    @flash.get("success").map { success =>
+      <div class="flash-success z-depth-1">@success</div>
+    }
+    <div class="row">
+      <div class="col s12">
+        @content
       </div>
     </div>
   </main>
