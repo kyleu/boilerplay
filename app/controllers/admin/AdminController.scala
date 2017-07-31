@@ -12,7 +12,7 @@ class AdminController @javax.inject.Inject() (override val app: Application) ext
   }
 
   def explore = withAdminSession("admin.explore") { implicit request =>
-    Future.successful(Ok(views.html.admin.explore(request.identity)))
+    Future.successful(Ok(views.html.admin.explore.explore(request.identity)))
   }
 
   def status = withAdminSession("admin.status") { implicit request =>

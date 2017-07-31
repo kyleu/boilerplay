@@ -17,9 +17,9 @@ class UserEditController @javax.inject.Inject() (
     userService: UserService,
     userSearchService: UserSearchService
 ) extends BaseController {
-  def users = withAdminSession("admin-users") { implicit request =>
+  def users(q: Option[String] = None, limit: Option[Int] = None, offset: Option[Int] = None) = withAdminSession("admin-users") { implicit request =>
     userService.getAll.map { users =>
-      Ok(views.html.admin.user.list(request.identity, users))
+      Ok(views.html.admin.user.list(request.identity, q, users, limit.getOrElse(100), offset.getOrElse(0)))
     }
   }
 

@@ -1,44 +1,41 @@
-@(user: models.user.User, users: Seq[models.user.User])(
+@(user: models.user.User, q: Option[String], users: Seq[models.user.User], limit: Int, offset: Int)(
     implicit request: Request[AnyContent], session: Session, flash: Flash
-)@layout.admin(user, "explore", "User Management") {
-  <div class="content-panel">
-    <div class="panel-title"><i class="fa @models.template.Icons.user"></i> User Management</div>
+)
 
-    <div class="row">
-      <table class="bordered highlight">
-        <thead>
-          <tr>
-            <th>Username</th>
-            <th>Email</th>
-            <th>Theme</th>
-            <th>Role</th>
-            <th>Created</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          @users.map { u =>
-            <tr>
-              <td>
-                <a class="theme-text" href="@controllers.admin.routes.UserEditController.view(u.id)">@u.username</a>
-              </td>
-              <td>@u.profile.providerKey</td>
-              <td><div class="theme-swatch" style="background-color: @u.preferences.theme.color"></div></td>
-              <td>@u.role</td>
-              <td>@util.DateUtils.niceDate(u.created.toLocalDate)</td>
-              <td>
-                @defining(s"return confirm('Are you certain you want to delete this user (${u.username})?');") { onClick =>
-                  <a class="theme-text" onclick="@onClick" href="@controllers.admin.routes.UserEditController.remove(u.id)"><i class="fa fa-close"></i></a>
-                }
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
-    </div>
-  </div>
-  <div class="panel-action">
-    <a class="right-link theme-text" href="@controllers.admin.routes.UserCreateController.newUser()">New User</a>
-    <a class="theme-text" href="@controllers.admin.routes.AdminController.index()">Back</a>
-  </div>
+@resultFor(user: models.user.User) = {
+  <tr>
+    <td><a class="theme-text" href="@controllers.admin.routes.UserEditController.view(user.id)">@user.id</a></td>
+    <td>@user.username</td>
+    <td>@user.profile.providerKey</td>
+    <td><div class="theme-swatch" style="background-color: @user.preferences.theme.color"></div></td>
+    <td>@user.role</td>
+    <td>@util.DateUtils.niceDate(user.created.toLocalDate)</td>
+    <td>
+    @defining(s"return confirm('Are you certain you want to delete this user (${user.username})?');") { onClick =>
+      <a class="theme-text" onclick="@onClick" href="@controllers.admin.routes.UserEditController.remove(user.id)"><i class="fa fa-close"></i></a>
+    }
+    </td>
+  </tr>
 }
+
+@views.html.admin.explore.list(
+  user = user,
+  model = "User",
+  modelPlural = "Users",
+  icon = models.template.Icons.user,
+  cols = Seq(
+    "id" -> "ID",
+    "username" -> "Username",
+    "provider" -> "Provider",
+    "theme" -> "Theme",
+    "role" -> "Role",
+    "created" -> "Created",
+    "actions" -> ""
+  ),
+  rows = users.map(resultFor),
+  nextUrl = controllers.admin.routes.UserEditController.users(q, Some(limit), Some(offset + limit)),
+  limit = limit,
+  offset = offset,
+  showSearch = true,
+  q = q
+)
