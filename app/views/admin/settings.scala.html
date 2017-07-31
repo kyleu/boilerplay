@@ -3,7 +3,7 @@
 
 @settingPanel(key: models.settings.SettingKey, colWidth: Int = 12)(content: Html) = {
   <div class="col s12 m@colWidth">
-    <div class="z-depth-1 setting-panel">
+    <div class="setting-panel">
       <strong>@key.title</strong>
       <div class="setting-input">@content</div>
       <em>@key.description</em>

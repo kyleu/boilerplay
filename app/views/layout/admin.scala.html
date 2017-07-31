@@ -1,45 +1,7 @@
 @(user: models.user.User, activeSection: String, title: String, scripts: Seq[String] = Nil)(content: Html)(
     implicit request: Request[AnyContent], session: Session, flash: Flash
 )@layout.materialize(user = Some(user), title = title, scripts = scripts) {
-  <header>
-    @views.html.layout.themeStyles(user.preferences.theme)
-
-    @views.html.components.userDropdown(Some(user))
-
-    <nav id="topnav" class="theme">
-      <a href="@controllers.routes.HomeController.home()" class="brand-logo center">@util.Config.projectName</a>
-
-      <ul class="left hide-on-small-only">
-        @if(activeSection == "explore") {
-          <li class="active"><a class="dropdown-button" href="@controllers.admin.routes.AdminController.explore()" data-activates="dropdown-explore">Explore</a></li>
-        } else {
-          <li><a class="dropdown-button" href="@controllers.admin.routes.AdminController.explore()" data-activates="dropdown-explore">Explore</a></li>
-        }
-        @if(activeSection == "graphql") {
-          <li class="active"><a href="@controllers.admin.graphql.routes.GraphQLController.graphql(None)">GraphQL</a></li>
-        } else {
-          <li><a href="@controllers.admin.graphql.routes.GraphQLController.graphql(None)">GraphQL</a></li>
-        }
-        @if(activeSection == "status") {
-          <li class="active"><a href="@controllers.admin.routes.AdminController.status()">Status</a></li>
-        } else {
-          <li><a href="@controllers.admin.routes.AdminController.status()">Status</a></li>
-        }
-      </ul>
-
-      <ul class="right hide-on-small-only">
-        <li><a class="dropdown-button" href="@routes.ProfileController.view()" data-activates="dropdown-user">
-          @user.username <i id="user-dropdown-toggle" class="fa @models.template.Icons.dropdownToggle right"></i>
-        </a></li>
-      </ul>
-    </nav>
-  </header>
-
-  <ul id="dropdown-explore" class="dropdown-content">
-    <li><a href="@controllers.admin.routes.UserEditController.users()">Users</a></li>
-    <li><a href="@controllers.admin.routes.UserEditController.users()">Users 2</a></li>
-    <li><a href="@controllers.admin.routes.UserEditController.users()">Users 3</a></li>
-  </ul>
+  @views.html.layout.adminMenu(user, activeSection)
 
   <main>
     <div class="static-container container">

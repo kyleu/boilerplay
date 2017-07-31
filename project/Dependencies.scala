@@ -24,7 +24,7 @@ object Dependencies {
   }
 
   object Authentication {
-    private[this] val version = "5.0.0-RC2"
+    private[this] val version = "5.0.0-RC3"
     val silhouette = "com.mohiva" %% "play-silhouette" % version
     val hasher = "com.mohiva" %% "play-silhouette-password-bcrypt" % version
     val persistence = "com.mohiva" %% "play-silhouette-persistence" % version
