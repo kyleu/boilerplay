@@ -16,14 +16,14 @@ GET         /explore                           controllers.admin.AdminController
 # Other models...
 
 # Users
-GET         /user/new                         controllers.admin.UserCreateController.newUser()
-POST        /user/new                         controllers.admin.UserCreateController.saveNewUser()
+GET         /user/new                          controllers.admin.UserCreateController.newUser()
+POST        /user/new                          controllers.admin.UserCreateController.saveNewUser()
 
-GET         /user                             controllers.admin.UserEditController.users
-GET         /user/:id                         controllers.admin.UserEditController.view(id: java.util.UUID)
-GET         /user/:id/edit                    controllers.admin.UserEditController.edit(id: java.util.UUID)
-POST        /user/:id/edit                    controllers.admin.UserEditController.save(id: java.util.UUID)
-GET         /user/:id/remove                  controllers.admin.UserEditController.remove(id: java.util.UUID)
+GET         /user                              controllers.admin.UserEditController.users
+GET         /user/:id                          controllers.admin.UserEditController.view(id: java.util.UUID)
+GET         /user/:id/edit                     controllers.admin.UserEditController.edit(id: java.util.UUID)
+POST        /user/:id/edit                     controllers.admin.UserEditController.save(id: java.util.UUID)
+GET         /user/:id/remove                   controllers.admin.UserEditController.remove(id: java.util.UUID)
 
 # Settings
 GET         /settings                          controllers.admin.SettingsController.settings
