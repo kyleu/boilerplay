@@ -4,7 +4,6 @@ import com.mohiva.play.silhouette.api.actions.{SecuredRequest, UserAwareRequest}
 import models.auth.AuthEnv
 import util.FutureUtils.defaultContext
 import play.api.mvc._
-import services.user.UserService
 import util.metrics.Instrumented
 import util.{Application, Logging}
 
@@ -41,13 +40,13 @@ abstract class BaseController() extends InjectedController with Instrumented wit
             val auth = request.authenticator.getOrElse(throw new IllegalStateException("Somehow, you're not logged in."))
             block(SecuredRequest(u, auth, request))
           case None =>
-            val result = UserService.instance.map(_.userCount.map { count =>
+            val result = app.userService.userCount.map { count =>
               if (count == 0) {
                 Redirect(controllers.auth.routes.RegistrationController.registrationForm())
               } else {
                 Redirect(controllers.auth.routes.AuthenticationController.signInForm())
               }
-            }).getOrElse(Future.successful(Redirect(controllers.auth.routes.AuthenticationController.signInForm())))
+            }
 
             val flashed = result.map(_.flashing(
               "error" -> s"You must sign in or register before accessing ${util.Config.projectName}."

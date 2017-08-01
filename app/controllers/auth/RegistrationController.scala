@@ -19,7 +19,6 @@ import scala.concurrent.Future
 @javax.inject.Singleton
 class RegistrationController @javax.inject.Inject() (
     override val app: Application,
-    userService: UserService,
     userSearchService: UserSearchService,
     authInfoRepository: AuthInfoRepository,
     hasher: PasswordHasher
@@ -61,7 +60,7 @@ class RegistrationController @javax.inject.Inject() (
               profile = loginInfo,
               role = role
             )
-            val userSavedFuture = userService.save(user)
+            val userSavedFuture = app.userService.save(user)
             val result = request.session.get("returnUrl") match {
               case Some(url) => Redirect(url).withSession(request.session - "returnUrl")
               case None => Redirect(controllers.routes.HomeController.home())

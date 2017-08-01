@@ -5,7 +5,7 @@ import java.util.UUID
 import controllers.BaseController
 import models.user.Role
 import util.FutureUtils.defaultContext
-import services.user.{UserSearchService, UserService}
+import services.user.UserSearchService
 import util.Application
 import util.web.FormUtils
 
@@ -14,26 +14,29 @@ import scala.concurrent.Future
 @javax.inject.Singleton
 class UserEditController @javax.inject.Inject() (
     override val app: Application,
-    userService: UserService,
     userSearchService: UserSearchService
 ) extends BaseController {
   def users(q: Option[String] = None, limit: Option[Int] = None, offset: Option[Int] = None) = withAdminSession("admin-users") { implicit request =>
-    userService.getAll.map { users =>
-      Ok(views.html.admin.user.list(request.identity, q, users, limit.getOrElse(100), offset.getOrElse(0)))
+    val f = q match {
+      case Some(query) if query.nonEmpty => app.userService.search(query, limit.orElse(Some(100)), offset)
+      case _ => app.userService.getAll(limit.orElse(Some(100)), offset)
+    }
+    f.map { users =>
+      Ok(views.html.admin.user.userList(request.identity, q, users, limit.getOrElse(100), offset.getOrElse(0)))
     }
   }
 
   def view(id: UUID) = withAdminSession("admin-user-view") { implicit request =>
     userSearchService.retrieve(id).map { userOpt =>
       val user = userOpt.getOrElse(throw new IllegalStateException(s"Invalid user [$id]."))
-      Ok(views.html.admin.user.view(request.identity, user))
+      Ok(views.html.admin.user.userView(request.identity, user))
     }
   }
 
   def edit(id: UUID) = withAdminSession("admin-user-edit") { implicit request =>
     userSearchService.retrieve(id).map { userOpt =>
       val user = userOpt.getOrElse(throw new IllegalStateException(s"Invalid user [$id]."))
-      Ok(views.html.admin.user.edit(request.identity, user))
+      Ok(views.html.admin.user.userEdit(request.identity, user))
     }
   }
 
@@ -63,7 +66,7 @@ class UserEditController @javax.inject.Inject() (
       } else if (isSelf && (role != Role.Admin) && user.role == Role.Admin) {
         Future.successful(Redirect(controllers.admin.routes.UserEditController.edit(id)).flashing("error" -> "You cannot remove your own admin role."))
       } else {
-        userService.update(id, newUsername, newEmail, newPassword, role, user.profile.providerKey).map { _ =>
+        app.userService.update(id, newUsername, newEmail, newPassword, role, user.profile.providerKey).map { _ =>
           Redirect(controllers.admin.routes.UserEditController.view(id))
         }
       }
@@ -71,7 +74,7 @@ class UserEditController @javax.inject.Inject() (
   }
 
   def remove(id: UUID) = withAdminSession("admin-user-remove") { implicit request =>
-    userService.remove(id).map { _ =>
+    app.userService.remove(id).map { _ =>
       Redirect(controllers.admin.routes.UserEditController.users())
     }
   }

@@ -15,7 +15,6 @@ import scala.concurrent.Future
 @javax.inject.Singleton
 class ProfileController @javax.inject.Inject() (
     override val app: Application,
-    userService: UserService,
     authInfoRepository: AuthInfoRepository,
     credentialsProvider: CredentialsProvider,
     hasher: PasswordHasher
@@ -32,7 +31,7 @@ class ProfileController @javax.inject.Inject() (
           theme = profileData.theme
         )
         val newUser = request.identity.copy(username = profileData.username, preferences = newPrefs)
-        userService.save(newUser, update = true)
+        app.userService.save(newUser, update = true)
         Future.successful(Redirect(controllers.routes.HomeController.home()))
       }
     )

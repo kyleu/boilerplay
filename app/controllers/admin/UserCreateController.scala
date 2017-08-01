@@ -18,12 +18,11 @@ import scala.concurrent.Future
 @javax.inject.Singleton
 class UserCreateController @javax.inject.Inject() (
     override val app: Application,
-    userService: UserService,
     authInfoRepository: AuthInfoRepository,
     hasher: PasswordHasher
 ) extends BaseController {
   def newUser() = withAdminSession("admin-user-new") { implicit request =>
-    Future.successful(Ok(views.html.admin.user.create(request.identity)))
+    Future.successful(Ok(views.html.admin.user.userCreate(request.identity)))
   }
 
   def saveNewUser() = withAdminSession("admin-user-save-new") { implicit request =>
@@ -48,7 +47,7 @@ class UserCreateController @javax.inject.Inject() (
         profile = loginInfo,
         role = role
       )
-      val userSavedFuture = userService.save(user)
+      val userSavedFuture = app.userService.save(user)
       val authInfo = hasher.hash(form("password"))
       for {
         _ <- authInfoRepository.add(loginInfo, authInfo)

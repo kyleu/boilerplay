@@ -14,17 +14,8 @@ import util.cache.UserCache
 
 import scala.concurrent.Future
 
-object UserService {
-  var instance: Option[UserService] = None
-}
-
 @javax.inject.Singleton
 class UserService @javax.inject.Inject() (hasher: PasswordHasher) extends Logging {
-  UserService.instance match {
-    case Some(_) => throw new IllegalStateException("User Service already initialized.")
-    case None => UserService.instance = Some(this)
-  }
-
   def getById(id: UUID) = Database.query(UserQueries.getById(Seq(id)))
   def userCount = Database.query(UserQueries.count)
   def isUsernameInUse(name: String) = Database.query(UserQueries.IsUsernameInUse(name))
@@ -72,7 +63,12 @@ class UserService @javax.inject.Inject() (hasher: PasswordHasher) extends Loggin
     }
   }
 
-  def getAll = Database.query(UserQueries.getAll("\"username\""))
+  def getAll(limit: Option[Int] = None, offset: Option[Int] = None) = Database.query(UserQueries.getAll(Some("\"username\""), limit, offset))
+  def search(q: String, limit: Option[Int], offset: Option[Int]) = try {
+    getById(UUID.fromString(q)).map(_.toSeq)
+  } catch {
+    case _: NumberFormatException => Database.query(UserQueries.search(q, Some("id desc"), limit, offset))
+  }
 
   def update(id: UUID, username: String, email: String, password: Option[String], role: Role, originalEmail: String) = {
     Database.execute(UserQueries.UpdateFields(id, username, email, role)).flatMap { _ =>
