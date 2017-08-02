@@ -12,10 +12,7 @@ import util.web.FormUtils
 import scala.concurrent.Future
 
 @javax.inject.Singleton
-class UserEditController @javax.inject.Inject() (
-    override val app: Application,
-    userSearchService: UserSearchService
-) extends BaseController {
+class UserEditController @javax.inject.Inject() (override val app: Application, userSearchService: UserSearchService) extends BaseController {
   def users(q: Option[String] = None, limit: Option[Int] = None, offset: Option[Int] = None) = withAdminSession("admin-users") { implicit request =>
     val f = q match {
       case Some(query) if query.nonEmpty => app.userService.search(query, limit.orElse(Some(100)), offset)

@@ -17,33 +17,43 @@
       @if(showSearch) {
         <div class="right">
           <form action="" method="get">
-            <input type="text" name="q" placeholder="Search" value="@q.getOrElse("")" />
+            <input type="text" name="q" placeholder="Search @modelPlural" value="@q.getOrElse("")" />
           </form>
         </div>
       }
-      <h5><i class="fa @icon" style="margin-right: 6px;"></i> @{modelPlural}</h5>
+      <h5>
+        <i class="fa @icon" style="margin-right: 6px;"></i>
+        @{modelPlural}
+        @q.map { query =>
+          @if(query.trim.nonEmpty) {
+            matching [@query]
+          }
+        }
+      </h5>
       @if(offset > 0) {
         <em>Page @((offset / limit) + 1)</em>
       }
     </div>
-    <table>
-      <thead>
-        @cols.map { col =>
-          <th>@col._2</th>
-        }
-      </thead>
-      <tbody>
-        @rows.map { row =>
-          @row
-        }
-        @if(rows.isEmpty) {
-          <th colspan="@cols.length">
-            The system isn't managing any @{modelPlural.toLowerCase}.
-          </th>
-        }
+    <div class="collection-item">
+      <table>
+        <thead>
+          @cols.map { col =>
+            <th>@col._2</th>
+          }
+        </thead>
+        <tbody>
+          @rows.map { row =>
+            @row
+          }
+          @if(rows.isEmpty) {
+            <th colspan="@cols.length">
+              The system isn't managing any @{modelPlural.toLowerCase}.
+            </th>
+          }
 
-      </tbody>
-    </table>
+        </tbody>
+      </table>
+    </div>
   </div>
   @if(rows.size >= limit) {
     <div  style="text-align: center;"><a href="@nextUrl" class="theme-text">Next Page</a></div>

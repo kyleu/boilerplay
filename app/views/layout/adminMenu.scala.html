@@ -25,10 +25,19 @@
       }
     </ul>
 
-    <ul class="right hide-on-small-only">
+    <ul class="right hide-on-small-only nav-name">
       <li><a class="dropdown-button" href="@routes.ProfileController.view()" data-activates="dropdown-user">
         @user.username <i id="user-dropdown-toggle" class="fa @models.template.Icons.dropdownToggle right"></i>
       </a></li>
+    </ul>
+
+    <ul class="search-input input-field right">
+      <form action="@controllers.admin.routes.SearchController.search()" method="get">
+        <input id="search-input" name="q" type="search" />
+        <label for="search-input">
+          <i class="fa fa-search"></i>
+        </label>
+      </form>
     </ul>
   </nav>
 </header>

@@ -67,7 +67,7 @@ class UserService @javax.inject.Inject() (hasher: PasswordHasher) extends Loggin
   def search(q: String, limit: Option[Int], offset: Option[Int]) = try {
     getById(UUID.fromString(q)).map(_.toSeq)
   } catch {
-    case _: NumberFormatException => Database.query(UserQueries.search(q, Some("id desc"), limit, offset))
+    case _: IllegalArgumentException => Database.query(UserQueries.search(q, Some("id desc"), limit, offset))
   }
 
   def update(id: UUID, username: String, email: String, password: Option[String], role: Role, originalEmail: String) = {

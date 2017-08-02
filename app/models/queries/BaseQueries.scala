@@ -87,9 +87,9 @@ trait BaseQueries[T] extends JodaDateUtils {
   }, values = if (q.isEmpty) { Seq.empty[Any] } else { searchColumns.map(_ => "%" + q + "%") })
 
   protected case class Search(q: String, orderBy: Option[String], limit: Option[Int], offset: Option[Int]) extends Query[List[T]] {
-    private[this] val whereClause = if (q.isEmpty) { None } else { Some(searchColumns.map(c => s""""$c" like ?""").mkString(" or ")) }
+    private[this] val whereClause = if (q.isEmpty) { None } else { Some(searchColumns.map(c => s"""lower($c) like ?""").mkString(" or ")) }
     override val sql = getSql(whereClause, None, orderBy, limit, offset)
-    override val values = if (q.isEmpty) { Seq.empty } else { searchColumns.map(_ => "%" + q + "%") }
+    override val values = if (q.isEmpty) { Seq.empty } else { searchColumns.map(_ => "%" + q.toLowerCase + "%") }
     override def reduce(rows: Iterator[Row]) = rows.map(fromRow).toList
   }
 

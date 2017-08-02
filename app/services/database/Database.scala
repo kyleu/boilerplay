@@ -46,7 +46,7 @@ object Database extends Instrumented {
     val ret = metrics.timer(s"execute.$name").timeFuture {
       conn.getOrElse(pool).sendPreparedStatement(prependComment(statement, statement.sql), statement.values).map(_.rowsAffected.toInt)
     }
-    ret.failed.foreach(x => log.error(s"Error [${x.getClass.getSimpleName}] encountered while executing statement [$name].", x))
+    ret.failed.foreach(x => log.error(s"Error [${x.getClass.getSimpleName}] encountered while executing statement [$name] with SQL [${statement.sql}].", x))
     ret
   }
 
@@ -58,7 +58,7 @@ object Database extends Instrumented {
         query.handle(r.rows.getOrElse(throw new IllegalStateException()))
       }
     }
-    ret.failed.foreach(x => log.error(s"Error [${x.getClass.getSimpleName}] encountered while executing query [$name].", x))
+    ret.failed.foreach(x => log.error(s"Error [${x.getClass.getSimpleName}] encountered while executing query [$name] with SQL [${query.sql}].", x))
     ret
   }
 
@@ -67,7 +67,7 @@ object Database extends Instrumented {
     val ret = metrics.timer(s"raw.$name").timeFuture {
       conn.getOrElse(pool).sendQuery(prependComment(name, sql))
     }
-    ret.failed.foreach(x => log.error(s"Error [${x.getClass.getSimpleName}] encountered while executing raw query [$name].", x))
+    ret.failed.foreach(x => log.error(s"Error [${x.getClass.getSimpleName}] encountered while executing raw query [$name] with SQL [$sql].", x))
     ret
   }
 

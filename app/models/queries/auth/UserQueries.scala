@@ -11,7 +11,7 @@ import util.JsonSerializers
 object UserQueries extends BaseQueries[User] {
   override protected val tableName = "users"
   override protected val columns = Seq("id", "username", "prefs", "email", "role", "created")
-  override protected val searchColumns = Seq("id::text", "username")
+  override protected val searchColumns = Seq("id::text", "username", "email")
 
   val insert = Insert
   val getById = GetById
