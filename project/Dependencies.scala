@@ -54,7 +54,7 @@ object Dependencies {
   }
 
   object Metrics {
-    val version = "3.2.3"
+    val version = "3.2.4"
     val metrics = "nl.grons" %% "metrics-scala" % "3.5.9"
     val jvm = "io.dropwizard.metrics" % "metrics-jvm" % version
     val ehcache = "io.dropwizard.metrics" % "metrics-ehcache" % version intransitive()
