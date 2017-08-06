@@ -14,7 +14,8 @@ POST        /graphql                           controllers.admin.graphql.GraphQL
 GET         /search                            controllers.admin.SearchController.search(q ?= "")
 GET         /explore                           controllers.admin.AdminController.explore
 
-# Other models...
+# Start model routes
+# End model routes
 
 # Users
 GET         /user/new                          controllers.admin.UserCreateController.newUser()

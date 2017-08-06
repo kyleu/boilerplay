@@ -18,4 +18,7 @@ object Icons {
   val dropdownToggle = "fa-angle-down"
 
   val user = "fa-user"
+
+  // Start model icons
+  // End model icons
 }

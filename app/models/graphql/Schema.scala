@@ -2,13 +2,25 @@ package models.graphql
 
 import models.sandbox.SandboxSchema
 import models.user.UserSchema
-import sangria.execution.deferred.DeferredResolver
+import sangria.execution.deferred.{DeferredResolver, Fetcher}
 import sangria.schema._
 
 object Schema {
-  val resolver: DeferredResolver[GraphQLContext] = DeferredResolver.fetchers()
+  val modelFetchers: Seq[Fetcher[GraphQLContext, _, _, _]] = {
+    // Start model fetchers
+    Nil
+    // End model fetchers
+  }
 
-  val queryFields = UserSchema.queryFields ++ SandboxSchema.queryFields // ++ others
+  val resolver: DeferredResolver[GraphQLContext] = DeferredResolver.fetchers(modelFetchers: _*)
+
+  val modelQueryFields = {
+    // Start model query fields
+    Nil
+    // End model query fields
+  }
+
+  val queryFields = UserSchema.queryFields ++ SandboxSchema.queryFields ++ modelQueryFields
 
   val queryType = ObjectType(
     name = "Query",
@@ -16,7 +28,13 @@ object Schema {
     fields = queryFields
   )
 
-  val mutationFields = SandboxSchema.mutationFields // ++ others
+  val modelMutationFields = {
+    // Start model mutation fields
+    Nil
+    // End model mutation fields
+  }
+
+  val mutationFields = SandboxSchema.mutationFields ++ modelMutationFields
 
   val mutationType = ObjectType(
     name = "Mutation",
