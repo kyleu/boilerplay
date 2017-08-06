@@ -3,6 +3,7 @@ package controllers.admin
 import java.util.UUID
 
 import controllers.BaseController
+import play.twirl.api.Html
 import util.Application
 import util.FutureUtils.defaultContext
 
@@ -27,23 +28,35 @@ class SearchController @javax.inject.Inject() (override val app: Application) ex
   }
 
   private[this] def searchUuid(q: String, id: UUID) = {
+    // Start uuid searches
+    val uuidSearches = Seq.empty[Future[Seq[Html]]]
+    // End uuid searches
+
     val userF = app.userService.getById(id).map {
       case Some(u) => Seq(views.html.admin.user.userSearchResult(u, s"User [${u.username}] matched id [$q]."))
       case None => Nil
     }
 
-    Future.sequence(Seq(userF)).map(_.flatten)
+    Future.sequence(Seq(userF) ++ uuidSearches).map(_.flatten)
   }
 
   private[this] def searchInt(q: String, id: Int) = {
-    Future.successful(Nil)
+    // Start int searches
+    val intSearches = Seq.empty[Future[Seq[Html]]]
+    // End int searches
+
+    Future.sequence(intSearches).map(_.flatten)
   }
 
   private[this] def searchString(q: String) = {
+    // Start string searches
+    val stringSearches = Seq.empty[Future[Seq[Html]]]
+    // End string searches
+
     val userF = app.userService.searchExact(q, Some(10), None).map { users =>
       users.map(u => views.html.admin.user.userSearchResult(u, s"User [${u.username}] matched [$q]."))
     }
 
-    Future.sequence(Seq(userF)).map(_.flatten)
+    Future.sequence(Seq(userF) ++ stringSearches).map(_.flatten)
   }
 }
