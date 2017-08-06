@@ -18,6 +18,7 @@ import play.routes.compiler.InjectedRoutesGenerator
 import play.sbt.PlayImport.PlayKeys
 import play.sbt.routes.RoutesKeys.routesGenerator
 import play.sbt.PlayImport.PlayKeys._
+import play.sbt.routes.RoutesKeys
 import webscalajs.WebScalaJS.autoImport._
 import sbt.Keys._
 import sbt.Project.projectToRef
@@ -48,6 +49,8 @@ object Server {
     scalaJSProjects := Seq(Client.client),
     routesGenerator := InjectedRoutesGenerator,
     externalizeResources := false,
+
+    RoutesKeys.routesImport += "util.web.QueryStringUtils._",
 
     // Sbt-Web
     JsEngineKeys.engineType := JsEngineKeys.EngineType.Node,

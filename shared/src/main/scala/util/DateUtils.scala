@@ -20,6 +20,7 @@ object DateUtils {
   def fromMillis(millis: Long) = Instant.ofEpochMilli(millis).atZone(ZoneId.systemDefault).toLocalDateTime
 
   def toIsoString(ldt: LocalDateTime) = isoFmt.format(ldt)
+  def fromIsoString(s: String) = LocalDateTime.from(isoFmt.parse(s))
 
   def niceDate(d: LocalDate) = niceDateFmt.format(d)
   def niceTime(t: LocalTime) = niceTimeFmt.format(t)
