@@ -11,13 +11,14 @@ import util.JsonSerializers
 object UserQueries extends BaseQueries[User] {
   override protected val tableName = "users"
   override protected val columns = Seq("id", "username", "prefs", "email", "role", "created")
-  override protected val searchColumns = Seq("id::text", "username", "email")
+  override protected val searchColumns = Seq("id", "username", "email")
 
   val insert = Insert
   val getById = GetById
   def getAll(orderBy: Option[String], limit: Option[Int], offset: Option[Int]) = GetAll(orderBy = orderBy, limit = limit, offset = offset)
   val count = new Count(s"""select count(*) as c from "$tableName" """)
   val search = Search
+  val searchExact = SearchExact
   val removeById = RemoveById
 
   case class IsUsernameInUse(name: String) extends SingleRowQuery[Boolean] {

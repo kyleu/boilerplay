@@ -9,10 +9,8 @@ object BaseQueries {
 trait BaseQueries[T] extends JodaDateUtils {
   protected def tableName: String = "_invalid_"
   protected def idColumns = Seq("id")
-
   protected def columns: Seq[String]
   protected def searchColumns: Seq[String] = Nil
-
   protected def fromRow(row: Row): T
   protected def toDataSeq(t: T): Seq[Any]
 
@@ -25,20 +23,15 @@ trait BaseQueries[T] extends JodaDateUtils {
     update "$tableName" set ${updateColumns.map(x => s"$x = ?").mkString(", ")}${additionalUpdates.map(x => s", $x").getOrElse("")} where $idWhereClause
   """)
 
-  protected def getSql(
-    whereClause: Option[String] = None,
-    groupBy: Option[String] = None,
-    orderBy: Option[String] = None,
-    limit: Option[Int] = None,
-    offset: Option[Int] = None
-  ) = BaseQueries.trim(s"""
-    select $quotedColumns from "$tableName"
-    ${whereClause.map(x => s" where $x").getOrElse("")}
-    ${groupBy.map(x => s" group by $x").getOrElse("")}
-    ${orderBy.map(x => s" order by $x").getOrElse("")}
-    ${limit.map(x => s" limit $x").getOrElse("")}
-    ${offset.map(x => s" offset $x").getOrElse("")}
-  """)
+  protected def getSql(whereClause: Option[String] = None, orderBy: Option[String] = None, limit: Option[Int] = None, offset: Option[Int] = None) = {
+    BaseQueries.trim(s"""
+      select $quotedColumns from "$tableName"
+      ${whereClause.map(x => s" where $x").getOrElse("")}
+      ${orderBy.map(x => s" order by $x").getOrElse("")}
+      ${limit.map(x => s" limit $x").getOrElse("")}
+      ${offset.map(x => s" offset $x").getOrElse("")}
+    """)
+  }
 
   protected case class GetById(override val values: Seq[Any]) extends FlatSingleRowQuery[T] {
     override val sql = s"""select $quotedColumns from "$tableName" where $idWhereClause"""
@@ -86,9 +79,16 @@ trait BaseQueries[T] extends JodaDateUtils {
     s"""select count(*) as c from "$tableName" $searchWhere ${groupBy.map(x => s" group by $x").getOrElse("")}"""
   }, values = if (q.isEmpty) { Seq.empty[Any] } else { searchColumns.map(_ => "%" + q + "%") })
 
+  protected case class SearchExact(q: String, orderBy: Option[String], limit: Option[Int], offset: Option[Int]) extends Query[List[T]] {
+    private[this] val whereClause = if (q.isEmpty) { None } else { Some(searchColumns.map(c => s"""lower("$c"::text) = ?""").mkString(" or ")) }
+    override val sql = getSql(whereClause = whereClause, orderBy = orderBy, limit = limit, offset = offset)
+    override val values = if (q.isEmpty) { Seq.empty } else { searchColumns.map(_ => q.toLowerCase) }
+    override def reduce(rows: Iterator[Row]) = rows.map(fromRow).toList
+  }
+
   protected case class Search(q: String, orderBy: Option[String], limit: Option[Int], offset: Option[Int]) extends Query[List[T]] {
-    private[this] val whereClause = if (q.isEmpty) { None } else { Some(searchColumns.map(c => s"""lower($c) like ?""").mkString(" or ")) }
-    override val sql = getSql(whereClause, None, orderBy, limit, offset)
+    private[this] val whereClause = if (q.isEmpty) { None } else { Some(searchColumns.map(c => s"""lower("$c"::text) like ?""").mkString(" or ")) }
+    override val sql = getSql(whereClause = whereClause, orderBy = orderBy, limit = limit, offset = offset)
     override val values = if (q.isEmpty) { Seq.empty } else { searchColumns.map(_ => "%" + q.toLowerCase + "%") }
     override def reduce(rows: Iterator[Row]) = rows.map(fromRow).toList
   }

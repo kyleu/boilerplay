@@ -70,6 +70,8 @@ class UserService @javax.inject.Inject() (hasher: PasswordHasher) extends Loggin
     case _: IllegalArgumentException => Database.query(UserQueries.search(q, Some("id desc"), limit, offset))
   }
 
+  def searchExact(q: String, limit: Option[Int], offset: Option[Int]) = Database.query(UserQueries.searchExact(q, Some("id desc"), limit, offset))
+
   def update(id: UUID, username: String, email: String, password: Option[String], role: Role, originalEmail: String) = {
     Database.execute(UserQueries.UpdateFields(id, username, email, role)).flatMap { _ =>
       val emailUpdated = if (email != originalEmail) {

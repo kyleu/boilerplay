@@ -26,16 +26,24 @@ class SearchController @javax.inject.Inject() (override val app: Application) ex
     }
   }
 
-  private[this] def searchUuid(q: String, id: UUID) = app.userService.getById(id).map {
-    case Some(u) => Seq(views.html.admin.user.userSearchResult(u, s"User [foo] matched id [$q]."))
-    case None => Nil
+  private[this] def searchUuid(q: String, id: UUID) = {
+    val userF = app.userService.getById(id).map {
+      case Some(u) => Seq(views.html.admin.user.userSearchResult(u, s"User [${u.username}] matched id [$q]."))
+      case None => Nil
+    }
+
+    Future.sequence(Seq(userF)).map(_.flatten)
   }
 
   private[this] def searchInt(q: String, id: Int) = {
     Future.successful(Nil)
   }
 
-  private[this] def searchString(q: String) = app.userService.getAll().map { users =>
-    users.map(u => views.html.admin.user.userSearchResult(u, s"User [foo] matched email [$q]."))
+  private[this] def searchString(q: String) = {
+    val userF = app.userService.searchExact(q, Some(10), None).map { users =>
+      users.map(u => views.html.admin.user.userSearchResult(u, s"User [${u.username}] matched [$q]."))
+    }
+
+    Future.sequence(Seq(userF)).map(_.flatten)
   }
 }
