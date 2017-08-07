@@ -1,0 +1,24 @@
+@(user: models.user.User, model: models.user.User)(
+    implicit request: Request[AnyContent], session: Session, flash: Flash
+)@layout.admin(user, "explore", s"User [${model.id}]") {
+  <div class="collection with-header">
+    <div class="collection-header">
+      <h5>
+        <i class="fa @models.template.Icons.user"></i>
+        User [@model.id]
+      </h5>
+    </div>
+    <div class="collection-item">
+      <table class="highlight">
+        <tbody>
+          <tr><th>id</th><td>@model.id</td></tr>
+          <tr><th>username</th><td>@model.username</td></tr>
+          <tr><th>prefs</th><td>@model.prefs</td></tr>
+          <tr><th>email</th><td>@model.email</td></tr>
+          <tr><th>role</th><td>@model.role</td></tr>
+          <tr><th>created</th><td>@model.created</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+}

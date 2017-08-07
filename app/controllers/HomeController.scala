@@ -3,6 +3,7 @@ package controllers
 import akka.actor.ActorSystem
 import akka.stream.Materializer
 import com.mohiva.play.silhouette.api.HandlerResult
+import models.user.RichUser
 import models.{RequestMessage, ResponseMessage}
 import util.FutureUtils.defaultContext
 import play.api.libs.streams.ActorFlow
@@ -31,7 +32,7 @@ class HomeController @javax.inject.Inject() (
       Future.successful(HandlerResult(Ok, Some(securedRequest.identity)))
     }.map {
       case HandlerResult(_, Some(user)) => Right(ActorFlow.actorRef { out =>
-        SocketService.props(None, app.supervisor, user, out, request.remoteAddress)
+        SocketService.props(None, app.supervisor, RichUser(user), out, request.remoteAddress)
       })
       case HandlerResult(_, None) => Left(Redirect(controllers.routes.HomeController.home()))
     }

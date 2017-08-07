@@ -3,7 +3,7 @@ package controllers.admin
 import java.util.UUID
 
 import controllers.BaseController
-import models.user.Role
+import models.user.{RichUser, Role}
 import util.FutureUtils.defaultContext
 import services.user.UserSearchService
 import util.Application
@@ -26,14 +26,14 @@ class UserEditController @javax.inject.Inject() (override val app: Application, 
   def view(id: UUID) = withAdminSession("admin-user-view") { implicit request =>
     userSearchService.retrieve(id).map { userOpt =>
       val user = userOpt.getOrElse(throw new IllegalStateException(s"Invalid user [$id]."))
-      Ok(views.html.admin.auth.userView(request.identity, user))
+      Ok(views.html.admin.auth.userView(request.identity, RichUser(user)))
     }
   }
 
   def edit(id: UUID) = withAdminSession("admin-user-edit") { implicit request =>
     userSearchService.retrieve(id).map { userOpt =>
       val user = userOpt.getOrElse(throw new IllegalStateException(s"Invalid user [$id]."))
-      Ok(views.html.admin.auth.userEdit(request.identity, user))
+      Ok(views.html.admin.auth.userEdit(request.identity, RichUser(user)))
     }
   }
 
@@ -60,10 +60,10 @@ class UserEditController @javax.inject.Inject() (override val app: Application, 
         Future.successful(Redirect(controllers.admin.routes.UserEditController.edit(id)).flashing("error" -> "Username is required."))
       } else if (newEmail.isEmpty) {
         Future.successful(Redirect(controllers.admin.routes.UserEditController.edit(id)).flashing("error" -> "Email Address is required."))
-      } else if (isSelf && (role != Role.Admin) && user.role == Role.Admin) {
+      } else if (isSelf && (role != Role.Admin) && user.role == Role.Admin.toString) {
         Future.successful(Redirect(controllers.admin.routes.UserEditController.edit(id)).flashing("error" -> "You cannot remove your own admin role."))
       } else {
-        app.authService.update(id, newUsername, newEmail, newPassword, role, user.profile.providerKey).map { _ =>
+        app.authService.update(id, newUsername, newEmail, newPassword, role, user.email).map { _ =>
           Redirect(controllers.admin.routes.UserEditController.view(id))
         }
       }

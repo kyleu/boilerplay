@@ -1,0 +1,25 @@
+@(user: models.user.User, q: Option[String], modelSeq: Seq[models.ddl.Ddl], limit: Int, offset: Int)(
+    implicit request: Request[AnyContent], session: Session, flash: Flash
+)
+
+@resultFor(model: models.ddl.Ddl) = {
+  <tr>
+    <td><a href="@controllers.admin.ddl.routes.DdlController.view(model.id)" class="theme-text">@model.id</a></td>
+  </tr>
+}
+
+@views.html.admin.explore.list(
+  user = user,
+  model = "Ddl",
+  modelPlural = "Ddl Models",
+  icon = models.template.Icons.ddl,
+  cols = Seq(
+    "id" -> "Id"
+  ),
+  rows = modelSeq.map(resultFor),
+  nextUrl = controllers.admin.ddl.routes.DdlController.list(q, Some(limit), Some(offset + limit)),
+  limit = limit,
+  offset = offset,
+  showSearch = true,
+  q = q
+)

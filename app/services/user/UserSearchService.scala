@@ -5,7 +5,7 @@ import java.util.UUID
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.services.IdentityService
 import models.queries.auth.AuthQueries
-import models.user.RichUser
+import models.user.User
 import services.auth.AuthService
 import util.FutureUtils.defaultContext
 import services.database.Database
@@ -15,11 +15,11 @@ import util.cache.UserCache
 import scala.concurrent.Future
 
 @javax.inject.Singleton
-class UserSearchService @javax.inject.Inject() (authService: AuthService) extends IdentityService[RichUser] with Logging {
+class UserSearchService @javax.inject.Inject() (authService: AuthService) extends IdentityService[User] with Logging {
   def retrieve(id: UUID) = UserCache.getUser(id) match {
     case Some(u) => Future.successful(Some(u))
-    case None => authService.getById(id).map { x =>
-      x.foreach(UserCache.cacheUser)
+    case None => UserService.getById(id).map { x =>
+      x.foreach(y => UserCache.cacheUser(y))
       x
     }
   }
@@ -34,8 +34,8 @@ class UserSearchService @javax.inject.Inject() (authService: AuthService) extend
   override def retrieve(loginInfo: LoginInfo) = UserCache.getUserByLoginInfo(loginInfo) match {
     case Some(u) => Future.successful(Some(u))
     case None => Database.query(AuthQueries.FindUserByProfile(loginInfo)).map { x =>
-      x.foreach(UserCache.cacheUser)
-      x
+      x.foreach(y => UserCache.cacheUser(y.toUser))
+      x.map(_.toUser)
     }
   }
 }

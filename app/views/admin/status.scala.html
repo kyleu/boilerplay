@@ -1,4 +1,4 @@
-@(user: models.user.RichUser)(implicit request: Request[AnyContent], session: Session, flash: Flash)
+@(user: models.user.User)(implicit request: Request[AnyContent], session: Session, flash: Flash)
 @layout.admin(user, "status", util.Config.projectName + " Status") {
   <div class="content-panel">
     <div class="panel-title"><i class="fa @models.template.Icons.settings"></i> @util.Config.projectName Status</div>

@@ -1,14 +1,21 @@
 package models.graphql
 
 import models.sandbox.SandboxSchema
-import models.user.UserSchema
+import models.user.{ProfileSchema, UserSchema}
 import sangria.execution.deferred.{DeferredResolver, Fetcher}
 import sangria.schema._
 
 object Schema {
   val modelFetchers: Seq[Fetcher[GraphQLContext, _, _, _]] = {
     // Start model fetchers
-    Nil
+
+    Seq(
+      models.SettingValuesSchema.settingValuesByKFetcher,
+      models.ddl.DdlSchema.ddlByIdFetcher,
+      models.user.PasswordInfoSchema.passwordInfoByIdFetcher,
+      models.user.UserSchema.userByIdFetcher
+    )
+
     // End model fetchers
   }
 
@@ -16,11 +23,16 @@ object Schema {
 
   val modelQueryFields = {
     // Start model query fields
-    Nil
+
+    models.SettingValuesSchema.queryFields ++
+      models.ddl.DdlSchema.queryFields ++
+      models.user.PasswordInfoSchema.queryFields ++
+      models.user.UserSchema.queryFields
+
     // End model query fields
   }
 
-  val queryFields = UserSchema.queryFields ++ SandboxSchema.queryFields ++ modelQueryFields
+  val queryFields = ProfileSchema.queryFields ++ SandboxSchema.queryFields ++ modelQueryFields
 
   val queryType = ObjectType(
     name = "Query",

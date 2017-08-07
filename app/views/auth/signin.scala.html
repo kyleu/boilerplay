@@ -1,4 +1,4 @@
-@(user: Option[models.user.RichUser], form: Form[com.mohiva.play.silhouette.api.util.Credentials])(
+@(user: Option[models.user.User], form: Form[com.mohiva.play.silhouette.api.util.Credentials])(
   implicit request: Request[AnyContent], session: Session, flash: Flash
 )@layout.simple(user = user, title = "Sign in to " + util.Config.projectName) {
   <form method="post" action="@controllers.auth.routes.AuthenticationController.authenticateCredentials()">

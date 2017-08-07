@@ -4,7 +4,7 @@ import com.mohiva.play.silhouette.api.exceptions.ProviderException
 import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.api.util.{Credentials, PasswordHasher}
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
-import models.user.UserForms
+import models.user.{RichUser, UserForms}
 import util.FutureUtils.defaultContext
 import services.user.UserService
 import util.{Application, JsonSerializers}
@@ -20,17 +20,18 @@ class ProfileController @javax.inject.Inject() (
     hasher: PasswordHasher
 ) extends BaseController {
   def view = withSession("view") { implicit request =>
-    Future.successful(Ok(views.html.profile.view(request.identity)))
+    Future.successful(Ok(views.html.profile.view(RichUser(request.identity))))
   }
 
   def save = withSession("view") { implicit request =>
     UserForms.profileForm.bindFromRequest.fold(
-      _ => Future.successful(BadRequest(views.html.profile.view(request.identity))),
+      _ => Future.successful(BadRequest(views.html.profile.view(RichUser(request.identity)))),
       profileData => {
-        val newPrefs = request.identity.preferences.copy(
+        val u = RichUser(request.identity)
+        val newPrefs = u.preferences.copy(
           theme = profileData.theme
         )
-        val newUser = request.identity.copy(username = profileData.username, preferences = newPrefs)
+        val newUser = u.copy(username = profileData.username, preferences = newPrefs)
         app.authService.save(newUser, update = true)
         Future.successful(Redirect(controllers.routes.HomeController.home()))
       }
@@ -51,7 +52,7 @@ class ProfileController @javax.inject.Inject() (
         if (changePass.newPassword != changePass.confirm) {
           Future.successful(errorResponse("Passwords do not match."))
         } else {
-          val email = request.identity.profile.providerKey
+          val email = RichUser(request.identity).profile.providerKey
           credentialsProvider.authenticate(Credentials(email, changePass.oldPassword)).flatMap { loginInfo =>
             val okResponse = Redirect(controllers.routes.ProfileController.view()).flashing("success" -> "Password changed.")
             for {

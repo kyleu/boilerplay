@@ -15,6 +15,23 @@ GET         /search                            controllers.admin.SearchControlle
 GET         /explore                           controllers.admin.AdminController.explore
 
 # Start model routes
+
+# Ddl Routes
+GET         /ddl                               controllers.admin.ddl.DdlController.list(q: Option[String] ?= None, limit: Option[Int] ?= None, offset: Option[Int] ?= None)
+GET         /ddl/:id                           controllers.admin.ddl.DdlController.view(id: Int)
+
+# PasswordInfo Routes
+GET         /passwordInfo                      controllers.admin.user.PasswordInfoController.list(q: Option[String] ?= None, limit: Option[Int] ?= None, offset: Option[Int] ?= None)
+GET         /passwordInfo/:provider/:key       controllers.admin.user.PasswordInfoController.view(provider: String, key: String)
+
+# SettingValues Routes
+GET         /settingValues                     controllers.admin.SettingValuesController.list(q: Option[String] ?= None, limit: Option[Int] ?= None, offset: Option[Int] ?= None)
+GET         /settingValues/:k                  controllers.admin.SettingValuesController.view(k: String)
+
+# User Routes
+GET         /user                              controllers.admin.user.UserController.list(q: Option[String] ?= None, limit: Option[Int] ?= None, offset: Option[Int] ?= None)
+GET         /user/:id                          controllers.admin.user.UserController.view(id: java.util.UUID)
+
 # End model routes
 
 # Users

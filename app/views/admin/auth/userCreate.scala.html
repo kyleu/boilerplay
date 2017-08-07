@@ -1,4 +1,4 @@
-@(self: models.user.RichUser)(
+@(self: models.user.User)(
     implicit request: Request[AnyContent], session: Session, flash: Flash
 )@layout.admin(self, "explore", "New User") {
   <form action="@controllers.admin.routes.UserCreateController.newUser()" method="post">

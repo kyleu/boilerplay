@@ -1,4 +1,4 @@
-@(user: models.user.RichUser, s: models.sandbox.SandboxTask, result: models.sandbox.SandboxTask.Result)(
+@(user: models.user.User, s: models.sandbox.SandboxTask, result: models.sandbox.SandboxTask.Result)(
     implicit request: Request[AnyContent], session: Session, flash: Flash
 )@layout.simple(user = Some(user), title = s"${s.name} Result") {
   <div class="row">

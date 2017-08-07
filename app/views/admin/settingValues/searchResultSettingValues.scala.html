@@ -1,0 +1,8 @@
+@(model: models.SettingValues, hit: String)<div class="search-result">
+  <div class="right">???</div>
+  <div>
+    <i class="fa @models.template.Icons.settingValues"></i>
+    <a class="theme-text" href="@controllers.admin.routes.SettingValuesController.view(model.k)">@model.k</a>
+  </div>
+  <em>@hit</em>
+</div>

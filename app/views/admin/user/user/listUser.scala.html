@@ -1,0 +1,25 @@
+@(user: models.user.User, q: Option[String], modelSeq: Seq[models.user.User], limit: Int, offset: Int)(
+    implicit request: Request[AnyContent], session: Session, flash: Flash
+)
+
+@resultFor(model: models.user.User) = {
+  <tr>
+    <td><a href="@controllers.admin.user.routes.UserController.view(model.id)" class="theme-text">@model.id</a></td>
+  </tr>
+}
+
+@views.html.admin.explore.list(
+  user = user,
+  model = "User",
+  modelPlural = "User Models",
+  icon = models.template.Icons.user,
+  cols = Seq(
+    "id" -> "Id"
+  ),
+  rows = modelSeq.map(resultFor),
+  nextUrl = controllers.admin.user.routes.UserController.list(q, Some(limit), Some(offset + limit)),
+  limit = limit,
+  offset = offset,
+  showSearch = true,
+  q = q
+)

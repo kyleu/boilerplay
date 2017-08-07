@@ -1,0 +1,20 @@
+@(user: models.user.User, model: models.SettingValues)(
+    implicit request: Request[AnyContent], session: Session, flash: Flash
+)@layout.admin(user, "explore", s"SettingValues [${model.k}]") {
+  <div class="collection with-header">
+    <div class="collection-header">
+      <h5>
+        <i class="fa @models.template.Icons.settingValues"></i>
+        SettingValues [@model.k]
+      </h5>
+    </div>
+    <div class="collection-item">
+      <table class="highlight">
+        <tbody>
+          <tr><th>k</th><td>@model.k</td></tr>
+          <tr><th>v</th><td>@model.v</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+}

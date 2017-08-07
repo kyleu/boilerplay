@@ -30,7 +30,7 @@ class GraphQLController @javax.inject.Inject() (override val app: Application) e
     val variables = body.get("variables").map(x => GraphQLService.parseVariables(x.asString.getOrElse("{}")))
     val operation = body.get("operationName").flatMap(_.asString)
 
-    executeQuery(query, variables, operation, request.identity)
+    executeQuery(query, variables, operation, models.user.RichUser(request.identity))
   }
 
   def executeQuery(query: String, variables: Option[Json], operation: Option[String], user: RichUser) = {

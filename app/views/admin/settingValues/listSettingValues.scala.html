@@ -1,0 +1,25 @@
+@(user: models.user.User, q: Option[String], modelSeq: Seq[models.SettingValues], limit: Int, offset: Int)(
+    implicit request: Request[AnyContent], session: Session, flash: Flash
+)
+
+@resultFor(model: models.SettingValues) = {
+  <tr>
+    <td><a href="@controllers.admin.routes.SettingValuesController.view(model.k)" class="theme-text">@model.k</a></td>
+  </tr>
+}
+
+@views.html.admin.explore.list(
+  user = user,
+  model = "SettingValues",
+  modelPlural = "SettingValues Models",
+  icon = models.template.Icons.settingValues,
+  cols = Seq(
+    "k" -> "K"
+  ),
+  rows = modelSeq.map(resultFor),
+  nextUrl = controllers.admin.routes.SettingValuesController.list(q, Some(limit), Some(offset + limit)),
+  limit = limit,
+  offset = offset,
+  showSearch = true,
+  q = q
+)
