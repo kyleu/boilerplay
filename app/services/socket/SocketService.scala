@@ -4,18 +4,18 @@ import java.util.UUID
 
 import akka.actor.{ActorRef, Props}
 import models._
-import models.user.User
+import models.user.RichUser
 import util.Logging
 import util.metrics.InstrumentedActor
 
 object SocketService {
-  def props(id: Option[UUID], supervisor: ActorRef, user: User, out: ActorRef, sourceAddress: String) = {
+  def props(id: Option[UUID], supervisor: ActorRef, user: RichUser, out: ActorRef, sourceAddress: String) = {
     Props(SocketService(id.getOrElse(UUID.randomUUID), supervisor, user, out, sourceAddress))
   }
 }
 
 case class SocketService(
-    id: UUID, supervisor: ActorRef, user: User, out: ActorRef, sourceAddress: String
+    id: UUID, supervisor: ActorRef, user: RichUser, out: ActorRef, sourceAddress: String
 ) extends InstrumentedActor with RequestMessageHelper with Logging {
 
   override def preStart() = {

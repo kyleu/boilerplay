@@ -1,16 +1,16 @@
-package services.user
+package services.auth
 
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.util.PasswordInfo
 import com.mohiva.play.silhouette.persistence.daos.DelegableAuthInfoDAO
 import models.queries.auth.PasswordInfoQueries
-import util.FutureUtils.defaultContext
 import services.database.Database
+import util.FutureUtils.defaultContext
 
 import scala.concurrent.Future
 
 @javax.inject.Singleton
-class PasswordInfoService @javax.inject.Inject() () extends DelegableAuthInfoDAO[PasswordInfo] {
+class PasswordAuthService @javax.inject.Inject() () extends DelegableAuthInfoDAO[PasswordInfo] {
   def getByLoginInfo(loginInfo: LoginInfo) = Database.query(PasswordInfoQueries.getById(Seq(loginInfo.providerID, loginInfo.providerKey)))
 
   override def find(loginInfo: LoginInfo) = {

@@ -5,17 +5,15 @@ import java.util.UUID
 import com.mohiva.play.silhouette.api.LoginInfo
 import models.database._
 import models.queries.BaseQueries
-import models.user.{Role, User, UserPreferences}
+import models.user.{Role, RichUser, UserPreferences}
 import util.JsonSerializers
 
-object UserQueries extends BaseQueries[User] {
+object AuthQueries extends BaseQueries[RichUser] {
   override protected val tableName = "users"
   override protected val columns = Seq("id", "username", "prefs", "email", "role", "created")
   override protected val searchColumns = Seq("id", "username", "email")
 
   val insert = Insert
-  val getById = GetById
-  def getAll(orderBy: Option[String], limit: Option[Int], offset: Option[Int]) = GetAll(orderBy = orderBy, limit = limit, offset = offset)
   val count = new Count(s"""select count(*) as c from "$tableName" """)
   val search = Search
   val searchExact = SearchExact
@@ -39,7 +37,7 @@ object UserQueries extends BaseQueries[User] {
     override def reduce(rows: Iterator[Row]) = rows.map(r => r.as[UUID]("id") -> r.as[String]("username")).toMap
   }
 
-  case class UpdateUser(u: User) extends Statement {
+  case class UpdateUser(u: RichUser) extends Statement {
     override val sql = updateSql(Seq("username", "prefs", "email", "role"))
     override val values = Seq(u.username, JsonSerializers.writePreferences(u.preferences), u.profile.providerKey, u.role.toString, u.id)
   }
@@ -54,13 +52,13 @@ object UserQueries extends BaseQueries[User] {
     override val values = Seq(role.toString, id)
   }
 
-  case class FindUserByUsername(username: String) extends FlatSingleRowQuery[User] {
+  case class FindUserByUsername(username: String) extends FlatSingleRowQuery[RichUser] {
     override val sql = getSql(Some("\"username\" = ?"))
     override val values = Seq(username)
     override def flatMap(row: Row) = Some(fromRow(row))
   }
 
-  case class FindUserByProfile(loginInfo: LoginInfo) extends FlatSingleRowQuery[User] {
+  case class FindUserByProfile(loginInfo: LoginInfo) extends FlatSingleRowQuery[RichUser] {
     override val sql = getSql(Some("\"email\" = ?"))
     override val values = Seq(loginInfo.providerKey)
     override def flatMap(row: Row) = Some(fromRow(row))
@@ -84,10 +82,10 @@ object UserQueries extends BaseQueries[User] {
     val profile = LoginInfo("credentials", row.as[String]("email"))
     val role = Role.withName(row.as[String]("role").trim)
     val created = fromJoda(row.as[org.joda.time.LocalDateTime]("created"))
-    User(id, username, preferences, profile, role, created)
+    RichUser(id, username, preferences, profile, role, created)
   }
 
-  override protected def toDataSeq(u: User) = {
+  override protected def toDataSeq(u: RichUser) = {
     Seq(u.id, u.username, JsonSerializers.writePreferences(u.preferences), u.profile.providerKey, u.role.toString, toJoda(u.created))
   }
 }

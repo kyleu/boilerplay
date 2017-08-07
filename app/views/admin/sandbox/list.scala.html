@@ -1,4 +1,4 @@
-@(user: models.user.User)(implicit request: Request[AnyContent], session: Session, flash: Flash)
+@(user: models.user.RichUser)(implicit request: Request[AnyContent], session: Session, flash: Flash)
 @layout.simple(Some(user), "Sandbox List") {
   <div class="row">
     <div class="col s12">

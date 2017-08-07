@@ -10,6 +10,7 @@ import play.api.Environment
 import play.api.inject.ApplicationLifecycle
 import util.FutureUtils.defaultContext
 import play.api.libs.ws.WSClient
+import services.auth.AuthService
 import services.database.{Database, MasterDdl}
 import services.file.FileService
 import services.settings.SettingsService
@@ -30,7 +31,7 @@ class Application @javax.inject.Inject() (
     val lifecycle: ApplicationLifecycle,
     val playEnv: Environment,
     val actorSystem: ActorSystem,
-    val userService: UserService,
+    val authService: AuthService,
     val silhouette: Silhouette[AuthEnv],
     val ws: WSClient
 ) extends Logging {

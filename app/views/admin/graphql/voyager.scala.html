@@ -1,4 +1,4 @@
-@(user: models.user.User)(
+@(user: models.user.RichUser)(
     implicit request: Request[AnyContent], session: Session, flash: Flash
 )@views.html.layout.basic(Some(user), util.Config.projectName + " Schema", scripts = Seq(
   routes.Assets.versioned("lib/graphql/react.min.js").url,

@@ -1,6 +1,6 @@
 package models.graphql
 
-import models.user.User
+import models.user.RichUser
 import util.Application
 
-case class GraphQLContext(app: Application, user: User)
+case class GraphQLContext(app: Application, user: RichUser)

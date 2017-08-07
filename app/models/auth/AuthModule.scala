@@ -16,7 +16,8 @@ import net.codingwell.scalaguice.ScalaModule
 import util.FutureUtils.defaultContext
 import play.api.libs.ws.WSClient
 import play.api.mvc.DefaultCookieHeaderEncoding
-import services.user.{PasswordInfoService, UserSearchService}
+import services.auth.PasswordAuthService
+import services.user.UserSearchService
 import util.Configuration
 
 object AuthModule {
@@ -74,7 +75,7 @@ class AuthModule extends AbstractModule with ScalaModule {
   }
 
   @Provides
-  def provideAuthInfoRepository(passwordInfoService: PasswordInfoService): AuthInfoRepository = {
+  def provideAuthInfoRepository(passwordInfoService: PasswordAuthService): AuthInfoRepository = {
     new DelegableAuthInfoRepository(passwordInfoService)
   }
 }
