@@ -1,53 +1,53 @@
 # Admin
-GET         /                                          controllers.admin.AdminController.index
-GET         /status                                    controllers.admin.AdminController.status
-GET         /metrics                                   controllers.admin.MetricsController.showMetrics
+GET         /                                  controllers.admin.AdminController.index
+GET         /status                            controllers.admin.AdminController.status
+GET         /metrics                           controllers.admin.MetricsController.showMetrics
 
 # GraphQL
-GET         /schema                                    controllers.admin.graphql.SchemaController.renderSchema()
-GET         /voyager                                   controllers.admin.graphql.SchemaController.voyager()
+GET         /schema                            controllers.admin.graphql.SchemaController.renderSchema()
+GET         /voyager                           controllers.admin.graphql.SchemaController.voyager()
 
-GET         /graphql                                   controllers.admin.graphql.GraphQLController.graphql(query: Option[String] ?= None, variables: Option[String] ?= None)
-POST        /graphql                                   controllers.admin.graphql.GraphQLController.graphqlBody
+GET         /graphql                           controllers.admin.graphql.GraphQLController.graphql(query: Option[String] ?= None, variables: Option[String] ?= None)
+POST        /graphql                           controllers.admin.graphql.GraphQLController.graphqlBody
 
 # Explore
-GET         /search                                    controllers.admin.SearchController.search(q ?= "")
-GET         /explore                                   controllers.admin.AdminController.explore
+GET         /search                            controllers.admin.SearchController.search(q ?= "")
+GET         /explore                           controllers.admin.AdminController.explore
 
 # Start model routes
 
 # Ddl Routes
-GET         /ddl/ddl                                   controllers.admin.ddl.DdlController.list(q: Option[String] ?= None, limit: Option[Int] ?= None, offset: Option[Int] ?= None)
-GET         /ddl/:id                                   controllers.admin.ddl.DdlController.view(id: Int)
+GET         /ddl                               controllers.admin.ddl.DdlController.list(q: Option[String] ?= None, limit: Option[Int] ?= None, offset: Option[Int] ?= None)
+GET         /ddl/:id                           controllers.admin.ddl.DdlController.view(id: Int)
 
 # PasswordInfo Routes
-GET         /user/passwordInfo                         controllers.admin.user.PasswordInfoController.list(q: Option[String] ?= None, limit: Option[Int] ?= None, offset: Option[Int] ?= None)
-GET         /passwordInfo/:provider/:key               controllers.admin.user.PasswordInfoController.view(provider: String, key: String)
+GET         /passwordInfo                      controllers.admin.user.PasswordInfoController.list(q: Option[String] ?= None, limit: Option[Int] ?= None, offset: Option[Int] ?= None)
+GET         /passwordInfo/:provider/:key       controllers.admin.user.PasswordInfoController.view(provider: String, key: String)
 
 # SettingValues Routes
-GET         /settingValues                             controllers.admin.SettingValuesController.list(q: Option[String] ?= None, limit: Option[Int] ?= None, offset: Option[Int] ?= None)
-GET         /settingValues/:k                          controllers.admin.SettingValuesController.view(k: String)
+GET         /settingValues                     controllers.admin.SettingValuesController.list(q: Option[String] ?= None, limit: Option[Int] ?= None, offset: Option[Int] ?= None)
+GET         /settingValues/:k                  controllers.admin.SettingValuesController.view(k: String)
 
 # User Routes
-GET         /user/user                                 controllers.admin.user.UserController.list(q: Option[String] ?= None, limit: Option[Int] ?= None, offset: Option[Int] ?= None)
-GET         /user/:id                                  controllers.admin.user.UserController.view(id: java.util.UUID)
+GET         /user                              controllers.admin.user.UserController.list(q: Option[String] ?= None, limit: Option[Int] ?= None, offset: Option[Int] ?= None)
+GET         /user/:id                          controllers.admin.user.UserController.view(id: java.util.UUID)
 
 # End model routes
 
 # Users
-GET         /user/new                                  controllers.admin.UserCreateController.newUser()
-POST        /user/new                                  controllers.admin.UserCreateController.saveNewUser()
+GET         /user/new                          controllers.admin.UserCreateController.newUser()
+POST        /user/new                          controllers.admin.UserCreateController.saveNewUser()
 
-GET         /user                                      controllers.admin.UserEditController.users(q: Option[String] ?= None, limit: Option[Int] ?= None, offset: Option[Int] ?= None)
-GET         /user/:id                                  controllers.admin.UserEditController.view(id: java.util.UUID)
-GET         /user/:id/edit                             controllers.admin.UserEditController.edit(id: java.util.UUID)
-POST        /user/:id/edit                             controllers.admin.UserEditController.save(id: java.util.UUID)
-GET         /user/:id/remove                           controllers.admin.UserEditController.remove(id: java.util.UUID)
+GET         /user                              controllers.admin.UserEditController.users(q: Option[String] ?= None, limit: Option[Int] ?= None, offset: Option[Int] ?= None)
+GET         /user/:id                          controllers.admin.UserEditController.view(id: java.util.UUID)
+GET         /user/:id/edit                     controllers.admin.UserEditController.edit(id: java.util.UUID)
+POST        /user/:id/edit                     controllers.admin.UserEditController.save(id: java.util.UUID)
+GET         /user/:id/remove                   controllers.admin.UserEditController.remove(id: java.util.UUID)
 
 # Settings
-GET         /settings                                  controllers.admin.SettingsController.settings
-POST        /settings                                  controllers.admin.SettingsController.saveSettings
+GET         /settings                          controllers.admin.SettingsController.settings
+POST        /settings                          controllers.admin.SettingsController.saveSettings
 
 # Sandboxes
-GET         /sandbox                                   controllers.admin.SandboxController.list
-GET         /sandbox/:key                              controllers.admin.SandboxController.sandbox(key)
+GET         /sandbox                           controllers.admin.SandboxController.list
+GET         /sandbox/:key                      controllers.admin.SandboxController.sandbox(key)
