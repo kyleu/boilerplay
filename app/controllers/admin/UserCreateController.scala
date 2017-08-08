@@ -7,8 +7,9 @@ import com.mohiva.play.silhouette.api.util.PasswordHasher
 import com.mohiva.play.silhouette.api.{LoginInfo, SignUpEvent}
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
 import controllers.BaseController
-import models.user.{RichUser, Role, UserPreferences}
+import models.user.{Role, User, UserPreferences}
 import util.FutureUtils.defaultContext
+import services.user.UserService
 import util.Application
 import util.web.FormUtils
 
@@ -21,7 +22,7 @@ class UserCreateController @javax.inject.Inject() (
     hasher: PasswordHasher
 ) extends BaseController {
   def newUser() = withAdminSession("admin-user-new") { implicit request =>
-    Future.successful(Ok(views.html.admin.auth.userCreate(request.identity)))
+    Future.successful(Ok(views.html.admin.user.userCreate(request.identity)))
   }
 
   def saveNewUser() = withAdminSession("admin-user-save-new") { implicit request =>
@@ -39,14 +40,14 @@ class UserCreateController @javax.inject.Inject() (
     } else if (loginInfo.providerKey.isEmpty) {
       Future.successful(Redirect(controllers.admin.routes.UserCreateController.newUser()).flashing("error" -> "Email Address is required."))
     } else {
-      val user = RichUser(
+      val user = User(
         id = id,
         username = username,
         preferences = UserPreferences.empty,
         profile = loginInfo,
         role = role
       )
-      val userSavedFuture = app.authService.save(user)
+      val userSavedFuture = app.userService.save(user)
       val authInfo = hasher.hash(form("password"))
       for {
         _ <- authInfoRepository.add(loginInfo, authInfo)

@@ -1,4 +1,4 @@
-@(user: models.user.RichUser, debug: Boolean)(
+@(user: models.user.User, debug: Boolean)(
     implicit request: Request[AnyContent], session: Session, flash: Flash
 )@layout.simple(Some(user), util.Config.projectName) {
   <div class="row">

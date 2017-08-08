@@ -1,4 +1,4 @@
-@(user: models.user.RichUser)(implicit request: Request[AnyContent], session: Session, flash: Flash)
+@(user: models.user.User)(implicit request: Request[AnyContent], session: Session, flash: Flash)
 @layout.admin(user, "explore", "Explore " + util.Config.projectName) {
   <div class="content-panel">
     <ul class="collection with-header">

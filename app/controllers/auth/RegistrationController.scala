@@ -11,8 +11,8 @@ import models.settings.SettingKey
 import models.user._
 import util.FutureUtils.defaultContext
 import services.settings.SettingsService
-import services.user.UserSearchService
-import util.{Application, DateUtils}
+import services.user.{UserSearchService, UserService}
+import util.Application
 
 import scala.concurrent.Future
 
@@ -53,14 +53,14 @@ class RegistrationController @javax.inject.Inject() (
           case None =>
             val authInfo = hasher.hash(data.password)
             val role = Role.withName(SettingsService(SettingKey.DefaultNewUserRole))
-            val user = RichUser(
+            val user = User(
               id = UUID.randomUUID,
               username = data.username,
               preferences = UserPreferences.empty,
               profile = loginInfo,
               role = role
             )
-            val userSavedFuture = app.authService.save(user)
+            val userSavedFuture = app.userService.save(user)
             val result = request.session.get("returnUrl") match {
               case Some(url) => Redirect(url).withSession(request.session - "returnUrl")
               case None => Redirect(controllers.routes.HomeController.home())

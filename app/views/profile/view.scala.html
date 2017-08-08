@@ -1,4 +1,4 @@
-@(user: models.user.RichUser)(
+@(user: models.user.User)(
     implicit request: Request[AnyContent], session: Session, flash: Flash
 )@layout.simple(Some(user), util.Config.projectName) {
   <form id="profile-form" action="" method="post">

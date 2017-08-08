@@ -2,7 +2,7 @@ package controllers.admin.graphql
 
 import controllers.BaseController
 import io.circe.Json
-import models.user.RichUser
+import models.user.User
 import sangria.execution.{ErrorWithResolver, QueryAnalysisError}
 import sangria.marshalling.circe._
 import sangria.marshalling.MarshallingUtil._
@@ -33,7 +33,7 @@ class GraphQLController @javax.inject.Inject() (override val app: Application) e
     executeQuery(query, variables, operation, request.identity)
   }
 
-  def executeQuery(query: String, variables: Option[Json], operation: Option[String], user: RichUser) = {
+  def executeQuery(query: String, variables: Option[Json], operation: Option[String], user: User) = {
     try {
       val f = GraphQLService.executeQuery(app, query, variables, operation, user)
       f.map(x => Ok(x.spaces2).as("application/json"))(FutureUtils.defaultContext).recover {

@@ -5,9 +5,8 @@ import java.util.UUID
 import akka.actor.SupervisorStrategy.Stop
 import akka.actor.{ActorRef, OneForOneStrategy, SupervisorStrategy}
 import models._
+import models.user.User
 import java.time.LocalDateTime
-
-import models.user.RichUser
 import util.metrics.{InstrumentedActor, MetricsServletActor}
 import util.{Application, DateUtils, Logging}
 
@@ -56,7 +55,7 @@ class ActorSupervisor(val app: Application) extends InstrumentedActor with Loggi
     case None => sender() ! ServerError("Unknown Client Socket", ct.id.toString)
   }
 
-  protected[this] def handleSocketStarted(user: RichUser, socketId: UUID, socket: ActorRef) = {
+  protected[this] def handleSocketStarted(user: User, socketId: UUID, socket: ActorRef) = {
     log.debug(s"Socket [$socketId] registered to [${user.username}] with path [${socket.path}].")
     ActorSupervisor.sockets(socketId) = SocketRecord(user.id, user.username, socket, DateUtils.now)
     socketsCounter.inc()
