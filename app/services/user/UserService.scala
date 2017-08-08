@@ -17,6 +17,8 @@ import scala.concurrent.Future
 @javax.inject.Singleton
 class UserService @javax.inject.Inject() (hasher: PasswordHasher) extends Logging {
   def getById(id: UUID) = Database.query(UserQueries.getById(Seq(id)))
+  def getByIdSeq(idSeq: Seq[UUID]) = Database.query(UserQueries.getByIdSeq(idSeq))
+
   def userCount = Database.query(UserQueries.count)
   def isUsernameInUse(name: String) = Database.query(UserQueries.IsUsernameInUse(name))
   def usernameLookup(id: UUID) = Database.query(UserQueries.GetUsername(id))
