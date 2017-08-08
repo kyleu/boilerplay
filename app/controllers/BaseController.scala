@@ -15,7 +15,7 @@ abstract class BaseController() extends InjectedController with Instrumented wit
   def withAdminSession(action: String)(block: (SecuredRequest[AuthEnv, AnyContent]) => Future[Result]) = {
     app.silhouette.SecuredAction.async { implicit request =>
       metrics.timer(action).timeFuture {
-        if (request.identity.role == models.user.Role.Admin.toString) {
+        if (request.identity.isAdmin) {
           block(request)
         } else {
           Future.successful(Redirect(controllers.routes.HomeController.home()).flashing("error" -> "You must have admin rights to access that page."))

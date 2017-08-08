@@ -1,6 +1,7 @@
 package services.user
 
 import java.util.UUID
+
 import models.queries.user.UserQueries
 import models.user.User
 import services.database.Database

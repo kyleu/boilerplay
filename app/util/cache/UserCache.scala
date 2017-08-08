@@ -4,26 +4,26 @@ import java.util.UUID
 
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticator
-import models.user.User
+import models.user.RichUser
 
 object UserCache {
   def getUser(id: UUID) = {
-    CacheService.getAs[User](s"user.$id")
+    CacheService.getAs[RichUser](s"user.$id")
   }
 
-  def cacheUser(user: User) = {
+  def cacheUser(user: RichUser) = {
     CacheService.set(s"user.${user.id}", user)
-    CacheService.set(s"user.${user.email}", user)
+    CacheService.set(s"user.${user.profile.providerKey}", user)
     user
   }
 
   def getUserByLoginInfo(loginInfo: LoginInfo) = {
-    CacheService.getAs[User](s"user.${loginInfo.providerKey}")
+    CacheService.getAs[RichUser](s"user.${loginInfo.providerKey}")
   }
 
   def removeUser(id: UUID) = {
-    CacheService.getAs[User](s"user.$id").foreach { u =>
-      CacheService.remove(s"user.${u.email}")
+    CacheService.getAs[RichUser](s"user.$id").foreach { u =>
+      CacheService.remove(s"user.${u.profile.providerKey}")
     }
     CacheService.remove(s"user.$id")
   }

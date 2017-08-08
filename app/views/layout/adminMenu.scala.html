@@ -1,8 +1,8 @@
-@(user: models.user.User, activeSection: String)
+@(user: models.user.RichUser, activeSection: String)
 @views.html.components.userDropdown(Some(user))
 
 <header>
-  @views.html.layout.themeStyles(models.user.RichUser(user).preferences.theme)
+  @views.html.layout.themeStyles(user.preferences.theme)
 
   <nav id="topnav" class="theme">
     <a href="@controllers.routes.HomeController.home()" class="brand-logo center">@util.Config.projectName</a>
@@ -44,12 +44,6 @@
 
 <ul id="dropdown-explore" class="dropdown-content">
   <!-- Start model list routes -->
-
-  <li><a href="@controllers.admin.ddl.routes.DdlController.list()">Ddl</a></li>
-  <li><a href="@controllers.admin.routes.SettingValuesController.list()">SettingValues</a></li>
-  <li><a href="@controllers.admin.user.routes.PasswordInfoController.list()">PasswordInfo</a></li>
-  <li><a href="@controllers.admin.user.routes.UserController.list()">User</a></li>
-
   <!-- End model list routes -->
   <li><a href="@controllers.admin.routes.UserEditController.users()">Users</a></li>
 </ul>

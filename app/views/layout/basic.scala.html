@@ -1,5 +1,5 @@
 @(
-  user: Option[models.user.User],
+  user: Option[models.user.RichUser],
   title: String,
   scripts: Seq[String] = Nil,
   stylesheets: Seq[String] = Nil
@@ -15,7 +15,7 @@
     <meta property="og:title" content="@title" />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="en_US" />
-    @defining(user.map(user => models.user.RichUser(user).preferences.theme).getOrElse(models.template.Theme.BlueGrey)) { theme =>
+    @defining(user.map(_.preferences.theme).getOrElse(models.template.Theme.BlueGrey)) { theme =>
     <link id="favicon-link" rel="shortcut icon" type="image/png" href="@controllers.routes.Assets.versioned(s"images/ui/favicon/icon-$theme@2x.png")">
     }
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">

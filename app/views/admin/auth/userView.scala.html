@@ -1,4 +1,4 @@
-@(self: models.user.User, user: models.user.RichUser)(
+@(self: models.user.RichUser, user: models.user.RichUser)(
     implicit request: Request[AnyContent], session: Session, flash: Flash
 )@layout.admin(self, "explore", "View User") {
   <div class="content-panel">

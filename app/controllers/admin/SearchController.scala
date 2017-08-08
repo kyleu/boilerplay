@@ -29,13 +29,12 @@ class SearchController @javax.inject.Inject() (override val app: Application) ex
 
   private[this] def searchUuid(q: String, id: UUID) = {
     // Start uuid searches
-
-    val userF = services.user.UserService.getById(id).map { modelOpt =>
-      modelOpt.map(model => views.html.admin.user.user.searchResultUser(model, s"User [${model.id}] matched [$q].")).toSeq
+    val userF = services.user.UserService.getById(id).map {
+      case Some(u) => Seq(views.html.admin.user.userSearchResult(u, s"User [${u.username}] matched id [$q]."))
+      case None => Nil
     }
 
-    val uuidSearches = Seq[Future[Seq[Html]]](userF)
-
+    val uuidSearches = Seq(userF)
     // End uuid searches
 
     Future.sequence(uuidSearches).map(_.flatten)
@@ -43,13 +42,7 @@ class SearchController @javax.inject.Inject() (override val app: Application) ex
 
   private[this] def searchInt(q: String, id: Int) = {
     // Start int searches
-
-    val ddlF = services.ddl.DdlService.getById(id).map { modelOpt =>
-      modelOpt.map(model => views.html.admin.ddl.ddl.searchResultDdl(model, s"Ddl [${model.id}] matched [$q].")).toSeq
-    }
-
-    val intSearches = Seq[Future[Seq[Html]]](ddlF)
-
+    val intSearches = Seq[Future[Seq[Html]]]()
     // End int searches
 
     Future.sequence(intSearches).map(_.flatten)
@@ -57,22 +50,11 @@ class SearchController @javax.inject.Inject() (override val app: Application) ex
 
   private[this] def searchString(q: String) = {
     // Start string searches
-
-    val ddlF = services.ddl.DdlService.searchExact(q, limit = Some(5)).map { models =>
-      models.map(model => views.html.admin.ddl.ddl.searchResultDdl(model, s"Ddl [${model.id}] matched [$q]."))
-    }
-    val passwordInfoF = services.user.PasswordInfoService.searchExact(q, limit = Some(5)).map { models =>
-      models.map(model => views.html.admin.user.passwordInfo.searchResultPasswordInfo(model, s"PasswordInfo [${model.provider}, ${model.key}] matched [$q]."))
-    }
-    val settingValuesF = services.SettingValuesService.searchExact(q, limit = Some(5)).map { models =>
-      models.map(model => views.html.admin.settingValues.searchResultSettingValues(model, s"SettingValues [${model.k}] matched [$q]."))
-    }
-    val userF = services.user.UserService.searchExact(q, limit = Some(5)).map { models =>
-      models.map(model => views.html.admin.user.user.searchResultUser(model, s"User [${model.id}] matched [$q]."))
+    val userF = services.user.UserService.searchExact(q, limit = Some(10)).map { users =>
+      users.map(u => views.html.admin.user.userSearchResult(u, s"User [${u.username}] matched [$q]."))
     }
 
-    val stringSearches = Seq[Future[Seq[Html]]](ddlF, passwordInfoF, settingValuesF, userF)
-
+    val stringSearches = Seq(userF)
     // End string searches
 
     Future.sequence(stringSearches).map(_.flatten)

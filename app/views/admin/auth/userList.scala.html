@@ -1,4 +1,4 @@
-@(user: models.user.User, q: Option[String], users: Seq[models.user.RichUser], limit: Int, offset: Int)(
+@(user: models.user.RichUser, q: Option[String], users: Seq[models.user.RichUser], limit: Int, offset: Int)(
     implicit request: Request[AnyContent], session: Session, flash: Flash
 )
 

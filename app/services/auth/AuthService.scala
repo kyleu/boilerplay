@@ -30,7 +30,7 @@ class AuthService @javax.inject.Inject() (hasher: PasswordHasher) extends Loggin
       AuthQueries.insert(user)
     }
     Database.execute(statement).map { _ =>
-      UserCache.cacheUser(user.toUser)
+      UserCache.cacheUser(user)
       user
     }
   }

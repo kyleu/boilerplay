@@ -1,4 +1,4 @@
-@(user: models.user.User)(implicit request: Request[AnyContent], session: Session, flash: Flash)
+@(user: models.user.RichUser)(implicit request: Request[AnyContent], session: Session, flash: Flash)
 @layout.admin(user, "explore", "Explore " + util.Config.projectName) {
   <div class="content-panel">
     <ul class="collection with-header">
@@ -6,24 +6,6 @@
         <h5>Explore @util.Config.projectName. </h5>
       </li>
       <!-- Start model list routes -->
-
-      <li class="collection-item">
-        <a class="theme-text" href="@controllers.admin.ddl.routes.DdlController.list()">Ddl Management</a>
-        <div><em>Manage the ddl of the system.</em></div>
-      </li>
-      <li class="collection-item">
-        <a class="theme-text" href="@controllers.admin.routes.SettingValuesController.list()">SettingValues Management</a>
-        <div><em>Manage the settingValues of the system.</em></div>
-      </li>
-      <li class="collection-item">
-        <a class="theme-text" href="@controllers.admin.user.routes.PasswordInfoController.list()">PasswordInfo Management</a>
-        <div><em>Manage the passwordInfo of the system.</em></div>
-      </li>
-      <li class="collection-item">
-        <a class="theme-text" href="@controllers.admin.user.routes.UserController.list()">User Management</a>
-        <div><em>Manage the user of the system.</em></div>
-      </li>
-
       <!-- End model list routes -->
       <li class="collection-item">
         <a class="theme-text" href="@controllers.admin.routes.UserEditController.users()">User Management</a>

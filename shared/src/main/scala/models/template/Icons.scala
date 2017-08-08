@@ -17,12 +17,8 @@ object Icons {
 
   val dropdownToggle = "fa-angle-down"
 
+  val user = "fa-user"
+
   // Start model icons
-
-  val ddl = "fa-folder-o"
-  val passwordInfo = "fa-folder-o"
-  val settingValues = "fa-folder-o"
-  val user = "fa-folder-o"
-
   // End model icons
 }
