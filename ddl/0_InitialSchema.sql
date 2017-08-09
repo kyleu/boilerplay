@@ -8,11 +8,9 @@ create table if not exists "users" (
   "created" timestamp not null
 );
 
-drop index if exists "users_email_idx";
-create unique index "users_email_idx" on "users" ("email");
+create unique index if not exists "users_email_idx" on "users" ("email");
 
-drop index if exists "users_username_idx";
-create unique index "users_username_idx" on "users" ("username");
+create unique index if not exists "users_username_idx" on "users" ("username");
 
 create table if not exists "password_info" (
   "provider" varchar(64) not null,

@@ -19,6 +19,7 @@ object UserQueries extends BaseQueries[User] {
   def getAll(orderBy: Option[String], limit: Option[Int], offset: Option[Int]) = GetAll(orderBy = orderBy, limit = limit, offset = offset)
   val count = new Count(s"""select count(*) as c from "$tableName" """)
   val search = Search
+  val searchCount = SearchCount
   val searchExact = SearchExact
   val removeById = RemoveById
 

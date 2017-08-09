@@ -37,10 +37,10 @@ object MasterDdl extends Logging {
       case false => Database.execute(DdlQueries.CreateDdlTable)
     }
 
-    val withData = withDdlTable.flatMap(_ => Database.query(DdlQueries.getAll))
+    val withData = withDdlTable.flatMap(_ => Database.query(DdlQueries.GetIds))
 
     val appliedFiles = withData.map { data =>
-      val candidates = files.filterNot(f => data.exists(_.id == f.id))
+      val candidates = files.filterNot(f => data.contains(f.id))
       val applied = candidates.map { f =>
         log.info(s"Applying [${f.statements.size}] statements for DDL [${f.id}:${f.name}].")
         val tx = Database.transaction { conn =>

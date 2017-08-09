@@ -1,6 +1,6 @@
 package models.ddl
 
-import models.database.{Row, SingleRowQuery, Statement}
+import models.database.{Query, Row, SingleRowQuery, Statement}
 import models.queries.BaseQueries
 
 object DdlQueries extends BaseQueries[DdlFile] {
@@ -8,6 +8,10 @@ object DdlQueries extends BaseQueries[DdlFile] {
   override protected val columns = Seq("id", "name", "sql", "applied")
 
   def getAll = GetAll(orderBy = Some("id"))
+  case object GetIds extends Query[Seq[Int]] {
+    override def sql = s"""select "id" from "$tableName" order by "id" """
+    override def reduce(rows: Iterator[Row]) = rows.map(_.as[Int]("id")).toSeq
+  }
   def insert(f: DdlFile) = Insert(f)
 
   case class DoesTableExist(tableName: String) extends SingleRowQuery[Boolean] {
