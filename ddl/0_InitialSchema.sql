@@ -1,5 +1,5 @@
 /* User */
-create table "users" (
+create table if not exists "users" (
   "id" uuid primary key,
   "username" character varying(256),
   "prefs" character varying(4096) not null,
@@ -8,10 +8,13 @@ create table "users" (
   "created" timestamp not null
 );
 
+drop index if exists "users_email_idx";
 create unique index "users_email_idx" on "users" ("email");
+
+drop index if exists "users_username_idx";
 create unique index "users_username_idx" on "users" ("username");
 
-create table "password_info" (
+create table if not exists "password_info" (
   "provider" varchar(64) not null,
   "key" varchar(2048) not null,
   "hasher" varchar(64) not null,
@@ -22,7 +25,7 @@ create table "password_info" (
 );
 
 /* System Settings */
-create table "setting_values" (
+create table if not exists "setting_values" (
   "k" character varying(256) primary key,
   "v" character varying(4096) not null
 );
