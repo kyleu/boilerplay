@@ -1,6 +1,7 @@
 package models.graphql
 
 import models.sandbox.SandboxSchema
+import models.settings.SettingSchema
 import models.user.UserSchema
 import sangria.execution.deferred.{DeferredResolver, Fetcher}
 import sangria.schema._
@@ -20,7 +21,10 @@ object Schema {
     // End model query fields
   }
 
-  val queryFields = UserSchema.queryFields ++ SandboxSchema.queryFields ++ modelQueryFields
+  val queryFields = {
+    val fields = modelQueryFields ++ UserSchema.queryFields ++ SettingSchema.queryFields ++ SandboxSchema.queryFields
+    fields.sortBy(_.name)
+  }
 
   val queryType = ObjectType(
     name = "Query",

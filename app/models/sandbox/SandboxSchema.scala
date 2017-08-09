@@ -27,7 +27,7 @@ object SandboxSchema {
   )
 
   val queryFields = fields[GraphQLContext, Unit](Field(
-    name = "sandboxes",
+    name = "sandbox",
     fieldType = ListType(sandboxTaskType),
     description = Some("Returns a list of one-off sandbox tests."),
     resolve = _ => SandboxTask.values

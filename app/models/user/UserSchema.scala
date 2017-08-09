@@ -26,7 +26,6 @@ object UserSchema {
 
   implicit val profileType = deriveObjectType[GraphQLContext, UserProfile](ObjectTypeDescription("Information about the current session."))
 
-
   implicit val userId = HasId[User, UUID](_.id)
   val userByIdFetcher = Fetcher((c: GraphQLContext, idSeq: Seq[UUID]) => c.app.userService.getByIdSeq(idSeq))
 
@@ -45,7 +44,7 @@ object UserSchema {
       }
     ),
     Field(
-      name = "users",
+      name = "user",
       fieldType = ListType(userType),
       arguments = queryArg :: limitArg :: offsetArg :: Nil,
       resolve = c => c.arg(CommonSchema.queryArg) match {

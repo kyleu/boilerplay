@@ -8,14 +8,16 @@ import sangria.execution.{Executor, HandledException, QueryReducer}
 import sangria.marshalling.circe._
 import sangria.parser.QueryParser
 import sangria.validation.QueryValidator
-import util.Application
+import util.{Application, Logging}
 import util.FutureUtils.defaultContext
 
 import scala.util.{Failure, Success}
 
-object GraphQLService {
-  private[this] val exceptionHandler: Executor.ExceptionHandler = {
-    case (_, e: IllegalStateException) => HandledException(e.getMessage)
+object GraphQLService extends Logging {
+  protected val exceptionHandler: Executor.ExceptionHandler = {
+    case (_, e: IllegalStateException) =>
+      log.warn("Error encountered while running GraphQL query.", e)
+      HandledException(message = e.getMessage, additionalFields = Map.empty)
   }
 
   private[this] val rejectComplexQueries = QueryReducer.rejectComplexQueries[Any](1000, (_, _) => new IllegalArgumentException(s"Query is too complex."))
@@ -44,7 +46,7 @@ object GraphQLService {
   } else {
     parse(variables) match {
       case Right(x) => x
-      case Left(x) => Json.obj()
+      case Left(_) => Json.obj()
     }
   }
 }
