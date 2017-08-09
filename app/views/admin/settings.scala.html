@@ -29,12 +29,12 @@
             <div class="col s12">
             @defining(services.settings.SettingsService.allowRegistration) { allowRegistration =>
               <div>
-                <input type="radio" id="@AllowRegistration.id-true" name="@AllowRegistration.id" value="true" @if(allowRegistration) { checked="checked" }></input>
-                <label for="@AllowRegistration.id-true">Yes</label>
+                <input type="radio" id="AllowRegistration-true" name="@AllowRegistration" value="true" @if(allowRegistration) { checked="checked" }></input>
+                <label for="AllowRegistration-true">Yes</label>
               </div>
               <div>
-                <input type="radio" id="@AllowRegistration.id-false" name="@AllowRegistration.id" value="false" @if(!allowRegistration) { checked="checked" }></input>
-                <label for="@AllowRegistration.id-false">No</label>
+                <input type="radio" id="AllowRegistration-false" name="@AllowRegistration" value="false" @if(!allowRegistration) { checked="checked" }></input>
+                <label for="AllowRegistration-false">No</label>
               </div>
             }
             </div>
@@ -45,8 +45,8 @@
           <div class="row">
             <div class="col s12">
             @defining(models.user.Role.withName(services.settings.SettingsService(DefaultNewUserRole))) { newUserRole =>
-              @roleRadio(DefaultNewUserRole.id, models.user.Role.User, newUserRole, "Registered Users")
-              @roleRadio(DefaultNewUserRole.id, models.user.Role.Admin, newUserRole, "Administrators")
+              @roleRadio(DefaultNewUserRole.toString, models.user.Role.User, newUserRole, "Registered Users")
+              @roleRadio(DefaultNewUserRole.toString, models.user.Role.Admin, newUserRole, "Administrators")
             }
             </div>
           </div>

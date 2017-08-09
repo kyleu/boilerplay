@@ -1,7 +1,0 @@
-query SandboxList {
-  sandboxes {
-    id
-    name
-    description
-  }
-}
