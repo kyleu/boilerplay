@@ -33,6 +33,7 @@
     "actions" -> ""
   ),
   rows = users.map(resultFor),
+  newUrl = Some(controllers.admin.routes.UserCreateController.newUser()),
   nextUrl = controllers.admin.routes.UserEditController.users(q, Some(limit), Some(offset + limit)),
   limit = limit,
   offset = offset,

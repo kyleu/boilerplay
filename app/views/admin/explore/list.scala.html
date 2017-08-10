@@ -5,13 +5,15 @@
     icon: String,
     cols: Seq[(String, String)],
     rows: Seq[Html],
+    newUrl: Option[Call],
     nextUrl: Call,
     limit: Int = 100,
     offset: Int = 0,
+    section: String = "explore",
     showSearch: Boolean = false,
     q: Option[String] = None
 )(implicit request: Request[AnyContent], session: Session, flash: Flash)
-@layout.admin(user, "explore", s"$model Management") {
+@layout.admin(user, section, s"$model Management") {
   <div class="collection with-header">
     <div class="collection-header">
       @if(showSearch) {
@@ -31,7 +33,10 @@
         }
       </h5>
       @if(offset > 0) {
-        <em>Page @((offset / limit) + 1)</em>
+        <em>Page @((offset / limit) + 1) </em>
+      }
+      @newUrl.map { nu =>
+        (<a class="theme-text" href="@nu">add new</a>)
       }
     </div>
     <div class="collection-item">

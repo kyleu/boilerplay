@@ -1,10 +1,9 @@
 package util
 
 import java.text.SimpleDateFormat
+import java.time._
 
 object DateUtils {
-  import java.time._
-
   private[this] val isoFmt = format.DateTimeFormatter.ISO_LOCAL_DATE_TIME
   private[this] val niceDateFmt = format.DateTimeFormatter.ofPattern("EEEE, MMM dd, yyyy")
   private[this] val niceTimeFmt = format.DateTimeFormatter.ofPattern("HH:mm:ss")

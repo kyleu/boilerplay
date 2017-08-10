@@ -16,11 +16,14 @@ object UserQueries extends BaseQueries[User] {
   val insert = Insert
   val getById = GetById
   def getByIdSeq(idSeq: Seq[UUID]) = new ColSeqQuery("id", idSeq)
+
+  def count(whereClause: Option[String] = None) = new Count(s"""select count(*) as c from "$tableName"  ${whereClause.getOrElse("")}""")
   def getAll(orderBy: Option[String], limit: Option[Int], offset: Option[Int]) = GetAll(orderBy = orderBy, limit = limit, offset = offset)
-  val count = new Count(s"""select count(*) as c from "$tableName" """)
+
   val search = Search
   val searchCount = SearchCount
   val searchExact = SearchExact
+
   val removeById = RemoveById
 
   case class IsUsernameInUse(name: String) extends SingleRowQuery[Boolean] {
