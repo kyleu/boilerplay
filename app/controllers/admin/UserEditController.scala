@@ -13,13 +13,17 @@ import scala.concurrent.Future
 
 @javax.inject.Singleton
 class UserEditController @javax.inject.Inject() (override val app: Application, userSearchService: UserSearchService) extends BaseController {
-  def users(q: Option[String] = None, limit: Option[Int] = None, offset: Option[Int] = None) = withAdminSession("admin-users") { implicit request =>
+  def list(q: Option[String] = None, limit: Option[Int] = None, offset: Option[Int] = None) = withAdminSession("admin-users") { implicit request =>
     val f = q match {
       case Some(query) if query.nonEmpty => app.userService.search(query, limit.orElse(Some(100)), offset)
       case _ => app.userService.getAll(limit.orElse(Some(100)), offset)
     }
-    f.map { users =>
-      Ok(views.html.admin.user.userList(request.identity, q, users, limit.getOrElse(100), offset.getOrElse(0)))
+    val c = q match {
+      case Some(query) if query.nonEmpty => app.userService.searchCount(query)
+      case _ => app.userService.totalCount()
+    }
+    for (models <- f; total <- c) yield {
+      Ok(views.html.admin.user.userList(request.identity, q, Some(total), models, limit.getOrElse(100), offset.getOrElse(0)))
     }
   }
 
@@ -72,7 +76,7 @@ class UserEditController @javax.inject.Inject() (override val app: Application, 
 
   def remove(id: UUID) = withAdminSession("admin-user-remove") { implicit request =>
     app.userService.remove(id).map { _ =>
-      Redirect(controllers.admin.routes.UserEditController.users())
+      Redirect(controllers.admin.routes.UserEditController.list())
     }
   }
 }

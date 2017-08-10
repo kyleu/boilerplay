@@ -1,4 +1,4 @@
-@(user: models.user.User, q: Option[String], users: Seq[models.user.User], limit: Int, offset: Int)(
+@(user: models.user.User, q: Option[String], totalCount: Option[Int], users: Seq[models.user.User], limit: Int, offset: Int)(
     implicit request: Request[AnyContent], session: Session, flash: Flash
 )
 
@@ -33,8 +33,9 @@
     "actions" -> ""
   ),
   rows = users.map(resultFor),
+  totalCount = totalCount,
   newUrl = Some(controllers.admin.routes.UserCreateController.newUser()),
-  nextUrl = controllers.admin.routes.UserEditController.users(q, Some(limit), Some(offset + limit)),
+  nextUrl = controllers.admin.routes.UserEditController.list(q, Some(limit), Some(offset + limit)),
   limit = limit,
   offset = offset,
   showSearch = true,

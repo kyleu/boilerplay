@@ -21,7 +21,7 @@ GET         /explore                                                   controlle
 GET         /user/new                                                  controllers.admin.UserCreateController.newUser()
 POST        /user/new                                                  controllers.admin.UserCreateController.saveNewUser()
 
-GET         /user                                                      controllers.admin.UserEditController.users(q: Option[String] ?= None, limit: Option[Int] ?= None, offset: Option[Int] ?= None)
+GET         /user                                                      controllers.admin.UserEditController.list(q: Option[String] ?= None, limit: Option[Int] ?= None, offset: Option[Int] ?= None)
 GET         /user/:id                                                  controllers.admin.UserEditController.view(id: java.util.UUID)
 GET         /user/:id/edit                                             controllers.admin.UserEditController.edit(id: java.util.UUID)
 POST        /user/:id/edit                                             controllers.admin.UserEditController.save(id: java.util.UUID)

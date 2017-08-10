@@ -13,7 +13,7 @@ object Schema {
     // End model fetchers
   }
 
-  val resolver: DeferredResolver[GraphQLContext] = DeferredResolver.fetchers(modelFetchers: _*)
+  val resolver: DeferredResolver[GraphQLContext] = DeferredResolver.fetchers(UserSchema.userByIdFetcher +: modelFetchers: _*)
 
   val modelQueryFields = {
     // Start model query fields

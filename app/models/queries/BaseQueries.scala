@@ -75,7 +75,7 @@ trait BaseQueries[T] extends JodaDateUtils {
   }
 
   protected case class SearchCount(q: String, groupBy: Option[String] = None) extends Count(sql = {
-    val searchWhere = if (q.isEmpty) { "" } else { "where " + searchColumns.map(c => s"""lower("$c") like lower(?)""").mkString(" or ") }
+    val searchWhere = if (q.isEmpty) { "" } else { "where " + searchColumns.map(c => s"""lower("$c"::text) like lower(?)""").mkString(" or ") }
     s"""select count(*) as c from "$tableName" $searchWhere ${groupBy.map(x => s" group by $x").getOrElse("")}"""
   }, values = if (q.isEmpty) { Seq.empty[Any] } else { searchColumns.map(_ => "%" + q + "%") })
 

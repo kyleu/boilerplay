@@ -66,6 +66,8 @@ class UserService @javax.inject.Inject() (hasher: PasswordHasher) extends Loggin
   }
 
   def getAll(limit: Option[Int] = None, offset: Option[Int] = None) = Database.query(UserQueries.getAll(Some("\"username\""), limit, offset))
+
+  def searchCount(q: String) = Database.query(UserQueries.searchCount(q))
   def search(q: String, limit: Option[Int], offset: Option[Int]) = try {
     getById(UUID.fromString(q)).map(_.toSeq)
   } catch {
