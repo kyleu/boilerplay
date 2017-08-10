@@ -1,0 +1,17 @@
+@(user: models.user.User, result: models.sandbox.SandboxTask.Result)(
+    implicit request: Request[AnyContent], session: Session, flash: Flash
+)@layout.admin(user = user, activeSection = "status", title = s"${result.task.name} Result") {
+  <div class="row">
+    <div class="col s12">
+      <div class="card">
+        <div class="card-content">
+          <span class="card-title">
+            <div class="right">@result.status: @{result.elapsed}ms</div>
+            @result.task.name Result
+          </span>
+          <pre class="sandbox-result" style="margin: 20px 0;">@result.result</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+}

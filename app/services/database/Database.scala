@@ -17,6 +17,8 @@ object Database extends Instrumented {
   private[this] val poolConfig = new PoolConfiguration(maxObjects = 100, maxIdle = 10, maxQueueSize = 1000)
   private[this] var factory: PostgreSQLConnectionFactory = _
   private[this] var pool: ConnectionPool[PostgreSQLConnection] = _
+  private[this] var config: Option[Configuration] = None
+  def getConfig = config.getOrElse(throw new IllegalStateException("Database not open."))
 
   private[this] def prependComment(obj: Object, sql: String) = s"/* ${obj.getClass.getSimpleName.replace("$", "")} */ $sql"
 
@@ -32,6 +34,7 @@ object Database extends Instrumented {
   def open(configuration: Configuration): Unit = {
     factory = new PostgreSQLConnectionFactory(configuration)
     pool = new ConnectionPool(factory, poolConfig)
+    config = Some(configuration)
 
     val healthCheck = pool.sendQuery("select now()")
     healthCheck.failed.foreach(x => throw new IllegalStateException("Cannot connect to database.", x))

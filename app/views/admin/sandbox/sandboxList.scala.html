@@ -1,0 +1,25 @@
+@(user: models.user.User)(implicit request: Request[AnyContent], session: Session, flash: Flash)
+
+@resultFor(task: models.sandbox.SandboxTask) = {
+  <tr>
+    <td><a class="theme-text" href="@controllers.admin.routes.SandboxController.run(task.id)">@task.name</a></td>
+    <td>@task.description</td>
+  </tr>
+}
+
+@views.html.admin.explore.list(
+  user = user,
+  model = "Sandbox",
+  modelPlural = "Sandboxes",
+  icon = models.template.Icons.sandbox,
+  cols = Seq(
+    "sandbox" -> "Sandbox",
+    "description" -> "Description"
+  ),
+  rows = models.sandbox.SandboxTask.values.map(resultFor),
+  nextUrl = controllers.admin.routes.SandboxController.list(),
+  limit = 100,
+  offset = 0,
+  showSearch = false,
+  q = None
+)
