@@ -1,11 +1,10 @@
 package services.database
 
-import java.nio.charset.Charset
-
 import models.ddl.DdlQueries.DdlStatement
 import models.ddl.{DdlFile, DdlQueries}
-import org.apache.commons.io.FileUtils
 import java.time.LocalDateTime
+
+import better.files.File
 import util.Logging
 import util.FutureUtils.defaultContext
 
@@ -13,20 +12,20 @@ import scala.concurrent.duration._
 import scala.concurrent.{Await, Future}
 
 object MasterDdl extends Logging {
-  val dir = new java.io.File("./ddl")
+  val dir = File("./ddl")
 
   lazy val files = if (dir.isDirectory) {
-    dir.listFiles.filter(_.getName.endsWith(".sql")).map { f =>
+    dir.children.filter(_.name.endsWith(".sql")).map { f =>
       val now = LocalDateTime.now()
-      val split = f.getName.stripSuffix(".sql").split('_')
+      val split = f.name.stripSuffix(".sql").split('_')
       if (split.length != 2) {
-        throw new IllegalStateException(s"Invalid filename [${f.getName}].")
+        throw new IllegalStateException(s"Invalid filename [${f.name}].")
       }
       val index = split.headOption.getOrElse(throw new IllegalStateException()).toInt
       val name = split(1)
-      val sql = FileUtils.readFileToString(f, Charset.defaultCharset)
+      val sql = f.contentAsString
       DdlFile(index, name, sql, now)
-    }.sortBy(_.id).toSeq
+    }.toSeq.sortBy(_.id)
   } else {
     Nil
   }
