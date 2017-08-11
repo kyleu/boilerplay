@@ -4,12 +4,14 @@ import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.util.PasswordInfo
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
 import models.queries.BaseQueries
-import models.database.{Row, Statement}
+import models.database.{DatabaseField, Row, Statement}
 import util.DateUtils
 
 object PasswordInfoQueries extends BaseQueries[PasswordInfo] {
   override protected val tableName = "password_info"
-  override protected val columns = Seq("provider", "key", "hasher", "password", "salt", "created")
+  override protected val columns = Seq(
+    DatabaseField("provider"), DatabaseField("key"), DatabaseField("hasher"), DatabaseField("password"), DatabaseField("salt"), DatabaseField("created")
+  )
   override protected val idColumns = Seq("provider", "key")
   override protected val searchColumns = Seq("key")
 

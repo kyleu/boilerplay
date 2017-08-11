@@ -1,14 +1,14 @@
 package models.queries.settings
 
-import models.database.{Row, Statement}
+import models.database.{DatabaseField, Row, Statement}
 import models.queries.BaseQueries
 import models.settings.{Setting, SettingKey}
 
 object SettingQueries extends BaseQueries[Setting] {
   override protected val tableName = "setting_values"
   override protected val idColumns = Seq("k")
-  override protected val columns = Seq("k", "v")
-  override protected val searchColumns = columns
+  override protected val columns = Seq(DatabaseField("k"), DatabaseField("v"))
+  override protected val searchColumns = columns.map(_.col)
 
   val insert = Insert
   def removeById(k: SettingKey) = RemoveById(Seq(k.toString))

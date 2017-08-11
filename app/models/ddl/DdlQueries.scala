@@ -1,11 +1,11 @@
 package models.ddl
 
-import models.database.{Query, Row, SingleRowQuery, Statement}
+import models.database._
 import models.queries.BaseQueries
 
 object DdlQueries extends BaseQueries[DdlFile] {
   override protected val tableName = "ddl"
-  override protected val columns = Seq("id", "name", "sql", "applied")
+  override protected val columns = Seq(DatabaseField("id"), DatabaseField("name"), DatabaseField("sql"), DatabaseField("applied"))
 
   def getAll = GetAll(orderBy = Some("id"))
   case object GetIds extends Query[Seq[Int]] {

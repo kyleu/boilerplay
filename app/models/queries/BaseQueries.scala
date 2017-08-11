@@ -1,6 +1,7 @@
 package models.queries
 
 import models.database._
+import util.JodaDateUtils
 
 object BaseQueries {
   def trim(s: String) = s.replaceAll("""[\s]+""", " ").trim
@@ -9,12 +10,12 @@ object BaseQueries {
 trait BaseQueries[T] extends JodaDateUtils {
   protected def tableName: String = "_invalid_"
   protected def idColumns = Seq("id")
-  protected def columns: Seq[String]
+  protected def columns: Seq[DatabaseField]
   protected def searchColumns: Seq[String] = Nil
   protected def fromRow(row: Row): T
   protected def toDataSeq(t: T): Seq[Any]
 
-  protected lazy val quotedColumns = columns.map("\"" + _ + "\"").mkString(", ")
+  protected lazy val quotedColumns = columns.map("\"" + _.col + "\"").mkString(", ")
   protected def placeholdersFor(seq: Seq[_]) = seq.map(_ => "?").mkString(", ")
   protected lazy val columnPlaceholders = placeholdersFor(columns)
   protected lazy val insertSql = s"""insert into "$tableName" ($quotedColumns) values ($columnPlaceholders)"""

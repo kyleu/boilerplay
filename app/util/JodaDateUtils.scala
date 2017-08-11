@@ -1,8 +1,6 @@
-package models.queries
+package util
 
 import java.time._
-
-import util.DateUtils
 
 trait JodaDateUtils {
   protected def toJoda(ldt: LocalDateTime): org.joda.time.LocalDateTime = new org.joda.time.LocalDateTime(DateUtils.toMillis(ldt))

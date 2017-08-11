@@ -8,12 +8,12 @@ object Dependencies {
     val ws = play.sbt.PlayImport.ws
     val guice = play.sbt.PlayImport.guice
     val cache = play.sbt.PlayImport.ehcache
-    val json = "com.typesafe.play" %% "play-json" % "2.6.2"
+    val json = "com.typesafe.play" %% "play-json" % "2.6.3"
     val test = "com.typesafe.play" %% "play-test" % version % "test"
   }
 
   object Akka {
-    private[this] val version = "2.5.3"
+    private[this] val version = "2.5.4"
     val actor = "com.typesafe.akka" %% "akka-actor" % version
     val remote = "com.typesafe.akka" %% "akka-remote" % version
     val logging = "com.typesafe.akka" %% "akka-slf4j" % version
@@ -48,7 +48,7 @@ object Dependencies {
   object WebJars {
     val fontAwesome = "org.webjars" % "font-awesome" % "4.7.0"
     val jquery = "org.webjars" % "jquery" % "2.2.4"
-    val materialize = "org.webjars" % "materializecss" % "0.99.0"
+    val materialize = "org.webjars" % "materializecss" % "0.100.1"
     val moment = "org.webjars" % "momentjs" % "2.18.1"
     val mousetrap = "org.webjars" % "mousetrap" % "1.6.0"
   }

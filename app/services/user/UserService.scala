@@ -20,6 +20,17 @@ class UserService @javax.inject.Inject() (hasher: PasswordHasher) extends Loggin
   def getByIdSeq(idSeq: Seq[UUID]) = Database.query(UserQueries.getByIdSeq(idSeq))
 
   def totalCount() = Database.query(UserQueries.count())
+  def getAll(limit: Option[Int] = None, offset: Option[Int] = None) = Database.query(UserQueries.getAll(Some("\"username\""), limit, offset))
+
+  def searchCount(q: String) = Database.query(UserQueries.searchCount(q))
+  def search(q: String, limit: Option[Int], offset: Option[Int]) = try {
+    getById(UUID.fromString(q)).map(_.toSeq)
+  } catch {
+    case _: IllegalArgumentException => Database.query(UserQueries.search(q, Some("id desc"), limit, offset))
+  }
+
+  def searchExact(q: String, limit: Option[Int], offset: Option[Int]) = Database.query(UserQueries.searchExact(q, Some("id desc"), limit, offset))
+
   def isUsernameInUse(name: String) = Database.query(UserQueries.IsUsernameInUse(name))
   def usernameLookup(id: UUID) = Database.query(UserQueries.GetUsername(id))
 
@@ -64,17 +75,6 @@ class UserService @javax.inject.Inject() (hasher: PasswordHasher) extends Loggin
       throw new IllegalStateException("An admin already exists.")
     }
   }
-
-  def getAll(limit: Option[Int] = None, offset: Option[Int] = None) = Database.query(UserQueries.getAll(Some("\"username\""), limit, offset))
-
-  def searchCount(q: String) = Database.query(UserQueries.searchCount(q))
-  def search(q: String, limit: Option[Int], offset: Option[Int]) = try {
-    getById(UUID.fromString(q)).map(_.toSeq)
-  } catch {
-    case _: IllegalArgumentException => Database.query(UserQueries.search(q, Some("id desc"), limit, offset))
-  }
-
-  def searchExact(q: String, limit: Option[Int], offset: Option[Int]) = Database.query(UserQueries.searchExact(q, Some("id desc"), limit, offset))
 
   def update(id: UUID, username: String, email: String, password: Option[String], role: Role, originalEmail: String) = {
     Database.execute(UserQueries.UpdateFields(id, username, email, role)).flatMap { _ =>
