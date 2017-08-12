@@ -21,7 +21,7 @@ sealed abstract class SandboxTask(val id: String, val name: String, val descript
   override def toString = id
 }
 
-object SandboxTask extends Enum[SandboxTask] {
+object SandboxTask extends Enum[SandboxTask] with CirceEnum[SandboxTask] {
   case class Result(task: SandboxTask, status: String = "OK", result: String, elapsed: Int)
 
   case object Testbed extends SandboxTask("testbed", "Testbed", "A simple sandbox for messin' around.") {

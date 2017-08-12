@@ -8,7 +8,7 @@ sealed abstract class Theme(val value: String, val color: String) extends String
   override def toString: String = value
 }
 
-object Theme extends StringEnum[Theme] {
+object Theme extends StringEnum[Theme] with StringCirceEnum[Theme] {
   case object Red extends Theme("red", "#c62828")
   case object Pink extends Theme("pink", "#d81b60")
   case object Purple extends Theme("purple", "#8e24aa")

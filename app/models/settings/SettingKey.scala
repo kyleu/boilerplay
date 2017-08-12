@@ -4,7 +4,7 @@ import enumeratum._
 
 sealed abstract class SettingKey(val title: String, val description: String, val default: String) extends EnumEntry
 
-object SettingKey extends Enum[SettingKey] {
+object SettingKey extends Enum[SettingKey] with CirceEnum[SettingKey] {
   case object AllowRegistration extends SettingKey(
     title = "Allow Registration",
     description = "Determines if users are allowed to sign themselves up for the system.",
