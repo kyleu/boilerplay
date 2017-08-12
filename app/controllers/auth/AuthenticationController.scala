@@ -6,7 +6,7 @@ import com.mohiva.play.silhouette.impl.exceptions.IdentityNotFoundException
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
 import controllers.BaseController
 import models.user.UserForms
-import util.FutureUtils.defaultContext
+import util.FutureUtils.webContext
 import services.user.UserSearchService
 import util.Application
 

@@ -6,7 +6,7 @@ import java.time.LocalDateTime
 
 import better.files.File
 import util.Logging
-import util.FutureUtils.defaultContext
+import util.FutureUtils.databaseContext
 
 import scala.concurrent.duration._
 import scala.concurrent.{Await, Future}

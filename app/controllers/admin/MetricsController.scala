@@ -2,7 +2,7 @@ package controllers.admin
 
 import controllers.BaseController
 import util.Application
-import util.FutureUtils.defaultContext
+import util.FutureUtils.webContext
 
 @javax.inject.Singleton
 class MetricsController @javax.inject.Inject() (override val app: Application) extends BaseController {

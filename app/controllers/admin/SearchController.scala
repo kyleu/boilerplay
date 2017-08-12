@@ -5,7 +5,7 @@ import java.util.UUID
 import controllers.BaseController
 import play.twirl.api.Html
 import util.Application
-import util.FutureUtils.defaultContext
+import util.FutureUtils.webContext
 
 import scala.concurrent.Future
 

@@ -9,7 +9,7 @@ import sangria.marshalling.circe._
 import sangria.parser.QueryParser
 import sangria.validation.QueryValidator
 import util.{Application, Logging}
-import util.FutureUtils.defaultContext
+import util.FutureUtils.graphQlContext
 
 import scala.util.{Failure, Success}
 

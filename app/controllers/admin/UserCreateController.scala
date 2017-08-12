@@ -8,7 +8,7 @@ import com.mohiva.play.silhouette.api.{LoginInfo, SignUpEvent}
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
 import controllers.BaseController
 import models.user.{Role, User, UserPreferences}
-import util.FutureUtils.defaultContext
+import util.FutureUtils.webContext
 import services.user.UserService
 import util.Application
 import util.web.FormUtils

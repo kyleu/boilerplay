@@ -9,7 +9,7 @@ import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
 import controllers.BaseController
 import models.settings.SettingKey
 import models.user._
-import util.FutureUtils.defaultContext
+import util.FutureUtils.webContext
 import services.settings.SettingsService
 import services.user.{UserSearchService, UserService}
 import util.Application

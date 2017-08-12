@@ -3,7 +3,7 @@ package controllers.admin
 import akka.util.Timeout
 import controllers.BaseController
 import models.sandbox.SandboxTask
-import util.FutureUtils.defaultContext
+import util.FutureUtils.webContext
 import util.Application
 
 import scala.concurrent.Future

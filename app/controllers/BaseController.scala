@@ -2,7 +2,7 @@ package controllers
 
 import com.mohiva.play.silhouette.api.actions.{SecuredRequest, UserAwareRequest}
 import models.auth.AuthEnv
-import util.FutureUtils.defaultContext
+import util.FutureUtils.webContext
 import play.api.mvc._
 import util.metrics.Instrumented
 import util.{Application, Logging}

@@ -8,7 +8,7 @@ import sangria.marshalling.circe._
 import sangria.marshalling.MarshallingUtil._
 import sangria.parser.SyntaxError
 import services.graphql.GraphQLService
-import util.{Application, FutureUtils}
+import util.Application
 
 import scala.concurrent.Future
 
@@ -35,11 +35,12 @@ class GraphQLController @javax.inject.Inject() (override val app: Application) e
 
   def executeQuery(query: String, variables: Option[Json], operation: Option[String], user: User) = {
     try {
+      import util.FutureUtils.graphQlContext
       val f = GraphQLService.executeQuery(app, query, variables, operation, user)
-      f.map(x => Ok(x.spaces2).as("application/json"))(FutureUtils.defaultContext).recover {
+      f.map(x => Ok(x.spaces2).as("application/json")).recover {
         case error: QueryAnalysisError => BadRequest(error.resolveError.spaces2).as("application/json")
         case error: ErrorWithResolver => InternalServerError(error.resolveError.spaces2).as("application/json")
-      }(FutureUtils.defaultContext)
+      }
     } catch {
       case error: SyntaxError =>
         val json = Json.obj(

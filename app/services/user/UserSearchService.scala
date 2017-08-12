@@ -6,7 +6,7 @@ import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.services.IdentityService
 import models.queries.auth.UserQueries
 import models.user.User
-import util.FutureUtils.defaultContext
+import util.FutureUtils.databaseContext
 import services.database.Database
 import util.Logging
 import util.cache.UserCache
