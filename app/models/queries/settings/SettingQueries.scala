@@ -7,14 +7,14 @@ import models.settings.{Setting, SettingKey}
 object SettingQueries extends BaseQueries[Setting] {
   override protected val tableName = "setting_values"
   override protected val idColumns = Seq("k")
-  override protected val columns = Seq(DatabaseField("k"), DatabaseField("v"))
-  override protected val searchColumns = columns.map(_.col)
+  override protected val fields = Seq(DatabaseField("k"), DatabaseField("v"))
+  override protected val searchColumns = fields.map(_.col)
 
   val insert = Insert
   def removeById(k: SettingKey) = RemoveById(Seq(k.toString))
-  val getAll = GetAll()
+  val getAll = GetAll
   def getById(k: SettingKey) = GetById(Seq(k.toString))
-  def search(q: String, orderBy: Option[String], limit: Option[Int] = None, offset: Option[Int] = None) = Search(q, orderBy, limit, offset)
+  def search = Search
 
   case class Update(s: Setting) extends Statement {
     override val sql = {

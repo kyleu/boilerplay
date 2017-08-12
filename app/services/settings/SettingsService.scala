@@ -13,7 +13,7 @@ object SettingsService {
   def asBool(key: SettingKey) = apply(key) == "true"
   def getOrSet(key: SettingKey, s: => String) = settingsMap.getOrElse(key, set(key, s))
 
-  def load() = Database.query(SettingQueries.getAll).map(_.map(s => s.key -> s.value).toMap).map { x =>
+  def load() = Database.query(SettingQueries.getAll()).map(_.map(s => s.key -> s.value).toMap).map { x =>
     settingsMap = x
     settings = SettingKey.values.map(k => Setting(k, settingsMap.getOrElse(k, k.default)))
   }

@@ -53,7 +53,7 @@ class SearchController @javax.inject.Inject() (override val app: Application) ex
     val stringSearches = Seq.empty[Future[Seq[Html]]]
     // End string searches
 
-    val userF = app.userService.searchExact(q, Some(10), None).map { users =>
+    val userF = app.userService.searchExact(q = q, orderBys = Nil, limit = Some(10), offset = None).map { users =>
       users.map(u => views.html.admin.user.userSearchResult(u, s"User [${u.username}] matched [$q]."))
     }
 

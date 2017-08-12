@@ -5,12 +5,13 @@ import java.util.UUID
 import com.mohiva.play.silhouette.api.LoginInfo
 import models.database._
 import models.queries.BaseQueries
+import models.result.filter.Filter
 import models.user.{Role, User, UserPreferences}
 import util.JsonSerializers
 
 object UserQueries extends BaseQueries[User] {
   override protected val tableName = "users"
-  override protected val columns = Seq(
+  override protected val fields = Seq(
     DatabaseField("id"), DatabaseField("username"), DatabaseField("prefs"), DatabaseField("email"), DatabaseField("role"), DatabaseField("created")
   )
   override protected val searchColumns = Seq("id", "username", "email")
@@ -19,8 +20,8 @@ object UserQueries extends BaseQueries[User] {
   val getById = GetById
   def getByIdSeq(idSeq: Seq[UUID]) = new ColSeqQuery("id", idSeq)
 
-  def count(whereClause: Option[String] = None) = new Count(s"""select count(*) as c from "$tableName"  ${whereClause.getOrElse("")}""")
-  def getAll(orderBy: Option[String], limit: Option[Int], offset: Option[Int]) = GetAll(orderBy = orderBy, limit = limit, offset = offset)
+  def countAll(filters: Seq[Filter] = Nil) = onCountAll(filters)
+  def getAll = GetAll
 
   val search = Search
   val searchCount = SearchCount

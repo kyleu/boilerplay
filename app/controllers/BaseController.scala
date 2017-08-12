@@ -40,7 +40,7 @@ abstract class BaseController() extends InjectedController with Instrumented wit
             val auth = request.authenticator.getOrElse(throw new IllegalStateException("Somehow, you're not logged in."))
             block(SecuredRequest(u, auth, request))
           case None =>
-            val result = app.userService.totalCount().map { count =>
+            val result = app.userService.countAll().map { count =>
               if (count == 0) {
                 Redirect(controllers.auth.routes.RegistrationController.registrationForm())
               } else {

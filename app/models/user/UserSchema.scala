@@ -8,8 +8,15 @@ import sangria.macros.derive._
 import sangria.schema._
 import models.graphql.CommonSchema._
 import models.graphql.DateTimeSchema._
+import models.result.filter.FilterSchema._
+import models.result.orderBy.OrderBySchema._
+import models.result.paging.PagingSchema.pagingOptionsType
 import models.template.Theme
 import sangria.execution.deferred.{Fetcher, HasId}
+import models.result.filter.FilterSchema.reportFiltersArg
+import models.result.orderBy.OrderBySchema.orderBysArg
+import models.result.paging.PagingOptions
+import util.FutureUtils.graphQlContext
 
 object UserSchema {
   implicit val roleEnum = CommonSchema.deriveEnumeratumType(
@@ -33,6 +40,8 @@ object UserSchema {
   implicit val userPreferenceType = deriveObjectType[GraphQLContext, UserPreferences](ObjectTypeDescription("Information about users of the system."))
   implicit lazy val userType: ObjectType[GraphQLContext, User] = deriveObjectType()
 
+  implicit lazy val userResultType: ObjectType[GraphQLContext, UserResult] = deriveObjectType()
+
   val queryFields = fields[GraphQLContext, Unit](
     Field(
       name = "profile",
@@ -45,11 +54,24 @@ object UserSchema {
     ),
     Field(
       name = "user",
-      fieldType = ListType(userType),
-      arguments = queryArg :: limitArg :: offsetArg :: Nil,
-      resolve = c => c.arg(CommonSchema.queryArg) match {
-        case Some(q) => c.ctx.app.userService.search(q, c.arg(limitArg), c.arg(offsetArg))
-        case _ => c.ctx.app.userService.getAll(c.arg(limitArg), c.arg(offsetArg))
+      fieldType = userResultType,
+      arguments = queryArg :: reportFiltersArg :: orderBysArg :: limitArg :: offsetArg :: Nil,
+      resolve = c =>
+      {
+        val start = util.DateUtils.now
+        val filters = c.arg(reportFiltersArg).getOrElse(Nil)
+        val orderBys = c.arg(orderBysArg).getOrElse(Nil)
+        val limit = c.arg(limitArg)
+        val offset = c.arg(offsetArg)
+        val f = c.arg(CommonSchema.queryArg) match {
+          case Some(q) => c.ctx.app.userService.searchWithCount(q, filters, orderBys, limit, offset)
+          case _ => c.ctx.app.userService.getAllWithCount(filters, orderBys, limit, offset)
+        }
+        f.map { r =>
+          val paging = PagingOptions.from(r._1, limit, offset)
+          val durationMs = (System.currentTimeMillis - util.DateUtils.toMillis(start)).toInt
+          UserResult(paging = paging, filters = filters, orderBys = orderBys, totalCount = r._1, records = r._2, durationMs = durationMs)
+        }
       }
     )
   )

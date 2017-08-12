@@ -3,8 +3,9 @@ package controllers.admin
 import java.util.UUID
 
 import controllers.BaseController
+import models.result.orderBy.OrderBy
 import models.user.Role
-import util.FutureUtils.defaultContext
+import util.FutureUtils.webContext
 import services.user.UserSearchService
 import util.Application
 import util.web.FormUtils
@@ -13,17 +14,16 @@ import scala.concurrent.Future
 
 @javax.inject.Singleton
 class UserEditController @javax.inject.Inject() (override val app: Application, userSearchService: UserSearchService) extends BaseController {
-  def list(q: Option[String] = None, limit: Option[Int] = None, offset: Option[Int] = None) = withAdminSession("admin-users") { implicit request =>
-    val f = q match {
-      case Some(query) if query.nonEmpty => app.userService.search(query, limit.orElse(Some(100)), offset)
-      case _ => app.userService.getAll(limit.orElse(Some(100)), offset)
-    }
-    val c = q match {
-      case Some(query) if query.nonEmpty => app.userService.searchCount(query)
-      case _ => app.userService.totalCount()
-    }
-    for (models <- f; total <- c) yield {
-      Ok(views.html.admin.user.userList(request.identity, q, Some(total), models, limit.getOrElse(100), offset.getOrElse(0)))
+  def list(q: Option[String], orderBy: Option[String], orderAsc: Boolean, limit: Option[Int], offset: Option[Int]) = {
+    withAdminSession("admin-users") { implicit request =>
+      val orderBys = orderBy.map(o => OrderBy(col = o, dir = OrderBy.Direction.fromBoolAsc(orderAsc))).toSeq
+      val f = q match {
+        case Some(query) if query.nonEmpty => app.userService.searchWithCount(query, Nil, orderBys, limit.orElse(Some(100)), offset)
+        case _ => app.userService.getAllWithCount(Nil, orderBys, limit.orElse(Some(100)), offset)
+      }
+      f.map(r => Ok(views.html.admin.user.userList(
+        request.identity, q, orderBy, orderAsc, Some(r._1), r._2, limit.getOrElse(100), offset.getOrElse(0)
+      )))
     }
   }
 

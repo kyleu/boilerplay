@@ -6,30 +6,34 @@ import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.util.PasswordHasher
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
 import models.queries.auth._
+import models.result.filter.Filter
+import models.result.orderBy.OrderBy
 import models.user.{Role, User}
-import util.FutureUtils.defaultContext
+import services.ModelServiceHelper
+import util.FutureUtils.databaseContext
 import services.database.Database
-import util.Logging
 import util.cache.UserCache
 
 import scala.concurrent.Future
 
 @javax.inject.Singleton
-class UserService @javax.inject.Inject() (hasher: PasswordHasher) extends Logging {
+class UserService @javax.inject.Inject() (hasher: PasswordHasher) extends ModelServiceHelper[User] {
   def getById(id: UUID) = Database.query(UserQueries.getById(Seq(id)))
   def getByIdSeq(idSeq: Seq[UUID]) = Database.query(UserQueries.getByIdSeq(idSeq))
 
-  def totalCount() = Database.query(UserQueries.count())
-  def getAll(limit: Option[Int] = None, offset: Option[Int] = None) = Database.query(UserQueries.getAll(Some("\"username\""), limit, offset))
-
-  def searchCount(q: String) = Database.query(UserQueries.searchCount(q))
-  def search(q: String, limit: Option[Int], offset: Option[Int]) = try {
-    getById(UUID.fromString(q)).map(_.toSeq)
-  } catch {
-    case _: IllegalArgumentException => Database.query(UserQueries.search(q, Some("id desc"), limit, offset))
+  override def countAll(filters: Seq[Filter] = Nil) = Database.query(UserQueries.countAll(filters))
+  override def getAll(filters: Seq[Filter], orderBys: Seq[OrderBy], limit: Option[Int] = None, offset: Option[Int] = None) = {
+    Database.query(UserQueries.getAll(filters, orderBys, limit, offset))
   }
 
-  def searchExact(q: String, limit: Option[Int], offset: Option[Int]) = Database.query(UserQueries.searchExact(q, Some("id desc"), limit, offset))
+  override def searchCount(q: String, filters: Seq[Filter]) = Database.query(UserQueries.searchCount(q, filters))
+  override def search(q: String, filters: Seq[Filter], orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int]) = {
+    Database.query(UserQueries.search(q, filters, orderBys, limit, offset))
+  }
+
+  def searchExact(q: String, orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int]) = {
+    Database.query(UserQueries.searchExact(q, orderBys, limit, offset))
+  }
 
   def isUsernameInUse(name: String) = Database.query(UserQueries.IsUsernameInUse(name))
   def usernameLookup(id: UUID) = Database.query(UserQueries.GetUsername(id))
