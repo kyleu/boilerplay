@@ -7,7 +7,12 @@ import java.time.LocalDateTime
 import util.DateUtils
 
 object User {
-  val mock = User(UUID.fromString("11111111-1111-1111-1111-111111111111"), "Test User", UserPreferences.empty, LoginInfo("anonymous", "guest"))
+  val empty = User(
+    id = UUID.fromString("11111111-1111-1111-1111-111111111111"),
+    username = "Test User",
+    preferences = UserPreferences.empty,
+    profile = LoginInfo("anonymous", "guest")
+  )
 }
 
 case class User(

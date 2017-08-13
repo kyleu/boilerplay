@@ -34,14 +34,14 @@ class UserEditController @javax.inject.Inject() (override val app: Application, 
     }
   }
 
-  def edit(id: UUID) = withAdminSession("admin-user-edit") { implicit request =>
+  def editForm(id: UUID) = withAdminSession("admin-user-edit") { implicit request =>
     userSearchService.retrieve(id).map { userOpt =>
       val user = userOpt.getOrElse(throw new IllegalStateException(s"Invalid user [$id]."))
-      Ok(views.html.admin.user.userEdit(request.identity, user))
+      Ok(views.html.admin.user.userForm(request.identity, user))
     }
   }
 
-  def save(id: UUID) = withAdminSession("admin-user-save") { implicit request =>
+  def edit(id: UUID) = withAdminSession("admin-user-save") { implicit request =>
     val form = FormUtils.getForm(request)
     userSearchService.retrieve(id).flatMap { userOpt =>
       val user = userOpt.getOrElse(throw new IllegalStateException(s"Invalid user [$id]."))

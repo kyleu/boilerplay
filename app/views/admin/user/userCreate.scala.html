@@ -1,7 +1,7 @@
 @(self: models.user.User)(
     implicit request: Request[AnyContent], session: Session, flash: Flash
 )@layout.admin(self, "explore", "New User") {
-  <form action="@controllers.admin.routes.UserCreateController.newUser()" method="post">
+  <form action="@controllers.admin.routes.UserCreateController.create()" method="post">
     <div class="content-panel">
       <div class="panel-title">
         <i class="fa @models.template.Icons.user"></i> New User

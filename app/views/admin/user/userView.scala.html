@@ -1,32 +1,39 @@
-@(self: models.user.User, user: models.user.User)(
+@(self: models.user.User, model: models.user.User)(
     implicit request: Request[AnyContent], session: Session, flash: Flash
 )@layout.admin(self, "explore", "View User") {
-  <div class="content-panel">
-    <div class="panel-title">
-      <i class="fa @models.template.Icons.user"></i>
-      @user.username
-      @if(self.id == user.id) { <span>(You)</span> }
+  <div class="collection with-header">
+    <div class="collection-header">
+      <div class="right"><a class="theme-text" href="@controllers.admin.routes.UserEditController.editForm(model.id)">Edit</a></div>
+      <h5>
+        <i class="fa @models.template.Icons.user"></i>
+        User [@model.id] @if(self.id == model.id) { <span>(You)</span> }
+      </h5>
     </div>
 
-    <div class="row padded">
-      <div class="col s12">
-        <em>@user.profile.providerKey</em>
-      </div>
-      <div class="col s12">
-        @if(user.role == models.user.Role.Admin) {
-          <em>Administrator</em>
-        } else {
-          @if(user.role == models.user.Role.User) {
-            <em>Normal User</em>
-          } else {
-            <em>Visitor</em>
-          }
-        }
-      </div>
+    <div class="collection-item">
+      <table class="highlight">
+        <tbody>
+          <tr><th>Id</th><td>@model.id</td></tr>
+          <tr><th>Username</th><td>@model.username</td></tr>
+          <tr><th>Theme</th><td>@model.preferences.theme</td></tr>
+          <tr><th>Email</th><td>@model.profile.providerKey</td></tr>
+          <tr>
+            <th>Role</th>
+            <td>
+            @if(model.role == models.user.Role.Admin) {
+              <em>Administrator</em>
+            } else {
+              @if(model.role == models.user.Role.User) {
+                <em>Normal User</em>
+              } else {
+                <em>Visitor</em>
+              }
+            }
+            </td>
+          </tr>
+          <tr><th>Created</th><td>@model.created</td></tr>
+        </tbody>
+      </table>
     </div>
-  </div>
-  <div class="panel-action">
-    <a class="theme-text right" href="@controllers.admin.routes.UserEditController.edit(user.id)">Edit</a>
-    <a class="theme-text" href="@controllers.admin.routes.UserEditController.list()">Back to User List</a>
   </div>
 }

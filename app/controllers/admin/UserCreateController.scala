@@ -21,11 +21,11 @@ class UserCreateController @javax.inject.Inject() (
     authInfoRepository: AuthInfoRepository,
     hasher: PasswordHasher
 ) extends BaseController {
-  def newUser() = withAdminSession("admin-user-new") { implicit request =>
+  def createForm() = withAdminSession("admin-user-form") { implicit request =>
     Future.successful(Ok(views.html.admin.user.userCreate(request.identity)))
   }
 
-  def saveNewUser() = withAdminSession("admin-user-save-new") { implicit request =>
+  def create() = withAdminSession("admin-user-create") { implicit request =>
     val form = FormUtils.getForm(request)
     val id = UUID.randomUUID
     val loginInfo = LoginInfo(CredentialsProvider.ID, form("email").trim)
@@ -36,9 +36,9 @@ class UserCreateController @javax.inject.Inject() (
     val username = form("username").trim
 
     if (username.isEmpty) {
-      Future.successful(Redirect(controllers.admin.routes.UserCreateController.newUser()).flashing("error" -> "Username is required."))
+      Future.successful(Redirect(controllers.admin.routes.UserCreateController.createForm()).flashing("error" -> "Username is required."))
     } else if (loginInfo.providerKey.isEmpty) {
-      Future.successful(Redirect(controllers.admin.routes.UserCreateController.newUser()).flashing("error" -> "Email Address is required."))
+      Future.successful(Redirect(controllers.admin.routes.UserCreateController.createForm()).flashing("error" -> "Email Address is required."))
     } else {
       val user = User(
         id = id,

@@ -19,11 +19,11 @@ GET         /explore                                                   controlle
 
 # Users
 GET         /user                                                      controllers.admin.UserEditController.list(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None)
-GET         /user/form                                                 controllers.admin.UserCreateController.newUser()
-POST        /user                                                      controllers.admin.UserCreateController.saveNewUser()
+GET         /user/form                                                 controllers.admin.UserCreateController.createForm()
+POST        /user                                                      controllers.admin.UserCreateController.create()
 GET         /user/:id                                                  controllers.admin.UserEditController.view(id: java.util.UUID)
-GET         /user/:id/form                                             controllers.admin.UserEditController.edit(id: java.util.UUID)
-POST        /user/:id                                                  controllers.admin.UserEditController.save(id: java.util.UUID)
+GET         /user/:id/form                                             controllers.admin.UserEditController.editForm(id: java.util.UUID)
+POST        /user/:id                                                  controllers.admin.UserEditController.edit(id: java.util.UUID)
 GET         /user/:id/remove                                           controllers.admin.UserEditController.remove(id: java.util.UUID)
 
 # Settings

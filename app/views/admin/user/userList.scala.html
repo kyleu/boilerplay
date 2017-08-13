@@ -26,7 +26,7 @@
   cols = Seq(
     "id" -> "ID",
     "username" -> "Username",
-    "provider" -> "Provider",
+    "provider" -> "Email",
     "theme" -> "Theme",
     "role" -> "Role",
     "created" -> "Created",
@@ -36,7 +36,7 @@
   orderAsc = orderAsc,
   rows = users.map(resultFor),
   totalCount = totalCount,
-  newUrl = Some(controllers.admin.routes.UserCreateController.newUser()),
+  newUrl = Some(controllers.admin.routes.UserCreateController.createForm()),
   orderByUrl = Some(controllers.admin.routes.UserEditController.list(q, _, _, Some(limit), Some(0))),
   searchUrl = Some(controllers.admin.routes.UserEditController.list(None, orderBy, orderAsc, Some(limit), None)),
   nextUrl = controllers.admin.routes.UserEditController.list(q, orderBy, orderAsc, Some(limit), Some(offset + limit)),
