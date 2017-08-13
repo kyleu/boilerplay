@@ -5,6 +5,7 @@ import java.util.UUID
 import com.mohiva.play.silhouette.api.LoginInfo
 import models.database._
 import models.queries.BaseQueries
+import models.result.data.DataField
 import models.result.filter.Filter
 import models.user.{Role, User, UserPreferences}
 import util.JsonSerializers
@@ -28,6 +29,7 @@ object UserQueries extends BaseQueries[User] {
   val searchExact = SearchExact
 
   val removeById = RemoveById
+  def update(id: UUID, fields: Seq[DataField]) = UpdateFields(Seq(id), fields)
 
   case class IsUsernameInUse(name: String) extends SingleRowQuery[Boolean] {
     override val sql = s"""select count(*) as c from "$tableName" where "username" = ?"""
@@ -77,11 +79,6 @@ object UserQueries extends BaseQueries[User] {
   case object CountAdmins extends SingleRowQuery[Int]() {
     override val sql = "select count(*) as c from \"users\" where \"role\" = 'admin'"
     override def map(row: Row) = row.as[Long]("c").toInt
-  }
-
-  case class UpdateFields(id: UUID, username: String, email: String, role: Role) extends Statement {
-    override val sql = s"""update "$tableName" set "username" = ?, "email" = ?, "role" = ? where "id" = ?"""
-    override val values = Seq(username, email, role.toString, id)
   }
 
   override protected def fromRow(row: Row) = {

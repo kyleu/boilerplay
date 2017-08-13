@@ -6,6 +6,7 @@ import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.util.PasswordHasher
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
 import models.queries.auth._
+import models.result.data.DataField
 import models.result.filter.Filter
 import models.result.orderBy.OrderBy
 import models.user.{Role, User}
@@ -81,7 +82,12 @@ class UserService @javax.inject.Inject() (hasher: PasswordHasher) extends ModelS
   }
 
   def update(id: UUID, username: String, email: String, password: Option[String], role: Role, originalEmail: String) = {
-    Database.execute(UserQueries.UpdateFields(id, username, email, role)).flatMap { _ =>
+    val fields = Seq(
+      DataField("username", Some(username)),
+      DataField("email", Some(email)),
+      DataField("role", Some(role.toString)),
+    )
+    Database.execute(UserQueries.update(id, fields)).flatMap { _ =>
       val emailUpdated = if (email != originalEmail) {
         Database.execute(PasswordInfoQueries.UpdateEmail(originalEmail, email))
       } else {

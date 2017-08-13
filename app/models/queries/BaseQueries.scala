@@ -1,6 +1,8 @@
 package models.queries
 
 import models.database._
+import models.result.ResultFieldHelper
+import models.result.data.DataField
 import util.JodaDateUtils
 
 object BaseQueries {
@@ -44,6 +46,12 @@ trait BaseQueries[T] extends SearchQueries[T] with JodaDateUtils {
     override val values: Seq[Any] = toDataSeq(model)
   }
 
+  protected case class InsertFields(dataFields: Seq[DataField]) extends Statement {
+    private[this] val cols = dataFields.map(f => ResultFieldHelper.sqlForField("update", f.k, fields))
+    override val sql = s"insert into $tableName (${cols.map("\"" + _ + "\"").mkString(", ")}) values (${cols.map(_ => "?").mkString(", ")})"
+    override val values: Seq[Any] = dataFields.map(_.v)
+  }
+
   protected case class InsertBatch(models: Seq[T]) extends Statement {
     private[this] val valuesClause = models.map(_ => s"($columnPlaceholders)").mkString(", ")
     override val sql = s"""insert into "$tableName" ($quotedColumns) values $valuesClause"""
@@ -52,6 +60,12 @@ trait BaseQueries[T] extends SearchQueries[T] with JodaDateUtils {
 
   protected case class RemoveById(override val values: Seq[Any]) extends Statement {
     override val sql = s"""delete from "$tableName" where $idWhereClause"""
+  }
+
+  protected case class UpdateFields(pks: Seq[Any], dataFields: Seq[DataField]) extends Statement {
+    private[this] val cols = dataFields.map(f => ResultFieldHelper.sqlForField("update", f.k, fields))
+    override val sql = s"""update "$tableName" set ${cols.map("\"" + _ + "\" = ?").mkString(", ")} where $idWhereClause"""
+    override val values = dataFields.map(_.v) ++ pks
   }
 
   protected class SeqQuery(additionalSql: String, override val values: Seq[Any] = Nil) extends Query[Seq[T]] {

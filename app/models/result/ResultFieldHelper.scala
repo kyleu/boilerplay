@@ -5,7 +5,7 @@ import models.result.filter.Filter
 import models.result.orderBy.OrderBy
 
 object ResultFieldHelper {
-  private[this] def sqlForField(t: String, field: String, fields: Seq[DatabaseField]) = fields.find(_.prop == field) match {
+  def sqlForField(t: String, field: String, fields: Seq[DatabaseField]) = fields.find(_.prop == field) match {
     case Some(f) => f.col
     case None => throw new IllegalStateException(s"Invalid $t field [$field]. Allowed fields are [${fields.map(_.prop).mkString(", ")}].")
   }
