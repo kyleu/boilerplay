@@ -1,6 +1,9 @@
 package models.template
 
 object Icons {
+  val sortAsc = "fa-sort-asc"
+  val sortDesc = "fa-sort-desc"
+
   val bars = "fa-bars"
   val spin = "fa-spin"
   val settings = "fa-gear"

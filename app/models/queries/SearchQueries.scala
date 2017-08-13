@@ -24,7 +24,10 @@ trait SearchQueries[T] { this: BaseQueries[T] =>
   }
 
   protected case class SearchCount(q: String, filter: Seq[Filter] = Nil) extends Count(
-    sql = s"""select count(*) as c from "$tableName" ${filterClause(filters = filter, fields = fields, add = Some(searchClause(q)))}""",
+    sql = {
+    val f = filterClause(filters = filter, fields = fields, add = Some(searchClause(q))).map(" where " + _).getOrElse("")
+    s"""select count(*) as c from "$tableName"$f"""
+  },
     values = if (q.isEmpty) { filter.flatMap(_.v) } else { filter.flatMap(_.v) ++ searchColumns.map(_ => "%" + q + "%") }
   )
 

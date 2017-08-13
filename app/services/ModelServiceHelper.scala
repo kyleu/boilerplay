@@ -21,8 +21,8 @@ trait ModelServiceHelper[T] extends Logging {
   def search(q: String, filters: Seq[Filter], orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int]): Future[Seq[T]]
 
   def searchWithCount(q: String, filters: Seq[Filter], orderBys: Seq[OrderBy], limit: Option[Int] = None, offset: Option[Int] = None) = {
-    val result = getAll(filters, orderBys, limit, offset)
-    val count = countAll(filters)
+    val result = search(q, filters, orderBys, limit, offset)
+    val count = searchCount(q, filters)
     result.flatMap(r => count.map(_ -> r))
   }
 }

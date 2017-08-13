@@ -16,13 +16,8 @@
     "sandbox" -> "Sandbox",
     "description" -> "Description"
   ),
-  totalCount = None,
   rows = models.sandbox.SandboxTask.values.map(resultFor),
-  newUrl = None,
   nextUrl = controllers.admin.routes.SandboxController.list(),
-  limit = 100,
-  offset = 0,
   section = "status",
-  showSearch = false,
   q = None
 )

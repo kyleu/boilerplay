@@ -4,22 +4,25 @@
     modelPlural: String,
     icon: String,
     cols: Seq[(String, String)],
+    orderBy: Option[String] = None,
+    orderAsc: Boolean = true,
     rows: Seq[Html],
-    totalCount: Option[Int],
-    newUrl: Option[Call],
+    totalCount: Option[Int] = None,
+    newUrl: Option[Call] = None,
+    orderByUrl: Option[(Option[String], Boolean) => Call] = None,
+    searchUrl: Option[Call] = None,
     nextUrl: Call,
     limit: Int = 100,
     offset: Int = 0,
     section: String = "explore",
-    showSearch: Boolean = false,
     q: Option[String] = None
 )(implicit request: Request[AnyContent], session: Session, flash: Flash)
 @layout.admin(user, section, s"$model Management") {
   <div class="collection with-header">
     <div class="collection-header">
-      @if(showSearch) {
+      @searchUrl.map { search =>
         <div class="right">
-          <form action="" method="get">
+          <form action="@search" method="get">
             <input type="text" name="q" placeholder="Search @modelPlural" value="@q.getOrElse("")" />
           </form>
         </div>
@@ -46,9 +49,22 @@
     <div class="collection-item">
       <table>
         <thead>
-          @cols.map { col =>
+        @cols.map { col =>
+          @orderByUrl.map { u =>
+            @if(orderBy.contains(col._1)) {
+              @if(orderAsc) {
+                <th><a href="@u(Some(col._1), !orderAsc)" class="theme-text">@col._2 <i class="fa @models.template.Icons.sortAsc"></i></a></th>
+              } else {
+                <th><a href="@u(Some(col._1), !orderAsc)" class="theme-text">@col._2 <i class="fa @models.template.Icons.sortDesc"></i></a></th>
+              }
+            } else {
+              <th><a href="@u(Some(col._1), true)" class="theme-text">@col._2</a></th>
+            }
+          }
+          @if(orderByUrl.isEmpty) {
             <th>@col._2</th>
           }
+        }
         </thead>
         <tbody>
           @rows.map { row =>
