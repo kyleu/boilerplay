@@ -15,6 +15,8 @@ object Schema {
 
   val resolver = DeferredResolver.fetchers(UserSchema.userByIdFetcher +: modelFetchers: _*)
 
+  val baseQueryFields = UserSchema.queryFields ++ SettingSchema.queryFields ++ SandboxSchema.queryFields
+
   val modelQueryFields = {
     // Start model query fields
     Nil
@@ -24,7 +26,7 @@ object Schema {
   val queryType = ObjectType(
     name = "Query",
     description = "The main query interface.",
-    fields = (modelQueryFields ++ UserSchema.queryFields ++ SettingSchema.queryFields ++ SandboxSchema.queryFields).sortBy(_.name)
+    fields = (modelQueryFields ++ baseQueryFields).sortBy(_.name)
   )
 
   val modelMutationFields = {

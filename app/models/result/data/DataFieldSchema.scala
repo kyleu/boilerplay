@@ -1,4 +1,4 @@
-package models.result.update
+package models.result.data
 
 import sangria.ast
 import sangria.macros.derive.InputObjectTypeName
@@ -7,7 +7,9 @@ import sangria.schema._
 import sangria.marshalling.circe._
 import sangria.validation.ValueCoercionViolation
 
-object UpdateFieldSchema {
+import io.circe.generic.auto._
+
+object DataFieldSchema {
   case object VarCoercionViolation extends ValueCoercionViolation("String, bool or int value expected.")
 
   val varType = ScalarType[String](
@@ -38,9 +40,9 @@ object UpdateFieldSchema {
     }
   )
 
-  val updateFieldType = deriveInputObjectType[UpdateField](
-    InputObjectTypeName("OrderByInput")
+  val dataFieldType = deriveInputObjectType[DataField](
+    InputObjectTypeName("DataFieldInput")
   )
 
-  //val updateFieldsArg = Argument("fields", ListInputType(updateFieldType))
+  val dataFieldsArg = Argument("fields", ListInputType(dataFieldType))
 }
