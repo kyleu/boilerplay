@@ -26,6 +26,9 @@
       }
       <h5>
         <i class="fa @icon" style="margin-right: 6px;"></i>
+        @totalCount.map { total =>
+          @util.NumberUtils.withCommas(total)
+        }
         @{modelPlural}
         @q.map { query =>
           @if(query.trim.nonEmpty) {

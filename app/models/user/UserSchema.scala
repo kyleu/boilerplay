@@ -70,7 +70,7 @@ object UserSchema {
         f.map { r =>
           val paging = PagingOptions.from(r._1, limit, offset)
           val durationMs = (System.currentTimeMillis - util.DateUtils.toMillis(start)).toInt
-          UserResult(paging = paging, filters = filters, orderBys = orderBys, totalCount = r._1, records = r._2, durationMs = durationMs)
+          UserResult(paging = paging, filters = filters, orderBys = orderBys, totalCount = r._1, results = r._2, durationMs = durationMs)
         }
       }
     )

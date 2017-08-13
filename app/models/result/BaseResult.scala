@@ -10,7 +10,7 @@ abstract class BaseResult[T] {
   def filters: Seq[Filter]
   def orderBys: Seq[OrderBy]
   def totalCount: Int
-  def records: Seq[T]
+  def results: Seq[T]
   def durationMs: Int
   def occurred: LocalDateTime
 }
