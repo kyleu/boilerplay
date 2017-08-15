@@ -62,6 +62,12 @@ trait BaseQueries[T] extends SearchQueries[T] with JodaDateUtils {
     override val sql = s"""delete from "$tableName" where $idWhereClause"""
   }
 
+  protected case class CreateFields(dataFields: Seq[DataField]) extends Statement {
+    private[this] val cols = dataFields.map(f => ResultFieldHelper.sqlForField("insert", f.k, fields))
+    override val sql = s"""insert into "$tableName" (${cols.map("\"" + _ + "\"").mkString(", ")}) values (${cols.map(_ => "?").mkString(", ")})"""
+    override val values = dataFields.map(_.v)
+  }
+
   protected case class UpdateFields(pks: Seq[Any], dataFields: Seq[DataField]) extends Statement {
     private[this] val cols = dataFields.map(f => ResultFieldHelper.sqlForField("update", f.k, fields))
     override val sql = s"""update "$tableName" set ${cols.map("\"" + _ + "\" = ?").mkString(", ")} where $idWhereClause"""

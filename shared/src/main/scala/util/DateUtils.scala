@@ -14,6 +14,7 @@ object DateUtils {
   def today = LocalDate.now()
   def now = LocalDateTime.now()
   def nowMillis = toMillis(now)
+  def currentTime = LocalTime.now()
 
   def toMillis(ldt: LocalDateTime) = ldt.atZone(ZoneId.systemDefault).toInstant.toEpochMilli
   def fromMillis(millis: Long) = Instant.ofEpochMilli(millis).atZone(ZoneId.systemDefault).toLocalDateTime

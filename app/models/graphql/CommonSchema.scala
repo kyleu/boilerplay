@@ -52,6 +52,20 @@ object CommonSchema {
     }
   )
 
+  implicit val byteType = ScalarType[Byte](
+    name = "Byte",
+    description = Some("A single byte, expressed as an integer."),
+    coerceOutput = (u, _) => u.toInt,
+    coerceUserInput = {
+      case i: Int => Right(i.toByte)
+      case _ => Left(UuidCoercionViolation)
+    },
+    coerceInput = {
+      case sangria.ast.IntValue(i, _, _) => Right(i.toByte)
+      case _ => Left(UuidCoercionViolation)
+    }
+  )
+
   implicit val byteArrayType = ScalarType[Array[Byte]](
     name = "Base64",
     description = Some("A binary array of bytes, encoded with Base64."),
