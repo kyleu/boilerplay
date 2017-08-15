@@ -32,7 +32,7 @@ class SearchController @javax.inject.Inject() (override val app: Application) ex
     val uuidSearches = Seq.empty[Future[Seq[Html]]]
     // End uuid searches
 
-    val userF = app.userService.getById(id).map {
+    val userF = app.userService.getByPrimaryKey(id).map {
       case Some(u) => Seq(views.html.admin.user.userSearchResult(u, s"User [${u.username}] matched id [$q]."))
       case None => Nil
     }

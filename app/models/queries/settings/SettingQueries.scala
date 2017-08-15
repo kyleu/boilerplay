@@ -6,14 +6,14 @@ import models.settings.{Setting, SettingKey}
 
 object SettingQueries extends BaseQueries[Setting] {
   override protected val tableName = "setting_values"
-  override protected val idColumns = Seq("k")
+  override protected val pkColumns = Seq("k")
   override protected val fields = Seq(DatabaseField("k"), DatabaseField("v"))
   override protected val searchColumns = fields.map(_.col)
 
   val insert = Insert
-  def removeById(k: SettingKey) = RemoveById(Seq(k.toString))
+  def removeByPrimaryKey(k: SettingKey) = RemoveByPrimaryKey(Seq(k.toString))
   val getAll = GetAll
-  def getById(k: SettingKey) = GetById(Seq(k.toString))
+  def getByPrimaryKey(k: SettingKey) = GetByPrimaryKey(Seq(k.toString))
   def search = Search
 
   case class Update(s: Setting) extends Statement {

@@ -19,8 +19,8 @@ import scala.concurrent.Future
 
 @javax.inject.Singleton
 class UserService @javax.inject.Inject() (hasher: PasswordHasher) extends ModelServiceHelper[User] {
-  def getById(id: UUID) = Database.query(UserQueries.getById(Seq(id)))
-  def getByIdSeq(idSeq: Seq[UUID]) = Database.query(UserQueries.getByIdSeq(idSeq))
+  def getByPrimaryKey(id: UUID) = Database.query(UserQueries.getByPrimaryKey(Seq(id)))
+  def getByPrimaryKeySeq(idSeq: Seq[UUID]) = Database.query(UserQueries.getByPrimaryKeySeq(idSeq))
 
   override def countAll(filters: Seq[Filter] = Nil) = Database.query(UserQueries.countAll(filters))
   override def getAll(filters: Seq[Filter], orderBys: Seq[OrderBy], limit: Option[Int] = None, offset: Option[Int] = None) = {
@@ -60,12 +60,12 @@ class UserService @javax.inject.Inject() (hasher: PasswordHasher) extends ModelS
 
   def remove(userId: UUID) = Database.transaction { conn =>
     val startTime = System.nanoTime
-    val f = getById(userId).flatMap {
-      case Some(user) => Database.execute(PasswordInfoQueries.removeById(Seq(user.profile.providerID, user.profile.providerKey)), Some(conn))
+    val f = getByPrimaryKey(userId).flatMap {
+      case Some(user) => Database.execute(PasswordInfoQueries.removeByPrimaryKey(Seq(user.profile.providerID, user.profile.providerKey)), Some(conn))
       case None => throw new IllegalStateException("Invalid User")
     }
     f.flatMap { _ =>
-      Database.execute(UserQueries.removeById(Seq(userId)), Some(conn)).map { users =>
+      Database.execute(UserQueries.removeByPrimaryKey(Seq(userId)), Some(conn)).map { users =>
         UserCache.removeUser(userId)
         val timing = ((System.nanoTime - startTime) / 1000000).toInt
         Map("users" -> users, "timing" -> timing)
@@ -85,7 +85,7 @@ class UserService @javax.inject.Inject() (hasher: PasswordHasher) extends ModelS
     val fields = Seq(
       DataField("username", Some(username)),
       DataField("email", Some(email)),
-      DataField("role", Some(role.toString)),
+      DataField("role", Some(role.toString))
     )
     Database.execute(UserQueries.update(id, fields)).flatMap { _ =>
       val emailUpdated = if (email != originalEmail) {

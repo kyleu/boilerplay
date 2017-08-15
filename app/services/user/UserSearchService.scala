@@ -17,7 +17,7 @@ import scala.concurrent.Future
 class UserSearchService @javax.inject.Inject() () extends IdentityService[User] with Logging {
   def retrieve(id: UUID) = UserCache.getUser(id) match {
     case Some(u) => Future.successful(Some(u))
-    case None => Database.query(UserQueries.getById(Seq(id))).map { x =>
+    case None => Database.query(UserQueries.getByPrimaryKey(Seq(id))).map { x =>
       x.foreach(UserCache.cacheUser)
       x
     }

@@ -12,11 +12,11 @@ object PasswordInfoQueries extends BaseQueries[PasswordInfo] {
   override protected val fields = Seq(
     DatabaseField("provider"), DatabaseField("key"), DatabaseField("hasher"), DatabaseField("password"), DatabaseField("salt"), DatabaseField("created")
   )
-  override protected val idColumns = Seq("provider", "key")
+  override protected val pkColumns = Seq("provider", "key")
   override protected val searchColumns = Seq("key")
 
-  val getById = GetById
-  val removeById = RemoveById
+  val getByPrimaryKey = GetByPrimaryKey
+  val removeByPrimaryKey = RemoveByPrimaryKey
 
   case class CreatePasswordInfo(l: LoginInfo, p: PasswordInfo) extends Statement {
     override val sql = insertSql

@@ -18,8 +18,8 @@ object UserQueries extends BaseQueries[User] {
   override protected val searchColumns = Seq("id", "username", "email")
 
   val insert = Insert
-  val getById = GetById
-  def getByIdSeq(idSeq: Seq[UUID]) = new ColSeqQuery("id", idSeq)
+  val getByPrimaryKey = GetByPrimaryKey
+  def getByPrimaryKeySeq(idSeq: Seq[UUID]) = new ColSeqQuery("id", idSeq)
 
   def countAll(filters: Seq[Filter] = Nil) = onCountAll(filters)
   def getAll = GetAll
@@ -28,7 +28,7 @@ object UserQueries extends BaseQueries[User] {
   val searchCount = SearchCount
   val searchExact = SearchExact
 
-  val removeById = RemoveById
+  val removeByPrimaryKey = RemoveByPrimaryKey
   def update(id: UUID, fields: Seq[DataField]) = UpdateFields(Seq(id), fields)
 
   case class IsUsernameInUse(name: String) extends SingleRowQuery[Boolean] {

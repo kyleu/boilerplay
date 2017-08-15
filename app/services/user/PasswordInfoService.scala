@@ -11,7 +11,7 @@ import scala.concurrent.Future
 
 @javax.inject.Singleton
 class PasswordInfoService @javax.inject.Inject() () extends DelegableAuthInfoDAO[PasswordInfo] {
-  def getByLoginInfo(loginInfo: LoginInfo) = Database.query(PasswordInfoQueries.getById(Seq(loginInfo.providerID, loginInfo.providerKey)))
+  def getByLoginInfo(loginInfo: LoginInfo) = Database.query(PasswordInfoQueries.getByPrimaryKey(Seq(loginInfo.providerID, loginInfo.providerKey)))
 
   override def find(loginInfo: LoginInfo) = {
     getByLoginInfo(loginInfo)
@@ -40,6 +40,6 @@ class PasswordInfoService @javax.inject.Inject() () extends DelegableAuthInfoDAO
   }
 
   override def remove(loginInfo: LoginInfo) = {
-    Database.execute(PasswordInfoQueries.removeById(Seq(loginInfo.providerID, loginInfo.providerKey))).map(_ => Unit)
+    Database.execute(PasswordInfoQueries.removeByPrimaryKey(Seq(loginInfo.providerID, loginInfo.providerKey))).map(_ => Unit)
   }
 }

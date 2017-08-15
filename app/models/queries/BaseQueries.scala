@@ -11,7 +11,7 @@ object BaseQueries {
 
 trait BaseQueries[T] extends SearchQueries[T] with JodaDateUtils {
   protected def tableName: String
-  protected def idColumns = Seq("id")
+  protected def pkColumns = Seq("id")
   protected def fields: Seq[DatabaseField]
   protected def searchColumns: Seq[String] = Nil
   protected def fromRow(row: Row): T
@@ -23,7 +23,7 @@ trait BaseQueries[T] extends SearchQueries[T] with JodaDateUtils {
   protected lazy val insertSql = s"""insert into "$tableName" ($quotedColumns) values ($columnPlaceholders)"""
 
   protected def updateSql(updateColumns: Seq[String], additionalUpdates: Option[String] = None) = BaseQueries.trim(s"""
-    update "$tableName" set ${updateColumns.map(x => s"$x = ?").mkString(", ")}${additionalUpdates.map(x => s", $x").getOrElse("")} where $idWhereClause
+    update "$tableName" set ${updateColumns.map(x => s"$x = ?").mkString(", ")}${additionalUpdates.map(x => s", $x").getOrElse("")} where $pkWhereClause
   """)
 
   protected def getSql(whereClause: Option[String] = None, orderBy: Option[String] = None, limit: Option[Int] = None, offset: Option[Int] = None) = {
@@ -36,8 +36,8 @@ trait BaseQueries[T] extends SearchQueries[T] with JodaDateUtils {
     """)
   }
 
-  protected case class GetById(override val values: Seq[Any]) extends FlatSingleRowQuery[T] {
-    override val sql = s"""select $quotedColumns from "$tableName" where $idWhereClause"""
+  protected case class GetByPrimaryKey(override val values: Seq[Any]) extends FlatSingleRowQuery[T] {
+    override val sql = s"""select $quotedColumns from "$tableName" where $pkWhereClause"""
     override def flatMap(row: Row) = Some(fromRow(row))
   }
 
@@ -58,8 +58,8 @@ trait BaseQueries[T] extends SearchQueries[T] with JodaDateUtils {
     override val values: Seq[Any] = models.flatMap(toDataSeq)
   }
 
-  protected case class RemoveById(override val values: Seq[Any]) extends Statement {
-    override val sql = s"""delete from "$tableName" where $idWhereClause"""
+  protected case class RemoveByPrimaryKey(override val values: Seq[Any]) extends Statement {
+    override val sql = s"""delete from "$tableName" where $pkWhereClause"""
   }
 
   protected case class CreateFields(dataFields: Seq[DataField]) extends Statement {
@@ -70,7 +70,7 @@ trait BaseQueries[T] extends SearchQueries[T] with JodaDateUtils {
 
   protected case class UpdateFields(pks: Seq[Any], dataFields: Seq[DataField]) extends Statement {
     private[this] val cols = dataFields.map(f => ResultFieldHelper.sqlForField("update", f.k, fields))
-    override val sql = s"""update "$tableName" set ${cols.map("\"" + _ + "\" = ?").mkString(", ")} where $idWhereClause"""
+    override val sql = s"""update "$tableName" set ${cols.map("\"" + _ + "\" = ?").mkString(", ")} where $pkWhereClause"""
     override val values = dataFields.map(_.v) ++ pks
   }
 
@@ -90,5 +90,5 @@ trait BaseQueries[T] extends SearchQueries[T] with JodaDateUtils {
     override def map(row: Row) = row.as[Long]("c").toInt
   }
 
-  private def idWhereClause = idColumns.map(c => s""""$c" = ?""").mkString(" and ")
+  private def pkWhereClause = pkColumns.map(c => s""""$c" = ?""").mkString(" and ")
 }

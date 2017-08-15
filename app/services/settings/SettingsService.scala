@@ -27,10 +27,10 @@ object SettingsService {
     val s = Setting(key, value)
     if (s.isDefault) {
       settingsMap = settingsMap - key
-      Database.execute(SettingQueries.removeById(key))
+      Database.execute(SettingQueries.removeByPrimaryKey(key))
     } else {
       Database.transaction { conn =>
-        Database.query(SettingQueries.getById(key), Some(conn)).map {
+        Database.query(SettingQueries.getByPrimaryKey(key), Some(conn)).map {
           case Some(_) => Database.execute(SettingQueries.Update(s), Some(conn))
           case None => Database.execute(SettingQueries.insert(s), Some(conn))
         }
