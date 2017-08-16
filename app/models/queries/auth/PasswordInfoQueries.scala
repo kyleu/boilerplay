@@ -8,8 +8,8 @@ import models.database.{DatabaseField, Row, Statement}
 import util.DateUtils
 
 object PasswordInfoQueries extends BaseQueries[PasswordInfo] {
-  override protected val tableName = "password_info"
-  override protected val fields = Seq(
+  override val tableName = "password_info"
+  override val fields = Seq(
     DatabaseField("provider"), DatabaseField("key"), DatabaseField("hasher"), DatabaseField("password"), DatabaseField("salt"), DatabaseField("created")
   )
   override protected val pkColumns = Seq("provider", "key")

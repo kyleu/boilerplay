@@ -11,8 +11,8 @@ import models.user.{Role, User, UserPreferences}
 import util.JsonSerializers
 
 object UserQueries extends BaseQueries[User] {
-  override protected val tableName = "users"
-  override protected val fields = Seq(
+  override val tableName = "users"
+  override val fields = Seq(
     DatabaseField("id"), DatabaseField("username"), DatabaseField("prefs"), DatabaseField("email"), DatabaseField("role"), DatabaseField("created")
   )
   override protected val searchColumns = Seq("id", "username", "email")
@@ -20,6 +20,9 @@ object UserQueries extends BaseQueries[User] {
   val insert = Insert
   val getByPrimaryKey = GetByPrimaryKey
   def getByPrimaryKeySeq(idSeq: Seq[UUID]) = new ColSeqQuery("id", idSeq)
+
+  def getByRole(role: Role) = new SeqQuery("where role = ?", Seq(role))
+  def getByRoleSeq(roleSeq: Seq[Role]) = new ColSeqQuery("role", roleSeq.map(_.toString))
 
   def countAll(filters: Seq[Filter] = Nil) = onCountAll(filters)
   def getAll = GetAll
@@ -30,24 +33,6 @@ object UserQueries extends BaseQueries[User] {
 
   val removeByPrimaryKey = RemoveByPrimaryKey
   def update(id: UUID, fields: Seq[DataField]) = UpdateFields(Seq(id), fields)
-
-  case class IsUsernameInUse(name: String) extends SingleRowQuery[Boolean] {
-    override val sql = s"""select count(*) as c from "$tableName" where "username" = ?"""
-    override val values = Seq(name)
-    override def map(row: Row) = row.as[Long]("c") != 0L
-  }
-
-  case class GetUsername(id: UUID) extends Query[Option[String]] {
-    override val sql = s"""select "username" from "$tableName" where "id" = ?"""
-    override val values = Seq(id)
-    override def reduce(rows: Iterator[Row]) = rows.toSeq.headOption.map(_.as[String]("username"))
-  }
-
-  case class GetUsernames(ids: Set[UUID]) extends Query[Map[UUID, String]] {
-    private[this] val idClause = ids.map(id => s"'$id'").mkString(", ")
-    override val sql = s"""select "id", "username" from "$tableName" where "id" in ($idClause)"""
-    override def reduce(rows: Iterator[Row]) = rows.map(r => r.as[UUID]("id") -> r.as[String]("username")).toMap
-  }
 
   case class UpdateUser(u: User) extends Statement {
     override val sql = updateSql(Seq("username", "prefs", "email", "role"))
@@ -74,11 +59,6 @@ object UserQueries extends BaseQueries[User] {
     override val sql = getSql(Some("\"email\" = ?"))
     override val values = Seq(loginInfo.providerKey)
     override def flatMap(row: Row) = Some(fromRow(row))
-  }
-
-  case object CountAdmins extends SingleRowQuery[Int]() {
-    override val sql = "select count(*) as c from \"users\" where \"role\" = 'admin'"
-    override def map(row: Row) = row.as[Long]("c").toInt
   }
 
   override protected def fromRow(row: Row) = {

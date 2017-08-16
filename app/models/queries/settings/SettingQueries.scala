@@ -5,9 +5,9 @@ import models.queries.BaseQueries
 import models.settings.{Setting, SettingKey}
 
 object SettingQueries extends BaseQueries[Setting] {
-  override protected val tableName = "setting_values"
+  override val tableName = "setting_values"
+  override val fields = Seq(DatabaseField("k"), DatabaseField("v"))
   override protected val pkColumns = Seq("k")
-  override protected val fields = Seq(DatabaseField("k"), DatabaseField("v"))
   override protected val searchColumns = fields.map(_.col)
 
   val insert = Insert
