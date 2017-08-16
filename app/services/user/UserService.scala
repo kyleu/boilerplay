@@ -22,6 +22,8 @@ class UserService @javax.inject.Inject() (hasher: PasswordHasher) extends ModelS
   def getByPrimaryKey(id: UUID) = Database.query(UserQueries.getByPrimaryKey(Seq(id)))
   def getByPrimaryKeySeq(idSeq: Seq[UUID]) = Database.query(UserQueries.getByPrimaryKeySeq(idSeq))
 
+  def getByRoleSeq(roleSeq: Seq[Role]) = Database.query(UserQueries.getByRoleSeq(roleSeq))
+
   override def countAll(filters: Seq[Filter] = Nil) = Database.query(UserQueries.countAll(filters))
   override def getAll(filters: Seq[Filter], orderBys: Seq[OrderBy], limit: Option[Int] = None, offset: Option[Int] = None) = {
     Database.query(UserQueries.getAll(filters, orderBys, limit, offset))
@@ -36,16 +38,12 @@ class UserService @javax.inject.Inject() (hasher: PasswordHasher) extends ModelS
     Database.query(UserQueries.searchExact(q, orderBys, limit, offset))
   }
 
-  def isUsernameInUse(name: String) = Database.query(UserQueries.IsUsernameInUse(name))
-  def usernameLookup(id: UUID) = Database.query(UserQueries.GetUsername(id))
+  def isUsernameInUse(name: String) = Database.query(UserSearchQueries.IsUsernameInUse(name))
+  def usernameLookup(id: UUID) = Database.query(UserSearchQueries.GetUsername(id))
 
   def save(user: User, update: Boolean = false) = {
     log.info(s"${if (update) { "Updating" } else { "Creating" }} user [$user].")
-    val statement = if (update) {
-      UserQueries.UpdateUser(user)
-    } else {
-      UserQueries.insert(user)
-    }
+    val statement = if (update) { UserQueries.UpdateUser(user) } else { UserQueries.insert(user) }
     Database.execute(statement).map { _ =>
       UserCache.cacheUser(user)
       user
@@ -55,7 +53,7 @@ class UserService @javax.inject.Inject() (hasher: PasswordHasher) extends ModelS
   def usernameLookupMulti(ids: Set[UUID]) = if (ids.isEmpty) {
     Future.successful(Map.empty[UUID, String])
   } else {
-    Database.query(UserQueries.GetUsernames(ids))
+    Database.query(UserSearchQueries.GetUsernames(ids))
   }
 
   def remove(userId: UUID) = Database.transaction { conn =>
@@ -70,14 +68,6 @@ class UserService @javax.inject.Inject() (hasher: PasswordHasher) extends ModelS
         val timing = ((System.nanoTime - startTime) / 1000000).toInt
         Map("users" -> users, "timing" -> timing)
       }
-    }
-  }
-
-  def enableAdmin(user: User) = Database.query(UserQueries.CountAdmins).flatMap { adminCount =>
-    if (adminCount == 0) {
-      Database.execute(UserQueries.SetRole(user.id, Role.Admin)).map(_ => UserCache.removeUser(user.id))
-    } else {
-      throw new IllegalStateException("An admin already exists.")
     }
   }
 

@@ -4,7 +4,9 @@ GET         /connect                                 controllers.HomeController.
 GET         /robots.txt                              controllers.HomeController.robots
 
 # Admin
-->          /admin                                   admin.Routes
+->          /admin/system                            system.Routes
+->          /admin/user                              user.Routes
+->          /admin/graphql                           graphql.Routes
 
 # Utility
 GET         /*path/                                  controllers.HomeController.untrail(path: String)

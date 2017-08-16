@@ -3,7 +3,7 @@
 )@layout.admin(self, "explore", "View User") {
   <div class="collection with-header">
     <div class="collection-header">
-      <div class="right"><a class="theme-text" href="@controllers.admin.routes.UserEditController.editForm(model.id)">Edit</a></div>
+      <div class="right"><a class="theme-text" href="@controllers.admin.user.routes.UserEditController.editForm(model.id)">Edit</a></div>
       <h5>
         <i class="fa @models.template.Icons.user"></i>
         User [@model.id] @if(self.id == model.id) { <span>(You)</span> }

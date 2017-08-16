@@ -2,7 +2,7 @@
   <div class="right">@model.username</div>
   <div>
     <i class="fa @models.template.Icons.user"></i>
-    <a class="theme-text" href="@controllers.admin.routes.UserEditController.view(model.id)">@model.id</a>
+    <a class="theme-text" href="@controllers.admin.user.routes.UserEditController.view(model.id)">@model.id</a>
   </div>
   <em>@hit</em>
 </div>

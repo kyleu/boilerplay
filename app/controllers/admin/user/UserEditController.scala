@@ -1,13 +1,13 @@
-package controllers.admin
+package controllers.admin.user
 
 import java.util.UUID
 
 import controllers.BaseController
 import models.result.orderBy.OrderBy
 import models.user.Role
-import util.FutureUtils.webContext
 import services.user.UserSearchService
 import util.Application
+import util.FutureUtils.webContext
 import util.web.FormUtils
 
 import scala.concurrent.Future
@@ -61,14 +61,14 @@ class UserEditController @javax.inject.Inject() (override val app: Application, 
       }
 
       if (newUsername.isEmpty) {
-        Future.successful(Redirect(controllers.admin.routes.UserEditController.edit(id)).flashing("error" -> "Username is required."))
+        Future.successful(Redirect(controllers.admin.user.routes.UserEditController.edit(id)).flashing("error" -> "Username is required."))
       } else if (newEmail.isEmpty) {
-        Future.successful(Redirect(controllers.admin.routes.UserEditController.edit(id)).flashing("error" -> "Email Address is required."))
+        Future.successful(Redirect(controllers.admin.user.routes.UserEditController.edit(id)).flashing("error" -> "Email Address is required."))
       } else if (isSelf && (role != Role.Admin) && user.role == Role.Admin) {
-        Future.successful(Redirect(controllers.admin.routes.UserEditController.edit(id)).flashing("error" -> "You cannot remove your own admin role."))
+        Future.successful(Redirect(controllers.admin.user.routes.UserEditController.edit(id)).flashing("error" -> "You cannot remove your own admin role."))
       } else {
         app.userService.update(id, newUsername, newEmail, newPassword, role, user.profile.providerKey).map { _ =>
-          Redirect(controllers.admin.routes.UserEditController.view(id))
+          Redirect(controllers.admin.user.routes.UserEditController.view(id))
         }
       }
     }
@@ -76,7 +76,7 @@ class UserEditController @javax.inject.Inject() (override val app: Application, 
 
   def remove(id: UUID) = withAdminSession("admin-user-remove") { implicit request =>
     app.userService.remove(id).map { _ =>
-      Redirect(controllers.admin.routes.UserEditController.list())
+      Redirect(controllers.admin.user.routes.UserEditController.list())
     }
   }
 }

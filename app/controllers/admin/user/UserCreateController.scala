@@ -1,4 +1,4 @@
-package controllers.admin
+package controllers.admin.user
 
 import java.util.UUID
 
@@ -8,9 +8,8 @@ import com.mohiva.play.silhouette.api.{LoginInfo, SignUpEvent}
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
 import controllers.BaseController
 import models.user.{Role, User, UserPreferences}
-import util.FutureUtils.webContext
-import services.user.UserService
 import util.Application
+import util.FutureUtils.webContext
 import util.web.FormUtils
 
 import scala.concurrent.Future
@@ -36,9 +35,9 @@ class UserCreateController @javax.inject.Inject() (
     val username = form("username").trim
 
     if (username.isEmpty) {
-      Future.successful(Redirect(controllers.admin.routes.UserCreateController.createForm()).flashing("error" -> "Username is required."))
+      Future.successful(Redirect(controllers.admin.user.routes.UserCreateController.createForm()).flashing("error" -> "Username is required."))
     } else if (loginInfo.providerKey.isEmpty) {
-      Future.successful(Redirect(controllers.admin.routes.UserCreateController.createForm()).flashing("error" -> "Email Address is required."))
+      Future.successful(Redirect(controllers.admin.user.routes.UserCreateController.createForm()).flashing("error" -> "Email Address is required."))
     } else {
       val user = User(
         id = id,
@@ -56,7 +55,7 @@ class UserCreateController @javax.inject.Inject() (
         userSaved <- userSavedFuture
       } yield {
         app.silhouette.env.eventBus.publish(SignUpEvent(userSaved, request))
-        Redirect(controllers.admin.routes.UserEditController.view(id)).flashing("success" -> s"User [${form("email")}] added.")
+        Redirect(controllers.admin.user.routes.UserEditController.view(id)).flashing("success" -> s"User [${form("email")}] added.")
       }
     }
   }

@@ -33,8 +33,14 @@ object UserSchema {
 
   implicit val profileType = deriveObjectType[GraphQLContext, UserProfile](ObjectTypeDescription("Information about the current session."))
 
-  implicit val userId = HasId[User, UUID](_.id)
-  val userByIdFetcher = Fetcher((c: GraphQLContext, idSeq: Seq[UUID]) => c.app.userService.getByPrimaryKeySeq(idSeq))
+  val userPrimaryKeyId = HasId[User, UUID](_.id)
+  val userByPrimaryKeyFetcher = Fetcher { (c: GraphQLContext, idSeq: Seq[UUID]) =>
+    c.app.userService.getByPrimaryKeySeq(idSeq)
+  }(userPrimaryKeyId)
+
+  val userByRoleFetcher = Fetcher { (c: GraphQLContext, roleSeq: Seq[Role]) =>
+    c.app.userService.getByRoleSeq(roleSeq)
+  }(HasId[User, Role](_.role))
 
   implicit val loginInfoType = deriveObjectType[GraphQLContext, LoginInfo](ObjectTypeDescription("Information about login credentials."))
   implicit val userPreferenceType = deriveObjectType[GraphQLContext, UserPreferences](ObjectTypeDescription("Information about users of the system."))

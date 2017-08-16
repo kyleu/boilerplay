@@ -19,7 +19,7 @@
 }
 
 @layout.admin(user, "status", "System Preferences") {
-  <form action="@controllers.admin.routes.SettingsController.saveSettings()" method="post">
+  <form action="@controllers.admin.system.routes.SettingsController.saveSettings()" method="post">
     <div class="content-panel">
       <div class="panel-title"><i class="fa @models.template.Icons.settings"></i> System Preferences</div>
 
@@ -55,7 +55,7 @@
     </div>
     <div class="panel-action">
       <button class="right btn theme waves-effect waves-light" type="submit">Save</button>
-      <a class="right theme-text btn-flat" href="@controllers.admin.routes.AdminController.index()">Cancel</a>
+      <a class="right theme-text btn-flat" href="@controllers.admin.system.routes.AdminController.index()">Cancel</a>
       <div style="clear: both;"></div>
     </div>
   </form>

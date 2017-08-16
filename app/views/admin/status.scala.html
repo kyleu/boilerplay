@@ -7,15 +7,15 @@
       <div class="col s12">
         <ul class="collection">
           <li class="collection-item">
-            <a class="theme-text" href="@controllers.admin.routes.SettingsController.settings()">System Preferences</a>
+            <a class="theme-text" href="@controllers.admin.system.routes.SettingsController.settings()">System Preferences</a>
             <div><em>Edit system preferences.</em></div>
           </li>
           <li class="collection-item">
-            <a class="theme-text" href="@controllers.admin.routes.MetricsController.showMetrics()">Configuration</a>
+            <a class="theme-text" href="@controllers.admin.system.routes.MetricsController.showMetrics()">Configuration</a>
             <div>View system metrics.</div>
           </li>
           <li class="collection-item">
-            <a class="theme-text" href="@controllers.admin.routes.SandboxController.list()">Sandbox Methods</a>
+            <a class="theme-text" href="@controllers.admin.system.routes.SandboxController.list()">Sandbox Methods</a>
             <div>Execute one-off tasks and view the results.</div>
           </li>
         </ul>
@@ -23,6 +23,6 @@
     </div>
   </div>
   <div class="panel-action">
-    <a class="theme-text" href="@controllers.admin.routes.AdminController.index()">Back</a>
+    <a class="theme-text" href="@controllers.admin.system.routes.AdminController.index()">Back</a>
   </div>
 }

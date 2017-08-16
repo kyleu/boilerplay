@@ -13,7 +13,7 @@ object Schema {
     // End model fetchers
   }
 
-  val resolver = DeferredResolver.fetchers(UserSchema.userByIdFetcher +: modelFetchers: _*)
+  val resolver = DeferredResolver.fetchers(UserSchema.userByPrimaryKeyFetcher +: modelFetchers: _*)
 
   val baseQueryFields = UserSchema.queryFields ++ SettingSchema.queryFields ++ SandboxSchema.queryFields
 

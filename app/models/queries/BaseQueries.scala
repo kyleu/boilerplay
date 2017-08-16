@@ -10,9 +10,10 @@ object BaseQueries {
 }
 
 trait BaseQueries[T] extends SearchQueries[T] with JodaDateUtils {
-  protected def tableName: String
+  def tableName: String
+  def fields: Seq[DatabaseField]
+
   protected def pkColumns = Seq("id")
-  protected def fields: Seq[DatabaseField]
   protected def searchColumns: Seq[String] = Nil
   protected def fromRow(row: Row): T
   protected def toDataSeq(t: T): Seq[Any]

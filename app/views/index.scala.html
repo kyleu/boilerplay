@@ -10,7 +10,7 @@
           </li>
           @if(user.role == models.user.Role.Admin) {
             <li class="collection-item">
-              You're an administrator, so head on over to the <a class="theme-text" href="@controllers.admin.routes.AdminController.index()">admin section</a>.
+              You're an administrator, so head on over to the <a class="theme-text" href="@controllers.admin.system.routes.AdminController.index()">admin section</a>.
             </li>
           }
           <li class="collection-item">

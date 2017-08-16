@@ -4,7 +4,7 @@ import java.util.UUID
 
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.services.IdentityService
-import models.queries.auth.UserQueries
+import models.queries.auth.{UserQueries, UserSearchQueries}
 import models.user.User
 import util.FutureUtils.databaseContext
 import services.database.Database
@@ -25,7 +25,7 @@ class UserSearchService @javax.inject.Inject() () extends IdentityService[User] 
 
   def getUsername(id: UUID) = UserCache.getUser(id).map(_.username) match {
     case Some(un) => Future.successful(un)
-    case None => Database.query(UserQueries.GetUsername(id))
+    case None => Database.query(UserSearchQueries.GetUsername(id))
   }
 
   def retrieve(username: String) = Database.query(UserQueries.FindUserByUsername(username))

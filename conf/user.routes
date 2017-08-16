@@ -1,0 +1,8 @@
+# Users
+GET         /                                                     controllers.admin.user.UserEditController.list(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None)
+GET         /form                                                 controllers.admin.user.UserCreateController.createForm()
+POST        /                                                     controllers.admin.user.UserCreateController.create()
+GET         /:id                                                  controllers.admin.user.UserEditController.view(id: java.util.UUID)
+GET         /:id/form                                             controllers.admin.user.UserEditController.editForm(id: java.util.UUID)
+POST        /:id                                                  controllers.admin.user.UserEditController.edit(id: java.util.UUID)
+GET         /:id/remove                                           controllers.admin.user.UserEditController.remove(id: java.util.UUID)

@@ -1,0 +1,19 @@
+# Admin
+GET         /                                                          controllers.admin.system.AdminController.index
+GET         /status                                                    controllers.admin.system.AdminController.status
+GET         /metrics                                                   controllers.admin.system.MetricsController.showMetrics
+
+# Explore
+GET         /search                                                    controllers.admin.system.SearchController.search(q ?= "")
+GET         /explore                                                   controllers.admin.system.AdminController.explore
+
+# Start model routes
+# End model routes
+
+# Settings
+GET         /settings                                                  controllers.admin.system.SettingsController.settings
+POST        /settings                                                  controllers.admin.system.SettingsController.saveSettings
+
+# Sandboxes
+GET         /sandbox                                                   controllers.admin.system.SandboxController.list
+GET         /sandbox/:key                                              controllers.admin.system.SandboxController.run(key)

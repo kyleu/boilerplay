@@ -4,14 +4,14 @@
 
 @resultFor(user: models.user.User) = {
   <tr>
-    <td><a class="theme-text" href="@controllers.admin.routes.UserEditController.view(user.id)">@user.id</a></td>
+    <td><a class="theme-text" href="@controllers.admin.user.routes.UserEditController.view(user.id)">@user.id</a></td>
     <td>@user.username</td>
     <td>@user.profile.providerKey</td>
     <td><div class="theme-swatch" style="background-color: @user.preferences.theme.color"></div></td>
     <td>@user.role</td>
     <td>@util.DateUtils.niceDate(user.created.toLocalDate)</td>
     <td>@defining(s"return confirm('Are you certain you want to delete this user (${user.username})?');") { onClick =>
-      <a class="theme-text" onclick="@onClick" href="@controllers.admin.routes.UserEditController.remove(user.id)"><i class="fa fa-close"></i></a>
+      <a class="theme-text" onclick="@onClick" href="@controllers.admin.user.routes.UserEditController.remove(user.id)"><i class="fa fa-close"></i></a>
     }</td>
   </tr>
 }
@@ -34,10 +34,10 @@
   orderAsc = orderAsc,
   rows = users.map(resultFor),
   totalCount = totalCount,
-  newUrl = Some(controllers.admin.routes.UserCreateController.createForm()),
-  orderByUrl = Some(controllers.admin.routes.UserEditController.list(q, _, _, Some(limit), Some(0))),
-  searchUrl = Some(controllers.admin.routes.UserEditController.list(None, orderBy, orderAsc, Some(limit), None)),
-  nextUrl = controllers.admin.routes.UserEditController.list(q, orderBy, orderAsc, Some(limit), Some(offset + limit)),
+  newUrl = Some(controllers.admin.user.routes.UserCreateController.createForm()),
+  orderByUrl = Some(controllers.admin.user.routes.UserEditController.list(q, _, _, Some(limit), Some(0))),
+  searchUrl = Some(controllers.admin.user.routes.UserEditController.list(None, orderBy, orderAsc, Some(limit), None)),
+  nextUrl = controllers.admin.user.routes.UserEditController.list(q, orderBy, orderAsc, Some(limit), Some(offset + limit)),
   limit = limit,
   offset = offset,
   q = q

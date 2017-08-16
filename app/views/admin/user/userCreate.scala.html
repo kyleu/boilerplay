@@ -1,7 +1,7 @@
 @(self: models.user.User)(
     implicit request: Request[AnyContent], session: Session, flash: Flash
 )@layout.admin(self, "explore", "New User") {
-  <form action="@controllers.admin.routes.UserCreateController.create()" method="post">
+  <form action="@controllers.admin.user.routes.UserCreateController.create()" method="post">
     <div class="content-panel">
       <div class="panel-title">
         <i class="fa @models.template.Icons.user"></i> New User
@@ -41,7 +41,7 @@
     </div>
     <div class="panel-action padded">
       <a class="theme-text right" onclick="$('form').submit();return false;">Create</a>
-      <a class="theme-text" href="@controllers.admin.routes.UserEditController.list()">Cancel</a>
+      <a class="theme-text" href="@controllers.admin.user.routes.UserEditController.list()">Cancel</a>
     </div>
   </form>
 }

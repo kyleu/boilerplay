@@ -1,4 +1,4 @@
-package controllers.admin
+package controllers.admin.system
 
 import controllers.BaseController
 import util.Application

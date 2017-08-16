@@ -4,8 +4,8 @@ import models.database._
 import models.queries.BaseQueries
 
 object DdlQueries extends BaseQueries[DdlFile] {
-  override protected val tableName = "ddl"
-  override protected val fields = Seq(DatabaseField("id"), DatabaseField("name"), DatabaseField("sql"), DatabaseField("applied"))
+  override val tableName = "ddl"
+  override val fields = Seq(DatabaseField("id"), DatabaseField("name"), DatabaseField("sql"), DatabaseField("applied"))
 
   def getAll = GetAll
   case object GetIds extends Query[Seq[Int]] {

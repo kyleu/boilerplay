@@ -2,7 +2,7 @@
 
 @resultFor(task: models.sandbox.SandboxTask) = {
   <tr>
-    <td><a class="theme-text" href="@controllers.admin.routes.SandboxController.run(task.id)">@task.name</a></td>
+    <td><a class="theme-text" href="@controllers.admin.system.routes.SandboxController.run(task.id)">@task.name</a></td>
     <td>@task.description</td>
   </tr>
 }
@@ -17,7 +17,7 @@
     "description" -> "Description"
   ),
   rows = models.sandbox.SandboxTask.values.map(resultFor),
-  nextUrl = controllers.admin.routes.SandboxController.list(),
+  nextUrl = controllers.admin.system.routes.SandboxController.list(),
   section = "status",
   q = None
 )
