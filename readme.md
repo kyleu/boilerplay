@@ -85,6 +85,8 @@ Boilerplay relies on a whole lot of tremendous open source projects. Here's a fe
 * [Play Framework](https://www.playframework.com)
 * [Akka](http://akka.io)
 * [Sangria](http://sangria-graphql.org)
+* [Graphiql](https://github.com/graphql/graphiql)
+* [GraphQL Voyager](https://github.com/APIs-guru/graphql-voyager)
 * [Materialize CSS](http://materializecss.com)
 * [Enumeratum](https://github.com/lloydmeta/enumeratum)
 * [circe](https://circe.github.io/circe)

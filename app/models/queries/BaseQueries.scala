@@ -49,7 +49,7 @@ trait BaseQueries[T] extends SearchQueries[T] with JodaDateUtils {
 
   protected case class InsertFields(dataFields: Seq[DataField]) extends Statement {
     private[this] val cols = dataFields.map(f => ResultFieldHelper.sqlForField("update", f.k, fields))
-    override val sql = s"insert into $tableName (${cols.map("\"" + _ + "\"").mkString(", ")}) values (${cols.map(_ => "?").mkString(", ")})"
+    override val sql = s"""insert into "$tableName" (${cols.map("\"" + _ + "\"").mkString(", ")}) values (${cols.map(_ => "?").mkString(", ")})"""
     override val values: Seq[Any] = dataFields.map(_.v)
   }
 
@@ -91,5 +91,5 @@ trait BaseQueries[T] extends SearchQueries[T] with JodaDateUtils {
     override def map(row: Row) = row.as[Long]("c").toInt
   }
 
-  private def pkWhereClause = pkColumns.map(c => s""""$c" = ?""").mkString(" and ")
+  private def pkWhereClause = pkColumns.map(c => "\"" + c + "\" = ?").mkString(" and ")
 }

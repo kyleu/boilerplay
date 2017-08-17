@@ -8,6 +8,9 @@ GET         /robots.txt                              controllers.HomeController.
 ->          /admin/user                              user.Routes
 ->          /admin/graphql                           graphql.Routes
 
+# Start model route files
+# End model route files
+
 # Utility
 GET         /*path/                                  controllers.HomeController.untrail(path: String)
 
