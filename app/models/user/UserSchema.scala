@@ -18,7 +18,9 @@ import models.result.orderBy.OrderBySchema.orderBysArg
 import models.result.paging.PagingOptions
 import util.FutureUtils.graphQlContext
 
-object UserSchema {
+import scala.concurrent.Future
+
+object UserSchema extends SchemaHelper {
   implicit val roleEnum = CommonSchema.deriveEnumeratumType(
     name = "Role",
     description = "The role of the system user.",
@@ -53,16 +55,16 @@ object UserSchema {
       name = "profile",
       description = Some("Returns information about the currently logged in user."),
       fieldType = profileType,
-      resolve = c => c.ctx.app.tracing.trace("profile.build") { _ =>
+      resolve = c => trace(c.ctx, "profile.build") { _ =>
         val u = c.ctx.user
-        UserProfile(u.id, u.username, u.profile.providerKey, u.role, u.preferences.theme, u.created)
+        Future.successful(UserProfile(u.id, u.username, u.profile.providerKey, u.role, u.preferences.theme, u.created))
       }(c.ctx.trace)
     ),
     Field(
       name = "user",
       fieldType = userResultType,
       arguments = queryArg :: reportFiltersArg :: orderBysArg :: limitArg :: offsetArg :: Nil,
-      resolve = c => c.ctx.app.tracing.traceFuture("user.list")(implicit timing => {
+      resolve = c => trace(c.ctx, "user.list") { implicit timing =>
       val start = util.DateUtils.now
       val filters = c.arg(reportFiltersArg).getOrElse(Nil)
       val orderBys = c.arg(orderBysArg).getOrElse(Nil)
@@ -73,12 +75,12 @@ object UserSchema {
         case _ => c.ctx.app.userService.getAllWithCount(filters, orderBys, limit, offset)(c.ctx.trace)
       }
       f.map { r =>
-        timing.log("Composing result.")
+        timing.span.annotate("Composing result.")
         val paging = PagingOptions.from(r._1, limit, offset)
         val durationMs = (System.currentTimeMillis - util.DateUtils.toMillis(start)).toInt
         UserResult(paging = paging, filters = filters, orderBys = orderBys, totalCount = r._1, results = r._2, durationMs = durationMs)
       }
-    })(c.ctx.trace)
+    }(c.ctx.trace)
     )
   )
 }

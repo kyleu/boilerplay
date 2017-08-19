@@ -11,6 +11,7 @@ import sangria.validation.QueryValidator
 import util.FutureUtils.graphQlContext
 import util.tracing.{TraceData, TracingService}
 import util.{Application, Logging}
+import zipkin.Endpoint
 
 import scala.util.{Failure, Success}
 
@@ -24,9 +25,12 @@ class GraphQLService @javax.inject.Inject() (tracing: TracingService) extends Lo
 
   private[this] val rejectComplexQueries = QueryReducer.rejectComplexQueries[Any](1000, (_, _) => new IllegalArgumentException(s"Query is too complex."))
 
+  private[this] val endpoint = Endpoint.builder().serviceName("graphql").build()
+
   def executeQuery(app: Application, query: String, variables: Option[Json], operation: Option[String], user: User, debug: Boolean)(implicit t: TraceData) = {
     tracing.trace("graphql.execute") { td =>
       if (!td.span.isNoop) {
+        td.span.remoteEndpoint(endpoint)
         td.span.tag("query", query)
         variables.foreach(v => td.span.tag("variables", v.spaces2))
         operation.foreach(o => td.span.tag("operation", o))

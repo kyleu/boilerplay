@@ -17,7 +17,7 @@ import scala.concurrent.Future
 abstract class BaseController() extends InjectedController with Instrumented with Logging {
   protected def app: Application
 
-  protected lazy val name = this.getClass.getSimpleName.stripSuffix("$")
+  private[this] lazy val endpoint = Endpoint.builder().serviceName(util.FormatUtils.classToPeriodDelimited(getClass)).build()
 
   protected def withoutSession(action: String)(block: UserAwareRequest[AuthEnv, AnyContent] => Future[Result]) = {
     app.silhouette.UserAwareAction.async { implicit request =>
@@ -55,7 +55,7 @@ abstract class BaseController() extends InjectedController with Instrumented wit
 
   private[this] def enhanceRequest(request: Request[AnyContent], user: Option[User], trace: Span) = {
     trace.tag(TraceKeys.HTTP_REQUEST_SIZE, request.body.asRaw.size.toString)
-    trace.remoteEndpoint(Endpoint.builder().serviceName(name).ipv4(127 << 24 | 1).port(1234).build())
+    trace.remoteEndpoint(endpoint)
     user.foreach { u =>
       trace.tag("user.id", u.id.toString)
       trace.tag("user.username", u.username)
