@@ -11,7 +11,7 @@ import scala.concurrent.Future
 
 @javax.inject.Singleton
 class SearchController @javax.inject.Inject() (override val app: Application) extends BaseController {
-  def search(q: String) = withAdminSession("admin.search") { implicit request =>
+  def search(q: String) = withSession("admin.search", admin = true) { implicit request =>
     val resultF = try {
       searchInt(q, q.toInt)
     } catch {

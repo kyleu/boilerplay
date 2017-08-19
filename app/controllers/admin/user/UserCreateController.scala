@@ -20,11 +20,11 @@ class UserCreateController @javax.inject.Inject() (
     authInfoRepository: AuthInfoRepository,
     hasher: PasswordHasher
 ) extends BaseController {
-  def createForm() = withAdminSession("admin-user-form") { implicit request =>
+  def createForm() = withSession("admin-user-form", admin = true) { implicit request =>
     Future.successful(Ok(views.html.admin.user.userCreate(request.identity)))
   }
 
-  def create() = withAdminSession("admin-user-create") { implicit request =>
+  def create() = withSession("admin-user-create", admin = true) { implicit request =>
     val form = FormUtils.getForm(request)
     val id = UUID.randomUUID
     val loginInfo = LoginInfo(CredentialsProvider.ID, form("email").trim)

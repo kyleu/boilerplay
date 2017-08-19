@@ -10,11 +10,11 @@ import scala.concurrent.Future
 
 @javax.inject.Singleton
 class SettingsController @javax.inject.Inject() (override val app: Application) extends BaseController {
-  def settings = withAdminSession("admin-settings") { implicit request =>
+  def settings = withSession("admin-settings", admin = true) { implicit request =>
     Future.successful(Ok(views.html.admin.settings(request.identity)))
   }
 
-  def saveSettings = withAdminSession("admin-settings-save") { implicit request =>
+  def saveSettings = withSession("admin-settings-save", admin = true) { implicit request =>
     val form = FormUtils.getForm(request)
     form.foreach { x =>
       SettingKey.withNameOption(x._1) match {
