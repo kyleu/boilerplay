@@ -47,7 +47,7 @@ class UserCreateController @javax.inject.Inject() (
         profile = loginInfo,
         role = role
       )
-      val userSavedFuture = app.userService.save(user)
+      val userSavedFuture = app.userService.insert(user)
       val authInfo = hasher.hash(form("password"))
       for {
         _ <- authInfoRepository.add(loginInfo, authInfo)

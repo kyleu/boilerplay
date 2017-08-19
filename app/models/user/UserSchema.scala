@@ -55,7 +55,6 @@ object UserSchema {
       fieldType = profileType,
       resolve = c => c.ctx.app.tracing.trace("profile.build") { _ =>
         val u = c.ctx.user
-        Thread.sleep(1000)
         UserProfile(u.id, u.username, u.profile.providerKey, u.role, u.preferences.theme, u.created)
       }(c.ctx.trace)
     ),
@@ -63,7 +62,7 @@ object UserSchema {
       name = "user",
       fieldType = userResultType,
       arguments = queryArg :: reportFiltersArg :: orderBysArg :: limitArg :: offsetArg :: Nil,
-      resolve = c => c.ctx.app.tracing.trace("user.list")(implicit timing => {
+      resolve = c => c.ctx.app.tracing.traceFuture("user.list")(implicit timing => {
       val start = util.DateUtils.now
       val filters = c.arg(reportFiltersArg).getOrElse(Nil)
       val orderBys = c.arg(orderBysArg).getOrElse(Nil)
@@ -73,7 +72,6 @@ object UserSchema {
         case Some(q) => c.ctx.app.userService.searchWithCount(q, filters, orderBys, limit, offset)(c.ctx.trace)
         case _ => c.ctx.app.userService.getAllWithCount(filters, orderBys, limit, offset)(c.ctx.trace)
       }
-      Thread.sleep(1000)
       f.map { r =>
         timing.log("Composing result.")
         val paging = PagingOptions.from(r._1, limit, offset)

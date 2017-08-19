@@ -35,7 +35,7 @@ class GraphQLService @javax.inject.Inject() (tracing: TracingService) extends Lo
 
       QueryParser.parse(query) match {
         case Success(ast) =>
-          td.span.annotate("execute.started")
+          td.span.annotate("parse.success")
           val ret = Executor.execute(
             schema = Schema.schema,
             queryAst = ast,

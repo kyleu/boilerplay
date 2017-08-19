@@ -32,7 +32,7 @@ class ProfileController @javax.inject.Inject() (
           theme = profileData.theme
         )
         val newUser = request.identity.copy(username = profileData.username, preferences = newPrefs)
-        app.userService.save(newUser, update = true)
+        app.userService.update(newUser)
         Future.successful(Redirect(controllers.routes.HomeController.home()))
       }
     )

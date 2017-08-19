@@ -68,7 +68,7 @@ class UserEditController @javax.inject.Inject() (override val app: Application, 
       } else if (isSelf && (role != Role.Admin) && user.role == Role.Admin) {
         Future.successful(Redirect(controllers.admin.user.routes.UserEditController.edit(id)).flashing("error" -> "You cannot remove your own admin role."))
       } else {
-        app.userService.update(id, newUsername, newEmail, newPassword, role, user.profile.providerKey).map { _ =>
+        app.userService.updateFields(id, newUsername, newEmail, newPassword, role, user.profile.providerKey).map { _ =>
           Redirect(controllers.admin.user.routes.UserEditController.view(id))
         }
       }
