@@ -7,6 +7,7 @@ import java.time.LocalDateTime
 import better.files.File
 import util.Logging
 import util.FutureUtils.databaseContext
+import util.tracing.TraceData
 
 import scala.concurrent.duration._
 import scala.concurrent.{Await, Future}
@@ -30,7 +31,7 @@ object MasterDdl extends Logging {
     Nil
   }
 
-  def init() = {
+  def init()(implicit trace: TraceData) = {
     val withDdlTable = Database.query(DdlQueries.DoesTableExist("ddl")).flatMap {
       case true => Future.successful(0)
       case false => Database.execute(DdlQueries.CreateDdlTable)

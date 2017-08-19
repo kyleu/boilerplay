@@ -8,15 +8,15 @@ import com.mohiva.play.silhouette.api.Silhouette
 import models.auth.AuthEnv
 import play.api.Environment
 import play.api.inject.ApplicationLifecycle
-import util.FutureUtils.defaultContext
 import services.database.{Database, MasterDdl}
 import services.file.FileService
 import services.settings.SettingsService
 import services.supervisor.ActorSupervisor
 import services.user.UserService
 import util.cache.CacheService
+import util.FutureUtils.defaultContext
 import util.metrics.Instrumented
-import util.tracing.TracingService
+import util.tracing.{TraceData, TracingService}
 import util.web.TracingWSClient
 
 import scala.concurrent.Future
@@ -45,7 +45,7 @@ class Application @javax.inject.Inject() (
 
   val supervisor = actorSystem.actorOf(Props(classOf[ActorSupervisor], this), "supervisor")
 
-  private[this] def start() = {
+  private[this] def start() = tracing.topLevelTrace("application.start") { implicit tn =>
     log.info(s"${Config.projectName} is starting.")
     Application.initialized = true
 
@@ -59,7 +59,7 @@ class Application @javax.inject.Inject() (
 
     FileService.setRootDir(config.dataDir)
 
-    Database.open(config.cnf)
+    Database.open(config.cnf, tracing)
     MasterDdl.init().map { _ =>
       SettingsService.load()
     }

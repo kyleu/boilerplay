@@ -2,13 +2,11 @@ package util.web
 import javax.inject.Inject
 
 import akka.stream.Materializer
-import brave.Span
-import org.slf4j.MDC
 import play.api.libs.typedmap.TypedKey
-import play.api.mvc.{Filter, Headers, RequestHeader, Result}
+import play.api.mvc.{Filter, RequestHeader, Result}
 import play.api.routing.Router
 import util.tracing.{TraceData, TracingService}
-import zipkin.{Endpoint, TraceKeys}
+import zipkin.TraceKeys
 
 import scala.concurrent.Future
 import scala.util.{Failure, Success}
@@ -26,32 +24,29 @@ object TracingFilter {
   }
 }
 
-class TracingFilter @Inject() (tracer: TracingService)(implicit val mat: Materializer) extends Filter {
-  import tracer.executionContext
+class TracingFilter @Inject() (tracingService: TracingService)(implicit val mat: Materializer) extends Filter {
+  import tracingService.executionContext
   private val reqHeaderToSpanName: RequestHeader => String = TracingFilter.paramAwareRequestNamer
 
   def apply(nextFilter: (RequestHeader) => Future[Result])(req: RequestHeader): Future[Result] = if (req.path.startsWith("/assets")) {
     nextFilter(req)
   } else {
-    val serverSpan = tracer.serverReceived(
+    val serverSpan = tracingService.serverReceived(
       spanName = reqHeaderToSpanName(req),
-      span = tracer.newSpan(req.headers)((headers, key) => headers.get(key))
+      span = tracingService.newSpan(req.headers)((headers, key) => headers.get(key))
     )
     serverSpan.tag(TraceKeys.HTTP_PATH, req.path)
     serverSpan.tag(TraceKeys.HTTP_METHOD, req.method)
     serverSpan.tag(TraceKeys.HTTP_HOST, req.host)
 
-    MDC.put("traceId", serverSpan.context.traceId().toString)
-    MDC.put("spanId", serverSpan.context.spanId().toString)
-
     val result = nextFilter(req.addAttr(TracingFilter.traceKey, TraceData(serverSpan)))
     result.onComplete {
-      case Failure(t) => tracer.serverSend(serverSpan, "failed" -> s"Finished with exception: ${t.getMessage}")
+      case Failure(t) => tracingService.serverSend(serverSpan, "failed" -> s"Finished with exception: ${t.getMessage}")
       case Success(x) =>
         serverSpan.tag(TraceKeys.HTTP_STATUS_CODE, x.header.status.toString)
         x.header.headers.get("Content-Type").map(c => serverSpan.tag("http.response.contentType", c))
         x.body.contentLength.map(l => serverSpan.tag(TraceKeys.HTTP_RESPONSE_SIZE, l.toString))
-        tracer.serverSend(serverSpan)
+        tracingService.serverSend(serverSpan)
     }
     result
   }

@@ -15,6 +15,19 @@ import scala.util.{Failure, Success, Try}
 
 @javax.inject.Singleton
 class TracingService @javax.inject.Inject() (actorSystem: ActorSystem, cnf: MetricsConfig) extends Logging {
+  def topLevelTrace[A](name: String)(f: TraceData => Future[A]) = {
+    val span = serverReceived(spanName = name, span = newSpan(Map.empty[String, String])((headers, key) => headers.get(key)))
+
+    span.tag("top.level", "true")
+
+    val result = f(TraceData(span))
+    result.onComplete {
+      case Failure(t) => serverSend(span, "failed" -> s"Finished with exception: ${t.getMessage}")
+      case Success(_) => serverSend(span)
+    }
+    result
+  }
+
   implicit val executionContext: ExecutionContext = actorSystem.dispatchers.lookup("context.tracing")
 
   private[this] val sender = OkHttpSender.create(s"http://${cnf.tracingServer}:${cnf.tracingPort}/api/v1/spans")

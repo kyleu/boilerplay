@@ -12,7 +12,7 @@ import util.web.FormUtils
 import scala.concurrent.Future
 
 @javax.inject.Singleton
-class UserEditController @javax.inject.Inject() (override val app: Application, userSearchService: UserSearchService) extends BaseController("user.edit") {
+class UserEditController @javax.inject.Inject() (override val app: Application) extends BaseController("user.edit") {
   import app.contexts.webContext
 
   def list(q: Option[String], orderBy: Option[String], orderAsc: Boolean, limit: Option[Int], offset: Option[Int]) = {
@@ -29,14 +29,14 @@ class UserEditController @javax.inject.Inject() (override val app: Application, 
   }
 
   def view(id: UUID) = withSession("admin.user.view", admin = true) { implicit request =>
-    userSearchService.retrieve(id).map { userOpt =>
+    app.userService.getByPrimaryKey(id).map { userOpt =>
       val user = userOpt.getOrElse(throw new IllegalStateException(s"Invalid user [$id]."))
       Ok(views.html.admin.user.userView(request.identity, user))
     }
   }
 
   def editForm(id: UUID) = withSession("admin.user.edit.form", admin = true) { implicit request =>
-    userSearchService.retrieve(id).map { userOpt =>
+    app.userService.getByPrimaryKey(id).map { userOpt =>
       val user = userOpt.getOrElse(throw new IllegalStateException(s"Invalid user [$id]."))
       Ok(views.html.admin.user.userForm(request.identity, user))
     }
@@ -44,7 +44,7 @@ class UserEditController @javax.inject.Inject() (override val app: Application, 
 
   def edit(id: UUID) = withSession("admin.user.save", admin = true) { implicit request =>
     val form = FormUtils.getForm(request)
-    userSearchService.retrieve(id).flatMap { userOpt =>
+    app.userService.getByPrimaryKey(id).flatMap { userOpt =>
       val user = userOpt.getOrElse(throw new IllegalStateException(s"Invalid user [$id]."))
 
       val isSelf = request.identity.id == id

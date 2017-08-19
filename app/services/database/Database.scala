@@ -8,6 +8,7 @@ import models.database.{RawQuery, Statement}
 import org.slf4j.LoggerFactory
 import util.FutureUtils.databaseContext
 import util.metrics.Instrumented
+import util.tracing.{TraceData, TracingService}
 
 import scala.concurrent.duration._
 import scala.concurrent.{Await, Future}
@@ -18,20 +19,22 @@ object Database extends Instrumented {
   private[this] var factory: PostgreSQLConnectionFactory = _
   private[this] var pool: ConnectionPool[PostgreSQLConnection] = _
   private[this] var config: Option[Configuration] = None
+  private[this] var tracing: Option[TracingService] = None
   def getConfig = config.getOrElse(throw new IllegalStateException("Database not open."))
 
   private[this] def prependComment(obj: Object, sql: String) = s"/* ${obj.getClass.getSimpleName.replace("$", "")} */ $sql"
 
-  def open(cfg: play.api.Configuration): Unit = {
+  def open(cfg: play.api.Configuration, tracingService: TracingService): Unit = {
     def get(k: String) = cfg.get[Option[String]]("database." + k).getOrElse(throw new IllegalStateException(s"Missing config for [$k]."))
-    open(get("username"), get("host"), get("port").toInt, Some(get("password")), Some(get("database")))
+    tracing = Some(tracingService)
+    open(get("host"), get("port").toInt, get("username"), Some(get("password")), Some(get("database")))
   }
 
-  def open(username: String, host: String = "localhost", port: Int = 5432, password: Option[String] = None, database: Option[String] = None): Unit = {
+  private[this] def open(host: String, port: Int = 5432, username: String, password: Option[String] = None, database: Option[String] = None): Unit = {
     open(Configuration(username, host, port, password, database))
   }
 
-  def open(configuration: Configuration): Unit = {
+  private[this] def open(configuration: Configuration): Unit = {
     factory = new PostgreSQLConnectionFactory(configuration)
     pool = new ConnectionPool(factory, poolConfig)
     config = Some(configuration)
@@ -41,7 +44,7 @@ object Database extends Instrumented {
     Await.result(healthCheck.map(r => r.rowsAffected == 1.toLong), 5.seconds)
   }
 
-  def transaction[A](f: (Connection) => Future[A], conn: Connection = pool): Future[A] = conn.inTransaction(c => f(c))
+  def transaction[A](f: (Connection) => Future[A], conn: Connection = pool)(implicit traceData: TraceData): Future[A] = conn.inTransaction(c => f(c))
 
   def execute(statement: Statement, conn: Option[Connection] = None): Future[Int] = {
     val name = statement.getClass.getSimpleName.replaceAllLiterally("$", "")
@@ -53,7 +56,7 @@ object Database extends Instrumented {
     ret
   }
 
-  def query[A](query: RawQuery[A], conn: Option[Connection] = None): Future[A] = {
+  def query[A](query: RawQuery[A], conn: Option[Connection] = None)(implicit traceData: TraceData): Future[A] = {
     val name = query.getClass.getSimpleName.replaceAllLiterally("$", "")
     log.debug(s"Executing query [$name] with SQL [${query.sql}] with values [${query.values.mkString(", ")}].")
     val ret = metrics.timer(s"query.$name").timeFuture {
@@ -65,7 +68,7 @@ object Database extends Instrumented {
     ret
   }
 
-  def raw(name: String, sql: String, conn: Option[Connection] = None): Future[QueryResult] = {
+  def raw(name: String, sql: String, conn: Option[Connection] = None)(implicit traceData: TraceData): Future[QueryResult] = {
     log.debug(s"Executing raw query [$name] with SQL [$sql].")
     val ret = metrics.timer(s"raw.$name").timeFuture {
       conn.getOrElse(pool).sendQuery(prependComment(name, sql))
