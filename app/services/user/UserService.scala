@@ -14,46 +14,47 @@ import services.ModelServiceHelper
 import util.FutureUtils.databaseContext
 import services.database.Database
 import util.cache.UserCache
+import util.tracing.TraceData
 
 import scala.concurrent.Future
 
 @javax.inject.Singleton
 class UserService @javax.inject.Inject() (hasher: PasswordHasher) extends ModelServiceHelper[User] {
-  def getByPrimaryKey(id: UUID) = Database.query(UserQueries.getByPrimaryKey(Seq(id)))
-  def getByPrimaryKeySeq(idSeq: Seq[UUID]) = Database.query(UserQueries.getByPrimaryKeySeq(idSeq))
+  def getByPrimaryKey(id: UUID)(implicit trace: TraceData) = Database.query(UserQueries.getByPrimaryKey(Seq(id)))
+  def getByPrimaryKeySeq(idSeq: Seq[UUID])(implicit trace: TraceData) = Database.query(UserQueries.getByPrimaryKeySeq(idSeq))
 
-  def getByRoleSeq(roleSeq: Seq[Role]) = Database.query(UserQueries.getByRoleSeq(roleSeq))
+  def getByRoleSeq(roleSeq: Seq[Role])(implicit trace: TraceData) = Database.query(UserQueries.getByRoleSeq(roleSeq))
 
-  override def countAll(filters: Seq[Filter] = Nil) = Database.query(UserQueries.countAll(filters))
-  override def getAll(filters: Seq[Filter], orderBys: Seq[OrderBy], limit: Option[Int] = None, offset: Option[Int] = None) = {
+  override def countAll(filters: Seq[Filter] = Nil)(implicit trace: TraceData) = Database.query(UserQueries.countAll(filters))
+  override def getAll(filters: Seq[Filter], orderBys: Seq[OrderBy], limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData) = {
     Database.query(UserQueries.getAll(filters, orderBys, limit, offset))
   }
 
-  override def searchCount(q: String, filters: Seq[Filter]) = Database.query(UserQueries.searchCount(q, filters))
-  override def search(q: String, filters: Seq[Filter], orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int]) = {
+  override def searchCount(q: String, filters: Seq[Filter])(implicit trace: TraceData) = Database.query(UserQueries.searchCount(q, filters))
+  override def search(q: String, filters: Seq[Filter], orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int])(implicit trace: TraceData) = {
     Database.query(UserQueries.search(q, filters, orderBys, limit, offset))
   }
 
-  def searchExact(q: String, orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int]) = {
+  def searchExact(q: String, orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int])(implicit trace: TraceData) = {
     Database.query(UserQueries.searchExact(q, orderBys, limit, offset))
   }
 
-  def isUsernameInUse(name: String) = Database.query(UserSearchQueries.IsUsernameInUse(name))
-  def usernameLookup(id: UUID) = Database.query(UserSearchQueries.GetUsername(id))
+  def isUsernameInUse(name: String)(implicit trace: TraceData) = Database.query(UserSearchQueries.IsUsernameInUse(name))
+  def usernameLookup(id: UUID)(implicit trace: TraceData) = Database.query(UserSearchQueries.GetUsername(id))
 
-  def insert(user: User) = Database.execute(UserQueries.insert(user)).map { _ =>
+  def insert(user: User)(implicit trace: TraceData) = Database.execute(UserQueries.insert(user)).map { _ =>
     log.info(s"Inserted user [$user].")
     UserCache.cacheUser(user)
     user
   }
 
-  def update(user: User) = Database.execute(UserQueries.UpdateUser(user)).map { _ =>
+  def update(user: User)(implicit trace: TraceData) = Database.execute(UserQueries.UpdateUser(user)).map { _ =>
     log.info(s"Updated user [$user].")
     UserCache.cacheUser(user)
     user
   }
 
-  def save(user: User, update: Boolean = false) = {
+  def save(user: User, update: Boolean = false)(implicit trace: TraceData) = {
     log.info(s"${if (update) { "Updating" } else { "Creating" }} user [$user].")
     val statement = if (update) { UserQueries.UpdateUser(user) } else { UserQueries.insert(user) }
     Database.execute(statement).map { _ =>
@@ -62,13 +63,13 @@ class UserService @javax.inject.Inject() (hasher: PasswordHasher) extends ModelS
     }
   }
 
-  def usernameLookupMulti(ids: Set[UUID]) = if (ids.isEmpty) {
+  def usernameLookupMulti(ids: Set[UUID])(implicit trace: TraceData) = if (ids.isEmpty) {
     Future.successful(Map.empty[UUID, String])
   } else {
     Database.query(UserSearchQueries.GetUsernames(ids))
   }
 
-  def remove(userId: UUID) = Database.transaction { conn =>
+  def remove(userId: UUID)(implicit trace: TraceData) = Database.transaction { conn =>
     val startTime = System.nanoTime
     val f = getByPrimaryKey(userId).flatMap {
       case Some(user) => Database.execute(PasswordInfoQueries.removeByPrimaryKey(Seq(user.profile.providerID, user.profile.providerKey)), Some(conn))
@@ -83,7 +84,7 @@ class UserService @javax.inject.Inject() (hasher: PasswordHasher) extends ModelS
     }
   }
 
-  def update(id: UUID, username: String, email: String, password: Option[String], role: Role, originalEmail: String) = {
+  def update(id: UUID, username: String, email: String, password: Option[String], role: Role, originalEmail: String)(implicit trace: TraceData) = {
     val fields = Seq(
       DataField("username", Some(username)),
       DataField("email", Some(email)),

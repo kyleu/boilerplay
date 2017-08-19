@@ -7,9 +7,9 @@ import akka.actor.ActorSystem
 import scala.concurrent.ExecutionContext
 
 object FutureUtils {
-  implicit val defaultContext = ExecutionContext.fromExecutor(Executors.newFixedThreadPool(16))
-  implicit val databaseContext = ExecutionContext.fromExecutor(Executors.newFixedThreadPool(16))
-  implicit val graphQlContext = ExecutionContext.fromExecutor(Executors.newFixedThreadPool(16))
+  implicit val defaultContext = ExecutionContext.global
+  implicit val databaseContext = ExecutionContext.global
+  implicit val graphQlContext = ExecutionContext.global
 }
 
 @javax.inject.Singleton

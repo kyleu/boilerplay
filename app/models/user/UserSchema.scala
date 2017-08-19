@@ -35,11 +35,11 @@ object UserSchema {
 
   val userPrimaryKeyId = HasId[User, UUID](_.id)
   val userByPrimaryKeyFetcher = Fetcher { (c: GraphQLContext, idSeq: Seq[UUID]) =>
-    c.app.userService.getByPrimaryKeySeq(idSeq)
+    c.app.userService.getByPrimaryKeySeq(idSeq)(c.trace)
   }(userPrimaryKeyId)
 
   val userByRoleFetcher = Fetcher { (c: GraphQLContext, roleSeq: Seq[Role]) =>
-    c.app.userService.getByRoleSeq(roleSeq)
+    c.app.userService.getByRoleSeq(roleSeq)(c.trace)
   }(HasId[User, Role](_.role))
 
   implicit val loginInfoType = deriveObjectType[GraphQLContext, LoginInfo](ObjectTypeDescription("Information about login credentials."))
@@ -53,32 +53,34 @@ object UserSchema {
       name = "profile",
       description = Some("Returns information about the currently logged in user."),
       fieldType = profileType,
-      resolve = c => {
+      resolve = c => c.ctx.app.tracing.trace("profile.build") { _ =>
         val u = c.ctx.user
+        Thread.sleep(1000)
         UserProfile(u.id, u.username, u.profile.providerKey, u.role, u.preferences.theme, u.created)
-      }
+      }(c.ctx.trace)
     ),
     Field(
       name = "user",
       fieldType = userResultType,
       arguments = queryArg :: reportFiltersArg :: orderBysArg :: limitArg :: offsetArg :: Nil,
-      resolve = c =>
-      {
-        val start = util.DateUtils.now
-        val filters = c.arg(reportFiltersArg).getOrElse(Nil)
-        val orderBys = c.arg(orderBysArg).getOrElse(Nil)
-        val limit = c.arg(limitArg)
-        val offset = c.arg(offsetArg)
-        val f = c.arg(CommonSchema.queryArg) match {
-          case Some(q) => c.ctx.app.userService.searchWithCount(q, filters, orderBys, limit, offset)
-          case _ => c.ctx.app.userService.getAllWithCount(filters, orderBys, limit, offset)
-        }
-        f.map { r =>
-          val paging = PagingOptions.from(r._1, limit, offset)
-          val durationMs = (System.currentTimeMillis - util.DateUtils.toMillis(start)).toInt
-          UserResult(paging = paging, filters = filters, orderBys = orderBys, totalCount = r._1, results = r._2, durationMs = durationMs)
-        }
+      resolve = c => c.ctx.app.tracing.trace("user.list")(implicit timing => {
+      val start = util.DateUtils.now
+      val filters = c.arg(reportFiltersArg).getOrElse(Nil)
+      val orderBys = c.arg(orderBysArg).getOrElse(Nil)
+      val limit = c.arg(limitArg)
+      val offset = c.arg(offsetArg)
+      val f = c.arg(CommonSchema.queryArg) match {
+        case Some(q) => c.ctx.app.userService.searchWithCount(q, filters, orderBys, limit, offset)(c.ctx.trace)
+        case _ => c.ctx.app.userService.getAllWithCount(filters, orderBys, limit, offset)(c.ctx.trace)
       }
+      Thread.sleep(1000)
+      f.map { r =>
+        timing.log("Composing result.")
+        val paging = PagingOptions.from(r._1, limit, offset)
+        val durationMs = (System.currentTimeMillis - util.DateUtils.toMillis(start)).toInt
+        UserResult(paging = paging, filters = filters, orderBys = orderBys, totalCount = r._1, results = r._2, durationMs = durationMs)
+      }
+    })(c.ctx.trace)
     )
   )
 }

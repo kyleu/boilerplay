@@ -5,6 +5,7 @@ import java.util.UUID
 import controllers.BaseController
 import play.twirl.api.Html
 import util.Application
+import util.tracing.TraceData
 
 import scala.concurrent.Future
 
@@ -28,7 +29,15 @@ class SearchController @javax.inject.Inject() (override val app: Application) ex
     }
   }
 
-  private[this] def searchUuid(q: String, id: UUID) = {
+  private[this] def searchInt(q: String, id: Int)(implicit timing: TraceData) = {
+    // Start int searches
+    val intSearches = Seq.empty[Future[Seq[Html]]]
+    // End int searches
+
+    Future.sequence(intSearches).map(_.flatten)
+  }
+
+  private[this] def searchUuid(q: String, id: UUID)(implicit timing: TraceData) = {
     // Start uuid searches
     val uuidSearches = Seq.empty[Future[Seq[Html]]]
     // End uuid searches
@@ -41,15 +50,7 @@ class SearchController @javax.inject.Inject() (override val app: Application) ex
     Future.sequence(Seq(userF) ++ uuidSearches).map(_.flatten)
   }
 
-  private[this] def searchInt(q: String, id: Int) = {
-    // Start int searches
-    val intSearches = Seq.empty[Future[Seq[Html]]]
-    // End int searches
-
-    Future.sequence(intSearches).map(_.flatten)
-  }
-
-  private[this] def searchString(q: String) = {
+  private[this] def searchString(q: String)(implicit timing: TraceData) = {
     // Start string searches
     val stringSearches = Seq.empty[Future[Seq[Html]]]
     // End string searches

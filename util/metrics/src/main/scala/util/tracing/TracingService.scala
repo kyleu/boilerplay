@@ -14,7 +14,7 @@ import scala.util.{Failure, Success, Try}
 
 @javax.inject.Singleton
 class TracingService @javax.inject.Inject() (actorSystem: ActorSystem, cnf: MetricsConfig) extends Logging {
-  implicit val executionContext: ExecutionContext = actorSystem.dispatchers.lookup(TracingKeys.contextKey)
+  implicit val executionContext: ExecutionContext = actorSystem.dispatchers.lookup("context.tracing")
 
   private[this] val sender = OkHttpSender.create(s"http://${cnf.tracingServer}:${cnf.tracingPort}/api/v1/spans")
   private[this] val reporter = AsyncReporter.create(sender)
@@ -24,7 +24,7 @@ class TracingService @javax.inject.Inject() (actorSystem: ActorSystem, cnf: Metr
   val tracing = Tracing.newBuilder().localServiceName(cnf.tracingService).reporter(reporter).currentTraceContext(ctx).traceId128Bit(true).sampler(samp).build()
   tracing.setNoop(!cnf.tracingEnabled)
 
-  val tracer: Tracer = tracing.tracer
+  private[this] val tracer: Tracer = tracing.tracer
 
   log.info(s"Tracing enabled, sending results to [${cnf.tracingServer}:${cnf.tracingPort}@${cnf.tracingService}] using sample rate [${cnf.tracingSampleRate}].")
 
@@ -37,7 +37,7 @@ class TracingService @javax.inject.Inject() (actorSystem: ActorSystem, cnf: Metr
         childSpan.finish()
         result
       case Failure(t) =>
-        childSpan.tag("failed", s"Finished with [${t.getClass.getSimpleName}] exception: [${t.getMessage}].")
+        childSpan.tag("exception", s"${t.getClass.getSimpleName.stripSuffix("$")}: [${t.getMessage}].")
         childSpan.finish()
         throw t
     }

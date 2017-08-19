@@ -18,7 +18,7 @@
     q: Option[String] = None
 )(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
-)@traceData.annotateViewClass(getClass)@layout.admin(user, section, s"$model Management") {
+)@traceData.logViewClass(getClass)@layout.admin(user, section, s"$model Management") {
   <div class="collection with-header">
     <div class="collection-header">
       @searchUrl.map { search =>

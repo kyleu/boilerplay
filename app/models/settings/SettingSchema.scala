@@ -13,7 +13,7 @@ object SettingSchema {
     values = SettingKey.values.map(t => t -> t.description).toList
   )
 
-  implicit val settingId = HasId[Setting, SettingKey](_.key)
+  val settingPrimaryKeyId = HasId[Setting, SettingKey](_.key)
 
   implicit lazy val settingType: ObjectType[GraphQLContext, Setting] = deriveObjectType()
 

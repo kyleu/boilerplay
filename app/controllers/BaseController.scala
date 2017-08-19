@@ -15,11 +15,11 @@ import util.FutureUtils.defaultContext
 import scala.concurrent.Future
 
 abstract class BaseController() extends InjectedController with Instrumented with Logging {
-  def app: Application
+  protected def app: Application
 
-  lazy val name = this.getClass.getSimpleName.stripSuffix("$")
+  protected lazy val name = this.getClass.getSimpleName.stripSuffix("$")
 
-  def withoutSession(action: String)(block: UserAwareRequest[AuthEnv, AnyContent] => Future[Result]) = {
+  protected def withoutSession(action: String)(block: UserAwareRequest[AuthEnv, AnyContent] => Future[Result]) = {
     app.silhouette.UserAwareAction.async { implicit request =>
       metrics.timer(action).timeFuture {
         enhanceRequest(request, None, getTraceData.span)
@@ -28,7 +28,7 @@ abstract class BaseController() extends InjectedController with Instrumented wit
     }
   }
 
-  def withSession(action: String, admin: Boolean = false)(block: SecuredRequest[AuthEnv, AnyContent] => Future[Result]) = {
+  protected def withSession(action: String, admin: Boolean = false)(block: SecuredRequest[AuthEnv, AnyContent] => Future[Result]) = {
     app.silhouette.UserAwareAction.async { implicit request =>
       request.identity match {
         case Some(u) => if (admin && u.role != Role.Admin) {
@@ -53,9 +53,15 @@ abstract class BaseController() extends InjectedController with Instrumented wit
     fields.map(f => DataField(f, Some(form.getOrElse(f, throw new IllegalStateException(s"Cannot find value for included field [$f].")))))
   }
 
-  private[this] def enhanceRequest(request: Request[AnyContent], u: Option[User], trace: Span) = {
+  private[this] def enhanceRequest(request: Request[AnyContent], user: Option[User], trace: Span) = {
     trace.tag(TraceKeys.HTTP_REQUEST_SIZE, request.body.asRaw.size.toString)
     trace.remoteEndpoint(Endpoint.builder().serviceName(name).ipv4(127 << 24 | 1).port(1234).build())
+    user.foreach { u =>
+      trace.tag("user.id", u.id.toString)
+      trace.tag("user.username", u.username)
+      trace.tag("user.email", u.profile.providerKey)
+      trace.tag("user.role", u.role.toString)
+    }
   }
 
   private[this] def failRequest(request: UserAwareRequest[AuthEnv, AnyContent]) = {

@@ -1,6 +1,6 @@
 @(self: models.user.User)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
-)@traceData.annotateViewClass(getClass)@layout.admin(self, "explore", "New User") {
+)@traceData.logViewClass(getClass)@layout.admin(self, "explore", "New User") {
   <form action="@controllers.admin.user.routes.UserCreateController.create()" method="post">
     <div class="content-panel">
       <div class="panel-title">

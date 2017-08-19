@@ -8,12 +8,14 @@ import sangria.execution.{Executor, HandledException, QueryReducer}
 import sangria.marshalling.circe._
 import sangria.parser.QueryParser
 import sangria.validation.QueryValidator
-import util.{Application, Logging}
 import util.FutureUtils.graphQlContext
+import util.tracing.{TraceData, TracingService}
+import util.{Application, Logging}
 
 import scala.util.{Failure, Success}
 
-object GraphQLService extends Logging {
+@javax.inject.Singleton
+class GraphQLService @javax.inject.Inject() (tracing: TracingService) extends Logging {
   protected val exceptionHandler: Executor.ExceptionHandler = {
     case (_, e: IllegalStateException) =>
       log.warn("Error encountered while running GraphQL query.", e)
@@ -22,23 +24,36 @@ object GraphQLService extends Logging {
 
   private[this] val rejectComplexQueries = QueryReducer.rejectComplexQueries[Any](1000, (_, _) => new IllegalArgumentException(s"Query is too complex."))
 
-  def executeQuery(app: Application, query: String, variables: Option[Json], operation: Option[String], user: User, debug: Boolean) = {
-    val ctx = GraphQLContext(app, user)
-    QueryParser.parse(query) match {
-      case Success(ast) => Executor.execute(
-        schema = Schema.schema,
-        queryAst = ast,
-        userContext = ctx,
-        operationName = operation,
-        variables = variables.getOrElse(Json.obj()),
-        deferredResolver = Schema.resolver,
-        exceptionHandler = exceptionHandler,
-        maxQueryDepth = Some(10),
-        queryValidator = QueryValidator.default,
-        queryReducers = List(rejectComplexQueries),
-        middleware = if (debug) { TracingExtension :: Nil } else { Nil }
-      )
-      case Failure(error) => throw error
+  def executeQuery(app: Application, query: String, variables: Option[Json], operation: Option[String], user: User, debug: Boolean)(implicit t: TraceData) = {
+    tracing.trace("graphql.execute") { td =>
+      if (!td.span.isNoop) {
+        td.span.tag("query", query)
+        variables.foreach(v => td.span.tag("variables", v.spaces2))
+        operation.foreach(o => td.span.tag("operation", o))
+        td.span.tag("debug", debug.toString)
+      }
+
+      QueryParser.parse(query) match {
+        case Success(ast) =>
+          td.span.annotate("execute.started")
+          val ret = Executor.execute(
+            schema = Schema.schema,
+            queryAst = ast,
+            userContext = GraphQLContext(app, user, td),
+            operationName = operation,
+            variables = variables.getOrElse(Json.obj()),
+            deferredResolver = Schema.resolver,
+            exceptionHandler = exceptionHandler,
+            maxQueryDepth = Some(10),
+            queryValidator = QueryValidator.default,
+            queryReducers = List(rejectComplexQueries),
+            middleware = if (debug) { TracingExtension :: Nil } else { Nil }
+          )
+          ret
+        case Failure(error) =>
+          td.span.annotate(s"parse.failure")
+          throw error
+      }
     }
   }
 
