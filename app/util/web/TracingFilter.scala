@@ -1,62 +1,54 @@
 package util.web
+import javax.inject.Inject
 
 import akka.stream.Materializer
-import com.twitter.zipkin.gen.Span
+import brave.Span
+import play.api.libs.typedmap.TypedKey
 import play.api.mvc.{Filter, Headers, RequestHeader, Result}
 import play.api.routing.Router
+import util.tracing.{TraceData, TracingService}
+import zipkin.{Endpoint, TraceKeys}
 
-import scala.concurrent.{ExecutionContext, Future}
-import scala.util.control.NonFatal
-import scala.util.Failure
-/*
+import scala.concurrent.Future
+import scala.util.{Failure, Success}
+
 object TracingFilter {
-  object HttpHeaders extends Enumeration {
-    val traceIdHeaderKey = "X-B3-TraceId"
-    val spanIdHeaderKey = "X-B3-SpanId"
-    val parentIdHeaderKey = "X-B3-ParentSpanId"
+  val traceKey = TypedKey[TraceData]("trace")
 
-    val all = Seq(traceIdHeaderKey, spanIdHeaderKey, parentIdHeaderKey)
-  }
-
-  def apply(zipkinServiceFactory: => ZipkinServiceLike, reqHeaderToSpanName: RequestHeader => String = ParamAwareRequestNamer)(
-    implicit mat: Materializer, eCtx: ExecutionContext
-  ) = new TracingFilter(zipkinServiceFactory, reqHeaderToSpanName)
-
-  val ParamAwareRequestNamer: RequestHeader => String = { reqHeader =>
+  val paramAwareRequestNamer: RequestHeader => String = { reqHeader =>
     import org.apache.commons.lang3.StringUtils
-    val rawPathPattern = reqHeader.attrs.get(Router.Attrs.HandlerDef).map(_.path).getOrElse(reqHeader.path)
-    val pathPattern = StringUtils.replace(rawPathPattern, "<[^/]+>", "")
+    val pathPattern = StringUtils.replace(
+      reqHeader.attrs.get(Router.Attrs.HandlerDef).map(_.path).getOrElse(reqHeader.path),
+      "<[^/]+>", ""
+    )
     s"${reqHeader.method} - $pathPattern"
   }
 }
 
+class TracingFilter @Inject() (tracer: TracingService)(implicit val mat: Materializer) extends Filter {
+  import tracer.executionContext
+  private val reqHeaderToSpanName: RequestHeader => String = TracingFilter.paramAwareRequestNamer
 
-class TracingFilter(zipkinServiceFactory: => ZipkinServiceLike, reqHeaderToSpanName: RequestHeader => String)(
-  implicit val mat: Materializer, eCtx: ExecutionContext
-) extends Filter {
-  private implicit lazy val zipkinService = zipkinServiceFactory
+  def apply(nextFilter: (RequestHeader) => Future[Result])(req: RequestHeader): Future[Result] = if (req.path.startsWith("/assets")) {
+    nextFilter(req)
+  } else {
+    val serverSpan = tracer.serverReceived(
+      spanName = reqHeaderToSpanName(req),
+      span = tracer.newSpan(req.headers)((headers, key) => headers.get(key))
+    )
+    serverSpan.tag(TraceKeys.HTTP_PATH, req.path)
+    serverSpan.tag(TraceKeys.HTTP_METHOD, req.method)
+    serverSpan.tag(TraceKeys.HTTP_HOST, req.host)
 
-  def apply(nextFilter: (RequestHeader) => Future[Result])(req: RequestHeader): Future[Result] = {
-    val parentSpan = zipkinService.generateSpan(reqHeaderToSpanName(req), req2span(req))
-    val fMaybeServerSpan = zipkinService.serverReceived(parentSpan).recover { case NonFatal(e) => None }
-    fMaybeServerSpan flatMap {
-      case None => nextFilter(req)
-      case Some(serverSpan) => {
-        val fResult = nextFilter(addHeadersToReq(req, zipkinService.serverSpanToSpan(serverSpan)))
-        fResult.onComplete {
-          case Failure(e) => zipkinService.serverSent(serverSpan, "failed" -> s"Finished with exception: ${e.getMessage}")
-          case _ => zipkinService.serverSent(serverSpan)
-        }
-        fResult
-      }
+    val result = nextFilter(req.addAttr(TracingFilter.traceKey, TraceData(serverSpan)))
+    result.onComplete {
+      case Failure(t) => tracer.serverSend(serverSpan, "failed" -> s"Finished with exception: ${t.getMessage}")
+      case Success(x) =>
+        serverSpan.tag(TraceKeys.HTTP_STATUS_CODE, x.header.status.toString)
+        x.header.headers.get("Content-Type").map(c => serverSpan.tag("http.response.contentType", c))
+        x.body.contentLength.map(l => serverSpan.tag(TraceKeys.HTTP_RESPONSE_SIZE, l.toString))
+        tracer.serverSend(serverSpan)
     }
-  }
-
-  private def addHeadersToReq(req: RequestHeader, span: Span): RequestHeader = {
-    val originalHeaderData = req.headers.toMap
-    val withSpanData = originalHeaderData ++ zipkinService.spanToIdsMap(span).map { case (key, value) => key -> Seq(value) }
-    val newHeaders = new Headers(withSpanData.mapValues(_.headOption.getOrElse("")).toSeq)
-    req.withHeaders(newHeaders)
+    result
   }
 }
-*/

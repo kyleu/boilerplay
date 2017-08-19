@@ -9,7 +9,6 @@ import models.auth.AuthEnv
 import play.api.Environment
 import play.api.inject.ApplicationLifecycle
 import util.FutureUtils.defaultContext
-import play.api.libs.ws.WSClient
 import services.database.{Database, MasterDdl}
 import services.file.FileService
 import services.settings.SettingsService
@@ -18,6 +17,7 @@ import services.user.UserService
 import util.cache.CacheService
 import util.metrics.Instrumented
 import util.tracing.TracingService
+import util.web.TracingWSClient
 
 import scala.concurrent.Future
 
@@ -34,7 +34,7 @@ class Application @javax.inject.Inject() (
     val actorSystem: ActorSystem,
     val userService: UserService,
     val silhouette: Silhouette[AuthEnv],
-    val ws: WSClient,
+    val ws: TracingWSClient,
     val tracing: TracingService
 ) extends Logging {
   if (Application.initialized) {

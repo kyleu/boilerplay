@@ -9,6 +9,7 @@ import play.api.mvc.{AnyContentAsEmpty, Request, WebSocket}
 import play.twirl.api.HtmlFormat
 import services.socket.SocketService
 import util.Application
+import util.tracing.TraceData
 import util.web.MessageFrameFormatter
 
 import scala.concurrent.Future
@@ -23,7 +24,14 @@ class HomeController @javax.inject.Inject() (
 
   private[this] implicit val t = new MessageFrameFormatter(app.config.debug).transformer
 
+  def doStuff()(implicit traceData: TraceData) = {
+    app.tracing.trace("test-uno") { implicit data =>
+      println("!!!!")
+    }
+  }
+
   def home() = withSession("home") { implicit request =>
+    doStuff()
     Future.successful(Ok(views.html.index(request.identity, app.config.debug)))
   }
 

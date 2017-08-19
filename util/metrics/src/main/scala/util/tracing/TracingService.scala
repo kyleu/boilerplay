@@ -2,7 +2,6 @@ package util.tracing
 
 import akka.actor.ActorSystem
 import brave.context.slf4j.MDCCurrentTraceContext
-import brave.propagation.TraceContext
 import brave.sampler.Sampler
 import brave.{Span, Tracer, Tracing}
 import util.Logging
@@ -55,31 +54,22 @@ class TracingService @javax.inject.Inject() (actorSystem: ActorSystem, cnf: Metr
     result
   }
 
-  private[tracing] def serverReceived(spanName: String, span: Span) = span.name(spanName).kind(Span.Kind.SERVER).start()
+  def serverReceived(spanName: String, span: Span) = span.name(spanName).kind(Span.Kind.SERVER).start()
 
-  private[tracing] def serverSend(span: Span, tags: (String, String)*) = {
+  def serverSend(span: Span, tags: (String, String)*) = {
     tags.foreach { case (key, value) => span.tag(key, value) }
     span.finish()
     span
   }
 
-  private[tracing] def newSpan[A](headers: A)(getHeader: (A, String) => Option[String]) = {
+  def newSpan[A](headers: A)(getHeader: (A, String) => Option[String]) = {
     val contextOrFlags = tracing.propagation().extractor(
       (carrier: A, key: String) => getHeader(carrier, key).orNull
     ).extract(headers)
     Option(contextOrFlags.context()).map(tracer.newChild).getOrElse(tracer.newTrace(contextOrFlags.samplingFlags()))
   }
 
-  private[tracing] def newSpan(parent: Option[TraceContext]) = parent match {
-    case Some(x) => tracer.newChild(x)
-    case None => tracer.newTrace()
-  }
-
-  private[tracing] def toSpan[A](headers: A)(getHeader: (A, String) => Option[String]) = tracer.joinSpan(tracing.propagation().extractor(
-    (carrier: A, key: String) => getHeader(carrier, key).orNull
-  ).extract(headers).context())
-
-  private[tracing] def toMap(span: Span) = {
+  def toMap(span: Span) = {
     val data = collection.mutable.Map[String, String]()
     tracing.propagation().injector(
       (carrier: collection.mutable.Map[String, String], key: String, value: String) => carrier += key -> value
