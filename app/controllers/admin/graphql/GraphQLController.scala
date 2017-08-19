@@ -30,13 +30,13 @@ class GraphQLController @javax.inject.Inject() (override val app: Application) e
     val variables = body.get("variables").map(x => GraphQLService.parseVariables(x.asString.getOrElse("{}")))
     val operation = body.get("operationName").flatMap(_.asString)
 
-    executeQuery(query, variables, operation, request.identity)
+    executeQuery(query, variables, operation, request.identity, app.config.debug)
   }
 
-  def executeQuery(query: String, variables: Option[Json], operation: Option[String], user: User) = {
+  def executeQuery(query: String, variables: Option[Json], operation: Option[String], user: User, debug: Boolean) = {
     try {
       import util.FutureUtils.graphQlContext
-      val f = GraphQLService.executeQuery(app, query, variables, operation, user)
+      val f = GraphQLService.executeQuery(app, query, variables, operation, user, debug)
       f.map(x => Ok(x.spaces2).as("application/json")).recover {
         case error: QueryAnalysisError => BadRequest(error.resolveError.spaces2).as("application/json")
         case error: ErrorWithResolver => InternalServerError(error.resolveError.spaces2).as("application/json")

@@ -1,5 +1,6 @@
 package services
 
+import models.result.data.DataField
 import models.result.filter.Filter
 import models.result.orderBy.OrderBy
 import util.Logging
@@ -8,6 +9,8 @@ import util.FutureUtils.databaseContext
 import scala.concurrent.Future
 
 trait ModelServiceHelper[T] extends Logging {
+  def logChanges(ids: Seq[(String, Any)], updates: Seq[DataField]) = {}
+
   def countAll(filters: Seq[Filter]): Future[Int]
   def getAll(filters: Seq[Filter], orderBys: Seq[OrderBy], limit: Option[Int] = None, offset: Option[Int] = None): Future[Seq[T]]
 

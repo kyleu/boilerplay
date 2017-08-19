@@ -2,7 +2,7 @@ package services.graphql
 
 import io.circe.Json
 import io.circe.parser._
-import models.graphql.{GraphQLContext, Schema}
+import models.graphql.{GraphQLContext, Schema, TracingExtension}
 import models.user.User
 import sangria.execution.{Executor, HandledException, QueryReducer}
 import sangria.marshalling.circe._
@@ -22,7 +22,7 @@ object GraphQLService extends Logging {
 
   private[this] val rejectComplexQueries = QueryReducer.rejectComplexQueries[Any](1000, (_, _) => new IllegalArgumentException(s"Query is too complex."))
 
-  def executeQuery(app: Application, query: String, variables: Option[Json], operation: Option[String], user: User) = {
+  def executeQuery(app: Application, query: String, variables: Option[Json], operation: Option[String], user: User, debug: Boolean) = {
     val ctx = GraphQLContext(app, user)
     QueryParser.parse(query) match {
       case Success(ast) => Executor.execute(
@@ -35,7 +35,8 @@ object GraphQLService extends Logging {
         exceptionHandler = exceptionHandler,
         maxQueryDepth = Some(10),
         queryValidator = QueryValidator.default,
-        queryReducers = List(rejectComplexQueries)
+        queryReducers = List(rejectComplexQueries),
+        middleware = if (debug) { TracingExtension :: Nil } else { Nil }
       )
       case Failure(error) => throw error
     }

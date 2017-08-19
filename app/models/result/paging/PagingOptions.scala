@@ -4,9 +4,13 @@ object PagingOptions {
   case class Range(start: Int, end: Int)
 
   def from(count: Int, limit: Option[Int], offset: Option[Int] = None) = {
-    val lim = if (limit.contains(0)) { None } else { limit }
     val off = offset.getOrElse(0)
-    val current = off / lim.getOrElse(count)
+    val lim = if (limit.contains(0)) { None } else { limit }
+    val current = lim match {
+      case Some(l) if l > 0 => off / l
+      case None if count > 0 => off / count
+      case _ => 0
+    }
     PagingOptions(
       current = current,
       limit = limit,

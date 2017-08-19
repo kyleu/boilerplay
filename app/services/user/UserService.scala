@@ -41,6 +41,18 @@ class UserService @javax.inject.Inject() (hasher: PasswordHasher) extends ModelS
   def isUsernameInUse(name: String) = Database.query(UserSearchQueries.IsUsernameInUse(name))
   def usernameLookup(id: UUID) = Database.query(UserSearchQueries.GetUsername(id))
 
+  def insert(user: User) = Database.execute(UserQueries.insert(user)).map { _ =>
+    log.info(s"Inserted user [$user].")
+    UserCache.cacheUser(user)
+    user
+  }
+
+  def update(user: User) = Database.execute(UserQueries.UpdateUser(user)).map { _ =>
+    log.info(s"Updated user [$user].")
+    UserCache.cacheUser(user)
+    user
+  }
+
   def save(user: User, update: Boolean = false) = {
     log.info(s"${if (update) { "Updating" } else { "Creating" }} user [$user].")
     val statement = if (update) { UserQueries.UpdateUser(user) } else { UserQueries.insert(user) }
