@@ -8,14 +8,14 @@ import com.mohiva.play.silhouette.api.Silhouette
 import models.auth.AuthEnv
 import play.api.Environment
 import play.api.inject.ApplicationLifecycle
+import services.ServiceRegistry
 import services.database.{Database, MasterDdl}
 import services.file.FileService
-import services.settings.SettingsService
 import services.supervisor.ActorSupervisor
 import services.user.UserService
 import util.FutureUtils.defaultContext
-import util._
 import services.cache.CacheService
+import util.{Config, FutureUtils, Logging}
 import util.metrics.Instrumented
 import util.tracing.TracingService
 import util.web.TracingWSClient
@@ -28,6 +28,7 @@ object Application {
 
 @javax.inject.Singleton
 class Application @javax.inject.Inject() (
+    val services: ServiceRegistry,
     val contexts: FutureUtils,
     val config: Configuration,
     val lifecycle: ApplicationLifecycle,
@@ -62,7 +63,7 @@ class Application @javax.inject.Inject() (
 
     Database.open(config.cnf, tracing)
     MasterDdl.init().map { _ =>
-      SettingsService.load()
+      services.settingsService.load()
     }
   }
 

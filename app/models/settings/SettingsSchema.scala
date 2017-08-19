@@ -5,7 +5,6 @@ import models.user.SchemaHelper
 import sangria.execution.deferred.HasId
 import sangria.macros.derive._
 import sangria.schema._
-import services.settings.SettingsService
 
 object SettingsSchema extends SchemaHelper("settings") {
   implicit val settingKeyEnum = CommonSchema.deriveEnumeratumType(
@@ -22,6 +21,6 @@ object SettingsSchema extends SchemaHelper("settings") {
     name = "setting",
     description = Some("The system setting values for this application."),
     fieldType = ListType(settingType),
-    resolve = c => trace(c.ctx, "search")(_ => SettingsService.getAll)(c.ctx.trace)
+    resolve = c => trace(c.ctx, "search")(_ => c.ctx.app.services.settingsService.getAll)(c.ctx.trace)
   ))
 }

@@ -1,4 +1,4 @@
-@(user: Option[models.user.User], form: Form[com.mohiva.play.silhouette.api.util.Credentials])(
+@(user: Option[models.user.User], form: Form[com.mohiva.play.silhouette.api.util.Credentials], allowRegistration: Boolean)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
 )@traceData.logViewClass(getClass)@layout.simple(user = user, title = "Sign in to " + util.Config.projectName) {
   <form method="post" action="@controllers.auth.routes.AuthenticationController.authenticateCredentials()">
@@ -38,7 +38,7 @@
         </div>
         <div>
           <p style="text-align: center;">
-            @if(services.settings.SettingsService.allowRegistration) {
+            @if(allowRegistration) {
               Not a member?
               <a class="theme-text" href="@controllers.auth.routes.RegistrationController.registrationForm()">Sign Up</a>.
             } else {

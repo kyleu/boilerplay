@@ -1,8 +1,5 @@
 @(user: Option[models.user.User])<ul id="dropdown-user" class="dropdown-content">
   @if(user.isEmpty) {
-  @if(services.settings.SettingsService.allowRegistration) { <li>
-    <a class="theme-text" href="@controllers.auth.routes.RegistrationController.registrationForm()">Sign Up</a>
-  </li> }
   <li><a class="theme-text" href="@controllers.auth.routes.AuthenticationController.signInForm()">Sign In</a></li>
   } else {
   @if(user.exists(_.role == models.user.Role.Admin)) {

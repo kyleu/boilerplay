@@ -1,4 +1,4 @@
-@(user: models.user.User)(implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData)
+@(user: models.user.User, settingsService: services.settings.SettingsService)(implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData)
 @import models.settings.SettingKey
 
 @settingPanel(key: models.settings.SettingKey, colWidth: Int = 12)(content: Html) = {
@@ -29,7 +29,7 @@
         @settingPanel(SettingKey.AllowRegistration) {
           <div class="row">
             <div class="col s12">
-            @defining(services.settings.SettingsService.allowRegistration) { allowRegistration =>
+            @defining(settingsService.allowRegistration) { allowRegistration =>
               <div>
                 <input type="radio" id="AllowRegistration-true" name="@SettingKey.AllowRegistration" value="true" @if(allowRegistration) { checked="checked" }></input>
                 <label for="AllowRegistration-true">Yes</label>
@@ -46,7 +46,7 @@
         @settingPanel(SettingKey.DefaultNewUserRole) {
           <div class="row">
             <div class="col s12">
-            @defining(models.user.Role.withName(services.settings.SettingsService(SettingKey.DefaultNewUserRole))) { newUserRole =>
+            @defining(models.user.Role.withName(settingsService(SettingKey.DefaultNewUserRole))) { newUserRole =>
               @roleRadio(SettingKey.DefaultNewUserRole.toString, models.user.Role.User, newUserRole, "Registered Users")
               @roleRadio(SettingKey.DefaultNewUserRole.toString, models.user.Role.Admin, newUserRole, "Administrators")
             }
