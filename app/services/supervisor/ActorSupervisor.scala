@@ -22,6 +22,7 @@ class ActorSupervisor(val app: Application) extends InstrumentedActor with Loggi
 
   override def preStart() = {
     context.actorOf(MetricsServletActor.props(app.config.metrics), "metrics-servlet")
+    log.debug(s"Actor Supervisor started for [${util.Config.projectId}].")
   }
 
   override def supervisorStrategy: SupervisorStrategy = OneForOneStrategy() {

@@ -6,7 +6,7 @@ import pl.project13.scala.sbt.JmhPlugin
 
 object Utilities {
   private[this] val metricsLibs = Seq(
-    Play.lib, Akka.actor,
+    Play.lib, Akka.actor, Tracing.brave, Tracing.http, Tracing.logging,
     Metrics.metrics, Metrics.healthChecks, Metrics.json, Metrics.jvm, Metrics.ehcache, Metrics.jettyServlet, Metrics.servlets, Metrics.graphite
   )
 

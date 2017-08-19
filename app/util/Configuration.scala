@@ -10,13 +10,21 @@ class Configuration @javax.inject.Inject() (val cnf: play.api.Configuration, env
   val debug = env.mode == Mode.Dev
   val dataDir = cnf.get[Option[String]]("data.directory").getOrElse("./data").toFile
 
-  val metrics: MetricsConfig = MetricsConfig(
-    jmxEnabled = cnf.get[Option[Boolean]]("metrics.jmx.enabled").getOrElse(true),
-    graphiteEnabled = cnf.get[Option[Boolean]]("metrics.graphite.enabled").getOrElse(false),
-    graphiteServer = cnf.get[Option[String]]("metrics.graphite.server").getOrElse("127.0.0.1"),
-    graphitePort = cnf.get[Option[Int]]("metrics.graphite.port").getOrElse(2003),
-    servletEnabled = cnf.get[Option[Boolean]]("metrics.servlet.enabled").getOrElse(true),
-    servletPort = cnf.get[Option[Int]]("metrics.servlet.port").getOrElse(9001)
+  val tracing = ""
+
+  val metrics = MetricsConfig(
+    jmxEnabled = cnf.get[Boolean]("metrics.jmx.enabled"),
+
+    tracingEnabled = cnf.get[Boolean]("metrics.tracing.enabled"),
+    tracingServer = cnf.get[String]("metrics.tracing.server"),
+    tracingPort = cnf.get[Int]("metrics.tracing.port"),
+
+    graphiteEnabled = cnf.get[Boolean]("metrics.graphite.enabled"),
+    graphiteServer = cnf.get[String]("metrics.graphite.server"),
+    graphitePort = cnf.get[Int]("metrics.graphite.port"),
+
+    servletEnabled = cnf.get[Boolean]("metrics.servlet.enabled"),
+    servletPort = cnf.get[Int]("metrics.servlet.port")
   )
 
   val cookieAuthSettings = {
@@ -26,15 +34,15 @@ class Configuration @javax.inject.Inject() (val cnf: play.api.Configuration, env
     }
 
     CookieAuthenticatorSettings(
-      cookieName = cfg.get[Option[String]]("name").getOrElse(throw new IllegalArgumentException()),
-      cookiePath = cfg.get[Option[String]]("path").getOrElse(throw new IllegalArgumentException()),
-      cookieDomain = cfg.get[Option[String]]("domain"),
-      secureCookie = cfg.get[Option[Boolean]]("secure").getOrElse(throw new IllegalArgumentException()),
+      cookieName = cfg.get[String]("name"),
+      cookiePath = cfg.get[String]("path"),
+      cookieDomain = Some(cfg.get[String]("domain")),
+      secureCookie = cfg.get[Boolean]("secure"),
       httpOnlyCookie = true,
-      useFingerprinting = cfg.get[Option[Boolean]]("useFingerprinting").getOrElse(throw new IllegalArgumentException()),
-      cookieMaxAge = cfg.get[Option[Int]]("maxAge").map(_.seconds),
-      authenticatorIdleTimeout = cfg.get[Option[Int]]("idleTimeout").map(_.seconds),
-      authenticatorExpiry = cfg.get[Option[Int]]("expiry").map(_.seconds).getOrElse(throw new IllegalArgumentException())
+      useFingerprinting = cfg.get[Boolean]("useFingerprinting"),
+      cookieMaxAge = Some(cfg.get[Int]("maxAge").seconds),
+      authenticatorIdleTimeout = Some(cfg.get[Int]("idleTimeout").seconds),
+      authenticatorExpiry = cfg.get[Int]("expiry").seconds
     )
   }
 }

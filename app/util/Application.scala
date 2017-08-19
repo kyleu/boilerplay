@@ -16,7 +16,7 @@ import services.settings.SettingsService
 import services.supervisor.ActorSupervisor
 import services.user.UserService
 import util.cache.CacheService
-import util.metrics.Instrumented
+import util.metrics.{Instrumented, TracingService}
 
 import scala.concurrent.Future
 
@@ -41,7 +41,8 @@ class Application @javax.inject.Inject() (
   }
 
   val supervisor = actorSystem.actorOf(Props(classOf[ActorSupervisor], this), "supervisor")
-  log.debug(s"Actor Supervisor [${supervisor.path}] started for [${util.Config.projectId}].")
+
+  lazy val tracing = TracingService(enabled = config.metrics.tracingEnabled, server = config.metrics.tracingServer, port = config.metrics.tracingPort)
 
   private[this] def start() = {
     log.info(s"${Config.projectName} is starting.")
@@ -61,11 +62,14 @@ class Application @javax.inject.Inject() (
     MasterDdl.init().map { _ =>
       SettingsService.load()
     }
+
+    tracing.test()
   }
 
   private[this] def stop() = {
     Database.close()
     CacheService.close()
+    tracing.close()
     SharedMetricRegistries.remove("default")
   }
 }

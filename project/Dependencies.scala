@@ -65,6 +65,13 @@ object Dependencies {
     val graphite = "io.dropwizard.metrics" % "metrics-graphite" % version intransitive()
   }
 
+  object Tracing {
+    private[this] val version = "4.5.2"
+    val brave = "io.zipkin.brave" % "brave-core" % version
+    val http = "io.zipkin.reporter" % "zipkin-sender-okhttp3" % "1.0.1"
+    val logging = "io.zipkin.brave" % "brave-context-slf4j" % version
+  }
+
   object ScalaJS {
     val jQueryVersion = "0.9.2"
     val scalaTagsVersion = "0.6.5"
@@ -80,7 +87,7 @@ object Dependencies {
   }
 
   object Testing {
-    val scalaTest = "org.scalatest" %% "scalatest" % "3.0.3" % "test"
+    val scalaTest = "org.scalatest" %% "scalatest" % "3.0.4" % "test"
     val gatlingCore = "io.gatling" % "gatling-test-framework" % "2.1.7" % "test"
     val gatlingCharts = "io.gatling.highcharts" % "gatling-charts-highcharts" % "2.1.7" % "test"
   }
