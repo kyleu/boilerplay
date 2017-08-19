@@ -1,5 +1,5 @@
 @(user: models.user.User, q: Option[String], orderBy: Option[String], orderAsc: Boolean, totalCount: Option[Int], users: Seq[models.user.User], limit: Int, offset: Int)(
-    implicit request: Request[AnyContent], session: Session, flash: Flash
+    implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
 )
 
 @resultFor(user: models.user.User) = {
@@ -15,6 +15,8 @@
     }</td>
   </tr>
 }
+
+@traceData.annotateViewClass(getClass)
 
 @views.html.admin.explore.list(
   user = user,

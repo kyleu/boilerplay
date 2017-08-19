@@ -3,6 +3,7 @@ import javax.inject.Inject
 
 import akka.stream.Materializer
 import brave.Span
+import org.slf4j.MDC
 import play.api.libs.typedmap.TypedKey
 import play.api.mvc.{Filter, Headers, RequestHeader, Result}
 import play.api.routing.Router
@@ -39,6 +40,9 @@ class TracingFilter @Inject() (tracer: TracingService)(implicit val mat: Materia
     serverSpan.tag(TraceKeys.HTTP_PATH, req.path)
     serverSpan.tag(TraceKeys.HTTP_METHOD, req.method)
     serverSpan.tag(TraceKeys.HTTP_HOST, req.host)
+
+    MDC.put("traceId", serverSpan.context.traceId().toString)
+    MDC.put("spanId", serverSpan.context.spanId().toString)
 
     val result = nextFilter(req.addAttr(TracingFilter.traceKey, TraceData(serverSpan)))
     result.onComplete {

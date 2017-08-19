@@ -22,6 +22,7 @@ class TracingService @javax.inject.Inject() (actorSystem: ActorSystem, cnf: Metr
 
   private[this] val ctx = MDCCurrentTraceContext.create()
   val tracing = Tracing.newBuilder().localServiceName(cnf.tracingService).reporter(reporter).currentTraceContext(ctx).traceId128Bit(true).sampler(samp).build()
+  tracing.setNoop(!cnf.tracingEnabled)
 
   val tracer: Tracer = tracing.tracer
 
