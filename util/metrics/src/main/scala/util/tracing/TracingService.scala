@@ -45,7 +45,7 @@ class TracingService @javax.inject.Inject() (actorSystem: ActorSystem, cnf: Metr
   def endpointFor(k: String) = Endpoint.builder().serviceName(k).build()
 
   def trace[A](traceName: String, tags: (String, String)*)(f: TraceData => A)(implicit parentData: TraceData) = {
-    val childSpan = tracer.newChild(parentData.span.context()).name(traceName).kind(Span.Kind.CLIENT)
+    val childSpan = tracer.newChild(parentData.span.context()).name(traceName).kind(Span.Kind.SERVER)
     tags.foreach { case (key, value) => childSpan.tag(key, value) }
     childSpan.start()
     Try(f(TraceData(childSpan))) match {
