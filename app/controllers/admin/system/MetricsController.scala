@@ -1,7 +1,7 @@
 package controllers.admin.system
 
 import controllers.BaseController
-import util.Application
+import models.Application
 
 @javax.inject.Singleton
 class MetricsController @javax.inject.Inject() (override val app: Application) extends BaseController("metrics") {

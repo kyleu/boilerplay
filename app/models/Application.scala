@@ -1,4 +1,4 @@
-package util
+package models
 
 import java.util.TimeZone
 
@@ -13,10 +13,11 @@ import services.file.FileService
 import services.settings.SettingsService
 import services.supervisor.ActorSupervisor
 import services.user.UserService
-import util.cache.CacheService
 import util.FutureUtils.defaultContext
+import util._
+import services.cache.CacheService
 import util.metrics.Instrumented
-import util.tracing.{TraceData, TracingService}
+import util.tracing.TracingService
 import util.web.TracingWSClient
 
 import scala.concurrent.Future

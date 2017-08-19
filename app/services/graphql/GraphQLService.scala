@@ -2,6 +2,7 @@ package services.graphql
 
 import io.circe.Json
 import io.circe.parser._
+import models.Application
 import models.graphql.{GraphQLContext, Schema, TracingExtension}
 import models.user.User
 import sangria.execution.{ExceptionHandler, Executor, HandledException, QueryReducer}
@@ -10,7 +11,7 @@ import sangria.parser.QueryParser
 import sangria.validation.QueryValidator
 import util.FutureUtils.graphQlContext
 import util.tracing.{TraceData, TracingService}
-import util.{Application, Logging}
+import util.Logging
 import zipkin.Endpoint
 
 import scala.util.{Failure, Success}

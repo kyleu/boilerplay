@@ -4,9 +4,9 @@ import com.mohiva.play.silhouette.api.exceptions.ProviderException
 import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.api.util.{Credentials, PasswordHasher}
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
+import models.Application
 import models.user.UserForms
 import services.user.UserService
-import util.Application
 import util.web.FormUtils
 
 import scala.concurrent.Future

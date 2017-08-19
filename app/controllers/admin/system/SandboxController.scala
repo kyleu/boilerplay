@@ -2,8 +2,8 @@ package controllers.admin.system
 
 import akka.util.Timeout
 import controllers.BaseController
+import models.Application
 import models.sandbox.SandboxTask
-import util.Application
 
 import scala.concurrent.Future
 import scala.concurrent.duration._

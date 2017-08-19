@@ -3,8 +3,8 @@ package controllers.admin.system
 import java.util.UUID
 
 import controllers.BaseController
+import models.Application
 import play.twirl.api.Html
-import util.Application
 import util.tracing.TraceData
 
 import scala.concurrent.Future

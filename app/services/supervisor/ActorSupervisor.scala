@@ -8,7 +8,7 @@ import models._
 import models.user.User
 import java.time.LocalDateTime
 import util.metrics.{InstrumentedActor, MetricsServletActor}
-import util.{Application, DateUtils, Logging}
+import util.{DateUtils, Logging}
 
 object ActorSupervisor {
   case class SocketRecord(userId: UUID, name: String, actorRef: ActorRef, started: LocalDateTime)

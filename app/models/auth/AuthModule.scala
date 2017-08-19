@@ -12,12 +12,12 @@ import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
 import com.mohiva.play.silhouette.impl.util.{DefaultFingerprintGenerator, SecureRandomIDGenerator}
 import com.mohiva.play.silhouette.password.BCryptPasswordHasher
 import com.mohiva.play.silhouette.persistence.repositories.DelegableAuthInfoRepository
+import models.Configuration
 import net.codingwell.scalaguice.ScalaModule
 import util.FutureUtils.defaultContext
 import play.api.libs.ws.WSClient
 import play.api.mvc.DefaultCookieHeaderEncoding
 import services.user.{PasswordInfoService, UserSearchService}
-import util.Configuration
 
 object AuthModule {
   val encKey = "dead60d84c1a41648ae258b57e8b5727"

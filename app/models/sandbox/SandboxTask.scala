@@ -1,8 +1,9 @@
 package models.sandbox
 
 import enumeratum._
+import models.Application
 import util.FutureUtils.defaultContext
-import util.{Application, Logging}
+import util.Logging
 
 import scala.concurrent.Future
 

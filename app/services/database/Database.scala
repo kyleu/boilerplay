@@ -28,7 +28,7 @@ object Database extends Instrumented {
   private[this] def prependComment(obj: Object, sql: String) = s"/* ${obj.getClass.getSimpleName.replace("$", "")} */ $sql"
 
   def open(cfg: play.api.Configuration, svc: TracingService): Unit = {
-    def get(k: String) = cfg.get[Option[String]]("database." + k).getOrElse(throw new IllegalStateException(s"Missing config for [$k]."))
+    def get(k: String) = cfg.get[String]("database." + k)
     tracingService = Some(svc)
     open(get("host"), get("port").toInt, get("username"), Some(get("password")), Some(get("database")))
   }

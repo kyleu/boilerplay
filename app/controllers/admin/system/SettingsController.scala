@@ -1,9 +1,9 @@
 package controllers.admin.system
 
 import controllers.BaseController
+import models.Application
 import models.settings.SettingKey
 import services.settings.SettingsService
-import util.Application
 import util.web.FormUtils
 
 import scala.concurrent.Future

@@ -2,13 +2,14 @@ package controllers
 
 import brave.Span
 import com.mohiva.play.silhouette.api.actions.{SecuredRequest, UserAwareRequest}
+import models.Application
 import models.auth.AuthEnv
 import models.result.data.DataField
 import models.user.{Role, User}
 import play.api.mvc._
 import util.metrics.Instrumented
 import util.web.TracingFilter
-import util.{Application, Logging}
+import util.Logging
 import zipkin.TraceKeys
 
 import scala.concurrent.{ExecutionContext, Future}

@@ -1,4 +1,4 @@
-package util.cache
+package services.cache
 
 import net.sf.ehcache.{CacheManager, Element}
 import org.apache.commons.lang3.reflect.TypeUtils

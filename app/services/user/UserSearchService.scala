@@ -6,7 +6,7 @@ import models.queries.auth.UserQueries
 import models.user.User
 import services.database.Database
 import util.Logging
-import util.cache.UserCache
+import services.cache.UserCache
 import util.FutureUtils.databaseContext
 import util.tracing.{TraceData, TracingService}
 

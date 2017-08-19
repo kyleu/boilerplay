@@ -7,11 +7,11 @@ import com.mohiva.play.silhouette.api.util.PasswordHasher
 import com.mohiva.play.silhouette.api.{LoginEvent, LoginInfo, SignUpEvent}
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
 import controllers.BaseController
+import models.Application
 import models.settings.SettingKey
 import models.user._
 import services.settings.SettingsService
 import services.user.{UserSearchService, UserService}
-import util.Application
 
 import scala.concurrent.Future
 

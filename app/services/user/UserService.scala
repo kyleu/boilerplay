@@ -13,7 +13,7 @@ import models.user.{Role, User}
 import services.ModelServiceHelper
 import util.FutureUtils.databaseContext
 import services.database.Database
-import util.cache.UserCache
+import services.cache.UserCache
 import util.tracing.{TraceData, TracingService}
 
 import scala.concurrent.Future

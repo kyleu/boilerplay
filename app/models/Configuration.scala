@@ -1,4 +1,4 @@
-package util
+package models
 
 import better.files._
 import com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorSettings
@@ -8,13 +8,11 @@ import util.metrics.MetricsConfig
 @javax.inject.Singleton
 class Configuration @javax.inject.Inject() (val cnf: play.api.Configuration, val metrics: MetricsConfig, env: Environment) {
   val debug = env.mode == Mode.Dev
-  val dataDir = cnf.get[Option[String]]("data.directory").getOrElse("./data").toFile
+  val dataDir = cnf.get[String]("data.directory").toFile
 
   val cookieAuthSettings = {
     import scala.concurrent.duration._
-    val cfg = cnf.get[Option[play.api.Configuration]]("silhouette.authenticator.cookie").getOrElse {
-      throw new IllegalArgumentException("Missing cookie configuration.")
-    }
+    val cfg = cnf.get[play.api.Configuration]("silhouette.authenticator.cookie")
 
     CookieAuthenticatorSettings(
       cookieName = cfg.get[String]("name"),

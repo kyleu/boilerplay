@@ -1,7 +1,7 @@
 package controllers.admin.system
 
 import controllers.BaseController
-import util.Application
+import models.Application
 
 import scala.concurrent.Future
 

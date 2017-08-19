@@ -3,10 +3,10 @@ package controllers.admin.user
 import java.util.UUID
 
 import controllers.BaseController
+import models.Application
 import models.result.orderBy.OrderBy
 import models.user.Role
 import services.user.UserSearchService
-import util.Application
 import util.web.FormUtils
 
 import scala.concurrent.Future

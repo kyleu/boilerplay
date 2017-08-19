@@ -7,8 +7,8 @@ import com.mohiva.play.silhouette.api.util.PasswordHasher
 import com.mohiva.play.silhouette.api.{LoginInfo, SignUpEvent}
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
 import controllers.BaseController
+import models.Application
 import models.user.{Role, User, UserPreferences}
-import util.Application
 import util.web.FormUtils
 
 import scala.concurrent.Future

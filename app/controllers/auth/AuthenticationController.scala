@@ -5,9 +5,9 @@ import com.mohiva.play.silhouette.api.{LoginEvent, LogoutEvent}
 import com.mohiva.play.silhouette.impl.exceptions.IdentityNotFoundException
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
 import controllers.BaseController
+import models.Application
 import models.user.UserForms
 import services.user.UserSearchService
-import util.Application
 
 import scala.concurrent.Future
 

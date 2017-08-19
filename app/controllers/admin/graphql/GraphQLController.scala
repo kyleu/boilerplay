@@ -2,13 +2,13 @@ package controllers.admin.graphql
 
 import controllers.BaseController
 import io.circe.Json
+import models.Application
 import models.user.User
 import sangria.execution.{ErrorWithResolver, QueryAnalysisError}
 import sangria.marshalling.MarshallingUtil._
 import sangria.marshalling.circe._
 import sangria.parser.SyntaxError
 import services.graphql.GraphQLService
-import util.Application
 import util.tracing.TraceData
 
 import scala.concurrent.Future
