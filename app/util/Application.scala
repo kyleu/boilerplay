@@ -34,7 +34,8 @@ class Application @javax.inject.Inject() (
     val actorSystem: ActorSystem,
     val userService: UserService,
     val silhouette: Silhouette[AuthEnv],
-    val ws: WSClient
+    val ws: WSClient,
+    val tracing: TracingService
 ) extends Logging {
   if (Application.initialized) {
     log.info("Skipping initialization after failure.")
@@ -43,10 +44,6 @@ class Application @javax.inject.Inject() (
   }
 
   val supervisor = actorSystem.actorOf(Props(classOf[ActorSupervisor], this), "supervisor")
-
-  lazy val tracing = TracingService(
-    enabled = config.metrics.tracingEnabled, actorSystem = actorSystem, server = config.metrics.tracingServer, port = config.metrics.tracingPort
-  )
 
   private[this] def start() = {
     log.info(s"${Config.projectName} is starting.")

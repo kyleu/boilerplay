@@ -5,8 +5,8 @@ import play.api.mvc.{AnyContent, Request, Result}
 import zipkin.{Endpoint, TraceKeys}
 
 object TracingHttpHelper {
-  def traceForRequest(tracer: Option[Tracer], controller: String, r: Request[AnyContent]) = tracer.map { t =>
-    val trace = t.newTrace()
+  def traceForRequest(tracer: Tracer, controller: String, r: Request[AnyContent]) = {
+    val trace = tracer.newTrace()
     trace.tag(TraceKeys.HTTP_PATH, r.path)
     trace.tag(TraceKeys.HTTP_METHOD, r.method)
     trace.tag(TraceKeys.HTTP_HOST, r.host)
@@ -15,16 +15,16 @@ object TracingHttpHelper {
     trace.start()
   }
 
-  def completeForResult(trace: Option[Span], result: Result) = trace.foreach { span =>
-    span.tag(TraceKeys.HTTP_STATUS_CODE, result.header.status.toString)
+  def completeForResult(trace: Span, result: Result) = {
+    trace.tag(TraceKeys.HTTP_STATUS_CODE, result.header.status.toString)
     result.body.contentLength.foreach { size =>
-      span.tag(TraceKeys.HTTP_RESPONSE_SIZE, size.toString)
+      trace.tag(TraceKeys.HTTP_RESPONSE_SIZE, size.toString)
     }
-    span.finish()
+    trace.finish()
   }
 
-  def failed(trace: Option[Span], ex: Throwable) = trace.foreach { span =>
-    span.tag("exception", ex.toString)
-    span.finish()
+  def failed(trace: Span, ex: Throwable) = {
+    trace.tag("exception", ex.toString)
+    trace.finish()
   }
 }

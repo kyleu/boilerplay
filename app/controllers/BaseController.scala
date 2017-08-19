@@ -7,7 +7,6 @@ import models.result.data.DataField
 import models.user.Role
 import play.api.libs.typedmap.TypedKey
 import play.api.mvc._
-import play.twirl.api.HtmlFormat
 import util.metrics.Instrumented
 import util.tracing.TracingHttpHelper
 import util.{Application, Logging}
@@ -21,7 +20,7 @@ abstract class BaseController() extends InjectedController with Instrumented wit
 
   lazy val name = this.getClass.getSimpleName.stripSuffix("$")
 
-  private[this] val traceKey: TypedKey[Option[Span]] = TypedKey.apply[Option[Span]]("trace")
+  private[this] val traceKey: TypedKey[Span] = TypedKey.apply[Span]("trace")
 
   def withoutSession(action: String)(block: UserAwareRequest[AuthEnv, AnyContent] => Future[Result]) = {
     app.silhouette.UserAwareAction.async { implicit request =>
@@ -40,12 +39,10 @@ abstract class BaseController() extends InjectedController with Instrumented wit
         } else {
           metrics.timer(action).timeFuture {
             val trace = TracingHttpHelper.traceForRequest(app.tracing.tracer, name, request)
-            trace.foreach { t =>
-              t.tag("user.id", u.id.toString)
-              t.tag("user.username", u.username)
-              t.tag("user.email", u.profile.providerKey)
-              t.tag("user.role", u.role.toString)
-            }
+            trace.tag("user.id", u.id.toString)
+            trace.tag("user.username", u.username)
+            trace.tag("user.email", u.profile.providerKey)
+            trace.tag("user.role", u.role.toString)
             val r = SecuredRequest(u, request.authenticator.get, request.addAttr(traceKey, trace))
             val f = block(r)
             f.foreach(result => TracingHttpHelper.completeForResult(trace, result))
