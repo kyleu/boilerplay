@@ -9,7 +9,6 @@ import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
 import controllers.BaseController
 import models.user.{Role, User, UserPreferences}
 import util.Application
-import util.FutureUtils.webContext
 import util.web.FormUtils
 
 import scala.concurrent.Future
@@ -20,6 +19,8 @@ class UserCreateController @javax.inject.Inject() (
     authInfoRepository: AuthInfoRepository,
     hasher: PasswordHasher
 ) extends BaseController {
+  import app.contexts.webContext
+
   def createForm() = withSession("admin-user-form", admin = true) { implicit request =>
     Future.successful(Ok(views.html.admin.user.userCreate(request.identity)))
   }

@@ -6,7 +6,6 @@ import com.mohiva.play.silhouette.impl.exceptions.IdentityNotFoundException
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
 import controllers.BaseController
 import models.user.UserForms
-import util.FutureUtils.webContext
 import services.user.UserSearchService
 import util.Application
 
@@ -18,6 +17,8 @@ class AuthenticationController @javax.inject.Inject() (
     userSearchService: UserSearchService,
     credentialsProvider: CredentialsProvider
 ) extends BaseController {
+  import app.contexts.webContext
+
   def signInForm = withoutSession("form") { implicit request =>
     //val src = request.headers.get("Referer").filter(_.contains(request.host))
     val resp = Ok(views.html.auth.signin(request.identity, UserForms.signInForm))

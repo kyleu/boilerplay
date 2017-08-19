@@ -5,12 +5,13 @@ import java.util.UUID
 import controllers.BaseController
 import play.twirl.api.Html
 import util.Application
-import util.FutureUtils.webContext
 
 import scala.concurrent.Future
 
 @javax.inject.Singleton
 class SearchController @javax.inject.Inject() (override val app: Application) extends BaseController {
+  import app.contexts.webContext
+
   def search(q: String) = withSession("admin.search", admin = true) { implicit request =>
     val resultF = try {
       searchInt(q, q.toInt)

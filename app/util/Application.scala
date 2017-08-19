@@ -27,6 +27,7 @@ object Application {
 
 @javax.inject.Singleton
 class Application @javax.inject.Inject() (
+    val contexts: FutureUtils,
     val config: Configuration,
     val lifecycle: ApplicationLifecycle,
     val playEnv: Environment,

@@ -9,7 +9,6 @@ import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
 import controllers.BaseController
 import models.settings.SettingKey
 import models.user._
-import util.FutureUtils.webContext
 import services.settings.SettingsService
 import services.user.{UserSearchService, UserService}
 import util.Application
@@ -23,6 +22,8 @@ class RegistrationController @javax.inject.Inject() (
     authInfoRepository: AuthInfoRepository,
     hasher: PasswordHasher
 ) extends BaseController {
+  import app.contexts.webContext
+
   def registrationForm(email: Option[String] = None) = withoutSession("form") { implicit request =>
     if (SettingsService.allowRegistration) {
       val form = UserForms.registrationForm.fill(RegistrationData(

@@ -5,7 +5,6 @@ import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.api.util.{Credentials, PasswordHasher}
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
 import models.user.UserForms
-import util.FutureUtils.webContext
 import services.user.UserService
 import util.Application
 import util.web.FormUtils
@@ -19,6 +18,8 @@ class ProfileController @javax.inject.Inject() (
     credentialsProvider: CredentialsProvider,
     hasher: PasswordHasher
 ) extends BaseController {
+  import app.contexts.webContext
+
   def view = withSession("view") { implicit request =>
     Future.successful(Ok(views.html.profile.view(request.identity)))
   }

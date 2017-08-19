@@ -7,13 +7,14 @@ import models.result.orderBy.OrderBy
 import models.user.Role
 import services.user.UserSearchService
 import util.Application
-import util.FutureUtils.webContext
 import util.web.FormUtils
 
 import scala.concurrent.Future
 
 @javax.inject.Singleton
 class UserEditController @javax.inject.Inject() (override val app: Application, userSearchService: UserSearchService) extends BaseController {
+  import app.contexts.webContext
+
   def list(q: Option[String], orderBy: Option[String], orderAsc: Boolean, limit: Option[Int], offset: Option[Int]) = {
     withSession("admin-users", admin = true) { implicit request =>
       val orderBys = orderBy.map(o => OrderBy(col = o, dir = OrderBy.Direction.fromBoolAsc(orderAsc))).toSeq

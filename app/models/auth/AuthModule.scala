@@ -13,7 +13,7 @@ import com.mohiva.play.silhouette.impl.util.{DefaultFingerprintGenerator, Secure
 import com.mohiva.play.silhouette.password.BCryptPasswordHasher
 import com.mohiva.play.silhouette.persistence.repositories.DelegableAuthInfoRepository
 import net.codingwell.scalaguice.ScalaModule
-import util.FutureUtils.webContext
+import util.FutureUtils.defaultContext
 import play.api.libs.ws.WSClient
 import play.api.mvc.DefaultCookieHeaderEncoding
 import services.user.{PasswordInfoService, UserSearchService}

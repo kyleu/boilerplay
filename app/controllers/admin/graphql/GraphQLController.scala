@@ -14,6 +14,8 @@ import scala.concurrent.Future
 
 @javax.inject.Singleton
 class GraphQLController @javax.inject.Inject() (override val app: Application) extends BaseController {
+  import app.contexts.webContext
+
   def graphql(query: Option[String], variables: Option[String]) = withSession("graphql.ui", admin = true) { implicit request =>
     Future.successful(Ok(views.html.admin.graphql.graphiql(request.identity)))
   }
@@ -35,7 +37,6 @@ class GraphQLController @javax.inject.Inject() (override val app: Application) e
 
   def executeQuery(query: String, variables: Option[Json], operation: Option[String], user: User, debug: Boolean) = {
     try {
-      import util.FutureUtils.graphQlContext
       val f = GraphQLService.executeQuery(app, query, variables, operation, user, debug)
       f.map(x => Ok(x.spaces2).as("application/json")).recover {
         case error: QueryAnalysisError => BadRequest(error.resolveError.spaces2).as("application/json")

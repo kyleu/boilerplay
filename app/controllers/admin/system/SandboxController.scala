@@ -4,13 +4,14 @@ import akka.util.Timeout
 import controllers.BaseController
 import models.sandbox.SandboxTask
 import util.Application
-import util.FutureUtils.webContext
 
 import scala.concurrent.Future
 import scala.concurrent.duration._
 
 @javax.inject.Singleton
 class SandboxController @javax.inject.Inject() (override val app: Application) extends BaseController {
+  import app.contexts.webContext
+
   implicit val timeout = Timeout(10.seconds)
 
   def list = withSession("sandbox.list", admin = true) { implicit request =>
