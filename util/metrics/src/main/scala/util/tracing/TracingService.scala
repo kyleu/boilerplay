@@ -1,4 +1,4 @@
-package util.metrics
+package util.tracing
 
 import akka.actor.ActorSystem
 import brave.context.slf4j.MDCCurrentTraceContext
@@ -13,10 +13,10 @@ import zipkin.{Endpoint, TraceKeys}
 import scala.concurrent.ExecutionContext
 
 case class TracingService(
-  enabled: Boolean = true, actorSystem: ActorSystem, server: String = "localhost", port: Int = 9411, service: String = "apptest"
+    enabled: Boolean = true, actorSystem: ActorSystem, server: String = "localhost", port: Int = 9411, service: String = "apptest"
 ) extends Logging {
 
-  implicit val executionContext: ExecutionContext = actorSystem.dispatchers.lookup("tracing-context")
+  implicit val executionContext: ExecutionContext = actorSystem.dispatchers.lookup(TracingKeys.contextKey)
 
   val (reporter, tracing, tracer) = if (enabled) {
     val sender = OkHttpSender.create(s"http://$server:$port/api/v1/spans")
@@ -47,7 +47,7 @@ case class TracingService(
     trace.start()
   }
 
-  def complete(trace: Option[Span], result: Result) = trace.foreach { span =>
+  def completeForResult(trace: Option[Span], result: Result) = trace.foreach { span =>
     span.tag(TraceKeys.HTTP_STATUS_CODE, result.header.status.toString)
     result.body.contentLength.foreach { size =>
       span.tag(TraceKeys.HTTP_RESPONSE_SIZE, size.toString)
