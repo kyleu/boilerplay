@@ -6,7 +6,9 @@ import util.Application
 import scala.concurrent.Future
 
 @javax.inject.Singleton
-class AdminController @javax.inject.Inject() (override val app: Application) extends BaseController {
+class AdminController @javax.inject.Inject() (override val app: Application) extends BaseController("admin") {
+  import app.contexts.webContext
+
   def index = withSession("admin.index", admin = true) { implicit request =>
     Future.successful(Ok(views.html.admin.index(request.identity)))
   }

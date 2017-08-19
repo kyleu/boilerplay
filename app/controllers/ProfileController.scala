@@ -17,7 +17,7 @@ class ProfileController @javax.inject.Inject() (
     authInfoRepository: AuthInfoRepository,
     credentialsProvider: CredentialsProvider,
     hasher: PasswordHasher
-) extends BaseController {
+) extends BaseController("profile") {
   import app.contexts.webContext
 
   def view = withSession("view") { implicit request =>

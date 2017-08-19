@@ -6,6 +6,7 @@ import brave.sampler.Sampler
 import brave.{Span, Tracer, Tracing}
 import util.Logging
 import util.metrics.MetricsConfig
+import zipkin.Endpoint
 import zipkin.reporter.AsyncReporter
 import zipkin.reporter.okhttp3.OkHttpSender
 
@@ -27,6 +28,8 @@ class TracingService @javax.inject.Inject() (actorSystem: ActorSystem, cnf: Metr
   private[this] val tracer: Tracer = tracing.tracer
 
   log.info(s"Tracing enabled, sending results to [${cnf.tracingServer}:${cnf.tracingPort}@${cnf.tracingService}] using sample rate [${cnf.tracingSampleRate}].")
+
+  def endpointFor(k: String) = Endpoint.builder().serviceName(k).build()
 
   def trace[A](traceName: String, tags: (String, String)*)(f: TraceData => A)(implicit parentData: TraceData) = {
     val childSpan = tracer.newChild(parentData.span.context()).name(traceName).kind(Span.Kind.CLIENT)

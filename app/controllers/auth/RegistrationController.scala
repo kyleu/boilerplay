@@ -21,7 +21,7 @@ class RegistrationController @javax.inject.Inject() (
     userSearchService: UserSearchService,
     authInfoRepository: AuthInfoRepository,
     hasher: PasswordHasher
-) extends BaseController {
+) extends BaseController("registration") {
   import app.contexts.webContext
 
   def registrationForm(email: Option[String] = None) = withoutSession("form") { implicit request =>

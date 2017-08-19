@@ -18,14 +18,14 @@ class UserCreateController @javax.inject.Inject() (
     override val app: Application,
     authInfoRepository: AuthInfoRepository,
     hasher: PasswordHasher
-) extends BaseController {
+) extends BaseController("user.create") {
   import app.contexts.webContext
 
-  def createForm() = withSession("admin-user-form", admin = true) { implicit request =>
+  def createForm() = withSession("admin.user.create.form", admin = true) { implicit request =>
     Future.successful(Ok(views.html.admin.user.userCreate(request.identity)))
   }
 
-  def create() = withSession("admin-user-create", admin = true) { implicit request =>
+  def create() = withSession("admin.user.create", admin = true) { implicit request =>
     val form = FormUtils.getForm(request)
     val id = UUID.randomUUID
     val loginInfo = LoginInfo(CredentialsProvider.ID, form("email").trim)

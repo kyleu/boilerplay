@@ -4,7 +4,7 @@ import io.circe.Json
 import io.circe.parser._
 import models.graphql.{GraphQLContext, Schema, TracingExtension}
 import models.user.User
-import sangria.execution.{Executor, HandledException, QueryReducer}
+import sangria.execution.{ExceptionHandler, Executor, HandledException, QueryReducer}
 import sangria.marshalling.circe._
 import sangria.parser.QueryParser
 import sangria.validation.QueryValidator
@@ -17,7 +17,7 @@ import scala.util.{Failure, Success}
 
 @javax.inject.Singleton
 class GraphQLService @javax.inject.Inject() (tracing: TracingService) extends Logging {
-  protected val exceptionHandler: Executor.ExceptionHandler = {
+  protected val exceptionHandler = ExceptionHandler {
     case (_, e: IllegalStateException) =>
       log.warn("Error encountered while running GraphQL query.", e)
       HandledException(message = e.getMessage, additionalFields = Map.empty)
@@ -25,7 +25,7 @@ class GraphQLService @javax.inject.Inject() (tracing: TracingService) extends Lo
 
   private[this] val rejectComplexQueries = QueryReducer.rejectComplexQueries[Any](1000, (_, _) => new IllegalArgumentException(s"Query is too complex."))
 
-  private[this] val endpoint = Endpoint.builder().serviceName("graphql").build()
+  private[this] val endpoint = tracing.endpointFor("graphql.service")
 
   def executeQuery(app: Application, query: String, variables: Option[Json], operation: Option[String], user: User, debug: Boolean)(implicit t: TraceData) = {
     tracing.trace("graphql.execute") { td =>

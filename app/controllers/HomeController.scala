@@ -19,7 +19,7 @@ class HomeController @javax.inject.Inject() (
     override val app: Application,
     implicit val system: ActorSystem,
     implicit val materializer: Materializer
-) extends BaseController {
+) extends BaseController("home") {
   import app.contexts.webContext
 
   private[this] implicit val t = new MessageFrameFormatter(app.config.debug).transformer

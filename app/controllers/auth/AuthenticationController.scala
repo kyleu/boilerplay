@@ -16,7 +16,7 @@ class AuthenticationController @javax.inject.Inject() (
     override val app: Application,
     userSearchService: UserSearchService,
     credentialsProvider: CredentialsProvider
-) extends BaseController {
+) extends BaseController("authentication") {
   import app.contexts.webContext
 
   def signInForm = withoutSession("form") { implicit request =>

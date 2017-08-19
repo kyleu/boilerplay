@@ -20,7 +20,7 @@ import util.FutureUtils.graphQlContext
 
 import scala.concurrent.Future
 
-object UserSchema extends SchemaHelper {
+object UserSchema extends SchemaHelper("user") {
   implicit val roleEnum = CommonSchema.deriveEnumeratumType(
     name = "Role",
     description = "The role of the system user.",
@@ -55,7 +55,7 @@ object UserSchema extends SchemaHelper {
       name = "profile",
       description = Some("Returns information about the currently logged in user."),
       fieldType = profileType,
-      resolve = c => trace(c.ctx, "profile.build") { _ =>
+      resolve = c => trace(c.ctx, "profile") { _ =>
         val u = c.ctx.user
         Future.successful(UserProfile(u.id, u.username, u.profile.providerKey, u.role, u.preferences.theme, u.created))
       }(c.ctx.trace)
@@ -64,7 +64,7 @@ object UserSchema extends SchemaHelper {
       name = "user",
       fieldType = userResultType,
       arguments = queryArg :: reportFiltersArg :: orderBysArg :: limitArg :: offsetArg :: Nil,
-      resolve = c => trace(c.ctx, "user.list") { implicit timing =>
+      resolve = c => trace(c.ctx, "search") { implicit timing =>
       val start = util.DateUtils.now
       val filters = c.arg(reportFiltersArg).getOrElse(Nil)
       val orderBys = c.arg(orderBysArg).getOrElse(Nil)

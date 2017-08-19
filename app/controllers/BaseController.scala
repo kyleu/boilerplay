@@ -9,17 +9,18 @@ import play.api.mvc._
 import util.metrics.Instrumented
 import util.web.TracingFilter
 import util.{Application, Logging}
-import zipkin.{Endpoint, TraceKeys}
-import util.FutureUtils.defaultContext
+import zipkin.TraceKeys
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
-abstract class BaseController() extends InjectedController with Instrumented with Logging {
+abstract class BaseController(name: String) extends InjectedController with Instrumented with Logging {
   protected def app: Application
 
-  private[this] lazy val endpoint = Endpoint.builder().serviceName(util.FormatUtils.classToPeriodDelimited(getClass)).build()
+  private[this] lazy val endpoint = app.tracing.endpointFor(name + ".controller")
 
-  protected def withoutSession(action: String)(block: UserAwareRequest[AuthEnv, AnyContent] => Future[Result]) = {
+  protected def withoutSession(action: String)(
+    block: UserAwareRequest[AuthEnv, AnyContent] => Future[Result]
+  )(implicit ec: ExecutionContext) = {
     app.silhouette.UserAwareAction.async { implicit request =>
       metrics.timer(action).timeFuture {
         enhanceRequest(request, None, getTraceData.span)
@@ -28,7 +29,9 @@ abstract class BaseController() extends InjectedController with Instrumented wit
     }
   }
 
-  protected def withSession(action: String, admin: Boolean = false)(block: SecuredRequest[AuthEnv, AnyContent] => Future[Result]) = {
+  protected def withSession(action: String, admin: Boolean = false)(
+    block: SecuredRequest[AuthEnv, AnyContent] => Future[Result]
+  )(implicit ec: ExecutionContext) = {
     app.silhouette.UserAwareAction.async { implicit request =>
       request.identity match {
         case Some(u) => if (admin && u.role != Role.Admin) {

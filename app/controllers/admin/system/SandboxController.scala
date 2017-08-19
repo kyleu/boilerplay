@@ -9,7 +9,7 @@ import scala.concurrent.Future
 import scala.concurrent.duration._
 
 @javax.inject.Singleton
-class SandboxController @javax.inject.Inject() (override val app: Application) extends BaseController {
+class SandboxController @javax.inject.Inject() (override val app: Application) extends BaseController("sandbox") {
   import app.contexts.webContext
 
   implicit val timeout = Timeout(10.seconds)

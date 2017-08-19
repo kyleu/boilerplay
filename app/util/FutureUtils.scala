@@ -1,7 +1,5 @@
 package util
 
-import java.util.concurrent.Executors
-
 import akka.actor.ActorSystem
 
 import scala.concurrent.ExecutionContext

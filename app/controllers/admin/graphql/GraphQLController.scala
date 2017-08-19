@@ -14,7 +14,7 @@ import util.tracing.TraceData
 import scala.concurrent.Future
 
 @javax.inject.Singleton
-class GraphQLController @javax.inject.Inject() (override val app: Application, graphQLService: GraphQLService) extends BaseController {
+class GraphQLController @javax.inject.Inject() (override val app: Application, graphQLService: GraphQLService) extends BaseController("graphql") {
   import app.contexts.webContext
 
   def graphql(query: Option[String], variables: Option[String]) = withSession("graphql.ui", admin = true) { implicit request =>
