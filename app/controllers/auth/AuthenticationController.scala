@@ -21,13 +21,13 @@ class AuthenticationController @javax.inject.Inject() (
 
   def signInForm = withoutSession("form") { implicit request =>
     //val src = request.headers.get("Referer").filter(_.contains(request.host))
-    val resp = Ok(views.html.auth.signin(request.identity, UserForms.signInForm, app.services.settingsService.allowRegistration))
+    val resp = Ok(views.html.auth.signin(request.identity, UserForms.signInForm, app.settingsService.allowRegistration))
     Future.successful(resp)
   }
 
   def authenticateCredentials = withoutSession("authenticate") { implicit request =>
     UserForms.signInForm.bindFromRequest.fold(
-      form => Future.successful(BadRequest(views.html.auth.signin(request.identity, form, app.services.settingsService.allowRegistration))),
+      form => Future.successful(BadRequest(views.html.auth.signin(request.identity, form, app.settingsService.allowRegistration))),
       credentials => {
         val creds = credentials.copy(identifier = credentials.identifier.toLowerCase)
         credentialsProvider.authenticate(creds).flatMap { loginInfo =>

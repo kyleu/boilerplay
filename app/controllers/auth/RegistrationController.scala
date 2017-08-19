@@ -24,7 +24,7 @@ class RegistrationController @javax.inject.Inject() (
   import app.contexts.webContext
 
   def registrationForm(email: Option[String] = None) = withoutSession("form") { implicit request =>
-    if (app.services.settingsService.allowRegistration) {
+    if (app.settingsService.allowRegistration) {
       val form = UserForms.registrationForm.fill(RegistrationData(
         username = email.map(e => if (e.contains('@')) { e.substring(0, e.indexOf('@')) } else { "" }).getOrElse(""),
         email = email.getOrElse("")
@@ -36,7 +36,7 @@ class RegistrationController @javax.inject.Inject() (
   }
 
   def register = withoutSession("register") { implicit request =>
-    if (!app.services.settingsService.allowRegistration) {
+    if (!app.settingsService.allowRegistration) {
       throw new IllegalStateException("You cannot sign up at this time. Contact your administrator.")
     }
     UserForms.registrationForm.bindFromRequest.fold(
@@ -52,7 +52,7 @@ class RegistrationController @javax.inject.Inject() (
           )
           case None =>
             val authInfo = hasher.hash(data.password)
-            val role = Role.withName(app.services.settingsService(SettingKey.DefaultNewUserRole))
+            val role = Role.withName(app.settingsService(SettingKey.DefaultNewUserRole))
             val user = User(
               id = UUID.randomUUID,
               username = data.username,

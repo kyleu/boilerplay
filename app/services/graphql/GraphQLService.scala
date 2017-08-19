@@ -9,15 +9,15 @@ import sangria.execution.{ExceptionHandler, Executor, HandledException, QueryRed
 import sangria.marshalling.circe._
 import sangria.parser.QueryParser
 import sangria.validation.QueryValidator
+import services.ServiceRegistry
 import util.FutureUtils.graphQlContext
 import util.tracing.{TraceData, TracingService}
 import util.Logging
-import zipkin.Endpoint
 
 import scala.util.{Failure, Success}
 
 @javax.inject.Singleton
-class GraphQLService @javax.inject.Inject() (tracing: TracingService) extends Logging {
+class GraphQLService @javax.inject.Inject() (tracing: TracingService, registry: ServiceRegistry) extends Logging {
   protected val exceptionHandler = ExceptionHandler {
     case (_, e: IllegalStateException) =>
       log.warn("Error encountered while running GraphQL query.", e)
@@ -44,7 +44,7 @@ class GraphQLService @javax.inject.Inject() (tracing: TracingService) extends Lo
           val ret = Executor.execute(
             schema = Schema.schema,
             queryAst = ast,
-            userContext = GraphQLContext(app, user, td),
+            userContext = GraphQLContext(app, registry, user, td),
             operationName = operation,
             variables = variables.getOrElse(Json.obj()),
             deferredResolver = Schema.resolver,
