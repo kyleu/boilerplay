@@ -2,11 +2,14 @@ package controllers.admin.user
 
 import java.util.UUID
 
+import io.circe.generic.auto._
+import io.circe.java8.time._
+import io.circe.syntax._
+
 import controllers.BaseController
 import models.Application
 import models.result.orderBy.OrderBy
-import models.user.Role
-import services.user.UserSearchService
+import models.user.{Role, UserResult}
 import util.web.FormUtils
 
 import scala.concurrent.Future
@@ -16,29 +19,39 @@ class UserEditController @javax.inject.Inject() (override val app: Application) 
   import app.contexts.webContext
 
   def list(q: Option[String], orderBy: Option[String], orderAsc: Boolean, limit: Option[Int], offset: Option[Int]) = {
-    withSession("admin.user.list", admin = true) { implicit request =>
+    withSession("user.list", admin = true) { implicit request =>
+      val startMs = util.DateUtils.nowMillis
       val orderBys = orderBy.map(o => OrderBy(col = o, dir = OrderBy.Direction.fromBoolAsc(orderAsc))).toSeq
       val f = q match {
         case Some(query) if query.nonEmpty => app.userService.searchWithCount(query, Nil, orderBys, limit.orElse(Some(100)), offset)
         case _ => app.userService.getAllWithCount(Nil, orderBys, limit.orElse(Some(100)), offset)
       }
-      f.map(r => Ok(views.html.admin.user.userList(
-        request.identity, q, orderBy, orderAsc, Some(r._1), r._2, limit.getOrElse(100), offset.getOrElse(0)
-      )))
+      f.map { r =>
+        render {
+          case Accepts.Html() => Ok(views.html.admin.user.userList(
+            request.identity, q, orderBy, orderAsc, Some(r._1), r._2, limit.getOrElse(100), offset.getOrElse(0)
+          ))
+          case Accepts.Json() => Ok(UserResult.fromRecords(q, Nil, orderBys, limit, offset, startMs, r._1, r._2).asJson.spaces2).as(JSON)
+        }
+      }
     }
   }
 
-  def view(id: UUID) = withSession("admin.user.view", admin = true) { implicit request =>
-    app.userService.getByPrimaryKey(id).map { userOpt =>
-      val user = userOpt.getOrElse(throw new IllegalStateException(s"Invalid user [$id]."))
-      Ok(views.html.admin.user.userView(request.identity, user))
+  def view(id: UUID) = withSession("user.view", admin = true) { implicit request =>
+    app.userService.getByPrimaryKey(id).map {
+      case Some(model) => render {
+        case Accepts.Html() => Ok(views.html.admin.user.userView(request.identity, model))
+        case Accepts.Json() => Ok(model.asJson.spaces2).as(JSON)
+      }
+      case None => NotFound(s"No user found with id [$id].")
     }
   }
 
-  def editForm(id: UUID) = withSession("admin.user.edit.form", admin = true) { implicit request =>
-    app.userService.getByPrimaryKey(id).map { userOpt =>
-      val user = userOpt.getOrElse(throw new IllegalStateException(s"Invalid user [$id]."))
-      Ok(views.html.admin.user.userForm(request.identity, user))
+  def editForm(id: UUID) = withSession("user.edit.form", admin = true) { implicit request =>
+    val call = controllers.admin.user.routes.UserEditController.edit(id)
+    app.userService.getByPrimaryKey(id).map {
+      case Some(model) => Ok(views.html.admin.user.userForm(request.identity, model, s"User [$id]", call))
+      case None => NotFound(s"No user found with id [$id].")
     }
   }
 

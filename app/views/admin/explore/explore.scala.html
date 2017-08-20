@@ -1,20 +1,15 @@
 @(user: models.user.User)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
 )@traceData.logViewClass(getClass)@layout.admin(user, "explore", "Explore " + util.Config.projectName) {
-  <div class="content-panel">
-    <ul class="collection with-header">
-      <li class="collection-header">
-        <h5>Explore @util.Config.projectName. </h5>
-      </li>
-      <!-- Start model list routes -->
-      <!-- End model list routes -->
-      <li class="collection-item">
-        <a class="theme-text" href="@controllers.admin.user.routes.UserEditController.list()">User Management</a>
-        <div><em>Manage the users of the system.</em></div>
-      </li>
-    </ul>
-  </div>
-  <div class="panel-action">
-    <a class="theme-text" href="@controllers.admin.system.routes.AdminController.index()">Back</a>
-  </div>
+  <ul class="collection with-header">
+    <li class="collection-header">
+      <h5>Explore @util.Config.projectName. </h5>
+    </li>
+    <!-- Start model list routes -->
+    <!-- End model list routes -->
+    <li class="collection-item">
+      <a class="theme-text" href="@controllers.admin.user.routes.UserEditController.list()">User Management</a>
+      <div><em>Manage the users of the system.</em></div>
+    </li>
+  </ul>
 }

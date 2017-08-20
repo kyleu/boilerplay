@@ -1,30 +1,25 @@
 @(user: models.user.User)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
 )@traceData.logViewClass(getClass)@layout.admin(user, "", util.Config.projectName + " Administration") {
-  <div class="content-panel">
-    <div class="panel-title">@util.Config.projectName Administration</div>
-
-    Use the menu above or the links below to get started!
-
-    <ul class="collection">
-      <li class="collection-item">
-        <a class="theme-text" href="@controllers.admin.system.routes.AdminController.explore()">Explore Models</a>
-        <div><em>Manage the models of the system.</em></div>
-      </li>
-      <li class="collection-item">
-        <a class="theme-text" href="@controllers.admin.graphql.routes.GraphQLController.graphql(None)">GraphQL</a>
-        <div>
-          Query the system using GraphQL
-          (<a class="theme-text" href="@controllers.admin.graphql.routes.SchemaController.voyager()">View Schema</a>).
-        </div>
-      </li>
-      <li class="collection-item">
-        <a class="theme-text" href="@controllers.admin.system.routes.AdminController.status()">@util.Config.projectName Status</a>
-        <div><em>View server details and system status.</em></div>
-      </li>
-    </ul>
-  </div>
-  <div class="panel-action">
-    <a class="theme-text" href="@controllers.routes.HomeController.home()">Back</a>
-  </div>
+  <ul class="collection with-header">
+    <li class="collection-header">
+      <h5>@util.Config.projectName Administration</h5>
+      Use the menu above or the links below to get started!
+    </li>
+    <li class="collection-item">
+      <a class="theme-text" href="@controllers.admin.system.routes.AdminController.explore()">Explore Models</a>
+      <div><em>Manage the models of the system.</em></div>
+    </li>
+    <li class="collection-item">
+      <a class="theme-text" href="@controllers.admin.graphql.routes.GraphQLController.graphql(None)">GraphQL</a>
+      <div>
+        Query the system using GraphQL
+        (<a class="theme-text" href="@controllers.admin.graphql.routes.SchemaController.voyager()">View Schema</a>).
+      </div>
+    </li>
+    <li class="collection-item">
+      <a class="theme-text" href="@controllers.admin.system.routes.AdminController.status()">@util.Config.projectName Status</a>
+      <div><em>View server details and system status.</em></div>
+    </li>
+  </ul>
 }

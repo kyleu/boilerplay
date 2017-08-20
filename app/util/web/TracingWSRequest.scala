@@ -52,10 +52,7 @@ private class TracingWSRequest(
     data.span.tag("call", callType)
     data.span.tag(TraceKeys.HTTP_URL, request.url)
     data.span.tag(TraceKeys.HTTP_METHOD, request.method)
-    request.body match {
-      case im: InMemoryBody => data.span.tag(TraceKeys.HTTP_REQUEST_SIZE, im.bytes.size.toString)
-      case _ => // noop
-    }
+    request.headers.get(play.api.http.HeaderNames.CONTENT_LENGTH).map(x => data.span.tag(TraceKeys.HTTP_REQUEST_SIZE, x.headOption.getOrElse("0").toString))
     request.header("Content-Type").foreach(ct => data.span.tag("contenttype", ct))
     request.requestTimeout.foreach(t => data.span.tag("timeout", t.toString))
     data

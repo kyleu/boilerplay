@@ -1,58 +1,64 @@
-@(self: models.user.User, user: models.user.User)(
+@(self: models.user.User, model: models.user.User, title: String, act: Call, isNew: Boolean = false)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
-)@traceData.logViewClass(getClass)@layout.admin(self, "explore", "Edit User") {
-  <form action="@controllers.admin.user.routes.UserEditController.edit(user.id)" method="post">
-    <div class="content-panel">
-      <div class="panel-title">
-        <i class="fa @models.template.Icons.user"></i>
-        Edit @user.username
-        @if(self.id == user.id) { <span>(You)</span> }
+)@traceData.logViewClass(getClass)@layout.admin(self, "explore", title) {
+  <form action="@act" method="post">
+    <div class="collection with-header">
+      <div class="collection-header">
+        <div class="right"><button type="submit" class="btn theme waves-effect waves-light">@if(isNew) {Create} else {Save} User</button></div>
+        <h5><i class="fa @models.template.Icons.user"></i> @title @if(self.id == model.id) { <span>(You)</span> }</h5>
       </div>
+      <div class="collection-item">
+        <table class="highlight">
+          <tbody>
+            <tr>
+              <td>
+                <label for="input-username">Username</label>
+              </td>
+              <td>
+                <input id="input-username" type="text" class="form-control validate" name="username" value="@model.username" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label for="input-email">Email</label>
+              </td>
+              <td>
+                <input id="input-email" type="email" class="form-control validate" name="email" value="@model.profile.providerKey" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label for="input-password">Password</label>
+              </td>
+              <td>
+                <input id="input-password" type="password" class="form-control validate" name="password" value="original" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label>Role</label>
+              </td>
+              <td>
+                <p>
+                  @if(model.role == models.user.Role.Admin) {
+                    <input type="radio" name="role" value="admin" id="admin-radio" checked="checked" />
+                  } else {
+                    <input type="radio" name="role" value="admin" id="admin-radio" />
+                  }
+                  <label for="admin-radio">Administrator</label>
 
-      <div class="padded horizontal">
-        <div class="row">
-          <div class="input-field col s12">
-            <input id="input-username" type="text" class="form-control validate" name="username" value="@user.username" />
-            <label for="input-username">Username</label>
-          </div>
-        </div>
-        <div class="row">
-          <div class="input-field col s12">
-            <input id="input-email" type="email" class="form-control validate" name="email" value="@user.profile.providerKey" />
-            <label for="input-email">Email</label>
-          </div>
-        </div>
-        <div class="row">
-          <div class="input-field col s12">
-            <input id="input-password" type="password" class="form-control validate" name="password" value="original" />
-            <label for="input-password">Password</label>
-          </div>
-        </div>
-        <div class="row">
-          <div class="input-field col s12">
-            <p>
-              @if(user.role == models.user.Role.Admin) {
-                <input type="radio" name="role" value="admin" id="admin-radio" checked="checked" />
-              } else {
-                <input type="radio" name="role" value="admin" id="admin-radio" />
-              }
-              <label for="admin-radio">Administrator</label>
-
-              @if(user.role == models.user.Role.User) {
-                <input type="radio" name="role" id="user-radio" value="user" checked="checked" />
-              } else {
-                <input type="radio" name="role" id="user-radio" value="user" />
-              }
-              <label for="user-radio">Normal User</label>
-            </p>
-          </div>
-        </div>
+                  @if(model.role == models.user.Role.User) {
+                    <input type="radio" name="role" id="user-radio" value="user" checked="checked" />
+                  } else {
+                    <input type="radio" name="role" id="user-radio" value="user" />
+                  }
+                  <label for="user-radio">Normal User</label>
+                </p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-    </div>
-    <div class="panel-action padded">
-      <button class="right btn theme waves-effect waves-light" type="submit">Save</button>
-      <a class="right btn-flat theme-text" href="@controllers.admin.user.routes.UserEditController.view(user.id)">Cancel</a>
-      <div class="clear"></div>
     </div>
   </form>
 }

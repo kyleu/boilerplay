@@ -9,12 +9,12 @@ import util.tracing.TraceData
 import scala.concurrent.Future
 
 sealed abstract class SandboxTask(val id: String, val name: String, val description: String) extends EnumEntry with Logging {
-  def run(app: Application, argument: Option[String])(implicit trace: TraceData): Future[SandboxTask.Result] = {
+  def run(app: Application, arg: Option[String])(implicit trace: TraceData): Future[SandboxTask.Result] = {
     app.tracing.trace("sandbox." + id) { _ =>
       log.info(s"Running sandbox task [$id]...")
       val startMs = System.currentTimeMillis
-      val result = call(app, argument).map { r =>
-        val res = SandboxTask.Result(this, "OK", r, (System.currentTimeMillis - startMs).toInt)
+      val result = call(app, arg).map { r =>
+        val res = SandboxTask.Result(this, arg, "OK", r, (System.currentTimeMillis - startMs).toInt)
         log.info(s"Completed sandbox task [$id] with status [${res.status}] in [${res.elapsed}ms].")
         res
       }
@@ -26,7 +26,7 @@ sealed abstract class SandboxTask(val id: String, val name: String, val descript
 }
 
 object SandboxTask extends Enum[SandboxTask] with CirceEnum[SandboxTask] {
-  case class Result(task: SandboxTask, status: String = "OK", result: String, elapsed: Int)
+  case class Result(task: SandboxTask, arg: Option[String], status: String = "OK", result: String, elapsed: Int)
 
   case object Testbed extends SandboxTask("testbed", "Testbed", "A simple sandbox for messin' around.") {
     override def call(app: Application, argument: Option[String])(implicit trace: TraceData) = {
@@ -37,7 +37,7 @@ object SandboxTask extends Enum[SandboxTask] with CirceEnum[SandboxTask] {
   case object WebCall extends SandboxTask("webcall", "Web Call", "Calls the provided url and returns stats.") {
     override def call(app: Application, argument: Option[String])(implicit trace: TraceData) = argument match {
       case Some(url) => app.ws.url("sandbox.request", url).get().map { rsp =>
-        s"$url: ${rsp.status} (${rsp.bodyAsBytes.size} bytes) [0ms]"
+        s"${rsp.status} $url (${util.NumberUtils.withCommas(rsp.bodyAsBytes.size)} bytes)"
       }
       case None => Future.successful("No url provided...")
     }

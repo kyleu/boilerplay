@@ -7,9 +7,9 @@ import java.time.LocalDateTime
 import util.DateUtils
 
 object User {
-  val empty = User(
-    id = UUID.fromString("11111111-1111-1111-1111-111111111111"),
-    username = "Test User",
+  def empty() = User(
+    id = UUID.randomUUID,
+    username = "",
     preferences = UserPreferences.empty,
     profile = LoginInfo("anonymous", "guest")
   )

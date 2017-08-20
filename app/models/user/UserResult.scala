@@ -16,3 +16,14 @@ case class UserResult(
   override val durationMs: Int = 0,
   override val occurred: LocalDateTime = util.DateUtils.now
 ) extends BaseResult[User]
+
+object UserResult {
+  def fromRecords(
+    q: Option[String], filters: Seq[Filter], orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int],
+    startMs: Long, totalCount: Int, results: Seq[User]
+  ) = {
+    val paging = PagingOptions.from(totalCount, limit, offset)
+    val durationMs = (System.currentTimeMillis - startMs).toInt
+    UserResult(paging = paging, filters = filters, orderBys = orderBys, totalCount = totalCount, results = results, durationMs = durationMs)
+  }
+}
