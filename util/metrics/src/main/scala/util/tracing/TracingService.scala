@@ -44,7 +44,7 @@ class TracingService @javax.inject.Inject() (actorSystem: ActorSystem, cnf: Metr
 
   def endpointFor(k: String) = Endpoint.builder().serviceName(k).build()
 
-  def trace[A](traceName: String, tags: (String, String)*)(f: TraceData => A)(implicit parentData: TraceData) = {
+  def traceBlocking[A](traceName: String, tags: (String, String)*)(f: TraceData => A)(implicit parentData: TraceData) = {
     val childSpan = tracer.newChild(parentData.span.context()).name(traceName).kind(Span.Kind.SERVER)
     tags.foreach { case (key, value) => childSpan.tag(key, value) }
     childSpan.start()
@@ -59,7 +59,7 @@ class TracingService @javax.inject.Inject() (actorSystem: ActorSystem, cnf: Metr
     }
   }
 
-  def traceFuture[A](traceName: String, tags: (String, String)*)(f: TraceData => Future[A])(implicit parentData: TraceData) = {
+  def trace[A](traceName: String, tags: (String, String)*)(f: TraceData => Future[A])(implicit parentData: TraceData) = {
     val childSpan = tracer.newChild(parentData.span.context()).name(traceName).kind(Span.Kind.CLIENT)
     tags.foreach { case (key, value) => childSpan.tag(key, value) }
     childSpan.start()

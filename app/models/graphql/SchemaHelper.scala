@@ -18,7 +18,7 @@ abstract class SchemaHelper(val name: String) {
 
   protected def trace[A](ctx: GraphQLContext, k: String)(f: TraceData => Future[A]) = {
     implicit val traceData = ctx.trace
-    ctx.app.tracing.traceFuture(k) { tn =>
+    ctx.app.tracing.trace(k) { tn =>
       tn.span.remoteEndpoint(endpoint)
       f(tn)
     }

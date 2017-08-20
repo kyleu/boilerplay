@@ -12,6 +12,7 @@ object SandboxSchema {
   )
 
   val sandboxTaskArg = Argument("task", sandboxTaskEnum, description = "Filters the results to a provided SandboxTask.")
+  val sandboxArgumentArg = Argument("arg", OptionInputType(StringType), description = "Passes the provided argument to the SandboxTask.")
 
   val sandboxTaskType = ObjectType("SandboxTaskDetail", "Detailed information about sandbox tasks.", fields[Unit, SandboxTask](
     Field("id", StringType, Some("The  id for the sandbox task."), resolve = _.value.toString),
@@ -33,21 +34,13 @@ object SandboxSchema {
     resolve = _ => SandboxTask.values
   ))
 
-  class SandboxApi(ctx: GraphQLContext) {
-    def call(task: SandboxTask) = task.run(ctx.app)
-  }
-
-  val mutationType = deriveObjectType[GraphQLContext, SandboxApi](
-    IncludeMethods("call"),
-    DocumentField("call", "Calls one of our sandbox tasks, returning the result.")
-  )
-
   val mutationFields = fields[GraphQLContext, Unit](
     Field(
       name = "sandbox",
-      fieldType = mutationType,
+      fieldType = sandboxResultType,
       description = Some("Allows calling of sandbox tests."),
-      resolve = c => new SandboxApi(c.ctx)
+      arguments = sandboxTaskArg :: sandboxArgumentArg :: Nil,
+      resolve = c => c.arg(sandboxTaskArg).run(c.ctx.app, c.arg(sandboxArgumentArg))(c.ctx.trace)
     )
   )
 }

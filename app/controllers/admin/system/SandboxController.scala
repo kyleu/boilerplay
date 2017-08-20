@@ -18,9 +18,9 @@ class SandboxController @javax.inject.Inject() (override val app: Application) e
     Future.successful(Ok(views.html.admin.sandbox.sandboxList(request.identity)))
   }
 
-  def run(key: String) = withSession("sandbox." + key, admin = true) { implicit request =>
+  def run(key: String, arg: Option[String]) = withSession("sandbox." + key, admin = true) { implicit request =>
     val sandbox = SandboxTask.withNameInsensitive(key)
-    sandbox.run(app).map { result =>
+    sandbox.run(app, arg).map { result =>
       Ok(views.html.admin.sandbox.sandboxRun(request.identity, result))
     }
   }

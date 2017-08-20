@@ -15,7 +15,7 @@ class SettingsService @javax.inject.Inject() (tracing: TracingService) {
 
   def apply(key: SettingKey) = settingsMap.getOrElse(key, key.default)
   def asBool(key: SettingKey) = apply(key) == "true"
-  def getOrSet(key: SettingKey, s: => String)(implicit trace: TraceData) = tracing.trace("get.or.set")(_ => settingsMap.getOrElse(key, set(key, s)))
+  def getOrSet(key: SettingKey, s: => String)(implicit trace: TraceData) = tracing.traceBlocking("get.or.set")(_ => settingsMap.getOrElse(key, set(key, s)))
 
   def load()(implicit trace: TraceData) = tracing.trace("get.or.set") { tn =>
     Database.query(SettingQueries.getAll())(tn).map(_.map(s => s.key -> s.value).toMap).map { x =>

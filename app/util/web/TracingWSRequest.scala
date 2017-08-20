@@ -1,28 +1,15 @@
 package util.web
 
-import java.io.File
-
-import akka.stream.scaladsl.Source
-import akka.util.ByteString
 import play.api.libs.ws._
-import play.api.mvc.MultipartFormData.Part
 import util.tracing.{TraceData, TracingService}
+import zipkin.TraceKeys
 
+import scala.concurrent.ExecutionContext
 import scala.concurrent.duration.Duration
 
-private class TracingWSRequest(spanName: String, request: WSRequest, tracer: TracingService, traceData: TraceData) extends WSRequest {
-  override val url: String = request.url
-  override val method: String = request.method
-  override val body: WSBody = request.body
-  override val headers: Map[String, Seq[String]] = request.headers
-  override val queryString: Map[String, Seq[String]] = request.queryString
-  override val calc: Option[WSSignatureCalculator] = request.calc
-  override val auth: Option[(String, String, WSAuthScheme)] = request.auth
-  override val followRedirects: Option[Boolean] = request.followRedirects
-  override val requestTimeout: Option[Int] = request.requestTimeout
-  override val virtualHost = request.virtualHost
-  override val proxyServer: Option[WSProxyServer] = request.proxyServer
-
+private class TracingWSRequest(
+    val spanName: String, val request: WSRequest, val tracer: TracingService, val traceData: TraceData
+)(implicit val ctx: ExecutionContext) extends TracingWSRequestHelper {
   override def sign(calc: WSSignatureCalculator) = new TracingWSRequest(spanName, request.sign(calc), tracer, traceData)
   override def withAuth(username: String, password: String, scheme: WSAuthScheme) = {
     new TracingWSRequest(spanName, request.withAuth(username, password, scheme), tracer, traceData)
@@ -40,40 +27,37 @@ private class TracingWSRequest(spanName: String, request: WSRequest, tracer: Tra
   override def withProxyServer(proxyServer: WSProxyServer) = new TracingWSRequest(spanName, request.withProxyServer(proxyServer), tracer, traceData)
   override def withMethod(method: String) = new TracingWSRequest(spanName, request.withMethod(method), tracer, traceData)
 
-  override def execute() = tracer.traceFuture(spanName) { data =>
-    request.addHttpHeaders(tracer.toMap(data.span).toSeq: _*).execute()
+  override def execute() = tracer.trace(spanName) { data =>
+    annotate(data, "execute")
+    request.addHttpHeaders(tracer.toMap(data.span).toSeq: _*).execute().map { rsp =>
+      data.span.tag(TraceKeys.HTTP_STATUS_CODE, rsp.status.toString)
+      data.span.tag(TraceKeys.HTTP_RESPONSE_SIZE, rsp.bodyAsBytes.size.toString)
+      rsp
+    }
   }(traceData)
-  override def stream() = tracer.traceFuture(spanName) { data =>
+  override def stream() = tracer.trace(spanName) { data =>
+    annotate(data, "stream")
     request.addHttpHeaders(tracer.toMap(data.span).toSeq: _*).stream()
   }(traceData)
 
-  override def uri = request.uri
-  override def contentType = request.contentType
-  override def withBody[T](body: T)(implicit evidence$1: BodyWritable[T]) = new TracingWSRequest(spanName, request.withBody(body), tracer, traceData)
-
-  override def patch(body: Source[Part[Source[ByteString, _]], _]) = withBody(body).execute("PATCH")
-  override def patch[T](body: T)(implicit evidence$2: BodyWritable[T]) = withBody(body).execute("PATCH")
-  override def patch(body: File) = withBody(body).execute("PATCH")
-
-  override def get() = execute("GET")
-
-  override def post[T](body: T)(implicit evidence$3: BodyWritable[T]) = withBody(body).execute("POST")
-  override def post(body: File) = withBody(body).execute("POST")
-  override def post(body: Source[Part[Source[ByteString, _]], _]) = withBody(body).execute("POST")
-
-  override def put[T](body: T)(implicit evidence$4: BodyWritable[T]) = withBody(body).execute("PUT")
-  override def put(body: File) = withBody(body).execute("PUT")
-  override def put(body: Source[Part[Source[ByteString, _]], _]) = withBody(body).execute("PUT")
-
-  override def delete() = execute("DELETE")
-  override def head() = execute("HEAD")
-  override def options() = execute("OPTIONS")
   override def execute(method: String) = withMethod(method).execute()
 
-  override def cookies = request.cookies
   override def withHttpHeaders(headers: (String, String)*) = new TracingWSRequest(spanName, request.withHttpHeaders(headers: _*), tracer, traceData)
   override def withQueryStringParameters(parameters: (String, String)*) = {
     new TracingWSRequest(spanName, request.withQueryStringParameters(parameters: _*), tracer, traceData)
   }
   override def withCookies(cookies: WSCookie*) = new TracingWSRequest(spanName, request.withCookies(cookies: _*), tracer, traceData)
+
+  private[this] def annotate(data: TraceData, callType: String) = {
+    data.span.tag("call", callType)
+    data.span.tag(TraceKeys.HTTP_URL, request.url)
+    data.span.tag(TraceKeys.HTTP_METHOD, request.method)
+    request.body match {
+      case im: InMemoryBody => data.span.tag(TraceKeys.HTTP_REQUEST_SIZE, im.bytes.size.toString)
+      case _ => // noop
+    }
+    request.header("Content-Type").foreach(ct => data.span.tag("contenttype", ct))
+    request.requestTimeout.foreach(t => data.span.tag("timeout", t.toString))
+    data
+  }
 }

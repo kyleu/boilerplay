@@ -14,7 +14,7 @@ trait ModelServiceHelper[T] extends Logging {
 
   private[this] lazy val endpoint = Endpoint.builder().serviceName(util.FormatUtils.classToPeriodDelimited(getClass)).build()
 
-  def traceF[A](k: String)(f: TraceData => Future[A])(implicit traceData: TraceData) = tracing.traceFuture(k) { tn =>
+  def traceF[A](k: String)(f: TraceData => Future[A])(implicit traceData: TraceData) = tracing.trace(k) { tn =>
     tn.span.remoteEndpoint(endpoint)
     f(tn)
   }

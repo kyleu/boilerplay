@@ -82,13 +82,13 @@ object Database extends Instrumented {
     }
   }
 
-  def raw(name: String, sql: String, conn: Option[Connection] = None)(implicit traceData: TraceData): Future[QueryResult] = tracing.trace("raw." + name) { _ =>
-    log.debug(s"Executing raw query [$name] with SQL [$sql].")
-    val ret = metrics.timer(s"raw.$name").timeFuture {
-      conn.getOrElse(pool).sendQuery(prependComment(name, sql))
+  def raw(name: String, sql: String, conn: Option[Connection] = None)(implicit traceData: TraceData): Future[QueryResult] = {
+    tracing.trace("raw." + name) { _ =>
+      log.debug(s"Executing raw query [$name] with SQL [$sql].")
+      val ret = metrics.timer(s"raw.$name").timeFuture(conn.getOrElse(pool).sendQuery(prependComment(name, sql)))
+      ret.failed.foreach(x => log.error(s"Error [${x.getClass.getSimpleName}] encountered while executing raw query [$name] with SQL [$sql].", x))
+      ret
     }
-    ret.failed.foreach(x => log.error(s"Error [${x.getClass.getSimpleName}] encountered while executing raw query [$name] with SQL [$sql].", x))
-    ret
   }
 
   def close() = {
