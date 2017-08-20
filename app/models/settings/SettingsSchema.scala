@@ -1,7 +1,6 @@
 package models.settings
 
-import models.graphql.{CommonSchema, GraphQLContext}
-import models.user.SchemaHelper
+import models.graphql.{CommonSchema, GraphQLContext, SchemaHelper}
 import sangria.execution.deferred.HasId
 import sangria.macros.derive._
 import sangria.schema._
@@ -21,6 +20,6 @@ object SettingsSchema extends SchemaHelper("settings") {
     name = "setting",
     description = Some("The system setting values for this application."),
     fieldType = ListType(settingType),
-    resolve = c => trace(c.ctx, "search")(_ => c.ctx.services.settingsService.getAll)(c.ctx.trace)
+    resolve = c => trace(c.ctx, "search")(_ => c.ctx.services.settingsService.getAll)
   ))
 }

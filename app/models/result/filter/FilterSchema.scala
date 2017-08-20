@@ -8,10 +8,10 @@ import sangria.marshalling.circe._
 import io.circe.generic.auto._
 
 object FilterSchema {
-  implicit val filterOpType = CommonSchema.deriveEnumeratumType[Filter.Op](
+  implicit val filterOpType = CommonSchema.deriveEnumeratumType[FilterOp](
     name = "FilterOperation",
     description = "Various operation to apply in filters.",
-    values = Filter.Op.values.map(t => t -> t.toString).toList
+    values = FilterOp.values.map(t => t -> t.toString).toList
   )
 
   implicit val filterType = deriveObjectType[GraphQLContext, Filter](

@@ -1,7 +1,7 @@
 package models.result
 
 import models.database.DatabaseField
-import models.result.filter.Filter
+import models.result.filter.{Filter, FilterOp}
 import models.result.orderBy.OrderBy
 
 object ResultFieldHelper {
@@ -23,13 +23,13 @@ object ResultFieldHelper {
       val col = sqlForField("where clause", filter.k, fields)
       val vals = filter.v.map(_ => "?").mkString(", ")
       filter.o match {
-        case Filter.Op.Equal => s"$col in ($vals)"
-        case Filter.Op.NotEqual => s"$col not in ($vals)"
-        case Filter.Op.StartsWith => "(" + filter.v.map(_ => s"$col like ?").mkString(" or ") + ")"
-        case Filter.Op.EndsWith => "(" + filter.v.map(_ => s"$col like ?").mkString(" or ") + ")"
-        case Filter.Op.Contains => "(" + filter.v.map(_ => s"$col like ?").mkString(" or ") + ")"
-        case Filter.Op.GreaterThanOrEqual => "(" + vals.map(_ => s"$col >= ?").mkString(" or ") + ")"
-        case Filter.Op.LessThanOrEqual => "(" + vals.map(_ => s"$col <= ?").mkString(" or ") + ")"
+        case FilterOp.Equal => s"$col in ($vals)"
+        case FilterOp.NotEqual => s"$col not in ($vals)"
+        case FilterOp.StartsWith => "(" + filter.v.map(_ => s"$col like ?").mkString(" or ") + ")"
+        case FilterOp.EndsWith => "(" + filter.v.map(_ => s"$col like ?").mkString(" or ") + ")"
+        case FilterOp.Contains => "(" + filter.v.map(_ => s"$col like ?").mkString(" or ") + ")"
+        case FilterOp.GreaterThanOrEqual => "(" + vals.map(_ => s"$col >= ?").mkString(" or ") + ")"
+        case FilterOp.LessThanOrEqual => "(" + vals.map(_ => s"$col <= ?").mkString(" or ") + ")"
         case x => throw new IllegalStateException(s"Operation [$x] is not currently supported.")
       }
     }

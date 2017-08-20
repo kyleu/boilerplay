@@ -5,12 +5,13 @@ import java.util.UUID
 import controllers.BaseController
 import models.Application
 import play.twirl.api.Html
+import services.ServiceRegistry
 import util.tracing.TraceData
 
 import scala.concurrent.Future
 
 @javax.inject.Singleton
-class SearchController @javax.inject.Inject() (override val app: Application) extends BaseController("search") {
+class SearchController @javax.inject.Inject() (override val app: Application, services: ServiceRegistry) extends BaseController("search") {
   import app.contexts.webContext
 
   def search(q: String) = withSession("admin.search", admin = true) { implicit request =>
