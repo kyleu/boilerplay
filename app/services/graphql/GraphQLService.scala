@@ -27,7 +27,7 @@ class GraphQLService @javax.inject.Inject() (tracing: TracingService, registry: 
   private[this] val rejectComplexQueries = QueryReducer.rejectComplexQueries[Any](1000, (_, _) => new IllegalArgumentException(s"Query is too complex."))
 
   def executeQuery(app: Application, query: String, variables: Option[Json], operation: Option[String], user: User, debug: Boolean)(implicit t: TraceData) = {
-    tracing.trace("graphql.execute") { td =>
+    tracing.trace(s"graphql.execute.${operation.getOrElse("adhoc")}") { td =>
       if (!td.span.isNoop) {
         td.span.tag("query", query)
         variables.foreach(v => td.span.tag("variables", v.spaces2))

@@ -7,7 +7,7 @@ import sangria.schema._
 
 object SettingsSchema extends SchemaHelper("settings") {
   implicit val settingKeyEnum = CommonSchema.deriveEnumeratumType(
-    name = "SettingKey",
+    name = "SettingKeyEnum",
     description = "The possible system settings for this application.",
     values = SettingKey.values.map(t => t -> t.description).toList
   )
