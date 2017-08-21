@@ -6,7 +6,6 @@ import brave.sampler.Sampler
 import brave.{Span, Tracer, Tracing}
 import util.Logging
 import util.metrics.MetricsConfig
-import zipkin.Endpoint
 import zipkin.reporter.AsyncReporter
 import zipkin.reporter.okhttp3.OkHttpSender
 
@@ -15,9 +14,11 @@ import scala.util.{Failure, Success, Try}
 
 @javax.inject.Singleton
 class TracingService @javax.inject.Inject() (actorSystem: ActorSystem, cnf: MetricsConfig) extends Logging {
+  implicit val executionContext: ExecutionContext = actorSystem.dispatchers.lookup("context.tracing")
+
+  def noopTrace[A](name: String)(f: TraceData => Future[A]) = f(TraceData(newSpan(Map.empty[String, String])((headers, key) => headers.get(key)).name("noop")))
   def topLevelTrace[A](name: String)(f: TraceData => Future[A]) = {
     val span = serverReceived(spanName = name, span = newSpan(Map.empty[String, String])((headers, key) => headers.get(key)))
-
     span.tag("top.level", "true")
 
     val result = f(TraceData(span))
@@ -28,12 +29,9 @@ class TracingService @javax.inject.Inject() (actorSystem: ActorSystem, cnf: Metr
     result
   }
 
-  implicit val executionContext: ExecutionContext = actorSystem.dispatchers.lookup("context.tracing")
-
   private[this] val sender = OkHttpSender.create(s"http://${cnf.tracingServer}:${cnf.tracingPort}/api/v1/spans")
   private[this] val reporter = AsyncReporter.create(sender)
   private[this] val samp = Sampler.create(cnf.tracingSampleRate)
-
   private[this] val ctx = MDCCurrentTraceContext.create()
   val tracing = Tracing.newBuilder().localServiceName(cnf.tracingService).reporter(reporter).currentTraceContext(ctx).traceId128Bit(true).sampler(samp).build()
   tracing.setNoop(!cnf.tracingEnabled)
@@ -41,8 +39,6 @@ class TracingService @javax.inject.Inject() (actorSystem: ActorSystem, cnf: Metr
   private[this] val tracer: Tracer = tracing.tracer
 
   log.info(s"Tracing enabled, sending results to [${cnf.tracingServer}:${cnf.tracingPort}@${cnf.tracingService}] using sample rate [${cnf.tracingSampleRate}].")
-
-  def endpointFor(k: String) = Endpoint.builder().serviceName(k).build()
 
   def traceBlocking[A](traceName: String, tags: (String, String)*)(f: TraceData => A)(implicit parentData: TraceData) = {
     val childSpan = tracer.newChild(parentData.span.context()).name(traceName).kind(Span.Kind.SERVER)
@@ -58,7 +54,6 @@ class TracingService @javax.inject.Inject() (actorSystem: ActorSystem, cnf: Metr
         throw t
     }
   }
-
   def trace[A](traceName: String, tags: (String, String)*)(f: TraceData => Future[A])(implicit parentData: TraceData) = {
     val childSpan = tracer.newChild(parentData.span.context()).name(traceName).kind(Span.Kind.CLIENT)
     tags.foreach { case (key, value) => childSpan.tag(key, value) }
@@ -72,7 +67,6 @@ class TracingService @javax.inject.Inject() (actorSystem: ActorSystem, cnf: Metr
   }
 
   def serverReceived(spanName: String, span: Span) = span.name(spanName).kind(Span.Kind.SERVER).start()
-
   def serverSend(span: Span, tags: (String, String)*) = {
     tags.foreach { case (key, value) => span.tag(key, value) }
     span.finish()

@@ -43,10 +43,10 @@ object MasterDdl extends Logging {
       val candidates = files.filterNot(f => data.contains(f.id))
       val applied = candidates.map { f =>
         log.info(s"Applying [${f.statements.size}] statements for DDL [${f.id}:${f.name}].")
-        val tx = Database.transaction { conn =>
+        val tx = Database.transaction { (txTd, conn) =>
           f.statements.map { sql =>
             val statement = DdlStatement(sql._1)
-            Await.result(Database.execute(statement, Some(conn)), 5.seconds)
+            Await.result(Database.execute(statement, Some(conn))(txTd), 5.seconds)
           }
           Database.execute(DdlQueries.insert(f)).map(_ => f)
         }

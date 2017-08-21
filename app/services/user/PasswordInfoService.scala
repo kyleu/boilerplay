@@ -13,23 +13,23 @@ import scala.concurrent.Future
 @javax.inject.Singleton
 class PasswordInfoService @javax.inject.Inject() (tracingService: TracingService) extends DelegableAuthInfoDAO[PasswordInfo] {
 
-  override def find(loginInfo: LoginInfo) = tracingService.topLevelTrace("password.find") { implicit td =>
+  override def find(loginInfo: LoginInfo) = tracingService.noopTrace("password.find") { implicit td =>
     Database.query(PasswordInfoQueries.getByPrimaryKey(Seq(loginInfo.providerID, loginInfo.providerKey)))
   }
 
-  override def add(loginInfo: LoginInfo, authInfo: PasswordInfo) = tracingService.topLevelTrace("password.add") { implicit td =>
+  override def add(loginInfo: LoginInfo, authInfo: PasswordInfo) = tracingService.noopTrace("password.add") { implicit td =>
     Database.execute(PasswordInfoQueries.CreatePasswordInfo(loginInfo, authInfo)).map { _ => authInfo }
   }
 
-  override def update(loginInfo: LoginInfo, authInfo: PasswordInfo): Future[PasswordInfo] = tracingService.topLevelTrace("password.update") { implicit td =>
+  override def update(loginInfo: LoginInfo, authInfo: PasswordInfo): Future[PasswordInfo] = tracingService.noopTrace("password.update") { implicit td =>
     Database.execute(PasswordInfoQueries.UpdatePasswordInfo(loginInfo, authInfo)).map { _ => authInfo }
   }
 
-  override def save(loginInfo: LoginInfo, authInfo: PasswordInfo) = tracingService.topLevelTrace("password.save") { implicit td =>
-    Database.transaction { conn =>
-      Database.execute(PasswordInfoQueries.UpdatePasswordInfo(loginInfo, authInfo), Some(conn)).flatMap { rowsAffected =>
+  override def save(loginInfo: LoginInfo, authInfo: PasswordInfo) = tracingService.noopTrace("password.save") { implicit td =>
+    Database.transaction { (txTd, conn) =>
+      Database.execute(PasswordInfoQueries.UpdatePasswordInfo(loginInfo, authInfo), Some(conn))(txTd).flatMap { rowsAffected =>
         if (rowsAffected == 0) {
-          Database.execute(PasswordInfoQueries.CreatePasswordInfo(loginInfo, authInfo), Some(conn)).map { _ => authInfo }
+          Database.execute(PasswordInfoQueries.CreatePasswordInfo(loginInfo, authInfo), Some(conn))(txTd).map { _ => authInfo }
         } else {
           Future.successful(authInfo)
         }

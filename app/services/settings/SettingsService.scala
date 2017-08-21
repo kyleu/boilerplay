@@ -15,9 +15,14 @@ class SettingsService @javax.inject.Inject() (tracing: TracingService) {
 
   def apply(key: SettingKey) = settingsMap.getOrElse(key, key.default)
   def asBool(key: SettingKey) = apply(key) == "true"
-  def getOrSet(key: SettingKey, s: => String)(implicit trace: TraceData) = tracing.traceBlocking("get.or.set")(_ => settingsMap.getOrElse(key, set(key, s)))
+  def getOrSet(key: SettingKey, s: => String)(implicit trace: TraceData) = tracing.trace("get.or.set") { td =>
+    settingsMap.get(key) match {
+      case Some(v) => Future.successful(v)
+      case None => set(key, s)(td)
+    }
+  }
 
-  def load()(implicit trace: TraceData) = tracing.trace("get.or.set") { tn =>
+  def load()(implicit trace: TraceData) = tracing.trace("load") { tn =>
     Database.query(SettingQueries.getAll())(tn).map(_.map(s => s.key -> s.value).toMap).map { x =>
       settingsMap = x
       settings = SettingKey.values.map(k => Setting(k, settingsMap.getOrElse(k, k.default)))
@@ -29,22 +34,23 @@ class SettingsService @javax.inject.Inject() (tracing: TracingService) {
   def getAll = Future.successful(settings)
   def getOverrides = settings.filter(s => isOverride(s.key))
 
-  def set(key: SettingKey, value: String)(implicit trace: TraceData) = {
+  def set(key: SettingKey, value: String)(implicit trace: TraceData) = tracing.trace("set") { td =>
     val s = Setting(key, value)
-    if (s.isDefault) {
+    val f = if (s.isDefault) {
       settingsMap = settingsMap - key
       Database.execute(SettingQueries.removeByPrimaryKey(key))
     } else {
-      Database.transaction { conn =>
-        Database.query(SettingQueries.getByPrimaryKey(key), Some(conn)).map {
-          case Some(_) => Database.execute(SettingQueries.Update(s), Some(conn))
-          case None => Database.execute(SettingQueries.insert(s), Some(conn))
-        }
-      }
-      settingsMap = settingsMap + (key -> value)
+      Database.transaction { (txTd, conn) =>
+        Database.query(SettingQueries.getByPrimaryKey(key), Some(conn))(txTd).map {
+          case Some(_) => Database.execute(SettingQueries.Update(s), Some(conn))(txTd)
+          case None => Database.execute(SettingQueries.insert(s), Some(conn))(txTd)
+        }.map(_ => settingsMap = settingsMap + (key -> value))
+      }(td)
     }
-    settings = SettingKey.values.map(k => Setting(k, settingsMap.getOrElse(k, k.default)))
-    value
+    f.map { _ =>
+      settings = SettingKey.values.map(k => Setting(k, settingsMap.getOrElse(k, k.default)))
+      value
+    }
   }
 
   def allowRegistration = asBool(SettingKey.AllowRegistration)

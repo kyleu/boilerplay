@@ -10,10 +10,10 @@ import scala.concurrent.Future
 
 sealed abstract class SandboxTask(val id: String, val name: String, val description: String) extends EnumEntry with Logging {
   def run(app: Application, arg: Option[String])(implicit trace: TraceData): Future[SandboxTask.Result] = {
-    app.tracing.trace("sandbox." + id) { _ =>
+    app.tracing.trace("sandbox." + id) { sandboxTrace =>
       log.info(s"Running sandbox task [$id]...")
       val startMs = System.currentTimeMillis
-      val result = call(app, arg).map { r =>
+      val result = call(app, arg)(sandboxTrace).map { r =>
         val res = SandboxTask.Result(this, arg, "OK", r, (System.currentTimeMillis - startMs).toInt)
         log.info(s"Completed sandbox task [$id] with status [${res.status}] in [${res.elapsed}ms].")
         res
@@ -32,6 +32,10 @@ object SandboxTask extends Enum[SandboxTask] with CirceEnum[SandboxTask] {
     override def call(app: Application, argument: Option[String])(implicit trace: TraceData) = {
       Future.successful("All good!")
     }
+  }
+
+  case object TracingTest extends SandboxTask("tracing", "Tracing Test", "A tracing test.") {
+    override def call(app: Application, argument: Option[String])(implicit trace: TraceData) = TracingLogic.go(app, argument)
   }
 
   case object WebCall extends SandboxTask("webcall", "Web Call", "Calls the provided url and returns stats.") {

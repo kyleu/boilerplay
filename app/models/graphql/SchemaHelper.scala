@@ -14,12 +14,9 @@ import scala.concurrent.Future
 import util.FutureUtils.graphQlContext
 
 abstract class SchemaHelper(val name: String) {
-  private[this] lazy val endpoint = Endpoint.builder().serviceName(name + ".schema").build()
-
   protected def trace[A](ctx: GraphQLContext, k: String)(f: TraceData => Future[A]) = {
     implicit val traceData = ctx.trace
     ctx.app.tracing.trace(k) { tn =>
-      tn.span.remoteEndpoint(endpoint)
       f(tn)
     }
   }

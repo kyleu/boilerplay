@@ -35,7 +35,7 @@ class AuthenticationController @javax.inject.Inject() (
             case Some(url) => Redirect(url).withSession(request.session - "returnUrl")
             case None => Redirect(controllers.routes.HomeController.home())
           }
-          userSearchService.retrieve(loginInfo).flatMap {
+          userSearchService.getByLoginInfo(loginInfo).flatMap {
             case Some(user) => app.silhouette.env.authenticatorService.create(loginInfo).flatMap { authenticator =>
               app.silhouette.env.eventBus.publish(LoginEvent(user, request))
               app.silhouette.env.authenticatorService.init(authenticator).flatMap { v =>
