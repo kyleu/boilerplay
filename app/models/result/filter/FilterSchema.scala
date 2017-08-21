@@ -4,8 +4,8 @@ import models.graphql.{CommonSchema, GraphQLContext}
 import sangria.macros.derive._
 import sangria.schema._
 import sangria.marshalling.circe._
-
 import io.circe.generic.auto._
+import models.result.data.DataFieldSchema
 
 object FilterSchema {
   implicit val filterOpType = CommonSchema.deriveEnumeratumType[FilterOp](
@@ -18,9 +18,11 @@ object FilterSchema {
     ObjectTypeDescription("Options for filtering the results.")
   )
 
-  val filterInputType = deriveInputObjectType[Filter](
-    InputObjectTypeName("FilterInput")
-  )
+  val filterInputType = InputObjectType[Filter](name = "FilterInput", fields = List(
+    InputField("k", StringType),
+    InputField("o", filterOpType),
+    InputField("v", ListInputType(DataFieldSchema.varType))
+  ))
 
   val reportFiltersArg = Argument("filters", OptionInputType(ListInputType(filterInputType)))
 }

@@ -1,8 +1,6 @@
 package models.result.data
 
 import sangria.ast
-import sangria.macros.derive.InputObjectTypeName
-import sangria.macros.derive._
 import sangria.schema._
 import sangria.marshalling.circe._
 import sangria.validation.ValueCoercionViolation
@@ -40,9 +38,10 @@ object DataFieldSchema {
     }
   )
 
-  val dataFieldType = deriveInputObjectType[DataField](
-    InputObjectTypeName("DataFieldInput")
-  )
+  val dataFieldInputType = InputObjectType[DataField](name = "DataFieldInput", fields = List(
+    InputField("k", StringType),
+    InputField("v", OptionInputType(varType))
+  ))
 
-  val dataFieldsArg = Argument("fields", ListInputType(dataFieldType))
+  val dataFieldsArg = Argument("fields", ListInputType(dataFieldInputType))
 }
