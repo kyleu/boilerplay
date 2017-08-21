@@ -22,8 +22,8 @@ class SettingsService @javax.inject.Inject() (tracing: TracingService) {
     }
   }
 
-  def load()(implicit trace: TraceData) = tracing.trace("load") { tn =>
-    Database.query(SettingQueries.getAll())(tn).map(_.map(s => s.key -> s.value).toMap).map { x =>
+  def load()(implicit trace: TraceData) = tracing.trace("load") { td =>
+    Database.query(SettingQueries.getAll())(td).map(_.map(s => s.key -> s.value).toMap).map { x =>
       settingsMap = x
       settings = SettingKey.values.map(k => Setting(k, settingsMap.getOrElse(k, k.default)))
     }

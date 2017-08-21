@@ -10,7 +10,7 @@ import scala.concurrent.Future
 
 sealed abstract class SandboxTask(val id: String, val name: String, val description: String) extends EnumEntry with Logging {
   def run(app: Application, arg: Option[String])(implicit trace: TraceData): Future[SandboxTask.Result] = {
-    app.tracing.trace("sandbox." + id) { sandboxTrace =>
+    app.tracing.trace(id + ".sandbox") { sandboxTrace =>
       log.info(s"Running sandbox task [$id]...")
       val startMs = System.currentTimeMillis
       val result = call(app, arg)(sandboxTrace).map { r =>

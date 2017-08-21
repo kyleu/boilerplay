@@ -8,18 +8,12 @@ import models.result.paging.PagingOptions
 import sangria.schema.{Args, Context}
 import services.ModelServiceHelper
 import util.tracing.TraceData
-import zipkin.Endpoint
 
 import scala.concurrent.Future
 import util.FutureUtils.graphQlContext
 
 abstract class SchemaHelper(val name: String) {
-  protected def trace[A](ctx: GraphQLContext, k: String)(f: TraceData => Future[A]) = {
-    implicit val traceData = ctx.trace
-    ctx.app.tracing.trace(k) { tn =>
-      f(tn)
-    }
-  }
+  protected def trace[A](ctx: GraphQLContext, k: String)(f: TraceData => Future[A]) = ctx.app.tracing.trace(name + ".schema." + k)(f)(ctx.trace)
 
   protected case class SearchArgs(start: LocalDateTime, filters: Seq[Filter], orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int])
   protected case class SearchResult[T](count: Int, results: Seq[T], args: SearchArgs) {
@@ -35,11 +29,11 @@ abstract class SchemaHelper(val name: String) {
     offset = args.arg(CommonSchema.offsetArg)
   )
 
-  def runSearch[T](svc: ModelServiceHelper[T], c: Context[GraphQLContext, Unit])(implicit trace: TraceData) = {
+  def runSearch[T](svc: ModelServiceHelper[T], c: Context[GraphQLContext, Unit])(trace: TraceData) = {
     val args = argsFor(c.args)
     val f = c.arg(CommonSchema.queryArg) match {
-      case Some(q) => svc.searchWithCount(q, args.filters, args.orderBys, args.limit, args.offset)(c.ctx.trace)
-      case _ => svc.getAllWithCount(args.filters, args.orderBys, args.limit, args.offset)(c.ctx.trace)
+      case Some(q) => svc.searchWithCount(q, args.filters, args.orderBys, args.limit, args.offset)(trace)
+      case _ => svc.getAllWithCount(args.filters, args.orderBys, args.limit, args.offset)(trace)
     }
     f.map { x =>
       trace.span.annotate("Composing result.")
