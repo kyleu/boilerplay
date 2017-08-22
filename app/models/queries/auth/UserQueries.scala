@@ -62,7 +62,7 @@ object UserQueries extends BaseQueries[User] {
   }
 
   override protected def fromRow(row: Row) = {
-    val id = UUID.fromString(row.as[String]("id"))
+    val id = row.as[UUID]("id")
     val username = row.as[String]("username")
     val prefsString = row.as[String]("prefs")
     val preferences = JsonSerializers.readPreferences(prefsString)
