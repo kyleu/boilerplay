@@ -11,7 +11,7 @@ import models.user.{Role, User, UserPreferences}
 import util.JsonSerializers
 
 object UserQueries extends BaseQueries[User] {
-  override val tableName = "local_users"
+  override val tableName = "users"
   override val fields = Seq(
     DatabaseField("id"), DatabaseField("username"), DatabaseField("prefs"), DatabaseField("email"), DatabaseField("role"), DatabaseField("created")
   )
