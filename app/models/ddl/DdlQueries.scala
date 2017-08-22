@@ -9,23 +9,23 @@ object DdlQueries extends BaseQueries[DdlFile] {
 
   def getAll = GetAll
   case object GetIds extends Query[Seq[Int]] {
-    override def sql = s"""select "id" from "$tableName" order by "id" """
+    override def sql = s"select ${quote("id")} from ${quote(tableName)} order by ${quote("id")}"
     override def reduce(rows: Iterator[Row]) = rows.map(_.as[Int]("id")).toSeq
   }
   def insert(f: DdlFile) = Insert(f)
 
   case class DoesTableExist(tableName: String) extends SingleRowQuery[Boolean] {
-    override val sql = "select count(*) as c from information_schema.tables WHERE (table_name = ? or table_name = ?);"
+    override val sql = s"select count(*) as c from ${quote("information_schema")}.${quote("tables")} WHERE (${quote("table_name")} = ? or ${quote("table_name")} = ?);"
     override val values = tableName :: tableName.toUpperCase :: Nil
     override def map(row: Row) = row.as[Long]("c") > 0
   }
 
   case object CreateDdlTable extends Statement {
-    override val sql = """create table "ddl" (
-       "id" integer primary key,
-       "name" varchar(128) not null,
-       "sql" text not null,
-       "applied" timestamp not null
+    override val sql = s"""create table ${quote("ddl")} (
+       ${quote("id")} integer primary key,
+       ${quote("name")} varchar(128) not null,
+       ${quote("sql")} text not null,
+       ${quote("applied")} timestamp not null
     );"""
   }
 
