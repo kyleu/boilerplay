@@ -1,3 +1,3 @@
 package services.database
 
-object MasterDatabase extends BaseDatabase("database.master")
+object MasterDatabase extends BaseDatabase("master", "database.master")

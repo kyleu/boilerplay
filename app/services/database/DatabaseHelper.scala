@@ -1,5 +1,7 @@
 package services.database
 
+import java.net.InetAddress
+
 import com.github.mauricio.async.db.pool.ConnectionPool
 import com.github.mauricio.async.db.postgresql.PostgreSQLConnection
 import com.github.mauricio.async.db.{Configuration, Connection, QueryResult}
@@ -16,11 +18,16 @@ trait DatabaseHelper extends Instrumented with Logging {
   protected[this] def tracing: TracingService
   protected[this] def pool: ConnectionPool[PostgreSQLConnection]
   protected[this] def getConfig: Configuration
+  protected[this] def name: String
+
+  private[this] lazy val endpoint = {
+    Endpoint.builder().port(getConfig.port).serviceName("database." + name).ipv6(InetAddress.getByName(getConfig.host).getAddress).build()
+  }
 
   private[this] def prependComment(obj: Object, sql: String) = s"/* ${obj.getClass.getSimpleName.replace("$", "")} */ $sql"
 
   private[this] def trace[A](name: String)(f: TraceData => Future[A])(implicit traceData: TraceData) = tracing.trace(name) { td =>
-    td.span.kind(brave.Span.Kind.CLIENT).remoteEndpoint(Endpoint.builder().port(getConfig.port).serviceName("database.master").build())
+    td.span.kind(brave.Span.Kind.CLIENT).remoteEndpoint(endpoint)
     f(td)
   }
 
