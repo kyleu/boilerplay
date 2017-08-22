@@ -1,11 +1,12 @@
 package models.result
 
 import models.database.DatabaseField
+import models.queries.BaseQueries
 import models.result.filter._
 import models.result.orderBy.OrderBy
 
 object ResultFieldHelper {
-  val (lQuote, rQuote) = ("\"", "\"")
+  private[this] def quote(n: String) = BaseQueries.leftQuote + n + BaseQueries.rightQuote
 
   def sqlForField(t: String, field: String, fields: Seq[DatabaseField]) = fields.find(_.prop == field) match {
     case Some(f) => f.col
@@ -25,11 +26,11 @@ object ResultFieldHelper {
       val col = sqlForField("where clause", filter.k, fields)
       val vals = filter.v.map(_ => "?").mkString(", ")
       filter.o match {
-        case Equal => s"$lQuote$col$rQuote in ($vals)"
-        case NotEqual => s"$lQuote$col$rQuote not in ($vals)"
-        case Like => "(" + filter.v.map(_ => s"$lQuote$col$rQuote like ?").mkString(" or ") + ")"
-        case GreaterThanOrEqual => "(" + vals.map(_ => s"$lQuote$col$rQuote >= ?").mkString(" or ") + ")"
-        case LessThanOrEqual => "(" + vals.map(_ => s"$lQuote$col$rQuote <= ?").mkString(" or ") + ")"
+        case Equal => s"${quote(col)} in ($vals)"
+        case NotEqual => s"${quote(col)} not in ($vals)"
+        case Like => "(" + filter.v.map(_ => s"${quote(col)} like ?").mkString(" or ") + ")"
+        case GreaterThanOrEqual => "(" + vals.map(_ => s"${quote(col)} >= ?").mkString(" or ") + ")"
+        case LessThanOrEqual => "(" + vals.map(_ => s"${quote(col)} <= ?").mkString(" or ") + ")"
         case x => throw new IllegalStateException(s"Operation [$x] is not currently supported.")
       }
     }

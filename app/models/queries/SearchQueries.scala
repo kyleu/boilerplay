@@ -6,13 +6,16 @@ import models.result.filter.Filter
 import models.result.orderBy.OrderBy
 
 trait SearchQueries[T] { this: BaseQueries[T] =>
-  private[this] def searchClause(q: String) = searchColumns.map(c => s"lower($lQuote$c$rQuote::text) like ?").mkString(" or ")
-  private[this] def whereClause(filters: Seq[Filter], add: Option[String] = None) = {
-    filterClause(filters, fields).map(" where " + _).getOrElse("")
+  private[this] def searchClause(q: String) = searchColumns.map(c => s"lower(${quote(c)}::text) like ?").mkString(" or ")
+  private[this] def whereClause(filters: Seq[Filter], add: Option[String] = None) = (filterClause(filters, fields), add) match {
+    case (Some(fc), Some(a)) => " where (" + fc + ") and (" + a + ")"
+    case (Some(fc), None) => " where " + fc
+    case (None, Some(a)) => " where " + a
+    case (None, None) => ""
   }
 
   protected def onCountAll(filters: Seq[Filter] = Nil) = {
-    new Count(sql = s"select count(*) as c from $lQuote$tableName$rQuote ${whereClause(filters)}", values = filters.flatMap(_.v))
+    new Count(sql = s"select count(*) as c from ${quote(tableName)} ${whereClause(filters)}", values = filters.flatMap(_.v))
   }
 
   protected case class GetAll(
@@ -27,7 +30,7 @@ trait SearchQueries[T] { this: BaseQueries[T] =>
   }
 
   protected case class SearchCount(q: String, filters: Seq[Filter] = Nil) extends Count(
-    sql = s"select count(*) as c from $lQuote$tableName$rQuote${whereClause(filters)}",
+    sql = s"select count(*) as c from ${quote(tableName)}${whereClause(filters, add = Some(searchClause(q)))}",
     values = if (q.isEmpty) { filters.flatMap(_.v) } else { filters.flatMap(_.v) ++ searchColumns.map(_ => "%" + q + "%") }
   )
 
@@ -41,7 +44,7 @@ trait SearchQueries[T] { this: BaseQueries[T] =>
   }
 
   protected case class SearchExact(q: String, orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int]) extends Query[List[T]] {
-    private[this] val whereClause = searchColumns.map(c => s"lower($lQuote$c$rQuote::text) = ?").mkString(" or ")
+    private[this] val whereClause = searchColumns.map(c => s"lower(${quote(c)}::text) = ?").mkString(" or ")
     override val sql = getSql(whereClause = Some(whereClause), orderBy = orderClause(orderBys, fields), limit = limit, offset = offset)
     override val values = searchColumns.map(_ => q.toLowerCase)
     override def reduce(rows: Iterator[Row]) = rows.map(fromRow).toList

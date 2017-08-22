@@ -16,12 +16,12 @@ abstract class ModelServiceHelper[T](key: String) extends Logging {
   def countAll(filters: Seq[Filter])(implicit trace: TraceData): Future[Int]
   def getAll(filters: Seq[Filter], orderBys: Seq[OrderBy], limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData): Future[Seq[T]]
 
-  def getAllWithCount(filters: Seq[Filter], orderBys: Seq[OrderBy], limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData) = {
-    traceF("get.all.with.count") { td =>
-      val result = getAll(filters, orderBys, limit, offset)(td)
-      val count = countAll(filters)(td)
-      result.flatMap(r => count.map(_ -> r))
-    }
+  def getAllWithCount(
+    filters: Seq[Filter], orderBys: Seq[OrderBy], limit: Option[Int] = None, offset: Option[Int] = None
+  )(implicit trace: TraceData) = traceF("get.all.with.count") { td =>
+    val result = getAll(filters, orderBys, limit, offset)(td)
+    val count = countAll(filters)(td)
+    result.flatMap(r => count.map(_ -> r))
   }
 
   def searchCount(q: String, filters: Seq[Filter])(implicit trace: TraceData): Future[Int]
