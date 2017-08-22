@@ -21,6 +21,7 @@ trait SearchQueries[T] { this: BaseQueries[T] =>
   protected case class GetAll(
       filters: Seq[Filter] = Nil, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None
   ) extends Query[Seq[T]] {
+    override val name = s"$key.get.all"
     private[this] val (whereClause, orderBy) = {
       getResultSql(filters = filters, orderBys = orderBys, limit = limit, offset = offset, fields = fields, add = None)
     }
@@ -35,6 +36,7 @@ trait SearchQueries[T] { this: BaseQueries[T] =>
   )
 
   protected case class Search(q: String, filters: Seq[Filter], orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int]) extends Query[List[T]] {
+    override val name = s"$key.search"
     private[this] val (whereClause, orderBy) = {
       getResultSql(filters = filters, orderBys = orderBys, limit = limit, offset = offset, fields = fields, add = Some(searchClause(q)))
     }
@@ -44,6 +46,7 @@ trait SearchQueries[T] { this: BaseQueries[T] =>
   }
 
   protected case class SearchExact(q: String, orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int]) extends Query[List[T]] {
+    override val name = s"$key.search.exact"
     private[this] val whereClause = searchColumns.map(c => s"lower(${quote(c)}::text) = ?").mkString(" or ")
     override val sql = getSql(whereClause = Some(whereClause), orderBy = orderClause(orderBys, fields), limit = limit, offset = offset)
     override val values = searchColumns.map(_ => q.toLowerCase)

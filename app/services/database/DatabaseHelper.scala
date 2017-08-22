@@ -32,7 +32,7 @@ trait DatabaseHelper extends Instrumented with Logging {
 
   private[this] def prependComment(obj: Object, sql: String) = s"/* ${obj.getClass.getSimpleName.replace("$", "")} */ $sql"
 
-  private[this] def trace[A](name: String)(f: TraceData => Future[A])(implicit traceData: TraceData) = tracing.trace(name) { td =>
+  private[this] def trace[A](traceName: String)(f: TraceData => Future[A])(implicit traceData: TraceData) = tracing.trace(name + "." + traceName) { td =>
     td.span.kind(brave.Span.Kind.CLIENT).remoteEndpoint(endpoint)
     f(td)
   }
@@ -42,34 +42,34 @@ trait DatabaseHelper extends Instrumented with Logging {
   }
 
   def execute(statement: Statement, conn: Option[Connection] = None)(implicit traceData: TraceData): Future[Int] = {
-    val name = statement.getClass.getSimpleName.replaceAllLiterally("$", "")
-    trace("execute." + name) { tn =>
-      log.debug(s"Executing statement [$name] with SQL [${statement.sql}] with values [${statement.values.mkString(", ")}].")
+    val n = statement.name
+    trace("execute." + n) { tn =>
+      log.debug(s"Executing statement [$n] with SQL [${statement.sql}] with values [${statement.values.mkString(", ")}].")
       tn.span.tag(TraceKeys.SQL_QUERY, statement.sql)
-      val ret = metrics.timer(s"execute.$name").timeFuture {
+      val ret = metrics.timer(s"execute.$n").timeFuture {
         conn.getOrElse(pool).sendPreparedStatement(prependComment(statement, statement.sql), statement.values).map(_.rowsAffected.toInt)
       }
-      ret.failed.foreach(x => log.error(s"Error [${x.getClass.getSimpleName}] encountered while executing statement [$name] with SQL [${statement.sql}].", x))
+      ret.failed.foreach(x => log.error(s"Error [${x.getClass.getSimpleName}] encountered while executing statement [$n] with SQL [${statement.sql}].", x))
       ret
     }
   }
 
   def query[A](query: RawQuery[A], conn: Option[Connection] = None)(implicit traceData: TraceData): Future[A] = {
-    val name = query.getClass.getSimpleName.replaceAllLiterally("$", "")
-    trace("query." + name) { tn =>
-      log.debug(s"Executing query [$name] with SQL [${query.sql}] with values [${query.values.mkString(", ")}].")
+    val n = query.name
+    trace("query." + n) { tn =>
+      log.debug(s"Executing query [$n] with SQL [${query.sql}] with values [${query.values.mkString(", ")}].")
       tn.span.tag(TraceKeys.SQL_QUERY, query.sql)
-      val ret = metrics.timer(s"query.$name").timeFuture {
+      val ret = metrics.timer(s"query.$n").timeFuture {
         conn.getOrElse(pool).sendPreparedStatement(prependComment(query, query.sql), query.values).map { r =>
           query.handle(r.rows.getOrElse(throw new IllegalStateException()))
         }
       }
-      ret.failed.foreach(x => log.error(s"Error [${x.getClass.getSimpleName}] encountered while executing query [$name] with SQL [${query.sql}].", x))
+      ret.failed.foreach(x => log.error(s"Error [${x.getClass.getSimpleName}] encountered while executing query [$n] with SQL [${query.sql}].", x))
       ret
     }
   }
 
-  def raw(name: String, sql: String, conn: Option[Connection] = None)(implicit traceData: TraceData): Future[QueryResult] = {
+  def raw(namw: String, sql: String, conn: Option[Connection] = None)(implicit traceData: TraceData): Future[QueryResult] = {
     trace("raw." + name) { tn =>
       tn.span.tag(TraceKeys.SQL_QUERY, sql)
       log.debug(s"Executing raw query [$name] with SQL [$sql].")

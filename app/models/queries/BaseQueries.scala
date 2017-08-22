@@ -1,8 +1,6 @@
 package models.queries
 
 import models.database._
-import models.result.ResultFieldHelper
-import models.result.data.DataField
 import util.JodaDateUtils
 
 object BaseQueries {
@@ -10,8 +8,7 @@ object BaseQueries {
   def trim(s: String) = s.replaceAll("""[\s]+""", " ").trim
 }
 
-trait BaseQueries[T] extends SearchQueries[T] with JodaDateUtils {
-  def tableName: String
+abstract class BaseQueries[T](val key: String, val tableName: String) extends SearchQueries[T] with MutationQueries[T] with JodaDateUtils {
   def fields: Seq[DatabaseField]
 
   protected def pkColumns = Seq("id")
@@ -41,58 +38,29 @@ trait BaseQueries[T] extends SearchQueries[T] with JodaDateUtils {
   }
 
   protected case class GetByPrimaryKey(override val values: Seq[Any]) extends FlatSingleRowQuery[T] {
+    override val name = s"$key.get.by.primary.key"
     override val sql = s"""select $quotedColumns from ${quote(tableName)} where $pkWhereClause"""
     override def flatMap(row: Row) = Some(fromRow(row))
   }
 
-  protected case class Insert(model: T) extends Statement {
-    override val sql = insertSql
-    override val values: Seq[Any] = toDataSeq(model)
-  }
-
-  protected case class InsertFields(dataFields: Seq[DataField]) extends Statement {
-    private[this] val cols = dataFields.map(f => ResultFieldHelper.sqlForField("update", f.k, fields))
-    override val sql = s"insert into ${quote(tableName)} (${cols.map(quote).mkString(", ")}) values (${cols.map(_ => "?").mkString(", ")})"
-    override val values: Seq[Any] = dataFields.map(_.v)
-  }
-
-  protected case class InsertBatch(models: Seq[T]) extends Statement {
-    private[this] val valuesClause = models.map(_ => s"($columnPlaceholders)").mkString(", ")
-    override val sql = s"""insert into ${quote(tableName)} ($quotedColumns) values $valuesClause"""
-    override val values: Seq[Any] = models.flatMap(toDataSeq)
-  }
-
-  protected case class RemoveByPrimaryKey(override val values: Seq[Any]) extends Statement {
-    override val sql = s"""delete from ${quote(tableName)} where $pkWhereClause"""
-  }
-
-  protected case class CreateFields(dataFields: Seq[DataField]) extends Statement {
-    private[this] val cols = dataFields.map(f => ResultFieldHelper.sqlForField("insert", f.k, fields))
-    override val sql = s"""insert into ${quote(tableName)} (${cols.map(quote).mkString(", ")}) values (${cols.map(_ => "?").mkString(", ")})"""
-    override val values = dataFields.map(_.v)
-  }
-
-  protected case class UpdateFields(pks: Seq[Any], dataFields: Seq[DataField]) extends Statement {
-    private[this] val cols = dataFields.map(f => ResultFieldHelper.sqlForField("update", f.k, fields))
-    override val sql = s"""update ${quote(tableName)} set ${cols.map(c => quote(c) + " = ?").mkString(", ")} where $pkWhereClause"""
-    override val values = dataFields.map(_.v) ++ pks
-  }
-
   protected class SeqQuery(additionalSql: String, override val values: Seq[Any] = Nil) extends Query[Seq[T]] {
+    override val name = s"$key.seq.query"
     override val sql = s"""select $quotedColumns from ${quote(tableName)} $additionalSql"""
     override def reduce(rows: Iterator[Row]) = rows.map(fromRow).toList
   }
 
-  protected class ColSeqQuery(column: String, vals: Seq[Any] = Nil) extends SeqQuery(s"where ${quote(column)} in (${placeholdersFor(vals)})", vals)
+  protected class ColSeqQuery(column: String, vals: Seq[Any] = Nil) extends SeqQuery(s"where ${quote(column)} in (${placeholdersFor(vals)})", vals) {
+    override val name = s"$key.col.seq.query.$column"
+  }
 
   protected abstract class OptQuery(additionalSql: String, override val values: Seq[Any] = Nil) extends FlatSingleRowQuery[T] {
+    override val name = s"$key.opt.query"
     override val sql = s"""select $quotedColumns from ${quote(tableName)} $additionalSql"""
     override def flatMap(row: Row) = Some(fromRow(row))
   }
 
   protected class Count(override val sql: String, override val values: Seq[Any] = Nil) extends SingleRowQuery[Int] {
+    override val name = s"$key.count"
     override def map(row: Row) = row.as[Long]("c").toInt
   }
-
-  private def pkWhereClause = pkColumns.map(x => quote(x) + " = ?").mkString(" and ")
 }

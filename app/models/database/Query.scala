@@ -3,6 +3,7 @@ package models.database
 import com.github.mauricio.async.db.ResultSet
 
 trait RawQuery[A] {
+  def name: String
   def sql: String
   def values: Seq[Any] = Seq.empty
   def handle(results: ResultSet): A
