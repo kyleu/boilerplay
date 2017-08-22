@@ -10,7 +10,7 @@ import util.tracing.TracingService
 import scala.concurrent.Await
 import scala.concurrent.duration._
 
-abstract class BaseDatabase(configPrefix: String) extends DatabaseHelper {
+abstract class BaseDatabase(override val name: String, configPrefix: String) extends DatabaseHelper {
   private[this] val poolConfig = new PoolConfiguration(maxObjects = 100, maxIdle = 10, maxQueueSize = 1000)
 
   private[this] var poolOption: Option[ConnectionPool[PostgreSQLConnection]] = None

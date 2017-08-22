@@ -21,7 +21,6 @@ trait DatabaseHelper extends Instrumented with Logging {
   protected[this] def getConfig: Configuration
   protected[this] def name: String
 
-
   private[this] lazy val endpoint = {
     val builder = Endpoint.builder().port(getConfig.port).serviceName("database." + name)
     InetAddress.getByName(getConfig.host) match {
