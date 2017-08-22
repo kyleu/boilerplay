@@ -13,7 +13,6 @@ import models.result.orderBy.OrderBySchema._
 import models.result.paging.PagingSchema.pagingOptionsType
 import models.template.Theme
 import sangria.execution.deferred.{Fetcher, HasId, Relation}
-import models.result.paging.PagingOptions
 import util.FutureUtils.graphQlContext
 
 import scala.concurrent.Future
@@ -68,7 +67,7 @@ object UserSchema extends SchemaHelper("user") {
       name = "user",
       fieldType = userResultType,
       arguments = queryArg :: reportFiltersArg :: orderBysArg :: limitArg :: offsetArg :: Nil,
-      resolve = c => runSearch(c.ctx.app.userService, c).map(toResult)
+      resolve = c => trace(c.ctx, "search")(td => runSearch(c.ctx.app.userService, c, td).map(toResult))
     ),
     Field(
       name = "userByRole",
