@@ -11,8 +11,10 @@ import scala.concurrent.Future
 class SchemaController @javax.inject.Inject() (override val app: Application) extends BaseController("schema") {
   import app.contexts.webContext
 
+  lazy val idl = SchemaRenderer.renderSchema(Schema.schema)
+
   def renderSchema() = withSession("graphql.schema", admin = true) { implicit request =>
-    Future.successful(Ok(SchemaRenderer.renderSchema(Schema.schema)))
+    Future.successful(Ok(idl))
   }
 
   def voyager() = withSession("schema.render", admin = true) { implicit request =>
