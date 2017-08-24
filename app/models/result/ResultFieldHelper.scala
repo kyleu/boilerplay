@@ -7,7 +7,7 @@ import models.result.orderBy.OrderBy
 
 object ResultFieldHelper {
   def sqlForField(t: String, field: String, fields: Seq[DatabaseField]) = fields.find(_.prop == field) match {
-    case Some(f) => f.col
+    case Some(f) => EngineHelper.quote(f.col)
     case None => throw new IllegalStateException(s"Invalid $t field [$field]. Allowed fields are [${fields.map(_.prop).mkString(", ")}].")
   }
 
@@ -23,13 +23,12 @@ object ResultFieldHelper {
     val clauses = filters.map { filter =>
       val col = sqlForField("where clause", filter.k, fields)
       val vals = filter.v.map(_ => "?").mkString(", ")
-      val quoted = EngineHelper.quote(col)
       filter.o match {
-        case Equal => s"$quoted in ($vals)"
-        case NotEqual => s"$quoted not in ($vals)"
-        case Like => "(" + filter.v.map(_ => s"$quoted like ?").mkString(" or ") + ")"
-        case GreaterThanOrEqual => "(" + vals.map(_ => s"$quoted >= ?").mkString(" or ") + ")"
-        case LessThanOrEqual => "(" + vals.map(_ => s"$quoted <= ?").mkString(" or ") + ")"
+        case Equal => s"$col in ($vals)"
+        case NotEqual => s"$col not in ($vals)"
+        case Like => "(" + filter.v.map(_ => s"$col like ?").mkString(" or ") + ")"
+        case GreaterThanOrEqual => "(" + vals.map(_ => s"$col >= ?").mkString(" or ") + ")"
+        case LessThanOrEqual => "(" + vals.map(_ => s"$col <= ?").mkString(" or ") + ")"
         case x => throw new IllegalStateException(s"Operation [$x] is not currently supported.")
       }
     }

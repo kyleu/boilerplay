@@ -7,8 +7,8 @@ import enumeratum._
 import util.JodaDateUtils
 
 sealed abstract class DatabaseFieldType[T](val key: String, val isNumeric: Boolean = false) extends EnumEntry {
-  def fromRow(row: Row, col: String): T = row.as[T](col)
-  def fromRowOpt(row: Row, col: String): Option[T] = row.asOpt[T](col)
+  def apply(row: Row, col: String): T = row.as[T](col)
+  def opt(row: Row, col: String): Option[T] = row.asOpt[T](col)
 }
 
 object DatabaseFieldType extends Enum[DatabaseFieldType[_]] with JodaDateUtils {
@@ -17,23 +17,23 @@ object DatabaseFieldType extends Enum[DatabaseFieldType[_]] with JodaDateUtils {
   case object BooleanType extends DatabaseFieldType[Boolean]("boolean")
   case object ByteType extends DatabaseFieldType[Byte]("byte")
   case object ShortType extends DatabaseFieldType[Short]("short", isNumeric = true)
-  case object IntegerType extends DatabaseFieldType[Integer]("integer", isNumeric = true)
+  case object IntegerType extends DatabaseFieldType[Int]("int", isNumeric = true)
   case object LongType extends DatabaseFieldType[Long]("long", isNumeric = true)
   case object FloatType extends DatabaseFieldType[Float]("float", isNumeric = true)
   case object DoubleType extends DatabaseFieldType[Double]("double", isNumeric = true)
   case object ByteArrayType extends DatabaseFieldType[Array[Byte]]("bytearray")
 
   case object DateType extends DatabaseFieldType[LocalDate]("date") {
-    override def fromRow(row: Row, col: String) = fromJoda(row.as[org.joda.time.LocalDate](col))
-    override def fromRowOpt(row: Row, col: String) = row.asOpt[org.joda.time.LocalDate](col).map(fromJoda)
+    override def apply(row: Row, col: String) = fromJoda(row.as[org.joda.time.LocalDate](col))
+    override def opt(row: Row, col: String) = row.asOpt[org.joda.time.LocalDate](col).map(fromJoda)
   }
   case object TimeType extends DatabaseFieldType[LocalTime]("time") {
-    override def fromRow(row: Row, col: String) = fromJoda(row.as[org.joda.time.LocalTime](col))
-    override def fromRowOpt(row: Row, col: String) = row.asOpt[org.joda.time.LocalTime](col).map(fromJoda)
+    override def apply(row: Row, col: String) = fromJoda(row.as[org.joda.time.LocalTime](col))
+    override def opt(row: Row, col: String) = row.asOpt[org.joda.time.LocalTime](col).map(fromJoda)
   }
   case object TimestampType extends DatabaseFieldType[LocalDateTime]("timestamp") {
-    override def fromRow(row: Row, col: String) = fromJoda(row.as[org.joda.time.LocalDateTime](col))
-    override def fromRowOpt(row: Row, col: String) = row.asOpt[org.joda.time.LocalDateTime](col).map(fromJoda)
+    override def apply(row: Row, col: String) = fromJoda(row.as[org.joda.time.LocalDateTime](col))
+    override def opt(row: Row, col: String) = row.asOpt[org.joda.time.LocalDateTime](col).map(fromJoda)
   }
 
   case object RefType extends DatabaseFieldType[String]("ref")

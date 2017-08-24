@@ -67,13 +67,13 @@ object UserQueries extends BaseQueries[User]("user", "users") {
   }
 
   override protected def fromRow(row: Row) = {
-    val id = UuidType.fromRow(row, "id")
-    val username = StringType.fromRow(row, "username")
-    val prefsString = StringType.fromRow(row, "prefs")
+    val id = UuidType(row, "id")
+    val username = StringType(row, "username")
+    val prefsString = StringType(row, "prefs")
     val preferences = JsonSerializers.readPreferences(prefsString)
-    val profile = LoginInfo("credentials", StringType.fromRow(row, "email"))
-    val role = Role.withNameInsensitive(StringType.fromRow(row, "role").trim)
-    val created = TimestampType.fromRow(row, "created")
+    val profile = LoginInfo("credentials", StringType(row, "email"))
+    val role = Role.withNameInsensitive(StringType(row, "role").trim)
+    val created = TimestampType(row, "created")
     User(id, username, preferences, profile, role, created)
   }
 

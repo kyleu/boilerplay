@@ -37,9 +37,9 @@ object DdlQueries extends BaseQueries[DdlFile]("ddl", "ddl") {
   case class DdlStatement(override val sql: String, override val name: String = "ddl.adhoc") extends Statement
 
   override protected def fromRow(row: Row) = DdlFile(
-    id = IntegerType.fromRow(row, "id"),
-    name = StringType.fromRow(row, "name"),
-    sql = StringType.fromRow(row, "sql"),
-    applied = TimestampType.fromRow(row, "applied")
+    id = IntegerType(row, "id"),
+    name = StringType(row, "name"),
+    sql = StringType(row, "sql"),
+    applied = TimestampType(row, "applied")
   )
 }
