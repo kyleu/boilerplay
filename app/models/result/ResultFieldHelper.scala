@@ -1,13 +1,11 @@
 package models.result
 
 import models.database.DatabaseField
-import models.queries.BaseQueries
+import models.queries.EngineHelper
 import models.result.filter._
 import models.result.orderBy.OrderBy
 
 object ResultFieldHelper {
-  private[this] def quote(n: String) = BaseQueries.leftQuote + n + BaseQueries.rightQuote
-
   def sqlForField(t: String, field: String, fields: Seq[DatabaseField]) = fields.find(_.prop == field) match {
     case Some(f) => f.col
     case None => throw new IllegalStateException(s"Invalid $t field [$field]. Allowed fields are [${fields.map(_.prop).mkString(", ")}].")
@@ -25,12 +23,13 @@ object ResultFieldHelper {
     val clauses = filters.map { filter =>
       val col = sqlForField("where clause", filter.k, fields)
       val vals = filter.v.map(_ => "?").mkString(", ")
+      val quoted = EngineHelper.quote(col)
       filter.o match {
-        case Equal => s"${quote(col)} in ($vals)"
-        case NotEqual => s"${quote(col)} not in ($vals)"
-        case Like => "(" + filter.v.map(_ => s"${quote(col)} like ?").mkString(" or ") + ")"
-        case GreaterThanOrEqual => "(" + vals.map(_ => s"${quote(col)} >= ?").mkString(" or ") + ")"
-        case LessThanOrEqual => "(" + vals.map(_ => s"${quote(col)} <= ?").mkString(" or ") + ")"
+        case Equal => s"$quoted in ($vals)"
+        case NotEqual => s"$quoted not in ($vals)"
+        case Like => "(" + filter.v.map(_ => s"$quoted like ?").mkString(" or ") + ")"
+        case GreaterThanOrEqual => "(" + vals.map(_ => s"$quoted >= ?").mkString(" or ") + ")"
+        case LessThanOrEqual => "(" + vals.map(_ => s"$quoted <= ?").mkString(" or ") + ")"
         case x => throw new IllegalStateException(s"Operation [$x] is not currently supported.")
       }
     }

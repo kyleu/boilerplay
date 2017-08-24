@@ -3,10 +3,9 @@ package models.queries.auth
 import java.util.UUID
 
 import models.database._
-import models.queries.BaseQueries
+import models.queries.EngineHelper.quote
 
 object UserSearchQueries {
-  private[this] def quote(s: String) = BaseQueries.leftQuote + s + BaseQueries.rightQuote
   private[this] val tableName = UserQueries.tableName
 
   case class IsUsernameInUse(name: String) extends SingleRowQuery[Boolean] {

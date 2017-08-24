@@ -5,4 +5,4 @@ import models.user.User
 import services.ServiceRegistry
 import util.tracing.TraceData
 
-case class GraphQLContext(app: Application, services: ServiceRegistry, user: User, implicit val trace: TraceData)
+case class GraphQLContext(app: Application, services: ServiceRegistry, user: User, trace: TraceData)

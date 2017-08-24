@@ -5,7 +5,7 @@ import models.result.ResultFieldHelper._
 import models.result.filter.Filter
 import models.result.orderBy.OrderBy
 
-trait SearchQueries[T] { this: BaseQueries[T] =>
+trait SearchQueries[T <: Product] { this: BaseQueries[T] =>
   private[this] def searchClause(q: String) = searchColumns.map(c => s"lower(${quote(c)}::text) like ?").mkString(" or ")
   private[this] def whereClause(filters: Seq[Filter], add: Option[String] = None) = (filterClause(filters, fields), add) match {
     case (Some(fc), Some(a)) => " where (" + fc + ") and (" + a + ")"
@@ -14,9 +14,7 @@ trait SearchQueries[T] { this: BaseQueries[T] =>
     case (None, None) => ""
   }
 
-  protected def onCountAll(filters: Seq[Filter] = Nil) = {
-    new Count(sql = s"select count(*) as c from ${quote(tableName)} ${whereClause(filters)}", values = filters.flatMap(_.v))
-  }
+  protected def onCountAll(filters: Seq[Filter] = Nil) = new Count("all", s"${whereClause(filters)}", filters.flatMap(_.v))
 
   protected case class GetAll(
       filters: Seq[Filter] = Nil, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None
@@ -31,7 +29,8 @@ trait SearchQueries[T] { this: BaseQueries[T] =>
   }
 
   protected case class SearchCount(q: String, filters: Seq[Filter] = Nil) extends Count(
-    sql = s"select count(*) as c from ${quote(tableName)}${whereClause(filters, add = Some(searchClause(q)))}",
+    key = "search",
+    add = whereClause(filters, add = Some(searchClause(q))),
     values = if (q.isEmpty) { filters.flatMap(_.v) } else { filters.flatMap(_.v) ++ searchColumns.map(_ => "%" + q + "%") }
   )
 

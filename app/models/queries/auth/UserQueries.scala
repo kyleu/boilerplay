@@ -18,10 +18,10 @@ object UserQueries extends BaseQueries[User]("user", "users") {
 
   val insert = Insert
   val getByPrimaryKey = GetByPrimaryKey
-  def getByPrimaryKeySeq(idSeq: Seq[UUID]) = new ColSeqQuery("id", idSeq)
+  def getByPrimaryKeySeq(idSeq: Seq[UUID]) = new ColSeqQuery(column = "id", values = idSeq)
 
-  def getByRole(role: Role) = new SeqQuery(s"where ${quote("role")} = ?", Seq(role))
-  def getByRoleSeq(roleSeq: Seq[Role]) = new ColSeqQuery("role", roleSeq.map(_.toString))
+  def getByRole(role: Role) = new ColSeqQuery(column = "role", values = Seq(role))
+  def getByRoleSeq(roleSeq: Seq[Role]) = new ColSeqQuery(column = "role", values = roleSeq.map(_.toString))
 
   def countAll(filters: Seq[Filter] = Nil) = onCountAll(filters)
   def getAll = GetAll

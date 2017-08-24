@@ -4,7 +4,7 @@ import models.database.Statement
 import models.result.ResultFieldHelper
 import models.result.data.DataField
 
-trait MutationQueries[T] { this: BaseQueries[T] =>
+trait MutationQueries[T <: Product] { this: BaseQueries[T] =>
   protected def pkWhereClause = pkColumns.map(x => quote(x) + " = ?").mkString(" and ")
 
   protected case class Insert(model: T) extends Statement {
