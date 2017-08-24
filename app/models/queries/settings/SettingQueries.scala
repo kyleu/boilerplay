@@ -1,5 +1,6 @@
 package models.queries.settings
 
+import models.database.DatabaseFieldType.StringType
 import models.database.{DatabaseField, Row, Statement}
 import models.queries.BaseQueries
 import models.settings.{Setting, SettingKey}
@@ -21,6 +22,6 @@ object SettingQueries extends BaseQueries[Setting]("settings", "setting_values")
     override val values = Seq[Any](s.value, s.key.toString)
   }
 
-  override protected def fromRow(row: Row) = Setting(SettingKey.withName(row.as[String]("k")), row.as[String]("v"))
+  override protected def fromRow(row: Row) = Setting(SettingKey.withName(StringType.fromRow(row, "k")), StringType.fromRow(row, "v"))
   override protected def toDataSeq(s: Setting) = Seq[Any](s.key.toString, s.value)
 }

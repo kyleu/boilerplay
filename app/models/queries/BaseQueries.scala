@@ -3,11 +3,7 @@ package models.queries
 import models.database._
 import util.JodaDateUtils
 
-object BaseQueries {
-  def trim(s: String) = s.replaceAll("""[\s]+""", " ").trim
-}
-
-abstract class BaseQueries[T <: Product](val key: String, val tableName: String) extends SearchQueries[T] with MutationQueries[T] with JodaDateUtils {
+abstract class BaseQueries[T <: Product](val key: String, val tableName: String) extends SearchQueries[T] with MutationQueries[T] {
   def fields: Seq[DatabaseField]
 
   protected def pkColumns = Seq("id")
@@ -22,18 +18,17 @@ abstract class BaseQueries[T <: Product](val key: String, val tableName: String)
   protected lazy val insertSql = s"""insert into ${quote(tableName)} ($quotedColumns) values ($columnPlaceholders)"""
   protected def quote(n: String) = EngineHelper.quote(n)
 
-  protected def updateSql(updateColumns: Seq[String], additionalUpdates: Option[String] = None) = BaseQueries.trim(s"""
-    update ${quote(tableName)} set ${updateColumns.map(x => s"${quote(x)} = ?").mkString(", ")}${additionalUpdates.map(x => s", $x").getOrElse("")} where $pkWhereClause
-  """)
+  protected def updateSql(updateColumns: Seq[String], additionalUpdates: Option[String] = None) = s"""update ${quote(tableName)}
+    |set ${updateColumns.map(x => s"${quote(x)} = ?").mkString(", ")}${additionalUpdates.map(x => s", $x").getOrElse("")}
+    |where $pkWhereClause""".stripMargin.trim
 
   protected def getSql(whereClause: Option[String] = None, orderBy: Option[String] = None, limit: Option[Int] = None, offset: Option[Int] = None) = {
-    BaseQueries.trim(s"""
-      select $quotedColumns from ${quote(tableName)}
-      ${whereClause.map(x => s" where $x").getOrElse("")}
-      ${orderBy.map(x => s" order by $x").getOrElse("")}
-      ${limit.map(x => s" limit $x").getOrElse("")}
-      ${offset.map(x => s" offset $x").getOrElse("")}
-    """)
+    s"""select $quotedColumns from ${quote(tableName)}
+      |${whereClause.map(x => s" where $x").getOrElse("")}
+      |${orderBy.map(x => s" order by $x").getOrElse("")}
+      |${limit.map(x => s" limit $x").getOrElse("")}
+      |${offset.map(x => s" offset $x").getOrElse("")}
+    """.stripMargin.trim
   }
 
   protected case class GetByPrimaryKey(override val values: Seq[Any]) extends FlatSingleRowQuery[T] {

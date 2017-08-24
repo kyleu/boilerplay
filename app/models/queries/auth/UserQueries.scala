@@ -4,7 +4,8 @@ import java.util.UUID
 
 import com.mohiva.play.silhouette.api.LoginInfo
 import models.database._
-import models.queries.BaseQueries
+import models.database.DatabaseFieldType._
+import models.queries.{BaseQueries, EngineHelper}
 import models.result.data.DataField
 import models.result.filter.Filter
 import models.user.{Role, User, UserPreferences}
@@ -66,17 +67,17 @@ object UserQueries extends BaseQueries[User]("user", "users") {
   }
 
   override protected def fromRow(row: Row) = {
-    val id = row.as[UUID]("id")
-    val username = row.as[String]("username")
-    val prefsString = row.as[String]("prefs")
+    val id = UuidType.fromRow(row, "id")
+    val username = StringType.fromRow(row, "username")
+    val prefsString = StringType.fromRow(row, "prefs")
     val preferences = JsonSerializers.readPreferences(prefsString)
-    val profile = LoginInfo("credentials", row.as[String]("email"))
-    val role = Role.withName(row.as[String]("role").trim)
-    val created = fromJoda(row.as[org.joda.time.LocalDateTime]("created"))
+    val profile = LoginInfo("credentials", StringType.fromRow(row, "email"))
+    val role = Role.withNameInsensitive(StringType.fromRow(row, "role").trim)
+    val created = TimestampType.fromRow(row, "created")
     User(id, username, preferences, profile, role, created)
   }
 
-  override protected def toDataSeq(u: User) = {
-    Seq(u.id.toString, u.username, JsonSerializers.writePreferences(u.preferences), u.profile.providerKey, u.role.toString, toJoda(u.created))
-  }
+  override protected def toDataSeq(u: User) = Seq(
+    u.id.toString, u.username, JsonSerializers.writePreferences(u.preferences), u.profile.providerKey, u.role.toString, EngineHelper.toDatabaseFormat(u.created)
+  )
 }

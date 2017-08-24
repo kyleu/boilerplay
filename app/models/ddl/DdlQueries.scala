@@ -1,5 +1,6 @@
 package models.ddl
 
+import models.database.DatabaseFieldType._
 import models.database._
 import models.queries.BaseQueries
 
@@ -36,9 +37,9 @@ object DdlQueries extends BaseQueries[DdlFile]("ddl", "ddl") {
   case class DdlStatement(override val sql: String, override val name: String = "ddl.adhoc") extends Statement
 
   override protected def fromRow(row: Row) = DdlFile(
-    row.as[Int]("id"), row.as[String]("name"), row.as[String]("sql"), fromJoda(row.as[org.joda.time.LocalDateTime]("applied"))
-  )
-  override protected def toDataSeq(f: DdlFile) = Seq(
-    f.id, f.name, f.sql, toJoda(f.applied)
+    id = IntegerType.fromRow(row, "id"),
+    name = StringType.fromRow(row, "name"),
+    sql = StringType.fromRow(row, "sql"),
+    applied = TimestampType.fromRow(row, "applied")
   )
 }
