@@ -1,7 +1,6 @@
 package models.queries
 
 import models.database._
-import util.JodaDateUtils
 
 abstract class BaseQueries[T <: Product](val key: String, val tableName: String) extends SearchQueries[T] with MutationQueries[T] {
   def fields: Seq[DatabaseField]
@@ -65,7 +64,7 @@ abstract class BaseQueries[T <: Product](val key: String, val tableName: String)
     override def reduce(rows: Iterator[Row]) = rows.map(fromRow).toList
   }
 
-  protected class ColCount(column: String, vals: Seq[Any] = Nil) extends Count(column, s"where ${quote(column)} in (${placeholdersFor(vals)})", vals) {
+  protected class ColCount(column: String, values: Seq[Any] = Nil) extends Count(column, s"where ${quote(column)} in (${placeholdersFor(values)})", values) {
     override val name = s"$key.col.$column.count"
   }
 }
