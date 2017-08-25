@@ -1,0 +1,5 @@
+@(debug: Boolean)@if(debug) {
+  <script src="@controllers.routes.Assets.versioned("client-fastopt.js")" type="text/javascript" defer="defer"></script>
+} else {
+  <script src="@controllers.routes.Assets.versioned("client-opt.js")" type="text/javascript" defer="defer"></script>
+}

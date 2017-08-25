@@ -21,16 +21,10 @@
       </ul>
     </div>
   </div>
-
-  @if(debug) {
-    <script src="@controllers.routes.Assets.versioned("client-fastopt.js")" type="text/javascript" defer="defer"></script>
-  } else {
-    <script src="@controllers.routes.Assets.versioned("client-opt.js")" type="text/javascript" defer="defer"></script>
-  }
-
+  @views.html.components.includeScalaJs(debug)
   <script>
     $(function() {
-      window.boilerplay = new Boilerplay();
+      window.socket = new SocketConnection();
     });
   </script>
 

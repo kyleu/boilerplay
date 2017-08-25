@@ -21,7 +21,7 @@ abstract class BaseController(name: String) extends InjectedController with Inst
     block: UserAwareRequest[AuthEnv, AnyContent] => Future[Result]
   )(implicit ec: ExecutionContext) = {
     app.silhouette.UserAwareAction.async { implicit request =>
-      metrics.timer(action).timeFuture {
+      metrics.timer(name + "." + action).timeFuture {
         enhanceRequest(request, None, getTraceData.span)
         block(request)
       }
@@ -36,7 +36,7 @@ abstract class BaseController(name: String) extends InjectedController with Inst
         case Some(u) => if (admin && u.role != Role.Admin) {
           failRequest(request)
         } else {
-          metrics.timer(action).timeFuture {
+          metrics.timer(name + "." + action).timeFuture {
             enhanceRequest(request, Some(u), getTraceData.span)
             val r = SecuredRequest(u, request.authenticator.get, request)
             block(r)

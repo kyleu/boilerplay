@@ -1,4 +1,4 @@
-package util
+package services.socket
 
 import org.scalajs.dom.raw._
 

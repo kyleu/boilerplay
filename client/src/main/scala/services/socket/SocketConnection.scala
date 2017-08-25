@@ -1,18 +1,22 @@
+package services.socket
+
 import org.scalajs.jquery.{jQuery => $}
-import services.{InitService, NotificationService}
+import scribe.Logging
+import services.NotificationService
+import util.LoggingErrorHandler
 
 import scala.scalajs.js.annotation.JSExportTopLevel
 
-@JSExportTopLevel("Boilerplay")
-class Boilerplay extends NetworkHelper with ResponseMessageHelper {
-  val debug = true
-
-  InitService.init(sendMessage, connect _)
+@JSExportTopLevel("SocketConnection")
+class SocketConnection() extends Logging with NetworkHelper with ResponseMessageHelper {
+  LoggingErrorHandler.install()
+  NetworkMessage.register(sendMessage)
+  logger.debug(util.Config.projectName + " is connecting...")
+  connect()
 
   protected[this] def handleServerError(reason: String, content: String) = {
     val lp = $("#loading-panel")
-    val isLoading = lp.css("display") == "block"
-    if (isLoading) {
+    if (lp.css("display") == "block") {
       $("#tab-loading").text("Connection Error")
       val c = $("#loading-content", lp)
       c.text(s"Error loading database ($reason): $content")

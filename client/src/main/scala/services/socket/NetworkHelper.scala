@@ -1,16 +1,20 @@
+package services.socket
+
 import models.{Ping, RequestMessage}
-import services.NavigationService
-import util._
+import util.{DateUtils, JsonSerializers}
 
 import scala.scalajs.js.timers._
 
-trait NetworkHelper { this: Boilerplay =>
+trait NetworkHelper { this: SocketConnection =>
   private[this] val socket = new NetworkSocket(onSocketConnect _, onSocketMessage, onSocketError, onSocketClose _)
 
   protected[this] var latencyMs: Option[Int] = None
 
   protected def connect() = {
-    socket.open(NavigationService.socketUrl)
+    val loc = org.scalajs.dom.document.location
+    val wsProtocol = if (loc.protocol == "https:") { "wss" } else { "ws" }
+    val socketUrl = s"$wsProtocol://${loc.host}/connect"
+    socket.open(socketUrl)
   }
 
   private def sendPing(): Unit = {
@@ -23,11 +27,11 @@ trait NetworkHelper { this: Boilerplay =>
   setTimeout(1000)(sendPing())
 
   protected[this] def onSocketConnect(): Unit = {
-    Logging.debug("Socket connected.")
+    logger.debug("Socket connected.")
   }
 
   protected[this] def onSocketError(error: String): Unit = {
-    Logging.error(s"Socket error [$error].")
+    logger.error(s"Socket error [$error].")
   }
 
   protected[this] def onSocketClose(): Unit = {
@@ -45,7 +49,7 @@ trait NetworkHelper { this: Boilerplay =>
 
   def sendMessage(rm: RequestMessage): Unit = {
     if (socket.isConnected) {
-      val json = JsonSerializers.writeRequestMessage(rm, debug)
+      val json = JsonSerializers.writeRequestMessage(rm, debug = true)
       socket.send(json)
     } else {
       throw new IllegalStateException("Not connected.")
