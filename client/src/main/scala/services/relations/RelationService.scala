@@ -9,13 +9,10 @@ class RelationService(url: String) extends Logging {
   logger.info(s"Relation service running, using [$url].")
 
   private[this] def onOpen(el: JQuery) = {
-    val header = $(".collapsible-header", el)
     val body = $(".collapsible-body", el)
-
-    val url = el.data("url")
-
-    if ($(".todo", body).length == 0) {
-      body.html("<div class=\"todo\">Loaded!</div>")
+    if ($("table", body).length == 0) {
+      val url = el.data("url").toString
+      $.get(url = url, data = scalajs.js.Dynamic.literal(), success = (data: String) => body.html(data))
       logger.info("Initialized.")
     } else {
       logger.info("Cached.")
