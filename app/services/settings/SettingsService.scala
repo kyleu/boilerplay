@@ -22,7 +22,7 @@ class SettingsService @javax.inject.Inject() (tracing: TracingService) {
     }
   }
 
-  def load()(implicit trace: TraceData) = tracing.trace("load") { td =>
+  def load()(implicit trace: TraceData) = tracing.trace("settings.service.load") { td =>
     MasterDatabase.query(SettingQueries.getAll())(td).map(_.map(s => s.key -> s.value).toMap).map { x =>
       settingsMap = x
       settings = SettingKey.values.map(k => Setting(k, settingsMap.getOrElse(k, k.default)))
@@ -34,7 +34,7 @@ class SettingsService @javax.inject.Inject() (tracing: TracingService) {
   def getAll = Future.successful(settings)
   def getOverrides = settings.filter(s => isOverride(s.key))
 
-  def set(key: SettingKey, value: String)(implicit trace: TraceData) = tracing.trace("set") { td =>
+  def set(key: SettingKey, value: String)(implicit trace: TraceData) = tracing.trace("settings.service.set") { td =>
     val s = Setting(key, value)
     val f = if (s.isDefault) {
       settingsMap = settingsMap - key

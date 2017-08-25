@@ -1,4 +1,6 @@
-@(user: Option[models.user.User], title: String, scripts: Seq[String] = Nil, stylesheets: Seq[String] = Nil)(content: Html)(implicit session: Session, flash: Flash)@basic(
+@(user: Option[models.user.User], title: String, scripts: Seq[String] = Nil, stylesheets: Seq[String] = Nil)(content: Html)(
+    implicit session: Session, flash: Flash, traceData: util.tracing.TraceData
+)@views.html.layout.basic(
   user,
   title,
   scripts = Seq(

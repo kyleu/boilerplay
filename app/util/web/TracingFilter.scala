@@ -16,10 +16,7 @@ object TracingFilter {
 
   val paramAwareRequestNamer: RequestHeader => String = { reqHeader =>
     import org.apache.commons.lang3.StringUtils
-    val pathPattern = StringUtils.replace(
-      reqHeader.attrs.get(Router.Attrs.HandlerDef).map(_.path).getOrElse(reqHeader.path),
-      "<[^/]+>", ""
-    )
+    val pathPattern = StringUtils.replace(reqHeader.attrs.get(Router.Attrs.HandlerDef).map(_.path).getOrElse(reqHeader.path), "<[^/]+>", "")
     s"${reqHeader.method} - $pathPattern"
   }
 }
@@ -38,6 +35,12 @@ class TracingFilter @Inject() (tracingService: TracingService)(implicit val mat:
     serverSpan.tag(TraceKeys.HTTP_PATH, req.path)
     serverSpan.tag(TraceKeys.HTTP_METHOD, req.method)
     serverSpan.tag(TraceKeys.HTTP_HOST, req.host)
+    if (req.queryString.nonEmpty) {
+      serverSpan.tag("http.query.string", req.rawQueryString)
+    }
+    req.queryString.foreach {
+      case (k, v) => serverSpan.tag(s"http.query.$k", v.mkString(", "))
+    }
 
     val result = nextFilter(req.addAttr(TracingFilter.traceKey, TraceData(serverSpan)))
     result.onComplete {

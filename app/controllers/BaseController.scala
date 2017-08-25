@@ -22,8 +22,10 @@ abstract class BaseController(name: String) extends InjectedController with Inst
   )(implicit ec: ExecutionContext) = {
     app.silhouette.UserAwareAction.async { implicit request =>
       metrics.timer(name + "." + action).timeFuture {
-        enhanceRequest(request, None, getTraceData.span)
-        block(request)
+        app.tracing.trace(name + ".controller." + action) { td =>
+          enhanceRequest(request, request.identity, td.span)
+          block(request)
+        }(getTraceData)
       }
     }
   }
@@ -37,9 +39,11 @@ abstract class BaseController(name: String) extends InjectedController with Inst
           failRequest(request)
         } else {
           metrics.timer(name + "." + action).timeFuture {
-            enhanceRequest(request, Some(u), getTraceData.span)
-            val r = SecuredRequest(u, request.authenticator.get, request)
-            block(r)
+            app.tracing.trace(name + ".controller." + action) { td =>
+              enhanceRequest(request, Some(u), td.span)
+              val r = SecuredRequest(u, request.authenticator.get, request)
+              block(r)
+            }(getTraceData)
           }
         }
         case None => failRequest(request)
@@ -56,7 +60,7 @@ abstract class BaseController(name: String) extends InjectedController with Inst
   }
 
   private[this] def enhanceRequest(request: Request[AnyContent], user: Option[User], trace: Span) = {
-    trace.tag(TraceKeys.HTTP_REQUEST_SIZE, request.body.asRaw.size.toString)
+    trace.tag(TraceKeys.HTTP_REQUEST_SIZE, request.body.asText.map(_.length).orElse(request.body.asRaw.map(_.size)).getOrElse(0).toString)
     user.foreach { u =>
       trace.tag("user.id", u.id.toString)
       trace.tag("user.username", u.username)

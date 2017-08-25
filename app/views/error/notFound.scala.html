@@ -1,4 +1,6 @@
-@(path: String)(implicit session: Session, flash: Flash)@layout.materialize(None, "Page Not Found") {
+@(path: String)(
+    implicit session: Session, flash: Flash, traceData: util.tracing.TraceData
+)@traceData.logViewClass(getClass)@layout.materialize(None, "Page Not Found") {
   <div class="text-centered">
     <h1>@path</h1>
     <div class="text-large"><em>Page Not Found</em></div>

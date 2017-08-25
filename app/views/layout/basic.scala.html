@@ -3,7 +3,7 @@
   title: String,
   scripts: Seq[String] = Nil,
   stylesheets: Seq[String] = Nil
-)(content: Html)(implicit session: Session, flash: Flash)<!DOCTYPE html>
+)(content: Html)(implicit session: Session, flash: Flash, traceData: util.tracing.TraceData)<!DOCTYPE html>
 <html>
   <head>
     <title>@title</title>
@@ -25,6 +25,8 @@
     @for(script <- scripts) {<script src="@script"></script>}
     @for(stylesheet <- stylesheets) {<link rel="stylesheet" media="screen" href="@stylesheet" />}
   </head>
-  <body>@content
+  <body>
+    @content
   </body>
+  <!-- Trace @traceData.span.context.traceId / @traceData.span.context.spanId (@traceData.span.context.sampled) -->
 </html>
