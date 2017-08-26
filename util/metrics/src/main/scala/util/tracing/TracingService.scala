@@ -35,32 +35,36 @@ class TracingService @javax.inject.Inject() (actorSystem: ActorSystem, cnf: Metr
   private[this] val ctx = MDCCurrentTraceContext.create()
   val tracing = Tracing.newBuilder().localServiceName(cnf.tracingService).reporter(reporter).currentTraceContext(ctx).traceId128Bit(true).sampler(samp).build()
   tracing.setNoop(!cnf.tracingEnabled)
-
   private[this] val tracer: Tracer = tracing.tracer
-
   log.info(s"Tracing enabled, sending results to [${cnf.tracingServer}:${cnf.tracingPort}@${cnf.tracingService}] using sample rate [${cnf.tracingSampleRate}].")
 
-  def traceBlocking[A](traceName: String, tags: (String, String)*)(f: TraceData => A)(implicit parentData: TraceData) = {
+  def newServerSpan(traceName: String, tags: (String, String)*)(implicit parentData: TraceData) = {
     val childSpan = tracer.newChild(parentData.span.context()).name(traceName).kind(Span.Kind.SERVER)
     tags.foreach { case (key, value) => childSpan.tag(key, value) }
-    childSpan.start()
+    childSpan.start().tag("thread.id", Thread.currentThread.getName)
+  }
+
+  def traceBlocking[A](traceName: String, tags: (String, String)*)(f: TraceData => A)(implicit parentData: TraceData) = {
+    val childSpan = newServerSpan(traceName, tags: _*)
     Try(f(TraceData(childSpan))) match {
       case Success(result) =>
         childSpan.finish()
         result
       case Failure(t) =>
-        childSpan.tag("exception", s"${t.getClass.getSimpleName.stripSuffix("$")}: [${t.getMessage}].")
+        childSpan.tag("error.type", t.getClass.getSimpleName.stripSuffix("$"))
+        childSpan.tag("error.message", t.getMessage)
         childSpan.finish()
         throw t
     }
   }
+
   def trace[A](traceName: String, tags: (String, String)*)(f: TraceData => Future[A])(implicit parentData: TraceData) = {
-    val childSpan = tracer.newChild(parentData.span.context()).name(traceName).kind(Span.Kind.SERVER)
-    tags.foreach { case (key, value) => childSpan.tag(key, value) }
-    childSpan.start()
+    val childSpan = newServerSpan(traceName, tags: _*)
     val result = f(TraceData(childSpan))
     result.onComplete {
-      case Failure(t) => childSpan.tag("failed", s"Finished with exception: ${t.getMessage}").finish()
+      case Failure(t) =>
+        childSpan.tag("error.type", t.getClass.getSimpleName.stripSuffix("$"))
+        childSpan.tag("error.message", t.getMessage)
       case _ => childSpan.finish()
     }
     result
