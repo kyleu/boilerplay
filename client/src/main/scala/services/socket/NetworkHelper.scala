@@ -1,6 +1,7 @@
 package services.socket
 
 import models.{Ping, RequestMessage}
+import services.Logging
 import util.{DateUtils, JsonSerializers}
 
 import scala.scalajs.js.timers._
@@ -27,11 +28,11 @@ trait NetworkHelper { this: SocketConnection =>
   setTimeout(1000)(sendPing())
 
   protected[this] def onSocketConnect(): Unit = {
-    logger.debug("Socket connected.")
+    Logging.debug("Socket connected.")
   }
 
   protected[this] def onSocketError(error: String): Unit = {
-    logger.error(s"Socket error [$error].")
+    Logging.error(s"Socket error [$error].")
   }
 
   protected[this] def onSocketClose(): Unit = {

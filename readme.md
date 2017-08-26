@@ -90,7 +90,6 @@ Boilerplay relies on a whole lot of tremendous open source projects. Here's a fe
 * [Materialize CSS](http://materializecss.com)
 * [Enumeratum](https://github.com/lloydmeta/enumeratum)
 * [circe](https://circe.github.io/circe)
-* [Scalatags](https://github.com/lihaoyi/scalatags)
 * [Postgres-async](https://github.com/mauricio/postgresql-async)
 * [Silhouette](https://www.silhouette.rocks)
 * [Dropwizard Metrics](http://metrics.dropwizard.io)

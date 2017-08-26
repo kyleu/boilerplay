@@ -2,13 +2,12 @@ package services.relations
 
 import scala.scalajs.js.annotation.JSExportTopLevel
 import org.scalajs.jquery.{JQuery, JQueryEventObject, jQuery => $}
-import scribe.Logging
-import services.InitService
+import services.{InitService, Logging}
 
 @JSExportTopLevel("RelationService")
-class RelationService(url: String) extends Logging {
+class RelationService(url: String) {
   InitService.initIfNeeded()
-  logger.info(s"Relation service running, using [$url].")
+  Logging.info(s"Relation service running, using [$url].")
 
   private[this] def onComplete(body: JQuery, data: String): Unit = {
     body.html(data)
@@ -29,9 +28,9 @@ class RelationService(url: String) extends Logging {
     if ($("table", body).length == 0) {
       val url = el.data("url").toString
       call(body, url)
-      logger.info("Initialized.")
+      Logging.info("Initialized.")
     } else {
-      logger.info("Cached.")
+      Logging.info("Cached.")
     }
   }
 

@@ -74,13 +74,11 @@ object Dependencies {
 
   object ScalaJS {
     val jQueryVersion = "0.9.2"
-    val scalaTagsVersion = "0.6.5"
   }
 
   object Utils {
     val scapegoatVersion = "1.3.1"
     val enumeratumVersion = "1.5.14"
-    val scribeVersion = "1.4.5"
 
     val betterFiles = "com.github.pathikrit" %% "better-files" % "3.0.0"
     val commonsIo = "commons-io" % "commons-io" % "2.5"

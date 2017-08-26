@@ -1,6 +1,7 @@
 package services.socket
 
 import models._
+import services.Logging
 import services.ui.UserManager
 import util.DateUtils
 
@@ -10,6 +11,6 @@ trait ResponseMessageHelper { this: SocketConnection =>
     case us: UserSettings => UserManager.onUserSettings(us)
 
     case se: ServerError => handleServerError(se.reason, se.content)
-    case _ => logger.warn(s"Received unknown message of type [${rm.getClass.getSimpleName}].")
+    case _ => Logging.warn(s"Received unknown message of type [${rm.getClass.getSimpleName}].")
   }
 }
