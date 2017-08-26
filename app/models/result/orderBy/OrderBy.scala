@@ -12,6 +12,8 @@ object OrderBy {
     def fromBoolAsc(b: Boolean) = if (b) { Ascending } else { Descending }
     override val values = findValues
   }
+
+  def forVals(col: Option[String], asc: Boolean) = col.map(c => OrderBy(col = c, dir = OrderBy.Direction.fromBoolAsc(asc)))
 }
 
 case class OrderBy(

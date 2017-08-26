@@ -21,7 +21,7 @@ class UserEditController @javax.inject.Inject() (override val app: Application) 
   def list(q: Option[String], orderBy: Option[String], orderAsc: Boolean, limit: Option[Int], offset: Option[Int]) = {
     withSession("user.list", admin = true) { implicit request =>
       val startMs = util.DateUtils.nowMillis
-      val orderBys = orderBy.map(o => OrderBy(col = o, dir = OrderBy.Direction.fromBoolAsc(orderAsc))).toSeq
+      val orderBys = OrderBy.forVals(col = orderBy, asc = orderAsc).toSeq
       val f = q match {
         case Some(query) if query.nonEmpty => app.userService.searchWithCount(query, Nil, orderBys, limit.orElse(Some(100)), offset)
         case _ => app.userService.getAllWithCount(Nil, orderBys, limit.orElse(Some(100)), offset)

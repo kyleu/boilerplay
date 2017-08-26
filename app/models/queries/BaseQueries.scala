@@ -21,14 +21,13 @@ abstract class BaseQueries[T <: Product](val key: String, val tableName: String)
     |set ${updateColumns.map(x => s"${quote(x)} = ?").mkString(", ")}${additionalUpdates.map(x => s", $x").getOrElse("")}
     |where $pkWhereClause""".stripMargin.trim
 
-  protected def getSql(whereClause: Option[String] = None, orderBy: Option[String] = None, limit: Option[Int] = None, offset: Option[Int] = None) = {
-    s"""select $quotedColumns from ${quote(tableName)}
-      |${whereClause.map(x => s" where $x").getOrElse("")}
-      |${orderBy.map(x => s" order by $x").getOrElse("")}
-      |${limit.map(x => s" limit $x").getOrElse("")}
-      |${offset.map(x => s" offset $x").getOrElse("")}
-    """.stripMargin.trim
-  }
+  protected def getSql(whereClause: Option[String] = None, orderBy: Option[String] = None, limit: Option[Int] = None, offset: Option[Int] = None) = Seq(
+    Some(s"select $quotedColumns from ${quote(tableName)}"),
+    whereClause.map(x => s" where $x"),
+    orderBy.map(x => s" order by $x"),
+    limit.map(x => s" limit $x"),
+    offset.map(x => s" offset $x")
+  ).flatten.mkString(" ")
 
   protected case class GetByPrimaryKey(override val values: Seq[Any]) extends FlatSingleRowQuery[T] {
     override val name = s"$key.get.by.primary.key"

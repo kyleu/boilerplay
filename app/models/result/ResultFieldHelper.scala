@@ -11,7 +11,7 @@ object ResultFieldHelper {
     case None => throw new IllegalStateException(s"Invalid $t field [$field]. Allowed fields are [${fields.map(_.prop).mkString(", ")}].")
   }
 
-  def orderClause(orderBys: Seq[OrderBy], fields: Seq[DatabaseField]) = if (orderBys.isEmpty) {
+  def orderClause(fields: Seq[DatabaseField], orderBys: OrderBy*) = if (orderBys.isEmpty) {
     None
   } else {
     Some(orderBys.map(orderBy => sqlForField("order by", orderBy.col, fields) + " " + orderBy.dir.sql).mkString(", "))
@@ -40,6 +40,6 @@ object ResultFieldHelper {
     filters: Seq[Filter], orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None,
     fields: Seq[DatabaseField] = Nil, add: Option[String] = None
   ) = {
-    filterClause(filters, fields, add) -> orderClause(orderBys, fields)
+    filterClause(filters, fields, add) -> orderClause(fields, orderBys: _*)
   }
 }

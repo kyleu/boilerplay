@@ -1,18 +1,32 @@
 package services.relations
 
 import scala.scalajs.js.annotation.JSExportTopLevel
-import org.scalajs.jquery.{JQuery, jQuery => $}
+import org.scalajs.jquery.{JQuery, JQueryEventObject, jQuery => $}
 import scribe.Logging
 
 @JSExportTopLevel("RelationService")
 class RelationService(url: String) extends Logging {
   logger.info(s"Relation service running, using [$url].")
 
+  private[this] def onComplete(body: JQuery, data: String): Unit = {
+    body.html(data)
+    $(".sort-link, .next-link", body).click { e: JQueryEventObject =>
+      val jq = $(e.currentTarget)
+      val href = jq.attr("href").toString
+      call(body, href)
+      false
+    }
+  }
+
+  private[this] def call(body: JQuery, url: String): Unit = {
+    $.get(url = url, data = scalajs.js.Dynamic.literal(), success = (data: String) => onComplete(body, data))
+  }
+
   private[this] def onOpen(el: JQuery) = {
     val body = $(".collapsible-body", el)
     if ($("table", body).length == 0) {
       val url = el.data("url").toString
-      $.get(url = url, data = scalajs.js.Dynamic.literal(), success = (data: String) => body.html(data))
+      call(body, url)
       logger.info("Initialized.")
     } else {
       logger.info("Cached.")

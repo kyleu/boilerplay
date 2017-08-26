@@ -1,0 +1,33 @@
+@(
+    cols: Seq[(String, String)], rows: Seq[Html], modelPlural: String,
+    orderByUrl: Option[(Option[String], Boolean) => Call], orderBy: Option[String], orderAsc: Boolean
+)<table>
+  <thead>
+    <tr>
+      @cols.map { col =>
+        @orderByUrl.map { u =>
+          @if(orderBy.contains(col._1)) {
+            @if(orderAsc) {
+              <th><a class="sort-link theme-text" href="@u(Some(col._1), !orderAsc)">@col._2 <i class="fa @models.template.Icons.sortAsc"></i></a></th>
+            } else {
+              <th><a class="sort-link theme-text" href="@u(Some(col._1), !orderAsc)">@col._2 <i class="fa @models.template.Icons.sortDesc"></i></a></th>
+            }
+          } else {
+            <th><a class="sort-link theme-text" href="@u(Some(col._1), true)">@col._2</a></th>
+          }
+        }
+        @if(orderByUrl.isEmpty) {
+          <th>@col._2</th>
+        }
+      }
+    </tr>
+  </thead>
+  <tbody>
+    @rows.map { row =>
+      @row
+    }
+    @if(rows.isEmpty) {
+      <th colspan="@cols.length">The system couldn't find any matching @modelPlural.</th>
+    }
+  </tbody>
+</table>

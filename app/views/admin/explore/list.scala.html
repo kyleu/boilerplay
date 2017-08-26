@@ -4,10 +4,10 @@
     modelPlural: String,
     icon: String,
     cols: Seq[(String, String)],
+    totalCount: Option[Int] = None,
+    rows: Seq[Html],
     orderBy: Option[String] = None,
     orderAsc: Boolean = true,
-    rows: Seq[Html],
-    totalCount: Option[Int] = None,
     newUrl: Option[Call] = None,
     orderByUrl: Option[(Option[String], Boolean) => Call] = None,
     searchUrl: Option[Call] = None,
@@ -15,72 +15,51 @@
     limit: Int = 100,
     offset: Int = 0,
     section: String = "explore",
-    q: Option[String] = None
+    q: Option[String] = None,
+    fullUI: Boolean = true
 )(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
-)@traceData.logViewClass(getClass)@layout.admin(user, section, s"$model Management") {
-  <div class="collection with-header">
-    <div class="collection-header">
-      @searchUrl.map { search =>
-        <div class="right">
-          <form action="@search" method="get">
-            <input type="text" name="q" placeholder="Search @modelPlural" value="@q.getOrElse("")" />
-          </form>
-        </div>
-      }
-      <h5>
-        <i class="fa @icon" style="margin-right: 6px;"></i>
-        @totalCount.map { total =>
-          @util.NumberUtils.withCommas(total)
+)@traceData.logViewClass(getClass)@if(fullUI) {
+  @layout.admin(user, section, s"$model Management") {
+    <div class="collection with-header">
+      <div class="collection-header">
+        @searchUrl.map { search =>
+          <div class="right">
+            <form action="@search" method="get">
+              <input type="text" name="q" placeholder="Search @modelPlural" value="@q.getOrElse("")" />
+            </form>
+          </div>
         }
-        @{modelPlural}
-        @q.map { query =>
-          @if(query.trim.nonEmpty) {
-            matching [@query]
+        <h5>
+          <i class="fa @icon" style="margin-right: 6px;"></i>
+          @totalCount.map { total =>
+            @util.NumberUtils.withCommas(total)
           }
+          @{modelPlural}
+          @q.map { query =>
+            @if(query.trim.nonEmpty) {
+              matching [@query]
+            }
+          }
+        </h5>
+        @if(offset > 0) {
+          <em>Page @((offset / limit) + 1) </em>
         }
-      </h5>
-      @if(offset > 0) {
-        <em>Page @((offset / limit) + 1) </em>
-      }
-      @newUrl.map { nu =>
-        (<a class="theme-text" href="@nu">add new</a>)
-      }
+        @newUrl.map { nu =>
+          (<a class="theme-text" href="@nu">add new</a>)
+        }
+      </div>
+      <div class="collection-item">
+      @views.html.admin.explore.listTable(cols, rows, modelPlural, orderByUrl, orderBy, orderAsc)
+      </div>
     </div>
-    <div class="collection-item">
-      <table>
-        <thead>
-          <tr>
-          @cols.map { col =>
-            @orderByUrl.map { u =>
-              @if(orderBy.contains(col._1)) {
-                @if(orderAsc) {
-                  <th><a href="@u(Some(col._1), !orderAsc)" class="theme-text">@col._2 <i class="fa @models.template.Icons.sortAsc"></i></a></th>
-                } else {
-                  <th><a href="@u(Some(col._1), !orderAsc)" class="theme-text">@col._2 <i class="fa @models.template.Icons.sortDesc"></i></a></th>
-                }
-              } else {
-                <th><a href="@u(Some(col._1), true)" class="theme-text">@col._2</a></th>
-              }
-            }
-            @if(orderByUrl.isEmpty) {
-              <th>@col._2</th>
-            }
-          }
-          </tr>
-        </thead>
-        <tbody>
-          @rows.map { row =>
-            @row
-          }
-          @if(rows.isEmpty) {
-            <th colspan="@cols.length">The system couldn't find any matching @modelPlural.</th>
-            }
-        </tbody>
-      </table>
-    </div>
-  </div>
+    @if(rows.size >= limit) {
+      <div style="text-align: center;"><a class="next-link theme-text" href="@nextUrl">Next Page</a></div>
+    }
+  }
+} else {
+  @views.html.admin.explore.listTable(cols, rows, modelPlural, orderByUrl, orderBy, orderAsc)
   @if(rows.size >= limit) {
-    <div  style="text-align: center;"><a href="@nextUrl" class="theme-text">Next Page</a></div>
+    <div style="text-align: right"><a class="next-link theme-text" href="@nextUrl">Next Page</a></div>
   }
 }
