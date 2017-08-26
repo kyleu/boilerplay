@@ -17,11 +17,11 @@ import scala.concurrent.Future
 class GraphQLController @javax.inject.Inject() (override val app: Application, graphQLService: GraphQLService) extends BaseController("graphql") {
   import app.contexts.webContext
 
-  def graphql(query: Option[String], variables: Option[String]) = withSession("graphql.ui", admin = true) { implicit request =>
+  def graphql(query: Option[String], variables: Option[String]) = withSession("graphql.ui", admin = true) { implicit request => implicit td =>
     Future.successful(Ok(views.html.admin.graphql.graphiql(request.identity)))
   }
 
-  def graphqlBody = withSession("graphql.post", admin = true) { implicit request =>
+  def graphqlBody = withSession("graphql.post", admin = true) { implicit request => implicit td =>
     val json = {
       import sangria.marshalling.playJson._
       val playJson = request.body.asJson.getOrElse(play.api.libs.json.JsObject.empty)

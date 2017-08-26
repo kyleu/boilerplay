@@ -14,7 +14,7 @@ import scala.concurrent.Future
 class SearchController @javax.inject.Inject() (override val app: Application, services: ServiceRegistry) extends BaseController("search") {
   import app.contexts.webContext
 
-  def search(q: String) = withSession("admin.search", admin = true) { implicit request =>
+  def search(q: String) = withSession("admin.search", admin = true) { implicit request => implicit td =>
     val resultF = try {
       searchInt(q, q.toInt)
     } catch {

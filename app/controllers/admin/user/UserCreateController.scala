@@ -21,12 +21,12 @@ class UserCreateController @javax.inject.Inject() (
 ) extends BaseController("user.create") {
   import app.contexts.webContext
 
-  def createForm = withSession("user.createForm", admin = true) { implicit request =>
+  def createForm = withSession("user.createForm", admin = true) { implicit request => implicit td =>
     val call = controllers.admin.user.routes.UserCreateController.create()
     Future.successful(Ok(views.html.admin.user.userForm(request.identity, models.user.User.empty, "New User", call, isNew = true)))
   }
 
-  def create() = withSession("user.create", admin = true) { implicit request =>
+  def create() = withSession("user.create", admin = true) { implicit request => implicit td =>
     val form = FormUtils.getForm(request)
     val id = UUID.randomUUID
     val loginInfo = LoginInfo(CredentialsProvider.ID, form("email").trim)

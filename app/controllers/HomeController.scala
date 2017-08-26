@@ -23,7 +23,7 @@ class HomeController @javax.inject.Inject() (
 
   private[this] implicit val t = new MessageFrameFormatter(app.config.debug).transformer
 
-  def home() = withSession("home") { implicit request =>
+  def home() = withSession("home") { implicit request => implicit td =>
     Future.successful(Ok(views.html.index(request.identity, app.config.debug)))
   }
 
@@ -43,15 +43,15 @@ class HomeController @javax.inject.Inject() (
     Future.successful(MovedPermanently(s"/$path"))
   }
 
-  def externalLink(url: String) = withSession("external.link") { implicit request =>
+  def externalLink(url: String) = withSession("external.link") { implicit request => implicit td =>
     Future.successful(Redirect(if (url.startsWith("http")) { url } else { "http://" + url }))
   }
 
-  def ping(timestamp: Long) = withSession("ping") { implicit request =>
+  def ping(timestamp: Long) = withSession("ping") { implicit request => implicit td =>
     Future.successful(Ok(timestamp.toString))
   }
 
-  def robots() = withSession("robots") { implicit request =>
+  def robots() = withSession("robots") { implicit request => implicit td =>
     Future.successful(Ok("User-agent: *\nDisallow: /"))
   }
 }

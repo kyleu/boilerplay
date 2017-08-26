@@ -20,11 +20,11 @@ class ProfileController @javax.inject.Inject() (
 ) extends BaseController("profile") {
   import app.contexts.webContext
 
-  def view = withSession("view") { implicit request =>
+  def view = withSession("view") { implicit request => implicit td =>
     Future.successful(Ok(views.html.profile.view(request.identity)))
   }
 
-  def save = withSession("view") { implicit request =>
+  def save = withSession("view") { implicit request => implicit td =>
     UserForms.profileForm.bindFromRequest.fold(
       _ => Future.successful(BadRequest(views.html.profile.view(request.identity))),
       profileData => {
@@ -38,11 +38,11 @@ class ProfileController @javax.inject.Inject() (
     )
   }
 
-  def changePasswordForm = withSession("change-password-form") { implicit request =>
+  def changePasswordForm = withSession("change-password-form") { implicit request => implicit td =>
     Future.successful(Ok(views.html.profile.changePassword(request.identity)))
   }
 
-  def changePassword = withSession("change-password") { implicit request =>
+  def changePassword = withSession("change-password") { implicit request => implicit td =>
     def errorResponse(msg: String) = Redirect(controllers.routes.ProfileController.changePasswordForm()).flashing("error" -> msg)
     UserForms.changePasswordForm.bindFromRequest().fold(
       formWithErrors => {

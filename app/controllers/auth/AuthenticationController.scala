@@ -19,13 +19,13 @@ class AuthenticationController @javax.inject.Inject() (
 ) extends BaseController("authentication") {
   import app.contexts.webContext
 
-  def signInForm = withoutSession("form") { implicit request =>
+  def signInForm = withoutSession("form") { implicit request => implicit td =>
     //val src = request.headers.get("Referer").filter(_.contains(request.host))
     val resp = Ok(views.html.auth.signin(request.identity, UserForms.signInForm, app.settingsService.allowRegistration))
     Future.successful(resp)
   }
 
-  def authenticateCredentials = withoutSession("authenticate") { implicit request =>
+  def authenticateCredentials = withoutSession("authenticate") { implicit request => implicit td =>
     UserForms.signInForm.bindFromRequest.fold(
       form => Future.successful(BadRequest(views.html.auth.signin(request.identity, form, app.settingsService.allowRegistration))),
       credentials => {
@@ -53,7 +53,7 @@ class AuthenticationController @javax.inject.Inject() (
     )
   }
 
-  def signOut = withSession("signout") { implicit request =>
+  def signOut = withSession("signout") { implicit request => implicit td =>
     implicit val result = Redirect(controllers.routes.HomeController.home())
     app.silhouette.env.eventBus.publish(LogoutEvent(request.identity, request))
     app.silhouette.env.authenticatorService.discard(request.authenticator, result)

@@ -10,6 +10,7 @@ import play.api.mvc._
 import util.metrics.Instrumented
 import util.web.TracingFilter
 import util.Logging
+import util.tracing.TraceData
 import zipkin.TraceKeys
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -18,20 +19,20 @@ abstract class BaseController(name: String) extends InjectedController with Inst
   protected def app: Application
 
   protected def withoutSession(action: String)(
-    block: UserAwareRequest[AuthEnv, AnyContent] => Future[Result]
+    block: UserAwareRequest[AuthEnv, AnyContent] => TraceData => Future[Result]
   )(implicit ec: ExecutionContext) = {
     app.silhouette.UserAwareAction.async { implicit request =>
       metrics.timer(name + "." + action).timeFuture {
         app.tracing.trace(name + ".controller." + action) { td =>
           enhanceRequest(request, request.identity, td.span)
-          block(request)
+          block(request)(td)
         }(getTraceData)
       }
     }
   }
 
   protected def withSession(action: String, admin: Boolean = false)(
-    block: SecuredRequest[AuthEnv, AnyContent] => Future[Result]
+    block: SecuredRequest[AuthEnv, AnyContent] => TraceData => Future[Result]
   )(implicit ec: ExecutionContext) = {
     app.silhouette.UserAwareAction.async { implicit request =>
       request.identity match {
@@ -42,7 +43,7 @@ abstract class BaseController(name: String) extends InjectedController with Inst
             app.tracing.trace(name + ".controller." + action) { td =>
               enhanceRequest(request, Some(u), td.span)
               val r = SecuredRequest(u, request.authenticator.get, request)
-              block(r)
+              block(r)(td)
             }(getTraceData)
           }
         }
@@ -51,7 +52,7 @@ abstract class BaseController(name: String) extends InjectedController with Inst
     }
   }
 
-  protected implicit def getTraceData(implicit requestHeader: RequestHeader) = requestHeader.attrs(TracingFilter.traceKey)
+  protected def getTraceData(implicit requestHeader: RequestHeader) = requestHeader.attrs(TracingFilter.traceKey)
 
   protected def modelForm(rawForm: Option[Map[String, Seq[String]]]) = {
     val form = rawForm.getOrElse(Map.empty).mapValues(_.head)

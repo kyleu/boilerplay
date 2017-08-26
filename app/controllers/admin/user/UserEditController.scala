@@ -19,7 +19,7 @@ class UserEditController @javax.inject.Inject() (override val app: Application) 
   import app.contexts.webContext
 
   def list(q: Option[String], orderBy: Option[String], orderAsc: Boolean, limit: Option[Int], offset: Option[Int]) = {
-    withSession("user.list", admin = true) { implicit request =>
+    withSession("user.list", admin = true) { implicit request => implicit td =>
       val startMs = util.DateUtils.nowMillis
       val orderBys = OrderBy.forVals(col = orderBy, asc = orderAsc).toSeq
       val f = q match {
@@ -37,7 +37,7 @@ class UserEditController @javax.inject.Inject() (override val app: Application) 
     }
   }
 
-  def view(id: UUID) = withSession("user.view", admin = true) { implicit request =>
+  def view(id: UUID) = withSession("user.view", admin = true) { implicit request => implicit td =>
     app.userService.getByPrimaryKey(id).map {
       case Some(model) => render {
         case Accepts.Html() => Ok(views.html.admin.user.userView(request.identity, model))
@@ -47,7 +47,7 @@ class UserEditController @javax.inject.Inject() (override val app: Application) 
     }
   }
 
-  def editForm(id: UUID) = withSession("user.edit.form", admin = true) { implicit request =>
+  def editForm(id: UUID) = withSession("user.edit.form", admin = true) { implicit request => implicit td =>
     val call = controllers.admin.user.routes.UserEditController.edit(id)
     app.userService.getByPrimaryKey(id).map {
       case Some(model) => Ok(views.html.admin.user.userForm(request.identity, model, s"User [$id]", call))
@@ -55,7 +55,7 @@ class UserEditController @javax.inject.Inject() (override val app: Application) 
     }
   }
 
-  def edit(id: UUID) = withSession("admin.user.save", admin = true) { implicit request =>
+  def edit(id: UUID) = withSession("admin.user.save", admin = true) { implicit request => implicit td =>
     val form = FormUtils.getForm(request)
     app.userService.getByPrimaryKey(id).flatMap { userOpt =>
       val user = userOpt.getOrElse(throw new IllegalStateException(s"Invalid user [$id]."))
@@ -88,7 +88,7 @@ class UserEditController @javax.inject.Inject() (override val app: Application) 
     }
   }
 
-  def remove(id: UUID) = withSession("admin.user.remove", admin = true) { implicit request =>
+  def remove(id: UUID) = withSession("admin.user.remove", admin = true) { implicit request => implicit td =>
     app.userService.remove(id).map { _ =>
       Redirect(controllers.admin.user.routes.UserEditController.list())
     }
