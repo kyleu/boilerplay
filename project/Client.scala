@@ -11,7 +11,8 @@ object Client {
   private[this] val clientSettings = Shared.commonSettings ++ Seq(
     libraryDependencies ++= Seq(
       "be.doeraene" %%% "scalajs-jquery" % Dependencies.ScalaJS.jQueryVersion,
-      "com.lihaoyi" %%% "scalatags" % Dependencies.ScalaJS.scalaTagsVersion
+      "com.lihaoyi" %%% "scalatags" % Dependencies.ScalaJS.scalaTagsVersion,
+      "com.outr" %%% "scribe" % Dependencies.Utils.scribeVersion
     ),
     testFrameworks += new TestFramework("utest.runner.Framework"),
     scapegoatIgnoredFiles := Seq(".*/JsonUtils.scala", ".*/JsonSerializers.scala")
