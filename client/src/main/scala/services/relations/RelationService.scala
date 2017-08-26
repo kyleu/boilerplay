@@ -3,9 +3,11 @@ package services.relations
 import scala.scalajs.js.annotation.JSExportTopLevel
 import org.scalajs.jquery.{JQuery, JQueryEventObject, jQuery => $}
 import scribe.Logging
+import services.InitService
 
 @JSExportTopLevel("RelationService")
 class RelationService(url: String) extends Logging {
+  InitService.initIfNeeded()
   logger.info(s"Relation service running, using [$url].")
 
   private[this] def onComplete(body: JQuery, data: String): Unit = {

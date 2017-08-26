@@ -2,14 +2,13 @@ package services.socket
 
 import org.scalajs.jquery.{jQuery => $}
 import scribe.Logging
-import services.NotificationService
-import util.LoggingErrorHandler
+import services.{InitService, LogHelper, NotificationService}
 
 import scala.scalajs.js.annotation.JSExportTopLevel
 
 @JSExportTopLevel("SocketConnection")
 class SocketConnection() extends Logging with NetworkHelper with ResponseMessageHelper {
-  LoggingErrorHandler.install()
+  InitService.initIfNeeded()
   NetworkMessage.register(sendMessage)
   logger.debug(util.Config.projectName + " is connecting...")
   connect()
