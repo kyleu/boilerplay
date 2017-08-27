@@ -80,6 +80,7 @@ object Dependencies {
     val scapegoatVersion = "1.3.1"
     val enumeratumVersion = "1.5.14"
 
+    val csv = "com.github.tototoshi" %% "scala-csv" % "1.3.5"
     val betterFiles = "com.github.pathikrit" %% "better-files" % "3.0.0"
     val commonsIo = "commons-io" % "commons-io" % "2.5"
     val scalaGuice = "net.codingwell" %% "scala-guice" % "4.1.0"

@@ -15,7 +15,7 @@ import zipkin.TraceKeys
 
 import scala.concurrent.{ExecutionContext, Future}
 
-abstract class BaseController(name: String) extends InjectedController with Instrumented with Logging {
+abstract class BaseController(val name: String) extends InjectedController with Instrumented with Logging {
   protected def app: Application
 
   protected def withoutSession(action: String)(

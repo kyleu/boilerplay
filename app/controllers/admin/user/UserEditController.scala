@@ -10,7 +10,7 @@ import controllers.BaseController
 import models.Application
 import models.result.orderBy.OrderBy
 import models.user.{Role, UserResult}
-import util.web.FormUtils
+import util.web.ControllerUtils
 
 import scala.concurrent.Future
 
@@ -56,7 +56,7 @@ class UserEditController @javax.inject.Inject() (override val app: Application) 
   }
 
   def edit(id: UUID) = withSession("admin.user.save", admin = true) { implicit request => implicit td =>
-    val form = FormUtils.getForm(request)
+    val form = ControllerUtils.getForm(request)
     app.userService.getByPrimaryKey(id).flatMap { userOpt =>
       val user = userOpt.getOrElse(throw new IllegalStateException(s"Invalid user [$id]."))
 

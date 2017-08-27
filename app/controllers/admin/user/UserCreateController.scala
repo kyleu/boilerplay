@@ -9,7 +9,7 @@ import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
 import controllers.BaseController
 import models.Application
 import models.user.{Role, User, UserPreferences}
-import util.web.FormUtils
+import util.web.ControllerUtils
 
 import scala.concurrent.Future
 
@@ -27,7 +27,7 @@ class UserCreateController @javax.inject.Inject() (
   }
 
   def create() = withSession("user.create", admin = true) { implicit request => implicit td =>
-    val form = FormUtils.getForm(request)
+    val form = ControllerUtils.getForm(request)
     val id = UUID.randomUUID
     val loginInfo = LoginInfo(CredentialsProvider.ID, form("email").trim)
     val role = form.get("role") match {

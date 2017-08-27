@@ -3,7 +3,7 @@ package controllers.admin.system
 import controllers.BaseController
 import models.Application
 import models.settings.SettingKey
-import util.web.FormUtils
+import util.web.ControllerUtils
 
 import scala.concurrent.Future
 
@@ -16,7 +16,7 @@ class SettingsController @javax.inject.Inject() (override val app: Application) 
   }
 
   def saveSettings = withSession("settings.save", admin = true) { implicit request => implicit td =>
-    val form = FormUtils.getForm(request)
+    val form = ControllerUtils.getForm(request)
     form.foreach { x =>
       SettingKey.withNameOption(x._1) match {
         case Some(settingKey) => app.settingsService.set(settingKey, x._2)

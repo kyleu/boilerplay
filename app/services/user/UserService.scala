@@ -107,4 +107,8 @@ class UserService @javax.inject.Inject() (override val tracing: TracingService, 
       }
     }
   }
+
+  def csvFor(operation: String, totalCount: Int, rows: Seq[User])(implicit trace: TraceData) = {
+    traceB("export.csv")(td => util.CsvUtils.csvFor(Some(key), totalCount, rows, UserQueries.fields)(td))
+  }
 }

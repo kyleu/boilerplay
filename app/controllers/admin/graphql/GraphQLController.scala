@@ -39,9 +39,9 @@ class GraphQLController @javax.inject.Inject() (override val app: Application, g
   def executeQuery(query: String, variables: Option[Json], operation: Option[String], user: User, debug: Boolean)(implicit data: TraceData) = {
     try {
       val f = graphQLService.executeQuery(app, query, variables, operation, user, debug)
-      f.map(x => Ok(x.spaces2).as("application/json")).recover {
-        case error: QueryAnalysisError => BadRequest(error.resolveError.spaces2).as("application/json")
-        case error: ErrorWithResolver => InternalServerError(error.resolveError.spaces2).as("application/json")
+      f.map(x => Ok(x.spaces2).as(JSON)).recover {
+        case error: QueryAnalysisError => BadRequest(error.resolveError.spaces2).as(JSON)
+        case error: ErrorWithResolver => InternalServerError(error.resolveError.spaces2).as(JSON)
       }
     } catch {
       case error: SyntaxError =>
@@ -52,7 +52,7 @@ class GraphQLController @javax.inject.Inject() (override val app: Application, g
             "column" -> Json.fromInt(error.originalError.position.column)
           ))
         )
-        Future.successful(BadRequest(json.spaces2).as("application/json"))
+        Future.successful(BadRequest(json.spaces2).as(JSON))
     }
   }
 }

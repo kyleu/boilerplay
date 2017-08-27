@@ -7,7 +7,7 @@ import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
 import models.Application
 import models.user.UserForms
 import services.user.UserService
-import util.web.FormUtils
+import util.web.ControllerUtils
 
 import scala.concurrent.Future
 
@@ -46,7 +46,7 @@ class ProfileController @javax.inject.Inject() (
     def errorResponse(msg: String) = Redirect(controllers.routes.ProfileController.changePasswordForm()).flashing("error" -> msg)
     UserForms.changePasswordForm.bindFromRequest().fold(
       formWithErrors => {
-        Future.successful(errorResponse(FormUtils.errorsToString(formWithErrors.errors)))
+        Future.successful(errorResponse(ControllerUtils.errorsToString(formWithErrors.errors)))
       },
       changePass => {
         if (changePass.newPassword != changePass.confirm) {

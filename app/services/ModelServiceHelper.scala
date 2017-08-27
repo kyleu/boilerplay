@@ -8,10 +8,11 @@ import util.tracing.{TraceData, TracingService}
 
 import scala.concurrent.Future
 
-abstract class ModelServiceHelper[T](key: String) extends Logging {
+abstract class ModelServiceHelper[T](val key: String) extends Logging {
   def tracing: TracingService
 
   def traceF[A](name: String)(f: TraceData => Future[A])(implicit tracd: TraceData) = tracing.trace(key + ".service." + name)(td => f(td))
+  def traceB[A](name: String)(f: TraceData => A)(implicit tracd: TraceData) = tracing.traceBlocking(key + ".service." + name)(td => f(td))
 
   def countAll(filters: Seq[Filter])(implicit trace: TraceData): Future[Int]
   def getAll(filters: Seq[Filter], orderBys: Seq[OrderBy], limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData): Future[Seq[T]]

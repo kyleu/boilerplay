@@ -33,7 +33,7 @@ object Server {
       Database.postgres, GraphQL.sangria, GraphQL.playJson, GraphQL.circe,
       Authentication.silhouette, Authentication.hasher, Authentication.persistence, Authentication.crypto,
       WebJars.jquery, WebJars.fontAwesome, WebJars.materialize, WebJars.moment, WebJars.mousetrap,
-      Utils.scalaGuice, Utils.commonsIo, Utils.betterFiles, Akka.testkit, Play.test, Testing.scalaTest
+      Utils.csv, Utils.scalaGuice, Utils.commonsIo, Utils.betterFiles, Akka.testkit, Play.test, Testing.scalaTest
     )
   }
 
