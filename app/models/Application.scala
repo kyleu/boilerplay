@@ -8,7 +8,7 @@ import com.mohiva.play.silhouette.api.Silhouette
 import models.auth.AuthEnv
 import play.api.Environment
 import play.api.inject.ApplicationLifecycle
-import services.database.{MasterDatabase, MasterDdl}
+import services.database.{ApplicationDatabase, MasterDdl, SystemDatabase}
 import services.file.FileService
 import services.supervisor.ActorSupervisor
 import services.user.UserService
@@ -63,14 +63,16 @@ class Application @javax.inject.Inject() (
 
     FileService.setRootDir(config.dataDir)
 
-    MasterDatabase.open(config.cnf, tracing)
+    SystemDatabase.open(config.cnf, tracing)
+    ApplicationDatabase.open(config.cnf, tracing)
     MasterDdl.init().map { _ =>
       settingsService.load()
     }
   }
 
   private[this] def stop() = {
-    MasterDatabase.close()
+    ApplicationDatabase.close()
+    SystemDatabase.close()
     CacheService.close()
     tracing.close()
     SharedMetricRegistries.remove("default")

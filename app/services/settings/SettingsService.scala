@@ -3,7 +3,7 @@ package services.settings
 import models.queries.settings.SettingQueries
 import models.settings.{Setting, SettingKey}
 import util.FutureUtils.databaseContext
-import services.database.MasterDatabase
+import services.database.SystemDatabase
 import util.tracing.{TraceData, TracingService}
 
 import scala.concurrent.Future
@@ -23,7 +23,7 @@ class SettingsService @javax.inject.Inject() (tracing: TracingService) {
   }
 
   def load()(implicit trace: TraceData) = tracing.trace("settings.service.load") { td =>
-    MasterDatabase.query(SettingQueries.getAll())(td).map(_.map(s => s.key -> s.value).toMap).map { x =>
+    SystemDatabase.query(SettingQueries.getAll())(td).map(_.map(s => s.key -> s.value).toMap).map { x =>
       settingsMap = x
       settings = SettingKey.values.map(k => Setting(k, settingsMap.getOrElse(k, k.default)))
     }
@@ -38,12 +38,12 @@ class SettingsService @javax.inject.Inject() (tracing: TracingService) {
     val s = Setting(key, value)
     val f = if (s.isDefault) {
       settingsMap = settingsMap - key
-      MasterDatabase.execute(SettingQueries.removeByPrimaryKey(key))
+      SystemDatabase.execute(SettingQueries.removeByPrimaryKey(key))
     } else {
-      MasterDatabase.transaction { (txTd, conn) =>
-        MasterDatabase.query(SettingQueries.getByPrimaryKey(key), Some(conn))(txTd).map {
-          case Some(_) => MasterDatabase.execute(SettingQueries.Update(s), Some(conn))(txTd)
-          case None => MasterDatabase.execute(SettingQueries.insert(s), Some(conn))(txTd)
+      SystemDatabase.transaction { (txTd, conn) =>
+        SystemDatabase.query(SettingQueries.getByPrimaryKey(key), Some(conn))(txTd).map {
+          case Some(_) => SystemDatabase.execute(SettingQueries.Update(s), Some(conn))(txTd)
+          case None => SystemDatabase.execute(SettingQueries.insert(s), Some(conn))(txTd)
         }.map(_ => settingsMap = settingsMap + (key -> value))
       }(td)
     }

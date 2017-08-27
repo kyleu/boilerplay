@@ -1,5 +1,8 @@
 package services.relations
 
+import io.circe.Json
+import models.result.RelationCount
+
 import scala.scalajs.js.annotation.JSExportTopLevel
 import org.scalajs.jquery.{JQuery, JQueryEventObject, jQuery => $}
 import services.{InitService, Logging}
@@ -34,11 +37,11 @@ class RelationService(url: String) {
     }
   }
 
-  private[this] def processCount(key: String, count: Int) = {
-    val jq = $(s"#relation-$key")
+  private[this] def processCount(model: String, field: String, count: Int) = {
+    val jq = $(s"#relation-$model-$field")
     val title = $(".title", jq)
     if (jq.length != 1) {
-      throw new IllegalStateException(s"Missing relation section for [$key].")
+      throw new IllegalStateException(s"Missing relation section for [$model:$field].")
     }
     if (count == 1) {
       val singular = jq.data("singular").toString
@@ -49,9 +52,14 @@ class RelationService(url: String) {
     }
   }
 
-  $.get(url = url, data = scalajs.js.Dynamic.literal(), success = (data: scalajs.js.Dictionary[Int]) => data.foreach {
-    case (key, count) => processCount(key, count)
-  })
+  $.get(url = url, data = scalajs.js.Dynamic.literal(), success = (data: String) => {
+    import io.circe.parser._
+    import io.circe.generic.auto._
+    val ret = decode[Seq[RelationCount]](data) match {
+      case Right(seq) => seq.foreach(rc => processCount(rc.model, rc.field, rc.count))
+      case Left(x) => throw x
+    }
+  }, dataType = "text")
 
   val arg = scalajs.js.Dynamic.literal("onOpen" -> onOpen _)
   scalajs.js.Dynamic.global.$("#model-relations").collapsible(arg)

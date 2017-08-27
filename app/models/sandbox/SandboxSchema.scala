@@ -21,6 +21,7 @@ object SandboxSchema {
   ))
 
   implicit val sandboxResultType = deriveObjectType[GraphQLContext, SandboxTask.Result](
+    ObjectTypeName("SandboxResult"),
     DocumentField("task", "The task used to provide the result."),
     DocumentField("status", "The result status, usually \"OK\"."),
     DocumentField("elapsed", "The execution time, in milliseconds."),
