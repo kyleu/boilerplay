@@ -14,8 +14,7 @@ import util.web.ControllerUtils
 
 import scala.concurrent.Future
 
-@javax.inject.Singleton
-class UserEditController @javax.inject.Inject() (override val app: Application) extends BaseController("user.edit") {
+trait UserEditHelper { this: UserController =>
   import app.contexts.webContext
 
   def list(q: Option[String], orderBy: Option[String], orderAsc: Boolean, limit: Option[Int], offset: Option[Int]) = {
@@ -48,7 +47,7 @@ class UserEditController @javax.inject.Inject() (override val app: Application) 
   }
 
   def editForm(id: UUID) = withSession("user.edit.form", admin = true) { implicit request => implicit td =>
-    val call = controllers.admin.user.routes.UserEditController.edit(id)
+    val call = controllers.admin.user.routes.UserController.edit(id)
     app.userService.getByPrimaryKey(id).map {
       case Some(model) => Ok(views.html.admin.user.userForm(request.identity, model, s"User [$id]", call))
       case None => NotFound(s"No user found with id [$id].")
@@ -56,12 +55,12 @@ class UserEditController @javax.inject.Inject() (override val app: Application) 
   }
 
   def edit(id: UUID) = withSession("admin.user.save", admin = true) { implicit request => implicit td =>
-    val form = ControllerUtils.getForm(request)
     app.userService.getByPrimaryKey(id).flatMap { userOpt =>
       val user = userOpt.getOrElse(throw new IllegalStateException(s"Invalid user [$id]."))
 
       val isSelf = request.identity.id == id
 
+      val form = ControllerUtils.getForm(request)
       val newUsername = form("username")
       val newEmail = form("email")
       val newPassword = form.get("password") match {
@@ -75,14 +74,14 @@ class UserEditController @javax.inject.Inject() (override val app: Application) 
       }
 
       if (newUsername.isEmpty) {
-        Future.successful(Redirect(controllers.admin.user.routes.UserEditController.edit(id)).flashing("error" -> "Username is required."))
+        Future.successful(Redirect(controllers.admin.user.routes.UserController.edit(id)).flashing("error" -> "Username is required."))
       } else if (newEmail.isEmpty) {
-        Future.successful(Redirect(controllers.admin.user.routes.UserEditController.edit(id)).flashing("error" -> "Email Address is required."))
+        Future.successful(Redirect(controllers.admin.user.routes.UserController.edit(id)).flashing("error" -> "Email Address is required."))
       } else if (isSelf && (role != Role.Admin) && user.role == Role.Admin) {
-        Future.successful(Redirect(controllers.admin.user.routes.UserEditController.edit(id)).flashing("error" -> "You cannot remove your own admin role."))
+        Future.successful(Redirect(controllers.admin.user.routes.UserController.edit(id)).flashing("error" -> "You cannot remove your own admin role."))
       } else {
         app.userService.updateFields(id, newUsername, newEmail, newPassword, role, user.profile.providerKey).map { _ =>
-          Redirect(controllers.admin.user.routes.UserEditController.view(id))
+          Redirect(controllers.admin.user.routes.UserController.view(id))
         }
       }
     }
@@ -90,7 +89,7 @@ class UserEditController @javax.inject.Inject() (override val app: Application) 
 
   def remove(id: UUID) = withSession("admin.user.remove", admin = true) { implicit request => implicit td =>
     app.userService.remove(id).map { _ =>
-      Redirect(controllers.admin.user.routes.UserEditController.list())
+      Redirect(controllers.admin.user.routes.UserController.list())
     }
   }
 }

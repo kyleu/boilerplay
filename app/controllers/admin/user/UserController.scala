@@ -14,15 +14,15 @@ import util.web.ControllerUtils
 import scala.concurrent.Future
 
 @javax.inject.Singleton
-class UserCreateController @javax.inject.Inject() (
+class UserController @javax.inject.Inject() (
     override val app: Application,
     authInfoRepository: AuthInfoRepository,
     hasher: PasswordHasher
-) extends BaseController("user.create") {
+) extends BaseController("user.create") with UserEditHelper {
   import app.contexts.webContext
 
   def createForm = withSession("user.createForm", admin = true) { implicit request => implicit td =>
-    val call = controllers.admin.user.routes.UserCreateController.create()
+    val call = controllers.admin.user.routes.UserController.create()
     Future.successful(Ok(views.html.admin.user.userForm(request.identity, models.user.User.empty, "New User", call, isNew = true)))
   }
 
@@ -37,9 +37,9 @@ class UserCreateController @javax.inject.Inject() (
     val username = form("username").trim
 
     if (username.isEmpty) {
-      Future.successful(Redirect(controllers.admin.user.routes.UserCreateController.createForm()).flashing("error" -> "Username is required."))
+      Future.successful(Redirect(controllers.admin.user.routes.UserController.createForm()).flashing("error" -> "Username is required."))
     } else if (loginInfo.providerKey.isEmpty) {
-      Future.successful(Redirect(controllers.admin.user.routes.UserCreateController.createForm()).flashing("error" -> "Email Address is required."))
+      Future.successful(Redirect(controllers.admin.user.routes.UserController.createForm()).flashing("error" -> "Email Address is required."))
     } else {
       val user = User(
         id = id,
@@ -57,7 +57,7 @@ class UserCreateController @javax.inject.Inject() (
         userSaved <- userSavedFuture
       } yield {
         app.silhouette.env.eventBus.publish(SignUpEvent(userSaved, request))
-        Redirect(controllers.admin.user.routes.UserEditController.view(id)).flashing("success" -> s"User [${form("email")}] added.")
+        Redirect(controllers.admin.user.routes.UserController.view(id)).flashing("success" -> s"User [${form("email")}] added.")
       }
     }
   }
