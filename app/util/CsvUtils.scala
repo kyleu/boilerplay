@@ -12,10 +12,15 @@ object CsvUtils {
     val writer = CSVWriter.open(os)
 
     writer.writeRow(fields.map(_.prop))
-    records.foreach(r => writer.writeRow(r.productIterator.toSeq))
+    records.foreach(r => writer.writeRow(r.productIterator.toSeq.map {
+      case o: Option[_] => o.getOrElse(NullUtils.inst)
+      case x => x
+    }))
     name.foreach { n =>
+      val amt = util.NumberUtils.withCommas(records.size)
+      val totes = util.NumberUtils.withCommas(totalCount)
       writer.writeRow(Seq(
-        s"# $n export with ${util.NumberUtils.withCommas(totalCount)} results, generated ${util.DateUtils.niceDateTime(util.DateUtils.now)}."
+        s"# $n export with $amt out of $totes results, generated ${util.DateUtils.niceDateTime(util.DateUtils.now)}."
       ))
     }
 
