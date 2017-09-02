@@ -44,18 +44,27 @@ addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "0.8.0") // scalastyl
 
 addSbtPlugin("com.sksamuel.scapegoat" %% "sbt-scapegoat" % "1.0.4")
 
-addSbtPlugin("com.orrsella" % "sbt-stats" % "1.0.5") // stats
+// Broken on Windows
+// addSbtPlugin("ch.epfl.scala" % "sbt-scalafix" % "0.4.2")
 
+addSbtPlugin("com.typesafe.sbt" % "sbt-scalariform" % "1.3.0") // scalariformFormat
+
+// Utilities
 addSbtPlugin("net.virtual-void" % "sbt-dependency-graph" % "0.8.2") // dependencyGraph
 
 addSbtPlugin("com.timushev.sbt" % "sbt-updates" % "0.3.1") // dependencyUpdates
 
-addSbtPlugin("com.typesafe.sbt" % "sbt-scalariform" % "1.3.0") // scalariformFormat
+addSbtPlugin("com.orrsella" % "sbt-stats" % "1.0.5") // stats
 
-addSbtPlugin("com.github.xuwei-k" % "sbt-class-diagram" % "0.2.1")
+addSbtPlugin("pl.project13.sbt" % "sbt-jol" % "0.1.3") // jol:internals
 
-// Broken on Windows
-// addSbtPlugin("ch.epfl.scala" % "sbt-scalafix" % "0.4.2")
+addSbtPlugin("com.github.jozic" % "sbt-about-plugins" % "0.1.0") // about-plugins
+
+// Visualization
+addSbtPlugin("com.dwijnand" % "sbt-project-graph" % "0.2.2") // projectsGraphDot
+
+addSbtPlugin("com.github.xuwei-k" % "sbt-class-diagram" % "0.2.1") // classDiagram
+
 
 // IDE Integration
 addSbtPlugin("org.jetbrains" % "sbt-ide-settings" % "0.1.2")

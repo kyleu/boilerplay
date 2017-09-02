@@ -7,8 +7,14 @@
     </li>
     @models.sandbox.SandboxTask.values.map { task =>
       <li class="collection-item">
+        <div class="right">
+          <form action="@controllers.admin.system.routes.SandboxController.run(task.id)">
+            <input name="arg" placeholder="Run with argument" />
+          </form>
+        </div>
         <div><a class="theme-text" href="@controllers.admin.system.routes.SandboxController.run(task.id)">@task.name</a></div>
-        @task.description
+        <div>@task.description</div>
+        <div class="clear"></div>
       </li>
     }
   </ul>

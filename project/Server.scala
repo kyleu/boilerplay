@@ -73,7 +73,7 @@ object Server {
       id = Shared.projectId,
       base = file(".")
     ).enablePlugins(
-      SbtWeb, play.sbt.PlayScala, JavaAppPackaging,
+      SbtWeb, play.sbt.PlayScala, JavaAppPackaging, diagram.ClassDiagramPlugin,
       UniversalPlugin, LinuxPlugin, DebianPlugin, RpmPlugin, DockerPlugin, WindowsPlugin, JDKPackagerPlugin
     ).settings(serverSettings: _*).aggregate(projectToRef(Client.client)).settings(Packaging.settings: _*)
 

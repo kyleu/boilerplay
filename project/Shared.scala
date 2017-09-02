@@ -38,11 +38,6 @@ object Shared {
 
     publishMavenStyle := false,
 
-    // Prevent Scaladoc
-    publishArtifact in (Compile, packageDoc) := false,
-    publishArtifact in packageDoc := false,
-    sources in (Compile,doc) := Seq.empty,
-
     // Code Quality
     scapegoatVersion := Utils.scapegoatVersion,
     scapegoatDisabledInspections := Seq("MethodNames", "MethodReturningAny", "DuplicateImport"),
