@@ -42,7 +42,9 @@ object Packaging {
     wixFeatures := makeWindowsFeatures((mappings in Windows).value),
 
     // Docker
-    dockerExposedPorts := Seq(4260, 4261, 4262, 4263),
+    dockerExposedPorts := Seq(9000),
+    dockerLabels ++= Map("project" -> Shared.projectId),
+    dockerUpdateLatest := true,
     defaultLinuxInstallLocation in Docker := s"/opt/${Shared.projectId}",
     packageName in Docker := packageName.value,
     dockerExposedVolumes := Seq(s"/opt/${Shared.projectId}"),
