@@ -1,8 +1,6 @@
 import Dependencies._
 import sbt.Keys._
 import sbt._
-import io.gatling.sbt.GatlingPlugin
-import pl.project13.scala.sbt.JmhPlugin
 
 object Utilities {
   private[this] val metricsLibs = Seq(
@@ -13,10 +11,4 @@ object Utilities {
   lazy val metrics = (project in file("util/metrics"))
     .settings(libraryDependencies ++= metricsLibs)
     .settings(Shared.commonSettings: _*)
-
-  lazy val benchmarking = (project in file("util/benchmarking"))
-    .settings(libraryDependencies ++= Seq(Testing.gatlingCore, Testing.gatlingCharts))
-    .settings(Shared.commonSettings: _*)
-    .enablePlugins(GatlingPlugin, JmhPlugin)
-    .dependsOn(Shared.sharedJvm)
 }

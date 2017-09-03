@@ -88,7 +88,5 @@ object Dependencies {
 
   object Testing {
     val scalaTest = "org.scalatest" %% "scalatest" % "3.0.4" % "test"
-    val gatlingCore = "io.gatling" % "gatling-test-framework" % "2.1.7" % "test"
-    val gatlingCharts = "io.gatling.highcharts" % "gatling-charts-highcharts" % "2.1.7" % "test"
   }
 }
