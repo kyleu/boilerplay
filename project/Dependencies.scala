@@ -48,7 +48,7 @@ object Dependencies {
   object WebJars {
     val fontAwesome = "org.webjars" % "font-awesome" % "4.7.0"
     val jquery = "org.webjars" % "jquery" % "2.2.4"
-    val materialize = "org.webjars" % "materializecss" % "0.100.1"
+    val materialize = "org.webjars" % "materializecss" % "0.100.2"
     val moment = "org.webjars" % "momentjs" % "2.18.1"
     val mousetrap = "org.webjars" % "mousetrap" % "1.6.0"
   }
@@ -66,9 +66,9 @@ object Dependencies {
   }
 
   object Tracing {
-    private[this] val version = "4.5.2"
+    private[this] val version = "4.6.0"
     val brave = "io.zipkin.brave" % "brave-core" % version
-    val http = "io.zipkin.reporter" % "zipkin-sender-okhttp3" % "1.0.1"
+    val http = "io.zipkin.reporter" % "zipkin-sender-okhttp3" % "1.0.2"
     val logging = "io.zipkin.brave" % "brave-context-slf4j" % version
   }
 
@@ -77,11 +77,11 @@ object Dependencies {
   }
 
   object Utils {
-    val scapegoatVersion = "1.3.1"
+    val scapegoatVersion = "1.3.2"
     val enumeratumVersion = "1.5.14"
 
     val csv = "com.github.tototoshi" %% "scala-csv" % "1.3.5"
-    val betterFiles = "com.github.pathikrit" %% "better-files" % "3.0.0"
+    val betterFiles = "com.github.pathikrit" %% "better-files" % "3.1.0"
     val commonsIo = "commons-io" % "commons-io" % "2.5"
     val scalaGuice = "net.codingwell" %% "scala-guice" % "4.1.0"
   }

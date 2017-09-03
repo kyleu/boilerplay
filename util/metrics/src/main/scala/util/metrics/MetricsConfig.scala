@@ -14,8 +14,14 @@ class MetricsConfig @javax.inject.Inject() (cnf: Configuration) {
   val graphitePort = cnf.get[Int]("metrics.graphite.port")
 
   val tracingEnabled = cnf.get[Boolean]("metrics.tracing.enabled")
-  val tracingServer = cnf.get[String]("metrics.tracing.server")
-  val tracingPort = cnf.get[Int]("metrics.tracing.port")
+  val tracingServer = Option(System.getenv("ZIPKIN_SERVICE_HOST")) match {
+    case Some(host) => host
+    case _ => cnf.get[String]("metrics.tracing.server")
+  }
+  val tracingPort = Option(System.getenv("ZIPKIN_SERVICE_PORT")) match {
+    case Some(port) => port.toInt
+    case _ => cnf.get[Int]("metrics.tracing.port")
+  }
   val tracingService = cnf.get[String]("metrics.tracing.service")
   val tracingSampleRate = cnf.get[Double]("metrics.tracing.sampleRate").toFloat
 }
