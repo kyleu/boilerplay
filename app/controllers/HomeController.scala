@@ -6,19 +6,16 @@ import com.mohiva.play.silhouette.api.HandlerResult
 import models.{Application, RequestMessage, ResponseMessage}
 import play.api.libs.streams.ActorFlow
 import play.api.mvc.{AnyContentAsEmpty, Request, WebSocket}
-import play.twirl.api.HtmlFormat
 import services.socket.SocketService
-import util.tracing.TraceData
 import util.web.MessageFrameFormatter
 
 import scala.concurrent.Future
 
 @javax.inject.Singleton
 class HomeController @javax.inject.Inject() (
-    override val app: Application,
-    implicit val system: ActorSystem,
-    implicit val materializer: Materializer
+  override val app: Application, implicit val system: ActorSystem, implicit val materializer: Materializer
 ) extends BaseController("home") {
+
   import app.contexts.webContext
 
   private[this] implicit val t = new MessageFrameFormatter(app.config.debug).transformer
