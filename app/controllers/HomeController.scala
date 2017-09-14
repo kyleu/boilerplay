@@ -13,7 +13,7 @@ import scala.concurrent.Future
 
 @javax.inject.Singleton
 class HomeController @javax.inject.Inject() (
-  override val app: Application, implicit val system: ActorSystem, implicit val materializer: Materializer
+    override val app: Application, implicit val system: ActorSystem, implicit val materializer: Materializer
 ) extends BaseController("home") {
 
   import app.contexts.webContext

@@ -8,7 +8,7 @@ object Dependencies {
     val ws = play.sbt.PlayImport.ws
     val guice = play.sbt.PlayImport.guice
     val cache = play.sbt.PlayImport.ehcache
-    val json = "com.typesafe.play" %% "play-json" % version
+    val json = "com.typesafe.play" %% "play-json" % "2.6.4"
     val test = "com.typesafe.play" %% "play-test" % version % "test"
   }
 
@@ -66,9 +66,9 @@ object Dependencies {
   }
 
   object Tracing {
-    private[this] val version = "4.6.0"
+    private[this] val version = "4.7.0"
     val brave = "io.zipkin.brave" % "brave-core" % version
-    val http = "io.zipkin.reporter" % "zipkin-sender-okhttp3" % "1.0.2"
+    val http = "io.zipkin.reporter" % "zipkin-sender-okhttp3" % "1.1.0"
     val logging = "io.zipkin.brave" % "brave-context-slf4j" % version
   }
 

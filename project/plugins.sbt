@@ -8,11 +8,15 @@ resolvers += Resolver.url("jetbrains-bintray", url("http://dl.bintray.com/jetbra
 addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.6.3")
 
 // SBT-Web plugins
-addSbtPlugin("com.typesafe.sbt" % "sbt-less" % "1.0.0")
+addSbtPlugin("com.typesafe.sbt" % "sbt-web" % "1.4.3")
 
-addSbtPlugin("com.typesafe.sbt" % "sbt-digest" % "1.1.2")
+libraryDependencies += "org.webjars.npm" % "source-map" % "0.5.6"
 
-addSbtPlugin("com.typesafe.sbt" % "sbt-gzip" % "1.0.1")
+addSbtPlugin("com.typesafe.sbt" % "sbt-less" % "1.1.2")
+
+addSbtPlugin("com.typesafe.sbt" % "sbt-digest" % "1.1.3")
+
+addSbtPlugin("com.typesafe.sbt" % "sbt-gzip" % "1.0.2")
 
 // Scala.js
 addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.20")
@@ -21,7 +25,7 @@ addSbtPlugin("org.scala-native" % "sbt-crossproject" % "0.2.0")
 
 addSbtPlugin("org.scala-native" % "sbt-scalajs-crossproject" % "0.2.0")
 
-addSbtPlugin("com.vmunier" % "sbt-web-scalajs" % "1.0.5")
+addSbtPlugin("com.vmunier" % "sbt-web-scalajs" % "1.0.6")
 
 // Source Control
 addSbtPlugin("com.typesafe.sbt" % "sbt-git" % "0.9.3")

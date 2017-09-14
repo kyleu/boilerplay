@@ -28,3 +28,19 @@ spec:
         image: boilerplay:latest
         ports:
         - containerPort: 9000
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: boilerplay-ingress
+  annotations:
+    kubernetes.io/ingress.class: "istio"
+spec:
+  rules:
+  - host: boilerplay.io
+    http:
+      paths:
+      - backend:
+          serviceName: boilerplay
+          servicePort: 9000
+---

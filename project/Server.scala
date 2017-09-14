@@ -1,4 +1,5 @@
 import com.sksamuel.scapegoat.sbt.ScapegoatSbtPlugin.autoImport._
+import com.typesafe.sbt.GitPlugin.autoImport.git
 import com.typesafe.sbt.digest.Import._
 import com.typesafe.sbt.gzip.Import._
 import com.typesafe.sbt.jse.JsEngineImport.JsEngineKeys
@@ -21,7 +22,6 @@ import play.sbt.PlayImport.PlayKeys._
 import play.sbt.routes.RoutesKeys
 import webscalajs.WebScalaJS.autoImport._
 import sbt.Keys._
-import sbt.Project.projectToRef
 import sbt._
 import sbtassembly.AssemblyPlugin.autoImport._
 
@@ -40,17 +40,20 @@ object Server {
   private[this] lazy val serverSettings = Shared.commonSettings ++ Seq(
     name := Shared.projectId,
     maintainer := "Boilerplay User <admin@boilerplay.com>",
+    git.remoteRepo := "git@github.com:KyleU/boilerplay.git",
     description := "Boilerplay",
 
     resolvers += Resolver.jcenterRepo,
     resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/",
     libraryDependencies ++= dependencies,
 
-    scalaJSProjects := Seq(Client.client),
+    // Play
     routesGenerator := InjectedRoutesGenerator,
+    RoutesKeys.routesImport += "util.web.QueryStringUtils._",
     externalizeResources := false,
 
-    RoutesKeys.routesImport += "util.web.QueryStringUtils._",
+    // Scala.js
+    scalaJSProjects := Seq(Client.client),
 
     // Sbt-Web
     JsEngineKeys.engineType := JsEngineKeys.EngineType.Node,
@@ -59,6 +62,10 @@ object Server {
     includeFilter in (Assets, LessKeys.less) := "*.less",
     excludeFilter in (Assets, LessKeys.less) := "_*.less",
     LessKeys.compress in Assets := true,
+
+    // Source Control
+    scmInfo := Some(ScmInfo(url("https://github.com/KyleU/boilerplay"), "git@github.com:KyleU/boilerplay.git")),
+    git.remoteRepo := scmInfo.value.get.connection,
 
     // Fat-Jar Assembly
     fullClasspath in assembly += Attributed.blank(PlayKeys.playPackageAssets.value),
@@ -69,13 +76,10 @@ object Server {
   )
 
   lazy val server = {
-    val ret = Project(
-      id = Shared.projectId,
-      base = file(".")
-    ).enablePlugins(
+    val ret = Project(id = Shared.projectId, base = file(".")).enablePlugins(
       SbtWeb, play.sbt.PlayScala, JavaAppPackaging, diagram.ClassDiagramPlugin,
       UniversalPlugin, LinuxPlugin, DebianPlugin, RpmPlugin, DockerPlugin, WindowsPlugin, JDKPackagerPlugin
-    ).settings(serverSettings: _*).aggregate(projectToRef(Client.client)).settings(Packaging.settings: _*)
+    ).settings(serverSettings: _*).settings(Packaging.settings: _*)
 
     Shared.withProjects(ret, Seq(Shared.sharedJvm, Utilities.metrics))
   }
