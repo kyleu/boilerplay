@@ -30,10 +30,10 @@ class TracingService @javax.inject.Inject() (actorSystem: ActorSystem, cnf: Metr
   }
 
   private[this] val sender = OkHttpSender.create(s"http://${cnf.tracingServer}:${cnf.tracingPort}/api/v1/spans")
-  private[this] val reporter = AsyncReporter.create(sender)
+  private[this] val reporter = AsyncReporter.v2(sender)
   private[this] val samp = Sampler.create(cnf.tracingSampleRate)
   private[this] val ctx = MDCCurrentTraceContext.create()
-  val tracing = Tracing.newBuilder().localServiceName(cnf.tracingService).reporter(reporter).currentTraceContext(ctx).traceId128Bit(true).sampler(samp).build()
+  val tracing = Tracing.newBuilder().localServiceName(cnf.tracingService).spanReporter(reporter).currentTraceContext(ctx).traceId128Bit(true).sampler(samp).build()
   tracing.setNoop(!cnf.tracingEnabled)
   private[this] val tracer: Tracer = tracing.tracer
   log.info(s"Tracing enabled, sending results to [${cnf.tracingServer}:${cnf.tracingPort}@${cnf.tracingService}] using sample rate [${cnf.tracingSampleRate}].")
