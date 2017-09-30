@@ -29,7 +29,7 @@ class TracingService @javax.inject.Inject() (actorSystem: ActorSystem, cnf: Metr
     result
   }
 
-  private[this] val sender = OkHttpSender.create(s"http://${cnf.tracingServer}:${cnf.tracingPort}/api/v1/spans")
+  private[this] val sender = OkHttpSender.json(s"http://${cnf.tracingServer}:${cnf.tracingPort}/api/v1/spans")
   private[this] val reporter = AsyncReporter.v2(sender)
   private[this] val samp = Sampler.create(cnf.tracingSampleRate)
   private[this] val ctx = MDCCurrentTraceContext.create()
