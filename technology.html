@@ -2,7 +2,7 @@
 <html class="no-js" lang="en">
 
 <head>
-<title>Getting Started · Boilerplay</title>
+<title>Technology · Boilerplay</title>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <meta name="description" content='doc'/>
@@ -35,7 +35,7 @@
 </div>
 <div class="nav-toc">
 <ul>
-  <li><a href="gettingStarted.html" class="active page">Getting Started</a></li>
+  <li><a href="gettingStarted.html" class="page">Getting Started</a></li>
   <li><a href="explore/index.html" class="page">Explore</a>
   <ul>
     <li><a href="explore/graphql.html" class="page">GraphQL</a></li>
@@ -58,7 +58,7 @@
     <li><a href="build/packaging.html" class="page">Packaging</a></li>
     <li><a href="build/kubernetes.html" class="page">Kubernetes</a></li>
   </ul></li>
-  <li><a href="technology.html" class="page">Technology</a></li>
+  <li><a href="technology.html" class="active page">Technology</a></li>
   <li><a href="troubleshooting.html" class="page">Troubleshooting</a></li>
 </ul>
 </div>
@@ -96,7 +96,7 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 </div>
 <div class="nav-toc">
 <ul>
-  <li><a href="gettingStarted.html" class="active page">Getting Started</a></li>
+  <li><a href="gettingStarted.html" class="page">Getting Started</a></li>
   <li><a href="explore/index.html" class="page">Explore</a>
   <ul>
     <li><a href="explore/graphql.html" class="page">GraphQL</a></li>
@@ -119,7 +119,7 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
     <li><a href="build/packaging.html" class="page">Packaging</a></li>
     <li><a href="build/kubernetes.html" class="page">Kubernetes</a></li>
   </ul></li>
-  <li><a href="technology.html" class="page">Technology</a></li>
+  <li><a href="technology.html" class="active page">Technology</a></li>
   <li><a href="troubleshooting.html" class="page">Troubleshooting</a></li>
 </ul>
 </div>
@@ -135,7 +135,7 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 <div class="nav-breadcrumbs">
 <ul>
   <li><a href="index.html">Boilerplay</a></li>
-  <li>Getting Started</li>
+  <li>Technology</li>
 </ul>
 </div>
 </div>
@@ -143,58 +143,40 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 
 <div class="page-content row">
 <div class="small-12 large-9 column" id="docs">
-<h1><a href="#getting-started" name="getting-started" class="anchor"><span class="anchor-link"></span></a>Getting Started</h1>
-<h2><a href="#prerequisites" name="prerequisites" class="anchor"><span class="anchor-link"></span></a>Prerequisites</h2>
+<h2><a href="#technology" name="technology" class="anchor"><span class="anchor-link"></span></a>Technology</h2>
+<p>The Play application communicates over a WebSocket to a pool of Akka actors managing connections. Serialization is handled by Play Json, and all database communication runs via postgres-async. Scala.js compiles the shared code and provides an in-browser component. </p>
+<p>The index page opens a websocket connection for bidirectional communication, handled via Play and Akka.</p>
+<p>A GraphQL schema is provided, accessible in the administration section.</p>
+<p>Boilerplay relies on a whole lot of tremendous open source projects. Here&rsquo;s a few of them.</p>
 <ul>
-  <li>SBT</li>
-  <li>PostgreSQL</li>
-  <li>Node.js for building (or change Server.scala)</li>
-</ul>
-<h2><a href="#running-the-app" name="running-the-app" class="anchor"><span class="anchor-link"></span></a>Running the app</h2>
-<p>First, either create a Postgres role and database named &ldquo;boilerplay&rdquo;, or change the application.conf to use your existing database.</p>
-<pre class="prettyprint"><code class="language-sql">CREATE ROLE boilerplay WITH LOGIN PASSWORD &#39;boilerplay&#39;;
-CREATE DATABASE boilerplay;
-GRANT ALL PRIVILEGES ON DATABASE boilerplay TO boilerplay;
-</code></pre>
-<p>You&rsquo;ll either need Node.js available as &ldquo;node&rdquo; on the path, or change project/Server.scala&rsquo;s EngineType to Rhino.</p>
-<p>Now, finally,</p>
-<pre class="prettyprint"><code class="language-shell">$ sbt
-&gt; run
-$ open http://127.0.0.1:9000
-</code></pre>
-<p>As the application starts, it will create database tables and seed data.</p>
-<p>The first account to sign up is created as an Admin, all subsequent users will have a normal user role.</p>
-<h2><a href="#projects" name="projects" class="anchor"><span class="anchor-link"></span></a>Projects</h2>
-<ul>
-  <li><code>server</code> Main web application.</li>
-  <li><code>sharedJvm</code> Core Scala logic and rules definitions, for JVM projects.</li>
-  <li><code>sharedJs</code> Shared classes, compiled to Scala.js JavaScript.</li>
-  <li><code>client</code> Barebones Scala.js app.</li>
+  <li><a href="http://www.scala-lang.org">Scala</a></li>
+  <li><a href="https://www.scala-js.org">Scala.js</a></li>
+  <li><a href="https://www.playframework.com">Play Framework</a></li>
+  <li><a href="http://akka.io">Akka</a></li>
+  <li><a href="http://sangria-graphql.org">Sangria</a></li>
+  <li><a href="https://github.com/graphql/graphiql">Graphiql</a></li>
+  <li><a href="https://github.com/APIs-guru/graphql-voyager">GraphQL Voyager</a></li>
+  <li><a href="http://zipkin.io">Zipkin</a></li>
+  <li><a href="http://materializecss.com">Materialize CSS</a></li>
+  <li><a href="https://github.com/lloydmeta/enumeratum">Enumeratum</a></li>
+  <li><a href="https://circe.github.io/circe">circe</a></li>
+  <li><a href="https://github.com/mauricio/postgresql-async">Postgres-async</a></li>
+  <li><a href="https://www.silhouette.rocks">Silhouette</a></li>
+  <li><a href="http://metrics.dropwizard.io">Dropwizard Metrics</a></li>
+  <li><a href="http://netty.io">Netty</a></li>
+  <li><a href="https://github.com/Richard-W/scalacrypt">ScalaCrypt</a></li>
+  <li><a href="http://fontawesome.io">Font Awesome</a></li>
+  <li><a href="https://jquery.com/">JQuery</a></li>
 </ul>
 <div class="source-github">
-The source code for this page can be found <a href="https://github.com/KyleU/boilerplay/tree/master/doc/src/main/paradox/gettingStarted.md">here</a>.
+The source code for this page can be found <a href="https://github.com/KyleU/boilerplay/tree/master/doc/src/main/paradox/technology.md">here</a>.
 </div>
 
 <div class="nav-next">
-<p><strong>Next:</strong> <a href="explore/index.html">Explore</a></p>
+<p><strong>Next:</strong> <a href="troubleshooting.html">Troubleshooting</a></p>
 </div>
 </div>
 <div class="large-3 show-for-large column" data-sticky-container>
-<nav class="sidebar sticky" data-sticky data-anchor="docs" data-sticky-on="large">
-<div class="page-nav">
-<div class="nav-title">On this page:</div>
-<div class="nav-toc">
-<ul>
-  <li><a href="gettingStarted.html#getting-started" class="header">Getting Started</a>
-  <ul>
-    <li><a href="gettingStarted.html#prerequisites" class="header">Prerequisites</a></li>
-    <li><a href="gettingStarted.html#running-the-app" class="header">Running the app</a></li>
-    <li><a href="gettingStarted.html#projects" class="header">Projects</a></li>
-  </ul></li>
-</ul>
-</div>
-</div>
-</nav>
 </div>
 </div>
 
