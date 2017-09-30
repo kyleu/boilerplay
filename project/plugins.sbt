@@ -72,6 +72,10 @@ addSbtPlugin("com.github.xuwei-k" % "sbt-class-diagram" % "0.2.1") // classDiagr
 // Documentation
 addSbtPlugin("com.lightbend.paradox" % "sbt-paradox" % "0.3.1")
 
+addSbtPlugin("com.typesafe.sbt" % "sbt-site" % "1.3.1")
+
+addSbtPlugin("com.typesafe.sbt" % "sbt-ghpages" % "0.6.1")
+
 // IDE Integration
 addSbtPlugin("org.jetbrains" % "sbt-ide-settings" % "0.1.2")
 

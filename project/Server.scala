@@ -40,7 +40,6 @@ object Server {
   private[this] lazy val serverSettings = Shared.commonSettings ++ Seq(
     name := Shared.projectId,
     maintainer := "Boilerplay User <admin@boilerplay.com>",
-    git.remoteRepo := "git@github.com:KyleU/boilerplay.git",
     description := "Boilerplay",
 
     resolvers += Resolver.jcenterRepo,

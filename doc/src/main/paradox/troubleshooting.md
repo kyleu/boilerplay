@@ -1,0 +1,3 @@
+# Troubleshooting
+
+Install node.js.

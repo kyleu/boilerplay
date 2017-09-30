@@ -7,6 +7,7 @@
 * [Extend](extend/index.md)
 * [Monitor](monitor/index.md)
 * [Build](build/index.md)
+* [Troubleshooting](troubleshooting.md)
 
 @@@
 
