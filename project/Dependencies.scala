@@ -2,18 +2,18 @@ import sbt._
 
 object Dependencies {
   object Play {
-    private[this] val version = "2.6.3"
+    private[this] val version = "2.6.5"
     val lib = "com.typesafe.play" %% "play" % version
     val filters = play.sbt.PlayImport.filters
     val ws = play.sbt.PlayImport.ws
     val guice = play.sbt.PlayImport.guice
     val cache = play.sbt.PlayImport.ehcache
-    val json = "com.typesafe.play" %% "play-json" % "2.6.4"
+    val json = "com.typesafe.play" %% "play-json" % "2.6.6"
     val test = "com.typesafe.play" %% "play-test" % version % "test"
   }
 
   object Akka {
-    private[this] val version = "2.5.4"
+    private[this] val version = "2.5.6"
     val actor = "com.typesafe.akka" %% "akka-actor" % version
     val remote = "com.typesafe.akka" %% "akka-remote" % version
     val logging = "com.typesafe.akka" %% "akka-slf4j" % version
@@ -24,7 +24,7 @@ object Dependencies {
   }
 
   object Authentication {
-    private[this] val version = "5.0.0"
+    private[this] val version = "5.0.1"
     val silhouette = "com.mohiva" %% "play-silhouette" % version
     val hasher = "com.mohiva" %% "play-silhouette-password-bcrypt" % version
     val persistence = "com.mohiva" %% "play-silhouette-persistence" % version
