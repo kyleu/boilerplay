@@ -102,4 +102,6 @@ Boilerplay relies on a whole lot of tremendous open source projects. Here's a fe
 
 ## License
 
-The code is licensed under [Apache License v2.0](http://www.apache.org/licenses/LICENSE-2.0).
+The code is licensed under [CC0-1.0](./license). 
+
+You can basically do whatever you want with the code, no attribution required. Make it your own! 
