@@ -69,6 +69,8 @@ addSbtPlugin("com.dwijnand" % "sbt-project-graph" % "0.2.2") // projectsGraphDot
 
 addSbtPlugin("com.github.xuwei-k" % "sbt-class-diagram" % "0.2.1") // classDiagram
 
+// Documentation
+addSbtPlugin("com.lightbend.paradox" % "sbt-paradox" % "0.3.1")
 
 // IDE Integration
 addSbtPlugin("org.jetbrains" % "sbt-ide-settings" % "0.1.2")

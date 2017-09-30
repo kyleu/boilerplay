@@ -1,3 +1,5 @@
+lazy val doc = Documentation.doc
+
 lazy val sharedJs = Shared.sharedJs
 
 lazy val client = Client.client
