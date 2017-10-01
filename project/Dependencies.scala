@@ -32,7 +32,10 @@ object Dependencies {
   }
 
   object Database {
-    val postgres = "com.github.mauricio" %% "postgresql-async" % "0.2.21" //exclude("io.netty", "netty-all")
+    val postgresAsync = "com.github.mauricio" %% "postgresql-async" % "0.2.21" //exclude("io.netty", "netty-all")
+
+    val hikariCp = "com.zaxxer" % "HikariCP" % "2.6.3"
+    val postgresJdbc = "org.postgresql" % "postgresql" % "9.4.1212"
   }
 
   object GraphQL {

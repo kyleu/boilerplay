@@ -1,16 +1,19 @@
 package models.database
 
-import com.github.mauricio.async.db.ResultSet
+import models.database.async.AsyncRow
+import models.database.jdbc.JdbcRow
 
 trait RawQuery[A] {
   def name: String
   def sql: String
   def values: Seq[Any] = Seq.empty
-  def handle(results: ResultSet): A
+  def handle(results: com.github.mauricio.async.db.ResultSet): A
+  def handleJdbc(results: java.sql.ResultSet): A
 }
 
 trait Query[A] extends RawQuery[A] {
-  def handle(results: ResultSet) = reduce(results.toIterator.map(rd => new Row(rd)))
+  override def handle(results: com.github.mauricio.async.db.ResultSet) = reduce(results.toIterator.map(rd => new AsyncRow(rd)))
+  override def handleJdbc(results: java.sql.ResultSet): A = reduce(new JdbcRow.Iter(results))
   def reduce(rows: Iterator[Row]): A
 }
 
