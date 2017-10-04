@@ -32,9 +32,7 @@ object Dependencies {
   }
 
   object Database {
-    val postgresAsync = "com.github.mauricio" %% "postgresql-async" % "0.2.21" //exclude("io.netty", "netty-all")
-
-    val hikariCp = "com.zaxxer" % "HikariCP" % "2.6.3"
+    val hikariCp = "com.zaxxer" % "HikariCP" % "2.7.2"
     val postgresJdbc = "org.postgresql" % "postgresql" % "9.4.1212"
   }
 
@@ -80,7 +78,7 @@ object Dependencies {
   }
 
   object Utils {
-    val scapegoatVersion = "1.3.2"
+    val scapegoatVersion = "1.3.3"
     val enumeratumVersion = "1.5.14"
 
     val csv = "com.github.tototoshi" %% "scala-csv" % "1.3.5"

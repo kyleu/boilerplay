@@ -2,12 +2,12 @@ package models.database.jdbc
 
 import java.sql.{Connection, PreparedStatement, Types}
 import java.util.UUID
-import javax.transaction.Transaction
 
 import models.database.{Query, RawQuery, Statement}
 import util.{Logging, NullUtils}
 
 import scala.annotation.tailrec
+import scala.concurrent.Future
 
 trait Queryable extends Logging {
   @tailrec
@@ -26,14 +26,14 @@ trait Queryable extends Logging {
     }
   }
 
-  def apply[A](connection: Connection, query: RawQuery[A]): A = {
+  def apply[A](connection: Connection, query: RawQuery[A]): Future[A] = {
     log.debug(s"${query.sql} with ${query.values.mkString("(", ", ", ")")}")
     val stmt = connection.prepareStatement(query.sql)
     try {
       prepare(stmt, query.values)
       val results = stmt.executeQuery()
       try {
-        query.handleJdbc(results)
+        Future.successful(query.handle(results))
       } finally {
         results.close()
       }
@@ -42,20 +42,18 @@ trait Queryable extends Logging {
     }
   }
 
-  def executeUpdate(connection: Connection, statement: Statement): Int = {
+  def executeUpdate(connection: Connection, statement: Statement): Future[Int] = {
     log.debug(s"${statement.sql} with ${statement.values.mkString("(", ", ", ")")}")
     val stmt = connection.prepareStatement(statement.sql)
     try {
       prepare(stmt, statement.values)
-      stmt.executeUpdate()
+      Future.successful(stmt.executeUpdate())
     } finally {
       stmt.close()
     }
   }
 
-  def executeUnknown[A](query: Query[A], resultId: Option[UUID] = None): Either[A, Int]
-
-  def executeUnknown[A](connection: Connection, query: Query[A], resultId: Option[UUID]): Either[A, Int] = {
+  def executeUnknown[A](connection: Connection, query: Query[A], resultId: Option[UUID]): Future[Either[A, Int]] = {
     log.debug(s"${query.sql} with ${query.values.mkString("(", ", ", ")")}")
     val stmt = connection.prepareStatement(query.sql)
     try {
@@ -63,18 +61,12 @@ trait Queryable extends Logging {
       val isResultset = stmt.execute()
       if (isResultset) {
         val res = stmt.getResultSet
-        Left(query.handleJdbc(res))
+        Future.successful(Left(query.handle(res)))
       } else {
-        Right(stmt.getUpdateCount)
+        Future.successful(Right(stmt.getUpdateCount))
       }
     } finally {
       stmt.close()
     }
   }
-
-  def executeUpdate(statement: Statement): Int
-  def apply[A](query: RawQuery[A]): A
-  def transaction[A](f: Transaction => A): A
-
-  def query[A](q: RawQuery[A]): A = apply(q)
 }

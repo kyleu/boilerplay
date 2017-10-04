@@ -5,19 +5,21 @@ import java.util.Properties
 
 import com.codahale.metrics.MetricRegistry
 import com.zaxxer.hikari.{HikariConfig, HikariDataSource}
+import models.database.jdbc.Queryable
 import models.database.{DatabaseConfig, RawQuery, Statement}
 import util.metrics.{Checked, Instrumented}
 import util.tracing.{TraceData, TracingService}
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
-abstract class JdbcDatabase(override val key: String, configPrefix: String) extends Database[Connection] {
+abstract class JdbcDatabase(override val key: String, configPrefix: String) extends Database[Connection] with Queryable {
   private[this] def time[A](klass: java.lang.Class[_])(f: => A) = {
     val ctx = Instrumented.metricRegistry.timer(MetricRegistry.name(klass)).time()
     try { f } finally { ctx.stop }
   }
 
   private[this] var ds: Option[HikariDataSource] = None
+  private[this] def source = ds.getOrElse(throw new IllegalStateException("Database not initialized."))
 
   def open(cfg: play.api.Configuration, svc: TracingService) = {
     ds.foreach(_ => throw new IllegalStateException("Database already initialized."))
@@ -29,7 +31,7 @@ abstract class JdbcDatabase(override val key: String, configPrefix: String) exte
     val url = s"jdbc:postgresql://${config.host}:${config.port}/${config.database.getOrElse(util.Config.projectId)}"
 
     val poolConfig = new HikariConfig(properties) {
-      setPoolName(util.Config.projectId)
+      setPoolName(util.Config.projectId + "." + key)
       setJdbcUrl(url)
       setUsername(config.username)
       setPassword(config.password.getOrElse(""))
@@ -48,27 +50,30 @@ abstract class JdbcDatabase(override val key: String, configPrefix: String) exte
     start(config, svc)
   }
 
-  override def transaction[A](f: (TraceData, Connection) => Future[A], conn: Option[Connection])(implicit traceData: TraceData) = {
-    ???
+  override def transaction[A](f: (TraceData, Connection) => Future[A], conn: Option[Connection] = None)(implicit traceData: TraceData) = {
+    val connection = conn.getOrElse(source.getConnection)
+    f(traceData, connection)
   }
 
   override def execute(statement: Statement, conn: Option[Connection])(implicit traceData: TraceData) = {
-    val connection = conn.getOrElse(ds.get.getConnection)
-    log.debug(s"${statement.sql} with ${statement.values.mkString("(", ", ", ")")}")
-    val stmt = connection.prepareStatement(statement.sql)
+    val connection = conn.getOrElse(source.getConnection)
     try {
-      ???
-      //prepare(stmt, statement.values)
-      //stmt.executeUpdate()
+      time(statement.getClass) { executeUpdate(connection, statement) }
     } finally {
-      stmt.close()
+      connection.close()
     }
   }
 
   override def query[A](query: RawQuery[A], conn: Option[Connection])(implicit traceData: TraceData) = {
-    val connection = ds.get.getConnection
-    //try { time(query.getClass) { apply(connection, query) } } finally { connection.close() }
-    ???
+    val connection = conn.getOrElse(source.getConnection)
+    try {
+      time(query.getClass)(apply(connection, query))
+    } finally { connection.close() }
+  }
+
+  def withConnection[T](f: (Connection) => T) = {
+    val conn = source.getConnection()
+    try { f(conn) } finally { conn.close() }
   }
 
   override def close() = {

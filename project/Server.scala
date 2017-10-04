@@ -30,7 +30,7 @@ object Server {
     import Dependencies._
     Seq(
       Akka.actor, Akka.logging, Play.filters, Play.guice, Play.ws, Play.json, Play.cache,
-      Database.postgresAsync, Database.postgresJdbc, Database.hikariCp, GraphQL.sangria, GraphQL.playJson, GraphQL.circe,
+      Database.postgresJdbc, Database.hikariCp, GraphQL.sangria, GraphQL.playJson, GraphQL.circe,
       Authentication.silhouette, Authentication.hasher, Authentication.persistence, Authentication.crypto,
       WebJars.jquery, WebJars.fontAwesome, WebJars.materialize, WebJars.moment, WebJars.mousetrap,
       Utils.csv, Utils.scalaGuice, Utils.commonsIo, Utils.betterFiles, Akka.testkit, Play.test, Testing.scalaTest
