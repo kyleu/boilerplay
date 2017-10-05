@@ -3,7 +3,7 @@ package models
 import better.files._
 import com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorSettings
 import play.api.{Environment, Mode}
-import services.notification.SlackConfig
+import services.audit.SlackConfig
 import util.metrics.MetricsConfig
 
 @javax.inject.Singleton

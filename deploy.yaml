@@ -34,7 +34,7 @@ kind: Ingress
 metadata:
   name: boilerplay-ingress
   annotations:
-    kubernetes.io/ingress.class: "istio"
+    kubernetes.io/ingress.class: "nginx"
 spec:
   rules:
   - host: boilerplay.io

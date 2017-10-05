@@ -12,9 +12,39 @@ sealed abstract class DatabaseFieldType[T](val key: String, val isNumeric: Boole
 
 object DatabaseFieldType extends Enum[DatabaseFieldType[_]] {
   case object StringType extends DatabaseFieldType[String]("string")
-  case object BigDecimalType extends DatabaseFieldType[BigDecimal]("decimal", isNumeric = true)
-  case object BooleanType extends DatabaseFieldType[Boolean]("boolean")
-  case object ByteType extends DatabaseFieldType[Byte]("byte")
+  case object BigDecimalType extends DatabaseFieldType[BigDecimal]("decimal", isNumeric = true) {
+    override def apply(row: Row, col: String) = row.as[Any](col) match {
+      case b: java.math.BigDecimal => new BigDecimal(b)
+      case b: BigDecimal => b
+    }
+    override def opt(row: Row, col: String) = row.asOpt[Any](col).map {
+      case b: java.math.BigDecimal => new BigDecimal(b)
+      case b: BigDecimal => b
+    }
+  }
+
+  case object BooleanType extends DatabaseFieldType[Boolean]("boolean") {
+    override def apply(row: Row, col: String) = row.as[Any](col) match {
+      case b: Byte => b == 1.toByte
+      case b: Boolean => b
+    }
+    override def opt(row: Row, col: String) = row.asOpt[Any](col).map {
+      case b: Byte => b == 1.toByte
+      case b: Boolean => b
+    }
+  }
+
+  case object ByteType extends DatabaseFieldType[Byte]("byte") {
+    override def apply(row: Row, col: String) = row.as[Any](col) match {
+      case i: Int => i.toByte
+      case b: Byte => b
+    }
+    override def opt(row: Row, col: String) = row.asOpt[Any](col).map {
+      case i: Int => i.toByte
+      case b: Byte => b
+    }
+  }
+
   case object ShortType extends DatabaseFieldType[Short]("short", isNumeric = true)
   case object IntegerType extends DatabaseFieldType[Int]("int", isNumeric = true)
   case object LongType extends DatabaseFieldType[Long]("long", isNumeric = true)
@@ -37,7 +67,11 @@ object DatabaseFieldType extends Enum[DatabaseFieldType[_]] {
 
   case object RefType extends DatabaseFieldType[String]("ref")
   case object XmlType extends DatabaseFieldType[String]("xml")
-  case object UuidType extends DatabaseFieldType[UUID]("uuid")
+
+  case object UuidType extends DatabaseFieldType[UUID]("uuid") {
+    override def apply(row: Row, col: String) = UUID.fromString(row.as[String](col))
+    override def opt(row: Row, col: String) = row.asOpt[String](col).map(UUID.fromString)
+  }
 
   case object ObjectType extends DatabaseFieldType[String]("object")
   case object StructType extends DatabaseFieldType[String]("struct")

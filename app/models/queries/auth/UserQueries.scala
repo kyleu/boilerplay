@@ -15,6 +15,7 @@ object UserQueries extends BaseQueries[User]("user", "users") {
   override val fields = Seq(
     DatabaseField("id"), DatabaseField("username"), DatabaseField("prefs"), DatabaseField("email"), DatabaseField("role"), DatabaseField("created")
   )
+  override protected val pkColumns = Seq("id")
   override protected val searchColumns = Seq("id", "username", "email")
 
   val insert = Insert

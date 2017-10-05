@@ -1,4 +1,4 @@
-package services.notification
+package services.audit
 
 case class SlackConfig(
     enabled: Boolean,

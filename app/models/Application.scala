@@ -14,7 +14,7 @@ import services.supervisor.ActorSupervisor
 import services.user.UserService
 import util.FutureUtils.defaultContext
 import services.cache.CacheService
-import services.notification.NotificationService
+import services.audit.AuditService
 import services.settings.SettingsService
 import util.{Config, FutureUtils, Logging}
 import util.metrics.Instrumented
@@ -38,7 +38,7 @@ class Application @javax.inject.Inject() (
     val settingsService: SettingsService,
     val silhouette: Silhouette[AuthEnv],
     val ws: TracingWSClient,
-    val notifications: NotificationService,
+    val notifications: AuditService,
     val tracing: TracingService
 ) extends Logging {
   if (Application.initialized) {

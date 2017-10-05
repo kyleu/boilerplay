@@ -5,7 +5,7 @@ import models.database._
 abstract class BaseQueries[T <: Product](val key: String, val tableName: String) extends SearchQueries[T] with MutationQueries[T] {
   def fields: Seq[DatabaseField]
 
-  protected def pkColumns = Seq("id")
+  protected def pkColumns = Seq.empty[String]
   protected def searchColumns: Seq[String] = Nil
   protected def fromRow(row: Row): T
 

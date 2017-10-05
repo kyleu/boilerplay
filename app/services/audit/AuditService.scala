@@ -1,42 +1,42 @@
-package services.notification
+package services.audit
 
 import models.Configuration
-import models.notification.{Notification, NotificationField}
+import models.audit.{Audit, AuditField}
 import models.result.data.DataField
 import util.tracing.TraceData
 import util.web.TracingWSClient
 import util.{FutureUtils, Logging, NullUtils}
 
-object NotificationService extends Logging {
-  private var inst: Option[NotificationService] = None
+object AuditService extends Logging {
+  private var inst: Option[AuditService] = None
 
-  private[this] def onNotification(notification: Notification)(implicit trace: TraceData) = {
+  private[this] def onNotification(notification: Audit)(implicit trace: TraceData) = {
     inst.foreach(_.callback(notification))
     notification
   }
 
   def onInsert(t: String, fields: Seq[DataField])(implicit trace: TraceData) = {
     val msg = s"Inserted new [$t] with [${fields.size}] fields:"
-    onNotification(Notification("insert", t, Nil, msg, fields.map(f => NotificationField(f.k, None, f.v))))
+    onNotification(Audit("insert", t, Nil, msg, fields.map(f => AuditField(f.k, None, f.v))))
   }
 
   def onUpdate(t: String, ids: Seq[DataField], originalFields: Seq[DataField], newFields: Seq[DataField])(implicit trace: TraceData) = {
     def changeFor(f: DataField) = originalFields.find(_.k == f.k).map { o =>
-      NotificationField(f.k, o.v, f.v)
+      AuditField(f.k, o.v, f.v)
     }.getOrElse(throw new IllegalStateException(s"Missing original field [${f.k}]."))
     val changes = newFields.map(changeFor)
     val msg = s"Updated [${changes.size}] fields of $t[${ids.map(id => id.k + ": " + id.v.getOrElse(NullUtils.char)).mkString(", ")}]:\n"
-    onNotification(Notification("update", t, ids, msg, changes))
+    onNotification(Audit("update", t, ids, msg, changes))
   }
 }
 
 @javax.inject.Singleton
-class NotificationService @javax.inject.Inject() (config: Configuration, ws: TracingWSClient, fu: FutureUtils) extends Logging {
+class AuditService @javax.inject.Inject() (config: Configuration, ws: TracingWSClient, fu: FutureUtils) extends Logging {
   import fu.webContext
-  NotificationService.inst.foreach(_ => throw new IllegalStateException("Double initialization."))
-  NotificationService.inst = Some(this)
+  AuditService.inst.foreach(_ => throw new IllegalStateException("Double initialization."))
+  AuditService.inst = Some(this)
 
-  def callback(n: Notification)(implicit trace: TraceData) = {
+  def callback(n: Audit)(implicit trace: TraceData) = {
     val logs = n.changes.map(c => s"  ${c.key}: ${c.originalValue.getOrElse(NullUtils.char)} -> ${c.newValue.getOrElse(NullUtils.char)}").mkString("\n")
     val msg = n.msg + logs
 
