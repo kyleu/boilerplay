@@ -5,7 +5,7 @@ import java.util.UUID
 import com.mohiva.play.silhouette.api.{Identity, LoginInfo}
 import java.time.LocalDateTime
 
-import models.result.data.DataField
+import models.result.data.{DataField, DataFieldModel}
 import util.DateUtils
 
 object User {
@@ -24,10 +24,10 @@ case class User(
     profile: LoginInfo,
     role: Role = Role.User,
     created: LocalDateTime = DateUtils.now
-) extends Identity {
+) extends Identity with DataFieldModel {
   def isAdmin = role == Role.Admin
 
-  def toDataFields = Seq(
+  override def toDataFields = Seq(
     DataField("id", Some(id.toString)),
     DataField("username", Some(username)),
     DataField("preferences", Some(preferences.toString)),
