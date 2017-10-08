@@ -68,10 +68,7 @@ object DatabaseFieldType extends Enum[DatabaseFieldType[_]] {
   case object RefType extends DatabaseFieldType[String]("ref")
   case object XmlType extends DatabaseFieldType[String]("xml")
 
-  case object UuidType extends DatabaseFieldType[UUID]("uuid") {
-    override def apply(row: Row, col: String) = UUID.fromString(row.as[String](col))
-    override def opt(row: Row, col: String) = row.asOpt[String](col).map(UUID.fromString)
-  }
+  case object UuidType extends DatabaseFieldType[UUID]("uuid")
 
   case object ObjectType extends DatabaseFieldType[String]("object")
   case object StructType extends DatabaseFieldType[String]("struct")
