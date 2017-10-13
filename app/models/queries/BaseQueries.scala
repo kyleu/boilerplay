@@ -2,7 +2,9 @@ package models.queries
 
 import models.database._
 
-abstract class BaseQueries[T <: Product](val key: String, val tableName: String) extends SearchQueries[T] with MutationQueries[T] {
+abstract class BaseQueries[T <: Product](
+    val key: String, val tableName: String, val engine: String = "postgresql"
+) extends SearchQueries[T] with MutationQueries[T] {
   def fields: Seq[DatabaseField]
 
   protected def pkColumns = Seq.empty[String]
@@ -15,7 +17,7 @@ abstract class BaseQueries[T <: Product](val key: String, val tableName: String)
   protected def placeholdersFor(seq: Seq[_]) = seq.map(_ => "?").mkString(", ")
   protected lazy val columnPlaceholders = placeholdersFor(fields)
   protected lazy val insertSql = s"""insert into ${quote(tableName)} ($quotedColumns) values ($columnPlaceholders)"""
-  protected def quote(n: String) = EngineHelper.quote(n)
+  protected def quote(n: String) = EngineHelper.quote(n, engine)
 
   protected def updateSql(updateColumns: Seq[String], additionalUpdates: Option[String] = None) = s"""update ${quote(tableName)}
     |set ${updateColumns.map(x => s"${quote(x)} = ?").mkString(", ")}${additionalUpdates.map(x => s", $x").getOrElse("")}

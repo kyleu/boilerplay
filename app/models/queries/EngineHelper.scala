@@ -3,10 +3,15 @@ package models.queries
 import java.time.{LocalDate, LocalDateTime, LocalTime}
 
 object EngineHelper {
-  protected val leftQuote = "\""
-  protected val rightQuote = "\""
+  private[this] val mySqlLeftQuote = "`"
+  private[this] val mySqlRightQuote = "`"
+  private[this] val postgresLeftQuote = "\""
+  private[this] val postgresRightQuote = "\""
 
-  def quote(n: String) = leftQuote + n + rightQuote
+  def quote(n: String, engine: String) = engine match {
+    case "mysql" => mySqlLeftQuote + n + mySqlRightQuote
+    case "postgres" => postgresLeftQuote + n + postgresRightQuote
+  }
 
   def toDatabaseFormat(v: Any) = v match {
     case x: LocalDateTime => java.sql.Timestamp.valueOf(x)

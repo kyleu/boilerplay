@@ -1,0 +1,33 @@
+@(user: models.user.User, totalCount: Option[Int], modelSeq: Seq[models.audit.Audit], q: Option[String], orderBy: Option[String], orderAsc: Boolean, limit: Int, offset: Int)(
+    implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
+)@traceData.logViewClass(getClass)
+@views.html.admin.explore.list(
+  user = user,
+  model = "Audit",
+  modelPlural = "Audits",
+  icon = models.template.Icons.audit,
+  cols = Seq(
+    "id" -> "Id",
+    "act" -> "Action",
+    "app" -> "Application",
+    "client" -> "Client",
+    "server" -> "Server",
+    "userId" -> "User",
+    "companyId" -> "Company",
+    "tags" -> "Tags",
+    "msg" -> "Message",
+    "started" -> "Start",
+    "completed" -> "Complete"
+  ),
+  totalCount = totalCount,
+  rows = modelSeq.map(model => views.html.admin.audit.auditDataRow(model)),
+  orderBy = orderBy,
+  orderAsc = orderAsc,
+  newUrl =  None,
+  orderByUrl = Some(controllers.admin.audit.routes.AuditController.list(q, _, _, Some(limit), Some(0))),
+  searchUrl = Some(controllers.admin.audit.routes.AuditController.list(None, orderBy, orderAsc, Some(limit), None)),
+  nextUrl = controllers.admin.audit.routes.AuditController.list(q, orderBy, orderAsc, Some(limit), Some(offset + limit)),
+  limit = limit,
+  offset = offset,
+  q = q
+)

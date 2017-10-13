@@ -11,6 +11,7 @@ import util.metrics.{InstrumentedActor, MetricsServletActor}
 import util.{DateUtils, Logging}
 
 object ActorSupervisor {
+  case class Broadcast(msg: ResponseMessage)
   case class SocketRecord(userId: UUID, name: String, actorRef: ActorRef, started: LocalDateTime)
   protected val sockets = collection.mutable.HashMap.empty[UUID, SocketRecord]
 }
@@ -36,6 +37,8 @@ class ActorSupervisor(val app: Application) extends InstrumentedActor with Loggi
     case GetSystemStatus => timeReceive(GetSystemStatus) { handleGetSystemStatus() }
     case ct: SendSocketTrace => timeReceive(ct) { handleSendSocketTrace(ct) }
     case ct: SendClientTrace => timeReceive(ct) { handleSendClientTrace(ct) }
+
+    case ActorSupervisor.Broadcast(msg) => sockets.values.foreach(_.actorRef ! msg)
 
     case im: InternalMessage => log.warn(s"Unhandled internal message [${im.getClass.getSimpleName}] received.")
     case x => log.warn(s"ActorSupervisor encountered unknown message: ${x.toString}")

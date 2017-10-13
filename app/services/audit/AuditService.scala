@@ -1,67 +1,100 @@
 package services.audit
 
-import models.Configuration
-import models.audit.{Audit, AuditField}
+import java.util.UUID
+
+import models.audit.{Audit, AuditComplete, AuditField, AuditStart}
+import models.queries.audit.AuditQueries
 import models.result.data.DataField
-import util.tracing.TraceData
+import models.result.filter.Filter
+import models.result.orderBy.OrderBy
+import models.{Application, Configuration}
+import play.api.inject.Injector
+import services.ModelServiceHelper
+import services.database.AuditDatabase
+import services.supervisor.ActorSupervisor
+import util.tracing.{TraceData, TracingService}
 import util.web.TracingWSClient
 import util.{FutureUtils, Logging, NullUtils}
+import util.FutureUtils.databaseContext
 
 object AuditService extends Logging {
   private var inst: Option[AuditService] = None
+  private def getInst = inst.getOrElse(throw new IllegalStateException("Not initialized."))
 
-  private[this] def onNotification(notification: Audit)(implicit trace: TraceData) = {
-    inst.foreach(_.callback(notification))
-    notification
-  }
+  def onAudit(audit: Audit)(implicit trace: TraceData) = getInst.callback(audit)
+
+  def onStart(id: UUID, msg: AuditStart)(implicit traceData: TraceData) = getInst.cache.onStart(id, msg)
+  def onComplete(msg: AuditComplete)(implicit traceData: TraceData) = getInst.cache.onComplete(msg)
 
   def onInsert(t: String, fields: Seq[DataField])(implicit trace: TraceData) = {
     val msg = s"Inserted new [$t] with [${fields.size}] fields:"
-    onNotification(Audit("insert", t, Nil, msg, fields.map(f => AuditField(f.k, None, f.v))))
+    val auditId = UUID.randomUUID
+    val records = Seq(Audit.Record(auditId = auditId, t = t, changes = fields.map(f => AuditField(f.k, None, f.v))))
+    onAudit(Audit(id = auditId, act = "insert", app = Some("hodor"), msg = msg, records = records))
   }
 
   def onUpdate(t: String, ids: Seq[DataField], originalFields: Seq[DataField], newFields: Seq[DataField])(implicit trace: TraceData) = {
-    def changeFor(f: DataField) = originalFields.find(_.k == f.k).map { o =>
-      AuditField(f.k, o.v, f.v)
-    }.getOrElse(throw new IllegalStateException(s"Missing original field [${f.k}]."))
-    val changes = newFields.map(changeFor)
+    def changeFor(f: DataField) = originalFields.find(_.k == f.k).flatMap {
+      case o if f.v != o.v => Some(AuditField(f.k, o.v, f.v))
+      case _ => None
+    }
+    val changes = newFields.flatMap(changeFor)
     val msg = s"Updated [${changes.size}] fields of $t[${ids.map(id => id.k + ": " + id.v.getOrElse(NullUtils.char)).mkString(", ")}]:\n"
-    onNotification(Audit("update", t, ids, msg, changes))
+    val auditId = UUID.randomUUID
+    val records = Seq(Audit.Record(auditId = auditId, t = t, changes = changes))
+    onAudit(Audit(id = auditId, act = "update", app = Some("hodor"), msg = msg, records = records))
   }
 }
 
 @javax.inject.Singleton
-class AuditService @javax.inject.Inject() (config: Configuration, ws: TracingWSClient, fu: FutureUtils) extends Logging {
-  import fu.webContext
+class AuditService @javax.inject.Inject() (
+    override val tracing: TracingService, inject: Injector, config: Configuration, ws: TracingWSClient, lookup: AuditLookup, fu: FutureUtils
+) extends ModelServiceHelper[Audit]("audit") {
+  def getByPrimaryKey(id: UUID)(implicit trace: TraceData) = {
+    traceF("get.by.primary.key")(td => AuditDatabase.query(AuditQueries.getByPrimaryKey(id))(td))
+  }
+
+  override def countAll(filters: Seq[Filter] = Nil)(implicit trace: TraceData) = {
+    traceF("get.all.count")(td => AuditDatabase.query(AuditQueries.countAll(filters))(td))
+  }
+  override def getAll(filters: Seq[Filter], orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int] = None)(implicit trace: TraceData) = {
+    traceF("get.all")(td => AuditDatabase.query(AuditQueries.getAll(filters, orderBys, limit, offset))(td))
+  }
+
+  // Search
+  override def searchCount(q: String, filters: Seq[Filter])(implicit trace: TraceData) = {
+    traceF("search.count")(td => AuditDatabase.query(AuditQueries.searchCount(q, filters))(td))
+  }
+  override def search(q: String, filters: Seq[Filter], orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int] = None)(implicit trace: TraceData) = {
+    traceF("search")(td => AuditDatabase.query(AuditQueries.search(q, filters, orderBys, limit, offset))(td))
+  }
+
+  def remove(id: UUID)(implicit trace: TraceData) = {
+    traceF("remove")(td => AuditDatabase.query(AuditQueries.getByPrimaryKey(id))(td).flatMap {
+      case Some(current) => AuditDatabase.execute(AuditQueries.removeByPrimaryKey(id))(td).map(_ => current)
+      case None => throw new IllegalStateException(s"Cannot find Note matching [$id].")
+    })
+  }
+
+  def csvFor(operation: String, totalCount: Int, rows: Seq[Audit])(implicit trace: TraceData) = {
+    traceB("export.csv")(td => util.CsvUtils.csvFor(Some(key), totalCount, rows, AuditQueries.fields)(td))
+  }
+
+  lazy val supervisor = inject.instanceOf(classOf[Application]).supervisor
+
   AuditService.inst.foreach(_ => throw new IllegalStateException("Double initialization."))
   AuditService.inst = Some(this)
 
-  def callback(n: Audit)(implicit trace: TraceData) = {
-    val logs = n.changes.map(c => s"  ${c.key}: ${c.originalValue.getOrElse(NullUtils.char)} -> ${c.newValue.getOrElse(NullUtils.char)}").mkString("\n")
-    val msg = n.msg + logs
+  lazy val cache = new AuditCache(supervisor, lookup)
 
-    if (config.slackConfig.enabled) {
-      import io.circe.generic.extras.auto._
-      import io.circe.syntax._
-
-      val body = Map(
-        "channel" -> config.slackConfig.channel,
-        "username" -> config.slackConfig.username,
-        "icon_url" -> config.slackConfig.iconUrl,
-        "text" -> msg
-      )
-
-      val call = ws.url("slack.post", config.slackConfig.url).withHttpHeaders("Accept" -> "application/json").post(body.asJson.spaces2)
-      val ret = call.map { x =>
-        if (x.status == 200) {
-          "OK"
-        } else {
-          log.warn("Unable to post to Slack (" + x.status + "): [" + x.body + "].")
-          "ERROR"
-        }
-      }
-      ret.failed.foreach(x => log.warn("Unable to post to Slack.", x))
-    }
-    log.info(msg)
+  def callback(a: Audit)(implicit trace: TraceData) = if (a.records.exists(_.changes.nonEmpty)) {
+    supervisor ! ActorSupervisor.Broadcast(models.AuditNotification(a))
+    AuditNotifications.postToSlack(ws, config.slackConfig, a)
+    AuditNotifications.persist(a)
+    log.info(a.changeLog)
+    a
+  } else {
+    log.info(s"Ignoring audit [${a.id}], as it has no changes.")
+    a
   }
 }

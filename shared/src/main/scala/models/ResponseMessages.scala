@@ -3,6 +3,7 @@ package models
 import java.time.LocalDateTime
 import java.util.UUID
 
+import models.audit.{Audit, AuditComplete, AuditStart}
 import models.user.UserPreferences
 
 sealed trait ResponseMessage
@@ -14,3 +15,7 @@ case class Pong(timestamp: LocalDateTime) extends ResponseMessage
 case class Disconnected(reason: String) extends ResponseMessage
 
 case class UserSettings(userId: UUID, username: String, email: String, preferences: UserPreferences) extends ResponseMessage
+
+case class AuditStartNotification(id: UUID, as: AuditStart) extends ResponseMessage
+case class AuditCompleteNotification(ac: AuditComplete) extends ResponseMessage
+case class AuditNotification(a: Audit) extends ResponseMessage

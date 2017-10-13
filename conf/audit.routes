@@ -1,0 +1,12 @@
+GET         /                  controllers.admin.audit.AuditController.index
+
+GET         /form              controllers.admin.audit.AuditController.form
+
+POST        /start             controllers.admin.audit.AuditController.start
+POST        /complete          controllers.admin.audit.AuditController.complete
+
+GET         /list              controllers.admin.audit.AuditController.list(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None)
+GET         /:id               controllers.admin.audit.AuditController.view(id: java.util.UUID)
+
+GET         /:id/remove        controllers.admin.audit.AuditController.remove(id: java.util.UUID)
+

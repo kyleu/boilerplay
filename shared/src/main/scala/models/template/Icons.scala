@@ -12,6 +12,10 @@ object Icons {
   val search = "fa-search"
   val error = "fa-exclamation"
 
+  val connected = "fa-check"
+  val started = "fa-caret-square-o-right"
+  val completed = "fa-caret-square-o-left"
+
   val signIn = "fa-sign-in"
   val signOut = "fa-sign-out"
 
@@ -20,6 +24,7 @@ object Icons {
 
   val dropdownToggle = "fa-angle-down"
 
+  val audit = "fa-dot-circle-o"
   val sandbox = "fa-folder-o"
   val user = "fa-user"
 

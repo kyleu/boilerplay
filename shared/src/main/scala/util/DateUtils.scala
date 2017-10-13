@@ -7,7 +7,7 @@ object DateUtils {
   private[this] val isoFmt = format.DateTimeFormatter.ISO_LOCAL_DATE_TIME
   private[this] val dateFmt = format.DateTimeFormatter.ofPattern("yyyy-MM-dd")
   private[this] val niceDateFmt = format.DateTimeFormatter.ofPattern("EEEE, MMM dd, yyyy")
-  private[this] val niceTimeFmt = format.DateTimeFormatter.ofPattern("HH:mm:ss")
+  private[this] val timeFmt = format.DateTimeFormatter.ofPattern("HH:mm:ss")
 
   implicit def localDateOrdering: Ordering[LocalDate] = Ordering.fromLessThan(_ isBefore _)
   implicit def localDateTimeOrdering: Ordering[LocalDateTime] = Ordering.fromLessThan(_ isBefore _)
@@ -23,9 +23,10 @@ object DateUtils {
   def toIsoString(ldt: LocalDateTime) = isoFmt.format(ldt)
   def fromIsoString(s: String) = LocalDateTime.from(isoFmt.parse(s))
   def fromDateString(s: String) = LocalDate.from(dateFmt.parse(s))
+  def fromTimeString(s: String) = LocalTime.from(timeFmt.parse(s))
 
   def niceDate(d: LocalDate) = niceDateFmt.format(d)
-  def niceTime(t: LocalTime) = niceTimeFmt.format(t)
+  def niceTime(t: LocalTime) = timeFmt.format(t)
   def niceDateTime(dt: LocalDateTime) = s"${niceDate(dt.toLocalDate)} ${niceTime(dt.toLocalTime)} UTC"
 
   private[this] val dFmt = new SimpleDateFormat("yyyy-MM-dd")

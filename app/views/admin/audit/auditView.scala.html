@@ -1,0 +1,67 @@
+@(user: models.user.User, model: models.audit.Audit, debug: Boolean)(
+    implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
+)@traceData.logViewClass(getClass)@layout.admin(user, "audit", s"Audit [${model.id}]") {
+  <div class="collection with-header">
+    <div class="collection-header">
+      <div class="right"><a class="theme-text remove-link" onclick="return confirm('Are you sure you want to remove this Ad?')" href="@controllers.admin.audit.routes.AuditController.remove(model.id)">Remove</a></div>
+      <h5>
+        <i class="fa @models.template.Icons.audit"></i>
+        Audit [@model.id]
+      </h5>
+    </div>
+    <div class="collection-item">
+      <table class="highlight">
+        <tbody>
+          <tr>
+            <th>Id</th>
+            <td>@model.id</td>
+          </tr>
+          <tr>
+            <th>Action</th>
+            <td>@model.act</td>
+          </tr>
+          <tr>
+            <th>Application</th>
+            <td>@model.app</td>
+          </tr>
+          <tr>
+            <th>Client</th>
+            <td>@model.client</td>
+          </tr>
+          <tr>
+            <th>Server</th>
+            <td>@model.server</td>
+          </tr>
+          <tr>
+            <th>User</th>
+            <td>@model.user</td>
+          </tr>
+          <tr>
+            <th>Company</th>
+            <td>@model.completed</td>
+          </tr>
+          <tr>
+            <th>Tags</th>
+            <td>@model.tags</td>
+          </tr>
+          <tr>
+            <th>Message</th>
+            <td>@model.msg</td>
+          </tr>
+          <tr>
+            <th>Records</th>
+            <td>@model.records</td>
+          </tr>
+          <tr>
+            <th>Started</th>
+            <td>@model.started</td>
+          </tr>
+          <tr>
+            <th>Completed</th>
+            <td>@model.completed</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+}

@@ -8,6 +8,7 @@ import util.{Logging, NullUtils}
 
 import scala.annotation.tailrec
 import scala.concurrent.Future
+import scala.util.control.NonFatal
 
 trait Queryable extends Logging {
   @tailrec
@@ -30,10 +31,16 @@ trait Queryable extends Logging {
     log.debug(s"${query.sql} with ${query.values.mkString("(", ", ", ")")}")
     val stmt = connection.prepareStatement(query.sql)
     try {
-      prepare(stmt, query.values)
+      try {
+        prepare(stmt, query.values)
+      } catch {
+        case NonFatal(x) => log.errorThenThrow(s"Unable to prepare query for [${query.sql}].", x)
+      }
       val results = stmt.executeQuery()
       try {
         Future.successful(query.handle(results))
+      } catch {
+        case NonFatal(x) => log.errorThenThrow(s"Unable to handle query results for [${query.sql}].", x)
       } finally {
         results.close()
       }
@@ -48,6 +55,8 @@ trait Queryable extends Logging {
     try {
       prepare(stmt, statement.values)
       Future.successful(stmt.executeUpdate())
+    } catch {
+      case NonFatal(x) => log.errorThenThrow(s"Unable to prepare statement [${statement.sql}].", x)
     } finally {
       stmt.close()
     }
@@ -57,11 +66,21 @@ trait Queryable extends Logging {
     log.debug(s"${query.sql} with ${query.values.mkString("(", ", ", ")")}")
     val stmt = connection.prepareStatement(query.sql)
     try {
-      prepare(stmt, query.values)
+      try {
+        prepare(stmt, query.values)
+      } catch {
+        case NonFatal(x) => log.errorThenThrow(s"Unable to prepare raw query [${query.sql}].", x)
+      }
       val isResultset = stmt.execute()
       if (isResultset) {
         val res = stmt.getResultSet
-        Future.successful(Left(query.handle(res)))
+        try {
+          Future.successful(Left(query.handle(res)))
+        } catch {
+          case NonFatal(x) => log.errorThenThrow(s"Unable to handle query results for [${query.sql}].", x)
+        } finally {
+          res.close()
+        }
       } else {
         Future.successful(Right(stmt.getUpdateCount))
       }

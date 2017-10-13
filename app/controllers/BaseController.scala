@@ -2,6 +2,7 @@ package controllers
 
 import brave.Span
 import com.mohiva.play.silhouette.api.actions.{SecuredRequest, UserAwareRequest}
+import io.circe.Json
 import models.Application
 import models.auth.AuthEnv
 import models.result.data.DataField
@@ -12,6 +13,9 @@ import util.web.TracingFilter
 import util.Logging
 import util.tracing.TraceData
 import zipkin.TraceKeys
+
+import sangria.marshalling.MarshallingUtil._
+import sangria.marshalling.circe._
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -58,6 +62,12 @@ abstract class BaseController(val name: String) extends InjectedController with 
     val form = rawForm.getOrElse(Map.empty).mapValues(_.head)
     val fields = form.toSeq.filter(x => x._1.endsWith(".include") && x._2 == "true").map(_._1.stripSuffix(".include"))
     fields.map(f => DataField(f, Some(form.getOrElse(f, throw new IllegalStateException(s"Cannot find value for included field [$f].")))))
+  }
+
+  protected def jsonFor(request: Request[AnyContent]) = {
+    import sangria.marshalling.playJson._
+    val playJson = request.body.asJson.getOrElse(throw new IllegalStateException("Invalid JSON."))
+    playJson.convertMarshaled[Json]
   }
 
   private[this] def enhanceRequest(request: Request[AnyContent], user: Option[User], trace: Span) = {
