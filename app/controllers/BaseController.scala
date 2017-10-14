@@ -1,9 +1,12 @@
 package controllers
 
+import java.net.InetAddress
+
 import brave.Span
 import com.mohiva.play.silhouette.api.actions.{SecuredRequest, UserAwareRequest}
 import io.circe.Json
 import models.Application
+import models.audit.{AuditModelPk, AuditStart}
 import models.auth.AuthEnv
 import models.result.data.DataField
 import models.user.{Role, User}
@@ -13,13 +16,14 @@ import util.web.TracingFilter
 import util.Logging
 import util.tracing.TraceData
 import zipkin.TraceKeys
-
 import sangria.marshalling.MarshallingUtil._
 import sangria.marshalling.circe._
 
 import scala.concurrent.{ExecutionContext, Future}
 
 abstract class BaseController(val name: String) extends InjectedController with Instrumented with Logging {
+  private[this] lazy val serverName = Some(InetAddress.getLocalHost.getHostName)
+
   protected def app: Application
 
   protected def withoutSession(action: String)(
@@ -57,6 +61,17 @@ abstract class BaseController(val name: String) extends InjectedController with 
   }
 
   protected def getTraceData(implicit requestHeader: RequestHeader) = requestHeader.attrs(TracingFilter.traceKey)
+
+  def pk(t: String, v: Any*) = AuditModelPk(t, v.map(_.toString))
+  def audit(models: AuditModelPk*)(user: User, act: String = "development", tags: Map[String, String] = Map.empty)(implicit request: Request[AnyContent]) = {
+    val c = Some(request.remoteAddress)
+    AuditStart(action = act, app = Some(util.Config.projectId), client = c, server = serverName, user = Some(user.id), tags = tags, models = models)
+  }
+
+  def auditNoUser(models: AuditModelPk*)(act: String = "development", tags: Map[String, String] = Map.empty)(implicit request: Request[AnyContent]) = {
+    val c = Some(request.remoteAddress)
+    AuditStart(action = act, app = Some(util.Config.projectId), client = c, server = serverName, user = None, tags = tags, models = models)
+  }
 
   protected def modelForm(rawForm: Option[Map[String, Seq[String]]]) = {
     val form = rawForm.getOrElse(Map.empty).mapValues(_.head)

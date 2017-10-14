@@ -6,11 +6,11 @@ import services.{InitService, Logging, NotificationService}
 import scala.scalajs.js.annotation.JSExportTopLevel
 
 @JSExportTopLevel("SocketConnection")
-class SocketConnection() extends NetworkHelper with ResponseMessageHelper {
+class SocketConnection(path: String) extends NetworkHelper with ResponseMessageHelper {
   InitService.initIfNeeded()
   NetworkMessage.register(sendMessage)
   Logging.debug(util.Config.projectName + " is connecting...")
-  connect()
+  connect(path)
 
   protected[this] def handleServerError(reason: String, content: String) = {
     val lp = $("#loading-panel")

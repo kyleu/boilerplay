@@ -3,7 +3,6 @@ package controllers.admin.audit
 import java.util.UUID
 
 import controllers.BaseController
-import io.circe.syntax._
 import models.Application
 import io.circe.generic.auto._
 import io.circe.java8.time._
@@ -25,7 +24,8 @@ class AuditController @javax.inject.Inject() (override val app: Application, svc
   }
 
   def form() = withSession("form") { implicit request => implicit td =>
-    Future.successful(Ok(views.html.admin.audit.auditForm(request.identity, app.config.debug)))
+    val sJson = audit(pk("user", request.identity.id))(request.identity).asJson.spaces2
+    Future.successful(Ok(views.html.admin.audit.auditForm(request.identity, sJson, app.config.debug)))
   }
 
   def start() = withoutSession("start") { implicit request => implicit td =>

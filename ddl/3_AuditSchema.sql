@@ -6,8 +6,7 @@ create table if not exists audit (
   app character varying(64) not null,
   client character varying(32),
   server character varying(32),
-  user_id integer,
-  company_id integer,
+  user_id uuid,
   tags hstore not null,
   started timestamp without time zone not null,
   completed timestamp without time zone not null,
@@ -19,7 +18,6 @@ create index if not exists audit_app on audit using btree (app asc nulls last);
 create index if not exists audit_client on audit using btree (client asc nulls last);
 create index if not exists audit_server on audit using btree (server asc nulls last);
 create index if not exists audit_user_id on audit using btree (user_id asc nulls last);
-create index if not exists audit_company_id on audit using btree (company_id asc nulls last);
 create index if not exists audit_tags on audit using gin (tags);
 
 create table if not exists audit_record (

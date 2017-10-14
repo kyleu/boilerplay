@@ -11,10 +11,10 @@ trait NetworkHelper { this: SocketConnection =>
 
   protected[this] var latencyMs: Option[Int] = None
 
-  protected def connect() = {
+  protected def connect(path: String) = {
     val loc = org.scalajs.dom.document.location
     val wsProtocol = if (loc.protocol == "https:") { "wss" } else { "ws" }
-    val socketUrl = s"$wsProtocol://${loc.host}/connect"
+    val socketUrl = s"$wsProtocol://${loc.host}$path"
     socket.open(socketUrl)
   }
 

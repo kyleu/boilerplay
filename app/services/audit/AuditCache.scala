@@ -79,7 +79,6 @@ class AuditCache(supervisor: ActorRef, lookup: AuditLookup) extends Logging {
           client = current._1.client,
           server = current._1.server,
           user = current._1.user,
-          company = current._1.company,
           tags = current._1.tags ++ msg.tags,
           msg = msg.msg,
           records = updates ++ inserts,

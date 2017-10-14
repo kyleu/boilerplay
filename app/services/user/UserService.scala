@@ -58,11 +58,13 @@ class UserService @javax.inject.Inject() (override val tracing: TracingService, 
     user
   })
 
-  def update(user: User)(implicit trace: TraceData) = traceF("update")(td => SystemDatabase.execute(UserQueries.UpdateUser(user))(td).map { _ =>
-    log.info(s"Updated user [$user].")
-    UserCache.cacheUser(user)
-    user
-  })
+  def update(user: User)(implicit trace: TraceData) = traceF("update") { td =>
+    SystemDatabase.execute(UserQueries.UpdateUser(user))(td).map { _ =>
+      log.info(s"Updated user [$user].")
+      UserCache.cacheUser(user)
+      user
+    }
+  }
 
   def remove(userId: UUID)(implicit trace: TraceData) = traceF("remove")(td => SystemDatabase.transaction { (txTd, conn) =>
     val startTime = System.nanoTime

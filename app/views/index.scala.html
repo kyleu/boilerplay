@@ -24,7 +24,7 @@
   @views.html.components.includeScalaJs(debug)
   <script>
     $(function() {
-      window.socket = new SocketConnection();
+      window.socket = new SocketConnection('/connect');
     });
   </script>
 

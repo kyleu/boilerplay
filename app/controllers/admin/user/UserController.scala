@@ -23,7 +23,7 @@ class UserController @javax.inject.Inject() (
 
   def createForm = withSession("user.createForm", admin = true) { implicit request => implicit td =>
     val call = controllers.admin.user.routes.UserController.create()
-    Future.successful(Ok(views.html.admin.user.userForm(request.identity, models.user.User.empty, "New User", call, isNew = true)))
+    Future.successful(Ok(views.html.admin.user.userForm(request.identity, models.user.User.empty(), "New User", call, isNew = true)))
   }
 
   def create() = withSession("user.create", admin = true) { implicit request => implicit td =>
