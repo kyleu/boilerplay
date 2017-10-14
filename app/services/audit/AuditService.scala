@@ -30,7 +30,7 @@ object AuditService extends Logging {
     val msg = s"Inserted new [$t] with [${fields.size}] fields:"
     val auditId = UUID.randomUUID
     val records = Seq(Audit.Record(auditId = auditId, t = t, changes = fields.map(f => AuditField(f.k, None, f.v))))
-    onAudit(Audit(id = auditId, act = "insert", app = Some("hodor"), msg = msg, records = records))
+    onAudit(Audit(id = auditId, act = "insert", app = Some("boilerplay"), msg = msg, records = records))
   }
 
   def onUpdate(t: String, ids: Seq[DataField], originalFields: Seq[DataField], newFields: Seq[DataField])(implicit trace: TraceData) = {
@@ -42,7 +42,7 @@ object AuditService extends Logging {
     val msg = s"Updated [${changes.size}] fields of $t[${ids.map(id => id.k + ": " + id.v.getOrElse(NullUtils.char)).mkString(", ")}]:\n"
     val auditId = UUID.randomUUID
     val records = Seq(Audit.Record(auditId = auditId, t = t, changes = changes))
-    onAudit(Audit(id = auditId, act = "update", app = Some("hodor"), msg = msg, records = records))
+    onAudit(Audit(id = auditId, act = "update", app = Some("boilerplay"), msg = msg, records = records))
   }
 }
 

@@ -3,7 +3,7 @@ package controllers.admin.audit
 object AuditJson {
   val startJson = """{
     |  "action": "insert",
-    |  "app": "hodor",
+    |  "app": "boilerplay",
     |  "client": "127.0.0.1",
     |  "server": "localhost",
     |  "user": 1,
