@@ -10,6 +10,13 @@ import models.result.ResultFieldHelper
 import models.result.data.DataField
 import models.result.filter.Filter
 import models.result.orderBy.OrderBy
+import org.postgresql.jdbc.PgArray
+import org.postgresql.util.PGobject
+
+import io.circe.generic.auto._
+import io.circe.java8.time._
+import io.circe.syntax._
+import io.circe.parser._
 
 object AuditRecordQueries extends BaseQueries[Audit.Record]("auditRecord", "audit_record", "postgres") {
   override val fields = Seq(
@@ -35,15 +42,11 @@ object AuditRecordQueries extends BaseQueries[Audit.Record]("auditRecord", "audi
   case class CountByAuditId(auditId: UUID) extends ColCount(column = "audit_id", values = Seq(auditId))
   case class GetByAuditId(auditId: UUID, orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int]) extends SeqQuery(
     whereClause = Some(quote("audit_id") + "  = ?"), orderBy = ResultFieldHelper.orderClause(fields, engine, orderBys: _*),
-    limit = limit, offset = offset, values = Seq(auditId)
+    limit = limit, offset = offset, values = Seq(auditId.toString)
   )
   case class GetByAuditIdSeq(auditIdSeq: Seq[UUID]) extends ColSeqQuery(column = "audit_id", values = auditIdSeq)
 
   def insert(model: Audit.Record) = new Statement {
-    import io.circe.generic.auto._
-    import io.circe.java8.time._
-    import io.circe.syntax._
-
     override def name: String = "insert"
     override def sql: String = s"""insert into $tableName ($quotedColumns) values (?, ?, ?, ?, ?)"""
     private[this] val pkArray = "{ " + model.pk.map("\"" + _ + "\"").mkString(", ") + " }"
@@ -61,7 +64,7 @@ object AuditRecordQueries extends BaseQueries[Audit.Record]("auditRecord", "audi
     id = UuidType(row, "id"),
     auditId = UuidType(row, "audit_id"),
     t = StringType(row, "t"),
-    pk = row.as[Seq[String]]("pk"),
-    changes = row.as[Seq[AuditField]]("changes")
+    pk = row.as[PgArray]("pk").getArray.asInstanceOf[Array[String]],
+    changes = parse(row.as[PGobject]("changes").getValue).right.get.as[List[AuditField]].right.get
   )
 }
