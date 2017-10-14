@@ -1,4 +1,3 @@
-/* User */
 create table if not exists "users" (
   "id" uuid primary key,
   "username" character varying(256),
@@ -20,10 +19,4 @@ create table if not exists "password_info" (
   "salt" varchar(256),
   "created" timestamp not null,
   constraint "password_info_pkey" primary key ("provider", "key")
-);
-
-/* System Settings */
-create table if not exists "setting_values" (
-  "k" character varying(256) primary key,
-  "v" character varying(4096) not null
 );

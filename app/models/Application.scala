@@ -8,7 +8,7 @@ import com.mohiva.play.silhouette.api.Silhouette
 import models.auth.AuthEnv
 import play.api.Environment
 import play.api.inject.ApplicationLifecycle
-import services.database.{ApplicationDatabase, AuditDatabase, MasterDdl, SystemDatabase}
+import services.database._
 import services.file.FileService
 import services.supervisor.ActorSupervisor
 import services.user.UserService
@@ -65,14 +65,13 @@ class Application @javax.inject.Inject() (
 
     SystemDatabase.open(config.cnf, tracing)
     ApplicationDatabase.open(config.cnf, tracing)
-    AuditDatabase.open(config.cnf, tracing)
+
     MasterDdl.init().map { _ =>
       settingsService.load()
     }
   }
 
   private[this] def stop() = {
-    AuditDatabase.close()
     ApplicationDatabase.close()
     SystemDatabase.close()
     CacheService.close()

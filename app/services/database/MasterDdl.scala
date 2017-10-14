@@ -59,9 +59,7 @@ object MasterDdl extends Logging {
             val statement = DdlStatement(sql._1)
             Await.result(SystemDatabase.execute(statement, Some(conn))(txTd), 5.seconds)
           }
-          SystemDatabase.execute(DdlQueries.insert(f)).map(_ => f).recoverWith {
-            case NonFatal(x) => log.errorThenThrow("Error inserting ddl record.", x)
-          }
+          SystemDatabase.execute(DdlQueries.insert(f)).map(_ => f)
         }
         Await.result(tx, 30.seconds)
       }

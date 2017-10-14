@@ -10,7 +10,7 @@ import models.result.orderBy.OrderBy
 import models.{Application, Configuration}
 import play.api.inject.Injector
 import services.ModelServiceHelper
-import services.database.AuditDatabase
+import services.database.SystemDatabase
 import services.supervisor.ActorSupervisor
 import util.tracing.{TraceData, TracingService}
 import util.web.TracingWSClient
@@ -51,27 +51,27 @@ class AuditService @javax.inject.Inject() (
     override val tracing: TracingService, inject: Injector, config: Configuration, ws: TracingWSClient, lookup: AuditLookup, fu: FutureUtils
 ) extends ModelServiceHelper[Audit]("audit") {
   def getByPrimaryKey(id: UUID)(implicit trace: TraceData) = {
-    traceF("get.by.primary.key")(td => AuditDatabase.query(AuditQueries.getByPrimaryKey(id))(td))
+    traceF("get.by.primary.key")(td => SystemDatabase.query(AuditQueries.getByPrimaryKey(id))(td))
   }
 
   override def countAll(filters: Seq[Filter] = Nil)(implicit trace: TraceData) = {
-    traceF("get.all.count")(td => AuditDatabase.query(AuditQueries.countAll(filters))(td))
+    traceF("get.all.count")(td => SystemDatabase.query(AuditQueries.countAll(filters))(td))
   }
   override def getAll(filters: Seq[Filter], orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int] = None)(implicit trace: TraceData) = {
-    traceF("get.all")(td => AuditDatabase.query(AuditQueries.getAll(filters, orderBys, limit, offset))(td))
+    traceF("get.all")(td => SystemDatabase.query(AuditQueries.getAll(filters, orderBys, limit, offset))(td))
   }
 
   // Search
   override def searchCount(q: String, filters: Seq[Filter])(implicit trace: TraceData) = {
-    traceF("search.count")(td => AuditDatabase.query(AuditQueries.searchCount(q, filters))(td))
+    traceF("search.count")(td => SystemDatabase.query(AuditQueries.searchCount(q, filters))(td))
   }
   override def search(q: String, filters: Seq[Filter], orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int] = None)(implicit trace: TraceData) = {
-    traceF("search")(td => AuditDatabase.query(AuditQueries.search(q, filters, orderBys, limit, offset))(td))
+    traceF("search")(td => SystemDatabase.query(AuditQueries.search(q, filters, orderBys, limit, offset))(td))
   }
 
   def remove(id: UUID)(implicit trace: TraceData) = {
-    traceF("remove")(td => AuditDatabase.query(AuditQueries.getByPrimaryKey(id))(td).flatMap {
-      case Some(current) => AuditDatabase.execute(AuditQueries.removeByPrimaryKey(id))(td).map(_ => current)
+    traceF("remove")(td => SystemDatabase.query(AuditQueries.getByPrimaryKey(id))(td).flatMap {
+      case Some(current) => SystemDatabase.execute(AuditQueries.removeByPrimaryKey(id))(td).map(_ => current)
       case None => throw new IllegalStateException(s"Cannot find Note matching [$id].")
     })
   }

@@ -10,7 +10,9 @@ import models.database.{DatabaseConfig, RawQuery, Statement}
 import util.metrics.{Checked, Instrumented}
 import util.tracing.{TraceData, TracingService}
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
+import scala.util.control.NonFatal
+import util.FutureUtils.databaseContext
 
 abstract class JdbcDatabase(override val key: String, configPrefix: String) extends Database[Connection] with Queryable {
   private[this] def time[A](klass: java.lang.Class[_])(f: => A) = {
@@ -52,7 +54,16 @@ abstract class JdbcDatabase(override val key: String, configPrefix: String) exte
 
   override def transaction[A](f: (TraceData, Connection) => Future[A], conn: Option[Connection] = None)(implicit traceData: TraceData) = {
     val connection = conn.getOrElse(source.getConnection)
-    f(traceData, connection)
+    connection.setAutoCommit(false)
+    try {
+      val res = f(traceData, connection)
+      res.failed.foreach(_ => connection.rollback())
+      res
+    } catch {
+      case NonFatal(x) =>
+        connection.rollback()
+        Future.failed(x)
+    }
   }
 
   override def execute(statement: Statement, conn: Option[Connection])(implicit traceData: TraceData) = {
@@ -61,9 +72,7 @@ abstract class JdbcDatabase(override val key: String, configPrefix: String) exte
       trace("execute." + statement.name) { tn =>
         time(statement.getClass)(executeUpdate(connection, statement))
       }
-    } finally {
-      connection.close()
-    }
+    } finally { if (conn.isEmpty) { connection.close() } }
   }
 
   override def query[A](query: RawQuery[A], conn: Option[Connection])(implicit traceData: TraceData) = {
@@ -72,7 +81,7 @@ abstract class JdbcDatabase(override val key: String, configPrefix: String) exte
       trace("query." + query.name) { tn =>
         time(query.getClass)(apply(connection, query))
       }
-    } finally { connection.close() }
+    } finally { if (conn.isEmpty) { connection.close() } }
   }
 
   def withConnection[T](f: (Connection) => T) = {
