@@ -4,7 +4,7 @@ import java.net.InetSocketAddress
 import java.util.concurrent.TimeUnit
 
 import akka.actor.Props
-import com.codahale.metrics.graphite.{Graphite, GraphiteReporter}
+import com.codahale.metrics.graphite.{GraphiteUDP, GraphiteReporter}
 import com.codahale.metrics.{MetricFilter, JmxReporter}
 import com.codahale.metrics.servlets.AdminServlet
 import org.eclipse.jetty.server.{ServerConnector, Server}
@@ -29,7 +29,7 @@ class MetricsServletActor(cfg: MetricsConfig) extends InstrumentedActor with Log
 
     if (cfg.graphiteEnabled) {
       log.info(s"Starting Graphite reporter for [${cfg.graphiteServer}:${cfg.graphitePort}].")
-      val graphiteServer = new Graphite(new InetSocketAddress(cfg.graphiteServer, cfg.graphitePort))
+      val graphiteServer = new GraphiteUDP(new InetSocketAddress(cfg.graphiteServer, cfg.graphitePort))
       graphiteReporter = Some(
         GraphiteReporter.forRegistry(Instrumented.metricRegistry)
           .convertRatesTo(TimeUnit.SECONDS)
