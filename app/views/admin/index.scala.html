@@ -1,6 +1,6 @@
 @(user: models.user.User)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
-)@traceData.logViewClass(getClass)@layout.admin(user, "", util.Config.projectName + " Administration") {
+)@traceData.logViewClass(getClass)@views.html.admin.layout.page(user, "", util.Config.projectName + " Administration") {
   <ul class="collection with-header">
     <li class="collection-header">
       <h5>@util.Config.projectName Administration</h5>
@@ -9,6 +9,10 @@
     <li class="collection-item">
       <a class="theme-text" href="@controllers.admin.system.routes.AdminController.explore()">Explore Models</a>
       <div><em>Manage the models of the system.</em></div>
+    </li>
+    <li class="collection-item">
+      <a class="theme-text" href="@controllers.admin.audit.routes.AuditController.index()">Manage Audits</a>
+      <div><em>View and modify model additions and changes.</em></div>
     </li>
     <li class="collection-item">
       <a class="theme-text" href="@controllers.admin.graphql.routes.GraphQLController.graphql(None)">GraphQL</a>

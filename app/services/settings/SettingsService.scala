@@ -4,12 +4,13 @@ import models.queries.settings.SettingQueries
 import models.settings.{Setting, SettingKey}
 import util.FutureUtils.databaseContext
 import services.database.SystemDatabase
+import util.Logging
 import util.tracing.{TraceData, TracingService}
 
 import scala.concurrent.Future
 
 @javax.inject.Singleton
-class SettingsService @javax.inject.Inject() (tracing: TracingService) {
+class SettingsService @javax.inject.Inject() (tracing: TracingService) extends Logging {
   private[this] var settings = Seq.empty[Setting]
   private[this] var settingsMap = Map.empty[SettingKey, String]
 
@@ -26,6 +27,7 @@ class SettingsService @javax.inject.Inject() (tracing: TracingService) {
     SystemDatabase.query(SettingQueries.getAll())(td).map(_.map(s => s.key -> s.value).toMap).map { x =>
       settingsMap = x
       settings = SettingKey.values.map(k => Setting(k, settingsMap.getOrElse(k, k.default)))
+      log.debug(s"Loaded [${x.size}] system settings.")
     }
   }
 

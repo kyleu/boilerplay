@@ -1,6 +1,6 @@
 @(self: models.user.User, model: models.user.User)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
-)@traceData.logViewClass(getClass)@layout.admin(self, "explore", "View User") {
+)@traceData.logViewClass(getClass)@views.html.admin.layout.page(self, "explore", "View User") {
   <div class="collection with-header">
     <div class="collection-header">
       <div class="right"><a class="theme-text" href="@controllers.admin.user.routes.UserController.editForm(model.id)">Edit</a></div>

@@ -1,6 +1,6 @@
 @(user: models.user.User, model: models.audit.Audit, debug: Boolean)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
-)@traceData.logViewClass(getClass)@layout.admin(user, "audit", s"Audit [${model.id}]") {
+)@traceData.logViewClass(getClass)@views.html.admin.layout.page(user, "audit", s"Audit [${model.id}]") {
   <div class="collection with-header">
     <div class="collection-header">
       <div class="right"><a class="theme-text remove-link" onclick="return confirm('Are you sure you want to remove this Ad?')" href="@controllers.admin.audit.routes.AuditController.remove(model.id)">Remove</a></div>
@@ -10,7 +10,7 @@
       </h5>
     </div>
     <div class="collection-item">
-      <table class="highlight">
+      <table class="highlight audit-table">
         <tbody>
           <tr>
             <th>Id</th>
@@ -42,15 +42,11 @@
           </tr>
           <tr>
             <th>Tags</th>
-            <td>@model.tags</td>
+            <td>@model.tags.map(t => t._1 + "" + t._2).mkString(", ")</td>
           </tr>
           <tr>
             <th>Message</th>
             <td>@model.msg</td>
-          </tr>
-          <tr>
-            <th>Records</th>
-            <td>@model.records</td>
           </tr>
           <tr>
             <th>Started</th>
@@ -63,5 +59,31 @@
         </tbody>
       </table>
     </div>
+    @model.records.map { r =>
+      <div class="collection-item">
+        <div class="right">@r.id</div>
+        <h5><a class="theme-text" href="@services.audit.AuditRoutes.getViewRoute(r.t, r.pk)">@r.t:@r.pk.mkString(", ")</a></h5>
+      </div>
+      <div class="collection-item">
+        <table class="highlight audit-table">
+          <thead>
+            <tr>
+              <th>Property</th>
+              <th style="width: 40%;">Original</th>
+              <th style="width: 40%;">New</th>
+            </tr>
+          </thead>
+          <tbody>
+          @r.changes.map { c =>
+            <tr>
+              <th>@c.k</th>
+              <td>@c.o.getOrElse(util.NullUtils.char.toString)</td>
+              <td>@c.n.getOrElse(util.NullUtils.char.toString)</td>
+            </tr>
+          }
+          </tbody>
+        </table>
+      </div>
+    }
   </div>
 }

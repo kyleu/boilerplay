@@ -5,6 +5,7 @@ GET         /robots.txt                              controllers.HomeController.
 
 # Admin
 ->          /admin/system                            system.Routes
+->          /admin/audit                             audit.Routes
 ->          /admin/user                              user.Routes
 ->          /admin/graphql                           graphql.Routes
 

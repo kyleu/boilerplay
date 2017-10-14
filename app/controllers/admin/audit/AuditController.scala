@@ -24,37 +24,8 @@ class AuditController @javax.inject.Inject() (override val app: Application, svc
     Future.successful(Ok(views.html.admin.audit.auditIndex(request.identity, app.config.debug)))
   }
 
-  def form() = withoutSession("form") { implicit request => implicit td =>
-    val startJson = """{
-      |  "action": "insert",
-      |  "app": "hodor",
-      |  "client": "127.0.0.1",
-      |  "server": "localhost",
-      |  "user": 1,
-      |  "company": 15,
-      |  "models": [
-      |    { "t": "ad", "pk": ["123"] },
-      |    { "t": "company", "pk": ["500"] }
-      |  ],
-      |  "tags": {
-      |    "x": "y",
-      |    "foo": "bar"
-      |  }
-      |}""".stripMargin
-
-    val completeJson = """{
-      |  "id": "???",
-      |  "msg": "...",
-      |  "tags": {
-      |    "x": "z",
-      |    "key": "val"
-      |  },
-      |  "inserted": [
-      |    { "t": "ad", "pk": ["1"] }
-      |  ]
-      |}""".stripMargin
-
-    Future.successful(Ok(views.html.admin.audit.auditForm(request.identity, startJson, completeJson, app.config.debug)))
+  def form() = withSession("form") { implicit request => implicit td =>
+    Future.successful(Ok(views.html.admin.audit.auditForm(request.identity, app.config.debug)))
   }
 
   def start() = withoutSession("start") { implicit request => implicit td =>

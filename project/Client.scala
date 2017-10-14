@@ -9,7 +9,10 @@ import scalajscrossproject.ScalaJSCrossPlugin.autoImport.{toScalaJSGroupID => _,
 
 object Client {
   private[this] val clientSettings = Shared.commonSettings ++ Seq(
-    libraryDependencies ++= Seq("be.doeraene" %%% "scalajs-jquery" % Dependencies.ScalaJS.jQueryVersion),
+    libraryDependencies ++= Seq(
+      "be.doeraene" %%% "scalajs-jquery" % Dependencies.ScalaJS.jQueryVersion,
+      "com.lihaoyi" %%% "scalatags" % Dependencies.Utils.scalatagsVersion
+    ),
     testFrameworks += new TestFramework("utest.runner.Framework"),
     scapegoatIgnoredFiles := Seq(".*/JsonUtils.scala", ".*/JsonSerializers.scala")
   )

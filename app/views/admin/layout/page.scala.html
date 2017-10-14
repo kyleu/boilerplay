@@ -1,8 +1,7 @@
 @(user: models.user.User, activeSection: String, title: String, scripts: Seq[String] = Nil)(content: Html)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
 )@traceData.logViewClass(getClass)@layout.materialize(user = Some(user), title = title, scripts = scripts) {
-  @views.html.layout.adminMenu(user, activeSection)
-
+  @views.html.admin.layout.menu(user, activeSection)
   <main>
     @flash.get("error").map { err =>
       <div class="flash-error z-depth-1">@err</div>

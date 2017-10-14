@@ -20,7 +20,7 @@
 )(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
 )@traceData.logViewClass(getClass)@if(fullUI) {
-  @layout.admin(user, section, s"$model Management") {
+  @views.html.admin.layout.page(user, section, s"$model Management") {
     <div class="collection with-header">
       <div class="collection-header">
         @searchUrl.map { search =>

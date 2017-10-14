@@ -81,6 +81,7 @@ object Dependencies {
   object Utils {
     val scapegoatVersion = "1.3.3"
     val enumeratumVersion = "1.5.14"
+    val scalatagsVersion = "0.6.7"
 
     val csv = "com.github.tototoshi" %% "scala-csv" % "1.3.5"
     val betterFiles = "com.github.pathikrit" %% "better-files" % "3.1.0"

@@ -20,7 +20,7 @@
 
 @traceData.logViewClass(getClass)
 
-@layout.admin(user, "status", "System Preferences") {
+@views.html.admin.layout.page(user, "status", "System Preferences") {
   <form action="@controllers.admin.system.routes.SettingsController.saveSettings()" method="post">
     <div class="content-panel">
       <div class="panel-title"><i class="fa @models.template.Icons.settings"></i> System Preferences</div>

@@ -11,7 +11,7 @@ object DdlQueries extends BaseQueries[DdlFile]("ddl", "ddl") {
   case object GetIds extends Query[Seq[Int]] {
     override val name = "ddl.get.ids"
     override val sql = s"select ${quote("id")} from ${quote(tableName)} order by ${quote("id")}"
-    override def reduce(rows: Iterator[Row]) = rows.map(_.as[Int]("id")).toSeq
+    override def reduce(rows: Iterator[Row]) = rows.map(_.as[Int]("id")).toList
   }
   def insert(f: DdlFile) = Insert(f)
 

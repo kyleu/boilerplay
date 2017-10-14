@@ -11,6 +11,7 @@ import util.tracing.TraceData
 
 import scala.concurrent.duration._
 import scala.concurrent.{Await, Future}
+import scala.util.control.NonFatal
 
 object MasterDdl extends Logging {
   val dir = File("./ddl")
@@ -28,31 +29,42 @@ object MasterDdl extends Logging {
       DdlFile(index, name, sql, now)
     }.toSeq.sortBy(_.id)
   } else {
+    log.warn(s"Unable to read DDL directory [${dir.path}].")
     Nil
   }
 
   def init()(implicit trace: TraceData) = {
     val withDdlTable = SystemDatabase.query(DdlQueries.DoesTableExist("ddl")).flatMap {
-      case true => Future.successful(0)
-      case false => SystemDatabase.execute(DdlQueries.CreateDdlTable)
+      case true =>
+        Future.successful(0)
+      case false =>
+        SystemDatabase.execute(DdlQueries.CreateDdlTable)
+    }.recoverWith {
+      case NonFatal(x) => log.errorThenThrow("Error detecting ddl table.", x)
     }
 
-    val withData = withDdlTable.flatMap(_ => SystemDatabase.query(DdlQueries.GetIds))
+    val withData = withDdlTable.flatMap { _ =>
+      SystemDatabase.query(DdlQueries.GetIds).recoverWith {
+        case NonFatal(x) => log.errorThenThrow("Error getting applied ddl files from table.", x)
+      }
+    }
 
     val appliedFiles = withData.map { data =>
+      log.info(s"Found [${data.size}/${files.size}] applied ddl files.")
       val candidates = files.filterNot(f => data.contains(f.id))
-      val applied = candidates.map { f =>
+      candidates.map { f =>
         log.info(s"Applying [${f.statements.size}] statements for DDL [${f.id}:${f.name}].")
         val tx = SystemDatabase.transaction { (txTd, conn) =>
           f.statements.map { sql =>
             val statement = DdlStatement(sql._1)
             Await.result(SystemDatabase.execute(statement, Some(conn))(txTd), 5.seconds)
           }
-          SystemDatabase.execute(DdlQueries.insert(f)).map(_ => f)
+          SystemDatabase.execute(DdlQueries.insert(f)).map(_ => f).recoverWith {
+            case NonFatal(x) => log.errorThenThrow("Error inserting ddl record.", x)
+          }
         }
         Await.result(tx, 30.seconds)
       }
-      applied
     }
 
     appliedFiles.map { result =>

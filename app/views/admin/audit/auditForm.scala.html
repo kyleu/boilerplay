@@ -1,20 +1,20 @@
-@(user: Option[models.user.User], startJson: String, completeJson: String, debug: Boolean)(
+@(user: models.user.User, debug: Boolean)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
-)@traceData.logViewClass(getClass)@layout.simple(user, util.Config.projectName) {
+)@traceData.logViewClass(getClass)@views.html.admin.layout.page(user, "audit", "Audit Test Form") {
   <div class="row">
     <div class="col s12">
       <ul class="collection with-header">
         <li class="collection-header">
-          <h4>Audit Sandbox Form</h4>
+          <h4>Audit Test Form</h4>
         </li>
         <li class="collection-item">
           <h5>Start Audit</h5>
-          <textarea id="start-textarea" name="content" style="height: 320px; font: 'Consolas', 'Inconsolata', 'Droid Sans Mono', 'Monaco', monospace;">@startJson</textarea>
+          <textarea id="start-textarea" name="content" style="height: 320px; font: 'Consolas', 'Inconsolata', 'Droid Sans Mono', 'Monaco', monospace;">@controllers.admin.audit.AuditJson.startJson</textarea>
           <button id="start-submit" class="btn theme">Submit</button>
         </li>
         <li id="complete-section" class="collection-item" style="display: none;">
           <h5>Complete Audit</h5>
-          <textarea id="complete-textarea" name="content" style="height: 320px; font: 'Consolas', 'Inconsolata', 'Droid Sans Mono', 'Monaco', monospace;">@completeJson</textarea>
+          <textarea id="complete-textarea" name="content" style="height: 320px; font: 'Consolas', 'Inconsolata', 'Droid Sans Mono', 'Monaco', monospace;">@controllers.admin.audit.AuditJson.completeJson</textarea>
           <button id="complete-submit" class="btn theme">Submit</button>
         </li>
       </ul>
