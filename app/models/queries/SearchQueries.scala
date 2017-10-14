@@ -8,7 +8,7 @@ import models.result.orderBy.OrderBy
 trait SearchQueries[T <: Product] { this: BaseQueries[T] =>
   private[this] def searchCol(c: String) = engine match {
     case "mysql" => s"lower(convert(${quote(c)}, char)) like ?"
-    case "postgresql" => s"${quote(c)}::text like ?"
+    case "postgres" | "postgresql" => s"${quote(c)}::text like ?"
   }
 
   private[this] def searchClause(q: String) = searchColumns.map(searchCol).mkString(" or ")

@@ -10,7 +10,7 @@ object EngineHelper {
 
   def quote(n: String, engine: String) = engine match {
     case "mysql" => mySqlLeftQuote + n + mySqlRightQuote
-    case "postgres" => postgresLeftQuote + n + postgresRightQuote
+    case "postgres" | "postgresql" => postgresLeftQuote + n + postgresRightQuote
   }
 
   def toDatabaseFormat(v: Any) = v match {
