@@ -1,15 +1,11 @@
 create table if not exists "users" (
   "id" uuid primary key,
-  "username" character varying(256),
+  "username" character varying(256) unique,
   "prefs" character varying(4096) not null,
-  "email" character varying(1024) not null,
+  "email" character varying(1024) not null unique,
   "role" character varying(64) not null,
   "created" timestamp not null
 );
-
-create unique index if not exists "users_email_idx" on "users" ("email");
-
-create unique index if not exists "users_username_idx" on "users" ("username");
 
 create table if not exists "password_info" (
   "provider" varchar(64) not null,
