@@ -12,7 +12,7 @@ import zipkin.Endpoint
 trait Database[Conn] extends Instrumented with Logging {
   protected[this] def key: String
 
-  def transaction[A](f: (TraceData, Conn) => A, conn: Option[Conn])(implicit traceData: TraceData): A
+  def transaction[A](f: (TraceData, Conn) => A)(implicit traceData: TraceData): A
   def execute(statement: Statement, conn: Option[Conn] = None)(implicit traceData: TraceData): Int
   def query[A](query: RawQuery[A], conn: Option[Conn] = None)(implicit traceData: TraceData): A
 

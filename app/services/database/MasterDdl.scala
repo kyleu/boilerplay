@@ -35,7 +35,7 @@ object MasterDdl extends Logging {
     }
 
     val ids = SystemDatabase.query(DdlQueries.GetIds)
-    log.info(s"Found [${ids.size}/${files.size}] applied ddl files.")
+    log.debug(s"Found [${ids.size}/${files.size}] applied ddl files.")
 
     val candidates = files.filterNot(f => ids.contains(f.id))
     val result = candidates.map { f =>
@@ -43,9 +43,9 @@ object MasterDdl extends Logging {
       SystemDatabase.transaction { (txTd, conn) =>
         val results = f.statements.map { sql =>
           val statement = DdlStatement(sql._1)
-          log.info("Applying DDL statement [" + statement.sql.take(64) + "...].")
+          log.debug("Applying DDL statement [" + statement.sql.take(64) + "...].")
           val result = SystemDatabase.execute(statement, Some(conn))(txTd)
-          log.info("Applied DDL statement [" + statement.sql.take(64) + "...].")
+          log.debug("Applied DDL statement [" + statement.sql.take(64) + "...].")
           result
         }
         SystemDatabase.execute(DdlQueries.insert(f))

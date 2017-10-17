@@ -10,6 +10,8 @@ import models.database.{DatabaseConfig, RawQuery, Statement}
 import util.metrics.{Checked, Instrumented}
 import util.tracing.{TraceData, TracingService}
 
+import scala.util.control.NonFatal
+
 abstract class JdbcDatabase(override val key: String, configPrefix: String) extends Database[Connection] with Queryable {
   private[this] def time[A](klass: java.lang.Class[_])(f: => A) = {
     val ctx = Instrumented.metricRegistry.timer(MetricRegistry.name(klass)).time()
@@ -45,9 +47,20 @@ abstract class JdbcDatabase(override val key: String, configPrefix: String) exte
     start(config, svc)
   }
 
-  override def transaction[A](f: (TraceData, Connection) => A, conn: Option[Connection] = None)(implicit traceData: TraceData) = {
-    val connection = conn.getOrElse(source.getConnection)
-    f(traceData, connection)
+  override def transaction[A](f: (TraceData, Connection) => A)(implicit traceData: TraceData) = {
+    val connection = source.getConnection
+    connection.setAutoCommit(false)
+    try {
+      val result = f(traceData, connection)
+      connection.commit()
+      result
+    } catch {
+      case NonFatal(x) =>
+        connection.rollback()
+        throw x
+    } finally {
+      connection.close()
+    }
   }
 
   override def execute(statement: Statement, conn: Option[Connection])(implicit traceData: TraceData) = {
@@ -55,7 +68,7 @@ abstract class JdbcDatabase(override val key: String, configPrefix: String) exte
     try {
       time(statement.getClass) { executeUpdate(connection, statement) }
     } finally {
-      connection.close()
+      if (conn.isEmpty) { connection.close() }
     }
   }
 
@@ -63,7 +76,9 @@ abstract class JdbcDatabase(override val key: String, configPrefix: String) exte
     val connection = conn.getOrElse(source.getConnection)
     try {
       time(query.getClass)(apply(connection, query))
-    } finally { connection.close() }
+    } finally {
+      if (conn.isEmpty) { connection.close() }
+    }
   }
 
   def withConnection[T](f: (Connection) => T) = {
