@@ -49,7 +49,7 @@ class Application @javax.inject.Inject() (
 
   val supervisor = actorSystem.actorOf(Props(classOf[ActorSupervisor], this), "supervisor")
 
-  private[this] def start() = tracing.topLevelTrace("application.start") { implicit tn =>
+  private[this] def start() = tracing.topLevelTraceBlocking("application.start") { implicit tn =>
     log.info(s"${Config.projectName} is starting.")
     Application.initialized = true
 
@@ -66,9 +66,10 @@ class Application @javax.inject.Inject() (
     SystemDatabase.open(config.cnf, tracing)
     ApplicationDatabase.open(config.cnf, tracing)
 
-    MasterDdl.init().map { _ =>
-      settingsService.load()
-    }
+    MasterDdl.init()
+    settingsService.load()
+
+    "OK"
   }
 
   private[this] def stop() = {

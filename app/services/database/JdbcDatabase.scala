@@ -10,8 +10,6 @@ import models.database.{DatabaseConfig, RawQuery, Statement}
 import util.metrics.{Checked, Instrumented}
 import util.tracing.{TraceData, TracingService}
 
-import scala.concurrent.Future
-
 abstract class JdbcDatabase(override val key: String, configPrefix: String) extends Database[Connection] with Queryable {
   private[this] def time[A](klass: java.lang.Class[_])(f: => A) = {
     val ctx = Instrumented.metricRegistry.timer(MetricRegistry.name(klass)).time()
@@ -47,7 +45,7 @@ abstract class JdbcDatabase(override val key: String, configPrefix: String) exte
     start(config, svc)
   }
 
-  override def transaction[A](f: (TraceData, Connection) => Future[A], conn: Option[Connection] = None)(implicit traceData: TraceData) = {
+  override def transaction[A](f: (TraceData, Connection) => A, conn: Option[Connection] = None)(implicit traceData: TraceData) = {
     val connection = conn.getOrElse(source.getConnection)
     f(traceData, connection)
   }

@@ -33,12 +33,12 @@ object UserSchema extends SchemaHelper("user") {
   implicit val profileType = deriveObjectType[GraphQLContext, UserProfile](ObjectTypeDescription("Information about the current session."))
 
   implicit val userPrimaryKeyId = HasId[User, UUID](_.id)
-  private[this] def getByPrimaryKeySeq(c: GraphQLContext, idSeq: Seq[UUID]) = c.app.userService.getByPrimaryKeySeq(idSeq)(c.trace)
+  private[this] def getByPrimaryKeySeq(c: GraphQLContext, idSeq: Seq[UUID]) = Future.successful(c.app.userService.getByPrimaryKeySeq(idSeq)(c.trace))
   val userByPrimaryKeyFetcher = Fetcher(getByPrimaryKeySeq)
 
   val userByRoleRelation = Relation[User, Role]("byRole", x => Seq(x.role))
   val userByRoleFetcher = Fetcher.rel[GraphQLContext, User, User, UUID](
-    getByPrimaryKeySeq, (c, rels) => c.app.userService.getByRoleSeq(rels(userByRoleRelation))(c.trace)
+    getByPrimaryKeySeq, (c, rels) => Future.successful(c.app.userService.getByRoleSeq(rels(userByRoleRelation))(c.trace))
   )
 
   implicit val loginInfoType = deriveObjectType[GraphQLContext, LoginInfo](ObjectTypeDescription("Information about login credentials."))
@@ -58,16 +58,16 @@ object UserSchema extends SchemaHelper("user") {
       name = "profile",
       description = Some("Returns information about the currently logged in user."),
       fieldType = profileType,
-      resolve = c => trace(c.ctx, "profile") { _ =>
+      resolve = c => traceB(c.ctx, "profile") { _ =>
         val u = c.ctx.user
-        Future.successful(UserProfile(u.id, u.username, u.profile.providerKey, u.role, u.preferences.theme, u.created))
+        UserProfile(u.id, u.username, u.profile.providerKey, u.role, u.preferences.theme, u.created)
       }
     ),
     Field(
       name = "user",
       fieldType = userResultType,
       arguments = queryArg :: reportFiltersArg :: orderBysArg :: limitArg :: offsetArg :: Nil,
-      resolve = c => trace(c.ctx, "search")(td => runSearch(c.ctx.app.userService, c, td).map(toResult))
+      resolve = c => traceB(c.ctx, "search")(td => toResult(runSearch(c.ctx.app.userService, c, td)))
     ),
     Field(
       name = "userByRole",

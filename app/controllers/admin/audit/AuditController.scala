@@ -38,11 +38,10 @@ class AuditController @javax.inject.Inject() (override val app: Application, svc
     val startMs = DateUtils.nowMillis
     val auditId = UUID.randomUUID
 
-    AuditService.onStart(auditId, auditStart).map { ok =>
-      val elapsedMs = DateUtils.nowMillis - startMs
-      val response = s"""{ "id": "$auditId", "status": "OK", "elapsed": $elapsedMs }"""
-      Ok(response).as(JSON)
-    }
+    AuditService.onStart(auditId, auditStart)
+    val elapsedMs = DateUtils.nowMillis - startMs
+    val response = s"""{ "id": "$auditId", "status": "OK", "elapsed": $elapsedMs }"""
+    Future.successful(Ok(response).as(JSON))
   }
 
   def complete() = withoutSession("complete") { implicit request => implicit td =>
@@ -54,47 +53,45 @@ class AuditController @javax.inject.Inject() (override val app: Application, svc
 
     val startMs = DateUtils.nowMillis
 
-    AuditService.onComplete(auditComplete).map { ok =>
-      val elapsedMs = DateUtils.nowMillis - startMs
-      val response = s"""{ "id": "${auditComplete.id}", "status": "OK", "elapsed": $elapsedMs }"""
-      Ok(response).as(JSON)
-    }
+    AuditService.onComplete(auditComplete)
+    val elapsedMs = DateUtils.nowMillis - startMs
+    val response = s"""{ "id": "${auditComplete.id}", "status": "OK", "elapsed": $elapsedMs }"""
+    Future.successful(Ok(response).as(JSON))
   }
 
   def list(q: Option[String], orderBy: Option[String], orderAsc: Boolean, limit: Option[Int], offset: Option[Int]) = {
     withSession("list", admin = true) { implicit request => implicit td =>
       val startMs = util.DateUtils.nowMillis
       val orderBys = OrderBy.forVals(orderBy, orderAsc).toSeq
-      val f = q match {
+      val r = q match {
         case Some(query) if query.nonEmpty => svc.searchWithCount(query, Nil, orderBys, limit.orElse(Some(100)), offset)
         case _ => svc.getAllWithCount(Nil, orderBys, limit.orElse(Some(100)), offset)
       }
-      f.map { r =>
-        render {
-          case Accepts.Html() => Ok(views.html.admin.audit.auditList(
-            request.identity, Some(r._1), r._2, q, orderBy, orderAsc, limit.getOrElse(100), offset.getOrElse(0)
-          ))
-          case Accepts.Json() => Ok(AuditResult.fromRecords(q, Nil, orderBys, limit, offset, startMs, r._1, r._2).asJson.spaces2).as(JSON)
-          case acceptsCsv() => Ok(svc.csvFor("Audit", r._1, r._2)).as("text/csv")
-        }
-      }
+      Future.successful(render {
+        case Accepts.Html() => Ok(views.html.admin.audit.auditList(
+          request.identity, Some(r._1), r._2, q, orderBy, orderAsc, limit.getOrElse(100), offset.getOrElse(0)
+        ))
+        case Accepts.Json() => Ok(AuditResult.fromRecords(q, Nil, orderBys, limit, offset, startMs, r._1, r._2).asJson.spaces2).as(JSON)
+        case acceptsCsv() => Ok(svc.csvFor("Audit", r._1, r._2)).as("text/csv")
+      })
     }
   }
 
   def view(id: UUID) = withSession("view", admin = true) { implicit request => implicit td =>
-    svc.getByPrimaryKey(id).flatMap {
-      case Some(model) => recordSvc.getByAuditId(id, Nil, None, None).map { records =>
-        render {
+    svc.getByPrimaryKey(id) match {
+      case Some(model) =>
+        val records = recordSvc.getByAuditId(id, Nil, None, None)
+        Future.successful(render {
           case Accepts.Html() => Ok(views.html.admin.audit.auditView(request.identity, model.copy(records = records), app.config.debug))
           case Accepts.Json() => Ok(model.copy(records = records).asJson.spaces2).as(JSON)
-        }
-      }
+        })
       case None => Future.successful(NotFound(s"No Ad found with id [$id]."))
     }
   }
 
   def remove(id: UUID) = withSession("remove", admin = true) { implicit request => implicit td =>
-    svc.remove(id = id).map(_ => render {
+    svc.remove(id = id)
+    Future.successful(render {
       case Accepts.Html() => Redirect(controllers.admin.audit.routes.AuditController.list())
       case Accepts.Json() => Ok("{ \"status\": \"removed\" }").as(JSON)
     })

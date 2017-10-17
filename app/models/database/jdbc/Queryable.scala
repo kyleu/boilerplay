@@ -7,7 +7,6 @@ import models.database.{Query, RawQuery, Statement}
 import util.{Logging, NullUtils}
 
 import scala.annotation.tailrec
-import scala.concurrent.Future
 import scala.util.control.NonFatal
 
 trait Queryable extends Logging {
@@ -27,7 +26,7 @@ trait Queryable extends Logging {
     }
   }
 
-  def apply[A](connection: Connection, query: RawQuery[A]): Future[A] = {
+  def apply[A](connection: Connection, query: RawQuery[A]): A = {
     log.debug(s"${query.sql} with ${query.values.mkString("(", ", ", ")")}")
     val stmt = connection.prepareStatement(query.sql)
     try {
@@ -38,7 +37,7 @@ trait Queryable extends Logging {
       }
       val results = stmt.executeQuery()
       try {
-        Future.successful(query.handle(results))
+        query.handle(results)
       } catch {
         case NonFatal(x) => log.errorThenThrow(s"Unable to handle query results for [${query.sql}].", x)
       } finally {
@@ -49,7 +48,7 @@ trait Queryable extends Logging {
     }
   }
 
-  def executeUpdate(connection: Connection, statement: Statement): Future[Int] = {
+  def executeUpdate(connection: Connection, statement: Statement): Int = {
     log.debug(s"${statement.sql} with ${statement.values.mkString("(", ", ", ")")}")
     val stmt = connection.prepareStatement(statement.sql)
     try {
@@ -60,8 +59,7 @@ trait Queryable extends Logging {
         log.errorThenThrow(s"Unable to prepare statement [${statement.sql}].", x)
     }
     try {
-      val result = stmt.executeUpdate()
-      Future.successful(result)
+      stmt.executeUpdate()
     } catch {
       case NonFatal(x) => log.errorThenThrow(s"Unable to execute statement [${statement.sql}].", x)
     } finally {
@@ -69,7 +67,7 @@ trait Queryable extends Logging {
     }
   }
 
-  def executeUnknown[A](connection: Connection, query: Query[A], resultId: Option[UUID]): Future[Either[A, Int]] = {
+  def executeUnknown[A](connection: Connection, query: Query[A], resultId: Option[UUID]): Either[A, Int] = {
     log.debug(s"${query.sql} with ${query.values.mkString("(", ", ", ")")}")
     val stmt = connection.prepareStatement(query.sql)
     try {
@@ -82,14 +80,14 @@ trait Queryable extends Logging {
       if (isResultset) {
         val res = stmt.getResultSet
         try {
-          Future.successful(Left(query.handle(res)))
+          Left(query.handle(res))
         } catch {
           case NonFatal(x) => log.errorThenThrow(s"Unable to handle query results for [${query.sql}].", x)
         } finally {
           res.close()
         }
       } else {
-        Future.successful(Right(stmt.getUpdateCount))
+        Right(stmt.getUpdateCount)
       }
     } finally {
       stmt.close()

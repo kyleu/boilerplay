@@ -48,13 +48,12 @@ class UserController @javax.inject.Inject() (
         profile = loginInfo,
         role = role
       )
-      val userSavedFuture = app.userService.insert(user)
+      val userSaved = app.userService.insert(user)
       val authInfo = hasher.hash(form("password"))
       for {
         _ <- authInfoRepository.add(loginInfo, authInfo)
         authenticator <- app.silhouette.env.authenticatorService.create(loginInfo)
         _ <- app.silhouette.env.authenticatorService.init(authenticator)
-        userSaved <- userSavedFuture
       } yield {
         app.silhouette.env.eventBus.publish(SignUpEvent(userSaved, request))
         Redirect(controllers.admin.user.routes.UserController.view(id)).flashing("success" -> s"User [${form("email")}] added.")

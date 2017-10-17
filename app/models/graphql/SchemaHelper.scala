@@ -10,10 +10,10 @@ import services.ModelServiceHelper
 import util.tracing.TraceData
 
 import scala.concurrent.Future
-import util.FutureUtils.graphQlContext
 
 abstract class SchemaHelper(val name: String) {
-  protected def trace[A](ctx: GraphQLContext, k: String)(f: TraceData => Future[A]) = ctx.app.tracing.trace(name + ".schema." + k)(f)(ctx.trace)
+  protected def traceF[A](ctx: GraphQLContext, k: String)(f: TraceData => Future[A]) = ctx.app.tracing.trace(name + ".schema." + k)(f)(ctx.trace)
+  protected def traceB[A](ctx: GraphQLContext, k: String)(f: TraceData => A) = ctx.app.tracing.traceBlocking(name + ".schema." + k)(f)(ctx.trace)
 
   protected case class SearchArgs(start: LocalDateTime, filters: Seq[Filter], orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int])
   protected case class SearchResult[T](count: Int, results: Seq[T], args: SearchArgs) {
@@ -31,13 +31,11 @@ abstract class SchemaHelper(val name: String) {
 
   def runSearch[T](svc: ModelServiceHelper[T], c: Context[GraphQLContext, Unit], td: TraceData) = {
     val args = argsFor(c.args)
-    val f = c.arg(CommonSchema.queryArg) match {
+    val x = c.arg(CommonSchema.queryArg) match {
       case Some(q) => svc.searchWithCount(q, args.filters, args.orderBys, args.limit, args.offset)(td)
       case _ => svc.getAllWithCount(args.filters, args.orderBys, args.limit, args.offset)(td)
     }
-    f.map { x =>
-      c.ctx.trace.span.annotate("Composing search result.")
-      SearchResult(x._1, x._2, args)
-    }
+    c.ctx.trace.span.annotate("Composing search result.")
+    SearchResult(x._1, x._2, args)
   }
 }
