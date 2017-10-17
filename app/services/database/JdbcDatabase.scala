@@ -21,6 +21,15 @@ abstract class JdbcDatabase(override val key: String, configPrefix: String) exte
   private[this] var ds: Option[HikariDataSource] = None
   private[this] def source = ds.getOrElse(throw new IllegalStateException("Database not initialized."))
 
+  private[this] def perform[T](conn: Option[Connection])(block: Connection => T): T = {
+    val c = conn.map((_, false)).getOrElse((source.getConnection, true))
+    try {
+      block(c._1)
+    } finally {
+      if (c._2) c._1.close()
+    }
+  }
+
   def open(cfg: play.api.Configuration, svc: TracingService) = {
     ds.foreach(_ => throw new IllegalStateException("Database already initialized."))
 
@@ -48,29 +57,25 @@ abstract class JdbcDatabase(override val key: String, configPrefix: String) exte
   }
 
   override def transaction[A](f: (TraceData, Connection) => Future[A], conn: Option[Connection] = None)(implicit traceData: TraceData) = {
-    val connection = conn.getOrElse(source.getConnection)
-    f(traceData, connection)
+    perform(conn) {
+      f(traceData, _)
+    }
   }
 
   override def execute(statement: Statement, conn: Option[Connection])(implicit traceData: TraceData) = {
-    val connection = conn.getOrElse(source.getConnection)
-    try {
-      time(statement.getClass) { executeUpdate(connection, statement) }
-    } finally {
-      connection.close()
+    perform(conn) { c =>
+      time(statement.getClass) { executeUpdate(c, statement) }
     }
   }
 
   override def query[A](query: RawQuery[A], conn: Option[Connection])(implicit traceData: TraceData) = {
-    val connection = conn.getOrElse(source.getConnection)
-    try {
-      time(query.getClass)(apply(connection, query))
-    } finally { connection.close() }
+    perform(conn) { c =>
+      time(query.getClass)(apply(c, query))
+    }
   }
 
   def withConnection[T](f: (Connection) => T) = {
-    val conn = source.getConnection()
-    try { f(conn) } finally { conn.close() }
+    perform(None) { f(_) }
   }
 
   override def close() = {
