@@ -19,7 +19,7 @@ trait SingleRowQuery[A] extends Query[A] {
   override final def reduce(rows: Iterator[Row]) = if (rows.hasNext) {
     rows.map(map).next()
   } else {
-    throw new IllegalStateException(s"No row returned for [$sql].")
+    util.ise(s"No row returned for [$sql].")
   }
 }
 

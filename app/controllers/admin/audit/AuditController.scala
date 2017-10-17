@@ -31,7 +31,7 @@ class AuditController @javax.inject.Inject() (override val app: Application, svc
   def start() = withoutSession("start") { implicit request => implicit td =>
     val json = jsonFor(request)
     val auditStart = json.as[AuditStart] match {
-      case Left(x) => throw new IllegalStateException(x.toString)
+      case Left(x) => util.ise(x.toString)
       case Right(x) => x
     }
 
@@ -47,7 +47,7 @@ class AuditController @javax.inject.Inject() (override val app: Application, svc
   def complete() = withoutSession("complete") { implicit request => implicit td =>
     val json = jsonFor(request)
     val auditComplete = json.as[AuditComplete] match {
-      case Left(x) => throw new IllegalStateException(x.toString)
+      case Left(x) => util.ise(x.toString)
       case Right(x) => x
     }
 

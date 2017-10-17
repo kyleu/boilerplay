@@ -8,7 +8,7 @@ import models.result.orderBy.OrderBy
 object ResultFieldHelper {
   def sqlForField(t: String, field: String, fields: Seq[DatabaseField], engine: String) = fields.find(_.prop == field) match {
     case Some(f) => EngineHelper.quote(f.col, engine)
-    case None => throw new IllegalStateException(s"Invalid $t field [$field]. Allowed fields are [${fields.map(_.prop).mkString(", ")}].")
+    case None => util.ise(s"Invalid $t field [$field]. Allowed fields are [${fields.map(_.prop).mkString(", ")}].")
   }
 
   def orderClause(fields: Seq[DatabaseField], engine: String, orderBys: OrderBy*) = if (orderBys.isEmpty) {
@@ -29,7 +29,7 @@ object ResultFieldHelper {
         case Like => "(" + filter.v.map(_ => s"$col like ?").mkString(" or ") + ")"
         case GreaterThanOrEqual => "(" + vals.map(_ => s"$col >= ?").mkString(" or ") + ")"
         case LessThanOrEqual => "(" + vals.map(_ => s"$col <= ?").mkString(" or ") + ")"
-        case x => throw new IllegalStateException(s"Operation [$x] is not currently supported.")
+        case x => util.ise(s"Operation [$x] is not currently supported.")
       }
     }
     val clauseString = clauses.mkString(" and ")

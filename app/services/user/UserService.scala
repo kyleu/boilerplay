@@ -69,7 +69,7 @@ class UserService @javax.inject.Inject() (override val tracing: TracingService, 
     val startTime = System.nanoTime
     getByPrimaryKey(userId)(txTd) match {
       case Some(user) => SystemDatabase.execute(PasswordInfoQueries.removeByPrimaryKey(Seq(user.profile.providerID, user.profile.providerKey)), Some(conn))
-      case None => throw new IllegalStateException("Invalid User")
+      case None => util.ise("Invalid User")
     }
     val users = SystemDatabase.execute(UserQueries.removeByPrimaryKey(Seq(userId)), Some(conn))(txTd)
     UserCache.removeUser(userId)
