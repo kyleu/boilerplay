@@ -55,18 +55,22 @@ object MasterDdl extends Logging {
       candidates.map { f =>
         log.info(s"Applying [${f.statements.size}] statements for DDL [${f.id}:${f.name}].")
         val tx = SystemDatabase.transaction { (txTd, conn) =>
-          f.statements.map { sql =>
+          val results = f.statements.map { sql =>
             val statement = DdlStatement(sql._1)
-            Await.result(SystemDatabase.execute(statement, Some(conn))(txTd), 5.seconds)
+            log.info("Applying DDL statement [" + statement.sql.take(64) + "...].")
+            val result = Await.result(SystemDatabase.execute(statement, Some(conn))(txTd), 5.seconds)
+            log.info("Applied DDL statement [" + statement.sql.take(64) + "...].")
+            result
           }
-          SystemDatabase.execute(DdlQueries.insert(f)).map(_ => f)
+          val inserted = Await.result(SystemDatabase.execute(DdlQueries.insert(f)).map(_ => f), 5.seconds)
+          Future.successful(results)
         }
         Await.result(tx, 30.seconds)
       }
     }
 
     appliedFiles.map { result =>
-      s"DDL update successful. [${result.map(_.statements.size).sum}] queries applied across [${result.size}] ddl files."
+      s"DDL update successful. [${result.map(_.size).sum}] queries applied across [${result.size}] ddl files."
     }
   }
 }

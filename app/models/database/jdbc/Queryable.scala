@@ -54,9 +54,16 @@ trait Queryable extends Logging {
     val stmt = connection.prepareStatement(statement.sql)
     try {
       prepare(stmt, statement.values)
-      Future.successful(stmt.executeUpdate())
     } catch {
-      case NonFatal(x) => log.errorThenThrow(s"Unable to prepare statement [${statement.sql}].", x)
+      case NonFatal(x) =>
+        stmt.close()
+        log.errorThenThrow(s"Unable to prepare statement [${statement.sql}].", x)
+    }
+    try {
+      val result = stmt.executeUpdate()
+      Future.successful(result)
+    } catch {
+      case NonFatal(x) => log.errorThenThrow(s"Unable to execute statement [${statement.sql}].", x)
     } finally {
       stmt.close()
     }
