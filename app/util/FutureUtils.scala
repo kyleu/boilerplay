@@ -9,9 +9,9 @@ object FutureUtils {
   implicit val databaseContext = ExecutionContext.global
   implicit val graphQlContext = ExecutionContext.global
 
-  def acc[T, U](seq: Seq[T], f: T => Future[U])(implicit ec: ExecutionContext) = {
+  def acc[T, U](seq: Seq[T], f: T => Future[U])(ec: ExecutionContext) = {
     seq.foldLeft(Future.successful(Seq.empty[U])) { (ret, i) =>
-      ret.flatMap(s => f(i).map(_ +: s))
+      ret.flatMap(s => f(i).map(_ +: s)(ec))(ec)
     }
   }
 }
