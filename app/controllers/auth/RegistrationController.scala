@@ -37,7 +37,7 @@ class RegistrationController @javax.inject.Inject() (
 
   def register = withoutSession("register") { implicit request => implicit td =>
     if (!app.settingsService.allowRegistration) {
-      throw new IllegalStateException("You cannot sign up at this time. Contact your administrator.")
+      util.ise("You cannot sign up at this time. Contact your administrator.")
     }
     UserForms.registrationForm.bindFromRequest.fold(
       form => Future.successful(BadRequest(views.html.auth.register(request.identity, form))),
@@ -60,7 +60,7 @@ class RegistrationController @javax.inject.Inject() (
               profile = loginInfo,
               role = role
             )
-            val userSavedFuture = app.userService.insert(user)
+            val userSaved = app.userService.insert(user)
             val result = request.session.get("returnUrl") match {
               case Some(url) => Redirect(url).withSession(request.session - "returnUrl")
               case None => Redirect(controllers.routes.HomeController.home())
@@ -70,7 +70,6 @@ class RegistrationController @javax.inject.Inject() (
               authenticator <- app.silhouette.env.authenticatorService.create(loginInfo)
               value <- app.silhouette.env.authenticatorService.init(authenticator)
               result <- app.silhouette.env.authenticatorService.embed(value, result)
-              userSaved <- userSavedFuture
             } yield {
               app.silhouette.env.eventBus.publish(SignUpEvent(userSaved, request))
               app.silhouette.env.eventBus.publish(LoginEvent(userSaved, request))

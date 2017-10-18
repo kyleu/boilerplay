@@ -8,18 +8,14 @@ import util.Logging
 import util.tracing.TraceData
 import util.web.TracingWSClient
 
-import scala.concurrent.Future
-
 object AuditNotifications extends Logging {
   def persist(a: Audit)(implicit trace: TraceData) = {
     log.info(s"Persisting audit [${a.id}]...")
-    val insert = SystemDatabase.execute(AuditQueries.insert(a))
-    insert.failed.foreach(x => log.error("Unable to insert audit.", x))
-    insert.foreach { x =>
-      log.info(s"Persisted audit [${a.id}].")
-      val records = Future.sequence(a.records.map(r => SystemDatabase.execute(AuditRecordQueries.insert(r))))
-      records.failed.foreach(x => log.error("Unable to insert audit records.", x))
-      records.foreach(_ => log.info(s"Persisted [${a.records.size}] audit records for audit [${a.id}]."))
+    SystemDatabase.execute(AuditQueries.insert(a))
+    log.info(s"Persisted audit [${a.id}].")
+    a.records.foreach { r =>
+      SystemDatabase.execute(AuditRecordQueries.insert(r))
+      log.info(s"Persisted audit record [${r.id}] for audit [${a.id}].")
     }
   }
 

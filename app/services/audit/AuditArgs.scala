@@ -4,7 +4,7 @@ import java.util.UUID
 
 object AuditArgs {
   def getArg(id: Seq[String], i: Int) = {
-    if (id.length <= i) { throw new IllegalStateException(s"Needed at least [${i + 1}] id arguments, only have [${id.length}].") }
+    if (id.length <= i) { util.ise(s"Needed at least [${i + 1}] id arguments, only have [${id.length}].") }
     id(i)
   }
 

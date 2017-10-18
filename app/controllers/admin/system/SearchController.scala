@@ -15,7 +15,7 @@ class SearchController @javax.inject.Inject() (override val app: Application, se
   import app.contexts.webContext
 
   def search(q: String) = withSession("admin.search", admin = true) { implicit request => implicit td =>
-    val resultF = try {
+    val results = try {
       searchInt(q, q.toInt)
     } catch {
       case _: NumberFormatException => try {
@@ -24,42 +24,40 @@ class SearchController @javax.inject.Inject() (override val app: Application, se
         case _: IllegalArgumentException => searchString(q)
       }
     }
-
-    resultF.map { results =>
-      Ok(views.html.admin.explore.searchResults(q, results, request.identity))
-    }
+    Future.successful(Ok(views.html.admin.explore.searchResults(q, results, request.identity)))
   }
 
   private[this] def searchInt(q: String, id: Int)(implicit timing: TraceData) = {
     // Start int searches
-    val intSearches = Seq.empty[Future[Seq[Html]]]
+    val intSearches = Seq.empty[Seq[Html]]
     // End int searches
 
-    Future.sequence(intSearches).map(_.flatten)
+    intSearches.flatten
   }
 
   private[this] def searchUuid(q: String, id: UUID)(implicit timing: TraceData) = {
     // Start uuid searches
-    val uuidSearches = Seq.empty[Future[Seq[Html]]]
+    val uuidSearches = Seq.empty[Seq[Html]]
     // End uuid searches
 
-    val userF = app.userService.getByPrimaryKey(id).map {
+    val userR = app.userService.getByPrimaryKey(id) match {
       case Some(u) => Seq(views.html.admin.user.userSearchResult(u, s"User [${u.username}] matched id [$q]."))
       case None => Nil
     }
 
-    Future.sequence(Seq(userF) ++ uuidSearches).map(_.flatten)
+    (userR +: uuidSearches).flatten
   }
 
   private[this] def searchString(q: String)(implicit timing: TraceData) = {
     // Start string searches
-    val stringSearches = Seq.empty[Future[Seq[Html]]]
+    val stringSearches = Seq.empty[Seq[Html]]
     // End string searches
 
-    val userF = app.userService.searchExact(q = q, orderBys = Nil, limit = Some(10), offset = None).map { users =>
-      users.map(u => views.html.admin.user.userSearchResult(u, s"User [${u.username}] matched [$q]."))
+    val userR = {
+      val s = app.userService.searchExact(q = q, orderBys = Nil, limit = Some(10), offset = None)
+      s.map(u => views.html.admin.user.userSearchResult(u, s"User [${u.username}] matched [$q]."))
     }
 
-    Future.sequence(Seq(userF) ++ stringSearches).map(_.flatten)
+    (userR +: stringSearches).flatten
   }
 }

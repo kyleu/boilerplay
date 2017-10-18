@@ -76,12 +76,12 @@ abstract class BaseController(val name: String) extends InjectedController with 
   protected def modelForm(rawForm: Option[Map[String, Seq[String]]]) = {
     val form = rawForm.getOrElse(Map.empty).mapValues(_.head)
     val fields = form.toSeq.filter(x => x._1.endsWith(".include") && x._2 == "true").map(_._1.stripSuffix(".include"))
-    fields.map(f => DataField(f, Some(form.getOrElse(f, throw new IllegalStateException(s"Cannot find value for included field [$f].")))))
+    fields.map(f => DataField(f, Some(form.getOrElse(f, util.ise(s"Cannot find value for included field [$f].")))))
   }
 
   protected def jsonFor(request: Request[AnyContent]) = {
     import sangria.marshalling.playJson._
-    val playJson = request.body.asJson.getOrElse(throw new IllegalStateException("Invalid JSON."))
+    val playJson = request.body.asJson.getOrElse(util.ise("Invalid JSON."))
     playJson.convertMarshaled[Json]
   }
 

@@ -10,6 +10,7 @@ import zipkin.reporter.AsyncReporter
 import zipkin.reporter.okhttp3.OkHttpSender
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.control.NonFatal
 import scala.util.{Failure, Success, Try}
 
 @javax.inject.Singleton
@@ -27,6 +28,17 @@ class TracingService @javax.inject.Inject() (actorSystem: ActorSystem, cnf: Metr
       case Success(_) => serverSend(span)
     }
     result
+  }
+  def topLevelTraceBlocking[A](name: String)(f: TraceData => A) = {
+    val span = serverReceived(spanName = name, span = newSpan(Map.empty[String, String])((headers, key) => headers.get(key)))
+    span.tag("top.level", "true")
+    try {
+      val result = f(TraceData(span))
+      serverSend(span)
+      result
+    } catch {
+      case NonFatal(x) => serverSend(span, "failed" -> s"Finished with exception: ${x.getMessage}")
+    }
   }
 
   private[this] val sender = OkHttpSender.json(s"http://${cnf.tracingServer}:${cnf.tracingPort}/api/v1/spans")

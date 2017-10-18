@@ -10,7 +10,7 @@ import models.database.{DatabaseConfig, RawQuery, Statement}
 import util.metrics.{Checked, Instrumented}
 import util.tracing.{TraceData, TracingService}
 
-import scala.concurrent.Future
+import scala.util.control.NonFatal
 
 abstract class JdbcDatabase(override val key: String, configPrefix: String) extends Database[Connection] with Queryable {
   private[this] def time[A](klass: java.lang.Class[_])(f: => A) = {
@@ -19,7 +19,7 @@ abstract class JdbcDatabase(override val key: String, configPrefix: String) exte
   }
 
   private[this] var ds: Option[HikariDataSource] = None
-  private[this] def source = ds.getOrElse(throw new IllegalStateException("Database not initialized."))
+  private[this] def source = ds.getOrElse(util.ise("Database not initialized."))
 
   private[this] def perform[T](conn: Option[Connection])(block: Connection => T): T = {
     val c = conn.map((_, false)).getOrElse((source.getConnection, true))
@@ -31,7 +31,7 @@ abstract class JdbcDatabase(override val key: String, configPrefix: String) exte
   }
 
   def open(cfg: play.api.Configuration, svc: TracingService) = {
-    ds.foreach(_ => throw new IllegalStateException("Database already initialized."))
+    ds.foreach(_ => util.ise("Database already initialized."))
 
     val config = DatabaseConfig.fromConfig(cfg, configPrefix)
     val properties = new Properties
@@ -56,21 +56,37 @@ abstract class JdbcDatabase(override val key: String, configPrefix: String) exte
     start(config, svc)
   }
 
-  override def transaction[A](f: (TraceData, Connection) => Future[A], conn: Option[Connection] = None)(implicit traceData: TraceData) = {
-    perform(conn) {
-      f(traceData, _)
+  override def transaction[A](f: (TraceData, Connection) => A)(implicit traceData: TraceData) = {
+    val connection = source.getConnection
+    connection.setAutoCommit(false)
+    try {
+      val result = f(traceData, connection)
+      connection.commit()
+      result
+    } catch {
+      case NonFatal(x) =>
+        connection.rollback()
+        throw x
+    } finally {
+      connection.close()
     }
   }
 
   override def execute(statement: Statement, conn: Option[Connection])(implicit traceData: TraceData) = {
-    perform(conn) { c =>
-      time(statement.getClass) { executeUpdate(c, statement) }
+    val connection = conn.getOrElse(source.getConnection)
+    try {
+      time(statement.getClass) { executeUpdate(connection, statement) }
+    } finally {
+      if (conn.isEmpty) { connection.close() }
     }
   }
 
   override def query[A](query: RawQuery[A], conn: Option[Connection])(implicit traceData: TraceData) = {
-    perform(conn) { c =>
-      time(query.getClass)(apply(c, query))
+    val connection = conn.getOrElse(source.getConnection)
+    try {
+      time(query.getClass)(apply(connection, query))
+    } finally {
+      if (conn.isEmpty) { connection.close() }
     }
   }
 

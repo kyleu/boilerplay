@@ -7,7 +7,6 @@ import models.user.User
 import services.database.SystemDatabase
 import util.Logging
 import services.cache.UserCache
-import util.FutureUtils.databaseContext
 import util.tracing.{TraceData, TracingService}
 
 import scala.concurrent.Future
@@ -17,20 +16,20 @@ class UserSearchService @javax.inject.Inject() (tracingService: TracingService) 
   override def retrieve(loginInfo: LoginInfo) = tracingService.noopTrace("user.retreive") { implicit td =>
     UserCache.getUserByLoginInfo(loginInfo) match {
       case Some(u) => Future.successful(Some(u))
-      case None => SystemDatabase.query(UserQueries.FindUserByProfile(loginInfo))(td).map { x =>
-        x.foreach(UserCache.cacheUser)
-        x
-      }
+      case None =>
+        val u = SystemDatabase.query(UserQueries.FindUserByProfile(loginInfo))(td)
+        u.foreach(UserCache.cacheUser)
+        Future.successful(u)
     }
   }
 
   def getByLoginInfo(loginInfo: LoginInfo)(implicit trace: TraceData) = tracingService.trace("user.get.by.login.info") { td =>
     UserCache.getUserByLoginInfo(loginInfo) match {
       case Some(u) => Future.successful(Some(u))
-      case None => SystemDatabase.query(UserQueries.FindUserByProfile(loginInfo))(td).map { x =>
-        x.foreach(UserCache.cacheUser)
-        x
-      }
+      case None =>
+        val u = SystemDatabase.query(UserQueries.FindUserByProfile(loginInfo))(td)
+        u.foreach(UserCache.cacheUser)
+        Future.successful(u)
     }
   }
 }

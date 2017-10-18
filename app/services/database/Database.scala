@@ -9,14 +9,12 @@ import util.metrics.Instrumented
 import util.tracing.{TraceData, TracingService}
 import zipkin.Endpoint
 
-import scala.concurrent.Future
-
 trait Database[Conn] extends Instrumented with Logging {
   protected[this] def key: String
 
-  def transaction[A](f: (TraceData, Conn) => Future[A], conn: Option[Conn])(implicit traceData: TraceData): Future[A]
-  def execute(statement: Statement, conn: Option[Conn] = None)(implicit traceData: TraceData): Future[Int]
-  def query[A](query: RawQuery[A], conn: Option[Conn] = None)(implicit traceData: TraceData): Future[A]
+  def transaction[A](f: (TraceData, Conn) => A)(implicit traceData: TraceData): A
+  def execute(statement: Statement, conn: Option[Conn] = None)(implicit traceData: TraceData): Int
+  def query[A](query: RawQuery[A], conn: Option[Conn] = None)(implicit traceData: TraceData): A
 
   def close(): Boolean
 
@@ -31,11 +29,11 @@ trait Database[Conn] extends Instrumented with Logging {
 
   private[this] var tracingServiceOpt: Option[TracingService] = None
   protected def tracing = tracingServiceOpt.getOrElse {
-    throw new IllegalStateException("Tracing service not configured. Did you forget to call \"open\"?")
+    util.ise("Tracing service not configured. Did you forget to call \"open\"?")
   }
 
   private[this] var config: Option[DatabaseConfig] = None
-  def getConfig = config.getOrElse(throw new IllegalStateException("Database not open."))
+  def getConfig = config.getOrElse(util.ise("Database not open."))
 
   protected[this] def start(cfg: DatabaseConfig, svc: TracingService) = {
     tracingServiceOpt = Some(svc)
@@ -44,7 +42,7 @@ trait Database[Conn] extends Instrumented with Logging {
 
   protected[this] def prependComment(obj: Object, sql: String) = s"/* ${obj.getClass.getSimpleName.replace("$", "")} */ $sql"
 
-  protected[this] def trace[A](traceName: String)(f: TraceData => Future[A])(implicit traceData: TraceData) = tracing.trace(key + "." + traceName) { td =>
+  protected[this] def trace[A](traceName: String)(f: TraceData => A)(implicit traceData: TraceData) = tracing.traceBlocking(key + "." + traceName) { td =>
     td.span.kind(brave.Span.Kind.CLIENT).remoteEndpoint(endpoint.toV2)
     f(td)
   }
