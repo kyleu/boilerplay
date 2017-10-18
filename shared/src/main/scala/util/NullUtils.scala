@@ -2,6 +2,7 @@ package util
 
 object NullUtils {
   val char = '∅'
+  val str = char.toString
 
   val inst = None.orNull
 

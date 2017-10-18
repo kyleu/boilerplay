@@ -1,5 +1,6 @@
 package services
 
+import models.result.data.DataField
 import models.result.filter.Filter
 import models.result.orderBy.OrderBy
 import util.Logging
@@ -42,4 +43,6 @@ abstract class ModelServiceHelper[T](val key: String) extends Logging {
     val count = searchCount(q, filters)(td)
     count -> result
   }
+
+  protected def fieldVal(fields: Seq[DataField], k: String) = fields.find(_.k == k).flatMap(_.v).getOrElse(util.NullUtils.str)
 }

@@ -71,10 +71,13 @@ class UserService @javax.inject.Inject() (override val tracing: TracingService, 
       case Some(user) => SystemDatabase.execute(PasswordInfoQueries.removeByPrimaryKey(Seq(user.profile.providerID, user.profile.providerKey)), Some(conn))
       case None => throw new IllegalStateException("Invalid User")
     }
-    val users = SystemDatabase.execute(UserQueries.removeByPrimaryKey(Seq(userId)), Some(conn))(txTd)
+    UserCache.getUser(userId).foreach { user =>
+      services.audit.AuditService.onRemove("User", Seq(userId.toString), user.toDataFields)
+    }
+    val userCount = SystemDatabase.execute(UserQueries.removeByPrimaryKey(Seq(userId)), Some(conn))(txTd)
     UserCache.removeUser(userId)
     val timing = ((System.nanoTime - startTime) / 1000000).toInt
-    Map("users" -> users, "timing" -> timing)
+    Map("users" -> userCount, "timing" -> timing)
   }(td))
 
   def updateFields(id: UUID, username: String, email: String, password: Option[String], role: Role, originalEmail: String)(implicit trace: TraceData) = {

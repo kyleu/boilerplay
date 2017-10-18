@@ -25,11 +25,11 @@ object AuditService extends Logging {
   def onStart(id: UUID, msg: AuditStart)(implicit traceData: TraceData) = getInst.cache.onStart(id, msg)
   def onComplete(msg: AuditComplete)(implicit traceData: TraceData) = getInst.cache.onComplete(msg)
 
-  def onInsert(t: String, fields: Seq[DataField])(implicit trace: TraceData) = {
+  def onInsert(t: String, pk: Seq[String], fields: Seq[DataField])(implicit trace: TraceData) = {
     val msg = s"Inserted new [$t] with [${fields.size}] fields:"
     val auditId = UUID.randomUUID
-    val records = Seq(Audit.Record(auditId = auditId, t = t, changes = fields.map(f => AuditField(f.k, None, f.v))))
-    onAudit(Audit(id = auditId, act = "insert", app = Some("boilerplay"), msg = msg, records = records))
+    val records = Seq(Audit.Record(auditId = auditId, t = t, pk = pk, changes = fields.map(f => AuditField(f.k, None, f.v))))
+    onAudit(Audit(id = auditId, act = "insert", app = Some(util.Config.projectId), msg = msg, records = records))
   }
 
   def onUpdate(t: String, ids: Seq[DataField], originalFields: Seq[DataField], newFields: Seq[DataField])(implicit trace: TraceData) = {
@@ -38,10 +38,17 @@ object AuditService extends Logging {
       case _ => None
     }
     val changes = newFields.flatMap(changeFor)
-    val msg = s"Updated [${changes.size}] fields of $t[${ids.map(id => id.k + ": " + id.v.getOrElse(NullUtils.char)).mkString(", ")}]:\n"
+    val msg = s"Updated [${changes.size}] fields of $t[${ids.map(id => id.k + ": " + id.v.getOrElse(NullUtils.str)).mkString(", ")}]:\n"
     val auditId = UUID.randomUUID
     val records = Seq(Audit.Record(auditId = auditId, t = t, changes = changes))
-    onAudit(Audit(id = auditId, act = "update", app = Some("boilerplay"), msg = msg, records = records))
+    onAudit(Audit(id = auditId, act = "update", app = Some(util.Config.projectId), msg = msg, records = records))
+  }
+
+  def onRemove(t: String, pk: Seq[String], fields: Seq[DataField])(implicit trace: TraceData) = {
+    val msg = s"Removed [$t] with [${fields.size}] fields:"
+    val auditId = UUID.randomUUID
+    val records = Seq(Audit.Record(auditId = auditId, t = t, pk = pk, changes = fields.map(f => AuditField(f.k, None, f.v))))
+    onAudit(Audit(id = auditId, act = "remove", app = Some(util.Config.projectId), msg = msg, records = records))
   }
 }
 

@@ -77,8 +77,8 @@
           @r.changes.map { c =>
             <tr>
               <th>@c.k</th>
-              <td>@c.o.getOrElse(util.NullUtils.char.toString)</td>
-              <td>@c.n.getOrElse(util.NullUtils.char.toString)</td>
+              <td>@c.o.getOrElse(util.NullUtils.str)</td>
+              <td>@c.n.getOrElse(util.NullUtils.str)</td>
             </tr>
           }
           </tbody>

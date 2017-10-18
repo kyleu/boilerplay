@@ -39,5 +39,5 @@ object AuditTemplate {
     )
   )
 
-  private[this] def check(s: Option[String]) = s.getOrElse(NullUtils.char.toString)
+  private[this] def check(s: Option[String]) = s.getOrElse(NullUtils.str)
 }
