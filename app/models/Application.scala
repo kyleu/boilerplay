@@ -44,7 +44,7 @@ class Application @javax.inject.Inject() (
   if (Application.initialized) {
     log.info("Skipping initialization after failure.")
   } else {
-    start()
+    start().failed.foreach(t => log.error(s"Start error:", t))
   }
 
   val supervisor = actorSystem.actorOf(Props(classOf[ActorSupervisor], this), "supervisor")
