@@ -21,15 +21,6 @@ abstract class JdbcDatabase(override val key: String, configPrefix: String) exte
   private[this] var ds: Option[HikariDataSource] = None
   private[this] def source = ds.getOrElse(util.ise("Database not initialized."))
 
-  private[this] def perform[T](conn: Option[Connection])(block: Connection => T): T = {
-    val c = conn.map((_, false)).getOrElse((source.getConnection, true))
-    try {
-      block(c._1)
-    } finally {
-      if (c._2) c._1.close()
-    }
-  }
-
   def open(cfg: play.api.Configuration, svc: TracingService) = {
     ds.foreach(_ => util.ise("Database already initialized."))
 
@@ -91,7 +82,8 @@ abstract class JdbcDatabase(override val key: String, configPrefix: String) exte
   }
 
   def withConnection[T](f: (Connection) => T) = {
-    perform(None) { f(_) }
+    val conn = source.getConnection()
+    try { f(conn) } finally { conn.close() }
   }
 
   override def close() = {
