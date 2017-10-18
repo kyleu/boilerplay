@@ -9,7 +9,7 @@ object QueryStringUtils {
   implicit def localDateTimePathBindable(implicit stringBinder: PathBindable[String]) = new PathBindable[LocalDateTime] {
     override def bind(key: String, value: String) = stringBinder.bind(key, value) match {
       case Right(s) => Right(DateUtils.fromIsoString(s))
-      case Left(x) => util.ise(x)
+      case Left(x) => throw new IllegalStateException(x)
     }
     override def unbind(key: String, ldt: LocalDateTime) = DateUtils.toIsoString(ldt)
   }

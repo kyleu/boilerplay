@@ -54,7 +54,7 @@ class AuditRecordService @javax.inject.Inject() (override val tracing: TracingSe
     traceB("insert") { td =>
       ApplicationDatabase.execute(AuditRecordQueries.insert(model))(td) match {
         case 1 => getByPrimaryKey(model.id)(td)
-        case x => util.ise("Unable to find newly-inserted Audit Record.")
+        case x => throw new IllegalStateException("Unable to find newly-inserted Audit Record.")
       }
     }
   }
@@ -68,7 +68,7 @@ class AuditRecordService @javax.inject.Inject() (override val tracing: TracingSe
         case Some(current) =>
           ApplicationDatabase.execute(AuditRecordQueries.removeByPrimaryKey(id))(td)
           current
-        case None => util.ise(s"Cannot find Note matching [$id].")
+        case None => throw new IllegalStateException(s"Cannot find Note matching [$id].")
       }
     }
   }
@@ -79,9 +79,9 @@ class AuditRecordService @javax.inject.Inject() (override val tracing: TracingSe
         ApplicationDatabase.execute(AuditRecordQueries.update(id, fields))(td)
         ApplicationDatabase.query(AuditRecordQueries.getByPrimaryKey(id))(td) match {
           case Some(newModel) => newModel
-          case None => util.ise(s"Cannot find AuditRecord matching [$id].")
+          case None => throw new IllegalStateException(s"Cannot find AuditRecord matching [$id].")
         }
-      case None => util.ise(s"Cannot find AuditRecord matching [$id].")
+      case None => throw new IllegalStateException(s"Cannot find AuditRecord matching [$id].")
     }
   }
 

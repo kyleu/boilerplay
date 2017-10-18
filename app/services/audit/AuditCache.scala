@@ -43,7 +43,9 @@ class AuditCache(supervisor: ActorRef, lookup: AuditLookup) extends Logging {
   })
 
   def onComplete(msg: AuditComplete)(implicit traceData: TraceData) = {
-    val current = cache.getOrElse(msg.id, util.ise(s"Cannot find audit with id [${msg.id}] ($pendingCount in cache)."))
+    val current = cache.getOrElse(msg.id, throw new IllegalStateException(
+      s"Cannot find audit with id [${msg.id}] ($pendingCount in cache)."
+    ))
     supervisor ! ActorSupervisor.Broadcast(models.AuditCompleteNotification(msg))
 
     val updateLookup = current._2.map { c =>

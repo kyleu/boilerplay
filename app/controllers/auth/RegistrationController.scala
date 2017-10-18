@@ -37,7 +37,7 @@ class RegistrationController @javax.inject.Inject() (
 
   def register = withoutSession("register") { implicit request => implicit td =>
     if (!app.settingsService.allowRegistration) {
-      util.ise("You cannot sign up at this time. Contact your administrator.")
+      throw new IllegalStateException("You cannot sign up at this time. Contact your administrator.")
     }
     UserForms.registrationForm.bindFromRequest.fold(
       form => Future.successful(BadRequest(views.html.auth.register(request.identity, form))),

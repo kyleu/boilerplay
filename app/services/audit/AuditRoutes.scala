@@ -11,6 +11,6 @@ object AuditRoutes {
     /* End audit calls */
 
     case "user" => controllers.admin.user.routes.UserController.view(uuidArg(arg(0)))
-    case _ => util.ise(s"Invalid model key [$key].")
+    case _ => throw new IllegalStateException(s"Invalid model key [$key].")
   }
 }

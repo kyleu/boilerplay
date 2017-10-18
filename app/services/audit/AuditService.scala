@@ -18,7 +18,7 @@ import util.{FutureUtils, Logging, NullUtils}
 
 object AuditService extends Logging {
   private var inst: Option[AuditService] = None
-  private def getInst = inst.getOrElse(util.ise("Not initialized."))
+  private def getInst = inst.getOrElse(throw new IllegalStateException("Not initialized."))
 
   def onAudit(audit: Audit)(implicit trace: TraceData) = getInst.callback(audit)
 
@@ -74,7 +74,7 @@ class AuditService @javax.inject.Inject() (
         case Some(current) =>
           SystemDatabase.execute(AuditQueries.removeByPrimaryKey(id))(td)
           current
-        case None => util.ise(s"Cannot find Note matching [$id].")
+        case None => throw new IllegalStateException(s"Cannot find Note matching [$id].")
       }
     }
   }
@@ -85,7 +85,7 @@ class AuditService @javax.inject.Inject() (
 
   lazy val supervisor = inject.instanceOf(classOf[Application]).supervisor
 
-  AuditService.inst.foreach(_ => util.ise("Double initialization."))
+  AuditService.inst.foreach(_ => throw new IllegalStateException("Double initialization."))
   AuditService.inst = Some(this)
 
   lazy val cache = new AuditCache(supervisor, lookup)

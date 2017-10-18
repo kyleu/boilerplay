@@ -28,7 +28,7 @@ class GraphQLController @javax.inject.Inject() (override val app: Application, g
       playJson.convertMarshaled[Json]
     }
 
-    val body = json.asObject.getOrElse(util.ise(s"Invalid json [$json].")).filter(x => x._1 != "variables").toMap
+    val body = json.asObject.getOrElse(throw new IllegalStateException(s"Invalid json [$json].")).filter(x => x._1 != "variables").toMap
     val query = body("query").as[String].getOrElse("{}")
     val variables = body.get("variables").map(x => graphQLService.parseVariables(x.asString.getOrElse("{}")))
     val operation = body.get("operationName").flatMap(_.asString)

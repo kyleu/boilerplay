@@ -16,9 +16,9 @@ object MasterDdl extends Logging {
       val now = LocalDateTime.now()
       val split = f.name.stripSuffix(".sql").split('_')
       if (split.length != 2) {
-        util.ise(s"Invalid filename [${f.name}].")
+        throw new IllegalStateException(s"Invalid filename [${f.name}].")
       }
-      val index = split.headOption.getOrElse(throw new IllegalArgumentException()).toInt
+      val index = split.headOption.getOrElse(throw new IllegalStateException()).toInt
       val name = split(1)
       val sql = f.contentAsString
       DdlFile(index, name, sql, now)

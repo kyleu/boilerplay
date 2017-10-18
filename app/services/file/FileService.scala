@@ -16,7 +16,7 @@ object FileService extends Logging {
   }
 
   def getDir(name: String, createIfMissing: Boolean = true) = {
-    val d = dataDir.getOrElse(util.ise("File service not initialized.")) / name
+    val d = dataDir.getOrElse(throw new IllegalStateException("File service not initialized.")) / name
     if (createIfMissing && (!d.exists)) {
       d.createDirectory
     }

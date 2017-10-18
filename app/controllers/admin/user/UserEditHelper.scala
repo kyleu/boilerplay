@@ -51,7 +51,7 @@ trait UserEditHelper { this: UserController =>
   }
 
   def edit(id: UUID) = withSession("admin.user.save", admin = true) { implicit request => implicit td =>
-    val user = app.userService.getByPrimaryKey(id).getOrElse(util.ise(s"Invalid user [$id]."))
+    val user = app.userService.getByPrimaryKey(id).getOrElse(throw new IllegalStateException(s"Invalid user [$id]."))
     val isSelf = request.identity.id == id
 
     val form = ControllerUtils.getForm(request)
@@ -64,7 +64,7 @@ trait UserEditHelper { this: UserController =>
     val role = form.get("role") match {
       case Some("admin") => Role.Admin
       case Some("user") => Role.User
-      case x => util.ise(s"Missing role: [$x].")
+      case x => throw new IllegalStateException(s"Missing role: [$x].")
     }
 
     if (newUsername.isEmpty) {

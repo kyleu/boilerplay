@@ -14,7 +14,7 @@ trait Queryable extends Logging {
   @SuppressWarnings(Array("AsInstanceOf"))
   private[this] def prepare(stmt: PreparedStatement, values: Seq[Any], index: Int = 1): Unit = {
     if (values.nonEmpty) {
-      values.headOption.getOrElse(throw new IllegalArgumentException()) match {
+      values.headOption.getOrElse(throw new IllegalStateException()) match {
         case v if NullUtils.isNull(v) => stmt.setNull(index, Types.NULL)
 
         case Some(x) => stmt.setObject(index, Conversions.convert(x.asInstanceOf[AnyRef]))

@@ -29,11 +29,11 @@ trait Database[Conn] extends Instrumented with Logging {
 
   private[this] var tracingServiceOpt: Option[TracingService] = None
   protected def tracing = tracingServiceOpt.getOrElse {
-    util.ise("Tracing service not configured. Did you forget to call \"open\"?")
+    throw new IllegalStateException("Tracing service not configured. Did you forget to call \"open\"?")
   }
 
   private[this] var config: Option[DatabaseConfig] = None
-  def getConfig = config.getOrElse(util.ise("Database not open."))
+  def getConfig = config.getOrElse(throw new IllegalStateException("Database not open."))
 
   protected[this] def start(cfg: DatabaseConfig, svc: TracingService) = {
     tracingServiceOpt = Some(svc)

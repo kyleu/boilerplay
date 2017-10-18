@@ -19,10 +19,10 @@ abstract class JdbcDatabase(override val key: String, configPrefix: String) exte
   }
 
   private[this] var ds: Option[HikariDataSource] = None
-  private[this] def source = ds.getOrElse(util.ise("Database not initialized."))
+  private[this] def source = ds.getOrElse(throw new IllegalStateException("Database not initialized."))
 
   def open(cfg: play.api.Configuration, svc: TracingService) = {
-    ds.foreach(_ => util.ise("Database already initialized."))
+    ds.foreach(_ => throw new IllegalStateException("Database already initialized."))
 
     val config = DatabaseConfig.fromConfig(cfg, configPrefix)
     val properties = new Properties

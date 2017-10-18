@@ -21,6 +21,6 @@ case class DatabaseConfig(
   val url: String = engine match {
     case "postgresql" | "postgres" => s"jdbc:postgresql://$host:$port/${database.getOrElse(util.Config.projectId)}?stringtype=unspecified"
     case "mysql" => s"jdbc:mysql://$host:$port/${database.getOrElse(util.Config.projectId)}"
-    case _ => util.ise(s"Invalid engine. Expected [postgresql] or [mysql], encountered [$engine].")
+    case _ => throw new IllegalStateException(s"Invalid engine. Expected [postgresql] or [mysql], encountered [$engine].")
   }
 }
