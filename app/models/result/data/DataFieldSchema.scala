@@ -5,7 +5,7 @@ import sangria.schema._
 import sangria.marshalling.circe._
 import sangria.validation.ValueCoercionViolation
 
-import io.circe.generic.auto._
+import models.result.data.DataField._
 
 object DataFieldSchema {
   case object VarCoercionViolation extends ValueCoercionViolation("String, bool or int value expected.")
