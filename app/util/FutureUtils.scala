@@ -2,12 +2,18 @@ package util
 
 import akka.actor.ActorSystem
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 object FutureUtils {
   implicit val defaultContext = ExecutionContext.global
   implicit val databaseContext = ExecutionContext.global
   implicit val graphQlContext = ExecutionContext.global
+
+  def acc[T, U](seq: Seq[T], f: T => Future[U])(implicit ec: ExecutionContext) = {
+    seq.foldLeft(Future.successful(Seq.empty[U])) { (ret, i) =>
+      ret.flatMap(s => f(i).map(_ +: s))
+    }
+  }
 }
 
 @javax.inject.Singleton

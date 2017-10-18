@@ -2,6 +2,7 @@ package models.sandbox
 
 import enumeratum._
 import models.Application
+import services.database.BackupRestore
 import util.FutureUtils.defaultContext
 import util.Logging
 import util.tracing.TraceData
@@ -45,6 +46,14 @@ object SandboxTask extends Enum[SandboxTask] with CirceEnum[SandboxTask] {
       }
       case None => Future.successful("No url provided...")
     }
+  }
+
+  case object DatabaseBackup extends SandboxTask("databasebackup", "Database Backup", "Backs up the database.") {
+    override def call(app: Application, argument: Option[String])(implicit trace: TraceData) = Future.successful(BackupRestore.backup())
+  }
+
+  case object DatabaseRestore extends SandboxTask("databaserestore", "Database Restore", "Restores the database.") {
+    override def call(app: Application, argument: Option[String])(implicit trace: TraceData) = Future.successful(BackupRestore.restore("TODO"))
   }
 
   override val values = findValues
