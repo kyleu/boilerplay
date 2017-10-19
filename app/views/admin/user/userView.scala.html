@@ -1,4 +1,4 @@
-@(self: models.user.User, model: models.user.User)(
+@(self: models.user.User, model: models.user.User, notes: Seq[models.note.Note])(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
 )@traceData.logViewClass(getClass)@views.html.admin.layout.page(self, "explore", "View User") {
   <div class="collection with-header">
@@ -35,5 +35,6 @@
         </tbody>
       </table>
     </div>
+    @views.html.admin.note.notes(notes)
   </div>
 }

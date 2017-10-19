@@ -5,9 +5,9 @@ import java.util.UUID
 import io.circe.generic.auto._
 import io.circe.java8.time._
 import io.circe.syntax._
-
 import models.result.orderBy.OrderBy
 import models.user.{Role, UserResult}
+import services.note.ModelNoteService
 import util.web.ControllerUtils
 
 import scala.concurrent.Future
@@ -33,9 +33,10 @@ trait UserEditHelper { this: UserController =>
   }
 
   def view(id: UUID) = withSession("user.view", admin = true) { implicit request => implicit td =>
+    val notes = ModelNoteService.getFor("user", id)
     app.userService.getByPrimaryKey(id) match {
       case Some(model) => Future.successful(render {
-        case Accepts.Html() => Ok(views.html.admin.user.userView(request.identity, model))
+        case Accepts.Html() => Ok(views.html.admin.user.userView(request.identity, model, notes))
         case Accepts.Json() => Ok(model.asJson.spaces2).as(JSON)
       })
       case None => Future.successful(NotFound(s"No user found with id [$id]."))

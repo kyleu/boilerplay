@@ -1,0 +1,7 @@
+@(model: models.note.Note)<tr>
+  <td><a href="@controllers.admin.note.routes.NoteController.view(model.id)" class="theme-text">@model.id</a></td>
+  <td>@model.relType</td>
+  <td>@model.relPk</td>
+  <td>@model.text</td>
+  <td>@model.author</td>
+</tr>

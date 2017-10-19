@@ -1,0 +1,75 @@
+@(user: models.user.User, model: models.note.Note, title: String, cancel: Call, act: Call, isNew: Boolean = false, debug: Boolean = false)(
+    implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
+)@traceData.logViewClass(getClass)@views.html.admin.layout.page(user, "explore", title) {
+  <form id="form-edit-note" action="@act" method="post">
+    <div class="collection with-header">
+      <div class="collection-header">
+        <div class="right"><button type="submit" class="btn theme">@if(isNew) {Create} else {Save} Note</button></div>
+        <div class="right"><a href="@cancel" class="theme-text cancel-link">Cancel</a></div>
+        <h5><i class="fa @models.template.Icons.note"></i> @title</h5>
+      </div>
+      <div class="collection-item">
+        <table class="highlight">
+          <tbody>
+            <tr>
+              <td>
+                <input type="checkbox" name="id.include" id="id.include" value="true" @if(isNew) { checked="checked" } class="data-input" data-type="uuid" data-name="id" />
+                <label for="id.include">Id</label>
+              </td>
+              <td>
+                <input id="input-id" type="text" name="id" value="@model.id" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <input type="checkbox" name="relType.include" id="relType.include" value="true" class="data-input" data-type="string" data-name="relType" />
+                <label for="relType.include">Type</label>
+              </td>
+              <td>
+                <input id="input-relType" type="text" name="relType" value="@model.relType" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <input type="checkbox" name="relPk.include" id="relPk.include" value="true" class="data-input" data-type="string" data-name="relPk" />
+                <label for="relPk.include">Id</label>
+              </td>
+              <td>
+                <input id="input-relPk" type="text" name="relPk" value="@model.relPk" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <input type="checkbox" name="text.include" id="text.include" value="true" @if(isNew) { checked="checked" } class="data-input" data-type="string" data-name="text" />
+                <label for="text.include">Text</label>
+              </td>
+              <td>
+                <input id="input-text" type="text" name="text" value="@model.text" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <input type="checkbox" name="author.include" id="author.include" value="true" @if(isNew) { checked="checked" } class="data-input" data-type="uuid" data-name="author" />
+                <label for="author.include">Author</label>
+              </td>
+              <td>
+                <input id="input-author" type="text" name="author" value="@model.author" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <input type="checkbox" name="created.include" id="created.include" value="true" @if(isNew) { checked="checked" } class="data-input" data-type="timestamp" data-name="created" />
+                <label for="created.include">Created</label>
+              </td>
+              <td>
+                <input id="input-created" type="text" name="created" value="@model.created" />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </form>
+}
+@views.html.components.includeScalaJs(debug)
+<script>$(function() { new FormService('form-edit-note'); })</script>

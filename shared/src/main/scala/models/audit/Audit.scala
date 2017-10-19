@@ -16,7 +16,7 @@ object Audit {
 case class Audit(
   id: UUID = UUID.randomUUID,
   act: String = "???",
-  app: Option[String] = None,
+  app: Option[String] = Some(util.Config.projectId),
   client: Option[String] = None,
   server: Option[String] = None,
   user: Option[UUID] = None,
