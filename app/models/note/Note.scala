@@ -16,12 +16,12 @@ object Note {
 }
 
 case class Note(
-  id: UUID = UUID.randomUUID(),
-  relType: Option[String],
-  relPk: Option[String],
-  text: String,
-  author: UUID,
-  created: LocalDateTime = util.DateUtils.now
+    id: UUID = UUID.randomUUID(),
+    relType: Option[String],
+    relPk: Option[String],
+    text: String,
+    author: UUID,
+    created: LocalDateTime = util.DateUtils.now
 ) extends DataFieldModel {
   override def toDataFields = Seq(
     DataField("id", Some(id.toString)),

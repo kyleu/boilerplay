@@ -33,7 +33,7 @@ trait UserEditHelper { this: UserController =>
   }
 
   def view(id: UUID) = withSession("user.view", admin = true) { implicit request => implicit td =>
-    val notes = ModelNoteService.getFor("user", id)
+    val notes = app.noteService.getFor("user", id)
     app.userService.getByPrimaryKey(id) match {
       case Some(model) => Future.successful(render {
         case Accepts.Html() => Ok(views.html.admin.user.userView(request.identity, model, notes))

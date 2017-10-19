@@ -58,11 +58,15 @@ class SearchController @javax.inject.Inject() (override val app: Application, se
     val stringSearches = Seq.empty[Seq[Html]]
     // End string searches
 
+    val noteR = {
+      val s = app.noteService.svc.searchExact(q = q, orderBys = Nil, limit = Some(10), offset = None)
+      s.map(n => views.html.admin.note.noteSearchResult(n, s"Note [${n.id}] matched [$q]."))
+    }
     val userR = {
       val s = app.userService.searchExact(q = q, orderBys = Nil, limit = Some(10), offset = None)
       s.map(u => views.html.admin.user.userSearchResult(u, s"User [${u.username}] matched [$q]."))
     }
 
-    (userR +: stringSearches).flatten
+    (noteR +: userR +: stringSearches).flatten
   }
 }

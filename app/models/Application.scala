@@ -15,6 +15,7 @@ import services.user.UserService
 import util.FutureUtils.defaultContext
 import services.cache.CacheService
 import services.audit.AuditService
+import services.note.ModelNoteService
 import services.settings.SettingsService
 import util.{Config, FutureUtils, Logging}
 import util.metrics.Instrumented
@@ -36,6 +37,7 @@ class Application @javax.inject.Inject() (
     val actorSystem: ActorSystem,
     val userService: UserService,
     val settingsService: SettingsService,
+    val noteService: ModelNoteService,
     val silhouette: Silhouette[AuthEnv],
     val ws: TracingWSClient,
     val notifications: AuditService,
