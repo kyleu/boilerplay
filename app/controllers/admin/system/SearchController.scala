@@ -45,7 +45,12 @@ class SearchController @javax.inject.Inject() (override val app: Application, se
       case None => Nil
     }
 
-    (userR +: uuidSearches).flatten
+    val noteR = services.noteService.getByPrimaryKey(id) match {
+      case Some(n) => Seq(views.html.admin.note.noteSearchResult(n, s"Note [${n.id}] matched id [$q]."))
+      case None => Nil
+    }
+
+    (userR +: noteR +: uuidSearches).flatten
   }
 
   private[this] def searchString(q: String)(implicit timing: TraceData) = {
