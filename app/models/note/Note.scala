@@ -8,8 +8,8 @@ import models.result.data.{DataField, DataFieldModel}
 object Note {
   val empty = Note(
     id = UUID.randomUUID,
-    relType = Some(""),
-    relPk = Nil,
+    relType = None,
+    relPk = None,
     text = "",
     author = UUID.randomUUID,
     created = util.DateUtils.now
@@ -17,18 +17,18 @@ object Note {
 }
 
 case class Note(
-    id: UUID,
+    id: UUID = UUID.randomUUID(),
     relType: Option[String],
-    relPk: Seq[String],
+    relPk: Option[String],
     text: String,
     author: UUID,
-    created: LocalDateTime
+    created: LocalDateTime = util.DateUtils.now
 ) extends DataFieldModel {
   override def toDataFields = Seq(
     DataField("id", Some(id.toString)),
-    DataField("relType", relType.map(_.toString)),
-    DataField("relPk", Some(relPk.mkString(", "))),
-    DataField("text", Some(text.toString)),
+    DataField("relType", relType),
+    DataField("relPk", relPk),
+    DataField("text", Some(text)),
     DataField("author", Some(author.toString)),
     DataField("created", Some(created.toString))
   )

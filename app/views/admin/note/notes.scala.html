@@ -1,5 +1,16 @@
-@(notes: Seq[models.note.Note])
+@(notes: Seq[models.note.Note], model: String, pk: Any*)
 <div class="collection-item">
-  <div class="right"><a href="@controllers.admin.note.routes.NoteController.add()" class="theme-text">Add Note</a></div>
-  <i>No notes available for this item.</i>
+  <div class="right"><a href="@controllers.admin.note.routes.ModelNoteController.addForm(model, pk.mkString("/"))" class="theme-text">Add Note</a></div>
+  @if(notes.isEmpty) {
+    <i>No notes available for this item.</i>
+  } else {
+    @notes.size @if(notes.size == 1) { note } else { notes } available for this item.
+    @notes.map { note =>
+      <div class="model-note">
+        <div class="right">@util.DateUtils.niceDateTime(note.created)</div>
+        <a href="@controllers.admin.note.routes.NoteController.view(note.id)" class="theme-text">@note.id</a>
+        <pre>@note.text</pre>
+      </div>
+    }
+  }
 </div>

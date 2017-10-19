@@ -36,7 +36,7 @@ create index if not exists "audit_record_changes" on "audit_record" using gin ("
 create table if not exists "note" (
   "id" uuid primary key,
   "rel_type" varchar(128),
-  "rel_pk" varchar(256)[],
+  "rel_pk" varchar(256),
   "text" text not null,
   "author" uuid not null,
   "created" timestamp not null,

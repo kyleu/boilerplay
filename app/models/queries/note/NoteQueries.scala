@@ -2,15 +2,14 @@ package models.queries.note
 
 import java.util.UUID
 
-import models.database.{DatabaseField, Row, Statement}
 import models.database.DatabaseFieldType._
+import models.database.{DatabaseField, Row}
 import models.note.Note
 import models.queries.BaseQueries
 import models.result.ResultFieldHelper
 import models.result.data.DataField
 import models.result.filter.Filter
 import models.result.orderBy.OrderBy
-import org.postgresql.jdbc.PgArray
 
 object NoteQueries extends BaseQueries[Note]("note", "note") {
   override val fields = Seq(
@@ -41,22 +40,17 @@ object NoteQueries extends BaseQueries[Note]("note", "note") {
   )
   case class GetByAuthorSeq(authorSeq: Seq[UUID]) extends ColSeqQuery(column = "author", values = authorSeq)
 
-  def insert(model: Note) = new Statement {
-    override def name: String = "insert"
-    override def sql: String = s"""insert into $tableName ($quotedColumns) values (?, ?, ?, ?, ?, ?)"""
-    private[this] val pkArray = "{ " + model.relPk.map("\"" + _ + "\"").mkString(", ") + " }"
-    override def values = Seq(model.id, model.relType, pkArray, model.text, model.author, model.created)
-  }
+  def insert(model: Note) = Insert(model)
   def create(dataFields: Seq[DataField]) = CreateFields(dataFields)
 
   def removeByPrimaryKey(id: UUID) = RemoveByPrimaryKey(Seq[Any](id))
 
   def update(id: UUID, fields: Seq[DataField]) = UpdateFields(Seq[Any](id), fields)
 
-  override protected def fromRow(row: Row) = Note(
+  override def fromRow(row: Row) = Note(
     id = UuidType(row, "id"),
-    relType = StringType.opt(row, "rel_model_type"),
-    relPk = row.as[PgArray]("pk").getArray.asInstanceOf[Array[String]],
+    relType = StringType.opt(row, "rel_type"),
+    relPk = StringType.opt(row, "rel_pk"),
     text = StringType(row, "text"),
     author = UuidType(row, "author"),
     created = TimestampType(row, "created")
