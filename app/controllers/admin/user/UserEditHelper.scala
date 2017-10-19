@@ -36,7 +36,7 @@ trait UserEditHelper { this: UserController =>
     val notes = app.noteService.getFor("user", id)
     app.userService.getByPrimaryKey(id) match {
       case Some(model) => Future.successful(render {
-        case Accepts.Html() => Ok(views.html.admin.user.userView(request.identity, model, notes))
+        case Accepts.Html() => Ok(views.html.admin.user.userView(request.identity, model, notes, app.config.debug))
         case Accepts.Json() => Ok(model.asJson.spaces2).as(JSON)
       })
       case None => Future.successful(NotFound(s"No user found with id [$id]."))

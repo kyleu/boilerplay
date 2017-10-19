@@ -1,4 +1,4 @@
-@(self: models.user.User, model: models.user.User, notes: Seq[models.note.Note])(
+@(self: models.user.User, model: models.user.User, notes: Seq[models.note.Note], debug: Boolean)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
 )@traceData.logViewClass(getClass)@views.html.admin.layout.page(self, "explore", "View User") {
   <div class="collection with-header">
@@ -37,4 +37,15 @@
     </div>
     @views.html.admin.note.notes(notes, "user", model.id)
   </div>
+  <ul id="model-relations" class="collapsible" data-collapsible="expandable">
+    <li id="relation-note-author" data-table="note" data-field="author" data-singular="Note" data-plural="Notes" data-url="@controllers.admin.note.routes.NoteController.byAuthor(model.id, limit = Some(5))">
+      <div class="collapsible-header">
+        <i class="fa @models.template.Icons.note"></i>
+        <span class="title">Notes</span>&nbsp;by Author
+      </div>
+      <div class="collapsible-body"><span>Loading...</span></div>
+    </li>
+  </ul>
+  @views.html.components.includeScalaJs(debug)
+  <script>$(function() { new RelationService('@controllers.admin.user.routes.UserController.relationCounts(model.id)') });</script>
 }

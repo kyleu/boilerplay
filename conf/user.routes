@@ -3,6 +3,7 @@ GET         /                  controllers.admin.user.UserController.list(q: Opt
 GET         /form              controllers.admin.user.UserController.createForm()
 POST        /                  controllers.admin.user.UserController.create()
 GET         /:id               controllers.admin.user.UserController.view(id: java.util.UUID)
+GET         /:id/counts        controllers.admin.user.UserController.relationCounts(id: java.util.UUID)
 GET         /:id/form          controllers.admin.user.UserController.editForm(id: java.util.UUID)
 POST        /:id               controllers.admin.user.UserController.edit(id: java.util.UUID)
 GET         /:id/remove        controllers.admin.user.UserController.remove(id: java.util.UUID)

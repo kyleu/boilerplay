@@ -8,17 +8,20 @@ import com.mohiva.play.silhouette.api.{LoginInfo, SignUpEvent}
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
 import controllers.BaseController
 import models.Application
+import models.result.RelationCount
 import models.user.{Role, User, UserPreferences}
-import services.audit.AuditService
+import services.note.NoteService
 import util.web.ControllerUtils
+import io.circe.generic.auto._
+import io.circe.java8.time._
+import io.circe.syntax._
+import services.audit.AuditService
 
 import scala.concurrent.Future
 
 @javax.inject.Singleton
 class UserController @javax.inject.Inject() (
-    override val app: Application,
-    authInfoRepository: AuthInfoRepository,
-    hasher: PasswordHasher
+    override val app: Application, auditS: AuditService, noteS: NoteService, authInfoRepository: AuthInfoRepository, hasher: PasswordHasher
 ) extends BaseController("user.create") with UserEditHelper {
   import app.contexts.webContext
 
@@ -50,7 +53,6 @@ class UserController @javax.inject.Inject() (
         role = role
       )
       val userSaved = app.userService.insert(user)
-      AuditService.onInsert("user", Seq(userSaved.id.toString), userSaved.toDataFields)
       val authInfo = hasher.hash(form("password"))
       for {
         _ <- authInfoRepository.add(loginInfo, authInfo)
@@ -61,5 +63,11 @@ class UserController @javax.inject.Inject() (
         Redirect(controllers.admin.user.routes.UserController.view(id)).flashing("success" -> s"User [${form("email")}] added.")
       }
     }
+  }
+
+  def relationCounts(id: UUID) = withSession("relation.counts", admin = true) { implicit request => implicit td =>
+    val notesByAuthor = noteS.countByAuthor(id)
+    val auditsBy = auditS.countByAuthor(id)
+    Future.successful(Ok(Seq(RelationCount(model = "note", field = "author", count = notesByAuthor)).asJson.spaces2).as(JSON))
   }
 }

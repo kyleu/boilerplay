@@ -75,6 +75,16 @@ class AuditService @javax.inject.Inject() (
     traceB("search")(td => SystemDatabase.query(AuditQueries.search(q, filters, orderBys, limit, offset))(td))
   }
 
+  def countByAuthor(author: UUID)(implicit trace: TraceData) = traceB("count.by.author") { td =>
+    SystemDatabase.query(AuditQueries.CountByAuthor(author))(td)
+  }
+  def getByAuthor(author: UUID, orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int])(implicit trace: TraceData) = {
+    traceB("get.by.author")(td => SystemDatabase.query(AuditQueries.GetByAuthor(author, orderBys, limit, offset))(td))
+  }
+  def getByAuthorSeq(authorSeq: Seq[UUID])(implicit trace: TraceData) = traceB("get.by.author.seq") { td =>
+    SystemDatabase.query(AuditQueries.GetByAuthorSeq(authorSeq))(td)
+  }
+
   def remove(id: UUID)(implicit trace: TraceData) = {
     traceB("remove") { td =>
       SystemDatabase.query(AuditQueries.getByPrimaryKey(id))(td) match {
