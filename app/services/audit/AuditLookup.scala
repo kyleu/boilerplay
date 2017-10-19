@@ -8,7 +8,7 @@ import util.tracing.TraceData
 
 @javax.inject.Singleton
 class AuditLookup @javax.inject.Inject() (registry: ServiceRegistry) extends Logging {
-  def getById(key: String, id: Seq[String])(implicit traceData: TraceData) = getModel(key, getArg(id, _))
+  def getByPk(model: String, pk: String*)(implicit traceData: TraceData) = getModel(model, getArg(pk, _))
 
   private[this] def getModel(key: String, arg: (Int) => String)(implicit traceData: TraceData): Option[DataFieldModel] = key.toLowerCase match {
     /* Start registry lookups */

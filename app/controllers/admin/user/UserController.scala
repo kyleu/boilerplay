@@ -9,6 +9,7 @@ import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
 import controllers.BaseController
 import models.Application
 import models.user.{Role, User, UserPreferences}
+import services.audit.AuditService
 import util.web.ControllerUtils
 
 import scala.concurrent.Future
@@ -49,6 +50,7 @@ class UserController @javax.inject.Inject() (
         role = role
       )
       val userSaved = app.userService.insert(user)
+      AuditService.onInsert("user", Seq(userSaved.id.toString), userSaved.toDataFields)
       val authInfo = hasher.hash(form("password"))
       for {
         _ <- authInfoRepository.add(loginInfo, authInfo)

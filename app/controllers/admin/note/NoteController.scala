@@ -5,9 +5,12 @@ import io.circe.generic.auto._
 import io.circe.java8.time._
 import io.circe.syntax._
 import java.util.UUID
+
 import models.Application
 import models.note.NoteResult
 import models.result.orderBy.OrderBy
+import services.audit.AuditRoutes
+
 import scala.concurrent.Future
 import services.note.NoteService
 import util.FutureUtils.defaultContext
@@ -28,7 +31,16 @@ class NoteController @javax.inject.Inject() (
   def create = withSession("create", admin = true) { implicit request => implicit td =>
     val fields = modelForm(request.body.asFormUrlEncoded)
     svc.create(fields)
-    Future.successful(Ok(play.twirl.api.Html(fields.toString)))
+    fields.find(_.k == "id").flatMap(_.v).map(UUID.fromString) match {
+      case Some(id) =>
+        val n = svc.getByPrimaryKey(id).getOrElse(throw new IllegalStateException(s"Cannot load newly-inserted note with id [$id]."))
+        val r = n.relType match {
+          case Some(model) => AuditRoutes.getViewRoute(model, n.relPk.map(_.split("/")).getOrElse(Array.empty[String]).toSeq)
+          case None => controllers.admin.note.routes.NoteController.view(id)
+        }
+        Future.successful(Redirect(r))
+      case None => Future.successful(Ok(play.twirl.api.Html(fields.toString)))
+    }
   }
 
   def list(q: Option[String], orderBy: Option[String], orderAsc: Boolean, limit: Option[Int], offset: Option[Int]) = {

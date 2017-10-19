@@ -28,7 +28,7 @@ class AuditCache(supervisor: ActorRef, lookup: AuditLookup) extends Logging {
     supervisor ! ActorSupervisor.Broadcast(models.AuditStartNotification(id, msg))
 
     val results = msg.models.map { model =>
-      model -> lookup.getById(model.t, model.pk).map(_.toDataFields).getOrElse {
+      model -> lookup.getByPk(model.t, model.pk: _*).map(_.toDataFields).getOrElse {
         Seq(DataField("error", Some(s"Could not load model [${model.t}:${model.pk.mkString("/")}] for read.")))
       }
     }
@@ -49,13 +49,13 @@ class AuditCache(supervisor: ActorRef, lookup: AuditLookup) extends Logging {
     supervisor ! ActorSupervisor.Broadcast(models.AuditCompleteNotification(msg))
 
     val updateLookup = current._2.map { c =>
-      val r = lookup.getById(c.t, c.pk)
+      val r = lookup.getByPk(c.t, c.pk: _*)
       c -> r.map(_.toDataFields).getOrElse(Seq(
         DataField("error", Some(s"Could not load model [${c.t}:${c.pk.mkString("/")}] for update."))
       ))
     }
     val insertLookup = msg.inserted.map { c =>
-      c -> lookup.getById(c.t, c.pk).map(_.toDataFields).getOrElse(Seq(
+      c -> lookup.getByPk(c.t, c.pk: _*).map(_.toDataFields).getOrElse(Seq(
         DataField("error", Some(s"Could not load model [${c.t}:${c.pk.mkString("/")}] for insert."))
       ))
     }

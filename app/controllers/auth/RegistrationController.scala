@@ -10,6 +10,7 @@ import controllers.BaseController
 import models.Application
 import models.settings.SettingKey
 import models.user._
+import services.audit.AuditService
 import services.user.UserSearchService
 
 import scala.concurrent.Future
@@ -61,6 +62,7 @@ class RegistrationController @javax.inject.Inject() (
               role = role
             )
             val userSaved = app.userService.insert(user)
+            AuditService.onInsert("user", Seq(userSaved.id.toString), userSaved.toDataFields)
             val result = request.session.get("returnUrl") match {
               case Some(url) => Redirect(url).withSession(request.session - "returnUrl")
               case None => Redirect(controllers.routes.HomeController.home())
