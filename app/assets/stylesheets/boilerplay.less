@@ -83,131 +83,6 @@ input[type=text]:not(.browser-default) {
   margin-bottom: 0;
 }
 
-// Navbar
-nav {
-  a {
-    -webkit-font-smoothing: antialiased;
-  }
-}
-
-.nb-container {
-  height: 48px;
-}
-
-#topnav {
-  height: 48px;
-  line-height: 48px;
-
-  #user-dropdown-toggle {
-    height: 48px;
-    line-height: 48px;
-  }
-
-  .button-collapse i {
-    height: 48px;
-    line-height: 48px;
-  }
-
-  .brand-logo {
-    margin: 0 14px;
-    font-size: 1.6rem;
-
-    &.center {
-      margin: 0;
-    }
-
-    i {
-      height: 48px;
-      line-height: 48px;
-      margin-right: 6px;
-    }
-  }
-
-  #dropdown-explore {
-    width: 300px !important;
-  }
-
-  #dropdown-user {
-    width: 100px !important;
-  }
-
-  @media only screen and (max-width: 992px) {
-    .brand-logo {
-      margin: 0;
-    }
-  }
-
-  @media only screen and (max-width: 600px) {
-    .fa-search {
-      margin-top: 20px;
-    }
-  }
-
-  .menu-toggle {
-    font-size: 190%;
-    margin-left: 12px;
-    float: left;
-  }
-}
-
-.nav-name {
-  margin-left: 16px;
-}
-
-.search-input {
-  width: 25%;
-  margin-right: 10px;
-  input {
-    width: 100%;
-    padding-left: 1rem !important;
-    width: calc(100% - 1rem) !important;
-    margin-bottom: 0 !important;
-    height: 48px !important;
-  }
-  label {
-    left: auto !important;
-    right: 0 !important;
-    padding-right: 8px;
-    margin-top: -12px;
-    .fa-search {
-      font-size: 1.2rem;
-    }
-  }
-}
-
-// Profile
-.profile-container {
-  margin: 12px 0;
-  padding: 0 12px;
-}
-
-#theme-choices {
-  padding: 12px;
-  text-align: center;
-  .swatch {
-    height: 50px;
-    width: 50px;
-    cursor: pointer;
-    margin: 5px;
-    display: inline-block;
-    .indicator {
-      font-size: 2.5rem;
-      margin-top: 8px;
-      visibility: hidden;
-    }
-    &.active {
-      .indicator {
-        visibility: visible;
-      }
-    }
-  }
-}
-
-.theme-swatch {
-  height: 20px;
-  width: 20px;
-}
-
 .setting-panel {
   margin-bottom: 10px;
   padding: 10px;
@@ -221,3 +96,7 @@ nav {
     margin: 0;
   }
 }
+
+@import url(_navbar.less);
+@import url(_profile.less);
+@import url(_autocomplete.less);
