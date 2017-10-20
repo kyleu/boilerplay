@@ -55,7 +55,7 @@
               <td>
                 <div class="autocomplete" id="autocomplete-author">
                   <div class="ac-input">
-                    <input id="input-author" class="autocomplete" data-model="user" data-activates="dropdown-author" data-beloworigin="true" autocomplete="off" type="text" name="author" value="@model.author">
+                    <input id="input-author" class="lookup" data-model="user" data-url="@controllers.admin.user.routes.UserController.autocomplete()" data-activates="dropdown-author" data-beloworigin="true" autocomplete="off" type="text" name="author" value="@model.author">
                   </div>
                   <ul id="dropdown-author" class="dropdown-content ac-dropdown"></ul>
                 </div>

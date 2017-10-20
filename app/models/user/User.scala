@@ -35,4 +35,9 @@ case class User(
     DataField("role", Some(role.toString)),
     DataField("created", Some(created.toString))
   )
+
+  def toSummary = {
+    val title = username + " (" + id + ")"
+    models.result.data.DataSummary(model = "user", pk = Seq(id.toString), title = title)
+  }
 }

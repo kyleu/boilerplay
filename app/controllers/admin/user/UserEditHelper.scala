@@ -2,44 +2,52 @@ package controllers.admin.user
 
 import java.util.UUID
 
-import io.circe.generic.auto._
-import io.circe.java8.time._
-import io.circe.syntax._
-import models.result.orderBy.OrderBy
-import models.user.{Role, UserResult}
-import services.note.ModelNoteService
+import com.mohiva.play.silhouette.api.{LoginInfo, SignUpEvent}
+import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
+import models.user.{Role, User, UserPreferences}
 import util.web.ControllerUtils
 
 import scala.concurrent.Future
 
 trait UserEditHelper { this: UserController =>
   import app.contexts.webContext
-
-  def list(q: Option[String], orderBy: Option[String], orderAsc: Boolean, limit: Option[Int], offset: Option[Int]) = {
-    withSession("user.list", admin = true) { implicit request => implicit td =>
-      val startMs = util.DateUtils.nowMillis
-      val orderBys = OrderBy.forVals(col = orderBy, asc = orderAsc).toSeq
-      val r = q match {
-        case Some(query) if query.nonEmpty => app.userService.searchWithCount(query, Nil, orderBys, limit.orElse(Some(100)), offset)
-        case _ => app.userService.getAllWithCount(Nil, orderBys, limit.orElse(Some(100)), offset)
-      }
-      Future.successful(render {
-        case Accepts.Html() => Ok(views.html.admin.user.userList(
-          request.identity, q, orderBy, orderAsc, Some(r._1), r._2, limit.getOrElse(100), offset.getOrElse(0)
-        ))
-        case Accepts.Json() => Ok(UserResult.fromRecords(q, Nil, orderBys, limit, offset, startMs, r._1, r._2).asJson.spaces2).as(JSON)
-      })
-    }
+  def createForm = withSession("user.createForm", admin = true) { implicit request => implicit td =>
+    val call = controllers.admin.user.routes.UserController.create()
+    Future.successful(Ok(views.html.admin.user.userForm(request.identity, models.user.User.empty(), "New User", call, isNew = true)))
   }
 
-  def view(id: UUID) = withSession("user.view", admin = true) { implicit request => implicit td =>
-    val notes = app.noteService.getFor("user", id)
-    app.userService.getByPrimaryKey(id) match {
-      case Some(model) => Future.successful(render {
-        case Accepts.Html() => Ok(views.html.admin.user.userView(request.identity, model, notes, app.config.debug))
-        case Accepts.Json() => Ok(model.asJson.spaces2).as(JSON)
-      })
-      case None => Future.successful(NotFound(s"No user found with id [$id]."))
+  def create() = withSession("user.create", admin = true) { implicit request => implicit td =>
+    val form = ControllerUtils.getForm(request)
+    val id = UUID.randomUUID
+    val loginInfo = LoginInfo(CredentialsProvider.ID, form("email").trim)
+    val role = form.get("role") match {
+      case Some(r) => Role.withName(r)
+      case None => Role.User
+    }
+    val username = form("username").trim
+
+    if (username.isEmpty) {
+      Future.successful(Redirect(controllers.admin.user.routes.UserController.createForm()).flashing("error" -> "Username is required."))
+    } else if (loginInfo.providerKey.isEmpty) {
+      Future.successful(Redirect(controllers.admin.user.routes.UserController.createForm()).flashing("error" -> "Email Address is required."))
+    } else {
+      val user = User(
+        id = id,
+        username = username,
+        preferences = UserPreferences.empty,
+        profile = loginInfo,
+        role = role
+      )
+      val userSaved = app.userService.insert(user)
+      val authInfo = hasher.hash(form("password"))
+      for {
+        _ <- authInfoRepository.add(loginInfo, authInfo)
+        authenticator <- app.silhouette.env.authenticatorService.create(loginInfo)
+        _ <- app.silhouette.env.authenticatorService.init(authenticator)
+      } yield {
+        app.silhouette.env.eventBus.publish(SignUpEvent(userSaved, request))
+        Redirect(controllers.admin.user.routes.UserController.view(id)).flashing("success" -> s"User [${form("email")}] added.")
+      }
     }
   }
 

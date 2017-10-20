@@ -1,5 +1,6 @@
 # Users
 GET         /                  controllers.admin.user.UserController.list(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None)
+GET         /autocomplete      controllers.admin.user.UserController.autocomplete(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None)
 GET         /form              controllers.admin.user.UserController.createForm()
 POST        /                  controllers.admin.user.UserController.create()
 GET         /:id               controllers.admin.user.UserController.view(id: java.util.UUID)
