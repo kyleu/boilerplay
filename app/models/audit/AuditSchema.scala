@@ -1,6 +1,7 @@
 package models.audit
 
 import java.util.UUID
+
 import models.graphql.{GraphQLContext, SchemaHelper}
 import models.graphql.CommonSchema._
 import models.graphql.DateTimeSchema._
@@ -9,9 +10,11 @@ import models.result.data.DataFieldSchema
 import models.result.filter.FilterSchema._
 import models.result.orderBy.OrderBySchema._
 import models.result.paging.PagingSchema.pagingOptionsType
-import sangria.execution.deferred.{Fetcher, HasId}
+import models.user.User
+import sangria.execution.deferred.{Fetcher, HasId, Relation}
 import sangria.macros.derive._
 import sangria.schema._
+
 import scala.concurrent.Future
 import util.FutureUtils.graphQlContext
 
@@ -24,8 +27,13 @@ object AuditSchema extends SchemaHelper("audit") {
 
   val auditIdArg = Argument("id", uuidType, description = "Returns the Audit matching the provided Id.")
 
-  implicit lazy val tagsType = ObjectType[GraphQLContext, Map[String, String]](name = "", fields = fields[GraphQLContext, Map[String, String]](Field(
-    name = "tags",
+  val auditByUserIdRelation = Relation[Audit, UUID]("byUserId", x => Seq(x.id))
+  val auditByUserIdFetcher = Fetcher.rel[GraphQLContext, Audit, Audit, UUID](
+    getByPrimaryKeySeq, (c, rels) => Future.successful(c.app.auditService.svc.getByUserIdSeq(rels(auditByUserIdRelation))(c.trace))
+  )
+
+  implicit lazy val tagsType = ObjectType[GraphQLContext, Map[String, String]](name = "tags", fields = fields[GraphQLContext, Map[String, String]](Field(
+    name = "entries",
     fieldType = ListType(StringType),
     resolve = c => traceB(c.ctx, "search")(td => c.value.map(c => c._1 + ":" + c._2).toList)
   )))

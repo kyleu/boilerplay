@@ -1,5 +1,7 @@
 package models.graphql
 
+import models.audit.{AuditRecordSchema, AuditSchema}
+import models.note.NoteSchema
 import models.sandbox.SandboxSchema
 import models.settings.SettingsSchema
 import models.user.UserSchema
@@ -7,15 +9,27 @@ import sangria.execution.deferred.DeferredResolver
 import sangria.schema._
 
 object Schema {
+  // Fetchers
+  val baseFetchers = Seq(
+    UserSchema.userByPrimaryKeyFetcher, UserSchema.userByRoleFetcher,
+    AuditSchema.auditByPrimaryKeyFetcher, AuditSchema.auditByUserIdFetcher,
+    AuditRecordSchema.auditRecordByPrimaryKeyFetcher, AuditRecordSchema.auditRecordByAuditIdFetcher,
+    NoteSchema.noteByPrimaryKeyFetcher, NoteSchema.noteByAuthorFetcher
+  )
+
   val modelFetchers = {
     // Start model fetchers
     Nil
     // End model fetchers
   }
 
-  val resolver = DeferredResolver.fetchers(UserSchema.userByPrimaryKeyFetcher +: UserSchema.userByRoleFetcher +: modelFetchers: _*)
+  val resolver = DeferredResolver.fetchers(baseFetchers ++ modelFetchers: _*)
 
-  val baseQueryFields = UserSchema.queryFields ++ SettingsSchema.queryFields ++ SandboxSchema.queryFields
+  // Query Types
+  val baseQueryFields = {
+    UserSchema.queryFields ++ AuditSchema.queryFields ++ AuditRecordSchema.queryFields ++
+      NoteSchema.queryFields ++ SettingsSchema.queryFields ++ SandboxSchema.queryFields
+  }
 
   val modelQueryFields = {
     // Start model query fields
@@ -26,8 +40,11 @@ object Schema {
   val queryType = ObjectType(
     name = "Query",
     description = "The main query interface.",
-    fields = (modelQueryFields ++ baseQueryFields).sortBy(_.name)
+    fields = (baseQueryFields ++ modelQueryFields).sortBy(_.name)
   )
+
+  // Mutation Types
+  val baseMutationFields = SandboxSchema.mutationFields ++ AuditSchema.mutationFields ++ AuditRecordSchema.mutationFields ++ NoteSchema.mutationFields
 
   val modelMutationFields = {
     // Start model mutation fields
@@ -38,9 +55,10 @@ object Schema {
   val mutationType = ObjectType(
     name = "Mutation",
     description = "The main mutation interface.",
-    fields = (SandboxSchema.mutationFields ++ modelMutationFields).sortBy(_.name)
+    fields = (baseMutationFields ++ modelMutationFields).sortBy(_.name)
   )
 
+  // Schema
   val schema = sangria.schema.Schema(
     query = queryType,
     mutation = Some(mutationType),

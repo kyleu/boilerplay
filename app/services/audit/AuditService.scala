@@ -48,7 +48,7 @@ class AuditService @javax.inject.Inject() (
   def getByUserId(user: UUID, orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int])(implicit trace: TraceData) = {
     traceB("get.by.user")(td => SystemDatabase.query(AuditQueries.GetByUserId(user, orderBys, limit, offset))(td))
   }
-  def getByUserSeq(userSeq: Seq[UUID])(implicit trace: TraceData) = traceB("get.by.user.seq") { td =>
+  def getByUserIdSeq(userSeq: Seq[UUID])(implicit trace: TraceData) = traceB("get.by.user.seq") { td =>
     SystemDatabase.query(AuditQueries.GetByUserIdSeq(userSeq))(td)
   }
 
