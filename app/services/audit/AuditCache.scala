@@ -4,9 +4,8 @@ import java.time.LocalDateTime
 import java.util.UUID
 
 import akka.actor.ActorRef
-import models.audit.{Audit, AuditField}
+import models.audit._
 import models.result.data.DataField
-import models.audit.{AuditComplete, AuditStart}
 import services.supervisor.ActorSupervisor
 import util.{DateUtils, Logging}
 import util.tracing.TraceData
@@ -83,6 +82,6 @@ class AuditCache(supervisor: ActorRef, lookup: AuditLookup) extends Logging {
     )
     cache.remove(audit.id)
     log.info(s"Completed audit with id [${msg.id}] ($pendingCount in cache).")
-    AuditService.onAudit(audit)
+    AuditHelper.onAudit(audit)
   }
 }

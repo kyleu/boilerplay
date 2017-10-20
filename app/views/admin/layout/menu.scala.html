@@ -14,9 +14,9 @@
         <li><a class="dropdown-button" href="@controllers.admin.system.routes.AdminController.explore()" data-activates="dropdown-explore">Explore</a></li>
       }
       @if(activeSection == "audit") {
-        <li class="active"><a href="@controllers.admin.audit.routes.AuditController.index()">Audits</a></li>
+        <li class="active"><a href="@controllers.admin.audit.routes.AuditLifecycleController.index()">Audits</a></li>
       } else {
-        <li><a href="@controllers.admin.audit.routes.AuditController.index()">Audits</a></li>
+        <li><a href="@controllers.admin.audit.routes.AuditLifecycleController.index()">Audits</a></li>
       }
       @if(activeSection == "graphql") {
         <li class="active"><a href="@controllers.admin.graphql.routes.GraphQLController.graphql(None)">GraphQL</a></li>
@@ -50,5 +50,6 @@
 <ul id="dropdown-explore" class="dropdown-content">
   <!-- Start model list routes -->
   <!-- End model list routes -->
+  <li><a href="@controllers.admin.note.routes.NoteController.list()"><i class="fa @models.template.Icons.note"></i> Notes</a></li>
   <li><a href="@controllers.admin.user.routes.UserController.list()"><i class="fa @models.template.Icons.user"></i> Users</a></li>
 </ul>

@@ -7,5 +7,5 @@ case class AuditRecord(
   auditId: UUID = UUID.randomUUID,
   t: String = "default",
   pk: Seq[String] = Seq.empty,
-  changes: Seq[AuditField]
+  changes: Seq[AuditField] = Nil
 )

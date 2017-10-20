@@ -1,90 +1,102 @@
-@(user: models.user.User, startJson: String, debug: Boolean)(
+@(user: models.user.User, model: models.audit.Audit, title: String, cancel: Call, act: Call, isNew: Boolean = false, debug: Boolean = false)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
-)@traceData.logViewClass(getClass)@views.html.admin.layout.page(user, "audit", "Audit Test Form") {
-  <div class="row">
-    <div class="col s12">
-      <ul class="collection with-header">
-        <li class="collection-header">
-          <h4>Audit Test Form</h4>
-        </li>
-        @defining("height: 320px; font: 'Consolas', 'Inconsolata', 'Droid Sans Mono', 'Monaco', monospace;") { taStyle =>
-          <li class="collection-item">
-            <h5>Start Audit</h5>
-            <textarea id="start-textarea" name="content" style="@taStyle">@startJson</textarea>
-            <button id="start-submit" class="btn theme">Submit</button>
-          </li>
-          <li id="complete-section" class="collection-item" style="display: none;">
-            <h5>Complete Audit</h5>
-            <textarea id="complete-textarea" name="content" style="@taStyle">{
-  "id": "???",
-  "msg": "...",
-  "tags": {
-    "x": "z",
-    "key": "val"
-  },
-  "inserted": [
-    { "t": "ad", "pk": ["1"] }
-  ]
-}</textarea>
-            <button id="complete-submit" class="btn theme">Submit</button>
-          </li>
-        }
-      </ul>
+)@traceData.logViewClass(getClass)@views.html.admin.layout.page(user, "explore", title) {
+  <form id="form-edit-audit" action="@act" method="post">
+    <div class="collection with-header">
+      <div class="collection-header">
+        <div class="right"><button type="submit" class="btn theme">@if(isNew) {Create} else {Save} Audit</button></div>
+        <div class="right"><a href="@cancel" class="theme-text cancel-link">Cancel</a></div>
+        <h5><i class="fa @models.template.Icons.audit"></i> @title</h5>
+      </div>
+      <div class="collection-item">
+        <table class="highlight">
+          <tbody>
+            <tr>
+              <td>
+                <input type="checkbox" name="id.include" id="id.include" value="true" @if(isNew) { checked="checked" } class="data-input" data-type="uuid" data-name="id" />
+                <label for="id.include">Id</label>
+              </td>
+              <td>
+                <input id="input-id" type="text" name="id" value="@model.id" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <input type="checkbox" name="act.include" id="act.include" value="true" @if(isNew) { checked="checked" } class="data-input" data-type="string" data-name="act" />
+                <label for="act.include">Act</label>
+              </td>
+              <td>
+                <input id="input-act" type="text" name="act" value="@model.act" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <input type="checkbox" name="app.include" id="app.include" value="true" @if(isNew) { checked="checked" } class="data-input" data-type="string" data-name="app" />
+                <label for="app.include">App</label>
+              </td>
+              <td>
+                <input id="input-app" type="text" name="app" value="@model.app" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <input type="checkbox" name="client.include" id="client.include" value="true" class="data-input" data-type="string" data-name="client" />
+                <label for="client.include">Client</label>
+              </td>
+              <td>
+                <input id="input-client" type="text" name="client" value="@model.client" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <input type="checkbox" name="server.include" id="server.include" value="true" class="data-input" data-type="string" data-name="server" />
+                <label for="server.include">Server</label>
+              </td>
+              <td>
+                <input id="input-server" type="text" name="server" value="@model.server" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <input type="checkbox" name="user.include" id="user.include" value="true" class="data-input" data-type="uuid" data-name="user" />
+                <label for="user.include">User Id</label>
+              </td>
+              <td>
+                <input id="input-userId" type="text" name="userId" value="@model.user" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <input type="checkbox" name="tags.include" id="tags.include" value="true" @if(isNew) { checked="checked" } class="data-input" data-type="unknown" data-name="tags" />
+                <label for="tags.include">Tags</label>
+              </td>
+              <td>
+                <input id="input-tags" type="text" name="tags" value="@model.tags" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <input type="checkbox" name="started.include" id="started.include" value="true" @if(isNew) { checked="checked" } class="data-input" data-type="timestamp" data-name="started" />
+                <label for="started.include">Started</label>
+              </td>
+              <td>
+                <input id="input-started" type="text" name="started" value="@model.started" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <input type="checkbox" name="completed.include" id="completed.include" value="true" @if(isNew) { checked="checked" } class="data-input" data-type="timestamp" data-name="completed" />
+                <label for="completed.include">Completed</label>
+              </td>
+              <td>
+                <input id="input-completed" type="text" name="completed" value="@model.completed" />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-  </div>
-  <script>
-    var originalText = '?';
-
-    function onStartSuccess(rsp) {
-      if(rsp.status === 'OK') {
-        console.log(rsp.id);
-        $('#complete-textarea').val(originalText.replace('???', rsp.id));
-        $('#complete-section').show();
-      } else {
-        console.error('Received status [' + rsp.status + '].', rsp);
-      }
-    }
-
-    function onCompleteSuccess(rsp) {
-      console.log(rsp);
-    }
-
-    $(function() {
-      originalText = $('#complete-textarea').val();
-
-      $("#start-submit").on("click", function() {
-        var json;
-        try {
-          json = JSON.parse($("#start-textarea").val());
-        } catch(e) {
-          alert('Invalid json.');
-        }
-        console.log(json);
-        $.post({
-          type: 'POST',
-          url: '@controllers.admin.audit.routes.AuditController.start()',
-          data: JSON.stringify(json),
-          contentType: "application/json",
-          dataType: 'json'
-        }).done(onStartSuccess);
-      });
-
-      $("#complete-submit").on("click", function() {
-        var json;
-        try {
-          json = JSON.parse($("#complete-textarea").val());
-        } catch(e) {
-          alert('Invalid json.');
-        }
-        console.log(json);
-        $.post({
-          type: 'POST',
-          url: '@controllers.admin.audit.routes.AuditController.complete()',
-          data: JSON.stringify(json),
-          contentType: "application/json",
-          dataType: 'json'
-        }).done(onCompleteSuccess);
-      });
-    });
-  </script>
+  </form>
 }
+@views.html.components.includeScalaJs(debug)
+<script>$(function() { new FormService('form-edit-audit'); })</script>

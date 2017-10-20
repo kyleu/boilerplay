@@ -1,17 +1,17 @@
 package controllers.admin.audit
 
-import java.util.UUID
-
 import controllers.BaseController
 import io.circe.generic.auto._
+import io.circe.java8.time._
 import io.circe.syntax._
+import java.util.UUID
 import models.Application
+import models.audit.AuditRecordResult
 import models.result.orderBy.OrderBy
+import scala.concurrent.Future
 import services.audit.AuditRecordService
 import util.FutureUtils.defaultContext
 import util.web.ControllerUtils.acceptsCsv
-
-import scala.concurrent.Future
 
 @javax.inject.Singleton
 class AuditRecordController @javax.inject.Inject() (
@@ -21,7 +21,7 @@ class AuditRecordController @javax.inject.Inject() (
     val cancel = controllers.admin.audit.routes.AuditRecordController.list()
     val call = controllers.admin.audit.routes.AuditRecordController.create()
     Future.successful(Ok(views.html.admin.audit.auditRecordForm(
-      request.identity, models.audit.AuditRecord.empty, "New Audit Record", cancel, call, isNew = true, debug = app.config.debug
+      request.identity, models.audit.AuditRecord(), "New Audit Record", cancel, call, isNew = true, debug = app.config.debug
     )))
   }
 

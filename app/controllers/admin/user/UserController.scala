@@ -67,7 +67,10 @@ class UserController @javax.inject.Inject() (
 
   def relationCounts(id: UUID) = withSession("relation.counts", admin = true) { implicit request => implicit td =>
     val notesByAuthor = noteS.countByAuthor(id)
-    val auditsBy = auditS.countByAuthor(id)
-    Future.successful(Ok(Seq(RelationCount(model = "note", field = "author", count = notesByAuthor)).asJson.spaces2).as(JSON))
+    val auditsByUserId = auditS.countByUserId(id)
+    Future.successful(Ok(Seq(
+      RelationCount(model = "note", field = "author", count = notesByAuthor),
+      RelationCount(model = "audit", field = "user", count = auditsByUserId)
+    ).asJson.spaces2).as(JSON))
   }
 }

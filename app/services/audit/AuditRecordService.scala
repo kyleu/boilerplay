@@ -12,7 +12,7 @@ import services.database.ApplicationDatabase
 import util.tracing.{TraceData, TracingService}
 
 @javax.inject.Singleton
-class AuditRecordService @javax.inject.Inject() (override val tracing: TracingService) extends ModelServiceHelper[AuditRecord]("auditRecord") {
+class AuditRecordService @javax.inject.Inject() (override val tracing: TracingService, val svc: AuditService) extends ModelServiceHelper[AuditRecord]("auditRecord") {
   def getByPrimaryKey(id: UUID)(implicit trace: TraceData) = {
     traceB("get.by.primary.key")(td => ApplicationDatabase.query(AuditRecordQueries.getByPrimaryKey(id))(td))
   }
@@ -58,8 +58,10 @@ class AuditRecordService @javax.inject.Inject() (override val tracing: TracingSe
       }
     }
   }
-  def create(fields: Seq[DataField])(implicit trace: TraceData) = {
-    traceB("create")(td => ApplicationDatabase.execute(AuditRecordQueries.create(fields))(td))
+  def create(fields: Seq[DataField])(implicit trace: TraceData) = traceB("create") { td =>
+    ApplicationDatabase.execute(AuditRecordQueries.create(fields))(td)
+    services.audit.AuditHelper.onInsert("AuditRecord", Seq(fieldVal(fields, "id")), fields)
+    None: Option[AuditRecord] // TODO: getByPrimaryKey
   }
 
   def remove(id: UUID)(implicit trace: TraceData) = {

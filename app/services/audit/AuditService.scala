@@ -10,47 +10,11 @@ import models.result.orderBy.OrderBy
 import models.{Application, Configuration}
 import play.api.inject.Injector
 import services.ModelServiceHelper
-import services.database.SystemDatabase
+import services.database.{ApplicationDatabase, SystemDatabase}
 import services.supervisor.ActorSupervisor
+import util.FutureUtils
 import util.tracing.{TraceData, TracingService}
 import util.web.TracingWSClient
-import util.{FutureUtils, Logging, NullUtils}
-
-object AuditService extends Logging {
-  private var inst: Option[AuditService] = None
-  private def getInst = inst.getOrElse(throw new IllegalStateException("Not initialized."))
-
-  def onAudit(audit: Audit)(implicit trace: TraceData) = getInst.callback(audit)
-
-  def onStart(id: UUID, msg: AuditStart)(implicit traceData: TraceData) = getInst.cache.onStart(id, msg)
-  def onComplete(msg: AuditComplete)(implicit traceData: TraceData) = getInst.cache.onComplete(msg)
-
-  def onInsert(t: String, pk: Seq[String], fields: Seq[DataField])(implicit trace: TraceData) = {
-    val msg = s"Inserted new [$t] with [${fields.size}] fields:"
-    val auditId = UUID.randomUUID
-    val records = Seq(AuditRecord(auditId = auditId, t = t, pk = pk, changes = fields.map(f => AuditField(f.k, None, f.v))))
-    onAudit(Audit(id = auditId, act = "insert", msg = msg, records = records))
-  }
-
-  def onUpdate(t: String, ids: Seq[DataField], originalFields: Seq[DataField], newFields: Seq[DataField])(implicit trace: TraceData) = {
-    def changeFor(f: DataField) = originalFields.find(_.k == f.k).flatMap {
-      case o if f.v != o.v => Some(AuditField(f.k, o.v, f.v))
-      case _ => None
-    }
-    val changes = newFields.flatMap(changeFor)
-    val msg = s"Updated [${changes.size}] fields of $t[${ids.map(id => id.k + ": " + id.v.getOrElse(NullUtils.str)).mkString(", ")}]:\n"
-    val auditId = UUID.randomUUID
-    val records = Seq(AuditRecord(auditId = auditId, t = t, changes = changes))
-    onAudit(Audit(id = auditId, act = "update", msg = msg, records = records))
-  }
-
-  def onRemove(t: String, pk: Seq[String], fields: Seq[DataField])(implicit trace: TraceData) = {
-    val msg = s"Removed [$t] with [${fields.size}] fields:"
-    val auditId = UUID.randomUUID
-    val records = Seq(AuditRecord(auditId = auditId, t = t, pk = pk, changes = fields.map(f => AuditField(f.k, None, f.v))))
-    onAudit(Audit(id = auditId, act = "remove", msg = msg, records = records))
-  }
-}
 
 @javax.inject.Singleton
 class AuditService @javax.inject.Inject() (
@@ -58,6 +22,9 @@ class AuditService @javax.inject.Inject() (
 ) extends ModelServiceHelper[Audit]("audit") {
   def getByPrimaryKey(id: UUID)(implicit trace: TraceData) = {
     traceB("get.by.primary.key")(td => SystemDatabase.query(AuditQueries.getByPrimaryKey(id))(td))
+  }
+  def getByPrimaryKeySeq(idSeq: Seq[UUID])(implicit trace: TraceData) = {
+    traceB("get.by.primary.key.seq")(td => ApplicationDatabase.query(AuditQueries.getByPrimaryKeySeq(idSeq))(td))
   }
 
   override def countAll(filters: Seq[Filter] = Nil)(implicit trace: TraceData) = {
@@ -75,25 +42,52 @@ class AuditService @javax.inject.Inject() (
     traceB("search")(td => SystemDatabase.query(AuditQueries.search(q, filters, orderBys, limit, offset))(td))
   }
 
-  def countByAuthor(author: UUID)(implicit trace: TraceData) = traceB("count.by.author") { td =>
-    SystemDatabase.query(AuditQueries.CountByAuthor(author))(td)
+  def countByUserId(user: UUID)(implicit trace: TraceData) = traceB("count.by.user") { td =>
+    SystemDatabase.query(AuditQueries.CountByUserId(user))(td)
   }
-  def getByAuthor(author: UUID, orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int])(implicit trace: TraceData) = {
-    traceB("get.by.author")(td => SystemDatabase.query(AuditQueries.GetByAuthor(author, orderBys, limit, offset))(td))
+  def getByUserId(user: UUID, orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int])(implicit trace: TraceData) = {
+    traceB("get.by.user")(td => SystemDatabase.query(AuditQueries.GetByUserId(user, orderBys, limit, offset))(td))
   }
-  def getByAuthorSeq(authorSeq: Seq[UUID])(implicit trace: TraceData) = traceB("get.by.author.seq") { td =>
-    SystemDatabase.query(AuditQueries.GetByAuthorSeq(authorSeq))(td)
+  def getByUserSeq(userSeq: Seq[UUID])(implicit trace: TraceData) = traceB("get.by.user.seq") { td =>
+    SystemDatabase.query(AuditQueries.GetByUserIdSeq(userSeq))(td)
+  }
+
+  // Mutations
+  def insert(model: Audit)(implicit trace: TraceData) = {
+    traceB("insert")(td => ApplicationDatabase.execute(AuditQueries.insert(model))(td) match {
+      case 1 => getByPrimaryKey(model.id)(td)
+      case _ => throw new IllegalStateException("Unable to find newly-inserted Audit.")
+    })
+  }
+  def insertBatch(models: Seq[Audit])(implicit trace: TraceData) = {
+    traceB("insertBatch")(td => ApplicationDatabase.execute(AuditQueries.insertBatch(models))(td))
+  }
+  def create(fields: Seq[DataField])(implicit trace: TraceData) = traceB("create") { td =>
+    ApplicationDatabase.execute(AuditQueries.create(fields))(td)
+    None: Option[Audit] // TODO: getByPrimaryKey
   }
 
   def remove(id: UUID)(implicit trace: TraceData) = {
-    traceB("remove") { td =>
-      SystemDatabase.query(AuditQueries.getByPrimaryKey(id))(td) match {
-        case Some(current) =>
-          SystemDatabase.execute(AuditQueries.removeByPrimaryKey(id))(td)
-          current
-        case None => throw new IllegalStateException(s"Cannot find Note matching [$id].")
-      }
-    }
+    traceB("remove")(td => ApplicationDatabase.query(AuditQueries.getByPrimaryKey(id))(td) match {
+      case Some(current) =>
+        ApplicationDatabase.execute(AuditQueries.removeByPrimaryKey(id))(td)
+        current
+      case None => throw new IllegalStateException(s"Cannot find Audit matching [$id].")
+    })
+  }
+
+  def update(id: UUID, fields: Seq[DataField])(implicit trace: TraceData) = {
+    traceB("update")(td => ApplicationDatabase.query(AuditQueries.getByPrimaryKey(id))(td) match {
+      case Some(current) =>
+        ApplicationDatabase.execute(AuditQueries.update(id, fields))(td)
+        ApplicationDatabase.query(AuditQueries.getByPrimaryKey(id))(td) match {
+          case Some(newModel) =>
+            services.audit.AuditHelper.onUpdate("Audit", Seq(DataField("id", Some(id.toString))), current.toDataFields, fields)
+            newModel
+          case None => throw new IllegalStateException(s"Cannot find Audit matching [$id].")
+        }
+      case None => throw new IllegalStateException(s"Cannot find Audit matching [$id].")
+    })
   }
 
   def csvFor(operation: String, totalCount: Int, rows: Seq[Audit])(implicit trace: TraceData) = {
@@ -101,10 +95,7 @@ class AuditService @javax.inject.Inject() (
   }
 
   lazy val supervisor = inject.instanceOf(classOf[Application]).supervisor
-
-  AuditService.inst.foreach(_ => throw new IllegalStateException("Double initialization."))
-  AuditService.inst = Some(this)
-
+  AuditHelper.init(this)
   lazy val cache = new AuditCache(supervisor, lookup)
 
   def callback(a: Audit)(implicit trace: TraceData) = if (a.records.exists(_.changes.nonEmpty)) {

@@ -14,7 +14,7 @@ import services.supervisor.ActorSupervisor
 import services.user.UserService
 import util.FutureUtils.defaultContext
 import services.cache.CacheService
-import services.audit.AuditService
+import services.audit.{AuditRecordService, AuditService}
 import services.note.ModelNoteService
 import services.settings.SettingsService
 import util.{Config, FutureUtils, Logging}
@@ -37,6 +37,7 @@ class Application @javax.inject.Inject() (
     val actorSystem: ActorSystem,
     val userService: UserService,
     val settingsService: SettingsService,
+    val auditService: AuditRecordService,
     val noteService: ModelNoteService,
     val silhouette: Silhouette[AuthEnv],
     val ws: TracingWSClient,

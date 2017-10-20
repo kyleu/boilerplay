@@ -45,6 +45,13 @@
       </div>
       <div class="collapsible-body"><span>Loading...</span></div>
     </li>
+    <li id="relation-audit-user" data-table="audit" data-field="user" data-singular="Audit" data-plural="Audits" data-url="@controllers.admin.audit.routes.AuditController.byUserId(model.id, limit = Some(5))">
+      <div class="collapsible-header">
+        <i class="fa @models.template.Icons.audit"></i>
+        <span class="title">Audits</span>&nbsp;by User Id
+      </div>
+      <div class="collapsible-body"><span>Loading...</span></div>
+    </li>
   </ul>
   @views.html.components.includeScalaJs(debug)
   <script>$(function() { new RelationService('@controllers.admin.user.routes.UserController.relationCounts(model.id)') });</script>

@@ -3,5 +3,10 @@
   <td>@model.relType</td>
   <td>@model.relPk</td>
   <td>@model.text</td>
-  <td>@model.author</td>
+  <td>
+    @model.author
+    <a class="theme-text" href="@controllers.admin.user.routes.UserController.view(model.author)">
+      <i class="fa @models.template.Icons.user"></i>
+    </a>
+  </td>
 </tr>

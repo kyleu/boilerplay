@@ -72,7 +72,7 @@ class UserService @javax.inject.Inject() (override val tracing: TracingService, 
       case None => throw new IllegalStateException("Invalid User")
     }
     UserCache.getUser(userId).foreach { user =>
-      services.audit.AuditService.onRemove("User", Seq(userId.toString), user.toDataFields)
+      services.audit.AuditHelper.onRemove("User", Seq(userId.toString), user.toDataFields)
     }
     val userCount = SystemDatabase.execute(UserQueries.removeByPrimaryKey(Seq(userId)), Some(conn))(txTd)
     UserCache.removeUser(userId)
