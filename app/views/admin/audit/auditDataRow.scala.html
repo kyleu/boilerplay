@@ -5,6 +5,7 @@
   <td>@model.client</td>
   <td>@model.server</td>
   <td>@model.user.map { u =>
+    @u.toString.take(8)
     <a class="theme-text" href="@controllers.admin.user.routes.UserController.view(u)">
       <i class="fa @models.template.Icons.user"></i>
     </a>

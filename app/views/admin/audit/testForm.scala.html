@@ -28,6 +28,9 @@
 }</textarea>
             <button id="complete-submit" class="btn theme">Submit</button>
           </li>
+          <li id="success-section" class="collection-item" style="display: none;">
+            <h5>Success!</h5>
+          </li>
         }
       </ul>
     </div>
@@ -47,6 +50,7 @@
 
     function onCompleteSuccess(rsp) {
       console.log(rsp);
+      $('#success-section').show();
     }
 
     $(function() {
