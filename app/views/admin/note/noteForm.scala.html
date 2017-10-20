@@ -53,7 +53,12 @@
                 <label for="author.include">Author</label>
               </td>
               <td>
-                <input id="input-author" type="text" name="author" value="@model.author" />
+                <div class="autocomplete" id="autocomplete-author">
+                  <div class="ac-input">
+                    <input id="input-author" class="autocomplete" data-model="user" data-activates="dropdown-author" data-beloworigin="true" autocomplete="off" type="text" name="author" value="@model.author">
+                  </div>
+                  <ul id="dropdown-author" class="dropdown-content ac-dropdown"></ul>
+                </div>
               </td>
             </tr>
             <tr>
@@ -72,4 +77,9 @@
   </form>
 }
 @views.html.components.includeScalaJs(debug)
+@if(debug) {
+<script src="@routes.Assets.versioned("lib/autocomplete/jquery.materialize-autocomplete.js").url"></script>
+} else {
+<script src="@routes.Assets.versioned("lib/autocomplete/jquery.materialize-autocomplete.min.js").url"></script>
+}
 <script>$(function() { new FormService('form-edit-note'); })</script>

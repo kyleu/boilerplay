@@ -79,6 +79,6 @@ object UserQueries extends BaseQueries[User]("user", "users") {
   }
 
   override protected def toDataSeq(u: User) = Seq(
-    u.id.toString, u.username, JsonSerializers.writePreferences(u.preferences), u.profile.providerKey, u.role.toString, EngineHelper.toDatabaseFormat(u.created)
+    u.id.toString, u.username, JsonSerializers.writePreferences(u.preferences), u.profile.providerKey, u.role.toString, u.created
   )
 }
