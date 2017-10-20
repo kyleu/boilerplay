@@ -2,7 +2,7 @@ package services.audit
 
 import java.util.UUID
 
-import models.audit.Audit
+import models.audit.AuditRecord
 import models.queries.audit.AuditRecordQueries
 import models.result.data.DataField
 import models.result.filter.Filter
@@ -12,7 +12,7 @@ import services.database.ApplicationDatabase
 import util.tracing.{TraceData, TracingService}
 
 @javax.inject.Singleton
-class AuditRecordService @javax.inject.Inject() (override val tracing: TracingService) extends ModelServiceHelper[Audit.Record]("auditRecord") {
+class AuditRecordService @javax.inject.Inject() (override val tracing: TracingService) extends ModelServiceHelper[AuditRecord]("auditRecord") {
   def getByPrimaryKey(id: UUID)(implicit trace: TraceData) = {
     traceB("get.by.primary.key")(td => ApplicationDatabase.query(AuditRecordQueries.getByPrimaryKey(id))(td))
   }
@@ -50,7 +50,7 @@ class AuditRecordService @javax.inject.Inject() (override val tracing: TracingSe
   }
 
   // Mutations
-  def insert(model: Audit.Record)(implicit trace: TraceData) = {
+  def insert(model: AuditRecord)(implicit trace: TraceData) = {
     traceB("insert") { td =>
       ApplicationDatabase.execute(AuditRecordQueries.insert(model))(td) match {
         case 1 => getByPrimaryKey(model.id)(td)
@@ -85,7 +85,7 @@ class AuditRecordService @javax.inject.Inject() (override val tracing: TracingSe
     }
   }
 
-  def csvFor(operation: String, totalCount: Int, rows: Seq[Audit.Record])(implicit trace: TraceData) = {
+  def csvFor(operation: String, totalCount: Int, rows: Seq[AuditRecord])(implicit trace: TraceData) = {
     traceB("export.csv")(td => util.CsvUtils.csvFor(Some(key), totalCount, rows, AuditRecordQueries.fields)(td))
   }
 }

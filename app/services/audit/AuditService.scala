@@ -2,7 +2,7 @@ package services.audit
 
 import java.util.UUID
 
-import models.audit.{Audit, AuditComplete, AuditField, AuditStart}
+import models.audit._
 import models.queries.audit.AuditQueries
 import models.result.data.DataField
 import models.result.filter.Filter
@@ -28,7 +28,7 @@ object AuditService extends Logging {
   def onInsert(t: String, pk: Seq[String], fields: Seq[DataField])(implicit trace: TraceData) = {
     val msg = s"Inserted new [$t] with [${fields.size}] fields:"
     val auditId = UUID.randomUUID
-    val records = Seq(Audit.Record(auditId = auditId, t = t, pk = pk, changes = fields.map(f => AuditField(f.k, None, f.v))))
+    val records = Seq(AuditRecord(auditId = auditId, t = t, pk = pk, changes = fields.map(f => AuditField(f.k, None, f.v))))
     onAudit(Audit(id = auditId, act = "insert", msg = msg, records = records))
   }
 
@@ -40,14 +40,14 @@ object AuditService extends Logging {
     val changes = newFields.flatMap(changeFor)
     val msg = s"Updated [${changes.size}] fields of $t[${ids.map(id => id.k + ": " + id.v.getOrElse(NullUtils.str)).mkString(", ")}]:\n"
     val auditId = UUID.randomUUID
-    val records = Seq(Audit.Record(auditId = auditId, t = t, changes = changes))
+    val records = Seq(AuditRecord(auditId = auditId, t = t, changes = changes))
     onAudit(Audit(id = auditId, act = "update", msg = msg, records = records))
   }
 
   def onRemove(t: String, pk: Seq[String], fields: Seq[DataField])(implicit trace: TraceData) = {
     val msg = s"Removed [$t] with [${fields.size}] fields:"
     val auditId = UUID.randomUUID
-    val records = Seq(Audit.Record(auditId = auditId, t = t, pk = pk, changes = fields.map(f => AuditField(f.k, None, f.v))))
+    val records = Seq(AuditRecord(auditId = auditId, t = t, pk = pk, changes = fields.map(f => AuditField(f.k, None, f.v))))
     onAudit(Audit(id = auditId, act = "remove", msg = msg, records = records))
   }
 }

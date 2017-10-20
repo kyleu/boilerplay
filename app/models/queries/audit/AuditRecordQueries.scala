@@ -2,7 +2,7 @@ package models.queries.audit
 
 import java.util.UUID
 
-import models.audit.{Audit, AuditField}
+import models.audit.{AuditField, AuditRecord}
 import models.database.{DatabaseField, Row, Statement}
 import models.database.DatabaseFieldType._
 import models.queries.BaseQueries
@@ -12,13 +12,12 @@ import models.result.filter.Filter
 import models.result.orderBy.OrderBy
 import org.postgresql.jdbc.PgArray
 import org.postgresql.util.PGobject
-
 import io.circe.generic.auto._
 import io.circe.java8.time._
 import io.circe.syntax._
 import io.circe.parser._
 
-object AuditRecordQueries extends BaseQueries[Audit.Record]("auditRecord", "audit_record", "postgres") {
+object AuditRecordQueries extends BaseQueries[AuditRecord]("auditRecord", "audit_record", "postgres") {
   override val fields = Seq(
     DatabaseField(title = "Id", prop = "id", col = "id", typ = UuidType),
     DatabaseField(title = "Audit Id", prop = "auditId", col = "audit_id", typ = UuidType),
@@ -46,7 +45,7 @@ object AuditRecordQueries extends BaseQueries[Audit.Record]("auditRecord", "audi
   )
   case class GetByAuditIdSeq(auditIdSeq: Seq[UUID]) extends ColSeqQuery(column = "audit_id", values = auditIdSeq)
 
-  def insert(model: Audit.Record) = new Statement {
+  def insert(model: AuditRecord) = new Statement {
     override def name: String = "insert"
     override def sql: String = s"""insert into $tableName ($quotedColumns) values (?, ?, ?, ?, ?)"""
     private[this] val pkArray = "{ " + model.pk.map("\"" + _ + "\"").mkString(", ") + " }"
@@ -60,7 +59,7 @@ object AuditRecordQueries extends BaseQueries[Audit.Record]("auditRecord", "audi
 
   def update(id: UUID, fields: Seq[DataField]) = UpdateFields(Seq[Any](id), fields)
 
-  override protected def fromRow(row: Row) = Audit.Record(
+  override protected def fromRow(row: Row) = AuditRecord(
     id = UuidType(row, "id"),
     auditId = UuidType(row, "audit_id"),
     t = StringType(row, "t"),

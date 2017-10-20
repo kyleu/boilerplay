@@ -61,11 +61,11 @@ class AuditCache(supervisor: ActorRef, lookup: AuditLookup) extends Logging {
     }
 
     val updates = updateLookup.map { c =>
-      Audit.Record(auditId = msg.id, t = c._1.t, pk = c._1.pk, changes = getAuditFields(c._1, c._2))
+      AuditRecord(auditId = msg.id, t = c._1.t, pk = c._1.pk, changes = getAuditFields(c._1, c._2))
     }.filter(_.changes.nonEmpty)
 
     val inserts = insertLookup.map { c =>
-      Audit.Record(auditId = msg.id, t = c._1.t, pk = c._1.pk, changes = c._2.map(x => AuditField(x.k, None, x.v)))
+      AuditRecord(auditId = msg.id, t = c._1.t, pk = c._1.pk, changes = c._2.map(x => AuditField(x.k, None, x.v)))
     }
 
     val audit = Audit(

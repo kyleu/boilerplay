@@ -1,0 +1,8 @@
+@(model: models.audit.Audit, hit: String)<div class="search-result">
+  <div class="right">Audit</div>
+  <div>
+    <i class="fa @models.template.Icons.audit"></i>
+    <a class="theme-text" href="@controllers.admin.audit.routes.AuditController.view(model.id)">@model.id</a>
+  </div>
+  <em>@hit</em>
+</div>
