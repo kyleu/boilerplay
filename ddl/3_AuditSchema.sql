@@ -39,6 +39,6 @@ create table if not exists "note" (
   "rel_pk" varchar(256),
   "text" text not null,
   "author" uuid not null,
-  "created" timestamp not null,
+  "created" timestamp without time zone not null,
   foreign key ("author") references "users" ("id")
 );

@@ -11,7 +11,12 @@ abstract class BaseQueries[T <: Product](
   protected def searchColumns: Seq[String] = Nil
   protected def fromRow(row: Row): T
 
-  protected def toDataSeq(t: T): Seq[Any] = t.productIterator.toSeq
+  protected def toDataSeq(t: T): Seq[Any] = t.productIterator.map {
+    case x: java.time.LocalDateTime => java.sql.Timestamp.valueOf(x)
+    case x: java.time.LocalDate => java.sql.Date.valueOf(x)
+    case x: java.time.LocalTime => java.sql.Time.valueOf(x)
+    case x => x
+  }.toSeq
 
   protected lazy val quotedColumns = fields.map(f => quote(f.col)).mkString(", ")
   protected def placeholdersFor(seq: Seq[_]) = seq.map(_ => "?").mkString(", ")
