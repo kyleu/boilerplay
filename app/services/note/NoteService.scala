@@ -62,7 +62,7 @@ class NoteService @javax.inject.Inject() (override val tracing: TracingService) 
   def create(fields: Seq[DataField])(implicit trace: TraceData) = traceB("create") { td =>
     ApplicationDatabase.execute(NoteQueries.create(fields))(td)
     services.audit.AuditHelper.onInsert("Note", Seq(fieldVal(fields, "id")), fields)
-    None: Option[Note] // TODO: getByPrimaryKey
+    getByPrimaryKey(UUID.fromString(fieldVal(fields, "id")))
   }
 
   def remove(id: UUID)(implicit trace: TraceData) = {

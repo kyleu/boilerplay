@@ -30,15 +30,11 @@ class NoteController @javax.inject.Inject() (
 
   def create = withSession("create", admin = true) { implicit request => implicit td =>
     val fields = modelForm(request.body.asFormUrlEncoded)
-    svc.create(fields)
-    fields.find(_.k == "id").flatMap(_.v).map(UUID.fromString) match {
-      case Some(id) =>
-        val n = svc.getByPrimaryKey(id).getOrElse(throw new IllegalStateException(s"Cannot load newly-inserted note with id [$id]."))
-        val r = n.relType match {
-          case Some(model) => AuditRoutes.getViewRoute(model, n.relPk.map(_.split("/")).getOrElse(Array.empty[String]).toSeq)
-          case None => controllers.admin.note.routes.NoteController.view(id)
-        }
-        Future.successful(Redirect(r))
+    svc.create(fields) match {
+      case Some(note) => Future.successful(Redirect(note.relType match {
+        case Some(model) => AuditRoutes.getViewRoute(model, note.relPk.map(_.split("/")).getOrElse(Array.empty[String]).toSeq)
+        case None => controllers.admin.note.routes.NoteController.view(note.id)
+      }))
       case None => Future.successful(Ok(play.twirl.api.Html(fields.toString)))
     }
   }
