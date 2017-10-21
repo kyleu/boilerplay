@@ -24,7 +24,7 @@ object Dependencies {
   }
 
   object Authentication {
-    private[this] val version = "5.0.1"
+    private[this] val version = "5.0.2"
     val silhouette = "com.mohiva" %% "play-silhouette" % version
     val hasher = "com.mohiva" %% "play-silhouette-password-bcrypt" % version
     val persistence = "com.mohiva" %% "play-silhouette-persistence" % version
@@ -56,13 +56,13 @@ object Dependencies {
   }
 
   object Metrics {
-    val version = "3.2.4"
+    val version = "3.2.5"
     val metrics = "nl.grons" %% "metrics-scala" % "3.5.9"
     val jvm = "io.dropwizard.metrics" % "metrics-jvm" % version
     val ehcache = "io.dropwizard.metrics" % "metrics-ehcache" % version intransitive()
     val healthChecks = "io.dropwizard.metrics" % "metrics-healthchecks" % version intransitive()
     val json = "io.dropwizard.metrics" % "metrics-json" % version
-    val jettyServlet = "org.eclipse.jetty" % "jetty-servlet" % "9.4.6.v20170531"
+    val jettyServlet = "org.eclipse.jetty" % "jetty-servlet" % "9.4.7.v20170914"
     val servlets = "io.dropwizard.metrics" % "metrics-servlets" % version intransitive()
     val graphite = "io.dropwizard.metrics" % "metrics-graphite" % version intransitive()
   }
@@ -84,8 +84,8 @@ object Dependencies {
     val scalatagsVersion = "0.6.7"
 
     val csv = "com.github.tototoshi" %% "scala-csv" % "1.3.5"
-    val betterFiles = "com.github.pathikrit" %% "better-files" % "3.1.0"
-    val commonsIo = "commons-io" % "commons-io" % "2.5"
+    val betterFiles = "com.github.pathikrit" %% "better-files" % "3.2.0"
+    val commonsIo = "commons-io" % "commons-io" % "2.6"
     val scalaGuice = "net.codingwell" %% "scala-guice" % "4.1.0"
   }
 
