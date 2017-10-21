@@ -77,9 +77,5 @@
   </form>
 }
 @views.html.components.includeScalaJs(debug)
-@if(debug) {
-<script src="@routes.Assets.versioned("lib/autocomplete/jquery.materialize-autocomplete.js").url"></script>
-} else {
-<script src="@routes.Assets.versioned("lib/autocomplete/jquery.materialize-autocomplete.min.js").url"></script>
-}
+@views.html.components.includeAutocomplete(debug)
 <script>$(function() { new FormService('form-edit-note'); })</script>

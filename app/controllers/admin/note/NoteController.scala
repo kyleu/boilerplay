@@ -61,6 +61,17 @@ class NoteController @javax.inject.Inject() (
     }
   }
 
+  def autocomplete(q: Option[String], orderBy: Option[String], orderAsc: Boolean, limit: Option[Int]) = {
+    withSession("autocomplete", admin = true) { implicit request => implicit td =>
+      val orderBys = OrderBy.forVals(col = orderBy, asc = orderAsc).toSeq
+      val r = q match {
+        case Some(query) if query.nonEmpty => svc.search(query, Nil, orderBys, limit.orElse(Some(5)), None)
+        case _ => svc.getAll(Nil, orderBys, limit.orElse(Some(5)))
+      }
+      Future.successful(Ok(r.map(_.toSummary).asJson.spaces2).as(JSON))
+    }
+  }
+
   def byAuthor(author: UUID, orderBy: Option[String], orderAsc: Boolean, limit: Option[Int], offset: Option[Int]) = {
     withSession("get.by.author", admin = true) { implicit request => implicit td =>
       val orderBys = OrderBy.forVals(orderBy, orderAsc).toSeq

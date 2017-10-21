@@ -31,4 +31,9 @@ case class Note(
     DataField("author", Some(author.toString)),
     DataField("created", Some(created.toString))
   )
+
+  def toSummary = {
+    val title = id + " (" + text.take(20) + "...)"
+    models.result.data.DataSummary(model = "note", pk = Seq(id.toString), title = title)
+  }
 }

@@ -55,7 +55,7 @@ class FormService(id: String) {
             multiple = js.Dynamic.literal(enable = false),
             dropdown = js.Dynamic.literal(
               el = s"#dropdown-$name",
-              itemTemplate = """<li class="ac-item" data-id="<%= item.id %>" data-text="<%= item.id %>"><a href="javascript:void(0)"><%= item.text %></a></li>""",
+              itemTemplate = """<li class="ac-item theme-text" data-id="<%= item.id %>" data-text="<%= item.id %>"><a href="javascript:void(0)"><%= item.text %></a></li>""",
               noItem = s"No matching $model records found."
             ),
             getData = (s: String, callback: js.Function2[String, js.Array[js.Object with js.Dynamic], Unit]) => {

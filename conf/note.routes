@@ -1,5 +1,6 @@
 # Note Routes
 GET         /                                                         controllers.admin.note.NoteController.list(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None)
+GET         /autocomplete                                             controllers.admin.note.NoteController.autocomplete(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None)
 GET         /form                                                     controllers.admin.note.NoteController.createForm
 POST        /                                                         controllers.admin.note.NoteController.create
 GET         /byAuthor/:author                                         controllers.admin.note.NoteController.byAuthor(author: java.util.UUID, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None)
