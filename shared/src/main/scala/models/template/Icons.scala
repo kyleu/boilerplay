@@ -22,11 +22,16 @@ object Icons {
   val help = "fa-key"
   val close = "fa-close"
 
+  val date = "fa-calendar-o"
+  val time = "fa-clock-o"
+  val calendar = "fa-calendar-o"
+
   val dropdownToggle = "fa-angle-down"
 
   val audit = "fa-dot-circle-o"
   val auditRecord = "fa-dot-circle-o"
   val note = "fa-sticky-note-o"
+
   val sandbox = "fa-folder-o"
   val user = "fa-user"
 
