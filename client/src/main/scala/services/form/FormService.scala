@@ -23,7 +23,7 @@ class FormService(id: String) {
   if (dates.length > 0) {
     dates.asInstanceOf[js.Dynamic].pickadate(js.Dynamic.literal(
       selectMonths = true,
-      selectYears = 15,
+      selectYears = 100,
       today = "Today",
       clear = "Clear",
       close = "Ok",
@@ -33,7 +33,16 @@ class FormService(id: String) {
   }
   val times = $(".timepicker")
   if (times.length > 0) {
-    Logging.info("Has time!")
+    times.asInstanceOf[js.Dynamic].pickatime(js.Dynamic.literal(
+      default = "now",
+      format = "HH:i",
+      twelvehour = true,
+      donetext = "OK",
+      cleartext = "Clear",
+      canceltext = "Cancel",
+      autoclose = false,
+      ampmclickable = true
+    ))
   }
 
   Logging.info(s"Form service started. [${fields.length}] fields.")
@@ -46,6 +55,9 @@ class FormService(id: String) {
       case "boolean" => FieldHelper.onBoolean(name, formEl, checkbox)
       case "date" => FieldHelper.onDate(name, formEl, checkbox)
       case "time" => FieldHelper.onTime(name, formEl, checkbox)
+      case "timestamp" =>
+        FieldHelper.onDate(name + "-date", formEl, checkbox)
+        FieldHelper.onTime(name + "-time", formEl, checkbox)
       case _ => FieldDefault.onDefault(t, name, formEl, checkbox)
     }
     name -> t

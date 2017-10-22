@@ -17,25 +17,22 @@ import util.FutureUtils.defaultContext
 import util.web.ControllerUtils.acceptsCsv
 
 @javax.inject.Singleton
-class NoteController @javax.inject.Inject() (
-    override val app: Application, svc: NoteService
-) extends BaseController("note") {
+class NoteController @javax.inject.Inject() (override val app: Application, svc: NoteService) extends BaseController("note") {
   def createForm = withSession("create.form", admin = true) { implicit request => implicit td =>
     val cancel = controllers.admin.note.routes.NoteController.list()
     val call = controllers.admin.note.routes.NoteController.create()
     Future.successful(Ok(views.html.admin.note.noteForm(
-      request.identity, models.note.Note.empty, "New Note", cancel, call, isNew = true, debug = app.config.debug
+      request.identity, models.note.Note.empty(), "New Note", cancel, call, isNew = true, debug = app.config.debug
     )))
   }
 
   def create = withSession("create", admin = true) { implicit request => implicit td =>
-    val fields = modelForm(request.body.asFormUrlEncoded)
-    svc.create(fields) match {
+    svc.create(modelForm(request.body.asFormUrlEncoded)) match {
       case Some(note) => Future.successful(Redirect(note.relType match {
         case Some(model) => AuditRoutes.getViewRoute(model, note.relPk.map(_.split("/")).getOrElse(Array.empty[String]).toSeq)
         case None => controllers.admin.note.routes.NoteController.view(note.id)
-      }))
-      case None => Future.successful(Ok(play.twirl.api.Html(fields.toString)))
+      }).flashing("success" -> s"Note [${note.id}] saved succesfully"))
+      case None => Future.successful(Redirect(controllers.admin.note.routes.NoteController.list()).flashing("success" -> "Note saved succesfully."))
     }
   }
 
@@ -107,7 +104,7 @@ class NoteController @javax.inject.Inject() (
     val fields = modelForm(request.body.asFormUrlEncoded)
     val res = svc.update(id = id, fields = fields)
     Future.successful(render {
-      case Accepts.Html() => Redirect(controllers.admin.note.routes.NoteController.view(res.id))
+      case Accepts.Html() => Redirect(controllers.admin.note.routes.NoteController.view(res._1.id)).flashing("success" -> res._2)
       case Accepts.Json() => Ok(res.asJson.spaces2).as(JSON)
     })
   }

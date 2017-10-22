@@ -2,7 +2,7 @@ package controllers.admin.audit
 
 import java.util.UUID
 
-import controllers.BaseController
+import controllers.{BaseController, ControllerUtilities}
 import io.circe.generic.auto._
 import io.circe.syntax._
 import models.Application
@@ -26,7 +26,7 @@ class AuditLifecycleController @javax.inject.Inject() (override val app: Applica
   }
 
   def start() = withoutSession("start") { implicit request => implicit td =>
-    val json = jsonFor(request)
+    val json = ControllerUtilities.jsonFor(request)
     val auditStart = json.as[AuditStart] match {
       case Left(x) => throw new IllegalStateException(x.toString)
       case Right(x) => x
@@ -42,7 +42,7 @@ class AuditLifecycleController @javax.inject.Inject() (override val app: Applica
   }
 
   def complete() = withoutSession("complete") { implicit request => implicit td =>
-    val json = jsonFor(request)
+    val json = ControllerUtilities.jsonFor(request)
     val auditComplete = json.as[AuditComplete] match {
       case Left(x) => throw new IllegalStateException(x.toString)
       case Right(x) => x

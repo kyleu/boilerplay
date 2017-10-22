@@ -2,22 +2,16 @@ package controllers
 
 import java.net.InetAddress
 
-import brave.Span
 import com.mohiva.play.silhouette.api.actions.{SecuredRequest, UserAwareRequest}
-import io.circe.Json
 import models.Application
 import models.audit.{AuditModelPk, AuditStart}
 import models.auth.AuthEnv
-import models.result.data.DataField
 import models.user.{Role, User}
 import play.api.mvc._
-import util.metrics.Instrumented
-import util.web.TracingFilter
 import util.Logging
+import util.metrics.Instrumented
 import util.tracing.TraceData
-import zipkin.TraceKeys
-import sangria.marshalling.MarshallingUtil._
-import sangria.marshalling.circe._
+import util.web.TracingFilter
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -32,7 +26,7 @@ abstract class BaseController(val name: String) extends InjectedController with 
     app.silhouette.UserAwareAction.async { implicit request =>
       metrics.timer(name + "." + action).timeFuture {
         app.tracing.trace(name + ".controller." + action) { td =>
-          enhanceRequest(request, request.identity, td.span)
+          ControllerUtilities.enhanceRequest(request, request.identity, td.span)
           block(request)(td)
         }(getTraceData)
       }
@@ -49,7 +43,7 @@ abstract class BaseController(val name: String) extends InjectedController with 
         } else {
           metrics.timer(name + "." + action).timeFuture {
             app.tracing.trace(name + ".controller." + action) { td =>
-              enhanceRequest(request, Some(u), td.span)
+              ControllerUtilities.enhanceRequest(request, Some(u), td.span)
               val r = SecuredRequest(u, request.authenticator.get, request)
               block(r)(td)
             }(getTraceData)
@@ -73,27 +67,7 @@ abstract class BaseController(val name: String) extends InjectedController with 
     AuditStart(action = act, app = Some(util.Config.projectId), client = c, server = serverName, user = None, tags = tags, models = models)
   }
 
-  protected def modelForm(rawForm: Option[Map[String, Seq[String]]]) = {
-    val form = rawForm.getOrElse(Map.empty).mapValues(_.head)
-    val fields = form.toSeq.filter(x => x._1.endsWith(".include") && x._2 == "true").map(_._1.stripSuffix(".include"))
-    fields.map(f => DataField(f, Some(form.getOrElse(f, throw new IllegalStateException(s"Cannot find value for included field [$f].")))))
-  }
-
-  protected def jsonFor(request: Request[AnyContent]) = {
-    import sangria.marshalling.playJson._
-    val playJson = request.body.asJson.getOrElse(throw new IllegalStateException("Invalid JSON."))
-    playJson.convertMarshaled[Json]
-  }
-
-  private[this] def enhanceRequest(request: Request[AnyContent], user: Option[User], trace: Span) = {
-    trace.tag(TraceKeys.HTTP_REQUEST_SIZE, request.body.asText.map(_.length).orElse(request.body.asRaw.map(_.size)).getOrElse(0).toString)
-    user.foreach { u =>
-      trace.tag("user.id", u.id.toString)
-      trace.tag("user.username", u.username)
-      trace.tag("user.email", u.profile.providerKey)
-      trace.tag("user.role", u.role.toString)
-    }
-  }
+  protected def modelForm(rawForm: Option[Map[String, Seq[String]]]) = ControllerUtilities.modelForm(rawForm)
 
   private[this] def failRequest(request: UserAwareRequest[AuthEnv, AnyContent]) = {
     val msg = request.identity match {

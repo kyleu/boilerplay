@@ -5,12 +5,12 @@ import java.util.UUID
 import models.result.data.{DataField, DataFieldModel}
 
 object Note {
-  val empty = Note(
+  def empty(author: Option[UUID] = None) = Note(
     id = UUID.randomUUID,
     relType = Some(""),
     relPk = Some(""),
     text = "",
-    author = UUID.randomUUID,
+    author = author.getOrElse(UUID.randomUUID),
     created = util.DateUtils.now
   )
 }

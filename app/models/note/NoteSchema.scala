@@ -69,7 +69,7 @@ object NoteSchema extends SchemaHelper("note") {
         fieldType = noteType,
         resolve = c => {
           val dataFields = c.args.arg(DataFieldSchema.dataFieldsArg)
-          traceB(c.ctx, "update")(tn => c.ctx.services.noteService.update(c.args.arg(noteIdArg), dataFields)(tn))
+          traceB(c.ctx, "update")(tn => c.ctx.services.noteService.update(c.args.arg(noteIdArg), dataFields)(tn)._1)
         }
       ),
       Field(
