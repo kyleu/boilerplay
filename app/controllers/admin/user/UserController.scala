@@ -17,7 +17,7 @@ class UserController @javax.inject.Inject() (
     override val app: Application, svc: UserService, val authInfoRepository: AuthInfoRepository, val hasher: PasswordHasher, noteS: NoteService
 ) extends BaseController("user") with UserEditHelper with UserSearchHelper {
   def relationCounts(id: java.util.UUID) = withSession("relation.counts", admin = true) { implicit request => implicit td =>
-    val noteByAuthor = noteS.countByAuthor(id)
+    val noteByAuthor = noteS.countByAuthor(request.identity, id)
     Future.successful(Ok(Seq(
       RelationCount(model = "note", field = "author", count = noteByAuthor)
     ).asJson.spaces2).as(JSON))

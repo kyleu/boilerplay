@@ -58,13 +58,7 @@ abstract class BaseController(val name: String) extends InjectedController with 
 
   def pk(t: String, v: Any*) = AuditModelPk(t, v.map(_.toString))
   def audit(models: AuditModelPk*)(user: User, act: String = "development", tags: Map[String, String] = Map.empty)(implicit request: Request[AnyContent]) = {
-    val c = Some(request.remoteAddress)
-    AuditStart(action = act, app = Some(util.Config.projectId), client = c, server = serverName, user = Some(user.id), tags = tags, models = models)
-  }
-
-  def auditNoUser(models: AuditModelPk*)(act: String = "development", tags: Map[String, String] = Map.empty)(implicit request: Request[AnyContent]) = {
-    val c = Some(request.remoteAddress)
-    AuditStart(action = act, app = Some(util.Config.projectId), client = c, server = serverName, user = None, tags = tags, models = models)
+    AuditStart(action = act, app = Some(util.Config.projectId), client = Some(request.remoteAddress), server = serverName, tags = tags, models = models)
   }
 
   protected def modelForm(rawForm: Option[Map[String, Seq[String]]]) = ControllerUtilities.modelForm(rawForm)

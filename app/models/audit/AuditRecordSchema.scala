@@ -17,7 +17,7 @@ import util.FutureUtils.graphQlContext
 object AuditRecordSchema extends SchemaHelper("auditRecord") {
   implicit val auditRecordPrimaryKeyId = HasId[AuditRecord, UUID](_.id)
   private[this] def getByPrimaryKeySeq(c: GraphQLContext, idSeq: Seq[UUID]) = {
-    Future.successful(c.app.auditRecordService.getByPrimaryKeySeq(idSeq)(c.trace))
+    Future.successful(c.app.auditRecordService.getByPrimaryKeySeq(c.user, idSeq)(c.trace))
   }
   val auditRecordByPrimaryKeyFetcher = Fetcher(getByPrimaryKeySeq)
 
@@ -25,7 +25,7 @@ object AuditRecordSchema extends SchemaHelper("auditRecord") {
 
   val auditRecordByAuditIdRelation = Relation[AuditRecord, UUID]("byAuditId", x => Seq(x.auditId))
   val auditRecordByAuditIdFetcher = Fetcher.rel[GraphQLContext, AuditRecord, AuditRecord, UUID](
-    getByPrimaryKeySeq, (c, rels) => Future.successful(c.app.auditRecordService.getByAuditIdSeq(rels(auditRecordByAuditIdRelation))(c.trace))
+    getByPrimaryKeySeq, (c, rels) => Future.successful(c.app.auditRecordService.getByAuditIdSeq(c.user, rels(auditRecordByAuditIdRelation))(c.trace))
   )
 
   implicit lazy val auditFieldType: ObjectType[GraphQLContext, AuditField] = deriveObjectType()
@@ -60,7 +60,7 @@ object AuditRecordSchema extends SchemaHelper("auditRecord") {
         fieldType = OptionType(auditRecordType),
         resolve = c => {
           val dataFields = c.args.arg(DataFieldSchema.dataFieldsArg)
-          traceB(c.ctx, "create")(tn => c.ctx.services.auditServices.auditRecordService.create(dataFields)(tn))
+          traceB(c.ctx, "create")(tn => c.ctx.services.auditServices.auditRecordService.create(c.ctx.user, dataFields)(tn))
         }
       ),
       Field(
@@ -70,7 +70,7 @@ object AuditRecordSchema extends SchemaHelper("auditRecord") {
         fieldType = auditRecordType,
         resolve = c => {
           val dataFields = c.args.arg(DataFieldSchema.dataFieldsArg)
-          traceB(c.ctx, "update")(tn => c.ctx.services.auditServices.auditRecordService.update(c.args.arg(auditRecordIdArg), dataFields)(tn)._1)
+          traceB(c.ctx, "update")(tn => c.ctx.services.auditServices.auditRecordService.update(c.ctx.user, c.args.arg(auditRecordIdArg), dataFields)(tn)._1)
         }
       ),
       Field(
@@ -78,7 +78,7 @@ object AuditRecordSchema extends SchemaHelper("auditRecord") {
         description = Some("Removes the Audit Record with the provided id."),
         arguments = auditRecordIdArg :: Nil,
         fieldType = auditRecordType,
-        resolve = c => traceB(c.ctx, "remove")(tn => c.ctx.services.auditServices.auditRecordService.remove(c.args.arg(auditRecordIdArg))(tn))
+        resolve = c => traceB(c.ctx, "remove")(tn => c.ctx.services.auditServices.auditRecordService.remove(c.ctx.user, c.args.arg(auditRecordIdArg))(tn))
       )
     )
   )

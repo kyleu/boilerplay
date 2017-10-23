@@ -61,7 +61,7 @@ class RegistrationController @javax.inject.Inject() (
               profile = loginInfo,
               role = role
             )
-            val userSaved = app.userService.insert(user)
+            val userSaved = app.userService.insert(user, user)
             AuditHelper.onInsert("user", Seq(userSaved.id.toString), userSaved.toDataFields)
             val result = request.session.get("returnUrl") match {
               case Some(url) => Redirect(url).withSession(request.session - "returnUrl")

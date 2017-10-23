@@ -24,7 +24,7 @@ class AuditLifecycleController @javax.inject.Inject() (override val app: Applica
     Future.successful(Ok(views.html.admin.audit.testForm(request.identity, sJson, app.config.debug)))
   }
 
-  def start() = withoutSession("start") { implicit request => implicit td =>
+  def start() = withSession("start") { implicit request => implicit td =>
     val json = ControllerUtilities.jsonFor(request)
     val auditStart = json.as[AuditStart] match {
       case Left(x) => throw new IllegalStateException(x.toString)
@@ -34,13 +34,13 @@ class AuditLifecycleController @javax.inject.Inject() (override val app: Applica
     val startMs = DateUtils.nowMillis
     val auditId = UUID.randomUUID
 
-    AuditHelper.onStart(auditId, auditStart)
+    AuditHelper.onStart(request.identity, auditId, auditStart)
     val elapsedMs = DateUtils.nowMillis - startMs
     val response = s"""{ "id": "$auditId", "status": "OK", "elapsed": $elapsedMs }"""
     Future.successful(Ok(response).as(JSON))
   }
 
-  def complete() = withoutSession("complete") { implicit request => implicit td =>
+  def complete() = withSession("complete") { implicit request => implicit td =>
     val json = ControllerUtilities.jsonFor(request)
     val auditComplete = json.as[AuditComplete] match {
       case Left(x) => throw new IllegalStateException(x.toString)
@@ -49,7 +49,7 @@ class AuditLifecycleController @javax.inject.Inject() (override val app: Applica
 
     val startMs = DateUtils.nowMillis
 
-    AuditHelper.onComplete(auditComplete)
+    AuditHelper.onComplete(request.identity, auditComplete)
     val elapsedMs = DateUtils.nowMillis - startMs
     val response = s"""{ "id": "${auditComplete.id}", "status": "OK", "elapsed": $elapsedMs }"""
     Future.successful(Ok(response).as(JSON))

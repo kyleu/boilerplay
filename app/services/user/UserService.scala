@@ -19,10 +19,10 @@ import scala.concurrent.Future
 
 @javax.inject.Singleton
 class UserService @javax.inject.Inject() (override val tracing: TracingService, hasher: PasswordHasher) extends ModelServiceHelper[User]("user") {
-  def getByPrimaryKey(id: UUID)(implicit trace: TraceData) = traceB("get.by.primary.key") { td =>
+  def getByPrimaryKey(user: User, id: UUID)(implicit trace: TraceData) = traceB("get.by.primary.key") { td =>
     SystemDatabase.query(UserQueries.getByPrimaryKey(id))(td)
   }
-  def getByPrimaryKeySeq(idSeq: Seq[UUID])(implicit trace: TraceData) = traceB("get.by.primary.key.sequence") { td =>
+  def getByPrimaryKeySeq(user: User, idSeq: Seq[UUID])(implicit trace: TraceData) = traceB("get.by.primary.key.sequence") { td =>
     SystemDatabase.query(UserQueries.getByPrimaryKeySeq(idSeq))(td)
   }
 
@@ -30,20 +30,24 @@ class UserService @javax.inject.Inject() (override val tracing: TracingService, 
     SystemDatabase.query(UserQueries.getByRoleSeq(roleSeq))(td)
   }
 
-  override def countAll(filters: Seq[Filter] = Nil)(implicit trace: TraceData) = traceB("count.all") { td =>
+  override def countAll(user: User, filters: Seq[Filter] = Nil)(implicit trace: TraceData) = traceB("count.all") { td =>
     SystemDatabase.query(UserQueries.countAll(filters))(td)
   }
-  override def getAll(filters: Seq[Filter], orderBys: Seq[OrderBy], limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData) = {
+  override def getAll(
+    user: User, filters: Seq[Filter], orderBys: Seq[OrderBy], limit: Option[Int] = None, offset: Option[Int] = None
+  )(implicit trace: TraceData) = {
     traceB("get.all")(td => SystemDatabase.query(UserQueries.getAll(filters, orderBys, limit, offset))(td))
   }
 
-  override def searchCount(q: String, filters: Seq[Filter])(implicit trace: TraceData) = {
+  override def searchCount(user: User, q: String, filters: Seq[Filter])(implicit trace: TraceData) = {
     traceB("search.count")(td => SystemDatabase.query(UserQueries.searchCount(q, filters))(td))
   }
-  override def search(q: String, filters: Seq[Filter], orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int])(implicit trace: TraceData) = {
+  override def search(
+    user: User, q: String, filters: Seq[Filter], orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int]
+  )(implicit trace: TraceData) = {
     traceB("search")(td => SystemDatabase.query(UserQueries.search(q, filters, orderBys, limit, offset))(td))
   }
-  def searchExact(q: String, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData) = {
+  def searchExact(user: User, q: String, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData) = {
     traceB("search.exact")(td => SystemDatabase.query(UserQueries.searchExact(q, orderBys, limit, offset))(td))
   }
 
@@ -51,25 +55,25 @@ class UserService @javax.inject.Inject() (override val tracing: TracingService, 
     SystemDatabase.query(UserSearchQueries.IsUsernameInUse(name))(td)
   }
 
-  def insert(user: User)(implicit trace: TraceData) = traceB("insert") { td =>
-    SystemDatabase.execute(UserQueries.insert(user))(td)
-    log.info(s"Inserted user [$user].")
-    UserCache.cacheUser(user)
-    user
+  def insert(user: User, model: User)(implicit trace: TraceData) = traceB("insert") { td =>
+    SystemDatabase.execute(UserQueries.insert(model))(td)
+    log.info(s"Inserted user [$model].")
+    UserCache.cacheUser(model)
+    model
   }
 
-  def create(fields: Seq[DataField])(implicit trace: TraceData) = traceB("create") { td =>
+  def create(user: User, fields: Seq[DataField])(implicit trace: TraceData) = traceB("create") { td =>
     SystemDatabase.execute(UserQueries.create(fields))(td)
     services.audit.AuditHelper.onInsert("Identity", Seq(fieldVal(fields, "id")), fields)
-    getByPrimaryKey(UUID.fromString(fieldVal(fields, "id")))
+    getByPrimaryKey(user, UUID.fromString(fieldVal(fields, "id")))
   }
 
-  def update(id: UUID, fields: Seq[DataField])(implicit trace: TraceData) = {
+  def update(user: User, id: UUID, fields: Seq[DataField])(implicit trace: TraceData) = {
     traceB("update")(td => SystemDatabase.query(UserQueries.getByPrimaryKey(id))(td) match {
       case Some(current) if fields.isEmpty => current -> s"No changes required for Identity [$id]."
       case Some(current) =>
         SystemDatabase.execute(UserQueries.update(id, fields))(td)
-        getByPrimaryKey(id)(td) match {
+        getByPrimaryKey(user, id)(td) match {
           case Some(newModel) =>
             services.audit.AuditHelper.onUpdate("Identity", Seq(DataField("id", Some(id.toString))), current.toDataFields, fields)
             newModel -> s"Updated [${fields.size}] fields of Identity [$id]."
@@ -79,25 +83,23 @@ class UserService @javax.inject.Inject() (override val tracing: TracingService, 
     })
   }
 
-  def updateUser(user: User)(implicit trace: TraceData) = traceB("update") { td =>
-    SystemDatabase.execute(UserQueries.UpdateUser(user))(td)
-    log.info(s"Updated user [$user].")
-    UserCache.cacheUser(user)
-    user
+  def updateUser(user: User, model: User)(implicit trace: TraceData) = traceB("update") { td =>
+    SystemDatabase.execute(UserQueries.UpdateUser(model))(td)
+    log.info(s"Updated user [$model].")
+    UserCache.cacheUser(model)
+    model
   }
 
-  def remove(userId: UUID)(implicit trace: TraceData) = traceB("remove")(td => SystemDatabase.transaction { (txTd, conn) =>
-    val startTime = System.nanoTime
-    getByPrimaryKey(userId)(txTd) match {
-      case Some(user) =>
-        UserCache.getUser(userId).foreach { user =>
-          services.audit.AuditHelper.onRemove("User", Seq(userId.toString), user.toDataFields)
+  def remove(user: User, id: UUID)(implicit trace: TraceData) = traceB("remove")(td => SystemDatabase.transaction { (txTd, conn) =>
+    getByPrimaryKey(user, id)(txTd) match {
+      case Some(model) =>
+        UserCache.getUser(id).foreach { user =>
+          services.audit.AuditHelper.onRemove("User", Seq(id.toString), user.toDataFields)
         }
-        val userCount = SystemDatabase.execute(UserQueries.removeByPrimaryKey(userId), Some(conn))(txTd)
-        UserCache.removeUser(userId)
-        val timing = ((System.nanoTime - startTime) / 1000000).toInt
-        SystemDatabase.execute(PasswordInfoQueries.removeByPrimaryKey(Seq(user.profile.providerID, user.profile.providerKey)), Some(conn))
-        user
+        SystemDatabase.execute(UserQueries.removeByPrimaryKey(id), Some(conn))(txTd)
+        UserCache.removeUser(id)
+        SystemDatabase.execute(PasswordInfoQueries.removeByPrimaryKey(Seq(model.profile.providerID, model.profile.providerKey)), Some(conn))
+        model
       case None => throw new IllegalStateException("Invalid User")
     }
   }(td))
@@ -110,10 +112,8 @@ class UserService @javax.inject.Inject() (override val tracing: TracingService, 
         DataField("role", Some(role.toString))
       )
       SystemDatabase.execute(UserQueries.update(id, fields))
-      val emailUpdated = if (email != originalEmail) {
+      if (email != originalEmail) {
         SystemDatabase.execute(PasswordInfoQueries.UpdateEmail(originalEmail, email))
-      } else {
-        Future.successful(0)
       }
       password match {
         case Some(p) =>

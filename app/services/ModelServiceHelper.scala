@@ -3,6 +3,7 @@ package services
 import models.result.data.DataField
 import models.result.filter.Filter
 import models.result.orderBy.OrderBy
+import models.user.User
 import util.Logging
 import util.tracing.{TraceData, TracingService}
 
@@ -14,27 +15,27 @@ abstract class ModelServiceHelper[T](val key: String) extends Logging {
   def traceF[A](name: String)(f: TraceData => Future[A])(implicit tracd: TraceData) = tracing.trace(key + ".service." + name)(td => f(td))
   def traceB[A](name: String)(f: TraceData => A)(implicit tracd: TraceData) = tracing.traceBlocking(key + ".service." + name)(td => f(td))
 
-  def countAll(filters: Seq[Filter])(implicit trace: TraceData): Int
-  def getAll(filters: Seq[Filter], orderBys: Seq[OrderBy], limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData): Seq[T]
+  def countAll(user: User, filters: Seq[Filter])(implicit trace: TraceData): Int
+  def getAll(user: User, filters: Seq[Filter], orderBys: Seq[OrderBy], limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData): Seq[T]
 
   def getAllWithCount(
-    filters: Seq[Filter], orderBys: Seq[OrderBy], limit: Option[Int] = None, offset: Option[Int] = None
+    user: User, filters: Seq[Filter], orderBys: Seq[OrderBy], limit: Option[Int] = None, offset: Option[Int] = None
   )(implicit trace: TraceData) = traceB("get.all.with.count") { td =>
-    val result = getAll(filters, orderBys, limit, offset)(td)
-    val count = countAll(filters)(td)
+    val result = getAll(user, filters, orderBys, limit, offset)(td)
+    val count = countAll(user, filters)(td)
     count -> result
   }
 
-  def searchCount(q: String, filters: Seq[Filter])(implicit trace: TraceData): Int
+  def searchCount(user: User, q: String, filters: Seq[Filter])(implicit trace: TraceData): Int
   def search(
-    q: String, filters: Seq[Filter], orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int]
+    user: User, q: String, filters: Seq[Filter], orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int]
   )(implicit trace: TraceData): Seq[T]
 
   def searchWithCount(
-    q: String, filters: Seq[Filter], orderBys: Seq[OrderBy], limit: Option[Int] = None, offset: Option[Int] = None
+    user: User, q: String, filters: Seq[Filter], orderBys: Seq[OrderBy], limit: Option[Int] = None, offset: Option[Int] = None
   )(implicit trace: TraceData) = traceB("search.with.count") { td =>
-    val result = search(q, filters, orderBys, limit, offset)(td)
-    val count = searchCount(q, filters)(td)
+    val result = search(user, q, filters, orderBys, limit, offset)(td)
+    val count = searchCount(user, q, filters)(td)
     count -> result
   }
 
