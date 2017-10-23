@@ -1,3 +1,4 @@
+@* Generated File *@
 @(user: models.user.User, auditId: java.util.UUID, modelSeq: Seq[models.audit.AuditRecord], orderBy: Option[String], orderAsc: Boolean, limit: Int, offset: Int)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
 )@traceData.logViewClass(getClass)
@@ -23,5 +24,5 @@
   limit = limit,
   offset = offset,
   q = None,
-  fullUI = false,
+  fullUI = false
 )

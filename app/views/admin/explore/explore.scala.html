@@ -6,14 +6,24 @@
       <h5>Explore @util.Config.projectName. </h5>
     </li>
     <!-- Start model list routes -->
-    <!-- End model list routes -->
+
+    <li class="collection-item">
+      <a class="theme-text" href="@controllers.admin.audit.routes.AuditController.list()"><i class="fa @models.template.Icons.audit"></i> Audits</a>
+      <div><em>Manage the Audits of the system.</em></div>
+    </li>
+    <li class="collection-item">
+      <a class="theme-text" href="@controllers.admin.audit.routes.AuditRecordController.list()"><i class="fa @models.template.Icons.auditRecord"></i> Audit Records</a>
+      <div><em>Manage the Audit Records of the system.</em></div>
+    </li>
     <li class="collection-item">
       <a class="theme-text" href="@controllers.admin.note.routes.NoteController.list()"><i class="fa @models.template.Icons.note"></i> Notes</a>
-      <div><em>Manage the notes of the system.</em></div>
+      <div><em>Manage the Notes of the system.</em></div>
     </li>
     <li class="collection-item">
-      <a class="theme-text" href="@controllers.admin.user.routes.UserController.list()"><i class="fa @models.template.Icons.user"></i> User Management</a>
-      <div><em>Manage the users of the system.</em></div>
+      <a class="theme-text" href="@controllers.admin.user.routes.UserController.list()"><i class="fa @models.template.Icons.user"></i> Users</a>
+      <div><em>Manage the Users of the system.</em></div>
     </li>
+
+    <!-- End model list routes -->
   </ul>
 }

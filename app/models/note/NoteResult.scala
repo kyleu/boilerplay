@@ -1,7 +1,7 @@
+/* Generated File */
 package models.note
 
 import java.time.LocalDateTime
-
 import models.result.BaseResult
 import models.result.filter.Filter
 import models.result.orderBy.OrderBy

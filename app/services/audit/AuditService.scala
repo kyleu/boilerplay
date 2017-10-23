@@ -42,6 +42,10 @@ class AuditService @javax.inject.Inject() (
     traceB("search")(td => SystemDatabase.query(AuditQueries.search(q, filters, orderBys, limit, offset))(td))
   }
 
+  def searchExact(q: String, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData) = {
+    traceB("search.exact")(td => ApplicationDatabase.query(AuditQueries.searchExact(q, orderBys, limit, offset))(td))
+  }
+
   def countByUserId(user: UUID)(implicit trace: TraceData) = traceB("count.by.user") { td =>
     SystemDatabase.query(AuditQueries.CountByUserId(user))(td)
   }
@@ -64,7 +68,8 @@ class AuditService @javax.inject.Inject() (
   }
   def create(fields: Seq[DataField])(implicit trace: TraceData) = traceB("create") { td =>
     ApplicationDatabase.execute(AuditQueries.create(fields))(td)
-    None: Option[Audit] // TODO: getByPrimaryKey
+    services.audit.AuditHelper.onInsert("Audit", Seq(fieldVal(fields, "id")), fields)
+    getByPrimaryKey(UUID.fromString(fieldVal(fields, "id")))
   }
 
   def remove(id: UUID)(implicit trace: TraceData) = {
@@ -78,12 +83,13 @@ class AuditService @javax.inject.Inject() (
 
   def update(id: UUID, fields: Seq[DataField])(implicit trace: TraceData) = {
     traceB("update")(td => ApplicationDatabase.query(AuditQueries.getByPrimaryKey(id))(td) match {
+      case Some(current) if fields.isEmpty => current -> s"No changes required for Audit [$id]."
       case Some(current) =>
         ApplicationDatabase.execute(AuditQueries.update(id, fields))(td)
         ApplicationDatabase.query(AuditQueries.getByPrimaryKey(id))(td) match {
           case Some(newModel) =>
             services.audit.AuditHelper.onUpdate("Audit", Seq(DataField("id", Some(id.toString))), current.toDataFields, fields)
-            newModel
+            newModel -> s"Updated [${fields.size}] fields of Audit [$id]."
           case None => throw new IllegalStateException(s"Cannot find Audit matching [$id].")
         }
       case None => throw new IllegalStateException(s"Cannot find Audit matching [$id].")

@@ -3,9 +3,9 @@ package models.queries.auth
 import java.util.UUID
 
 import com.mohiva.play.silhouette.api.LoginInfo
-import models.database._
 import models.database.DatabaseFieldType._
-import models.queries.{BaseQueries, EngineHelper}
+import models.database._
+import models.queries.BaseQueries
 import models.result.data.DataField
 import models.result.filter.Filter
 import models.user.{Role, User, UserPreferences}
@@ -19,7 +19,9 @@ object UserQueries extends BaseQueries[User]("user", "users") {
   override protected val searchColumns = Seq("id", "username", "email")
 
   val insert = Insert
-  val getByPrimaryKey = GetByPrimaryKey
+  val insertBatch = InsertBatch
+  val create = CreateFields
+  def getByPrimaryKey(id: UUID) = GetByPrimaryKey(Seq(id))
   def getByPrimaryKeySeq(idSeq: Seq[UUID]) = new ColSeqQuery(column = "id", values = idSeq)
 
   def getByRole(role: Role) = new ColSeqQuery(column = "role", values = Seq(role))
@@ -32,7 +34,7 @@ object UserQueries extends BaseQueries[User]("user", "users") {
   val searchCount = SearchCount
   val searchExact = SearchExact
 
-  val removeByPrimaryKey = RemoveByPrimaryKey
+  def removeByPrimaryKey(id: UUID) = RemoveByPrimaryKey(Seq(id))
   def update(id: UUID, fields: Seq[DataField]) = UpdateFields(Seq(id), fields)
 
   case class UpdateUser(u: User) extends Statement {

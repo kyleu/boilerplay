@@ -8,6 +8,8 @@ import sangria.macros.derive._
 import sangria.schema._
 import models.graphql.CommonSchema._
 import models.graphql.DateTimeSchema._
+import models.note.NoteSchema
+import models.result.data.DataFieldSchema
 import models.result.filter.FilterSchema._
 import models.result.orderBy.OrderBySchema._
 import models.result.paging.PagingSchema.pagingOptionsType
@@ -43,7 +45,17 @@ object UserSchema extends SchemaHelper("user") {
 
   implicit val loginInfoType = deriveObjectType[GraphQLContext, LoginInfo](ObjectTypeDescription("Information about login credentials."))
   implicit val userPreferenceType = deriveObjectType[GraphQLContext, UserPreferences](ObjectTypeDescription("Information about users of the system."))
-  implicit lazy val userType: ObjectType[GraphQLContext, User] = deriveObjectType()
+  implicit lazy val userType: ObjectType[GraphQLContext, User] = deriveObjectType(
+    AddFields(
+      Field(
+        name = "noteAuthorFkey",
+        fieldType = ListType(NoteSchema.noteType),
+        resolve = c => NoteSchema.noteByAuthorFetcher.deferRelSeq(
+          NoteSchema.noteByAuthorRelation, c.value.id
+        )
+      )
+    )
+  )
 
   implicit lazy val userResultType: ObjectType[GraphQLContext, UserResult] = deriveObjectType()
 
@@ -51,6 +63,7 @@ object UserSchema extends SchemaHelper("user") {
     UserResult(paging = r.paging, filters = r.args.filters, orderBys = r.args.orderBys, totalCount = r.count, results = r.results, durationMs = r.dur)
   }
 
+  val userIdArg = Argument("id", uuidType, description = "Returns the User matching the provided Id.")
   val roleArg = Argument("role", roleEnum, description = "Filters the results to a provided SandboxTask.")
 
   val queryFields = fields[GraphQLContext, Unit](
@@ -76,4 +89,40 @@ object UserSchema extends SchemaHelper("user") {
       resolve = c => userByRoleFetcher.deferRelSeq(userByRoleRelation, c.arg(roleArg))
     )
   )
+
+  val userMutationType = ObjectType(
+    name = "user",
+    description = "Mutations for Users.",
+    fields = fields[GraphQLContext, Unit](
+      Field(
+        name = "create",
+        description = Some("Creates a new User using the provided fields."),
+        arguments = DataFieldSchema.dataFieldsArg :: Nil,
+        fieldType = OptionType(userType),
+        resolve = c => {
+          val dataFields = c.args.arg(DataFieldSchema.dataFieldsArg)
+          traceB(c.ctx, "create")(tn => c.ctx.services.userServices.userService.create(dataFields)(tn))
+        }
+      ),
+      Field(
+        name = "update",
+        description = Some("Updates the User with the provided id."),
+        arguments = userIdArg :: DataFieldSchema.dataFieldsArg :: Nil,
+        fieldType = userType,
+        resolve = c => {
+          val dataFields = c.args.arg(DataFieldSchema.dataFieldsArg)
+          traceB(c.ctx, "update")(tn => c.ctx.services.userServices.userService.update(c.args.arg(userIdArg), dataFields)(tn)._1)
+        }
+      ),
+      Field(
+        name = "remove",
+        description = Some("Removes the User with the provided id."),
+        arguments = userIdArg :: Nil,
+        fieldType = userType,
+        resolve = c => traceB(c.ctx, "remove")(tn => c.ctx.services.userServices.userService.remove(c.args.arg(userIdArg))(tn))
+      )
+    )
+  )
+
+  val mutationFields = fields[GraphQLContext, Unit](Field(name = "user", fieldType = userMutationType, resolve = _ => ()))
 }

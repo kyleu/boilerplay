@@ -3,34 +3,37 @@ package controllers.admin.audit
 import java.util.UUID
 
 import controllers.BaseController
-import models.Application
 import io.circe.generic.auto._
 import io.circe.java8.time._
 import io.circe.syntax._
-import models.audit._
+import models.Application
+import models.audit.AuditResult
 import models.result.RelationCount
 import models.result.orderBy.OrderBy
-import services.audit.{AuditRecordService, AuditService}
-import util.web.ControllerUtils.acceptsCsv
 
 import scala.concurrent.Future
+import services.audit.{AuditRecordService, AuditService}
+import util.FutureUtils.defaultContext
+import util.web.ControllerUtils.acceptsCsv
 
 @javax.inject.Singleton
-class AuditController @javax.inject.Inject() (override val app: Application, svc: AuditService, recordS: AuditRecordService) extends BaseController("audit") {
-  import app.contexts.webContext
-
+class AuditController @javax.inject.Inject() (
+    override val app: Application, svc: AuditService,
+    auditRecordS: AuditRecordService
+) extends BaseController("audit") {
   def createForm = withSession("create.form", admin = true) { implicit request => implicit td =>
     val cancel = controllers.admin.audit.routes.AuditController.list()
     val call = controllers.admin.audit.routes.AuditController.create()
     Future.successful(Ok(views.html.admin.audit.auditForm(
-      request.identity, models.audit.Audit(user = Some(request.identity.id)), "New Audit", cancel, call, isNew = true, debug = app.config.debug
+      request.identity, models.audit.Audit.empty(userId = Some(request.identity.id)), "New Audit", cancel, call, isNew = true, debug = app.config.debug
     )))
   }
 
   def create = withSession("create", admin = true) { implicit request => implicit td =>
-    val fields = modelForm(request.body.asFormUrlEncoded)
-    svc.create(fields)
-    Future.successful(Ok(play.twirl.api.Html(fields.toString)))
+    svc.create(modelForm(request.body.asFormUrlEncoded)) match {
+      case Some(model) => Future.successful(Redirect(controllers.admin.audit.routes.AuditController.view(model.id)))
+      case None => Future.successful(Redirect(controllers.admin.audit.routes.AuditController.list()))
+    }
   }
 
   def list(q: Option[String], orderBy: Option[String], orderAsc: Boolean, limit: Option[Int], offset: Option[Int]) = {
@@ -65,15 +68,25 @@ class AuditController @javax.inject.Inject() (override val app: Application, svc
     }
   }
 
-  def view(id: UUID) = withSession("view", admin = true) { implicit request => implicit td =>
+  def autocomplete(q: Option[String], orderBy: Option[String], orderAsc: Boolean, limit: Option[Int]) = {
+    withSession("autocomplete", admin = true) { implicit request => implicit td =>
+      val orderBys = OrderBy.forVals(orderBy, orderAsc).toSeq
+      val r = q match {
+        case Some(query) if query.nonEmpty => svc.search(query, Nil, orderBys, limit.orElse(Some(5)), None)
+        case _ => svc.getAll(Nil, orderBys, limit.orElse(Some(5)))
+      }
+      Future.successful(Ok(r.map(_.toSummary).asJson.spaces2).as(JSON))
+    }
+  }
+
+  def view(id: java.util.UUID) = withSession("view", admin = true) { implicit request => implicit td =>
+    val notes = app.noteService.getFor("audit", id)
     svc.getByPrimaryKey(id) match {
-      case Some(model) =>
-        val records = recordS.getByAuditId(id, Nil, None, None)
-        Future.successful(render {
-          case Accepts.Html() => Ok(views.html.admin.audit.auditView(request.identity, model.copy(records = records), app.config.debug))
-          case Accepts.Json() => Ok(model.copy(records = records).asJson.spaces2).as(JSON)
-        })
-      case None => Future.successful(NotFound(s"No Ad found with id [$id]."))
+      case Some(model) => Future.successful(render {
+        case Accepts.Html() => Ok(views.html.admin.audit.auditView(request.identity, model, notes, app.config.debug))
+        case Accepts.Json() => Ok(model.asJson.spaces2).as(JSON)
+      })
+      case None => Future.successful(NotFound(s"No Audit found with id [$id]."))
     }
   }
 
@@ -92,12 +105,12 @@ class AuditController @javax.inject.Inject() (override val app: Application, svc
     val fields = modelForm(request.body.asFormUrlEncoded)
     val res = svc.update(id = id, fields = fields)
     Future.successful(render {
-      case Accepts.Html() => Redirect(controllers.admin.audit.routes.AuditController.view(res.id))
+      case Accepts.Html() => Redirect(controllers.admin.audit.routes.AuditController.view(res._1.id)).flashing("success" -> res._2)
       case Accepts.Json() => Ok(res.asJson.spaces2).as(JSON)
     })
   }
 
-  def remove(id: UUID) = withSession("remove", admin = true) { implicit request => implicit td =>
+  def remove(id: java.util.UUID) = withSession("remove", admin = true) { implicit request => implicit td =>
     svc.remove(id = id)
     Future.successful(render {
       case Accepts.Html() => Redirect(controllers.admin.audit.routes.AuditController.list())
@@ -106,7 +119,7 @@ class AuditController @javax.inject.Inject() (override val app: Application, svc
   }
 
   def relationCounts(id: java.util.UUID) = withSession("relation.counts", admin = true) { implicit request => implicit td =>
-    val auditRecordByAuditId = recordS.countByAuditId(id)
+    val auditRecordByAuditId = auditRecordS.countByAuditId(id)
     Future.successful(Ok(Seq(
       RelationCount(model = "auditRecord", field = "auditId", count = auditRecordByAuditId)
     ).asJson.spaces2).as(JSON))

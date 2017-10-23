@@ -5,7 +5,6 @@ import io.circe.generic.auto._
 import io.circe.java8.time._
 import io.circe.syntax._
 import java.util.UUID
-
 import models.Application
 import models.note.NoteResult
 import models.result.orderBy.OrderBy
@@ -56,7 +55,7 @@ class NoteController @javax.inject.Inject() (override val app: Application, svc:
 
   def autocomplete(q: Option[String], orderBy: Option[String], orderAsc: Boolean, limit: Option[Int]) = {
     withSession("autocomplete", admin = true) { implicit request => implicit td =>
-      val orderBys = OrderBy.forVals(col = orderBy, asc = orderAsc).toSeq
+      val orderBys = OrderBy.forVals(orderBy, orderAsc).toSeq
       val r = q match {
         case Some(query) if query.nonEmpty => svc.search(query, Nil, orderBys, limit.orElse(Some(5)), None)
         case _ => svc.getAll(Nil, orderBys, limit.orElse(Some(5)))
@@ -80,9 +79,10 @@ class NoteController @javax.inject.Inject() (override val app: Application, svc:
   }
 
   def view(id: java.util.UUID) = withSession("view", admin = true) { implicit request => implicit td =>
+    val notes = app.noteService.getFor("note", id)
     svc.getByPrimaryKey(id) match {
       case Some(model) => Future.successful(render {
-        case Accepts.Html() => Ok(views.html.admin.note.noteView(request.identity, model, app.config.debug))
+        case Accepts.Html() => Ok(views.html.admin.note.noteView(request.identity, model, notes, app.config.debug))
         case Accepts.Json() => Ok(model.asJson.spaces2).as(JSON)
       })
       case None => Future.successful(NotFound(s"No Note found with id [$id]."))

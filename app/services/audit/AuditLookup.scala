@@ -12,9 +12,12 @@ class AuditLookup @javax.inject.Inject() (registry: ServiceRegistry) extends Log
 
   private[this] def getModel(key: String, arg: (Int) => String)(implicit traceData: TraceData): Option[DataFieldModel] = key.toLowerCase match {
     /* Start registry lookups */
-    /* End registry lookups */
 
-    case "user" => registry.userService.getByPrimaryKey(uuidArg(arg(0)))
+    case "auditrecord" => registry.auditServices.auditRecordService.getByPrimaryKey(uuidArg(arg(0)))
+    case "note" => registry.noteServices.noteService.getByPrimaryKey(uuidArg(arg(0)))
+    case "user" => registry.userServices.userService.getByPrimaryKey(uuidArg(arg(0)))
+
+    /* End registry lookups */
     case _ =>
       log.warn(s"Attempted to load invalid object type [$key:${arg(0)}].")
       None

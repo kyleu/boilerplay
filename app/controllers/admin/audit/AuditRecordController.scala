@@ -1,3 +1,4 @@
+/* Generated File */
 package controllers.admin.audit
 
 import controllers.BaseController
@@ -21,14 +22,15 @@ class AuditRecordController @javax.inject.Inject() (
     val cancel = controllers.admin.audit.routes.AuditRecordController.list()
     val call = controllers.admin.audit.routes.AuditRecordController.create()
     Future.successful(Ok(views.html.admin.audit.auditRecordForm(
-      request.identity, models.audit.AuditRecord(), "New Audit Record", cancel, call, isNew = true, debug = app.config.debug
+      request.identity, models.audit.AuditRecord.empty, "New Audit Record", cancel, call, isNew = true, debug = app.config.debug
     )))
   }
 
   def create = withSession("create", admin = true) { implicit request => implicit td =>
-    val fields = modelForm(request.body.asFormUrlEncoded)
-    svc.create(fields)
-    Future.successful(Ok(play.twirl.api.Html(fields.toString)))
+    svc.create(modelForm(request.body.asFormUrlEncoded)) match {
+      case Some(model) => Future.successful(Redirect(controllers.admin.audit.routes.AuditRecordController.view(model.id)))
+      case None => Future.successful(Redirect(controllers.admin.audit.routes.AuditRecordController.list()))
+    }
   }
 
   def list(q: Option[String], orderBy: Option[String], orderAsc: Boolean, limit: Option[Int], offset: Option[Int]) = {
@@ -46,6 +48,17 @@ class AuditRecordController @javax.inject.Inject() (
         case Accepts.Json() => Ok(AuditRecordResult.fromRecords(q, Nil, orderBys, limit, offset, startMs, r._1, r._2).asJson.spaces2).as(JSON)
         case acceptsCsv() => Ok(svc.csvFor("AuditRecord", r._1, r._2)).as("text/csv")
       })
+    }
+  }
+
+  def autocomplete(q: Option[String], orderBy: Option[String], orderAsc: Boolean, limit: Option[Int]) = {
+    withSession("autocomplete", admin = true) { implicit request => implicit td =>
+      val orderBys = OrderBy.forVals(orderBy, orderAsc).toSeq
+      val r = q match {
+        case Some(query) if query.nonEmpty => svc.search(query, Nil, orderBys, limit.orElse(Some(5)), None)
+        case _ => svc.getAll(Nil, orderBys, limit.orElse(Some(5)))
+      }
+      Future.successful(Ok(r.map(_.toSummary).asJson.spaces2).as(JSON))
     }
   }
 
@@ -89,7 +102,7 @@ class AuditRecordController @javax.inject.Inject() (
     val fields = modelForm(request.body.asFormUrlEncoded)
     val res = svc.update(id = id, fields = fields)
     Future.successful(render {
-      case Accepts.Html() => Redirect(controllers.admin.audit.routes.AuditRecordController.view(res.id))
+      case Accepts.Html() => Redirect(controllers.admin.audit.routes.AuditRecordController.view(res._1.id)).flashing("success" -> res._2)
       case Accepts.Json() => Ok(res.asJson.spaces2).as(JSON)
     })
   }

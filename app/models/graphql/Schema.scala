@@ -10,30 +10,36 @@ import sangria.schema._
 
 object Schema {
   // Fetchers
-  val baseFetchers = Seq(
-    UserSchema.userByPrimaryKeyFetcher, UserSchema.userByRoleFetcher,
-    AuditSchema.auditByPrimaryKeyFetcher, AuditSchema.auditByUserIdFetcher,
-    AuditRecordSchema.auditRecordByPrimaryKeyFetcher, AuditRecordSchema.auditRecordByAuditIdFetcher,
-    NoteSchema.noteByPrimaryKeyFetcher, NoteSchema.noteByAuthorFetcher
-  )
+  val baseFetchers = Seq(UserSchema.userByRoleFetcher, AuditSchema.auditByUserIdFetcher)
 
   val modelFetchers = {
     // Start model fetchers
-    Nil
+
+    Seq(
+      models.audit.AuditRecordSchema.auditRecordByAuditIdFetcher,
+      models.audit.AuditRecordSchema.auditRecordByPrimaryKeyFetcher,
+      models.audit.AuditSchema.auditByPrimaryKeyFetcher,
+      models.note.NoteSchema.noteByAuthorFetcher,
+      models.note.NoteSchema.noteByPrimaryKeyFetcher,
+      models.user.UserSchema.userByPrimaryKeyFetcher
+    )
+
     // End model fetchers
   }
 
   val resolver = DeferredResolver.fetchers(baseFetchers ++ modelFetchers: _*)
 
   // Query Types
-  val baseQueryFields = {
-    UserSchema.queryFields ++ AuditSchema.queryFields ++ AuditRecordSchema.queryFields ++
-      NoteSchema.queryFields ++ SettingsSchema.queryFields ++ SandboxSchema.queryFields
-  }
+  val baseQueryFields = SettingsSchema.queryFields ++ SandboxSchema.queryFields
 
   val modelQueryFields = {
     // Start model query fields
-    Nil
+
+    models.audit.AuditRecordSchema.queryFields ++
+      models.audit.AuditSchema.queryFields ++
+      models.note.NoteSchema.queryFields ++
+      models.user.UserSchema.queryFields
+
     // End model query fields
   }
 
@@ -44,11 +50,16 @@ object Schema {
   )
 
   // Mutation Types
-  val baseMutationFields = SandboxSchema.mutationFields ++ AuditSchema.mutationFields ++ AuditRecordSchema.mutationFields ++ NoteSchema.mutationFields
+  val baseMutationFields = SandboxSchema.mutationFields
 
   val modelMutationFields = {
     // Start model mutation fields
-    Nil
+
+    models.audit.AuditRecordSchema.mutationFields ++
+      models.audit.AuditSchema.mutationFields ++
+      models.note.NoteSchema.mutationFields ++
+      models.user.UserSchema.mutationFields
+
     // End model mutation fields
   }
 

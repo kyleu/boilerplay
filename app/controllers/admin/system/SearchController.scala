@@ -37,36 +37,55 @@ class SearchController @javax.inject.Inject() (override val app: Application, se
 
   private[this] def searchUuid(q: String, id: UUID)(implicit timing: TraceData) = {
     // Start uuid searches
-    val uuidSearches = Seq.empty[Seq[Html]]
+
+    val auditRecord = services.auditServices.auditRecordService.getByPrimaryKey(id).map { model =>
+      views.html.admin.audit.auditRecordSearchResult(model, s"Audit Record [${model.id}] matched [$q].")
+    }.toSeq
+    val note = services.noteServices.noteService.getByPrimaryKey(id).map { model =>
+      views.html.admin.note.noteSearchResult(model, s"Note [${model.id}] matched [$q].")
+    }.toSeq
+    val user = services.userServices.userService.getByPrimaryKey(id).map { model =>
+      views.html.admin.user.userSearchResult(model, s"User [${model.id}] matched [$q].")
+    }.toSeq
+
+    val uuidSearches = Seq[Seq[Html]](auditRecord, note, user)
+
     // End uuid searches
 
-    val userR = app.userService.getByPrimaryKey(id) match {
-      case Some(u) => Seq(views.html.admin.user.userSearchResult(u, s"User [${u.username}] matched id [$q]."))
-      case None => Nil
-    }
+    val auditR = app.auditService.getByPrimaryKey(id).map { model =>
+      views.html.admin.audit.auditSearchResult(model, s"Audit [${model.id}] matched [$q].")
+    }.toSeq
 
-    val noteR = services.noteService.getByPrimaryKey(id) match {
-      case Some(n) => Seq(views.html.admin.note.noteSearchResult(n, s"Note [${n.id}] matched id [$q]."))
-      case None => Nil
-    }
-
-    (userR +: noteR +: uuidSearches).flatten
+    (auditR +: uuidSearches).flatten
   }
 
   private[this] def searchString(q: String)(implicit timing: TraceData) = {
     // Start string searches
-    val stringSearches = Seq.empty[Seq[Html]]
+
+    val auditRecord = services.auditServices.auditRecordService.searchExact(q = q, limit = Some(5)).map { model =>
+      views.html.admin.audit.auditRecordSearchResult(model, s"Audit Record [${model.id}] matched [$q].")
+    }
+    val note = services.noteServices.noteService.searchExact(q = q, limit = Some(5)).map { model =>
+      views.html.admin.note.noteSearchResult(model, s"Note [${model.id}] matched [$q].")
+    }
+    val user = services.userServices.userService.searchExact(q = q, limit = Some(5)).map { model =>
+      views.html.admin.user.userSearchResult(model, s"User [${model.id}] matched [$q].")
+    }
+
+    val stringSearches = Seq[Seq[Html]](auditRecord, note, user)
+
     // End string searches
 
-    val noteR = {
-      val s = app.noteService.svc.searchExact(q = q, orderBys = Nil, limit = Some(10), offset = None)
-      s.map(n => views.html.admin.note.noteSearchResult(n, s"Note [${n.id}] matched [$q]."))
+    val auditR = app.auditService.searchExact(q = q, limit = Some(5)).map { model =>
+      views.html.admin.audit.auditSearchResult(model, s"Audit [${model.id}] matched [$q].")
     }
-    val userR = {
-      val s = app.userService.searchExact(q = q, orderBys = Nil, limit = Some(10), offset = None)
-      s.map(u => views.html.admin.user.userSearchResult(u, s"User [${u.username}] matched [$q]."))
+    val noteR = app.noteService.svc.searchExact(q = q, orderBys = Nil, limit = Some(10), offset = None).map { n =>
+      views.html.admin.note.noteSearchResult(n, s"Note [${n.id}] matched [$q].")
+    }
+    val userR = app.userService.searchExact(q = q, orderBys = Nil, limit = Some(10), offset = None).map { u =>
+      views.html.admin.user.userSearchResult(u, s"User [${u.username}] matched [$q].")
     }
 
-    (noteR +: userR +: stringSearches).flatten
+    (auditR +: noteR +: userR +: stringSearches).flatten
   }
 }

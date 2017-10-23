@@ -1,27 +1,29 @@
-@(user: models.user.User, model: models.audit.Audit, debug: Boolean)(
+@* Generated File *@
+@(user: models.user.User, model: models.audit.Audit, notes: Seq[models.note.Note], debug: Boolean)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
-)@traceData.logViewClass(getClass)@views.html.admin.layout.page(user, "audit", s"Audit [${model.id}]") {
+)@traceData.logViewClass(getClass)@views.html.admin.layout.page(user, "explore", s"Audit [${model.id}]") {
   <div class="collection with-header">
     <div class="collection-header">
-      <div class="right"><a class="theme-text remove-link" onclick="return confirm('Are you sure you want to remove this Ad?')" href="@controllers.admin.audit.routes.AuditController.remove(model.id)">Remove</a></div>
+      <div class="right"><a class="theme-text" href="@controllers.admin.audit.routes.AuditController.editForm(model.id)">Edit</a></div>
+      <div class="right"><a class="theme-text remove-link" onclick="return confirm('Are you sure you want to remove this Audit?')" href="@controllers.admin.audit.routes.AuditController.remove(model.id)">Remove</a></div>
       <h5>
         <i class="fa @models.template.Icons.audit"></i>
         Audit [@model.id]
       </h5>
     </div>
     <div class="collection-item">
-      <table class="highlight audit-table">
+      <table class="highlight">
         <tbody>
           <tr>
             <th>Id</th>
             <td>@model.id</td>
           </tr>
           <tr>
-            <th>Action</th>
+            <th>Act</th>
             <td>@model.act</td>
           </tr>
           <tr>
-            <th>Application</th>
+            <th>App</th>
             <td>@model.app</td>
           </tr>
           <tr>
@@ -33,20 +35,12 @@
             <td>@model.server</td>
           </tr>
           <tr>
-            <th>User</th>
-            <td>@model.user</td>
-          </tr>
-          <tr>
-            <th>Company</th>
-            <td>@model.completed</td>
+            <th>User Id</th>
+            <td>@model.userId</td>
           </tr>
           <tr>
             <th>Tags</th>
-            <td>@model.tags.map(t => t._1 + ":" + t._2).mkString(", ")</td>
-          </tr>
-          <tr>
-            <th>Message</th>
-            <td>@model.msg</td>
+            <td>@model.tags</td>
           </tr>
           <tr>
             <th>Started</th>
@@ -59,31 +53,18 @@
         </tbody>
       </table>
     </div>
-    @model.records.map { r =>
-      <div class="collection-item">
-        <div class="right">@r.id</div>
-        <h5><a class="theme-text" href="@services.audit.AuditRoutes.getViewRoute(r.t, r.pk)">@r.t:@r.pk.mkString(", ")</a></h5>
-      </div>
-      <div class="collection-item">
-        <table class="highlight audit-table">
-          <thead>
-            <tr>
-              <th>Property</th>
-              <th style="width: 40%;">Original</th>
-              <th style="width: 40%;">New</th>
-            </tr>
-          </thead>
-          <tbody>
-          @r.changes.map { c =>
-            <tr>
-              <th>@c.k</th>
-              <td>@c.o.getOrElse(util.NullUtils.str)</td>
-              <td>@c.n.getOrElse(util.NullUtils.str)</td>
-            </tr>
-          }
-          </tbody>
-        </table>
-      </div>
-    }
+    @views.html.admin.note.notes(notes, "audit", model.id)
   </div>
+
+  <ul id="model-relations" class="collapsible" data-collapsible="expandable">
+    <li id="relation-auditRecord-auditId" data-table="auditRecord" data-field="auditId" data-singular="Audit Record" data-plural="Audit Records" data-url="@controllers.admin.audit.routes.AuditRecordController.byAuditId(model.id, limit = Some(5))">
+      <div class="collapsible-header">
+        <i class="fa @models.template.Icons.auditRecord"></i>
+        <span class="title">Audit Records</span>&nbsp;by Audit Id
+      </div>
+      <div class="collapsible-body"><span>Loading...</span></div>
+    </li>
+  </ul>
+  @views.html.components.includeScalaJs(debug)
+  <script>$(function() { new RelationService('@controllers.admin.audit.routes.AuditController.relationCounts(model.id)') });</script>
 }

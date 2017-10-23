@@ -10,13 +10,13 @@ import util.web.TracingWSClient
 
 object AuditNotifications extends Logging {
   def persist(a: Audit)(implicit trace: TraceData) = {
-    log.info(s"Persisting audit [${a.id}]...")
+    log.debug(s"Persisting audit [${a.id}]...")
     SystemDatabase.execute(AuditQueries.insert(a))
-    log.info(s"Persisted audit [${a.id}].")
     a.records.foreach { r =>
       SystemDatabase.execute(AuditRecordQueries.insert(r))
-      log.info(s"Persisted audit record [${r.id}] for audit [${a.id}].")
+      log.debug(s"Persisted audit record [${r.id}] for audit [${a.id}].")
     }
+    log.debug(s"Persisted audit [${a.id}] with [${a.records.size}] records.")
   }
 
   def postToSlack(ws: TracingWSClient, config: SlackConfig, a: Audit)(implicit trace: TraceData) = if (config.enabled) {

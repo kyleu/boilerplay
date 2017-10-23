@@ -52,7 +52,7 @@ object AuditRecordQueries extends BaseQueries[AuditRecord]("auditRecord", "audit
     private[this] val changesArray = "[ " + model.changes.map(_.asJson.noSpaces).mkString(", ") + " ]"
     override def values = Seq(model.id, model.auditId, model.t, pkArray, changesArray)
   }
-
+  def insertBatch(models: Seq[AuditRecord]) = InsertBatch(models)
   def create(dataFields: Seq[DataField]) = CreateFields(dataFields)
 
   def removeByPrimaryKey(id: UUID) = RemoveByPrimaryKey(Seq[Any](id))

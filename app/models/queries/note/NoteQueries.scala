@@ -1,9 +1,9 @@
+/* Generated File */
 package models.queries.note
 
 import java.util.UUID
-
-import models.database.DatabaseFieldType._
 import models.database.{DatabaseField, Row}
+import models.database.DatabaseFieldType._
 import models.note.Note
 import models.queries.BaseQueries
 import models.result.ResultFieldHelper
@@ -14,8 +14,8 @@ import models.result.orderBy.OrderBy
 object NoteQueries extends BaseQueries[Note]("note", "note") {
   override val fields = Seq(
     DatabaseField(title = "Id", prop = "id", col = "id", typ = UuidType),
-    DatabaseField(title = "Relation Type", prop = "relType", col = "rel_type", typ = StringType),
-    DatabaseField(title = "Relation Pk", prop = "relPk", col = "rel_pk", typ = StringType),
+    DatabaseField(title = "Type", prop = "relType", col = "rel_type", typ = StringType),
+    DatabaseField(title = "PK", prop = "relPk", col = "rel_pk", typ = StringType),
     DatabaseField(title = "Text", prop = "text", col = "text", typ = StringType),
     DatabaseField(title = "Author", prop = "author", col = "author", typ = UuidType),
     DatabaseField(title = "Created", prop = "created", col = "created", typ = TimestampType)
@@ -41,6 +41,7 @@ object NoteQueries extends BaseQueries[Note]("note", "note") {
   case class GetByAuthorSeq(authorSeq: Seq[UUID]) extends ColSeqQuery(column = "author", values = authorSeq)
 
   def insert(model: Note) = Insert(model)
+  def insertBatch(models: Seq[Note]) = InsertBatch(models)
   def create(dataFields: Seq[DataField]) = CreateFields(dataFields)
 
   def removeByPrimaryKey(id: UUID) = RemoveByPrimaryKey(Seq[Any](id))

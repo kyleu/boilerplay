@@ -1,7 +1,6 @@
 package models.queries.audit
 
 import java.util.UUID
-
 import models.audit.Audit
 import models.database.{DatabaseField, Row}
 import models.database.DatabaseFieldType._
@@ -11,16 +10,16 @@ import models.result.data.DataField
 import models.result.filter.Filter
 import models.result.orderBy.OrderBy
 
-import collection.JavaConverters._
+import scala.collection.JavaConverters._
 
-object AuditQueries extends BaseQueries[Audit]("audit", "audit", "postgres") {
+object AuditQueries extends BaseQueries[Audit]("audit", "audit") {
   override val fields = Seq(
     DatabaseField(title = "Id", prop = "id", col = "id", typ = UuidType),
     DatabaseField(title = "Act", prop = "act", col = "act", typ = StringType),
     DatabaseField(title = "App", prop = "app", col = "app", typ = StringType),
     DatabaseField(title = "Client", prop = "client", col = "client", typ = StringType),
     DatabaseField(title = "Server", prop = "server", col = "server", typ = StringType),
-    DatabaseField(title = "User", prop = "user", col = "user_id", typ = UuidType),
+    DatabaseField(title = "User Id", prop = "userId", col = "user_id", typ = UuidType),
     DatabaseField(title = "Tags", prop = "tags", col = "tags", typ = UnknownType),
     DatabaseField(title = "Started", prop = "started", col = "started", typ = TimestampType),
     DatabaseField(title = "Completed", prop = "completed", col = "completed", typ = TimestampType)
@@ -56,10 +55,10 @@ object AuditQueries extends BaseQueries[Audit]("audit", "audit", "postgres") {
   override protected def fromRow(row: Row) = Audit(
     id = UuidType(row, "id"),
     act = StringType(row, "act"),
-    app = StringType.opt(row, "app"),
+    app = StringType(row, "app"),
     client = StringType.opt(row, "client"),
     server = StringType.opt(row, "server"),
-    user = UuidType.opt(row, "user_id"),
+    userId = UuidType.opt(row, "user_id"),
     tags = row.as[String]("tags").asInstanceOf[java.util.HashMap[String, String]].asScala.toMap,
     started = TimestampType(row, "started"),
     completed = TimestampType(row, "completed")
@@ -68,6 +67,6 @@ object AuditQueries extends BaseQueries[Audit]("audit", "audit", "postgres") {
   override protected def toDataSeq(t: Audit) = {
     val tags = new java.util.HashMap[String, String]()
     t.tags.foreach(tag => tags.put(tag._1, tag._2))
-    Seq(t.id, t.act, t.app, t.client, t.server, t.user, tags, t.started, t.completed)
+    Seq(t.id, t.act, t.app, t.client, t.server, t.userId, tags, t.started, t.completed)
   }
 }

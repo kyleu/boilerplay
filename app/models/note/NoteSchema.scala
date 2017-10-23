@@ -1,3 +1,4 @@
+/* Generated File */
 package models.note
 
 import java.util.UUID
@@ -18,7 +19,7 @@ import util.FutureUtils.graphQlContext
 object NoteSchema extends SchemaHelper("note") {
   implicit val notePrimaryKeyId = HasId[Note, UUID](_.id)
   private[this] def getByPrimaryKeySeq(c: GraphQLContext, idSeq: Seq[UUID]) = {
-    Future.successful(c.services.noteService.getByPrimaryKeySeq(idSeq)(c.trace))
+    Future.successful(c.services.noteServices.noteService.getByPrimaryKeySeq(idSeq)(c.trace))
   }
   val noteByPrimaryKeyFetcher = Fetcher(getByPrimaryKeySeq)
 
@@ -26,7 +27,7 @@ object NoteSchema extends SchemaHelper("note") {
 
   val noteByAuthorRelation = Relation[Note, UUID]("byAuthor", x => Seq(x.author))
   val noteByAuthorFetcher = Fetcher.rel[GraphQLContext, Note, Note, UUID](
-    getByPrimaryKeySeq, (c, rels) => Future.successful(c.services.noteService.getByAuthorSeq(rels(noteByAuthorRelation))(c.trace))
+    getByPrimaryKeySeq, (c, rels) => Future.successful(c.services.noteServices.noteService.getByAuthorSeq(rels(noteByAuthorRelation))(c.trace))
   )
 
   implicit lazy val noteType: ObjectType[GraphQLContext, Note] = deriveObjectType(
@@ -45,7 +46,7 @@ object NoteSchema extends SchemaHelper("note") {
     name = "note",
     fieldType = noteResultType,
     arguments = queryArg :: reportFiltersArg :: orderBysArg :: limitArg :: offsetArg :: Nil,
-    resolve = c => traceB(c.ctx, "search")(td => toResult(runSearch(c.ctx.services.noteService, c, td)))
+    resolve = c => traceB(c.ctx, "search")(td => toResult(runSearch(c.ctx.services.noteServices.noteService, c, td)))
   ))
 
   val noteMutationType = ObjectType(
@@ -59,7 +60,7 @@ object NoteSchema extends SchemaHelper("note") {
         fieldType = OptionType(noteType),
         resolve = c => {
           val dataFields = c.args.arg(DataFieldSchema.dataFieldsArg)
-          traceB(c.ctx, "create")(tn => c.ctx.services.noteService.create(dataFields)(tn))
+          traceB(c.ctx, "create")(tn => c.ctx.services.noteServices.noteService.create(dataFields)(tn))
         }
       ),
       Field(
@@ -69,7 +70,7 @@ object NoteSchema extends SchemaHelper("note") {
         fieldType = noteType,
         resolve = c => {
           val dataFields = c.args.arg(DataFieldSchema.dataFieldsArg)
-          traceB(c.ctx, "update")(tn => c.ctx.services.noteService.update(c.args.arg(noteIdArg), dataFields)(tn)._1)
+          traceB(c.ctx, "update")(tn => c.ctx.services.noteServices.noteService.update(c.args.arg(noteIdArg), dataFields)(tn)._1)
         }
       ),
       Field(
@@ -77,7 +78,7 @@ object NoteSchema extends SchemaHelper("note") {
         description = Some("Removes the Note with the provided id."),
         arguments = noteIdArg :: Nil,
         fieldType = noteType,
-        resolve = c => traceB(c.ctx, "remove")(tn => c.ctx.services.noteService.remove(c.args.arg(noteIdArg))(tn))
+        resolve = c => traceB(c.ctx, "remove")(tn => c.ctx.services.noteServices.noteService.remove(c.args.arg(noteIdArg))(tn))
       )
     )
   )

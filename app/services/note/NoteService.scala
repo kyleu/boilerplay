@@ -1,7 +1,7 @@
+/* Generated File */
 package services.note
 
 import java.util.UUID
-
 import models.note.Note
 import models.queries.note.NoteQueries
 import models.result.data.DataField
@@ -59,6 +59,9 @@ class NoteService @javax.inject.Inject() (override val tracing: TracingService) 
       case _ => throw new IllegalStateException("Unable to find newly-inserted Note.")
     })
   }
+  def insertBatch(models: Seq[Note])(implicit trace: TraceData) = {
+    traceB("insertBatch")(td => ApplicationDatabase.execute(NoteQueries.insertBatch(models))(td))
+  }
   def create(fields: Seq[DataField])(implicit trace: TraceData) = traceB("create") { td =>
     ApplicationDatabase.execute(NoteQueries.create(fields))(td)
     services.audit.AuditHelper.onInsert("Note", Seq(fieldVal(fields, "id")), fields)
@@ -66,7 +69,7 @@ class NoteService @javax.inject.Inject() (override val tracing: TracingService) 
   }
 
   def remove(id: UUID)(implicit trace: TraceData) = {
-    traceB("remove")(td => ApplicationDatabase.query(NoteQueries.getByPrimaryKey(id))(td) match {
+    traceB("remove")(td => getByPrimaryKey(id)(td) match {
       case Some(current) =>
         services.audit.AuditHelper.onRemove("Note", Seq(id.toString), current.toDataFields)
         ApplicationDatabase.execute(NoteQueries.removeByPrimaryKey(id))(td)
@@ -76,14 +79,14 @@ class NoteService @javax.inject.Inject() (override val tracing: TracingService) 
   }
 
   def update(id: UUID, fields: Seq[DataField])(implicit trace: TraceData) = {
-    traceB("update")(td => ApplicationDatabase.query(NoteQueries.getByPrimaryKey(id))(td) match {
-      case Some(current) if fields.isEmpty => current -> s"No changes required for note [$id]."
+    traceB("update")(td => getByPrimaryKey(id)(td) match {
+      case Some(current) if fields.isEmpty => current -> s"No changes required for Note [$id]."
       case Some(current) =>
         ApplicationDatabase.execute(NoteQueries.update(id, fields))(td)
-        ApplicationDatabase.query(NoteQueries.getByPrimaryKey(id))(td) match {
+        getByPrimaryKey(id)(td) match {
           case Some(newModel) =>
             services.audit.AuditHelper.onUpdate("Note", Seq(DataField("id", Some(id.toString))), current.toDataFields, fields)
-            newModel -> s"Updated [${fields.size}] fields of note [$id]."
+            newModel -> s"Updated [${fields.size}] fields of Note [$id]."
           case None => throw new IllegalStateException(s"Cannot find Note matching [$id].")
         }
       case None => throw new IllegalStateException(s"Cannot find Note matching [$id].")

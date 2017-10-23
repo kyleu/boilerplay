@@ -2,7 +2,7 @@ package models.note
 
 import java.time.LocalDateTime
 import java.util.UUID
-import models.result.data.{DataField, DataFieldModel}
+import models.result.data.{DataField, DataFieldModel, DataSummary}
 
 object Note {
   def empty(author: Option[UUID] = None) = Note(
@@ -32,8 +32,5 @@ case class Note(
     DataField("created", Some(created.toString))
   )
 
-  def toSummary = {
-    val title = id + " (" + text.take(20) + "...)"
-    models.result.data.DataSummary(model = "note", pk = Seq(id.toString), title = title)
-  }
+  def toSummary = DataSummary(model = "note", pk = Seq(id.toString), title = s"$relType / $relPk / $text ($id)")
 }

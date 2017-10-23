@@ -1,0 +1,5 @@
+@(model: models.user.User)<tr>
+  <td><a href="@controllers.admin.user.routes.UserController.view(model.id)" class="theme-text">@model.id</a></td>
+  <td>@model.username</td>
+  <td>@model.profile.providerKey</td>
+</tr>
