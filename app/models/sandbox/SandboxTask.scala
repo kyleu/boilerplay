@@ -1,10 +1,8 @@
 package models.sandbox
 
-import java.util.UUID
 
 import enumeratum._
 import models.Application
-import models.user.User
 import services.ServiceRegistry
 import services.database.BackupRestore
 import util.FutureUtils.defaultContext
@@ -59,7 +57,9 @@ object SandboxTask extends Enum[SandboxTask] with CirceEnum[SandboxTask] {
   }
 
   case object DatabaseRestore extends SandboxTask("databaserestore", "Database Restore", "Restores the database.") {
-    override def call(app: Application, services: ServiceRegistry, argument: Option[String])(implicit trace: TraceData) = Future.successful(BackupRestore.restore("TODO"))
+    override def call(app: Application, services: ServiceRegistry, argument: Option[String])(implicit trace: TraceData) = {
+      Future.successful(BackupRestore.restore("TODO"))
+    }
   }
 
   override val values = findValues

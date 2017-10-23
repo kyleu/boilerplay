@@ -10,5 +10,5 @@ class ServiceRegistry @javax.inject.Inject() (
 
   /* End model service files */
 
-  val settingsService: services.settings.SettingsService,
+  val settingsService: services.settings.SettingsService
 )
