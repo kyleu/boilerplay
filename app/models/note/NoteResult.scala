@@ -2,10 +2,14 @@
 package models.note
 
 import java.time.LocalDateTime
+
+import io.circe.{Decoder, Encoder}
 import models.result.BaseResult
 import models.result.filter.Filter
 import models.result.orderBy.OrderBy
 import models.result.paging.PagingOptions
+import io.circe.generic.semiauto._
+import io.circe.java8.time._
 
 case class NoteResult(
   override val filters: Seq[Filter] = Nil,
@@ -18,6 +22,9 @@ case class NoteResult(
 ) extends BaseResult[Note]
 
 object NoteResult {
+  implicit val jsonEncoder: Encoder[NoteResult] = deriveEncoder
+  implicit val jsonDecoder: Decoder[NoteResult] = deriveDecoder
+
   def fromRecords(
     q: Option[String], filters: Seq[Filter], orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int],
     startMs: Long, totalCount: Int, results: Seq[Note]

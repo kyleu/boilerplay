@@ -4,7 +4,6 @@ import models.graphql.{CommonSchema, GraphQLContext}
 import sangria.macros.derive._
 import sangria.schema._
 import sangria.marshalling.circe._
-import io.circe.generic.auto._
 import models.result.data.DataFieldSchema
 
 object FilterSchema {

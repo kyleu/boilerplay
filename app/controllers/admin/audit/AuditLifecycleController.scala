@@ -3,7 +3,6 @@ package controllers.admin.audit
 import java.util.UUID
 
 import controllers.{BaseController, ControllerUtilities}
-import io.circe.generic.auto._
 import io.circe.syntax._
 import models.Application
 import models.audit._

@@ -1,7 +1,16 @@
 package models.result.paging
 
+import io.circe.{Decoder, Encoder}
+import io.circe.generic.semiauto._
+
 object PagingOptions {
   case class Range(start: Int, end: Int)
+
+  private[this] implicit val jsonRangeEncoder: Encoder[Range] = deriveEncoder
+  private[this] implicit val jsonRangeDecoder: Decoder[Range] = deriveDecoder
+
+  implicit val jsonEncoder: Encoder[PagingOptions] = deriveEncoder
+  implicit val jsonDecoder: Decoder[PagingOptions] = deriveDecoder
 
   def from(count: Int, limit: Option[Int], offset: Option[Int] = None) = {
     val off = offset.getOrElse(0)

@@ -2,8 +2,6 @@ package controllers.admin.user
 
 import java.util.UUID
 
-import io.circe.generic.auto._
-import io.circe.java8.time._
 import io.circe.syntax._
 import models.result.orderBy.OrderBy
 import models.user.UserResult

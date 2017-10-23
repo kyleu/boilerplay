@@ -3,10 +3,15 @@ package models.audit
 import java.time.LocalDateTime
 import java.util.UUID
 
+import io.circe.{Decoder, Encoder}
 import models.result.data.{DataField, DataFieldModel, DataSummary}
-
+import io.circe.generic.semiauto._
+import io.circe.java8.time._
 
 object Audit {
+  implicit val jsonEncoder: Encoder[Audit] = deriveEncoder
+  implicit val jsonDecoder: Decoder[Audit] = deriveDecoder
+
   def empty(act: String = "default", userId: Option[UUID] = None) = Audit(act = act, userId = userId)
 }
 

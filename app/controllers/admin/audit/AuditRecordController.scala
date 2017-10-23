@@ -2,12 +2,11 @@
 package controllers.admin.audit
 
 import controllers.BaseController
-import io.circe.generic.auto._
-import io.circe.java8.time._
 import io.circe.syntax._
 import java.util.UUID
 import models.Application
 import models.audit.AuditRecordResult
+import models.result.data.DataSummary._
 import models.result.orderBy.OrderBy
 import scala.concurrent.Future
 import services.audit.AuditRecordService

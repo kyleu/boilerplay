@@ -3,8 +3,6 @@ package controllers.admin.audit
 import java.util.UUID
 
 import controllers.BaseController
-import io.circe.generic.auto._
-import io.circe.java8.time._
 import io.circe.syntax._
 import models.Application
 import models.audit.AuditResult
@@ -18,8 +16,7 @@ import util.web.ControllerUtils.acceptsCsv
 
 @javax.inject.Singleton
 class AuditController @javax.inject.Inject() (
-    override val app: Application, svc: AuditService,
-    auditRecordS: AuditRecordService
+    override val app: Application, svc: AuditService, auditRecordS: AuditRecordService
 ) extends BaseController("audit") {
   def createForm = withSession("create.form", admin = true) { implicit request => implicit td =>
     val cancel = controllers.admin.audit.routes.AuditController.list()

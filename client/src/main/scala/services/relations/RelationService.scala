@@ -1,6 +1,5 @@
 package services.relations
 
-import io.circe.Json
 import models.result.RelationCount
 
 import scala.scalajs.js.annotation.JSExportTopLevel
@@ -54,7 +53,6 @@ class RelationService(url: String) {
 
   $.get(url = url, data = scalajs.js.Dynamic.literal(), success = (data: String) => {
     import io.circe.parser._
-    import io.circe.generic.auto._
     val ret = decode[Seq[RelationCount]](data) match {
       case Right(seq) => seq.foreach(rc => processCount(rc.model, rc.field, rc.count))
       case Left(x) => throw x

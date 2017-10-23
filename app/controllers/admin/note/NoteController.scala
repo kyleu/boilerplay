@@ -1,8 +1,6 @@
 package controllers.admin.note
 
 import controllers.BaseController
-import io.circe.generic.auto._
-import io.circe.java8.time._
 import io.circe.syntax._
 import java.util.UUID
 import models.Application

@@ -3,6 +3,7 @@ package models.queries.audit
 import java.util.UUID
 
 import models.audit.{AuditField, AuditRecord}
+import models.audit.AuditField._
 import models.database.{DatabaseField, Row, Statement}
 import models.database.DatabaseFieldType._
 import models.queries.BaseQueries
@@ -12,8 +13,6 @@ import models.result.filter.Filter
 import models.result.orderBy.OrderBy
 import org.postgresql.jdbc.PgArray
 import org.postgresql.util.PGobject
-import io.circe.generic.auto._
-import io.circe.java8.time._
 import io.circe.syntax._
 import io.circe.parser._
 

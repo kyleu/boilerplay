@@ -2,9 +2,14 @@ package models.audit
 
 import java.util.UUID
 
+import io.circe.{Decoder, Encoder}
 import models.result.data.{DataField, DataFieldModel, DataSummary}
+import io.circe.generic.semiauto._
 
 object AuditRecord {
+  implicit val jsonEncoder: Encoder[AuditRecord] = deriveEncoder
+  implicit val jsonDecoder: Decoder[AuditRecord] = deriveDecoder
+
   def empty = AuditRecord(
     id = UUID.randomUUID,
     auditId = UUID.randomUUID,

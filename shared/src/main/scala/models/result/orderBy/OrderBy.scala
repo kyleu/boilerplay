@@ -1,8 +1,13 @@
 package models.result.orderBy
 
 import enumeratum._
+import io.circe.{Decoder, Encoder}
+import io.circe.generic.semiauto._
 
 object OrderBy {
+  implicit val jsonEncoder: Encoder[OrderBy] = deriveEncoder
+  implicit val jsonDecoder: Decoder[OrderBy] = deriveDecoder
+
   sealed abstract class Direction(val sql: String) extends EnumEntry
 
   object Direction extends Enum[Direction] with CirceEnum[Direction] {

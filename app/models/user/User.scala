@@ -5,10 +5,19 @@ import java.util.UUID
 import com.mohiva.play.silhouette.api.{Identity, LoginInfo}
 import java.time.LocalDateTime
 
+import io.circe.{Decoder, Encoder}
+import io.circe.generic.semiauto._
+import io.circe.java8.time._
 import models.result.data.{DataField, DataFieldModel}
 import util.DateUtils
 
 object User {
+  private[this] implicit val jsonLoginInfoEncoder: Encoder[LoginInfo] = deriveEncoder
+  private[this] implicit val jsonLoginInfoDecoder: Decoder[LoginInfo] = deriveDecoder
+
+  implicit val jsonEncoder: Encoder[User] = deriveEncoder
+  implicit val jsonDecoder: Decoder[User] = deriveDecoder
+
   def empty() = User(
     id = UUID.randomUUID,
     username = "",

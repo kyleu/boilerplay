@@ -5,8 +5,6 @@ import sangria.macros.derive._
 import sangria.schema._
 import sangria.marshalling.circe._
 
-import io.circe.generic.auto._
-
 object OrderBySchema {
   implicit val orderByDirectionType = CommonSchema.deriveEnumeratumType[OrderBy.Direction](
     name = "OrderDirection",

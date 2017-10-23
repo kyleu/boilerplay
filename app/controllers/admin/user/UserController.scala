@@ -3,7 +3,6 @@ package controllers.admin.user
 import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.api.util.PasswordHasher
 import controllers.BaseController
-import io.circe.generic.auto._
 import io.circe.syntax._
 import models.Application
 import models.result.RelationCount
