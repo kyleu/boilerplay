@@ -21,6 +21,7 @@ object AuditQueries extends BaseQueries[Audit]("audit", "audit") {
     DatabaseField(title = "Server", prop = "server", col = "server", typ = StringType),
     DatabaseField(title = "User Id", prop = "userId", col = "user_id", typ = UuidType),
     DatabaseField(title = "Tags", prop = "tags", col = "tags", typ = UnknownType),
+    DatabaseField(title = "Message", prop = "msg", col = "msg", typ = UnknownType),
     DatabaseField(title = "Started", prop = "started", col = "started", typ = TimestampType),
     DatabaseField(title = "Completed", prop = "completed", col = "completed", typ = TimestampType)
   )
@@ -60,6 +61,7 @@ object AuditQueries extends BaseQueries[Audit]("audit", "audit") {
     server = StringType.opt(row, "server"),
     userId = UuidType.opt(row, "user_id"),
     tags = row.as[String]("tags").asInstanceOf[java.util.HashMap[String, String]].asScala.toMap,
+    msg = StringType(row, "msg"),
     started = TimestampType(row, "started"),
     completed = TimestampType(row, "completed")
   )
@@ -67,6 +69,6 @@ object AuditQueries extends BaseQueries[Audit]("audit", "audit") {
   override protected def toDataSeq(t: Audit) = {
     val tags = new java.util.HashMap[String, String]()
     t.tags.foreach(tag => tags.put(tag._1, tag._2))
-    Seq(t.id, t.act, t.app, t.client, t.server, t.userId, tags, t.started, t.completed)
+    Seq(t.id, t.act, t.app, t.client, t.server, t.userId, tags, t.msg, t.started, t.completed)
   }
 }

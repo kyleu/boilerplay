@@ -8,6 +8,7 @@ create table if not exists "audit" (
   "server" character varying(32),
   "user_id" uuid,
   "tags" hstore not null,
+  "msg" text not null,
   "started" timestamp without time zone not null,
   "completed" timestamp without time zone not null,
   primary key ("id")

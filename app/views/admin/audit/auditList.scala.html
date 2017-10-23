@@ -13,7 +13,10 @@
     "client" -> "Client",
     "server" -> "Server",
     "userId" -> "User Id",
-    "tags" -> "Tags"
+    "tags" -> "Tags",
+    "msg" -> "Message",
+    "started" -> "Started",
+    "completed" -> "Completed",
   ),
   totalCount = totalCount,
   rows = modelSeq.map(model => views.html.admin.audit.auditDataRow(model)),

@@ -31,13 +31,13 @@ case class Audit(
     DataField("server", server.map(_.toString)),
     DataField("userId", userId.map(_.toString)),
     DataField("tags", Some(tags.toString)),
+    DataField("msg", Some(msg)),
     DataField("started", Some(started.toString)),
     DataField("completed", Some(completed.toString))
   )
 
-  lazy val changeLog = {
-    "TODO... " + msg
-  }
+  lazy val changeLog = s"Audit [$id] ($act/$app): $msg"
+  lazy val duration = (util.DateUtils.toMillis(completed) - util.DateUtils.toMillis(started)).toInt
 
   def toSummary = DataSummary(model = "audit", pk = Seq(id.toString), title = s"$act / $app ($id)")
 }
