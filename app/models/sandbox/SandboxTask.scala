@@ -1,6 +1,5 @@
 package models.sandbox
 
-
 import enumeratum._
 import models.Application
 import services.ServiceRegistry

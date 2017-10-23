@@ -45,10 +45,15 @@ class TracingService @javax.inject.Inject() (actorSystem: ActorSystem, cnf: Metr
   private[this] val reporter = AsyncReporter.v2(sender)
   private[this] val samp = Sampler.create(cnf.tracingSampleRate)
   private[this] val ctx = MDCCurrentTraceContext.create()
-  val tracing = Tracing.newBuilder().localServiceName(cnf.tracingService).spanReporter(reporter).currentTraceContext(ctx).traceId128Bit(true).sampler(samp).build()
-  tracing.setNoop(!cnf.tracingEnabled)
+  val builder = Tracing.newBuilder().localServiceName(cnf.tracingService).spanReporter(reporter).currentTraceContext(ctx).traceId128Bit(true).sampler(samp)
+  val tracing = builder.build()
+  if(!cnf.tracingEnabled) {
+    tracing.setNoop(true)
+  } else {
+    val loc = s"${cnf.tracingServer}:${cnf.tracingPort}@${cnf.tracingService}"
+    log.info(s"Tracing enabled, sending results to [$loc] using sample rate [${cnf.tracingSampleRate}].")
+  }
   private[this] val tracer: Tracer = tracing.tracer
-  log.info(s"Tracing enabled, sending results to [${cnf.tracingServer}:${cnf.tracingPort}@${cnf.tracingService}] using sample rate [${cnf.tracingSampleRate}].")
 
   def newServerSpan(traceName: String, tags: (String, String)*)(implicit parentData: TraceData) = {
     val childSpan = tracer.newChild(parentData.span.context()).name(traceName).kind(Span.Kind.SERVER)
