@@ -11,7 +11,7 @@ import models.user.User
 import models.{Application, Configuration}
 import play.api.inject.Injector
 import services.ModelServiceHelper
-import services.database.{ApplicationDatabase, SystemDatabase}
+import services.database.ApplicationDatabase
 import services.supervisor.ActorSupervisor
 import util.FutureUtils
 import util.tracing.{TraceData, TracingService}
@@ -22,25 +22,25 @@ class AuditService @javax.inject.Inject() (
     override val tracing: TracingService, inject: Injector, config: Configuration, ws: TracingWSClient, lookup: AuditLookup, fu: FutureUtils
 ) extends ModelServiceHelper[Audit]("audit") {
   def getByPrimaryKey(user: User, id: UUID)(implicit trace: TraceData) = {
-    traceB("get.by.primary.key")(td => SystemDatabase.query(AuditQueries.getByPrimaryKey(id))(td))
+    traceB("get.by.primary.key")(td => ApplicationDatabase.query(AuditQueries.getByPrimaryKey(id))(td))
   }
   def getByPrimaryKeySeq(user: User, idSeq: Seq[UUID])(implicit trace: TraceData) = {
     traceB("get.by.primary.key.seq")(td => ApplicationDatabase.query(AuditQueries.getByPrimaryKeySeq(idSeq))(td))
   }
 
   override def countAll(user: User, filters: Seq[Filter] = Nil)(implicit trace: TraceData) = {
-    traceB("get.all.count")(td => SystemDatabase.query(AuditQueries.countAll(filters))(td))
+    traceB("get.all.count")(td => ApplicationDatabase.query(AuditQueries.countAll(filters))(td))
   }
   override def getAll(user: User, filters: Seq[Filter], orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int] = None)(implicit trace: TraceData) = {
-    traceB("get.all")(td => SystemDatabase.query(AuditQueries.getAll(filters, orderBys, limit, offset))(td))
+    traceB("get.all")(td => ApplicationDatabase.query(AuditQueries.getAll(filters, orderBys, limit, offset))(td))
   }
 
   // Search
   override def searchCount(user: User, q: String, filters: Seq[Filter])(implicit trace: TraceData) = {
-    traceB("search.count")(td => SystemDatabase.query(AuditQueries.searchCount(q, filters))(td))
+    traceB("search.count")(td => ApplicationDatabase.query(AuditQueries.searchCount(q, filters))(td))
   }
   override def search(user: User, q: String, filters: Seq[Filter], orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int] = None)(implicit trace: TraceData) = {
-    traceB("search")(td => SystemDatabase.query(AuditQueries.search(q, filters, orderBys, limit, offset))(td))
+    traceB("search")(td => ApplicationDatabase.query(AuditQueries.search(q, filters, orderBys, limit, offset))(td))
   }
 
   def searchExact(user: User, q: String, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData) = {
@@ -48,13 +48,13 @@ class AuditService @javax.inject.Inject() (
   }
 
   def countByUserId(user: UUID)(implicit trace: TraceData) = traceB("count.by.user") { td =>
-    SystemDatabase.query(AuditQueries.CountByUserId(user))(td)
+    ApplicationDatabase.query(AuditQueries.CountByUserId(user))(td)
   }
   def getByUserId(user: User, id: UUID, orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int])(implicit trace: TraceData) = {
-    traceB("get.by.user")(td => SystemDatabase.query(AuditQueries.GetByUserId(id, orderBys, limit, offset))(td))
+    traceB("get.by.user")(td => ApplicationDatabase.query(AuditQueries.GetByUserId(id, orderBys, limit, offset))(td))
   }
   def getByUserIdSeq(user: User, idSeq: Seq[UUID])(implicit trace: TraceData) = traceB("get.by.user.seq") { td =>
-    SystemDatabase.query(AuditQueries.GetByUserIdSeq(idSeq))(td)
+    ApplicationDatabase.query(AuditQueries.GetByUserIdSeq(idSeq))(td)
   }
 
   // Mutations

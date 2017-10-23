@@ -67,7 +67,7 @@ class Application @javax.inject.Inject() (
 
     FileService.setRootDir(config.dataDir)
 
-    SystemDatabase.open(config.cnf, tracing)
+    ApplicationDatabase.open(config.cnf, tracing)
     ApplicationDatabase.open(config.cnf, tracing)
 
     MasterDdl.init()
@@ -78,7 +78,7 @@ class Application @javax.inject.Inject() (
 
   private[this] def stop() = {
     ApplicationDatabase.close()
-    SystemDatabase.close()
+    ApplicationDatabase.close()
     CacheService.close()
     tracing.close()
     SharedMetricRegistries.remove("default")

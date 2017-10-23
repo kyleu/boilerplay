@@ -2,7 +2,7 @@ package services.settings
 
 import models.queries.settings.SettingQueries
 import models.settings.{Setting, SettingKey}
-import services.database.SystemDatabase
+import services.database.ApplicationDatabase
 import util.Logging
 import util.tracing.{TraceData, TracingService}
 
@@ -21,7 +21,7 @@ class SettingsService @javax.inject.Inject() (tracing: TracingService) extends L
   }
 
   def load()(implicit trace: TraceData) = tracing.traceBlocking("settings.service.load") { td =>
-    val x = SystemDatabase.query(SettingQueries.getAll())(td).map(s => s.key -> s.value).toMap
+    val x = ApplicationDatabase.query(SettingQueries.getAll())(td).map(s => s.key -> s.value).toMap
     settingsMap = x
     settings = SettingKey.values.map(k => Setting(k, settingsMap.getOrElse(k, k.default)))
     log.debug(s"Loaded [${x.size}] system settings.")
@@ -36,12 +36,12 @@ class SettingsService @javax.inject.Inject() (tracing: TracingService) extends L
     val s = Setting(key, value)
     if (s.isDefault) {
       settingsMap = settingsMap - key
-      SystemDatabase.execute(SettingQueries.removeByPrimaryKey(key))
+      ApplicationDatabase.execute(SettingQueries.removeByPrimaryKey(key))
     } else {
-      SystemDatabase.transaction { (txTd, conn) =>
-        SystemDatabase.query(SettingQueries.getByPrimaryKey(key), Some(conn))(txTd) match {
-          case Some(_) => SystemDatabase.execute(SettingQueries.Update(s), Some(conn))(txTd)
-          case None => SystemDatabase.execute(SettingQueries.insert(s), Some(conn))(txTd)
+      ApplicationDatabase.transaction { (txTd, conn) =>
+        ApplicationDatabase.query(SettingQueries.getByPrimaryKey(key), Some(conn))(txTd) match {
+          case Some(_) => ApplicationDatabase.execute(SettingQueries.Update(s), Some(conn))(txTd)
+          case None => ApplicationDatabase.execute(SettingQueries.insert(s), Some(conn))(txTd)
         }
         settingsMap = settingsMap + (key -> value)
       }(td)

@@ -4,7 +4,7 @@ import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.services.IdentityService
 import models.queries.auth.UserQueries
 import models.user.User
-import services.database.SystemDatabase
+import services.database.ApplicationDatabase
 import util.Logging
 import services.cache.UserCache
 import util.tracing.{TraceData, TracingService}
@@ -17,7 +17,7 @@ class UserSearchService @javax.inject.Inject() (tracingService: TracingService) 
     UserCache.getUserByLoginInfo(loginInfo) match {
       case Some(u) => Future.successful(Some(u))
       case None =>
-        val u = SystemDatabase.query(UserQueries.FindUserByProfile(loginInfo))(td)
+        val u = ApplicationDatabase.query(UserQueries.FindUserByProfile(loginInfo))(td)
         u.foreach(UserCache.cacheUser)
         Future.successful(u)
     }
@@ -27,7 +27,7 @@ class UserSearchService @javax.inject.Inject() (tracingService: TracingService) 
     UserCache.getUserByLoginInfo(loginInfo) match {
       case Some(u) => Future.successful(Some(u))
       case None =>
-        val u = SystemDatabase.query(UserQueries.FindUserByProfile(loginInfo))(td)
+        val u = ApplicationDatabase.query(UserQueries.FindUserByProfile(loginInfo))(td)
         u.foreach(UserCache.cacheUser)
         Future.successful(u)
     }

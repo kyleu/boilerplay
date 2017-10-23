@@ -22,8 +22,8 @@ object BackupRestore {
     }
 
     val path = (backupRoot / filename).path.toAbsolutePath.toString
-    val host = SystemDatabase.getConfig.host
-    val schema = SystemDatabase.getConfig.database.getOrElse(util.Config.projectId)
+    val host = ApplicationDatabase.getConfig.host
+    val schema = ApplicationDatabase.getConfig.database.getOrElse(util.Config.projectId)
     val dumpResult = Seq("pg_dump", "-Fp", "-h", host, "-O", "-f", path, "-d", schema).!!
     if (!f.exists) {
       throw new IllegalStateException(s"Backup to file [$filename] failed: [$dumpResult].")

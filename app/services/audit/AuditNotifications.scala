@@ -2,7 +2,7 @@ package services.audit
 
 import models.audit.Audit
 import models.queries.audit.{AuditQueries, AuditRecordQueries}
-import services.database.SystemDatabase
+import services.database.ApplicationDatabase
 import util.FutureUtils.defaultContext
 import util.Logging
 import util.tracing.TraceData
@@ -11,9 +11,9 @@ import util.web.TracingWSClient
 object AuditNotifications extends Logging {
   def persist(a: Audit)(implicit trace: TraceData) = {
     log.debug(s"Persisting audit [${a.id}]...")
-    SystemDatabase.execute(AuditQueries.insert(a))
+    ApplicationDatabase.execute(AuditQueries.insert(a))
     a.records.foreach { r =>
-      SystemDatabase.execute(AuditRecordQueries.insert(r))
+      ApplicationDatabase.execute(AuditRecordQueries.insert(r))
       log.debug(s"Persisted audit record [${r.id}] for audit [${a.id}].")
     }
     log.debug(s"Persisted audit [${a.id}] with [${a.records.size}] records.")
