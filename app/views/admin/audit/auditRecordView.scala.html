@@ -1,4 +1,3 @@
-@* Generated File *@
 @(user: models.user.User, model: models.audit.AuditRecord, notes: Seq[models.note.Note], debug: Boolean)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
 )@traceData.logViewClass(getClass)@views.html.admin.layout.page(user, "explore", s"Audit Record [${model.id}]") {
@@ -35,7 +34,9 @@
           </tr>
           <tr>
             <th>Changes</th>
-            <td>@model.changes</td>
+            <td>@model.changes.map { c =>
+              <div>@c</div>
+            }</td>
           </tr>
         </tbody>
       </table>
