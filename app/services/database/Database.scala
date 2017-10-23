@@ -43,7 +43,7 @@ trait Database[Conn] extends Instrumented with Logging {
   protected[this] def prependComment(obj: Object, sql: String) = s"/* ${obj.getClass.getSimpleName.replace("$", "")} */ $sql"
 
   protected[this] def trace[A](traceName: String)(f: TraceData => A)(implicit traceData: TraceData) = tracing.traceBlocking(key + "." + traceName) { td =>
-    td.span.kind(brave.Span.Kind.CLIENT).remoteEndpoint(endpoint.toV2)
+    td.span.kind(brave.Span.Kind.CLIENT).remoteEndpoint(endpoint)
     f(td)
   }
 }
