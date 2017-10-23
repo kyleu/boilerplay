@@ -47,11 +47,11 @@ abstract class JdbcDatabase(override val key: String, configPrefix: String) exte
     start(config, svc)
   }
 
-  override def transaction[A](f: (TraceData, Connection) => A)(implicit traceData: TraceData) = {
+  override def transaction[A](f: (TraceData, Connection) => A)(implicit traceData: TraceData) = trace("transaction") { td =>
     val connection = source.getConnection
     connection.setAutoCommit(false)
     try {
-      val result = f(traceData, connection)
+      val result = f(td, connection)
       connection.commit()
       result
     } catch {
@@ -63,7 +63,8 @@ abstract class JdbcDatabase(override val key: String, configPrefix: String) exte
     }
   }
 
-  override def execute(statement: Statement, conn: Option[Connection])(implicit traceData: TraceData) = {
+  override def execute(statement: Statement, conn: Option[Connection])(implicit traceData: TraceData) = trace("execute." + statement.name) { td =>
+    td.span.tag("SQL", statement.sql)
     val connection = conn.getOrElse(source.getConnection)
     try {
       time(statement.getClass) { executeUpdate(connection, statement) }
@@ -72,7 +73,8 @@ abstract class JdbcDatabase(override val key: String, configPrefix: String) exte
     }
   }
 
-  override def query[A](query: RawQuery[A], conn: Option[Connection])(implicit traceData: TraceData) = {
+  override def query[A](query: RawQuery[A], conn: Option[Connection])(implicit traceData: TraceData) = trace("query." + query.name) { td =>
+    td.span.tag("SQL", query.sql)
     val connection = conn.getOrElse(source.getConnection)
     try {
       time(query.getClass)(apply(connection, query))
