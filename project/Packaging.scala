@@ -1,8 +1,8 @@
 import com.typesafe.sbt.packager.Keys._
 import com.typesafe.sbt.packager.debian.DebianPlugin.autoImport.Debian
-import com.typesafe.sbt.packager.docker.DockerPlugin.autoImport.{ Docker, dockerExposedPorts, dockerExposedVolumes }
-import com.typesafe.sbt.packager.jdkpackager.JDKPackagerPlugin.autoImport.{ JDKPackager, jdkAppIcon, jdkPackagerBasename }
-import com.typesafe.sbt.packager.universal.UniversalPlugin.autoImport.{ Universal, useNativeZip }
+import com.typesafe.sbt.packager.docker.DockerPlugin.autoImport.{Docker, dockerExposedPorts, dockerExposedVolumes}
+import com.typesafe.sbt.packager.jdkpackager.JDKPackagerPlugin.autoImport.{JDKPackager, jdkAppIcon, jdkPackagerBasename}
+import com.typesafe.sbt.packager.universal.UniversalPlugin.autoImport.{Universal, useNativeZip}
 import com.typesafe.sbt.packager.windows
 import com.typesafe.sbt.packager.windows.WindowsPlugin.autoImport.Windows
 import sbt.Keys._
@@ -55,10 +55,8 @@ object Packaging {
     jdkPackagerBasename := Shared.projectName,
     name in JDKPackager := Shared.projectName,
 
-    javaOptions in Universal ++= Seq(
-      "-J-Xmx2g",
-      "-J-Xms256m",
-      s"-Dproject=${Shared.projectId}"))
+    javaOptions in Universal ++= Seq("-J-Xmx2g", "-J-Xms256m", s"-Dproject=${Shared.projectId}")
+  )
 
   private[this] def makeWindowsFeatures(mappings: Seq[(File, String)]): Seq[windows.WindowsFeature] = {
     import com.typesafe.sbt.packager.windows._
@@ -79,13 +77,7 @@ object Packaging {
       title = "Update PATH",
       desc = "Update PATH environment variables (requires restart).",
       components = Seq(AddDirectoryToPath("bin")))
-    // val menuLinks = WindowsFeature(
-    //   id = "AddConfigLinks",
-    // title = "Start Menu Links",
-    // desc = "Adds start menu shortcuts.",
-    // components = Seq(AddShortCuts(Seq(s"bin\\${Shared.projectId}.bat")))
-    // )
 
-    Seq(corePackage, addBinToPath /* , menuLinks */ )
+    Seq(corePackage, addBinToPath)
   }
 }

@@ -1,4 +1,3 @@
-//import com.sksamuel.scapegoat.sbt.ScapegoatSbtPlugin.autoImport._
 import com.typesafe.sbt.GitPlugin.autoImport.git
 import com.typesafe.sbt.digest.Import._
 import com.typesafe.sbt.gzip.Import._
@@ -68,9 +67,6 @@ object Server {
     // Fat-Jar Assembly
     fullClasspath in assembly += Attributed.blank(PlayKeys.playPackageAssets.value),
     mainClass in assembly := Some(Shared.projectName)
-
-  // Code Quality
-  // scapegoatIgnoredFiles := Seq(".*/Row.scala", ".*/Routes.scala", ".*/ReverseRoutes.scala", ".*/JavaScriptReverseRoutes.scala", ".*/*.template.scala")
   )
 
   lazy val server = {

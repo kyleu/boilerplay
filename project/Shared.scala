@@ -1,5 +1,3 @@
-// import com.sksamuel.scapegoat.sbt.ScapegoatSbtPlugin.autoImport._
-// import net.virtualvoid.sbt.graph.DependencyGraphSettings.graphSettings
 import webscalajs.ScalaJSWeb
 import sbt.Keys._
 import sbt._
@@ -34,13 +32,7 @@ object Shared {
     scalacOptions in Test ++= Seq("-Yrangepos"),
 
     publishMavenStyle := false
-
-  // Code Quality
-  // scapegoatVersion := Utils.scapegoatVersion,
-  // scapegoatDisabledInspections := Seq("MethodNames", "MethodReturningAny", "DuplicateImport"),
-  // scapegoatIgnoredFiles := Seq(".*/JsonSerializers.scala"),
-  // scapegoatDisabledInspections := Seq("FinalModifierOnCaseClass")
-  ) // ++ graphSettings
+  )
 
   def withProjects(p: Project, includes: Seq[Project]) = includes.foldLeft(p)((proj, inc) => proj.dependsOn(inc))
 
