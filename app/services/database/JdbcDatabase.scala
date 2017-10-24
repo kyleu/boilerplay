@@ -68,6 +68,8 @@ abstract class JdbcDatabase(override val key: String, configPrefix: String) exte
     val connection = conn.getOrElse(source.getConnection)
     try {
       time(statement.getClass) { executeUpdate(connection, statement) }
+    } catch {
+      case NonFatal(x) => log.errorThenThrow(s"Error running statement [${statement.name}] with [${statement.values.size}] values and sql [${statement.sql}].", x)
     } finally {
       if (conn.isEmpty) { connection.close() }
     }
@@ -78,6 +80,8 @@ abstract class JdbcDatabase(override val key: String, configPrefix: String) exte
     val connection = conn.getOrElse(source.getConnection)
     try {
       time(query.getClass)(apply(connection, query))
+    } catch {
+      case NonFatal(x) => log.errorThenThrow(s"Error running query [${query.name}] with [${query.values.size}] values and sql [${query.sql}].", x)
     } finally {
       if (conn.isEmpty) { connection.close() }
     }

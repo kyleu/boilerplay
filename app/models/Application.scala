@@ -42,7 +42,6 @@ class Application @javax.inject.Inject() (
     val noteService: ModelNoteService,
     val silhouette: Silhouette[AuthEnv],
     val ws: TracingWSClient,
-    val notifications: AuditService,
     val tracing: TracingService
 ) extends Logging {
   if (Application.initialized) {

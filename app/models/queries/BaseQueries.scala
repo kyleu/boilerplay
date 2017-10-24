@@ -18,7 +18,7 @@ abstract class BaseQueries[T <: Product](
     case x => x
   }.toSeq
 
-  protected lazy val quotedColumns = fields.map(f => quote(f.col)).mkString(", ")
+  lazy val quotedColumns = fields.map(f => quote(f.col)).mkString(", ")
   protected def placeholdersFor(seq: Seq[_]) = seq.map(_ => "?").mkString(", ")
   protected lazy val columnPlaceholders = placeholdersFor(fields)
   protected lazy val insertSql = s"""insert into ${quote(tableName)} ($quotedColumns) values ($columnPlaceholders)"""
