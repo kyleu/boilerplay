@@ -8,10 +8,7 @@
     rows: Seq[Html],
     orderBy: Option[String] = None,
     orderAsc: Boolean = true,
-    newUrl: Option[Call] = None,
-    orderByUrl: Option[(Option[String], Boolean) => Call] = None,
-    searchUrl: Option[Call] = None,
-    nextUrl: Call,
+    calls: models.result.web.ListCalls,
     limit: Int = 100,
     offset: Int = 0,
     section: String = "explore",
@@ -23,7 +20,7 @@
   @views.html.admin.layout.page(user, section, s"$model Management") {
     <div class="collection with-header">
       <div class="collection-header">
-        @searchUrl.map { search =>
+        @calls.search.map { search =>
           <div class="right">
             <form action="@search" method="get">
               <input type="text" name="q" placeholder="Search @modelPlural" value="@q.getOrElse("")" />
@@ -45,21 +42,21 @@
         @if(offset > 0) {
           <em>Page @((offset / limit) + 1) </em>
         }
-        @newUrl.map { nu =>
+        @calls.newCall.map { nu =>
           (<a class="theme-text" href="@nu">add new</a>)
         }
       </div>
       <div class="collection-item">
-      @views.html.admin.explore.listTable(cols, rows, modelPlural, orderByUrl, orderBy, orderAsc)
+      @views.html.admin.explore.listTable(cols, rows, modelPlural, calls.orderBy, orderBy, orderAsc)
       </div>
     </div>
-    @if(rows.size >= limit) {
-      <div style="text-align: center;"><a class="next-link theme-text" href="@nextUrl">Next Page</a></div>
-    }
+    <div>
+    @if(offset > 0) { <a class="prev-link theme-text" href="@calls.prev">Prev Page</a> }
+    @if(rows.size >= limit) { <a class="next-link theme-text" href="@calls.next">Next Page</a> }
+    </div>
   }
 } else {
-  @views.html.admin.explore.listTable(cols, rows, modelPlural, orderByUrl, orderBy, orderAsc)
-  @if(rows.size >= limit) {
-    <div style="text-align: right"><a class="next-link theme-text" href="@nextUrl">Next Page</a></div>
-  }
+  @views.html.admin.explore.listTable(cols, rows, modelPlural, calls.orderBy, orderBy, orderAsc)
+  @if(offset > 0) { <a class="prev-link theme-text left" href="@calls.prev">Prev Page</a> }
+  @if(rows.size >= limit) { <div><a class="next-link theme-text right" href="@calls.next">Next Page</a></div> }
 }

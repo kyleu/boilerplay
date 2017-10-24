@@ -18,10 +18,13 @@
   rows = modelSeq.map(model => views.html.admin.note.noteDataRow(model)),
   orderBy = orderBy,
   orderAsc = orderAsc,
-  newUrl = Some(controllers.admin.note.routes.NoteController.createForm()),
-  orderByUrl = Some(controllers.admin.note.routes.NoteController.list(q, _, _, Some(limit), Some(0))),
-  searchUrl = Some(controllers.admin.note.routes.NoteController.list(None, orderBy, orderAsc, Some(limit), None)),
-  nextUrl = controllers.admin.note.routes.NoteController.list(q, orderBy, orderAsc, Some(limit), Some(offset + limit)),
+  calls = models.result.web.ListCalls(
+    newCall = Some(controllers.admin.note.routes.NoteController.createForm()),
+    orderBy = Some(controllers.admin.note.routes.NoteController.list(q, _, _, Some(limit), Some(0))),
+    search = Some(controllers.admin.note.routes.NoteController.list(None, orderBy, orderAsc, Some(limit), None)),
+    next = controllers.admin.note.routes.NoteController.list(q, orderBy, orderAsc, Some(limit), Some(offset + limit)),
+    prev = controllers.admin.note.routes.NoteController.list(q, orderBy, orderAsc, Some(limit), Some(offset + limit))
+  ),
   limit = limit,
   offset = offset,
   q = q

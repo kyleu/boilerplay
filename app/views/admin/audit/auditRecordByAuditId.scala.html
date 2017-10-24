@@ -17,10 +17,12 @@
   orderAsc = orderAsc,
   totalCount = None,
   rows = modelSeq.map(model => views.html.admin.audit.auditRecordDataRow(model)),
-  newUrl = None,
-  orderByUrl = Some(controllers.admin.audit.routes.AuditRecordController.byAuditId(auditId, _, _, Some(limit), Some(0))),
-  searchUrl = None,
-  nextUrl = controllers.admin.audit.routes.AuditRecordController.byAuditId(auditId, orderBy, orderAsc, Some(limit), Some(offset + limit)),
+  calls = models.result.web.ListCalls(
+    orderBy = Some(controllers.admin.audit.routes.AuditRecordController.byAuditId(auditId, _, _, Some(limit), Some(0))),
+    search = None,
+    next = controllers.admin.audit.routes.AuditRecordController.byAuditId(auditId, orderBy, orderAsc, Some(limit), Some(offset + limit)),
+    prev = controllers.admin.audit.routes.AuditRecordController.byAuditId(auditId, orderBy, orderAsc, Some(limit), Some(offset - limit))
+  ),
   limit = limit,
   offset = offset,
   q = None,

@@ -22,10 +22,13 @@
   rows = modelSeq.map(model => views.html.admin.audit.auditDataRow(model)),
   orderBy = orderBy,
   orderAsc = orderAsc,
-  newUrl = Some(controllers.admin.audit.routes.AuditController.createForm()),
-  orderByUrl = Some(controllers.admin.audit.routes.AuditController.list(q, _, _, Some(limit), Some(0))),
-  searchUrl = Some(controllers.admin.audit.routes.AuditController.list(None, orderBy, orderAsc, Some(limit), None)),
-  nextUrl = controllers.admin.audit.routes.AuditController.list(q, orderBy, orderAsc, Some(limit), Some(offset + limit)),
+  calls = models.result.web.ListCalls(
+    newCall = Some(controllers.admin.audit.routes.AuditController.createForm()),
+    orderBy = Some(controllers.admin.audit.routes.AuditController.list(q, _, _, Some(limit), Some(0))),
+    search = Some(controllers.admin.audit.routes.AuditController.list(None, orderBy, orderAsc, Some(limit), None)),
+    next = controllers.admin.audit.routes.AuditController.list(q, orderBy, orderAsc, Some(limit), Some(offset + limit)),
+    prev = controllers.admin.audit.routes.AuditController.list(q, orderBy, orderAsc, Some(limit), Some(offset - limit))
+  ),
   limit = limit,
   offset = offset,
   section = "audit",

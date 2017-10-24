@@ -1,5 +1,11 @@
-@(model: models.user.User)<tr>
-  <td><a href="@controllers.admin.user.routes.UserController.view(model.id)" class="theme-text">@model.id</a></td>
+@(model: models.user.User)  <tr>
+  <td><a class="theme-text" href="@controllers.admin.user.routes.UserController.view(model.id)">@model.id</a></td>
   <td>@model.username</td>
   <td>@model.profile.providerKey</td>
+  <td><div class="theme-swatch" style="background-color: @model.preferences.theme.color"></div></td>
+  <td>@model.role</td>
+  <td>@util.DateUtils.niceDate(model.created.toLocalDate)</td>
+  <td>@defining(s"return confirm('Are you certain you want to delete this user (${model.username})?');") { onClick =>
+    <a class="theme-text" onclick="@onClick" href="@controllers.admin.user.routes.UserController.remove(model.id)"><i class="fa fa-close"></i></a>
+  }</td>
 </tr>
