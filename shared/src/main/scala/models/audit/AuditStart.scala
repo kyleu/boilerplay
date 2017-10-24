@@ -12,12 +12,11 @@ object AuditStart {
 }
 
 case class AuditStart(
-  action: String,
-  app: Option[String] = None,
-  client: Option[String] = None,
-  server: Option[String] = None,
-  tags: Map[String, String] = Map.empty,
-  models: Seq[AuditModelPk] = Seq.empty
+    action: String,
+    app: Option[String] = None,
+    client: Option[String] = None,
+    server: Option[String] = None,
+    tags: Map[String, String] = Map.empty,
+    models: Seq[AuditModelPk] = Seq.empty
 )
-
 

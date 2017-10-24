@@ -3,5 +3,5 @@ package services.note
 
 @javax.inject.Singleton
 class NoteServiceRegistry @javax.inject.Inject() (
-  val noteService: services.note.NoteService
+    val noteService: services.note.NoteService
 )

@@ -6,10 +6,10 @@ import models.template.Theme
 import java.time.LocalDateTime
 
 case class UserProfile(
-  id: UUID,
-  username: String,
-  email: String,
-  role: Role,
-  theme: Theme,
-  created: LocalDateTime
+    id: UUID,
+    username: String,
+    email: String,
+    role: Role,
+    theme: Theme,
+    created: LocalDateTime
 )

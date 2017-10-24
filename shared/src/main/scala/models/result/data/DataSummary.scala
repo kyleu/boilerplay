@@ -9,7 +9,7 @@ object DataSummary {
 }
 
 case class DataSummary(
-  model: String,
-  pk: Seq[String],
-  title: String
+    model: String,
+    pk: Seq[String],
+    title: String
 )

@@ -12,5 +12,5 @@ object UserPreferences {
 }
 
 case class UserPreferences(
-  theme: Theme = Theme.BlueGrey
+    theme: Theme = Theme.BlueGrey
 )

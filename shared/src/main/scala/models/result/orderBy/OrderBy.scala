@@ -22,6 +22,6 @@ object OrderBy {
 }
 
 case class OrderBy(
-  col: String = "?",
-  dir: OrderBy.Direction = OrderBy.Direction.Ascending
+    col: String = "?",
+    dir: OrderBy.Direction = OrderBy.Direction.Ascending
 )

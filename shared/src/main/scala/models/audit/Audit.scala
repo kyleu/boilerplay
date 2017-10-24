@@ -16,17 +16,17 @@ object Audit {
 }
 
 case class Audit(
-  id: UUID = UUID.randomUUID,
-  act: String = "???",
-  app: String = util.Config.projectId,
-  client: Option[String] = None,
-  server: Option[String] = None,
-  userId: Option[UUID] = None,
-  tags: Map[String, String] = Map.empty,
-  msg: String = "n/a",
-  records: Seq[AuditRecord] = Nil,
-  started: LocalDateTime = util.DateUtils.now,
-  completed: LocalDateTime = util.DateUtils.now
+    id: UUID = UUID.randomUUID,
+    act: String = "???",
+    app: String = util.Config.projectId,
+    client: Option[String] = None,
+    server: Option[String] = None,
+    userId: Option[UUID] = None,
+    tags: Map[String, String] = Map.empty,
+    msg: String = "n/a",
+    records: Seq[AuditRecord] = Nil,
+    started: LocalDateTime = util.DateUtils.now,
+    completed: LocalDateTime = util.DateUtils.now
 ) extends DataFieldModel {
   override def toDataFields = Seq(
     DataField("id", Some(id.toString)),

@@ -16,7 +16,7 @@ object JsonSerializers {
     case Right(x) => x
     case Left(_) => UserPreferences.empty
   }
-  def writePreferences(p: UserPreferences, indent: Boolean = true) = if(indent) { p.asJson.spaces2 } else { p.asJson.noSpaces }
+  def writePreferences(p: UserPreferences, indent: Boolean = true) = if (indent) { p.asJson.spaces2 } else { p.asJson.noSpaces }
 
   def readRequestMessage(s: String) = decode[RequestMessage](s) match {
     case Right(x) => x

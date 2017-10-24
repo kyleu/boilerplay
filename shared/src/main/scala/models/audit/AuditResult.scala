@@ -8,13 +8,13 @@ import models.result.orderBy.OrderBy
 import models.result.paging.PagingOptions
 
 case class AuditResult(
-  override val filters: Seq[Filter] = Nil,
-  override val orderBys: Seq[OrderBy] = Nil,
-  override val totalCount: Int = 0,
-  override val paging: PagingOptions = PagingOptions(),
-  override val results: Seq[Audit] = Nil,
-  override val durationMs: Int = 0,
-  override val occurred: LocalDateTime = util.DateUtils.now
+    override val filters: Seq[Filter] = Nil,
+    override val orderBys: Seq[OrderBy] = Nil,
+    override val totalCount: Int = 0,
+    override val paging: PagingOptions = PagingOptions(),
+    override val results: Seq[Audit] = Nil,
+    override val durationMs: Int = 0,
+    override val occurred: LocalDateTime = util.DateUtils.now
 ) extends BaseResult[Audit]
 
 object AuditResult {
