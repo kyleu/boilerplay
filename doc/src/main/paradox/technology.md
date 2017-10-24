@@ -1,7 +1,7 @@
 ## Technology
 
 The Play application communicates over a WebSocket to a pool of Akka actors managing connections.
-Serialization is handled by Play Json, and all database communication runs via jdbc. Scala.js compiles the
+Serialization is handled by circe, and all database communication runs via jdbc. Scala.js compiles the
 shared code and provides an in-browser component. 
 
 The index page opens a websocket connection for bidirectional communication, handled via Play and Akka.
