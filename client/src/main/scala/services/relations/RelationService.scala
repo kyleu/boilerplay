@@ -13,7 +13,7 @@ class RelationService(url: String) {
 
   private[this] def onComplete(body: JQuery, data: String): Unit = {
     body.html(data)
-    $(".sort-link, .next-link", body).click { e: JQueryEventObject =>
+    $(".sort-link, .next-link, .prev-link", body).click { e: JQueryEventObject =>
       val jq = $(e.currentTarget)
       val href = jq.attr("href").toString
       call(body, href)
