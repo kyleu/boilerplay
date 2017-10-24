@@ -59,12 +59,12 @@ object Dependencies {
     val version = "3.2.5"
     val metrics = "nl.grons" %% "metrics-scala" % "3.5.9"
     val jvm = "io.dropwizard.metrics" % "metrics-jvm" % version
-    val ehcache = "io.dropwizard.metrics" % "metrics-ehcache" % version intransitive()
-    val healthChecks = "io.dropwizard.metrics" % "metrics-healthchecks" % version intransitive()
+    val ehcache = "io.dropwizard.metrics" % "metrics-ehcache" % version intransitive ()
+    val healthChecks = "io.dropwizard.metrics" % "metrics-healthchecks" % version intransitive ()
     val json = "io.dropwizard.metrics" % "metrics-json" % version
     val jettyServlet = "org.eclipse.jetty" % "jetty-servlet" % "9.4.7.v20170914"
-    val servlets = "io.dropwizard.metrics" % "metrics-servlets" % version intransitive()
-    val graphite = "io.dropwizard.metrics" % "metrics-graphite" % version intransitive()
+    val servlets = "io.dropwizard.metrics" % "metrics-servlets" % version intransitive ()
+    val graphite = "io.dropwizard.metrics" % "metrics-graphite" % version intransitive ()
   }
 
   object Tracing {
