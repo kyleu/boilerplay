@@ -20,7 +20,7 @@ class AuditLifecycleController @javax.inject.Inject() (override val app: Applica
   }
 
   def testForm() = withSession("form") { implicit request => implicit td =>
-    val sJson = audit(pk("user", request.identity.id))(request.identity).asJson.spaces2
+    val sJson = audit(pk("user", request.identity.id))(request).asJson.spaces2
     Future.successful(Ok(views.html.admin.audit.testForm(request.identity, sJson, app.config.debug)))
   }
 
@@ -34,7 +34,7 @@ class AuditLifecycleController @javax.inject.Inject() (override val app: Applica
     val startMs = DateUtils.nowMillis
     val auditId = UUID.randomUUID
 
-    AuditHelper.onStart(request.identity, auditId, auditStart)
+    AuditHelper.onStart(request, auditId, auditStart)
     val elapsedMs = DateUtils.nowMillis - startMs
     val response = s"""{ "id": "$auditId", "status": "OK", "elapsed": $elapsedMs }"""
     Future.successful(Ok(response).as(JSON))
@@ -49,7 +49,7 @@ class AuditLifecycleController @javax.inject.Inject() (override val app: Applica
 
     val startMs = DateUtils.nowMillis
 
-    AuditHelper.onComplete(request.identity, auditComplete)
+    AuditHelper.onComplete(request, auditComplete)
     val elapsedMs = DateUtils.nowMillis - startMs
     val response = s"""{ "id": "${auditComplete.id}", "status": "OK", "elapsed": $elapsedMs }"""
     Future.successful(Ok(response).as(JSON))

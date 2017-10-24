@@ -16,8 +16,8 @@ trait UserSearchHelper { this: UserController =>
       val startMs = util.DateUtils.nowMillis
       val orderBys = OrderBy.forVals(col = orderBy, asc = orderAsc).toSeq
       val r = q match {
-        case Some(query) if query.nonEmpty => app.userService.searchWithCount(request.identity, query, Nil, orderBys, limit.orElse(Some(100)), offset)
-        case _ => app.userService.getAllWithCount(request.identity, Nil, orderBys, limit.orElse(Some(100)), offset)
+        case Some(query) if query.nonEmpty => app.userService.searchWithCount(request, query, Nil, orderBys, limit.orElse(Some(100)), offset)
+        case _ => app.userService.getAllWithCount(request, Nil, orderBys, limit.orElse(Some(100)), offset)
       }
       Future.successful(render {
         case Accepts.Html() => Ok(views.html.admin.user.userList(
@@ -32,8 +32,8 @@ trait UserSearchHelper { this: UserController =>
     withSession("user.autocomplete", admin = true) { implicit request => implicit td =>
       val orderBys = OrderBy.forVals(col = orderBy, asc = orderAsc).toSeq
       val r = q match {
-        case Some(query) if query.nonEmpty => app.userService.search(request.identity, query, Nil, orderBys, limit.orElse(Some(5)), None)
-        case _ => app.userService.getAll(request.identity, Nil, orderBys, limit.orElse(Some(5)))
+        case Some(query) if query.nonEmpty => app.userService.search(request, query, Nil, orderBys, limit.orElse(Some(5)), None)
+        case _ => app.userService.getAll(request, Nil, orderBys, limit.orElse(Some(5)))
       }
       Future.successful(Ok(r.map(_.toSummary).asJson.spaces2).as(JSON))
     }
@@ -41,7 +41,7 @@ trait UserSearchHelper { this: UserController =>
 
   def view(id: UUID) = withSession("user.view", admin = true) { implicit request => implicit td =>
     val notes = app.noteService.getFor("user", id)
-    app.userService.getByPrimaryKey(request.identity, id) match {
+    app.userService.getByPrimaryKey(request, id) match {
       case Some(model) => Future.successful(render {
         case Accepts.Html() => Ok(views.html.admin.user.userView(request.identity, model, notes, app.config.debug))
         case Accepts.Json() => Ok(model.asJson.spaces2).as(JSON)

@@ -5,8 +5,9 @@ import java.util.UUID
 import akka.actor.SupervisorStrategy.Stop
 import akka.actor.{ActorRef, OneForOneStrategy, SupervisorStrategy}
 import models._
-import models.user.User
 import java.time.LocalDateTime
+
+import models.auth.Credentials
 import util.metrics.{InstrumentedActor, MetricsServletActor}
 import util.{DateUtils, Logging}
 
@@ -31,7 +32,7 @@ class ActorSupervisor(val app: Application) extends InstrumentedActor with Loggi
   }
 
   override def receiveRequest = {
-    case ss: SocketStarted => timeReceive(ss) { handleSocketStarted(ss.user, ss.socketId, ss.conn) }
+    case ss: SocketStarted => timeReceive(ss) { handleSocketStarted(ss.creds, ss.socketId, ss.conn) }
     case ss: SocketStopped => timeReceive(ss) { handleSocketStopped(ss.socketId) }
 
     case GetSystemStatus => timeReceive(GetSystemStatus) { handleGetSystemStatus() }
@@ -59,9 +60,9 @@ class ActorSupervisor(val app: Application) extends InstrumentedActor with Loggi
     case None => sender() ! ServerError("Unknown Client Socket", ct.id.toString)
   }
 
-  protected[this] def handleSocketStarted(user: User, socketId: UUID, socket: ActorRef) = {
-    log.debug(s"Socket [$socketId] registered to [${user.username}] with path [${socket.path}].")
-    ActorSupervisor.sockets(socketId) = SocketRecord(user.id, user.username, socket, DateUtils.now)
+  protected[this] def handleSocketStarted(creds: Credentials, socketId: UUID, socket: ActorRef) = {
+    log.debug(s"Socket [$socketId] registered to [${creds.user.username}] with path [${socket.path}].")
+    ActorSupervisor.sockets(socketId) = SocketRecord(creds.user.id, creds.user.username, socket, DateUtils.now)
     socketsCounter.inc()
   }
 

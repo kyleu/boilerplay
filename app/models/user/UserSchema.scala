@@ -35,7 +35,7 @@ object UserSchema extends SchemaHelper("user") {
   implicit val profileType = deriveObjectType[GraphQLContext, UserProfile](ObjectTypeDescription("Information about the current session."))
 
   implicit val userPrimaryKeyId = HasId[User, UUID](_.id)
-  private[this] def getByPrimaryKeySeq(c: GraphQLContext, idSeq: Seq[UUID]) = Future.successful(c.app.userService.getByPrimaryKeySeq(c.user, idSeq)(c.trace))
+  private[this] def getByPrimaryKeySeq(c: GraphQLContext, idSeq: Seq[UUID]) = Future.successful(c.app.userService.getByPrimaryKeySeq(c.creds, idSeq)(c.trace))
   val userByPrimaryKeyFetcher = Fetcher(getByPrimaryKeySeq)
 
   val userByRoleRelation = Relation[User, Role]("byRole", x => Seq(x.role))
@@ -72,7 +72,7 @@ object UserSchema extends SchemaHelper("user") {
       description = Some("Returns information about the currently logged in user."),
       fieldType = profileType,
       resolve = c => traceB(c.ctx, "profile") { _ =>
-        val u = c.ctx.user
+        val u = c.ctx.creds.user
         UserProfile(u.id, u.username, u.profile.providerKey, u.role, u.preferences.theme, u.created)
       }
     ),
@@ -101,7 +101,7 @@ object UserSchema extends SchemaHelper("user") {
         fieldType = OptionType(userType),
         resolve = c => {
           val dataFields = c.args.arg(DataFieldSchema.dataFieldsArg)
-          traceB(c.ctx, "create")(tn => c.ctx.services.userServices.userService.create(c.ctx.user, dataFields)(tn))
+          traceB(c.ctx, "create")(tn => c.ctx.services.userServices.userService.create(c.ctx.creds, dataFields)(tn))
         }
       ),
       Field(
@@ -111,7 +111,7 @@ object UserSchema extends SchemaHelper("user") {
         fieldType = userType,
         resolve = c => {
           val dataFields = c.args.arg(DataFieldSchema.dataFieldsArg)
-          traceB(c.ctx, "update")(tn => c.ctx.services.userServices.userService.update(c.ctx.user, c.args.arg(userIdArg), dataFields)(tn)._1)
+          traceB(c.ctx, "update")(tn => c.ctx.services.userServices.userService.update(c.ctx.creds, c.args.arg(userIdArg), dataFields)(tn)._1)
         }
       ),
       Field(
@@ -119,7 +119,7 @@ object UserSchema extends SchemaHelper("user") {
         description = Some("Removes the User with the provided id."),
         arguments = userIdArg :: Nil,
         fieldType = userType,
-        resolve = c => traceB(c.ctx, "remove")(tn => c.ctx.services.userServices.userService.remove(c.ctx.user, c.args.arg(userIdArg))(tn))
+        resolve = c => traceB(c.ctx, "remove")(tn => c.ctx.services.userServices.userService.remove(c.ctx.creds, c.args.arg(userIdArg))(tn))
       )
     )
   )

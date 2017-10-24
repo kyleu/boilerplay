@@ -5,13 +5,14 @@ import java.net.InetAddress
 import com.mohiva.play.silhouette.api.actions.{SecuredRequest, UserAwareRequest}
 import models.Application
 import models.audit.{AuditModelPk, AuditStart}
-import models.auth.AuthEnv
-import models.user.{Role, User}
+import models.auth.{AuthEnv, Credentials}
+import models.user.Role
 import play.api.mvc._
 import util.Logging
 import util.metrics.Instrumented
 import util.tracing.TraceData
 import util.web.TracingFilter
+import scala.language.implicitConversions
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -56,8 +57,12 @@ abstract class BaseController(val name: String) extends InjectedController with 
 
   protected def getTraceData(implicit requestHeader: RequestHeader) = requestHeader.attrs(TracingFilter.traceKey)
 
+  protected implicit def toCredentials(request: SecuredRequest[AuthEnv, _]) = Credentials.fromRequest(request)
+
   def pk(t: String, v: Any*) = AuditModelPk(t, v.map(_.toString))
-  def audit(models: AuditModelPk*)(user: User, act: String = "development", tags: Map[String, String] = Map.empty)(implicit request: Request[AnyContent]) = {
+  def audit(models: AuditModelPk*)(
+    creds: Credentials, act: String = "development", tags: Map[String, String] = Map.empty
+  )(implicit request: Request[AnyContent]) = {
     AuditStart(action = act, app = Some(util.Config.projectId), client = Some(request.remoteAddress), server = serverName, tags = tags, models = models)
   }
 

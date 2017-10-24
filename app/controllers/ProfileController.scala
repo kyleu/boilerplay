@@ -6,7 +6,6 @@ import com.mohiva.play.silhouette.api.util.{Credentials, PasswordHasher}
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
 import models.Application
 import models.user.UserForms
-import services.user.UserService
 import util.web.ControllerUtils
 
 import scala.concurrent.Future
@@ -32,7 +31,7 @@ class ProfileController @javax.inject.Inject() (
           theme = profileData.theme
         )
         val newUser = request.identity.copy(username = profileData.username, preferences = newPrefs)
-        app.userService.updateUser(request.identity, newUser)
+        app.userService.updateUser(request, newUser)
         Future.successful(Redirect(controllers.routes.HomeController.home()))
       }
     )

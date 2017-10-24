@@ -32,8 +32,8 @@ abstract class SchemaHelper(val name: String) {
   def runSearch[T](svc: ModelServiceHelper[T], c: Context[GraphQLContext, Unit], td: TraceData) = {
     val args = argsFor(c.args)
     val x = c.arg(CommonSchema.queryArg) match {
-      case Some(q) => svc.searchWithCount(c.ctx.user, q, args.filters, args.orderBys, args.limit, args.offset)(td)
-      case _ => svc.getAllWithCount(c.ctx.user, args.filters, args.orderBys, args.limit, args.offset)(td)
+      case Some(q) => svc.searchWithCount(c.ctx.creds, q, args.filters, args.orderBys, args.limit, args.offset)(td)
+      case _ => svc.getAllWithCount(c.ctx.creds, args.filters, args.orderBys, args.limit, args.offset)(td)
     }
     c.ctx.trace.span.annotate("Composing search result.")
     SearchResult(x._1, x._2, args)

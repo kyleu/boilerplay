@@ -8,6 +8,7 @@ import com.mohiva.play.silhouette.api.{LoginEvent, LoginInfo, SignUpEvent}
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
 import controllers.BaseController
 import models.Application
+import models.auth.Credentials
 import models.settings.SettingKey
 import models.user._
 import services.audit.AuditHelper
@@ -61,7 +62,7 @@ class RegistrationController @javax.inject.Inject() (
               profile = loginInfo,
               role = role
             )
-            val userSaved = app.userService.insert(user, user)
+            val userSaved = app.userService.insert(Credentials(user, request.remoteAddress), user)
             AuditHelper.onInsert("user", Seq(userSaved.id.toString), userSaved.toDataFields)
             val result = request.session.get("returnUrl") match {
               case Some(url) => Redirect(url).withSession(request.session - "returnUrl")

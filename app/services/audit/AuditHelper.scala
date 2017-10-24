@@ -3,8 +3,8 @@ package services.audit
 import java.util.UUID
 
 import models.audit._
+import models.auth.Credentials
 import models.result.data.DataField
-import models.user.User
 import util.tracing.TraceData
 import util.{Logging, NullUtils}
 
@@ -18,8 +18,8 @@ object AuditHelper extends Logging {
 
   def onAudit(audit: Audit)(implicit trace: TraceData) = getInst.callback(audit)
 
-  def onStart(user: User, id: UUID, msg: AuditStart)(implicit traceData: TraceData) = getInst.cache.onStart(user, id, msg)
-  def onComplete(user: User, msg: AuditComplete)(implicit traceData: TraceData) = getInst.cache.onComplete(user, msg)
+  def onStart(creds: Credentials, id: UUID, msg: AuditStart)(implicit traceData: TraceData) = getInst.cache.onStart(creds, id, msg)
+  def onComplete(creds: Credentials, msg: AuditComplete)(implicit traceData: TraceData) = getInst.cache.onComplete(creds, msg)
 
   def onInsert(t: String, pk: Seq[String], fields: Seq[DataField])(implicit trace: TraceData) = {
     val msg = s"Inserted new [$t] with [${fields.size}] fields:"

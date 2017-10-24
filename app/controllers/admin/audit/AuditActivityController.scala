@@ -4,6 +4,7 @@ import akka.actor.ActorSystem
 import akka.stream.Materializer
 import com.mohiva.play.silhouette.api.HandlerResult
 import controllers.BaseController
+import models.auth.Credentials
 import models.{Application, RequestMessage, ResponseMessage}
 import play.api.libs.streams.ActorFlow
 import play.api.mvc.{AnyContentAsEmpty, Request, WebSocket}
@@ -31,7 +32,7 @@ class AuditActivityController @javax.inject.Inject() (
       Future.successful(HandlerResult(Ok, Some(securedRequest.identity)))
     }.map {
       case HandlerResult(_, Some(user)) => Right(ActorFlow.actorRef { out =>
-        SocketService.props(None, app.supervisor, user, out, request.remoteAddress)
+        SocketService.props(None, app.supervisor, Credentials(user, request.remoteAddress), out, request.remoteAddress)
       })
       case HandlerResult(_, None) => Left(Redirect(controllers.routes.HomeController.home()).flashing("error" -> "You're not signed in."))
     }

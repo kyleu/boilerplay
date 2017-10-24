@@ -38,7 +38,7 @@ trait UserEditHelper { this: UserController =>
         profile = loginInfo,
         role = role
       )
-      val userSaved = app.userService.insert(request.identity, user)
+      val userSaved = app.userService.insert(request, user)
       val authInfo = hasher.hash(form("password"))
       for {
         _ <- authInfoRepository.add(loginInfo, authInfo)
@@ -53,14 +53,14 @@ trait UserEditHelper { this: UserController =>
 
   def editForm(id: UUID) = withSession("user.edit.form", admin = true) { implicit request => implicit td =>
     val call = controllers.admin.user.routes.UserController.edit(id)
-    app.userService.getByPrimaryKey(request.identity, id) match {
+    app.userService.getByPrimaryKey(request, id) match {
       case Some(model) => Future.successful(Ok(views.html.admin.user.userForm(request.identity, model, s"User [$id]", call)))
       case None => Future.successful(NotFound(s"No user found with id [$id]."))
     }
   }
 
   def edit(id: UUID) = withSession("admin.user.save", admin = true) { implicit request => implicit td =>
-    val user = app.userService.getByPrimaryKey(request.identity, id).getOrElse(throw new IllegalStateException(s"Invalid user [$id]."))
+    val user = app.userService.getByPrimaryKey(request, id).getOrElse(throw new IllegalStateException(s"Invalid user [$id]."))
     val isSelf = request.identity.id == id
 
     val form = ControllerUtils.getForm(request)
@@ -89,7 +89,7 @@ trait UserEditHelper { this: UserController =>
   }
 
   def remove(id: UUID) = withSession("admin.user.remove", admin = true) { implicit request => implicit td =>
-    app.userService.remove(request.identity, id)
+    app.userService.remove(request, id)
     Future.successful(Redirect(controllers.admin.user.routes.UserController.list()))
   }
 }

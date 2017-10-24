@@ -26,7 +26,7 @@ class AuditRecordController @javax.inject.Inject() (
   }
 
   def create = withSession("create", admin = true) { implicit request => implicit td =>
-    svc.create(request.identity, modelForm(request.body.asFormUrlEncoded)) match {
+    svc.create(request, modelForm(request.body.asFormUrlEncoded)) match {
       case Some(model) => Future.successful(Redirect(controllers.admin.audit.routes.AuditRecordController.view(model.id)))
       case None => Future.successful(Redirect(controllers.admin.audit.routes.AuditRecordController.list()))
     }
@@ -37,8 +37,8 @@ class AuditRecordController @javax.inject.Inject() (
       val startMs = util.DateUtils.nowMillis
       val orderBys = OrderBy.forVals(orderBy, orderAsc).toSeq
       val r = q match {
-        case Some(query) if query.nonEmpty => svc.searchWithCount(request.identity, query, Nil, orderBys, limit.orElse(Some(100)), offset)
-        case _ => svc.getAllWithCount(request.identity, Nil, orderBys, limit.orElse(Some(100)), offset)
+        case Some(query) if query.nonEmpty => svc.searchWithCount(request, query, Nil, orderBys, limit.orElse(Some(100)), offset)
+        case _ => svc.getAllWithCount(request, Nil, orderBys, limit.orElse(Some(100)), offset)
       }
       Future.successful(render {
         case Accepts.Html() => Ok(views.html.admin.audit.auditRecordList(
@@ -54,8 +54,8 @@ class AuditRecordController @javax.inject.Inject() (
     withSession("autocomplete", admin = true) { implicit request => implicit td =>
       val orderBys = OrderBy.forVals(orderBy, orderAsc).toSeq
       val r = q match {
-        case Some(query) if query.nonEmpty => svc.search(request.identity, query, Nil, orderBys, limit.orElse(Some(5)), None)
-        case _ => svc.getAll(request.identity, Nil, orderBys, limit.orElse(Some(5)))
+        case Some(query) if query.nonEmpty => svc.search(request, query, Nil, orderBys, limit.orElse(Some(5)), None)
+        case _ => svc.getAll(request, Nil, orderBys, limit.orElse(Some(5)))
       }
       Future.successful(Ok(r.map(_.toSummary).asJson.spaces2).as(JSON))
     }
@@ -64,7 +64,7 @@ class AuditRecordController @javax.inject.Inject() (
   def byAuditId(auditId: UUID, orderBy: Option[String], orderAsc: Boolean, limit: Option[Int], offset: Option[Int]) = {
     withSession("get.by.auditId", admin = true) { implicit request => implicit td =>
       val orderBys = OrderBy.forVals(orderBy, orderAsc).toSeq
-      val models = svc.getByAuditId(request.identity, auditId, orderBys, limit, offset)
+      val models = svc.getByAuditId(request, auditId, orderBys, limit, offset)
       Future.successful(render {
         case Accepts.Html() => Ok(views.html.admin.audit.auditRecordByAuditId(
           request.identity, auditId, models, orderBy, orderAsc, limit.getOrElse(5), offset.getOrElse(0)
@@ -77,7 +77,7 @@ class AuditRecordController @javax.inject.Inject() (
 
   def view(id: java.util.UUID) = withSession("view", admin = true) { implicit request => implicit td =>
     val notes = app.noteService.getFor("auditRecord", id)
-    svc.getByPrimaryKey(request.identity, id) match {
+    svc.getByPrimaryKey(request, id) match {
       case Some(model) => Future.successful(render {
         case Accepts.Html() => Ok(views.html.admin.audit.auditRecordView(request.identity, model, notes, app.config.debug))
         case Accepts.Json() => Ok(model.asJson.spaces2).as(JSON)
@@ -89,7 +89,7 @@ class AuditRecordController @javax.inject.Inject() (
   def editForm(id: java.util.UUID) = withSession("edit.form", admin = true) { implicit request => implicit td =>
     val cancel = controllers.admin.audit.routes.AuditRecordController.view(id)
     val call = controllers.admin.audit.routes.AuditRecordController.edit(id)
-    svc.getByPrimaryKey(request.identity, id) match {
+    svc.getByPrimaryKey(request, id) match {
       case Some(model) => Future.successful(Ok(
         views.html.admin.audit.auditRecordForm(request.identity, model, s"Audit Record [$id]", cancel, call, debug = app.config.debug)
       ))
@@ -99,7 +99,7 @@ class AuditRecordController @javax.inject.Inject() (
 
   def edit(id: java.util.UUID) = withSession("edit", admin = true) { implicit request => implicit td =>
     val fields = modelForm(request.body.asFormUrlEncoded)
-    val res = svc.update(request.identity, id = id, fields = fields)
+    val res = svc.update(request, id = id, fields = fields)
     Future.successful(render {
       case Accepts.Html() => Redirect(controllers.admin.audit.routes.AuditRecordController.view(res._1.id)).flashing("success" -> res._2)
       case Accepts.Json() => Ok(res.asJson.spaces2).as(JSON)
@@ -107,7 +107,7 @@ class AuditRecordController @javax.inject.Inject() (
   }
 
   def remove(id: java.util.UUID) = withSession("remove", admin = true) { implicit request => implicit td =>
-    svc.remove(request.identity, id = id)
+    svc.remove(request, id = id)
     Future.successful(render {
       case Accepts.Html() => Redirect(controllers.admin.audit.routes.AuditRecordController.list())
       case Accepts.Json() => Ok("{ \"status\": \"removed\" }").as(JSON)

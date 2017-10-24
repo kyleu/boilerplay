@@ -5,8 +5,8 @@ import java.util.UUID
 
 import akka.actor.ActorRef
 import models.audit._
+import models.auth.Credentials
 import models.result.data.DataField
-import models.user.User
 import services.supervisor.ActorSupervisor
 import util.{DateUtils, Logging}
 import util.tracing.TraceData
@@ -24,11 +24,11 @@ class AuditCache(supervisor: ActorRef, lookup: AuditLookup) extends Logging {
   def pendingCount = cache.size
   def pending = cache.toSeq.sortBy(_._2._3)(util.DateUtils.localDateTimeOrdering)
 
-  def onStart(user: User, id: UUID, msg: AuditStart)(implicit traceData: TraceData) = {
+  def onStart(creds: Credentials, id: UUID, msg: AuditStart)(implicit traceData: TraceData) = {
     supervisor ! ActorSupervisor.Broadcast(models.AuditStartNotification(id, msg))
 
     val results = msg.models.map { model =>
-      model -> lookup.getByPk(user, model.t, model.pk: _*).map(_.toDataFields).getOrElse {
+      model -> lookup.getByPk(creds, model.t, model.pk: _*).map(_.toDataFields).getOrElse {
         Seq(DataField("error", Some(s"Could not load model [${model.t}:${model.pk.mkString("/")}] for read.")))
       }
     }
@@ -42,19 +42,19 @@ class AuditCache(supervisor: ActorRef, lookup: AuditLookup) extends Logging {
     if (f.v != nf.v) { Some(AuditField(k = f.k, o = f.v, n = nf.v)) } else { None }
   })
 
-  def onComplete(user: User, msg: AuditComplete)(implicit traceData: TraceData) = {
+  def onComplete(creds: Credentials, msg: AuditComplete)(implicit traceData: TraceData) = {
     val current = cache.getOrElse(msg.id, throw new IllegalStateException(
       s"Cannot find audit with id [${msg.id}] ($pendingCount in cache)."
     ))
     supervisor ! ActorSupervisor.Broadcast(models.AuditCompleteNotification(msg))
 
     val updateLookup = current._2.map { c =>
-      c -> lookup.getByPk(user, c.t, c.pk: _*).map(_.toDataFields).getOrElse(Seq(
+      c -> lookup.getByPk(creds, c.t, c.pk: _*).map(_.toDataFields).getOrElse(Seq(
         DataField("error", Some(s"Could not load model [${c.t}:${c.pk.mkString("/")}] for update."))
       ))
     }
     val insertLookup = msg.inserted.map { c =>
-      c -> lookup.getByPk(user, c.t, c.pk: _*).map(_.toDataFields).getOrElse(Seq(
+      c -> lookup.getByPk(creds, c.t, c.pk: _*).map(_.toDataFields).getOrElse(Seq(
         DataField("error", Some(s"Could not load model [${c.t}:${c.pk.mkString("/")}] for insert."))
       ))
     }
@@ -73,7 +73,7 @@ class AuditCache(supervisor: ActorRef, lookup: AuditLookup) extends Logging {
       app = current._1.app.getOrElse(util.Config.projectId),
       client = current._1.client,
       server = current._1.server,
-      userId = Some(user.id),
+      userId = Some(creds.user.id),
       tags = current._1.tags ++ msg.tags,
       msg = msg.msg,
       records = updates ++ inserts,

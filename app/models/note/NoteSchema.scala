@@ -19,7 +19,7 @@ import util.FutureUtils.graphQlContext
 object NoteSchema extends SchemaHelper("note") {
   implicit val notePrimaryKeyId = HasId[Note, UUID](_.id)
   private[this] def getByPrimaryKeySeq(c: GraphQLContext, idSeq: Seq[UUID]) = {
-    Future.successful(c.services.noteServices.noteService.getByPrimaryKeySeq(c.user, idSeq)(c.trace))
+    Future.successful(c.services.noteServices.noteService.getByPrimaryKeySeq(c.creds, idSeq)(c.trace))
   }
   val noteByPrimaryKeyFetcher = Fetcher(getByPrimaryKeySeq)
 
@@ -27,7 +27,7 @@ object NoteSchema extends SchemaHelper("note") {
 
   val noteByAuthorRelation = Relation[Note, UUID]("byAuthor", x => Seq(x.author))
   val noteByAuthorFetcher = Fetcher.rel[GraphQLContext, Note, Note, UUID](
-    getByPrimaryKeySeq, (c, rels) => Future.successful(c.services.noteServices.noteService.getByAuthorSeq(c.user, rels(noteByAuthorRelation))(c.trace))
+    getByPrimaryKeySeq, (c, rels) => Future.successful(c.services.noteServices.noteService.getByAuthorSeq(c.creds, rels(noteByAuthorRelation))(c.trace))
   )
 
   implicit lazy val noteType: ObjectType[GraphQLContext, Note] = deriveObjectType(
@@ -60,7 +60,7 @@ object NoteSchema extends SchemaHelper("note") {
         fieldType = OptionType(noteType),
         resolve = c => {
           val dataFields = c.args.arg(DataFieldSchema.dataFieldsArg)
-          traceB(c.ctx, "create")(tn => c.ctx.services.noteServices.noteService.create(c.ctx.user, dataFields)(tn))
+          traceB(c.ctx, "create")(tn => c.ctx.services.noteServices.noteService.create(c.ctx.creds, dataFields)(tn))
         }
       ),
       Field(
@@ -70,7 +70,7 @@ object NoteSchema extends SchemaHelper("note") {
         fieldType = noteType,
         resolve = c => {
           val dataFields = c.args.arg(DataFieldSchema.dataFieldsArg)
-          traceB(c.ctx, "update")(tn => c.ctx.services.noteServices.noteService.update(c.ctx.user, c.args.arg(noteIdArg), dataFields)(tn)._1)
+          traceB(c.ctx, "update")(tn => c.ctx.services.noteServices.noteService.update(c.ctx.creds, c.args.arg(noteIdArg), dataFields)(tn)._1)
         }
       ),
       Field(
@@ -78,7 +78,7 @@ object NoteSchema extends SchemaHelper("note") {
         description = Some("Removes the Note with the provided id."),
         arguments = noteIdArg :: Nil,
         fieldType = noteType,
-        resolve = c => traceB(c.ctx, "remove")(tn => c.ctx.services.noteServices.noteService.remove(c.ctx.user, c.args.arg(noteIdArg))(tn))
+        resolve = c => traceB(c.ctx, "remove")(tn => c.ctx.services.noteServices.noteService.remove(c.ctx.creds, c.args.arg(noteIdArg))(tn))
       )
     )
   )

@@ -3,8 +3,8 @@ package services.graphql
 import io.circe.Json
 import io.circe.parser._
 import models.Application
+import models.auth.Credentials
 import models.graphql.{GraphQLContext, Schema, TracingExtension}
-import models.user.User
 import sangria.execution.{ExceptionHandler, Executor, HandledException, QueryReducer}
 import sangria.marshalling.circe._
 import sangria.parser.QueryParser
@@ -26,7 +26,9 @@ class GraphQLService @javax.inject.Inject() (tracing: TracingService, registry: 
 
   private[this] val rejectComplexQueries = QueryReducer.rejectComplexQueries[Any](1000, (_, _) => new IllegalArgumentException(s"Query is too complex."))
 
-  def executeQuery(app: Application, query: String, variables: Option[Json], operation: Option[String], user: User, debug: Boolean)(implicit t: TraceData) = {
+  def executeQuery(
+    app: Application, query: String, variables: Option[Json], operation: Option[String], creds: Credentials, debug: Boolean
+  )(implicit t: TraceData) = {
     tracing.trace(s"graphql.service.execute.${operation.getOrElse("adhoc")}") { td =>
       if (!td.span.isNoop) {
         td.span.tag("query", query)
@@ -41,7 +43,7 @@ class GraphQLService @javax.inject.Inject() (tracing: TracingService, registry: 
           val ret = Executor.execute(
             schema = Schema.schema,
             queryAst = ast,
-            userContext = GraphQLContext(app, registry, user, td),
+            userContext = GraphQLContext(app, registry, creds, td),
             operationName = operation,
             variables = variables.getOrElse(Json.obj()),
             deferredResolver = Schema.resolver,

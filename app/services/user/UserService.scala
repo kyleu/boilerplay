@@ -5,6 +5,7 @@ import java.util.UUID
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.util.PasswordHasher
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
+import models.auth.Credentials
 import models.queries.auth._
 import models.result.data.DataField
 import models.result.filter.Filter
@@ -19,10 +20,10 @@ import scala.concurrent.Future
 
 @javax.inject.Singleton
 class UserService @javax.inject.Inject() (override val tracing: TracingService, hasher: PasswordHasher) extends ModelServiceHelper[User]("user") {
-  def getByPrimaryKey(user: User, id: UUID)(implicit trace: TraceData) = traceB("get.by.primary.key") { td =>
+  def getByPrimaryKey(creds: Credentials, id: UUID)(implicit trace: TraceData) = traceB("get.by.primary.key") { td =>
     ApplicationDatabase.query(UserQueries.getByPrimaryKey(id))(td)
   }
-  def getByPrimaryKeySeq(user: User, idSeq: Seq[UUID])(implicit trace: TraceData) = traceB("get.by.primary.key.sequence") { td =>
+  def getByPrimaryKeySeq(creds: Credentials, idSeq: Seq[UUID])(implicit trace: TraceData) = traceB("get.by.primary.key.sequence") { td =>
     ApplicationDatabase.query(UserQueries.getByPrimaryKeySeq(idSeq))(td)
   }
 
@@ -30,24 +31,26 @@ class UserService @javax.inject.Inject() (override val tracing: TracingService, 
     ApplicationDatabase.query(UserQueries.getByRoleSeq(roleSeq))(td)
   }
 
-  override def countAll(user: User, filters: Seq[Filter] = Nil)(implicit trace: TraceData) = traceB("count.all") { td =>
+  override def countAll(creds: Credentials, filters: Seq[Filter] = Nil)(implicit trace: TraceData) = traceB("count.all") { td =>
     ApplicationDatabase.query(UserQueries.countAll(filters))(td)
   }
   override def getAll(
-    user: User, filters: Seq[Filter], orderBys: Seq[OrderBy], limit: Option[Int] = None, offset: Option[Int] = None
+    creds: Credentials, filters: Seq[Filter], orderBys: Seq[OrderBy], limit: Option[Int] = None, offset: Option[Int] = None
   )(implicit trace: TraceData) = {
     traceB("get.all")(td => ApplicationDatabase.query(UserQueries.getAll(filters, orderBys, limit, offset))(td))
   }
 
-  override def searchCount(user: User, q: String, filters: Seq[Filter])(implicit trace: TraceData) = {
+  override def searchCount(creds: Credentials, q: String, filters: Seq[Filter])(implicit trace: TraceData) = {
     traceB("search.count")(td => ApplicationDatabase.query(UserQueries.searchCount(q, filters))(td))
   }
   override def search(
-    user: User, q: String, filters: Seq[Filter], orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int]
+    creds: Credentials, q: String, filters: Seq[Filter], orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int]
   )(implicit trace: TraceData) = {
     traceB("search")(td => ApplicationDatabase.query(UserQueries.search(q, filters, orderBys, limit, offset))(td))
   }
-  def searchExact(user: User, q: String, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData) = {
+  def searchExact(
+    creds: Credentials, q: String, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None
+  )(implicit trace: TraceData) = {
     traceB("search.exact")(td => ApplicationDatabase.query(UserQueries.searchExact(q, orderBys, limit, offset))(td))
   }
 
@@ -55,25 +58,25 @@ class UserService @javax.inject.Inject() (override val tracing: TracingService, 
     ApplicationDatabase.query(UserSearchQueries.IsUsernameInUse(name))(td)
   }
 
-  def insert(user: User, model: User)(implicit trace: TraceData) = traceB("insert") { td =>
+  def insert(creds: Credentials, model: User)(implicit trace: TraceData) = traceB("insert") { td =>
     ApplicationDatabase.execute(UserQueries.insert(model))(td)
     log.info(s"Inserted user [$model].")
     UserCache.cacheUser(model)
     model
   }
 
-  def create(user: User, fields: Seq[DataField])(implicit trace: TraceData) = traceB("create") { td =>
+  def create(creds: Credentials, fields: Seq[DataField])(implicit trace: TraceData) = traceB("create") { td =>
     ApplicationDatabase.execute(UserQueries.create(fields))(td)
     services.audit.AuditHelper.onInsert("Identity", Seq(fieldVal(fields, "id")), fields)
-    getByPrimaryKey(user, UUID.fromString(fieldVal(fields, "id")))
+    getByPrimaryKey(creds, UUID.fromString(fieldVal(fields, "id")))
   }
 
-  def update(user: User, id: UUID, fields: Seq[DataField])(implicit trace: TraceData) = {
+  def update(creds: Credentials, id: UUID, fields: Seq[DataField])(implicit trace: TraceData) = {
     traceB("update")(td => ApplicationDatabase.query(UserQueries.getByPrimaryKey(id))(td) match {
       case Some(current) if fields.isEmpty => current -> s"No changes required for Identity [$id]."
       case Some(current) =>
         ApplicationDatabase.execute(UserQueries.update(id, fields))(td)
-        getByPrimaryKey(user, id)(td) match {
+        getByPrimaryKey(creds, id)(td) match {
           case Some(newModel) =>
             services.audit.AuditHelper.onUpdate("Identity", Seq(DataField("id", Some(id.toString))), current.toDataFields, fields)
             newModel -> s"Updated [${fields.size}] fields of Identity [$id]."
@@ -83,15 +86,15 @@ class UserService @javax.inject.Inject() (override val tracing: TracingService, 
     })
   }
 
-  def updateUser(user: User, model: User)(implicit trace: TraceData) = traceB("update") { td =>
+  def updateUser(creds: Credentials, model: User)(implicit trace: TraceData) = traceB("update") { td =>
     ApplicationDatabase.execute(UserQueries.UpdateUser(model))(td)
     log.info(s"Updated user [$model].")
     UserCache.cacheUser(model)
     model
   }
 
-  def remove(user: User, id: UUID)(implicit trace: TraceData) = traceB("remove")(td => ApplicationDatabase.transaction { (txTd, conn) =>
-    getByPrimaryKey(user, id)(txTd) match {
+  def remove(creds: Credentials, id: UUID)(implicit trace: TraceData) = traceB("remove")(td => ApplicationDatabase.transaction { (txTd, conn) =>
+    getByPrimaryKey(creds, id)(txTd) match {
       case Some(model) =>
         UserCache.getUser(id).foreach { user =>
           services.audit.AuditHelper.onRemove("User", Seq(id.toString), user.toDataFields)

@@ -3,11 +3,11 @@ package models
 import java.util.UUID
 
 import akka.actor.ActorRef
-import models.user.User
+import models.auth.Credentials
 
 sealed trait InternalMessage
 
-case class SocketStarted(user: User, socketId: UUID, conn: ActorRef) extends InternalMessage
+case class SocketStarted(creds: Credentials, socketId: UUID, conn: ActorRef) extends InternalMessage
 case class SocketStopped(socketId: UUID) extends InternalMessage
 
 case object GetSystemStatus extends InternalMessage

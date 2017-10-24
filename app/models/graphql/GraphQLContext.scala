@@ -1,8 +1,8 @@
 package models.graphql
 
 import models.Application
-import models.user.User
+import models.auth.Credentials
 import services.ServiceRegistry
 import util.tracing.TraceData
 
-case class GraphQLContext(app: Application, services: ServiceRegistry, user: User, trace: TraceData)
+case class GraphQLContext(app: Application, services: ServiceRegistry, creds: Credentials, trace: TraceData)
