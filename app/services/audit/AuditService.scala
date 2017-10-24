@@ -75,7 +75,6 @@ class AuditService @javax.inject.Inject() (
   }
   def create(creds: Credentials, fields: Seq[DataField])(implicit trace: TraceData) = traceB("create") { td =>
     ApplicationDatabase.execute(AuditQueries.create(fields))(td)
-    services.audit.AuditHelper.onInsert("Audit", Seq(fieldVal(fields, "id")), fields)
     getByPrimaryKey(creds, UUID.fromString(fieldVal(fields, "id")))
   }
 
@@ -94,9 +93,7 @@ class AuditService @javax.inject.Inject() (
       case Some(current) =>
         ApplicationDatabase.execute(AuditQueries.update(id, fields))(td)
         ApplicationDatabase.query(AuditQueries.getByPrimaryKey(id))(td) match {
-          case Some(newModel) =>
-            services.audit.AuditHelper.onUpdate("Audit", Seq(DataField("id", Some(id.toString))), current.toDataFields, fields)
-            newModel -> s"Updated [${fields.size}] fields of Audit [$id]."
+          case Some(newModel) => newModel -> s"Updated [${fields.size}] fields of Audit [$id]."
           case None => throw new IllegalStateException(s"Cannot find Audit matching [$id].")
         }
       case None => throw new IllegalStateException(s"Cannot find Audit matching [$id].")

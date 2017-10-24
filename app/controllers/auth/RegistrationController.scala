@@ -62,8 +62,9 @@ class RegistrationController @javax.inject.Inject() (
               profile = loginInfo,
               role = role
             )
-            val userSaved = app.userService.insert(Credentials(user, request.remoteAddress), user)
-            AuditHelper.onInsert("user", Seq(userSaved.id.toString), userSaved.toDataFields)
+            val creds = Credentials(user, request.remoteAddress)
+            val userSaved = app.userService.insert(creds, user)
+            AuditHelper.onInsert("user", Seq(userSaved.id.toString), userSaved.toDataFields, creds)
             val result = request.session.get("returnUrl") match {
               case Some(url) => Redirect(url).withSession(request.session - "returnUrl")
               case None => Redirect(controllers.routes.HomeController.home())

@@ -67,7 +67,7 @@ class UserService @javax.inject.Inject() (override val tracing: TracingService, 
 
   def create(creds: Credentials, fields: Seq[DataField])(implicit trace: TraceData) = traceB("create") { td =>
     ApplicationDatabase.execute(UserQueries.create(fields))(td)
-    services.audit.AuditHelper.onInsert("Identity", Seq(fieldVal(fields, "id")), fields)
+    services.audit.AuditHelper.onInsert("User", Seq(fieldVal(fields, "id")), fields, creds)
     getByPrimaryKey(creds, UUID.fromString(fieldVal(fields, "id")))
   }
 
@@ -78,7 +78,7 @@ class UserService @javax.inject.Inject() (override val tracing: TracingService, 
         ApplicationDatabase.execute(UserQueries.update(id, fields))(td)
         getByPrimaryKey(creds, id)(td) match {
           case Some(newModel) =>
-            services.audit.AuditHelper.onUpdate("Identity", Seq(DataField("id", Some(id.toString))), current.toDataFields, fields)
+            services.audit.AuditHelper.onUpdate("User", Seq(DataField("id", Some(id.toString))), current.toDataFields, fields, creds)
             newModel -> s"Updated [${fields.size}] fields of Identity [$id]."
           case None => throw new IllegalStateException(s"Cannot find Identity matching [$id].")
         }
@@ -97,7 +97,7 @@ class UserService @javax.inject.Inject() (override val tracing: TracingService, 
     getByPrimaryKey(creds, id)(txTd) match {
       case Some(model) =>
         UserCache.getUser(id).foreach { user =>
-          services.audit.AuditHelper.onRemove("User", Seq(id.toString), user.toDataFields)
+          services.audit.AuditHelper.onRemove("User", Seq(id.toString), user.toDataFields, creds)
         }
         ApplicationDatabase.execute(UserQueries.removeByPrimaryKey(id), Some(conn))(txTd)
         UserCache.removeUser(id)

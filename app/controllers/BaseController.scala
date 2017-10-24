@@ -17,8 +17,6 @@ import scala.language.implicitConversions
 import scala.concurrent.{ExecutionContext, Future}
 
 abstract class BaseController(val name: String) extends InjectedController with Instrumented with Logging {
-  private[this] lazy val serverName = Some(InetAddress.getLocalHost.getHostName)
-
   protected def app: Application
 
   protected def withoutSession(action: String)(
@@ -63,7 +61,7 @@ abstract class BaseController(val name: String) extends InjectedController with 
   def audit(models: AuditModelPk*)(
     creds: Credentials, act: String = "development", tags: Map[String, String] = Map.empty
   )(implicit request: Request[AnyContent]) = {
-    AuditStart(action = act, app = Some(util.Config.projectId), client = Some(request.remoteAddress), server = serverName, tags = tags, models = models)
+    AuditStart(action = act, app = Some(util.Config.projectId), client = request.remoteAddress, tags = tags, models = models)
   }
 
   protected def modelForm(rawForm: Option[Map[String, Seq[String]]]) = ControllerUtilities.modelForm(rawForm)

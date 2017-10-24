@@ -5,7 +5,7 @@ import java.util.UUID
 import controllers.BaseController
 import io.circe.syntax._
 import models.Application
-import models.audit.AuditResult
+import models.audit.{Audit, AuditResult}
 import models.result.RelationCount
 import models.result.orderBy.OrderBy
 
@@ -21,8 +21,9 @@ class AuditController @javax.inject.Inject() (
   def createForm = withSession("create.form", admin = true) { implicit request => implicit td =>
     val cancel = controllers.admin.audit.routes.AuditController.list()
     val call = controllers.admin.audit.routes.AuditController.create()
+    val audit = Audit(userId = request.identity.id, client = "test", act = "test")
     Future.successful(Ok(views.html.admin.audit.auditForm(
-      request.identity, models.audit.Audit.empty(userId = Some(request.identity.id)), "New Audit", cancel, call, isNew = true, debug = app.config.debug
+      request.identity, audit, "New Audit", cancel, call, isNew = true, debug = app.config.debug
     )))
   }
 

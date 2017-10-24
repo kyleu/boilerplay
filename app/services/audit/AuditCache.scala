@@ -70,10 +70,8 @@ class AuditCache(supervisor: ActorRef, lookup: AuditLookup) extends Logging {
     val audit = Audit(
       id = msg.id,
       act = current._1.action,
-      app = current._1.app.getOrElse(util.Config.projectId),
       client = current._1.client,
-      server = current._1.server,
-      userId = Some(creds.user.id),
+      userId = creds.user.id,
       tags = current._1.tags ++ msg.tags,
       msg = msg.msg,
       records = updates ++ inserts,

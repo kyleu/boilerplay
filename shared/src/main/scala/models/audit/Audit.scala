@@ -1,5 +1,6 @@
 package models.audit
 
+import java.net.InetAddress
 import java.time.LocalDateTime
 import java.util.UUID
 
@@ -12,16 +13,16 @@ object Audit {
   implicit val jsonEncoder: Encoder[Audit] = deriveEncoder
   implicit val jsonDecoder: Decoder[Audit] = deriveDecoder
 
-  def empty(act: String = "default", userId: Option[UUID] = None) = Audit(act = act, userId = userId)
+  lazy val serverName = InetAddress.getLocalHost.getHostName
 }
 
 case class Audit(
     id: UUID = UUID.randomUUID,
-    act: String = "???",
+    act: String,
     app: String = util.Config.projectId,
-    client: Option[String] = None,
-    server: Option[String] = None,
-    userId: Option[UUID] = None,
+    client: String,
+    server: String = Audit.serverName,
+    userId: UUID,
     tags: Map[String, String] = Map.empty,
     msg: String = "n/a",
     records: Seq[AuditRecord] = Nil,
@@ -32,9 +33,9 @@ case class Audit(
     DataField("id", Some(id.toString)),
     DataField("act", Some(act.toString)),
     DataField("app", Some(app.toString)),
-    DataField("client", client.map(_.toString)),
-    DataField("server", server.map(_.toString)),
-    DataField("userId", userId.map(_.toString)),
+    DataField("client", Some(client.toString)),
+    DataField("server", Some(server.toString)),
+    DataField("userId", Some(userId.toString)),
     DataField("tags", Some(tags.toString)),
     DataField("msg", Some(msg)),
     DataField("started", Some(started.toString)),

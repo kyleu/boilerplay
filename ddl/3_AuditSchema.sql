@@ -1,12 +1,12 @@
 ﻿create extension if not exists hstore;
 
 create table if not exists "audit" (
-  "id" uuid NOT NULL,
+  "id" uuid not null,
   "act" character varying(32) not null,
   "app" character varying(64) not null,
-  "client" character varying(32),
-  "server" character varying(32),
-  "user_id" uuid,
+  "client" character varying(32) not null,
+  "server" character varying(32) not null,
+  "user_id" uuid not null,
   "tags" hstore not null,
   "msg" text not null,
   "started" timestamp without time zone not null,

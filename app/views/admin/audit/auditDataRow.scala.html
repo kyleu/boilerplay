@@ -4,12 +4,12 @@
   <td>@model.app</td>
   <td>@model.client</td>
   <td>@model.server</td>
-  <td>@model.userId.map { u =>
-    @u.toString.take(8)
-    <a class="theme-text" href="@controllers.admin.user.routes.UserController.view(u)">
+  <td>
+    @model.userId.toString.take(8)
+    <a class="theme-text" href="@controllers.admin.user.routes.UserController.view(model.userId)">
       <i class="fa @models.template.Icons.user"></i>
     </a>
-  }</td>
+  </td>
   <td>@model.tags.map(t => t._1 + ": " + t._2).mkString(", ")</td>
   <td>@model.msg</td>
   <td>@model.started</td>

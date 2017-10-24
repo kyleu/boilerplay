@@ -61,7 +61,7 @@ class AuditRecordService @javax.inject.Inject() (override val tracing: TracingSe
   def insert(creds: Credentials, model: AuditRecord)(implicit trace: TraceData) = {
     traceB("insert")(td => ApplicationDatabase.execute(AuditRecordQueries.insert(model))(td) match {
       case 1 => getByPrimaryKey(creds, model.id)(td).map { model =>
-        services.audit.AuditHelper.onInsert("AuditRecord", Seq(model.id.toString), model.toDataFields)
+        services.audit.AuditHelper.onInsert("AuditRecord", Seq(model.id.toString), model.toDataFields, creds)
         model
       }
       case _ => throw new IllegalStateException("Unable to find newly-inserted Audit Record.")
@@ -72,14 +72,14 @@ class AuditRecordService @javax.inject.Inject() (override val tracing: TracingSe
   }
   def create(creds: Credentials, fields: Seq[DataField])(implicit trace: TraceData) = traceB("create") { td =>
     ApplicationDatabase.execute(AuditRecordQueries.create(fields))(td)
-    services.audit.AuditHelper.onInsert("AuditRecord", Seq(fieldVal(fields, "id")), fields)
+    services.audit.AuditHelper.onInsert("AuditRecord", Seq(fieldVal(fields, "id")), fields, creds)
     getByPrimaryKey(creds, UUID.fromString(fieldVal(fields, "id")))
   }
 
   def remove(creds: Credentials, id: UUID)(implicit trace: TraceData) = {
     traceB("remove")(td => getByPrimaryKey(creds, id)(td) match {
       case Some(current) =>
-        services.audit.AuditHelper.onRemove("AuditRecord", Seq(id.toString), current.toDataFields)
+        services.audit.AuditHelper.onRemove("AuditRecord", Seq(id.toString), current.toDataFields, creds)
         ApplicationDatabase.execute(AuditRecordQueries.removeByPrimaryKey(id))(td)
         current
       case None => throw new IllegalStateException(s"Cannot find AuditRecord matching [$id].")
@@ -93,7 +93,7 @@ class AuditRecordService @javax.inject.Inject() (override val tracing: TracingSe
         ApplicationDatabase.execute(AuditRecordQueries.update(id, fields))(td)
         getByPrimaryKey(creds, id)(td) match {
           case Some(newModel) =>
-            services.audit.AuditHelper.onUpdate("AuditRecord", Seq(DataField("id", Some(id.toString))), current.toDataFields, fields)
+            services.audit.AuditHelper.onUpdate("AuditRecord", Seq(DataField("id", Some(id.toString))), current.toDataFields, fields, creds)
             newModel -> s"Updated [${fields.size}] fields of Audit Record [$id]."
           case None => throw new IllegalStateException(s"Cannot find AuditRecord matching [$id].")
         }
