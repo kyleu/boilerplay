@@ -144,7 +144,7 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 <div class="page-content row">
 <div class="small-12 large-9 column" id="docs">
 <h2><a href="#technology" name="technology" class="anchor"><span class="anchor-link"></span></a>Technology</h2>
-<p>The Play application communicates over a WebSocket to a pool of Akka actors managing connections. Serialization is handled by Play Json, and all database communication runs via postgres-async. Scala.js compiles the shared code and provides an in-browser component. </p>
+<p>The Play application communicates over a WebSocket to a pool of Akka actors managing connections. Serialization is handled by circe, and all database communication runs via jdbc. Scala.js compiles the shared code and provides an in-browser component. </p>
 <p>The index page opens a websocket connection for bidirectional communication, handled via Play and Akka.</p>
 <p>A GraphQL schema is provided, accessible in the administration section.</p>
 <p>Boilerplay relies on a whole lot of tremendous open source projects. Here&rsquo;s a few of them.</p>
@@ -160,7 +160,6 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
   <li><a href="http://materializecss.com">Materialize CSS</a></li>
   <li><a href="https://github.com/lloydmeta/enumeratum">Enumeratum</a></li>
   <li><a href="https://circe.github.io/circe">circe</a></li>
-  <li><a href="https://github.com/mauricio/postgresql-async">Postgres-async</a></li>
   <li><a href="https://www.silhouette.rocks">Silhouette</a></li>
   <li><a href="http://metrics.dropwizard.io">Dropwizard Metrics</a></li>
   <li><a href="http://netty.io">Netty</a></li>
