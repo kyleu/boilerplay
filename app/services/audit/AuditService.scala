@@ -21,6 +21,21 @@ import util.web.TracingWSClient
 class AuditService @javax.inject.Inject() (
     override val tracing: TracingService, inject: Injector, config: Configuration, ws: TracingWSClient, lookup: AuditLookup, fu: FutureUtils
 ) extends ModelServiceHelper[Audit]("audit") {
+  lazy val supervisor = inject.instanceOf(classOf[Application]).supervisor
+  AuditHelper.init(this)
+  lazy val cache = new AuditCache(supervisor, lookup)
+
+  def callback(a: Audit)(implicit trace: TraceData) = if (a.records.exists(_.changes.nonEmpty)) {
+    supervisor ! ActorSupervisor.Broadcast(models.AuditNotification(a))
+    AuditNotifications.postToSlack(ws, config.slackConfig, a)
+    AuditNotifications.persist(a)
+    log.info(a.changeLog)
+    a
+  } else {
+    log.info(s"Ignoring audit [${a.id}], as it has no changes.")
+    a
+  }
+
   def getByPrimaryKey(creds: Credentials, id: UUID)(implicit trace: TraceData) = {
     traceB("get.by.primary.key")(td => ApplicationDatabase.query(AuditQueries.getByPrimaryKey(id))(td))
   }
@@ -102,20 +117,5 @@ class AuditService @javax.inject.Inject() (
 
   def csvFor(operation: String, totalCount: Int, rows: Seq[Audit])(implicit trace: TraceData) = {
     traceB("export.csv")(td => util.CsvUtils.csvFor(Some(key), totalCount, rows, AuditQueries.fields)(td))
-  }
-
-  lazy val supervisor = inject.instanceOf(classOf[Application]).supervisor
-  AuditHelper.init(this)
-  lazy val cache = new AuditCache(supervisor, lookup)
-
-  def callback(a: Audit)(implicit trace: TraceData) = if (a.records.exists(_.changes.nonEmpty)) {
-    supervisor ! ActorSupervisor.Broadcast(models.AuditNotification(a))
-    AuditNotifications.postToSlack(ws, config.slackConfig, a)
-    AuditNotifications.persist(a)
-    log.info(a.changeLog)
-    a
-  } else {
-    log.info(s"Ignoring audit [${a.id}], as it has no changes.")
-    a
   }
 }

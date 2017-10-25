@@ -7,7 +7,7 @@
       <div class="right"><a class="theme-text" href="@controllers.admin.audit.routes.AuditController.editForm(model.id)">Edit</a></div>
       <div class="right"><a class="theme-text remove-link" onclick="return confirm('Are you sure you want to remove this Audit?')" href="@controllers.admin.audit.routes.AuditController.remove(model.id)">Remove</a></div>
       <h5>
-        <i class="fa @models.template.Icons.audit"></i>
+        <a class="theme-text" href="@controllers.admin.audit.routes.AuditController.list()"><i class="fa @models.template.Icons.audit"></i></a>
         Audit [@model.id]
       </h5>
     </div>

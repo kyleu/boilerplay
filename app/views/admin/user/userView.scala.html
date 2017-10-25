@@ -5,7 +5,7 @@
     <div class="collection-header">
       <div class="right"><a class="theme-text" href="@controllers.admin.user.routes.UserController.editForm(model.id)">Edit</a></div>
       <h5>
-        <i class="fa @models.template.Icons.user"></i>
+        <a class="theme-text" href="@controllers.admin.user.routes.UserController.list()"><i class="fa @models.template.Icons.user"></i></a>
         User [@model.id] @if(self.id == model.id) { <span>(You)</span> }
       </h5>
     </div>
