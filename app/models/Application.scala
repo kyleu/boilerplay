@@ -67,12 +67,10 @@ class Application @javax.inject.Inject() (
     FileService.setRootDir(config.dataDir)
 
     ApplicationDatabase.open(config.cnf, tracing)
-    ApplicationDatabase.open(config.cnf, tracing)
-
     MasterDdl.init()
     settingsService.load()
 
-    "OK"
+    true
   }
 
   private[this] def stop() = {

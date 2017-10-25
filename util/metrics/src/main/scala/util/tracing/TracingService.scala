@@ -29,7 +29,7 @@ class TracingService @javax.inject.Inject() (actorSystem: ActorSystem, cnf: Metr
     }
     result
   }
-  def topLevelTraceBlocking[A](name: String)(f: TraceData => A) = {
+  def topLevelTraceBlocking[A](name: String)(f: TraceData => A): A = {
     val span = serverReceived(spanName = name, span = newSpan(Map.empty[String, String])((headers, key) => headers.get(key)))
     span.tag("top.level", "true")
     try {
@@ -37,7 +37,9 @@ class TracingService @javax.inject.Inject() (actorSystem: ActorSystem, cnf: Metr
       serverSend(span)
       result
     } catch {
-      case NonFatal(x) => serverSend(span, "failed" -> s"Finished with exception: ${x.getMessage}")
+      case NonFatal(x) =>
+        serverSend(span, "failed" -> s"Finished with exception: ${x.getMessage}")
+        throw x
     }
   }
 
