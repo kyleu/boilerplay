@@ -20,7 +20,7 @@ class AuditLifecycleController @javax.inject.Inject() (override val app: Applica
   }
 
   def testForm() = withSession("form") { implicit request => implicit td =>
-    val sJson = audit(pk("user", request.identity.id))(request).asJson.spaces2
+    val sJson = AuditHelper.auditStart(AuditHelper.pk("user", request.identity.id))(request).asJson.spaces2
     Future.successful(Ok(views.html.admin.audit.testForm(request.identity, sJson, app.config.debug)))
   }
 

@@ -11,6 +11,7 @@ import util.{Logging, NullUtils}
 object AuditHelper extends Logging {
   private[this] var inst: Option[AuditService] = None
   private[this] def getInst = inst.getOrElse(throw new IllegalStateException("Not initialized."))
+
   def init(service: AuditService) = {
     inst.foreach(_ => throw new IllegalStateException("Double init."))
     inst = Some(service)
@@ -47,5 +48,10 @@ object AuditHelper extends Logging {
     val auditId = UUID.randomUUID
     val records = Seq(AuditRecord(auditId = auditId, t = t, pk = pk, changes = fields.map(f => AuditField(f.k, None, f.v))))
     onAudit(Audit(id = auditId, act = "remove", client = creds.remoteAddress, userId = creds.user.id, msg = msg, records = records))
+  }
+
+  def pk(t: String, v: Any*) = AuditModelPk(t, v.map(_.toString))
+  def auditStart(models: AuditModelPk*)(creds: Credentials, act: String = "development", tags: Map[String, String] = Map.empty) = {
+    AuditStart(action = act, app = Some(util.Config.projectId), client = creds.remoteAddress, tags = tags, models = models)
   }
 }

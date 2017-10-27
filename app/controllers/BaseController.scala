@@ -57,13 +57,6 @@ abstract class BaseController(val name: String) extends InjectedController with 
 
   protected implicit def toCredentials(request: SecuredRequest[AuthEnv, _]) = Credentials.fromRequest(request)
 
-  def pk(t: String, v: Any*) = AuditModelPk(t, v.map(_.toString))
-  def audit(models: AuditModelPk*)(
-    creds: Credentials, act: String = "development", tags: Map[String, String] = Map.empty
-  )(implicit request: Request[AnyContent]) = {
-    AuditStart(action = act, app = Some(util.Config.projectId), client = request.remoteAddress, tags = tags, models = models)
-  }
-
   protected def modelForm(rawForm: Option[Map[String, Seq[String]]]) = ControllerUtilities.modelForm(rawForm)
 
   private[this] def failRequest(request: UserAwareRequest[AuthEnv, AnyContent]) = {
