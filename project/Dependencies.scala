@@ -8,7 +8,7 @@ object Dependencies {
     val ws = play.sbt.PlayImport.ws
     val guice = play.sbt.PlayImport.guice
     val cache = play.sbt.PlayImport.ehcache
-    val json = "com.typesafe.play" %% "play-json" % "2.6.6"
+    val json = "com.typesafe.play" %% "play-json" % "2.6.7"
     val test = "com.typesafe.play" %% "play-test" % version % "test"
   }
 
