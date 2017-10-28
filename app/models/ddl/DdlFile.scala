@@ -2,7 +2,14 @@ package models.ddl
 
 import java.time.LocalDateTime
 
+import io.circe.{Decoder, Encoder}
+import io.circe.generic.semiauto._
+import io.circe.java8.time._
+
 object DdlFile {
+  implicit val jsonEncoder: Encoder[DdlFile] = deriveEncoder
+  implicit val jsonDecoder: Decoder[DdlFile] = deriveDecoder
+
   def split(sql: String, delimiter: Char = ';') = {
     val len = sql.length
     var startIndex = 0

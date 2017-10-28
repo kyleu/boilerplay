@@ -39,7 +39,9 @@ trait SearchQueries[T <: Product] { this: BaseQueries[T] =>
     values = if (q.isEmpty) { filters.flatMap(_.v) } else { filters.flatMap(_.v) ++ searchColumns.map(_ => "%" + q + "%") }
   )
 
-  protected case class Search(q: String, filters: Seq[Filter], orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int]) extends Query[List[T]] {
+  protected case class Search(
+      q: String, filters: Seq[Filter] = Nil, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None
+  ) extends Query[List[T]] {
     override val name = s"$key.search"
     private[this] val (whereClause, orderBy) = {
       getResultSql(filters = filters, orderBys = orderBys, limit = limit, offset = offset, fields = fields, add = Some(searchClause(q)), engine = engine)

@@ -35,7 +35,7 @@ object MasterDdl extends Logging {
     }
 
     val ids = ApplicationDatabase.query(DdlQueries.GetIds)
-    log.debug(s"Found [${ids.size}/${files.size}] applied ddl files.")
+    log.info(s"Found [${ids.size}/${files.size}] applied ddl files.")
 
     val candidates = files.filterNot(f => ids.contains(f.id))
     val result = candidates.map { f =>

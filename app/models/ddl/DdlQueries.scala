@@ -3,6 +3,7 @@ package models.ddl
 import models.database.DatabaseFieldType._
 import models.database._
 import models.queries.BaseQueries
+import models.result.filter.Filter
 
 object DdlQueries extends BaseQueries[DdlFile]("ddl", "ddl") {
   override val fields = Seq(DatabaseField("id"), DatabaseField("name"), DatabaseField("sql"), DatabaseField("applied"))

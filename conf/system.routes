@@ -14,6 +14,9 @@ GET         /explore             controllers.admin.system.AdminController.explor
 GET         /settings            controllers.admin.system.SettingsController.settings
 POST        /settings            controllers.admin.system.SettingsController.saveSettings
 
+# DDL Files
+GET         /ddl                 controllers.admin.system.DdlFileController.list
+
 # Sandboxes
 GET         /sandbox             controllers.admin.system.SandboxController.list
 GET         /sandbox/:key        controllers.admin.system.SandboxController.run(key, arg: Option[String] ?= None)
