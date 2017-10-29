@@ -4,6 +4,7 @@ import java.time.{LocalDate, LocalDateTime, LocalTime}
 import java.util.UUID
 
 import enumeratum._
+import org.postgresql.jdbc.PgArray
 
 sealed abstract class DatabaseFieldType[T](val key: String, val isNumeric: Boolean = false) extends EnumEntry {
   def apply(row: Row, col: String): T = row.as[T](col)
@@ -50,7 +51,23 @@ object DatabaseFieldType extends Enum[DatabaseFieldType[_]] {
   case object LongType extends DatabaseFieldType[Long]("long", isNumeric = true)
   case object FloatType extends DatabaseFieldType[Float]("float", isNumeric = true)
   case object DoubleType extends DatabaseFieldType[Double]("double", isNumeric = true)
-  case object ByteArrayType extends DatabaseFieldType[Array[Byte]]("bytearray")
+
+  case object ByteArrayType extends DatabaseFieldType[Array[Byte]]("byteArray") {
+    override def apply(row: Row, col: String) = row.as[PgArray](col).getArray.asInstanceOf[Array[Byte]]
+    override def opt(row: Row, col: String) = row.asOpt[PgArray](col).map(_.asInstanceOf[Array[Byte]])
+  }
+  case object LongArrayType extends DatabaseFieldType[Array[Long]]("longArray") {
+    override def apply(row: Row, col: String) = row.as[PgArray](col).getArray.asInstanceOf[Array[Long]]
+    override def opt(row: Row, col: String) = row.asOpt[PgArray](col).map(_.asInstanceOf[Array[Long]])
+  }
+  case object StringArrayType extends DatabaseFieldType[Array[String]]("stringArray") {
+    override def apply(row: Row, col: String) = row.as[PgArray](col).getArray.asInstanceOf[Array[String]]
+    override def opt(row: Row, col: String) = row.asOpt[PgArray](col).map(_.asInstanceOf[Array[String]])
+  }
+  case object UuidArrayType extends DatabaseFieldType[Array[UUID]]("uuidArray") {
+    override def apply(row: Row, col: String) = row.as[PgArray](col).getArray.asInstanceOf[Array[UUID]]
+    override def opt(row: Row, col: String) = row.asOpt[PgArray](col).map(_.asInstanceOf[Array[UUID]])
+  }
 
   case object DateType extends DatabaseFieldType[LocalDate]("date") {
     override def apply(row: Row, col: String) = row.as[java.sql.Date](col).toLocalDate
@@ -72,7 +89,6 @@ object DatabaseFieldType extends Enum[DatabaseFieldType[_]] {
 
   case object ObjectType extends DatabaseFieldType[String]("object")
   case object StructType extends DatabaseFieldType[String]("struct")
-  case object ArrayType extends DatabaseFieldType[Array[Byte]]("array")
 
   case object TagsType extends DatabaseFieldType[Seq[models.tag.Tag]]("tags") {
     override def apply(row: Row, col: String) = row.as[Any](col) match {

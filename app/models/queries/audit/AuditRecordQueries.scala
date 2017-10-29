@@ -21,7 +21,7 @@ object AuditRecordQueries extends BaseQueries[AuditRecord]("auditRecord", "audit
     DatabaseField(title = "Id", prop = "id", col = "id", typ = UuidType),
     DatabaseField(title = "Audit Id", prop = "auditId", col = "audit_id", typ = UuidType),
     DatabaseField(title = "Type", prop = "t", col = "t", typ = StringType),
-    DatabaseField(title = "Pk", prop = "pk", col = "pk", typ = ArrayType),
+    DatabaseField(title = "Pk", prop = "pk", col = "pk", typ = StringArrayType),
     DatabaseField(title = "Changes", prop = "changes", col = "changes", typ = UnknownType)
   )
   override protected val pkColumns = Seq("id")
@@ -62,7 +62,7 @@ object AuditRecordQueries extends BaseQueries[AuditRecord]("auditRecord", "audit
     id = UuidType(row, "id"),
     auditId = UuidType(row, "audit_id"),
     t = StringType(row, "t"),
-    pk = row.as[PgArray]("pk").getArray.asInstanceOf[Array[String]],
+    pk = StringArrayType(row, "pk"),
     changes = parse(row.as[PGobject]("changes").getValue).right.get.as[List[AuditField]].right.get
   )
 }
