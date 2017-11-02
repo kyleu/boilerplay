@@ -26,7 +26,7 @@ class AuditService @javax.inject.Inject() (
   lazy val cache = new AuditCache(supervisor, lookup)
 
   def callback(a: Audit)(implicit trace: TraceData) = if (a.records.exists(_.changes.nonEmpty)) {
-    supervisor ! ActorSupervisor.Broadcast(models.AuditNotification(a))
+    supervisor ! ActorSupervisor.Broadcast("audit", models.AuditNotification(a))
     AuditNotifications.postToSlack(ws, config.slackConfig, a)
     AuditNotifications.persist(a)
     log.info(a.changeLog)

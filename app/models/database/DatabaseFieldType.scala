@@ -92,10 +92,10 @@ object DatabaseFieldType extends Enum[DatabaseFieldType[_]] {
 
   case object TagsType extends DatabaseFieldType[Seq[models.tag.Tag]]("tags") {
     override def apply(row: Row, col: String) = row.as[Any](col) match {
-      case m: java.util.HashMap[_, _] => models.tag.Tag.seqFromJavaMap(m)
+      case m: java.util.HashMap[_, _] => models.tag.Tag.fromJavaMap(m)
     }
     override def opt(row: Row, col: String) = row.asOpt[Any](col).map {
-      case m: java.util.HashMap[_, _] => models.tag.Tag.seqFromJavaMap(m)
+      case m: java.util.HashMap[_, _] => models.tag.Tag.fromJavaMap(m)
     }
   }
 

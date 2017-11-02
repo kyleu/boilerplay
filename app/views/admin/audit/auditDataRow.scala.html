@@ -10,7 +10,7 @@
       <i class="fa @models.template.Icons.user"></i>
     </a>
   </td>
-  <td>@model.tags.map(t => t._1 + ": " + t._2).mkString(", ")</td>
+  <td>@models.tag.Tag.toString(model.tags)</td>
   <td>@model.msg</td>
   <td>@model.started</td>
   <td>@model.completed</td>

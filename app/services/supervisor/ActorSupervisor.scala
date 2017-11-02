@@ -12,8 +12,8 @@ import util.metrics.{InstrumentedActor, MetricsServletActor}
 import util.{DateUtils, Logging}
 
 object ActorSupervisor {
-  case class Broadcast(msg: ResponseMessage)
-  case class SocketRecord(userId: UUID, name: String, actorRef: ActorRef, started: LocalDateTime)
+  case class Broadcast(channel: String, msg: ResponseMessage)
+  case class SocketRecord(userId: UUID, name: String, channel: String, actorRef: ActorRef, started: LocalDateTime)
   protected val sockets = collection.mutable.HashMap.empty[UUID, SocketRecord]
 }
 
@@ -32,14 +32,14 @@ class ActorSupervisor(val app: Application) extends InstrumentedActor with Loggi
   }
 
   override def receiveRequest = {
-    case ss: SocketStarted => timeReceive(ss) { handleSocketStarted(ss.creds, ss.socketId, ss.conn) }
+    case ss: SocketStarted => timeReceive(ss) { handleSocketStarted(ss.creds, ss.channel, ss.socketId, ss.conn) }
     case ss: SocketStopped => timeReceive(ss) { handleSocketStopped(ss.socketId) }
 
     case GetSystemStatus => timeReceive(GetSystemStatus) { handleGetSystemStatus() }
     case ct: SendSocketTrace => timeReceive(ct) { handleSendSocketTrace(ct) }
     case ct: SendClientTrace => timeReceive(ct) { handleSendClientTrace(ct) }
 
-    case ActorSupervisor.Broadcast(msg) => sockets.values.foreach(_.actorRef ! msg)
+    case ActorSupervisor.Broadcast(channel, msg) => sockets.values.filter(_.channel == channel).foreach(_.actorRef ! msg)
 
     case im: InternalMessage => log.warn(s"Unhandled internal message [${im.getClass.getSimpleName}] received.")
     case x => log.warn(s"ActorSupervisor encountered unknown message: ${x.toString}")
@@ -60,9 +60,9 @@ class ActorSupervisor(val app: Application) extends InstrumentedActor with Loggi
     case None => sender() ! ServerError("Unknown Client Socket", ct.id.toString)
   }
 
-  protected[this] def handleSocketStarted(creds: Credentials, socketId: UUID, socket: ActorRef) = {
+  protected[this] def handleSocketStarted(creds: Credentials, channel: String, socketId: UUID, socket: ActorRef) = {
     log.debug(s"Socket [$socketId] registered to [${creds.user.username}] with path [${socket.path}].")
-    ActorSupervisor.sockets(socketId) = SocketRecord(creds.user.id, creds.user.username, socket, DateUtils.now)
+    ActorSupervisor.sockets(socketId) = SocketRecord(creds.user.id, creds.user.username, channel, socket, DateUtils.now)
     socketsCounter.inc()
   }
 

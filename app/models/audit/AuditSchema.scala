@@ -31,12 +31,6 @@ object AuditSchema extends SchemaHelper("audit") {
     getByPrimaryKeySeq, (c, rels) => Future.successful(c.app.auditService.getByUserIdSeq(c.creds, rels(auditByUserIdRelation))(c.trace))
   )
 
-  implicit lazy val tagsType = ObjectType[GraphQLContext, Map[String, String]](name = "tags", fields = fields[GraphQLContext, Map[String, String]](Field(
-    name = "entries",
-    fieldType = ListType(StringType),
-    resolve = c => traceB(c.ctx, "search")(td => c.value.map(c => c._1 + ":" + c._2).toList)
-  )))
-
   implicit lazy val auditType: ObjectType[GraphQLContext, Audit] = deriveObjectType(
     AddFields(
       Field(

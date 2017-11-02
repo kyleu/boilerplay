@@ -8,6 +8,7 @@ import io.circe.{Decoder, Encoder}
 import models.result.data.{DataField, DataFieldModel, DataSummary}
 import io.circe.generic.semiauto._
 import io.circe.java8.time._
+import models.tag.Tag
 
 object Audit {
   implicit val jsonEncoder: Encoder[Audit] = deriveEncoder
@@ -23,7 +24,7 @@ case class Audit(
     client: String,
     server: String = Audit.serverName,
     userId: UUID,
-    tags: Map[String, String] = Map.empty,
+    tags: Seq[Tag] = Nil,
     msg: String = "n/a",
     records: Seq[AuditRecord] = Nil,
     started: LocalDateTime = util.DateUtils.now,

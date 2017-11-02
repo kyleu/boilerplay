@@ -1,4 +1,4 @@
-package models.template
+package services.audit
 
 import models.audit.Audit
 import util.{DateUtils, NullUtils}
@@ -6,7 +6,7 @@ import util.{DateUtils, NullUtils}
 import scalatags.Text.all._
 
 object AuditTemplate {
-  def forMessage(msg: Audit) = div(
+  def forMessage(msg: Audit) = li(cls := "collection-item")(
     div(cls := "right")(DateUtils.niceDateTime(DateUtils.now)),
     div(
       i(cls := s"fa ${models.template.Icons.audit}"),
@@ -19,7 +19,7 @@ object AuditTemplate {
         tr(th(style := "width: 20%")("Client"), td(msg.client)),
         tr(th(style := "width: 20%")("Server"), td(msg.server)),
         tr(th(style := "width: 20%")("User"), td(msg.userId.toString)),
-        tr(th(style := "width: 20%")("Tags"), td(msg.tags.map(t => t._1 + ": " + t._2).mkString(", "))),
+        tr(th(style := "width: 20%")("Tags"), td(models.tag.Tag.toString(msg.tags))),
         tr(th(style := "width: 20%")("Message"), td(msg.msg)),
         tr(th(style := "width: 20%")("Records"), td(msg.records.map { r =>
           div(style := "border: 1px solid #aaa; margin: 10px 0; padding: 6px;")(

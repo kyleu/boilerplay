@@ -1,6 +1,7 @@
 package models.queries.audit
 
 import java.util.UUID
+
 import models.audit.Audit
 import models.database.{DatabaseField, Row}
 import models.database.DatabaseFieldType._
@@ -9,6 +10,7 @@ import models.result.ResultFieldHelper
 import models.result.data.DataField
 import models.result.filter.Filter
 import models.result.orderBy.OrderBy
+import models.tag.Tag
 
 import scala.collection.JavaConverters._
 
@@ -60,15 +62,14 @@ object AuditQueries extends BaseQueries[Audit]("audit", "audit") {
     client = StringType(row, "client"),
     server = StringType(row, "server"),
     userId = UuidType(row, "user_id"),
-    tags = row.as[String]("tags").asInstanceOf[java.util.HashMap[String, String]].asScala.toMap,
+    tags = Tag.fromJavaMap(row.as[Any]("tags").asInstanceOf[java.util.HashMap[String, String]]),
     msg = StringType(row, "msg"),
     started = TimestampType(row, "started"),
     completed = TimestampType(row, "completed")
   )
 
   override protected def toDataSeq(t: Audit) = {
-    val tags = new java.util.HashMap[String, String]()
-    t.tags.foreach(tag => tags.put(tag._1, tag._2))
-    Seq(t.id, t.act, t.app, t.client, t.server, t.userId, tags, t.msg, t.started, t.completed)
+
+    Seq(t.id, t.act, t.app, t.client, t.server, t.userId, models.tag.Tag.toJavaMap(t.tags), t.msg, t.started, t.completed)
   }
 }

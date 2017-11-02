@@ -1,11 +1,13 @@
 package services.socket
 
 import org.scalajs.dom.raw._
+import services.event.EventHandler
+import util.JsonSerializers
 
 import scala.scalajs.js
 import scala.scalajs.js.JSON
 
-class NetworkSocket(onConnect: () => Unit, onMessage: (String) => Unit, onError: (String) => Unit, onClose: () => Unit) {
+class NetworkSocket(handler: EventHandler) {
   private[this] var connecting = false
   private[this] var connected = false
 
@@ -43,26 +45,29 @@ class NetworkSocket(onConnect: () => Unit, onMessage: (String) => Unit, onError:
   private[this] def onConnectEvent(event: Event) = {
     connecting = false
     connected = true
-    onConnect()
+    handler.onConnect()
     event
   }
 
   private[this] def onErrorEvent(event: ErrorEvent) = {
-    onError("Websocket error: " + event)
+    handler.onError("Websocket error: " + event)
     event
   }
 
   private[this] def onMessageEvent(event: MessageEvent) = {
-    val msg = event.data.toString
+    val msg = event.data match {
+      case s: String => JsonSerializers.readResponseMessage(s)
+      case x => throw new IllegalStateException(s"Unhandled message data of type [${x.getClass}].")
+    }
     NetworkMessage.receivedMessageCount += 1
-    onMessage(msg)
+    handler.onMessage(msg)
     event
   }
 
   private[this] def onCloseEvent(event: Event) = {
     connecting = false
     connected = false
-    onClose()
+    handler.onClose()
     event
   }
 }

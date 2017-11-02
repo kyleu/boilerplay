@@ -7,7 +7,7 @@ import models.auth.Credentials
 
 sealed trait InternalMessage
 
-case class SocketStarted(creds: Credentials, socketId: UUID, conn: ActorRef) extends InternalMessage
+case class SocketStarted(creds: Credentials, channel: String, socketId: UUID, conn: ActorRef) extends InternalMessage
 case class SocketStopped(socketId: UUID) extends InternalMessage
 
 case object GetSystemStatus extends InternalMessage

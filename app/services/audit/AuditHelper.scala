@@ -5,6 +5,7 @@ import java.util.UUID
 import models.audit._
 import models.auth.Credentials
 import models.result.data.DataField
+import models.tag.Tag
 import util.tracing.TraceData
 import util.{Logging, NullUtils}
 
@@ -51,7 +52,7 @@ object AuditHelper extends Logging {
   }
 
   def pk(t: String, v: Any*) = AuditModelPk(t, v.map(_.toString))
-  def auditStart(models: AuditModelPk*)(creds: Credentials, act: String = "development", tags: Map[String, String] = Map.empty) = {
+  def auditStart(models: AuditModelPk*)(creds: Credentials, act: String = "development", tags: Seq[Tag] = Seq.empty) = {
     AuditStart(action = act, app = Some(util.Config.projectId), client = creds.remoteAddress, tags = tags, models = models)
   }
 }
