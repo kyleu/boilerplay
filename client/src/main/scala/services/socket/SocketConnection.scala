@@ -3,12 +3,12 @@ package services.socket
 import models.RequestMessage
 import services.event.{AuditEventHandler, EventHandler}
 import services.{InitService, Logging}
-import util.JsonSerializers
+import util.{BinarySerializers, JsonSerializers}
 
 import scala.scalajs.js.annotation.JSExportTopLevel
 
 @JSExportTopLevel("SocketConnection")
-class SocketConnection(path: String) {
+class SocketConnection(path: String, binary: Boolean = false) {
   private[this] val eventHandler = path match {
     case "/connect" => new EventHandler {}
     case "/admin/audit/activity/connect" => new AuditEventHandler
@@ -31,8 +31,11 @@ class SocketConnection(path: String) {
 
   def sendMessage(rm: RequestMessage): Unit = {
     if (socket.isConnected) {
-      val json = JsonSerializers.writeRequestMessage(rm, debug = true)
-      socket.send(json)
+      if (binary) {
+        socket.sendBinary(BinarySerializers.writeRequestMessage(rm))
+      } else {
+        socket.sendString(JsonSerializers.writeRequestMessage(rm, debug = true))
+      }
     } else {
       throw new IllegalStateException("Not connected.")
     }

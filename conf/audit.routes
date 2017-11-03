@@ -6,7 +6,7 @@ POST        /complete                                controllers.admin.audit.Aud
 
 # Audit Activity
 GET         /activity                                controllers.admin.audit.AuditActivityController.activity
-GET         /activity/connect                        controllers.admin.audit.AuditActivityController.connect()
+GET         /activity/connect                        controllers.admin.audit.AuditActivityController.connect(binary: Boolean ?= false)
 
 # Audit Record Routes
 GET         /auditRecord                             controllers.admin.audit.AuditRecordController.list(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None)

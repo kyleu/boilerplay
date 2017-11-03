@@ -1,11 +1,19 @@
 package util.web
 
+import java.nio.ByteBuffer
+
 import models.ResponseMessage
 import play.api.mvc.WebSocket.MessageFlowTransformer
-import util.{JsonSerializers, Logging}
+import util.{BinarySerializers, JsonSerializers, Logging}
 
 class MessageFrameFormatter(debug: Boolean) extends Logging {
-  val transformer = MessageFlowTransformer.stringMessageFlowTransformer.map { s =>
+  val stringTransformer = MessageFlowTransformer.stringMessageFlowTransformer.map { s =>
     JsonSerializers.readRequestMessage(s)
   }.contramap { m: ResponseMessage => JsonSerializers.writeResponseMessage(m, debug) }
+
+  val binaryTransformer = MessageFlowTransformer.byteArrayMessageFlowTransformer.map { ba =>
+    BinarySerializers.readRequestMessage(ByteBuffer.wrap(ba))
+  }.contramap { m: ResponseMessage => BinarySerializers.writeResponseMessage(m) }
+
+  def transformer(binary: Boolean) = if (binary) { binaryTransformer } else { stringTransformer }
 }

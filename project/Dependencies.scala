@@ -2,7 +2,7 @@ import sbt._
 
 object Dependencies {
   object Play {
-    private[this] val version = "2.6.6"
+    private[this] val version = "2.6.7"
     val lib = "com.typesafe.play" %% "play" % version
     val filters = play.sbt.PlayImport.filters
     val ws = play.sbt.PlayImport.ws
@@ -38,7 +38,7 @@ object Dependencies {
   }
 
   object GraphQL {
-    val sangria = "org.sangria-graphql" %% "sangria" % "1.3.0"
+    val sangria = "org.sangria-graphql" %% "sangria" % "1.3.2"
     val playJson = "org.sangria-graphql" %% "sangria-play-json" % "1.0.4"
     val circe = "org.sangria-graphql" %% "sangria-circe" % "1.1.0"
   }
@@ -51,7 +51,7 @@ object Dependencies {
     val fontAwesome = "org.webjars" % "font-awesome" % "4.7.0"
     val jquery = "org.webjars" % "jquery" % "2.2.4"
     val materialize = "org.webjars" % "materializecss" % "0.100.2"
-    val moment = "org.webjars" % "momentjs" % "2.18.1"
+    val moment = "org.webjars" % "momentjs" % "2.19.1"
     val mousetrap = "org.webjars" % "mousetrap" % "1.6.0"
   }
 
@@ -81,6 +81,8 @@ object Dependencies {
   object Utils {
     val scapegoatVersion = "1.3.3"
     val enumeratumVersion = "1.5.14"
+    val booPickleVersion = "1.2.5"
+
     val scalatagsVersion = "0.6.7"
 
     val csv = "com.github.tototoshi" %% "scala-csv" % "1.3.5"

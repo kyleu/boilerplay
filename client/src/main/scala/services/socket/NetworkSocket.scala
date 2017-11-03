@@ -1,11 +1,14 @@
 package services.socket
 
+import java.nio.ByteBuffer
+
+import models.ResponseMessage
 import org.scalajs.dom.raw._
 import services.event.EventHandler
-import util.JsonSerializers
+import services.util.ArrayBufferOps
+import util.{BinarySerializers, JsonSerializers}
 
-import scala.scalajs.js
-import scala.scalajs.js.JSON
+import scala.scalajs.js.typedarray.{ArrayBuffer, TypedArrayBuffer}
 
 class NetworkSocket(handler: EventHandler) {
   private[this] var connecting = false
@@ -21,14 +24,17 @@ class NetworkSocket(handler: EventHandler) {
     openSocket(url)
   }
 
-  def send(s: String): Unit = ws match {
-    case Some(socket) =>
-      NetworkMessage.sentMessageCount += 1
-      socket.send(s)
-    case None => throw new IllegalStateException("No available socket connection.")
+  def sendString(s: String): Unit = {
+    val socket = ws.getOrElse(throw new IllegalStateException("No available socket connection."))
+    NetworkMessage.sentMessageCount += 1
+    socket.send(s)
   }
 
-  def send(c: String, v: js.Dynamic): Unit = send(s"""{"c": "$c", "v": ${JSON.stringify(v)} }""")
+  def sendBinary(data: Array[Byte]): Unit = {
+    val socket = ws.getOrElse(throw new IllegalStateException("No available socket connection."))
+    NetworkMessage.sentMessageCount += 1
+    socket.send(ArrayBufferOps.convertBuffer(ByteBuffer.wrap(data)))
+  }
 
   def isConnected = connected
 
@@ -54,14 +60,26 @@ class NetworkSocket(handler: EventHandler) {
     event
   }
 
-  private[this] def onMessageEvent(event: MessageEvent) = {
-    val msg = event.data match {
-      case s: String => JsonSerializers.readResponseMessage(s)
-      case x => throw new IllegalStateException(s"Unhandled message data of type [${x.getClass}].")
-    }
+  private[this] def process(msg: ResponseMessage) = {
     NetworkMessage.receivedMessageCount += 1
     handler.onMessage(msg)
-    event
+  }
+
+  private[this] def onMessageEvent(event: MessageEvent): Unit = event.data match {
+    case s: String => process(JsonSerializers.readResponseMessage(s))
+    case b: Blob =>
+      val reader = new FileReader()
+      def onLoadEnd(ev: ProgressEvent) = {
+        val buff = reader.result
+        val data = TypedArrayBuffer.wrap(buff.asInstanceOf[ArrayBuffer])
+        process(BinarySerializers.readResponseMessage(data))
+      }
+      reader.onloadend = onLoadEnd _
+      reader.readAsArrayBuffer(b)
+    case buff: ArrayBuffer =>
+      val data = TypedArrayBuffer.wrap(buff)
+      process(BinarySerializers.readResponseMessage(data))
+    case x => throw new IllegalStateException(s"Unhandled message data of type [$x].")
   }
 
   private[this] def onCloseEvent(event: Event) = {

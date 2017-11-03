@@ -19,23 +19,21 @@ class HomeController @javax.inject.Inject() (
 
   import app.contexts.webContext
 
-  private[this] implicit val t = new MessageFrameFormatter(app.config.debug).transformer
+  private[this] val formatter = new MessageFrameFormatter(debug = app.config.debug)
 
   def home() = withSession("home") { implicit request => implicit td =>
     Future.successful(Ok(views.html.index(request.identity, app.config.debug)))
   }
 
-  def connect() = WebSocket.acceptOrResult[RequestMessage, ResponseMessage] { request =>
+  def connect(binary: Boolean) = WebSocket.acceptOrResult[RequestMessage, ResponseMessage] { request =>
     implicit val req = Request(request, AnyContentAsEmpty)
-    app.silhouette.SecuredRequestHandler { securedRequest =>
-      Future.successful(HandlerResult(Ok, Some(securedRequest.identity)))
-    }.map {
+    app.silhouette.SecuredRequestHandler { secured => Future.successful(HandlerResult(Ok, Some(secured.identity))) }.map {
       case HandlerResult(_, Some(user)) => Right(ActorFlow.actorRef { out =>
         SocketService.props(None, "default", app.supervisor, Credentials(user, request.remoteAddress), out, request.remoteAddress)
       })
       case HandlerResult(_, None) => Left(Redirect(controllers.routes.HomeController.home()).flashing("error" -> "You're not signed in."))
     }
-  }
+  }(formatter.transformer(binary))
 
   def untrail(path: String) = Action.async {
     Future.successful(MovedPermanently(s"/$path"))
