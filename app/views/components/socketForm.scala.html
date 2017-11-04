@@ -1,0 +1,36 @@
+@()
+<li class="collection-item">
+  <h5>Websocket Connection</h5>
+  <div>
+    <input name="channel" type="radio" id="format-string" checked="checked" />
+  </div>
+  <div class="input-field">
+    <select id="channel-select">
+      <option value="default">Default</option>
+      <option value="audit">Audit</option>
+    </select>
+    <label for="channel-select">Channel</label>
+  </div>
+  <div>
+    <input name="format" type="radio" id="format-string" checked="checked" />
+    <label for="format-string">JSON String</label>
+  </div>
+  <div>
+    <input name="format" type="radio" id="format-binary" />
+    <label for="format-binary">Binary</label>
+  </div>
+  <button id="websocket-connect-button" class="btn theme waves-light" style="margin-top: 12px;">Connect</button>
+</li>
+<li class="collection-item">
+  <div class="status">Ready to connect...</div>
+</li>
+<script>
+  $(function() {
+    $('#channel-select').material_select();
+    $('#websocket-connect-button').on("click", function() {
+      var binary = $('#format-binary').is(':checked');
+      console.log(binary);
+      window.socket = new SocketConnection('/connect', binary);
+    });
+  });
+</script>

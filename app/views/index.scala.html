@@ -6,26 +6,13 @@
       <ul class="collection with-header">
         <li class="collection-header">
           <h4>Welcome to @util.Config.projectName</h4>
-        </li>
-        @if(user.role == models.user.Role.Admin) {
-          <li class="collection-item">
+          @if(user.role == models.user.Role.Admin) {
             You're an administrator, so head on over to the <a class="theme-text" href="@controllers.admin.system.routes.AdminController.index()">admin section</a>.
-          </li>
-        }
-        <li class="collection-item">
-          You're connected to a websocket. Reload the page with Developer Tools active to see the network frames.
+          }
         </li>
-        <li class="collection-item">
-          For help with styling and components, see <a class="theme-text" href="http://materializecss.com">materializecss.com</a>.
-        </li>
+        @views.html.components.socketForm()
       </ul>
     </div>
   </div>
   @views.html.components.includeScalaJs(debug)
-  <script>
-    $(function() {
-      window.socket = new SocketConnection('/connect');
-    });
-  </script>
-
 }
