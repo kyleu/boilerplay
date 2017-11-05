@@ -1,16 +1,23 @@
 package util
 
+import io.circe.JsonObject
 import io.circe.generic.extras.Configuration
 import io.circe.generic.extras.auto._
 import io.circe.parser._
 import io.circe.syntax._
 import io.circe.java8.time._
-
 import models.user.UserPreferences
 import models.{RequestMessage, ResponseMessage}
 
 object JsonSerializers {
   private[this] implicit val config = Configuration.default.withDefaults
+
+  def toJson(s: String) = parse(s) match {
+    case Right(json) => json
+    case Left(failure) => throw failure
+  }
+
+  val emptyObject = toJson("{}")
 
   def readPreferences(s: String) = decode[UserPreferences](s) match {
     case Right(x) => x

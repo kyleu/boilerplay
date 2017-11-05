@@ -1,17 +1,15 @@
 package models.database
 
-import java.time.{LocalDate, LocalDateTime, LocalTime}
-import java.util.UUID
-
 import enumeratum._
 import org.postgresql.jdbc.PgArray
+import org.postgresql.util.PGobject
 
 sealed abstract class DatabaseFieldType[T](val key: String, val isNumeric: Boolean = false) extends EnumEntry {
   def apply(row: Row, col: String): T = row.as[T](col)
   def opt(row: Row, col: String): Option[T] = row.asOpt[T](col)
 }
 
-object DatabaseFieldType extends Enum[DatabaseFieldType[_]] {
+object DatabaseFieldType extends Enum[DatabaseFieldType[_]] with DatabaseFieldHelper {
   case object StringType extends DatabaseFieldType[String]("string")
   case object BigDecimalType extends DatabaseFieldType[BigDecimal]("decimal", isNumeric = true) {
     override def apply(row: Row, col: String) = row.as[Any](col) match {
@@ -25,25 +23,12 @@ object DatabaseFieldType extends Enum[DatabaseFieldType[_]] {
   }
 
   case object BooleanType extends DatabaseFieldType[Boolean]("boolean") {
-    override def apply(row: Row, col: String) = row.as[Any](col) match {
-      case b: Byte => b == 1.toByte
-      case b: Boolean => b
-    }
-    override def opt(row: Row, col: String) = row.asOpt[Any](col).map {
-      case b: Byte => b == 1.toByte
-      case b: Boolean => b
-    }
+    override def apply(row: Row, col: String) = boolCoerce(row.as[Any](col))
+    override def opt(row: Row, col: String) = row.asOpt[Any](col).map(boolCoerce)
   }
-
   case object ByteType extends DatabaseFieldType[Byte]("byte") {
-    override def apply(row: Row, col: String) = row.as[Any](col) match {
-      case i: Int => i.toByte
-      case b: Byte => b
-    }
-    override def opt(row: Row, col: String) = row.asOpt[Any](col).map {
-      case i: Int => i.toByte
-      case b: Byte => b
-    }
+    override def apply(row: Row, col: String) = byteCoerce(row.as[Any](col))
+    override def opt(row: Row, col: String) = row.asOpt[Any](col).map(byteCoerce)
   }
 
   case object ShortType extends DatabaseFieldType[Short]("short", isNumeric = true)
@@ -64,39 +49,39 @@ object DatabaseFieldType extends Enum[DatabaseFieldType[_]] {
     override def apply(row: Row, col: String) = row.as[PgArray](col).getArray.asInstanceOf[Array[String]]
     override def opt(row: Row, col: String) = row.asOpt[PgArray](col).map(_.asInstanceOf[Array[String]])
   }
-  case object UuidArrayType extends DatabaseFieldType[Array[UUID]]("uuidArray") {
-    override def apply(row: Row, col: String) = row.as[PgArray](col).getArray.asInstanceOf[Array[UUID]]
-    override def opt(row: Row, col: String) = row.asOpt[PgArray](col).map(_.asInstanceOf[Array[UUID]])
+  case object UuidArrayType extends DatabaseFieldType[Array[java.util.UUID]]("uuidArray") {
+    override def apply(row: Row, col: String) = row.as[PgArray](col).getArray.asInstanceOf[Array[java.util.UUID]]
+    override def opt(row: Row, col: String) = row.asOpt[PgArray](col).map(_.asInstanceOf[Array[java.util.UUID]])
   }
 
-  case object DateType extends DatabaseFieldType[LocalDate]("date") {
+  case object DateType extends DatabaseFieldType[java.time.LocalDate]("date") {
     override def apply(row: Row, col: String) = row.as[java.sql.Date](col).toLocalDate
     override def opt(row: Row, col: String) = row.asOpt[java.sql.Date](col).map(_.toLocalDate)
   }
-  case object TimeType extends DatabaseFieldType[LocalTime]("time") {
+  case object TimeType extends DatabaseFieldType[java.time.LocalTime]("time") {
     override def apply(row: Row, col: String) = row.as[java.sql.Time](col).toLocalTime
     override def opt(row: Row, col: String) = row.asOpt[java.sql.Time](col).map(_.toLocalTime)
   }
-  case object TimestampType extends DatabaseFieldType[LocalDateTime]("timestamp") {
+  case object TimestampType extends DatabaseFieldType[java.time.LocalDateTime]("timestamp") {
     override def apply(row: Row, col: String) = row.as[java.sql.Timestamp](col).toLocalDateTime
     override def opt(row: Row, col: String) = row.asOpt[java.sql.Timestamp](col).map(_.toLocalDateTime)
   }
 
   case object RefType extends DatabaseFieldType[String]("ref")
   case object XmlType extends DatabaseFieldType[String]("xml")
-
-  case object UuidType extends DatabaseFieldType[UUID]("uuid")
-
+  case object UuidType extends DatabaseFieldType[java.util.UUID]("uuid")
   case object ObjectType extends DatabaseFieldType[String]("object")
   case object StructType extends DatabaseFieldType[String]("struct")
 
+  case object JsonType extends DatabaseFieldType[io.circe.Json]("json") {
+    import io.circe.parser._
+    override def apply(row: Row, col: String) = parse(row.as[PGobject](col).getValue).right.get
+    override def opt(row: Row, col: String) = row.asOpt[PGobject](col).map(x => parse(x.getValue).right.get)
+  }
+
   case object TagsType extends DatabaseFieldType[Seq[models.tag.Tag]]("tags") {
-    override def apply(row: Row, col: String) = row.as[Any](col) match {
-      case m: java.util.HashMap[_, _] => models.tag.Tag.fromJavaMap(m)
-    }
-    override def opt(row: Row, col: String) = row.asOpt[Any](col).map {
-      case m: java.util.HashMap[_, _] => models.tag.Tag.fromJavaMap(m)
-    }
+    override def apply(row: Row, col: String) = tagsCoerce(row.as[Any](col))
+    override def opt(row: Row, col: String) = row.asOpt[Any](col).map(tagsCoerce)
   }
 
   case object UnknownType extends DatabaseFieldType[String]("unknown")

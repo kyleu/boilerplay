@@ -2,6 +2,7 @@
 
 @@@ index
 
+* [Serialization](serialization.md)
 * [Adding Models](addingModels.md)
 * [Websocket](websocket.md)
 

@@ -1,10 +1,10 @@
 package models.graphql
 
 import models.tag.Tag
-import sangria.schema._
 import sangria.macros.derive._
+import sangria.schema._
 
-object CommonSchema extends CommonSchemaTypes {
+object CommonSchema extends CommonSchemaValueTypes with CommonSchemaReferenceTypes {
   val idArg = Argument("id", OptionInputType(IntType), description = "Returns model matching the provided id.")
   val keyArg = Argument("key", StringType, description = "Returns the model matching provided key.")
   val queryArg = Argument("q", OptionInputType(StringType), description = "Limits the returned results to those matching the provided value.")

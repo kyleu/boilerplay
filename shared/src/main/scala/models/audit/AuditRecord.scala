@@ -9,19 +9,14 @@ import io.circe.generic.semiauto._
 object AuditRecord {
   implicit val jsonEncoder: Encoder[AuditRecord] = deriveEncoder
   implicit val jsonDecoder: Decoder[AuditRecord] = deriveDecoder
-
-  def empty = AuditRecord(
-    id = UUID.randomUUID,
-    auditId = UUID.randomUUID,
-  )
 }
 
 case class AuditRecord(
-  id: UUID = UUID.randomUUID,
-  auditId: UUID = UUID.randomUUID,
-  t: String = "default",
-  pk: Seq[String] = Seq.empty,
-  changes: Seq[AuditField] = Nil
+    id: UUID = UUID.randomUUID,
+    auditId: UUID = UUID.randomUUID,
+    t: String = "default",
+    pk: Seq[String] = Seq.empty,
+    changes: Seq[AuditField] = Nil
 ) extends DataFieldModel {
   override def toDataFields = Seq(
     DataField("id", Some(id.toString)),

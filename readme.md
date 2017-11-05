@@ -16,6 +16,7 @@ https://kyleu.github.io/boilerplay
 * GraphQL schema and query interface, with shared queries and mutations.
 * Scala source that is shared between the client and server via Scala.js.
 * Websocket-driven actor support, with monitoring and tracing.
+* Binary and JSON serialization, provided by circe and Boopickle.
 
 
 ## Contributing
