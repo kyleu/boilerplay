@@ -13,7 +13,8 @@
   @views.html.components.includeScalaJs(debug)
   <script>
     $(function() {
-      window.socket = new SocketConnection('/admin/audit/activity/connect');
+      var binary = false;
+      window.socket = new AuditSocketConnection(binary, @debug);
     });
   </script>
 }

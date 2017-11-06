@@ -42,7 +42,7 @@
   $(function() {
     $('#websocket-connect-button').on("click", function() {
       var binary = $('#format-binary').is(':checked');
-      window.socket = new SocketConnection('/connect', binary, @debug);
+      window.socket = new TestSocketConnection(binary, @debug);
     });
   });
 </script>
