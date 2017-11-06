@@ -5,7 +5,7 @@ import java.nio.ByteBuffer
 import models.ResponseMessage
 import org.scalajs.dom.raw._
 import services.event.EventHandler
-import services.util.ArrayBufferOps
+import util.ArrayBufferOps
 import util.{BinarySerializers, JsonSerializers}
 
 import scala.scalajs.js.typedarray.{ArrayBuffer, TypedArrayBuffer}
@@ -27,12 +27,14 @@ class NetworkSocket(handler: EventHandler) {
   def sendString(s: String): Unit = {
     val socket = ws.getOrElse(throw new IllegalStateException("No available socket connection."))
     NetworkMessage.sentMessageCount += 1
+    NetworkMessage.sentBytes += s.getBytes.length
     socket.send(s)
   }
 
   def sendBinary(data: Array[Byte]): Unit = {
     val socket = ws.getOrElse(throw new IllegalStateException("No available socket connection."))
     NetworkMessage.sentMessageCount += 1
+    NetworkMessage.sentBytes += data.length
     socket.send(ArrayBufferOps.convertBuffer(ByteBuffer.wrap(data)))
   }
 
@@ -62,17 +64,23 @@ class NetworkSocket(handler: EventHandler) {
 
   private[this] def process(msg: ResponseMessage) = {
     NetworkMessage.receivedMessageCount += 1
-    handler.onMessage(msg)
+    handler.onResponseMessage(msg)
   }
 
   private[this] def onMessageEvent(event: MessageEvent): Unit = event.data match {
-    case s: String => process(JsonSerializers.readResponseMessage(s))
+    case s: String =>
+      NetworkMessage.receivedBytes += s.getBytes.length
+      val msg = JsonSerializers.readResponseMessage(s)
+      process(msg)
     case b: Blob =>
       val reader = new FileReader()
       def onLoadEnd(ev: ProgressEvent) = {
         val buff = reader.result
-        val data = TypedArrayBuffer.wrap(buff.asInstanceOf[ArrayBuffer])
-        process(BinarySerializers.readResponseMessage(data))
+        val ab = buff.asInstanceOf[ArrayBuffer]
+        val data = TypedArrayBuffer.wrap(ab)
+        NetworkMessage.receivedBytes += ab.byteLength
+        val msg = BinarySerializers.readResponseMessage(data)
+        process(msg)
       }
       reader.onloadend = onLoadEnd _
       reader.readAsArrayBuffer(b)

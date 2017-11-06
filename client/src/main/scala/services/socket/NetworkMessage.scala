@@ -4,8 +4,12 @@ import models.RequestMessage
 
 object NetworkMessage {
   var latencyMs: Option[Int] = None
+
   var sentMessageCount = 0
+  var sentBytes = 0
+
   var receivedMessageCount = 0
+  var receivedBytes = 0
 
   private[this] var sendF: Option[(RequestMessage) => Unit] = None
 

@@ -2,15 +2,14 @@ package services.form
 
 import org.scalajs.dom
 import org.scalajs.jquery.{JQuery, jQuery => $}
-import services.{InitService, Logging}
+import services.entrypoint.Entrypoint
+import util.Logging
 
 import scala.scalajs.js
 import scala.scalajs.js.annotation.JSExportTopLevel
 
 @JSExportTopLevel("FormService")
-class FormService(id: String) {
-  InitService.initIfNeeded()
-
+class FormService(id: String) extends Entrypoint("form", debug = false) {
   val formEl = $("#" + id)
   if (formEl.length != 1) {
     throw new IllegalStateException(s"Found [${formEl.length}] form elements with id [$id].")

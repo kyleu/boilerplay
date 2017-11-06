@@ -1,23 +1,22 @@
 package services.socket
 
 import models.RequestMessage
-import services.event.{AuditEventHandler, EventHandler}
-import services.{InitService, Logging}
-import util.{BinarySerializers, JsonSerializers}
+import services.entrypoint.Entrypoint
+import services.event.{AuditEventHandler, EventHandler, LoggingEventHandler}
+import util.{BinarySerializers, JsonSerializers, Logging}
 
 import scala.scalajs.js.annotation.JSExportTopLevel
 
 @JSExportTopLevel("SocketConnection")
-class SocketConnection(val path: String, val binary: Boolean = false) {
+class SocketConnection(val path: String, val binary: Boolean = false, debug: Boolean = false) extends Entrypoint("socket", debug) {
   private[this] val eventHandler = path match {
-    case "/connect" => new EventHandler {}
+    case "/connect" => new LoggingEventHandler
     case "/admin/audit/activity/connect" => new AuditEventHandler
     case _ => throw new IllegalStateException(s"Unhandled path argument [$path].")
   }
 
   private[this] val socket = new NetworkSocket(eventHandler)
 
-  InitService.initIfNeeded()
   NetworkMessage.register(sendMessage)
   Logging.debug(util.Config.projectName + " is connecting...")
   connect()
@@ -33,10 +32,13 @@ class SocketConnection(val path: String, val binary: Boolean = false) {
   def sendMessage(rm: RequestMessage): Unit = {
     if (socket.isConnected) {
       if (binary) {
-        socket.sendBinary(BinarySerializers.writeRequestMessage(rm))
+        val x = BinarySerializers.writeRequestMessage(rm)
+        socket.sendBinary(x)
       } else {
-        socket.sendString(JsonSerializers.writeRequestMessage(rm, debug = true))
+        val x = JsonSerializers.writeRequestMessage(rm, debug = debug)
+        socket.sendString(x)
       }
+      eventHandler.onRequestMessage(rm)
     } else {
       throw new IllegalStateException("Not connected.")
     }

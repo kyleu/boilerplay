@@ -1,4 +1,4 @@
-package services
+package services.notification
 
 import scala.scalajs.js
 

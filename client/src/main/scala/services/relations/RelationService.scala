@@ -4,11 +4,12 @@ import models.result.RelationCount
 
 import scala.scalajs.js.annotation.JSExportTopLevel
 import org.scalajs.jquery.{JQuery, JQueryEventObject, jQuery => $}
-import services.{InitService, Logging}
+import services.entrypoint.Entrypoint
+import util.Logging
 
 @JSExportTopLevel("RelationService")
-class RelationService(url: String) {
-  InitService.initIfNeeded()
+class RelationService(url: String) extends Entrypoint("relation", debug = false) {
+
   Logging.info(s"Relation service running, using [$url].")
 
   private[this] def onComplete(body: JQuery, data: String): Unit = {

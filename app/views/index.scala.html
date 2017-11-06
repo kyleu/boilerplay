@@ -10,7 +10,16 @@
             You're an administrator, so head on over to the <a class="theme-text" href="@controllers.admin.system.routes.AdminController.index()">admin section</a>.
           }
         </li>
-        @views.html.components.socketForm()
+        <li class="collection-item">
+          <h5>Logs</h5>
+          <div id="log-container">
+            <div class="log-message">
+              <div class="log-timestamp">@util.DateUtils.niceTime(util.DateUtils.now.toLocalTime)</div>
+              Server render complete.
+            </div>
+          </div>
+        </li>
+        @views.html.components.socketForm(debug)
       </ul>
     </div>
   </div>

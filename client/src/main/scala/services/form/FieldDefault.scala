@@ -1,7 +1,7 @@
 package services.form
 
 import org.scalajs.jquery.{JQuery, JQueryEventObject, jQuery => $}
-import services.Logging
+import util.Logging
 
 import scala.scalajs.js
 
