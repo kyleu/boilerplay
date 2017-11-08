@@ -1,8 +1,9 @@
 package services.form
 
+import models.entrypoint.Entrypoint
+import models.form.{FieldDefault, FieldHelper}
 import org.scalajs.dom
 import org.scalajs.jquery.{JQuery, jQuery => $}
-import services.entrypoint.Entrypoint
 import util.Logging
 
 import scala.scalajs.js

@@ -1,4 +1,4 @@
-package services.form
+package models.form
 
 import org.scalajs.jquery.{JQuery, JQueryEventObject, jQuery => $}
 import util.Logging

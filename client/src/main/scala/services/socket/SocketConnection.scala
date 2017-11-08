@@ -1,7 +1,7 @@
 package services.socket
 
 import models.RequestMessage
-import services.entrypoint.Entrypoint
+import models.entrypoint.Entrypoint
 import services.event.EventHandler
 import util.{BinarySerializers, JsonSerializers, Logging}
 

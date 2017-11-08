@@ -1,6 +1,5 @@
 package services.audit
 
-import services.event.AuditEventHandler
 import services.socket.SocketConnection
 
 import scala.scalajs.js.annotation.JSExportTopLevel

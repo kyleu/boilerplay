@@ -1,4 +1,4 @@
-package services.audit
+package models.audit
 
 import util.DateUtils
 

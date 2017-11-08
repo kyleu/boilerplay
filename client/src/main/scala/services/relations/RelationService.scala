@@ -1,10 +1,10 @@
 package services.relations
 
+import models.entrypoint.Entrypoint
 import models.result.RelationCount
 
 import scala.scalajs.js.annotation.JSExportTopLevel
 import org.scalajs.jquery.{JQuery, JQueryEventObject, jQuery => $}
-import services.entrypoint.Entrypoint
 import util.Logging
 
 @JSExportTopLevel("RelationService")

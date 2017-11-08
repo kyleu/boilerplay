@@ -1,4 +1,4 @@
-package services.entrypoint
+package models.entrypoint
 
 import util.Logging
 

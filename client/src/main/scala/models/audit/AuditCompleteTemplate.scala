@@ -1,6 +1,5 @@
-package services.audit
+package models.audit
 
-import models.audit.AuditComplete
 import util.DateUtils
 
 import scalatags.Text.all._

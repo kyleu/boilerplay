@@ -1,8 +1,7 @@
-package services.audit
+package models.audit
 
 import java.util.UUID
 
-import models.audit.AuditStart
 import util.DateUtils
 
 import scalatags.Text.all._
