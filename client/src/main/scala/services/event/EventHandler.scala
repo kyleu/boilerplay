@@ -26,7 +26,7 @@ trait EventHandler {
   def onRequestMessage(rm: RequestMessage): Unit = {}
 
   def onResponseMessage(msg: ResponseMessage): Unit = msg match {
-    case p: Pong => onLatency((System.currentTimeMillis - DateUtils.toMillis(p.timestamp)).toInt)
+    case p: Pong => onLatency((System.currentTimeMillis - DateUtils.toMillis(p.ts)).toInt)
     case us: UserSettings => UserManager.onUserSettings(us)
     case se: ServerError => NotificationService.error(se.reason, se.content)
     case _ => Logging.warn(s"Received unknown message of type [${msg.getClass.getSimpleName}].")

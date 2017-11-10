@@ -8,4 +8,4 @@ case class MalformedRequest(reason: String, content: String) extends RequestMess
 
 case class GetVersion(v: String) extends RequestMessage
 
-case class Ping(timestamp: LocalDateTime) extends RequestMessage
+case class Ping(ts: LocalDateTime) extends RequestMessage

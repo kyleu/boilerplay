@@ -49,6 +49,24 @@ object SandboxTask extends Enum[SandboxTask] with CirceEnum[SandboxTask] {
     }
   }
 
+  case object JsonSerialization extends SandboxTask("jsonserialization", "Json Serialization", "Serializes 1,000 messages with circe.") {
+    override def call(app: Application, services: ServiceRegistry, argument: Option[String])(implicit trace: TraceData) = {
+      val pong = models.Pong(util.DateUtils.now)
+      val startMs = util.DateUtils.nowMillis
+      val json = (0 to 1000).map(_ => util.JsonSerializers.writeResponseMessage(pong))
+      Future.successful("Json: " + (util.DateUtils.nowMillis - startMs) + "ms")
+    }
+  }
+
+  case object BinarySerialization extends SandboxTask("binaryserialization", "Binary Serialization", "Serializes 1,000 messages with BooPickle.") {
+    override def call(app: Application, services: ServiceRegistry, argument: Option[String])(implicit trace: TraceData) = {
+      val pong = models.Pong(util.DateUtils.now)
+      val startMs = util.DateUtils.nowMillis
+      val binary = (0 to 1000).map(_ => util.BinarySerializers.writeResponseMessage(pong))
+      Future.successful("Binary: " + (util.DateUtils.nowMillis - startMs) + "ms")
+    }
+  }
+
   case object DatabaseBackup extends SandboxTask("databasebackup", "Database Backup", "Backs up the database.") {
     override def call(app: Application, services: ServiceRegistry, argument: Option[String])(implicit trace: TraceData) = {
       Future.successful(BackupRestore.backup())

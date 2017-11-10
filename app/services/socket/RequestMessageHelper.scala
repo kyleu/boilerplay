@@ -8,7 +8,7 @@ trait RequestMessageHelper extends InstrumentedActor { this: SocketService =>
   override def receiveRequest = {
     case mr: MalformedRequest => timeReceive(mr) { log.error(s"MalformedRequest:  [${mr.reason}]: [${mr.content}].") }
 
-    case p: Ping => timeReceive(p) { out ! Pong(p.timestamp) }
+    case p: Ping => timeReceive(p) { out ! Pong(p.ts) }
     case gv: GetVersion => timeReceive(gv) { out ! VersionResponse(Config.version) }
 
     case im: InternalMessage => handleInternalMessage(im)
