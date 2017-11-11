@@ -1,16 +1,46 @@
 package controllers
 
-import akka.actor.ActorSystem
+import java.util.UUID
+
+import akka.actor.{ActorRef, ActorSystem, Props}
 import akka.stream.Materializer
 import com.mohiva.play.silhouette.api.HandlerResult
 import models.auth.Credentials
-import models.{Application, RequestMessage, ResponseMessage}
+import models._
 import play.api.libs.streams.ActorFlow
 import play.api.mvc.{AnyContentAsEmpty, Request, WebSocket}
-import services.socket.SocketService
+import util.Logging
+import util.metrics.InstrumentedActor
 import util.web.MessageFrameFormatter
 
 import scala.concurrent.Future
+
+object HomeController {
+  case class SocketService(
+      id: UUID, supervisor: ActorRef, creds: Credentials, out: ActorRef, sourceAddress: String
+  ) extends InstrumentedActor with Logging {
+
+    override def preStart() = {
+      log.info(s"Starting connection for user [${creds.user.id}: ${creds.user.username}].")
+      supervisor ! SocketStarted(creds, "audit", id, self)
+      out ! UserSettings(creds.user.id, creds.user.username, creds.user.profile.providerKey, creds.user.preferences)
+    }
+
+    override def receiveRequest = {
+      case p: Ping => timeReceive(p) { out ! Pong(p.ts) }
+      case rm: ResponseMessage => out ! rm
+      case x => throw new IllegalArgumentException(s"Unhandled request message [${x.getClass.getSimpleName}].")
+    }
+
+    override def postStop() = {
+      supervisor ! SocketStopped(id)
+    }
+  }
+
+  def props(id: Option[UUID], supervisor: ActorRef, creds: Credentials, out: ActorRef, sourceAddress: String) = {
+    Props(SocketService(id.getOrElse(UUID.randomUUID), supervisor, creds, out, sourceAddress))
+  }
+}
 
 @javax.inject.Singleton
 class HomeController @javax.inject.Inject() (
@@ -29,7 +59,7 @@ class HomeController @javax.inject.Inject() (
     implicit val req = Request(request, AnyContentAsEmpty)
     app.silhouette.SecuredRequestHandler { secured => Future.successful(HandlerResult(Ok, Some(secured.identity))) }.map {
       case HandlerResult(_, Some(user)) => Right(ActorFlow.actorRef { out =>
-        SocketService.props(None, "default", app.supervisor, Credentials(user, request.remoteAddress), out, request.remoteAddress)
+        HomeController.props(None, app.supervisor, Credentials(user, request.remoteAddress), out, request.remoteAddress)
       })
       case HandlerResult(_, None) => Left(Redirect(controllers.routes.HomeController.home()).flashing("error" -> "You're not signed in."))
     }

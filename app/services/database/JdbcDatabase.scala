@@ -69,7 +69,7 @@ abstract class JdbcDatabase(override val key: String, configPrefix: String) exte
     try {
       time(statement.getClass) { executeUpdate(connection, statement) }
     } catch {
-      case NonFatal(x) => log.errorThenThrow(s"Error running statement [${statement.name}] with [${statement.values.size}] values and sql [${statement.sql}].", x)
+      case NonFatal(x) => log.errorThenThrow(s"Error executing [${statement.name}] with [${statement.values.size}] values and sql [${statement.sql}].", x)
     } finally {
       if (conn.isEmpty) { connection.close() }
     }

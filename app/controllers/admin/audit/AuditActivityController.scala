@@ -8,7 +8,7 @@ import models.auth.Credentials
 import models.{Application, RequestMessage, ResponseMessage}
 import play.api.libs.streams.ActorFlow
 import play.api.mvc.{AnyContentAsEmpty, Request, WebSocket}
-import services.socket.SocketService
+import services.audit.AuditSocketService
 import util.web.MessageFrameFormatter
 
 import scala.concurrent.Future
@@ -30,7 +30,7 @@ class AuditActivityController @javax.inject.Inject() (
     implicit val req = Request(request, AnyContentAsEmpty)
     app.silhouette.SecuredRequestHandler { secured => Future.successful(HandlerResult(Ok, Some(secured.identity))) }.map {
       case HandlerResult(_, Some(user)) => Right(ActorFlow.actorRef { out =>
-        SocketService.props(None, "audit", app.supervisor, Credentials(user, request.remoteAddress), out, request.remoteAddress)
+        AuditSocketService.props(None, app.supervisor, Credentials(user, request.remoteAddress), out, request.remoteAddress)
       })
       case HandlerResult(_, None) => Left(Redirect(controllers.routes.HomeController.home()).flashing("error" -> "You're not signed in."))
     }
