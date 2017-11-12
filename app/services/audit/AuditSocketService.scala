@@ -15,7 +15,6 @@ object AuditSocketService {
 }
 
 case class AuditSocketService(id: UUID, supervisor: ActorRef, creds: Credentials, out: ActorRef, sourceAddress: String) extends InstrumentedActor with Logging {
-
   override def preStart() = {
     log.info(s"Starting connection for user [${creds.user.id}: ${creds.user.username}].")
     supervisor ! SocketStarted(creds, "audit", id, self)
