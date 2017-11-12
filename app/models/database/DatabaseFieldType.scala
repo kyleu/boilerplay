@@ -61,7 +61,6 @@ object DatabaseFieldType extends Enum[DatabaseFieldType[_]] with DatabaseFieldHe
     override def opt(row: Row, col: String) = row.asOpt[PGobject](col).map(x => parse(x.getValue).right.get)
   }
 
-  case object CodeType extends DatabaseFieldType[String]("code")
   case object TagsType extends DatabaseFieldType[Seq[models.tag.Tag]]("tags") {
     override def apply(row: Row, col: String) = tagsCoerce(row.as[Any](col))
     override def opt(row: Row, col: String) = row.asOpt[Any](col).map(tagsCoerce)
