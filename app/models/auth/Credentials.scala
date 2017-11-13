@@ -11,5 +11,7 @@ object Credentials {
   implicit val jsonEncoder: Encoder[Credentials] = deriveEncoder
   implicit val jsonDecoder: Decoder[Credentials] = deriveDecoder
 
+  val system = Credentials(User.system, "localhost")
+
   def fromRequest(request: SecuredRequest[AuthEnv, _]) = Credentials(request.identity, request.remoteAddress)
 }

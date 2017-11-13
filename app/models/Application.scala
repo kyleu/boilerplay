@@ -12,7 +12,6 @@ import services.database._
 import services.file.FileService
 import services.supervisor.ActorSupervisor
 import services.user.UserService
-import util.FutureUtils.defaultContext
 import services.cache.CacheService
 import services.audit.{AuditRecordService, AuditService}
 import services.note.ModelNoteService
@@ -74,7 +73,6 @@ class Application @javax.inject.Inject() (
   }
 
   private[this] def stop() = {
-    ApplicationDatabase.close()
     ApplicationDatabase.close()
     CacheService.close()
     tracing.close()
