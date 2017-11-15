@@ -4,17 +4,23 @@ import java.net.InetAddress
 
 import com.google.common.net.InetAddresses
 import models.database.{DatabaseConfig, RawQuery, Statement}
+import util.FutureUtils.databaseContext
 import util.Logging
 import util.metrics.Instrumented
 import util.tracing.{TraceData, TracingService}
 import zipkin.Endpoint
 
+import scala.concurrent.Future
+
 trait Database[Conn] extends Instrumented with Logging {
   protected[this] def key: String
 
   def transaction[A](f: (TraceData, Conn) => A)(implicit traceData: TraceData): A
+
   def execute(statement: Statement, conn: Option[Conn] = None)(implicit traceData: TraceData): Int
-  def query[A](query: RawQuery[A], conn: Option[Conn] = None)(implicit traceData: TraceData): A
+  def executeF(statement: Statement, conn: Option[Conn] = None)(implicit traceData: TraceData): Future[Int] = Future(execute(statement, conn))
+  def query[A](q: RawQuery[A], conn: Option[Conn] = None)(implicit traceData: TraceData): A
+  def queryF[A](q: RawQuery[A], conn: Option[Conn] = None)(implicit traceData: TraceData): Future[A] = Future(query(q, conn))
 
   def close(): Boolean
 

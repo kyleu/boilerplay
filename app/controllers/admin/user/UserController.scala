@@ -18,9 +18,10 @@ class UserController @javax.inject.Inject() (
 ) extends BaseController("user") with UserEditHelper with UserSearchHelper {
   def relationCounts(id: java.util.UUID) = withSession("relation.counts", admin = true) { implicit request => implicit td =>
     val creds = models.auth.Credentials.fromRequest(request)
-    val noteByAuthor = noteS.countByAuthor(creds, id)
-    Future.successful(Ok(Seq(
-      RelationCount(model = "note", field = "author", count = noteByAuthor)
-    ).asJson.spaces2).as(JSON))
+    noteS.countByAuthor(creds, id).map { noteCountByAuthor =>
+      Ok(Seq(
+        RelationCount(model = "note", field = "author", count = noteCountByAuthor)
+      ).asJson.spaces2).as(JSON)
+    }
   }
 }

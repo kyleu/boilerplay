@@ -32,7 +32,7 @@ object Dependencies {
   }
 
   object Database {
-    val hikariCp = "com.zaxxer" % "HikariCP" % "2.7.2"
+    val hikariCp = "com.zaxxer" % "HikariCP" % "2.7.3"
     val mysql = "mysql" % "mysql-connector-java" % "5.1.44" // 6.0 is all different
     val postgres = "org.postgresql" % "postgresql" % "9.4.1212"
   }
@@ -88,7 +88,7 @@ object Dependencies {
     val csv = "com.github.tototoshi" %% "scala-csv" % "1.3.5"
     val betterFiles = "com.github.pathikrit" %% "better-files" % "3.2.0"
     val commonsIo = "commons-io" % "commons-io" % "2.6"
-    val scalaGuice = "net.codingwell" %% "scala-guice" % "4.1.0"
+    val scalaGuice = "net.codingwell" %% "scala-guice" % "4.1.1"
   }
 
   object Testing {

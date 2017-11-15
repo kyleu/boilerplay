@@ -21,6 +21,7 @@ Boilerplay relies on a whole lot of tremendous open source projects. Here's a fe
 * [Materialize CSS](http://materializecss.com)
 * [Enumeratum](https://github.com/lloydmeta/enumeratum)
 * [circe](https://circe.github.io/circe)
+* [BooPickle](https://github.com/suzaku-io/boopickle)
 * [Silhouette](https://www.silhouette.rocks)
 * [Dropwizard Metrics](http://metrics.dropwizard.io)
 * [Netty](http://netty.io)

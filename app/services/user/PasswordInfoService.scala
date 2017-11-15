@@ -5,6 +5,7 @@ import com.mohiva.play.silhouette.api.util.PasswordInfo
 import com.mohiva.play.silhouette.persistence.daos.DelegableAuthInfoDAO
 import models.queries.auth.PasswordInfoQueries
 import services.database.ApplicationDatabase
+import util.FutureUtils.serviceContext
 import util.tracing.TracingService
 
 import scala.concurrent.Future
@@ -17,26 +18,24 @@ class PasswordInfoService @javax.inject.Inject() (tracingService: TracingService
   }
 
   override def add(loginInfo: LoginInfo, authInfo: PasswordInfo) = tracingService.noopTrace("password.add") { implicit td =>
-    ApplicationDatabase.execute(PasswordInfoQueries.CreatePasswordInfo(loginInfo, authInfo))
-    Future.successful(authInfo)
+    ApplicationDatabase.executeF(PasswordInfoQueries.CreatePasswordInfo(loginInfo, authInfo)).map(_ => authInfo)
   }
 
   override def update(loginInfo: LoginInfo, authInfo: PasswordInfo): Future[PasswordInfo] = tracingService.noopTrace("password.update") { implicit td =>
-    ApplicationDatabase.execute(PasswordInfoQueries.UpdatePasswordInfo(loginInfo, authInfo))
-    Future.successful(authInfo)
+    ApplicationDatabase.executeF(PasswordInfoQueries.UpdatePasswordInfo(loginInfo, authInfo)).map(_ => authInfo)
   }
 
   override def save(loginInfo: LoginInfo, authInfo: PasswordInfo) = tracingService.noopTrace("password.save") { implicit td =>
-    ApplicationDatabase.transaction { (txTd, conn) =>
-      val rowsAffected = ApplicationDatabase.execute(PasswordInfoQueries.UpdatePasswordInfo(loginInfo, authInfo), Some(conn))(txTd)
+    ApplicationDatabase.executeF(PasswordInfoQueries.UpdatePasswordInfo(loginInfo, authInfo))(td).flatMap { rowsAffected =>
       if (rowsAffected == 0) {
-        ApplicationDatabase.execute(PasswordInfoQueries.CreatePasswordInfo(loginInfo, authInfo), Some(conn))(txTd)
+        ApplicationDatabase.executeF(PasswordInfoQueries.CreatePasswordInfo(loginInfo, authInfo))(td).map(_ => authInfo)
+      } else {
+        Future.successful(authInfo)
       }
     }
-    Future.successful(authInfo)
   }
 
   override def remove(loginInfo: LoginInfo) = tracingService.topLevelTrace("password.remove") { implicit td =>
-    Future.successful(ApplicationDatabase.execute(PasswordInfoQueries.removeByPrimaryKey(Seq(loginInfo.providerID, loginInfo.providerKey))))
+    ApplicationDatabase.executeF(PasswordInfoQueries.removeByPrimaryKey(Seq(loginInfo.providerID, loginInfo.providerKey))).map(_ => {})
   }
 }

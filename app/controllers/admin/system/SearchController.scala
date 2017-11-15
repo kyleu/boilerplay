@@ -26,62 +26,64 @@ class SearchController @javax.inject.Inject() (override val app: Application, se
         case _: IllegalArgumentException => searchString(creds, q)
       }
     }
-    Future.successful(Ok(views.html.admin.explore.searchResults(q, results, request.identity)))
+    results.map { r =>
+      Ok(views.html.admin.explore.searchResults(q, r, request.identity))
+    }
   }
 
   private[this] def searchInt(creds: Credentials, q: String, id: Int)(implicit timing: TraceData) = {
     // Start int searches
-    val intSearches = Seq.empty[Seq[Html]]
+    val intSearches = Seq.empty[Future[Seq[Html]]]
     // End int searches
 
-    intSearches.flatten
+    Future.sequence(intSearches).map(_.flatten)
   }
 
   private[this] def searchUuid(creds: Credentials, q: String, id: UUID)(implicit timing: TraceData) = {
     // Start uuid searches
 
-    val auditRecord = services.auditServices.auditRecordService.getByPrimaryKey(creds, id).map { model =>
+    val auditRecord = services.auditServices.auditRecordService.getByPrimaryKey(creds, id).map(_.map { model =>
       views.html.admin.audit.auditRecordSearchResult(model, s"Audit Record [${model.id}] matched [$q].")
-    }.toSeq
-    val note = services.noteServices.noteService.getByPrimaryKey(creds, id).map { model =>
+    }.toSeq)
+    val note = services.noteServices.noteService.getByPrimaryKey(creds, id).map(_.map { model =>
       views.html.admin.note.noteSearchResult(model, s"Note [${model.id}] matched [$q].")
-    }.toSeq
-    val user = services.userServices.userService.getByPrimaryKey(creds, id).map { model =>
+    }.toSeq)
+    val user = services.userServices.userService.getByPrimaryKey(creds, id).map(_.map { model =>
       views.html.admin.user.userSearchResult(model, s"User [${model.id}] matched [$q].")
-    }.toSeq
+    }.toSeq)
 
-    val uuidSearches = Seq[Seq[Html]](auditRecord, note, user)
+    val uuidSearches = Seq[Future[Seq[Html]]](auditRecord, note, user)
 
     // End uuid searches
 
-    val auditR = app.auditService.getByPrimaryKey(creds, id).map { model =>
+    val auditR = app.auditService.getByPrimaryKey(creds, id).map(_.map { model =>
       views.html.admin.audit.auditSearchResult(model, s"Audit [${model.id}] matched [$q].")
-    }.toSeq
+    }.toSeq)
 
-    (auditR +: uuidSearches).flatten
+    Future.sequence(auditR +: uuidSearches).map(_.flatten)
   }
 
   private[this] def searchString(creds: Credentials, q: String)(implicit timing: TraceData) = {
     // Start string searches
 
-    val auditRecord = services.auditServices.auditRecordService.searchExact(creds = creds, q = q, limit = Some(5)).map { model =>
+    val auditRecord = services.auditServices.auditRecordService.searchExact(creds = creds, q = q, limit = Some(5)).map(_.map { model =>
       views.html.admin.audit.auditRecordSearchResult(model, s"Audit Record [${model.id}] matched [$q].")
-    }
-    val note = services.noteServices.noteService.searchExact(creds = creds, q = q, limit = Some(5)).map { model =>
+    })
+    val note = services.noteServices.noteService.searchExact(creds = creds, q = q, limit = Some(5)).map(_.map { model =>
       views.html.admin.note.noteSearchResult(model, s"Note [${model.id}] matched [$q].")
-    }
-    val user = services.userServices.userService.searchExact(creds = creds, q = q, limit = Some(5)).map { model =>
+    })
+    val user = services.userServices.userService.searchExact(creds = creds, q = q, limit = Some(5)).map(_.map { model =>
       views.html.admin.user.userSearchResult(model, s"User [${model.id}] matched [$q].")
-    }
+    })
 
-    val stringSearches = Seq[Seq[Html]](auditRecord, note, user)
+    val stringSearches = Seq[Future[Seq[Html]]](auditRecord, note, user)
 
     // End string searches
 
-    val auditR = app.auditService.searchExact(creds = creds, q = q, limit = Some(5)).map { model =>
+    val auditR = app.auditService.searchExact(creds = creds, q = q, limit = Some(5)).map(_.map { model =>
       views.html.admin.audit.auditSearchResult(model, s"Audit [${model.id}] matched [$q].")
-    }
+    })
 
-    (auditR +: stringSearches).flatten
+    Future.sequence(auditR +: stringSearches).map(_.flatten)
   }
 }

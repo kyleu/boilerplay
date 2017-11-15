@@ -27,12 +27,11 @@ class ProfileController @javax.inject.Inject() (
     UserForms.profileForm.bindFromRequest.fold(
       _ => Future.successful(BadRequest(views.html.profile.view(request.identity))),
       profileData => {
-        val newPrefs = request.identity.preferences.copy(
-          theme = profileData.theme
-        )
+        val newPrefs = request.identity.preferences.copy(theme = profileData.theme)
         val newUser = request.identity.copy(username = profileData.username, preferences = newPrefs)
-        app.userService.updateUser(request, newUser)
-        Future.successful(Redirect(controllers.routes.HomeController.home()))
+        app.userService.updateUser(request, newUser).map { _ =>
+          Redirect(controllers.routes.HomeController.home())
+        }
       }
     )
   }

@@ -9,7 +9,10 @@ import models.auth.Credentials
 import models.result.data.DataField
 import services.supervisor.ActorSupervisor
 import util.{DateUtils, Logging}
+import util.FutureUtils.serviceContext
 import util.tracing.TraceData
+
+import scala.concurrent.Future
 
 object AuditCache {
   val maxPending = 1000
@@ -27,15 +30,18 @@ class AuditCache(supervisor: ActorRef, lookup: AuditLookup) extends Logging {
   def onStart(creds: Credentials, id: UUID, msg: AuditStart)(implicit traceData: TraceData) = {
     supervisor ! ActorSupervisor.Broadcast("audit", models.AuditStartNotification(id, msg))
 
-    val results = msg.models.map { model =>
-      model -> lookup.getByPk(creds, model.t, model.pk: _*).map(_.toDataFields).getOrElse {
+    val f = msg.models.map { model =>
+      lookup.getByPk(creds, model.t, model.pk: _*).map(_.map(_.toDataFields).getOrElse {
         Seq(DataField("error", Some(s"Could not load model [${model.t}:${model.pk.mkString("/")}] for read.")))
-      }
+      }).map(model -> _)
     }
-    val entries = results.map(x => AuditCache.CacheEntry(x._1.t, x._1.pk, x._2))
-    val v = (msg, entries, DateUtils.now)
-    cache.update(id, v)
-    log.info(s"Started audit with id [$id] ($pendingCount in cache).")
+    Future.sequence(f).map { results =>
+      val entries = results.map(x => AuditCache.CacheEntry(x._1.t, x._1.pk, x._2))
+      val v = (msg, entries, DateUtils.now)
+      cache.update(id, v)
+      log.info(s"Started audit with id [$id] ($pendingCount in cache).")
+      "OK"
+    }
   }
 
   private[this] def getAuditFields(o: AuditCache.CacheEntry, n: Seq[DataField]) = o.fields.flatMap(f => n.find(_.k == f.k).flatMap { nf =>
@@ -48,38 +54,43 @@ class AuditCache(supervisor: ActorRef, lookup: AuditLookup) extends Logging {
     ))
     supervisor ! ActorSupervisor.Broadcast("audit", models.AuditCompleteNotification(msg))
 
-    val updateLookup = current._2.map { c =>
-      c -> lookup.getByPk(creds, c.t, c.pk: _*).map(_.toDataFields).getOrElse(Seq(
-        DataField("error", Some(s"Could not load model [${c.t}:${c.pk.mkString("/")}] for update."))
-      ))
-    }
-    val insertLookup = msg.inserted.map { c =>
-      c -> lookup.getByPk(creds, c.t, c.pk: _*).map(_.toDataFields).getOrElse(Seq(
-        DataField("error", Some(s"Could not load model [${c.t}:${c.pk.mkString("/")}] for insert."))
-      ))
-    }
+    val updateLookup = Future.sequence(current._2.map { model =>
+      lookup.getByPk(creds, model.t, model.pk: _*).map(_.map(_.toDataFields).getOrElse {
+        Seq(DataField("error", Some(s"Could not load model [${model.t}:${model.pk.mkString("/")}] for read.")))
+      }).map(model -> _)
+    })
+    val insertLookup = Future.sequence(msg.inserted.map { model =>
+      lookup.getByPk(creds, model.t, model.pk: _*).map(_.map(_.toDataFields).getOrElse {
+        Seq(DataField("error", Some(s"Could not load model [${model.t}:${model.pk.mkString("/")}] for read.")))
+      }).map(model -> _)
+    })
 
-    val updates = updateLookup.map { c =>
-      AuditRecord(auditId = msg.id, t = c._1.t, pk = c._1.pk, changes = getAuditFields(c._1, c._2))
-    }.filter(_.changes.nonEmpty)
+    updateLookup.flatMap { u =>
+      insertLookup.map { i =>
+        val updates = u.map { c =>
+          AuditRecord(auditId = msg.id, t = c._1.t, pk = c._1.pk, changes = getAuditFields(c._1, c._2))
+        }.filter(_.changes.nonEmpty)
 
-    val inserts = insertLookup.map { c =>
-      AuditRecord(auditId = msg.id, t = c._1.t, pk = c._1.pk, changes = c._2.map(x => AuditField(x.k, None, x.v)))
+        val inserts = i.map { c =>
+          AuditRecord(auditId = msg.id, t = c._1.t, pk = c._1.pk, changes = c._2.map(x => AuditField(x.k, None, x.v)))
+        }
+
+        val audit = Audit(
+          id = msg.id,
+          act = current._1.action,
+          client = current._1.client,
+          userId = creds.user.id,
+          tags = current._1.tags ++ msg.tags,
+          msg = msg.msg,
+          records = updates ++ inserts,
+          started = current._3,
+          completed = util.DateUtils.now
+        )
+        cache.remove(audit.id)
+        log.info(s"Completed audit with id [${msg.id}] ($pendingCount in cache).")
+        AuditHelper.onAudit(audit)
+        audit
+      }
     }
-
-    val audit = Audit(
-      id = msg.id,
-      act = current._1.action,
-      client = current._1.client,
-      userId = creds.user.id,
-      tags = current._1.tags ++ msg.tags,
-      msg = msg.msg,
-      records = updates ++ inserts,
-      started = current._3,
-      completed = util.DateUtils.now
-    )
-    cache.remove(audit.id)
-    log.info(s"Completed audit with id [${msg.id}] ($pendingCount in cache).")
-    AuditHelper.onAudit(audit)
   }
 }

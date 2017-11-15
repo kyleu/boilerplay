@@ -34,12 +34,13 @@ class AuditLifecycleController @javax.inject.Inject() (override val app: Applica
     val startMs = DateUtils.nowMillis
     val auditId = UUID.randomUUID
 
-    AuditHelper.onStart(request, auditId, auditStart)
-    val elapsedMs = DateUtils.nowMillis - startMs
-    val response = s"""{ "id": "$auditId", "status": "OK", "elapsed": $elapsedMs }"""
-    Future.successful(Ok(response).as(JSON))
+    AuditHelper.onStart(request, auditId, auditStart).map { status =>
+      val elapsedMs = DateUtils.nowMillis - startMs
+      val response = s"""{ "id": "$auditId", "status": "$status", "elapsed": $elapsedMs }"""
+      Ok(response).as(JSON)
+    }
   }
-
+  // ???
   def complete() = withSession("complete") { implicit request => implicit td =>
     val json = ControllerUtilities.jsonFor(request)
     val auditComplete = json.as[AuditComplete] match {
@@ -49,9 +50,10 @@ class AuditLifecycleController @javax.inject.Inject() (override val app: Applica
 
     val startMs = DateUtils.nowMillis
 
-    AuditHelper.onComplete(request, auditComplete)
-    val elapsedMs = DateUtils.nowMillis - startMs
-    val response = s"""{ "id": "${auditComplete.id}", "status": "OK", "elapsed": $elapsedMs }"""
-    Future.successful(Ok(response).as(JSON))
+    AuditHelper.onComplete(request, auditComplete).map { audit =>
+      val elapsedMs = DateUtils.nowMillis - startMs
+      val response = s"""{ "id": "${audit.id}", "elapsed": $elapsedMs }"""
+      Ok(response).as(JSON)
+    }
   }
 }

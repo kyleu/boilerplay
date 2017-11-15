@@ -1,4 +1,3 @@
-/* Generated File */
 package services.audit
 
 import java.util.UUID
@@ -11,92 +10,91 @@ import models.result.filter.Filter
 import models.result.orderBy.OrderBy
 import services.ModelServiceHelper
 import services.database.ApplicationDatabase
+import util.FutureUtils.serviceContext
 import util.tracing.{TraceData, TracingService}
+
+import scala.concurrent.Future
 
 @javax.inject.Singleton
 class AuditRecordService @javax.inject.Inject() (override val tracing: TracingService) extends ModelServiceHelper[AuditRecord]("auditRecord") {
   def getByPrimaryKey(creds: Credentials, id: UUID)(implicit trace: TraceData) = {
-    traceB("get.by.primary.key")(td => ApplicationDatabase.query(AuditRecordQueries.getByPrimaryKey(id))(td))
+    traceF("get.by.primary.key")(td => ApplicationDatabase.queryF(AuditRecordQueries.getByPrimaryKey(id))(td))
   }
   def getByPrimaryKeySeq(creds: Credentials, idSeq: Seq[UUID])(implicit trace: TraceData) = {
-    traceB("get.by.primary.key.seq")(td => ApplicationDatabase.query(AuditRecordQueries.getByPrimaryKeySeq(idSeq))(td))
+    traceF("get.by.primary.key.seq")(td => ApplicationDatabase.queryF(AuditRecordQueries.getByPrimaryKeySeq(idSeq))(td))
   }
 
   override def countAll(creds: Credentials, filters: Seq[Filter] = Nil)(implicit trace: TraceData) = {
-    traceB("get.all.count")(td => ApplicationDatabase.query(AuditRecordQueries.countAll(filters))(td))
+    traceF("get.all.count")(td => ApplicationDatabase.queryF(AuditRecordQueries.countAll(filters))(td))
   }
   override def getAll(
     creds: Credentials, filters: Seq[Filter], orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int] = None
   )(implicit trace: TraceData) = {
-    traceB("get.all")(td => ApplicationDatabase.query(AuditRecordQueries.getAll(filters, orderBys, limit, offset))(td))
+    traceF("get.all")(td => ApplicationDatabase.queryF(AuditRecordQueries.getAll(filters, orderBys, limit, offset))(td))
   }
 
   // Search
   override def searchCount(creds: Credentials, q: String, filters: Seq[Filter])(implicit trace: TraceData) = {
-    traceB("search.count")(td => ApplicationDatabase.query(AuditRecordQueries.searchCount(q, filters))(td))
+    traceF("search.count")(td => ApplicationDatabase.queryF(AuditRecordQueries.searchCount(q, filters))(td))
   }
   override def search(
     creds: Credentials, q: String, filters: Seq[Filter], orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int] = None
   )(implicit trace: TraceData) = {
-    traceB("search")(td => ApplicationDatabase.query(AuditRecordQueries.search(q, filters, orderBys, limit, offset))(td))
+    traceF("search")(td => ApplicationDatabase.queryF(AuditRecordQueries.search(q, filters, orderBys, limit, offset))(td))
   }
 
   def searchExact(
     creds: Credentials, q: String, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None
   )(implicit trace: TraceData) = {
-    traceB("search.exact")(td => ApplicationDatabase.query(AuditRecordQueries.searchExact(q, orderBys, limit, offset))(td))
+    traceF("search.exact")(td => ApplicationDatabase.queryF(AuditRecordQueries.searchExact(q, orderBys, limit, offset))(td))
   }
 
-  def countByAuditId(creds: Credentials, auditId: UUID)(implicit trace: TraceData) = traceB("count.by.auditId") { td =>
-    ApplicationDatabase.query(AuditRecordQueries.CountByAuditId(auditId))(td)
+  def countByAuditId(creds: Credentials, auditId: UUID)(implicit trace: TraceData) = traceF("count.by.auditId") { td =>
+    ApplicationDatabase.queryF(AuditRecordQueries.CountByAuditId(auditId))(td)
   }
   def getByAuditId(creds: Credentials, auditId: UUID, orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int])(implicit trace: TraceData) = {
-    traceB("get.by.auditId")(td => ApplicationDatabase.query(AuditRecordQueries.GetByAuditId(auditId, orderBys, limit, offset))(td))
+    traceF("get.by.auditId")(td => ApplicationDatabase.queryF(AuditRecordQueries.GetByAuditId(auditId, orderBys, limit, offset))(td))
   }
-  def getByAuditIdSeq(creds: Credentials, auditIdSeq: Seq[UUID])(implicit trace: TraceData) = traceB("get.by.auditId.seq") { td =>
-    ApplicationDatabase.query(AuditRecordQueries.GetByAuditIdSeq(auditIdSeq))(td)
+  def getByAuditIdSeq(creds: Credentials, auditIdSeq: Seq[UUID])(implicit trace: TraceData) = traceF("get.by.auditId.seq") { td =>
+    ApplicationDatabase.queryF(AuditRecordQueries.GetByAuditIdSeq(auditIdSeq))(td)
   }
 
   // Mutations
   def insert(creds: Credentials, model: AuditRecord)(implicit trace: TraceData) = {
-    traceB("insert")(td => ApplicationDatabase.execute(AuditRecordQueries.insert(model))(td) match {
-      case 1 => getByPrimaryKey(creds, model.id)(td).map { model =>
-        services.audit.AuditHelper.onInsert("AuditRecord", Seq(model.id.toString), model.toDataFields, creds)
-        model
+    traceF("insert")(td => ApplicationDatabase.executeF(AuditRecordQueries.insert(model))(td).flatMap {
+      case 1 => getByPrimaryKey(creds, model.id)(td).map {
+        case Some(n) =>
+          services.audit.AuditHelper.onInsert("AuditRecord", Seq(n.id.toString), n.toDataFields, creds)
+          model
+        case _ => throw new IllegalStateException("Unable to retrieve newly-inserted Audit Record.")
       }
       case _ => throw new IllegalStateException("Unable to find newly-inserted Audit Record.")
     })
   }
   def insertBatch(creds: Credentials, models: Seq[AuditRecord])(implicit trace: TraceData) = {
-    traceB("insertBatch")(td => ApplicationDatabase.execute(AuditRecordQueries.insertBatch(models))(td))
+    traceF("insertBatch")(td => ApplicationDatabase.executeF(AuditRecordQueries.insertBatch(models))(td))
   }
-  def create(creds: Credentials, fields: Seq[DataField])(implicit trace: TraceData) = traceB("create") { td =>
-    ApplicationDatabase.execute(AuditRecordQueries.create(fields))(td)
-    services.audit.AuditHelper.onInsert("AuditRecord", Seq(fieldVal(fields, "id")), fields, creds)
+  def create(creds: Credentials, fields: Seq[DataField])(implicit trace: TraceData) = traceF("create") { td =>
+    ApplicationDatabase.executeF(AuditRecordQueries.create(fields))(td)
     getByPrimaryKey(creds, UUID.fromString(fieldVal(fields, "id")))
   }
 
   def remove(creds: Credentials, id: UUID)(implicit trace: TraceData) = {
-    traceB("remove")(td => getByPrimaryKey(creds, id)(td) match {
-      case Some(current) =>
-        services.audit.AuditHelper.onRemove("AuditRecord", Seq(id.toString), current.toDataFields, creds)
-        ApplicationDatabase.execute(AuditRecordQueries.removeByPrimaryKey(id))(td)
-        current
+    traceF("remove")(td => getByPrimaryKey(creds, id)(td).flatMap {
+      case Some(current) => ApplicationDatabase.executeF(AuditRecordQueries.removeByPrimaryKey(id))(td).map(_ => current)
       case None => throw new IllegalStateException(s"Cannot find AuditRecord matching [$id].")
     })
   }
 
   def update(creds: Credentials, id: UUID, fields: Seq[DataField])(implicit trace: TraceData) = {
-    traceB("update")(td => getByPrimaryKey(creds, id)(td) match {
-      case Some(current) if fields.isEmpty => current -> s"No changes required for Audit Record [$id]."
-      case Some(current) =>
-        ApplicationDatabase.execute(AuditRecordQueries.update(id, fields))(td)
-        getByPrimaryKey(creds, id)(td) match {
-          case Some(newModel) =>
-            services.audit.AuditHelper.onUpdate("AuditRecord", Seq(DataField("id", Some(id.toString))), current.toDataFields, fields, creds)
-            newModel -> s"Updated [${fields.size}] fields of Audit Record [$id]."
+    traceF("update")(td => getByPrimaryKey(creds, id)(td).flatMap {
+      case Some(current) if fields.isEmpty => Future.successful(current -> s"No changes required for Audit Record [$id].")
+      case Some(_) => ApplicationDatabase.executeF(AuditRecordQueries.update(id, fields))(td).flatMap { _ =>
+        getByPrimaryKey(creds, id)(td).map {
+          case Some(newModel) => newModel -> s"Updated [${fields.size}] fields of Audit Record [$id]."
           case None => throw new IllegalStateException(s"Cannot find AuditRecord matching [$id].")
         }
+      }
       case None => throw new IllegalStateException(s"Cannot find AuditRecord matching [$id].")
     })
   }

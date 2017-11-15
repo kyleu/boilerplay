@@ -7,13 +7,15 @@ import services.audit.AuditArgs._
 import util.Logging
 import util.tracing.TraceData
 
+import scala.concurrent.Future
+
 @javax.inject.Singleton
 class AuditLookup @javax.inject.Inject() (registry: ServiceRegistry) extends Logging {
   def getByPk(creds: Credentials, model: String, pk: String*)(implicit traceData: TraceData) = getModel(creds, model, getArg(pk, _))
 
   private[this] def getModel(
     creds: Credentials, key: String, arg: (Int) => String
-  )(implicit traceData: TraceData): Option[DataFieldModel] = key.toLowerCase match {
+  )(implicit traceData: TraceData): Future[Option[DataFieldModel]] = key.toLowerCase match {
     /* Start registry lookups */
 
     case "auditrecord" => registry.auditServices.auditRecordService.getByPrimaryKey(creds, uuidArg(arg(0)))
@@ -23,6 +25,6 @@ class AuditLookup @javax.inject.Inject() (registry: ServiceRegistry) extends Log
     /* End registry lookups */
     case _ =>
       log.warn(s"Attempted to load invalid object type [$key:${arg(0)}].")
-      None
+      Future.successful(None)
   }
 }

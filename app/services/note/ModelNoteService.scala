@@ -8,12 +8,10 @@ import util.tracing.{TraceData, TracingService}
 @javax.inject.Singleton
 class ModelNoteService @javax.inject.Inject() (val svc: NoteService, tracing: TracingService) {
   def getFor(model: String, pk: Any*)(implicit trace: TraceData) = {
-    ApplicationDatabase.query(ModelNoteQueries.GetByModel(model, pk.mkString("/")))
+    ApplicationDatabase.queryF(ModelNoteQueries.GetByModel(model, pk.mkString("/")))
   }
 
-  def csvFor(operation: String, totalCount: Int, rows: Seq[Note])(implicit trace: TraceData) = {
-    tracing.traceBlocking("note.service.note") { td =>
-      util.CsvUtils.csvFor(Some(s"Notes for [$operation]"), totalCount, rows, NoteQueries.fields)(td)
-    }
+  def csvFor(operation: String, totalCount: Int, rows: Seq[Note])(implicit trace: TraceData) = tracing.traceBlocking("note.service.note") { td =>
+    util.CsvUtils.csvFor(Some(s"Notes for [$operation]"), totalCount, rows, NoteQueries.fields)(td)
   }
 }

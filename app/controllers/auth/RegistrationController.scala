@@ -63,21 +63,22 @@ class RegistrationController @javax.inject.Inject() (
               role = role
             )
             val creds = Credentials(user, request.remoteAddress)
-            val userSaved = app.userService.insert(creds, user)
-            AuditHelper.onInsert("user", Seq(userSaved.id.toString), userSaved.toDataFields, creds)
-            val result = request.session.get("returnUrl") match {
-              case Some(url) => Redirect(url).withSession(request.session - "returnUrl")
-              case None => Redirect(controllers.routes.HomeController.home())
-            }
-            for {
-              _ <- authInfoRepository.add(loginInfo, authInfo)
-              authenticator <- app.silhouette.env.authenticatorService.create(loginInfo)
-              value <- app.silhouette.env.authenticatorService.init(authenticator)
-              result <- app.silhouette.env.authenticatorService.embed(value, result)
-            } yield {
-              app.silhouette.env.eventBus.publish(SignUpEvent(userSaved, request))
-              app.silhouette.env.eventBus.publish(LoginEvent(userSaved, request))
-              result.flashing("success" -> "You're all set!")
+            app.userService.insert(creds, user).flatMap { userSaved =>
+              AuditHelper.onInsert("user", Seq(userSaved.id.toString), userSaved.toDataFields, creds)
+              val result = request.session.get("returnUrl") match {
+                case Some(url) => Redirect(url).withSession(request.session - "returnUrl")
+                case None => Redirect(controllers.routes.HomeController.home())
+              }
+              for {
+                _ <- authInfoRepository.add(loginInfo, authInfo)
+                authenticator <- app.silhouette.env.authenticatorService.create(loginInfo)
+                value <- app.silhouette.env.authenticatorService.init(authenticator)
+                result <- app.silhouette.env.authenticatorService.embed(value, result)
+              } yield {
+                app.silhouette.env.eventBus.publish(SignUpEvent(userSaved, request))
+                app.silhouette.env.eventBus.publish(LoginEvent(userSaved, request))
+                result.flashing("success" -> "You're all set!")
+              }
             }
         }
       }

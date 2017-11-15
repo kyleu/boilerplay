@@ -1,22 +1,25 @@
 package services.audit
 
-import models.audit.Audit
+import models.audit.{Audit, AuditRecord}
 import models.queries.audit.{AuditQueries, AuditRecordQueries}
 import services.database.ApplicationDatabase
 import util.FutureUtils.defaultContext
-import util.Logging
+import util.{FutureUtils, Logging}
 import util.tracing.TraceData
 import util.web.TracingWSClient
 
 object AuditNotifications extends Logging {
   def persist(a: Audit)(implicit trace: TraceData) = {
     log.debug(s"Persisting audit [${a.id}]...")
-    ApplicationDatabase.execute(AuditQueries.insert(a))
-    a.records.foreach { r =>
-      ApplicationDatabase.execute(AuditRecordQueries.insert(r))
-      log.debug(s"Persisted audit record [${r.id}] for audit [${a.id}].")
+    val ret = ApplicationDatabase.executeF(AuditQueries.insert(a)).map { _ =>
+      val f = FutureUtils.acc(a.records, (r: AuditRecord) => ApplicationDatabase.executeF(AuditRecordQueries.insert(r)).map { _ =>
+        log.debug(s"Persisted audit record [${r.id}] for audit [${a.id}].")
+      })(FutureUtils.serviceContext).map { _ =>
+        log.debug(s"Persisted audit [${a.id}] with [${a.records.size}] records.")
+      }
     }
-    log.debug(s"Persisted audit [${a.id}] with [${a.records.size}] records.")
+    ret.failed.foreach(x => log.warn(s"Unable to persist audit [${a.id}].", x))
+    ret
   }
 
   def postToSlack(ws: TracingWSClient, config: SlackConfig, a: Audit)(implicit trace: TraceData) = if (config.enabled) {
@@ -39,6 +42,7 @@ object AuditNotifications extends Logging {
       }
     }
     ret.failed.foreach(x => log.warn("Unable to post to Slack.", x))
+    ret
   }
 
 }

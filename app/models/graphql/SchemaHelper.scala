@@ -8,6 +8,7 @@ import models.result.paging.PagingOptions
 import sangria.schema.{Args, Context}
 import services.ModelServiceHelper
 import util.tracing.TraceData
+import util.FutureUtils.graphQlContext
 
 import scala.concurrent.Future
 
@@ -31,11 +32,11 @@ abstract class SchemaHelper(val name: String) {
 
   def runSearch[T](svc: ModelServiceHelper[T], c: Context[GraphQLContext, Unit], td: TraceData) = {
     val args = argsFor(c.args)
-    val x = c.arg(CommonSchema.queryArg) match {
+    val f = c.arg(CommonSchema.queryArg) match {
       case Some(q) => svc.searchWithCount(c.ctx.creds, q, args.filters, args.orderBys, args.limit, args.offset)(td)
       case _ => svc.getAllWithCount(c.ctx.creds, args.filters, args.orderBys, args.limit, args.offset)(td)
     }
     c.ctx.trace.span.annotate("Composing search result.")
-    SearchResult(x._1, x._2, args)
+    f.map(x => SearchResult(x._1, x._2, args))
   }
 }

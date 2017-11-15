@@ -17,8 +17,6 @@ import models.template.Theme
 import sangria.execution.deferred.{Fetcher, HasId, Relation}
 import util.FutureUtils.graphQlContext
 
-import scala.concurrent.Future
-
 object UserSchema extends SchemaHelper("user") {
   implicit val roleEnum = CommonSchema.deriveEnumeratumType(
     name = "RoleEnum",
@@ -35,12 +33,12 @@ object UserSchema extends SchemaHelper("user") {
   implicit val profileType = deriveObjectType[GraphQLContext, UserProfile](ObjectTypeDescription("Information about the current session."))
 
   implicit val userPrimaryKeyId = HasId[User, UUID](_.id)
-  private[this] def getByPrimaryKeySeq(c: GraphQLContext, idSeq: Seq[UUID]) = Future.successful(c.app.userService.getByPrimaryKeySeq(c.creds, idSeq)(c.trace))
+  private[this] def getByPrimaryKeySeq(c: GraphQLContext, idSeq: Seq[UUID]) = c.app.userService.getByPrimaryKeySeq(c.creds, idSeq)(c.trace)
   val userByPrimaryKeyFetcher = Fetcher(getByPrimaryKeySeq)
 
   val userByRoleRelation = Relation[User, Role]("byRole", x => Seq(x.role))
   val userByRoleFetcher = Fetcher.rel[GraphQLContext, User, User, UUID](
-    getByPrimaryKeySeq, (c, rels) => Future.successful(c.app.userService.getByRoleSeq(rels(userByRoleRelation))(c.trace))
+    getByPrimaryKeySeq, (c, rels) => c.app.userService.getByRoleSeq(rels(userByRoleRelation))(c.trace)
   )
 
   implicit val loginInfoType = deriveObjectType[GraphQLContext, LoginInfo](ObjectTypeDescription("Information about login credentials."))
@@ -80,7 +78,7 @@ object UserSchema extends SchemaHelper("user") {
       name = "user",
       fieldType = userResultType,
       arguments = queryArg :: reportFiltersArg :: orderBysArg :: limitArg :: offsetArg :: Nil,
-      resolve = c => traceB(c.ctx, "search")(td => toResult(runSearch(c.ctx.app.userService, c, td)))
+      resolve = c => traceF(c.ctx, "search")(td => runSearch(c.ctx.app.userService, c, td).map(toResult))
     ),
     Field(
       name = "userByRole",
@@ -101,7 +99,7 @@ object UserSchema extends SchemaHelper("user") {
         fieldType = OptionType(userType),
         resolve = c => {
           val dataFields = c.args.arg(DataFieldSchema.dataFieldsArg)
-          traceB(c.ctx, "create")(tn => c.ctx.services.userServices.userService.create(c.ctx.creds, dataFields)(tn))
+          traceF(c.ctx, "create")(tn => c.ctx.services.userServices.userService.create(c.ctx.creds, dataFields)(tn))
         }
       ),
       Field(
@@ -111,7 +109,7 @@ object UserSchema extends SchemaHelper("user") {
         fieldType = userType,
         resolve = c => {
           val dataFields = c.args.arg(DataFieldSchema.dataFieldsArg)
-          traceB(c.ctx, "update")(tn => c.ctx.services.userServices.userService.update(c.ctx.creds, c.args.arg(userIdArg), dataFields)(tn)._1)
+          traceF(c.ctx, "update")(tn => c.ctx.services.userServices.userService.update(c.ctx.creds, c.args.arg(userIdArg), dataFields)(tn).map(_._1))
         }
       ),
       Field(
@@ -119,7 +117,7 @@ object UserSchema extends SchemaHelper("user") {
         description = Some("Removes the User with the provided id."),
         arguments = userIdArg :: Nil,
         fieldType = userType,
-        resolve = c => traceB(c.ctx, "remove")(tn => c.ctx.services.userServices.userService.remove(c.ctx.creds, c.args.arg(userIdArg))(tn))
+        resolve = c => traceF(c.ctx, "remove")(tn => c.ctx.services.userServices.userService.remove(c.ctx.creds, c.args.arg(userIdArg))(tn))
       )
     )
   )
