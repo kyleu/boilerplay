@@ -2,9 +2,9 @@
 <div class="collection-item">
   <div class="right"><a href="@controllers.admin.note.routes.ModelNoteController.addForm(model, pk.mkString("/"))" class="theme-text">Add Note</a></div>
   @if(notes.isEmpty) {
-    <i>No notes available for this item.</i>
+    <i>No notes available for this @model.</i>
   } else {
-    @notes.size @if(notes.size == 1) { note } else { notes } available for this item.
+    @notes.size @if(notes.size == 1) { note } else { notes } available for this @model.
     @notes.map { note =>
       <div class="model-note">
         <div class="right">@util.DateUtils.niceDateTime(note.created)</div>

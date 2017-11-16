@@ -4,14 +4,13 @@ import java.util.UUID
 
 import models.audit.{AuditField, AuditRecord}
 import models.audit.AuditField._
-import models.database.{DatabaseField, Row, Statement}
+import models.database.{DatabaseField, Query, Row, Statement}
 import models.database.DatabaseFieldType._
 import models.queries.BaseQueries
 import models.result.ResultFieldHelper
 import models.result.data.DataField
 import models.result.filter.Filter
 import models.result.orderBy.OrderBy
-import org.postgresql.jdbc.PgArray
 import org.postgresql.util.PGobject
 import io.circe.syntax._
 import io.circe.parser._
@@ -44,12 +43,19 @@ object AuditRecordQueries extends BaseQueries[AuditRecord]("auditRecord", "audit
   )
   case class GetByAuditIdSeq(auditIdSeq: Seq[UUID]) extends ColSeqQuery(column = "audit_id", values = auditIdSeq)
 
+  case class GetByModel(model: String, pk: Seq[Any]) extends Query[Seq[AuditRecord]] {
+    override def name = "get.audit.records.by.model"
+    override def sql = s"""select * from "$tableName" where "t" = ? and "pk" = ?::character varying[]"""
+    override val values: Seq[Any] = Seq(model, pk)
+    override def reduce(rows: Iterator[Row]) = rows.map(fromRow).toList
+  }
+
   def insert(model: AuditRecord) = new Statement {
     override def name: String = "insert"
     override def sql: String = s"""insert into $tableName ($quotedColumns) values (?, ?, ?, ?, ?)"""
     private[this] val pkArray = "{ " + model.pk.map("\"" + _ + "\"").mkString(", ") + " }"
     private[this] val changesArray = "[ " + model.changes.map(_.asJson.noSpaces).mkString(", ") + " ]"
-    override def values = Seq(model.id, model.auditId, model.t, pkArray, changesArray)
+    override val values: Seq[Any] = Seq(model.id, model.auditId, model.t, pkArray, changesArray)
   }
   def insertBatch(models: Seq[AuditRecord]) = InsertBatch(models)
   def create(dataFields: Seq[DataField]) = CreateFields(dataFields)

@@ -85,7 +85,7 @@ trait UserEditHelper { this: UserController =>
       } else if (isSelf && (role != Role.Admin) && user.role == Role.Admin) {
         Redirect(controllers.admin.user.routes.UserController.edit(id)).flashing("error" -> "You cannot remove your own admin role.")
       } else {
-        app.userService.updateFields(id, newUsername, newEmail, newPassword, role, user.profile.providerKey)
+        app.userService.updateFields(request, id, newUsername, newEmail, newPassword, role, user.profile.providerKey)
         Redirect(controllers.admin.user.routes.UserController.view(id))
       }
     }

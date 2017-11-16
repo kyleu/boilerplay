@@ -5,6 +5,7 @@ import java.util.UUID
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.util.PasswordHasher
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
+import models.AuditNotification
 import models.auth.Credentials
 import models.queries.auth._
 import models.result.data.DataField
@@ -16,6 +17,7 @@ import services.database.ApplicationDatabase
 import services.cache.UserCache
 import util.FutureUtils.serviceContext
 import util.tracing.{TraceData, TracingService}
+
 import scala.concurrent.Future
 
 @javax.inject.Singleton
@@ -113,7 +115,9 @@ class UserService @javax.inject.Inject() (override val tracing: TracingService, 
     }
   }(td))
 
-  def updateFields(id: UUID, username: String, email: String, password: Option[String], role: Role, originalEmail: String)(implicit trace: TraceData) = {
+  def updateFields(
+    creds: Credentials, id: UUID, username: String, email: String, password: Option[String], role: Role, originalEmail: String
+  )(implicit trace: TraceData) = {
     traceF("update.fields") { _ =>
       val fields = Seq(
         DataField("username", Some(username)),
@@ -133,6 +137,7 @@ class UserService @javax.inject.Inject() (override val tracing: TracingService, 
             val authInfo = hasher.hash(p)
             ApplicationDatabase.executeF(PasswordInfoQueries.UpdatePasswordInfo(loginInfo, authInfo)).map { _ =>
               UserCache.removeUser(id)
+              services.audit.AuditHelper.onInsert("user", Seq(id.toString), fields, creds)
               id
             }
           case _ => Future.successful(id)

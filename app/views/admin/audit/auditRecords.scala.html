@@ -1,0 +1,14 @@
+@(records: Seq[models.audit.AuditRecord], model: String, pk: Any*)
+<div class="collection-item">
+  @if(records.isEmpty) {
+    <i>No audit records available for this @model.</i>
+  } else {
+    @records.size @if(records.size == 1) { audit record } else { audit records } available for this @model.
+    @records.map { record =>
+      <div class="model-audit-record">
+        <a href="@controllers.admin.audit.routes.AuditRecordController.view(record.id)" class="theme-text">@record.id</a>
+        <pre>@record</pre>
+      </div>
+    }
+  }
+</div>

@@ -26,12 +26,21 @@ trait Queryable extends Logging {
     }
   }
 
+  def valsForJdbc(conn: Connection, vals: Seq[Any]) = vals.map {
+    case x: Seq[_] => conn.createArrayOf("text", x.map(_.toString).toArray)
+    case x: java.time.LocalDateTime => java.sql.Timestamp.valueOf(x)
+    case x: java.time.LocalDate => java.sql.Date.valueOf(x)
+    case x: java.time.LocalTime => java.sql.Time.valueOf(x)
+    case x => x
+  }
+
   def apply[A](connection: Connection, query: RawQuery[A]): A = {
-    log.debug(s"${query.sql} with ${query.values.mkString("(", ", ", ")")}")
+    val actualValues = valsForJdbc(connection, query.values)
+    log.debug(s"${query.sql} with ${actualValues.mkString("(", ", ", ")")}")
     val stmt = connection.prepareStatement(query.sql)
     try {
       try {
-        prepare(stmt, query.values)
+        prepare(stmt, actualValues)
       } catch {
         case NonFatal(x) => log.errorThenThrow(s"Unable to prepare query for [${query.sql}].", x)
       }
@@ -49,10 +58,11 @@ trait Queryable extends Logging {
   }
 
   def executeUpdate(connection: Connection, statement: Statement): Int = {
-    log.debug(s"${statement.sql} with ${statement.values.mkString("(", ", ", ")")}")
+    val actualValues = valsForJdbc(connection, statement.values)
+    log.debug(s"${statement.sql} with ${actualValues.mkString("(", ", ", ")")}")
     val stmt = connection.prepareStatement(statement.sql)
     try {
-      prepare(stmt, statement.values)
+      prepare(stmt, actualValues)
     } catch {
       case NonFatal(x) =>
         stmt.close()
@@ -68,11 +78,12 @@ trait Queryable extends Logging {
   }
 
   def executeUnknown[A](connection: Connection, query: Query[A], resultId: Option[UUID]): Either[A, Int] = {
-    log.debug(s"${query.sql} with ${query.values.mkString("(", ", ", ")")}")
+    val actualValues = valsForJdbc(connection, query.values)
+    log.debug(s"${query.sql} with ${actualValues.mkString("(", ", ", ")")}")
     val stmt = connection.prepareStatement(query.sql)
     try {
       try {
-        prepare(stmt, query.values)
+        prepare(stmt, actualValues)
       } catch {
         case NonFatal(x) => log.errorThenThrow(s"Unable to prepare raw query [${query.sql}].", x)
       }

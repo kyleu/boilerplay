@@ -24,6 +24,10 @@ class AuditRecordService @javax.inject.Inject() (override val tracing: TracingSe
     traceF("get.by.primary.key.seq")(td => ApplicationDatabase.queryF(AuditRecordQueries.getByPrimaryKeySeq(idSeq))(td))
   }
 
+  def getByModel(creds: Credentials, model: String, pk: Any*)(implicit trace: TraceData) = {
+    ApplicationDatabase.queryF(AuditRecordQueries.GetByModel(model, pk))
+  }
+
   override def countAll(creds: Credentials, filters: Seq[Filter] = Nil)(implicit trace: TraceData) = {
     traceF("get.all.count")(td => ApplicationDatabase.queryF(AuditRecordQueries.countAll(filters))(td))
   }

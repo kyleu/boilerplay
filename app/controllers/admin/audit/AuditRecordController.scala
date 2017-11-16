@@ -75,9 +75,11 @@ class AuditRecordController @javax.inject.Inject() (
   }
 
   def view(id: java.util.UUID) = withSession("view", admin = true) { implicit request => implicit td =>
-    val f = svc.getByPrimaryKey(request, id)
-    app.noteService.getFor("auditRecord", id).flatMap { notes =>
-      f.map {
+    val modelF = svc.getByPrimaryKey(request, id)
+    val notesF = app.noteService.getFor("auditRecord", id)
+
+    notesF.flatMap { notes =>
+      modelF.map {
         case Some(model) => render {
           case Accepts.Html() => Ok(views.html.admin.audit.auditRecordView(request.identity, model, notes, app.config.debug))
           case Accepts.Json() => Ok(model.asJson.spaces2).as(JSON)

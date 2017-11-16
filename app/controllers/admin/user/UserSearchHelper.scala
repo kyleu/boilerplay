@@ -1,7 +1,5 @@
 package controllers.admin.user
 
-import java.util.UUID
-
 import io.circe.syntax._
 import models.result.orderBy.OrderBy
 import models.user.UserResult
@@ -34,19 +32,6 @@ trait UserSearchHelper { this: UserController =>
         case _ => app.userService.getAll(request, Nil, orderBys, limit.orElse(Some(5)))
       }
       f.map(r => Ok(r.map(_.toSummary).asJson.spaces2).as(JSON))
-    }
-  }
-
-  def view(id: UUID) = withSession("user.view", admin = true) { implicit request => implicit td =>
-    val f = app.userService.getByPrimaryKey(request, id)
-    app.noteService.getFor("user", id).flatMap { notes =>
-      f.map {
-        case Some(model) => render {
-          case Accepts.Html() => Ok(views.html.admin.user.userView(request.identity, model, notes, app.config.debug))
-          case Accepts.Json() => Ok(model.asJson.spaces2).as(JSON)
-        }
-        case None => NotFound(s"No user found with id [$id].")
-      }
     }
   }
 }
