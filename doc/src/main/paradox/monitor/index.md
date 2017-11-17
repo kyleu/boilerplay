@@ -4,7 +4,6 @@
 
 * [Metrics](metrics.md)
 * [Tracing](tracing.md)
-* [Actors](actors.md)
 
 @@@
 

@@ -4,7 +4,7 @@
 
 * SBT
 * PostgreSQL
-* Node.js for building (or change Server.scala)
+* Node.js for building (or change to Rhino in `project/Server.scala`)
 
 ## Running the app
 
@@ -16,7 +16,7 @@ CREATE DATABASE boilerplay;
 GRANT ALL PRIVILEGES ON DATABASE boilerplay TO boilerplay;
 ```
 
-You'll either need Node.js available as "node" on the path, or change project/Server.scala's EngineType to Rhino.
+You'll either need Node.js available as "node" on the path, or change `project/Server.scala`'s EngineType to Rhino.
 
 Now, finally,
 ```shell
@@ -29,6 +29,7 @@ As the application starts, it will create database tables and seed data.
 
 The first account to sign up is created as an Admin, all subsequent users will have a normal user role.
 
+The project is built on SBT, and can be opened by IntelliJ directly. Plugins are included for Eclipse and Sublime Text.
 
 ## Projects
 
@@ -36,3 +37,5 @@ The first account to sign up is created as an Admin, all subsequent users will h
 * `sharedJvm` Core Scala logic and rules definitions, for JVM projects.
 * `sharedJs` Shared classes, compiled to Scala.js JavaScript.
 * `client` Barebones Scala.js app.
+
+See [Code Structure](extend/codeStructure.md) for more details.

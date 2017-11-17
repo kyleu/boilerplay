@@ -12,25 +12,23 @@
 
 @@@
 
-Using the latest technology in the Scala ecosystem, Boilerplay is a pure Scala reactive web application built on Play 2.6, ScalaJS, Silhouette 5, Akka, and Sangria.
+Using the latest technology in the Scala ecosystem, Boilerplay is a pure Scala reactive web application built on Play 2.6, ScalaJS, Silhouette 5, Akka 2.5, and Sangria.
 It provides a good starting point for whatever you want to build.
+
+Boilerplay relies on a whole lot of tremendous open source projects. [Here's a few of them](technology.md).
+
 
 ## Features
 
-* Local sign-in, profile, and change password support.
-* Role based security, with normal and admin roles.
-* Full admin suite for user management, reporting, and real-time session observation.
-* GraphQL schema and query interface, with shared queries and mutations.
-* Scala source that is shared between the client and server via Scala.js.
-* Websocket-driven actor support, with monitoring and tracing.
-
-
-## Contributing
-
-All Scala code is formatted by Scalariform, and passes all checks from Scalastyle and Scapegoat. No Scala file is longer than 100 lines, no line
-longer than 140 characters, and all warnings are treated as errors. Tests are part of the main source tree so they can be run from the browser.
-
-The project is built on SBT, and can be opened by IntelliJ directly. Plugins are included for Eclipse and Sublime Text.
+* [Admin](explore/admin.md) - Full admin suite for user management, reporting, and real-time session observation.
+* [GraphQL](explore/graphql.md) - GraphQL schema and query interface, with shared queries and mutations.
+* [Auditing](explore/auditing.md) - Models can be automatically audited, admins can search history, add notes, and view changes in real time.
+* [Authentication](explore/authentication.md) - Local sign-in, profile, and change password support.
+* [Security](explore/security.md) - Role based security, with normal and admin roles.
+* [Code Structure](extend/codeStructure.md) - Scala source that is shared between the client and server via Scala.js.
+* [Websocket](extend/websocket.md) - Websocket-driven actor support, with monitoring and tracing.
+* [Metrics](monitor/metrics.md) - Every database query, service call, and web request generates detailed metrics, published to Graphite or Prometheus.
+* [Tracing](monitor/tracing.md) - Detailed Zipkin traces show every aspect of web requests, including detailed microservice tracking.
 
 
 ## License

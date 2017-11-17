@@ -2,8 +2,9 @@
 
 @@@ index
 
-* [Serialization](serialization.md)
+* [Code Structure](codeStructure.md)
 * [Adding Models](addingModels.md)
+* [Serialization](serialization.md)
 * [Websocket](websocket.md)
 
 @@@
