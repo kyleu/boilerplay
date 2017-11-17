@@ -13,7 +13,10 @@ import util.{DateUtils, Logging}
 
 object ActorSupervisor {
   case class Broadcast(channel: String, msg: ResponseMessage)
-  case class SocketRecord(userId: UUID, name: String, channel: String, actorRef: ActorRef, started: LocalDateTime)
+  case class SocketDescription(socketId: UUID, userId: UUID, name: String, channel: String, started: LocalDateTime)
+  case class SocketRecord(socketId: UUID, userId: UUID, name: String, channel: String, actorRef: ActorRef, started: LocalDateTime) {
+    val desc = SocketDescription(socketId, userId, name, channel, started)
+  }
 
   private val emptyMap = collection.mutable.HashMap.empty[UUID, ActorSupervisor.SocketRecord]
 }
@@ -47,7 +50,7 @@ class ActorSupervisor(val app: Application) extends InstrumentedActor with Loggi
   }
 
   private[this] def handleGetSystemStatus() = {
-    val connectionStatuses = sockets.values.flatten.toList.sortBy(_._2.name).map(x => x._1 -> x._2.name)
+    val connectionStatuses = sockets.values.flatten.toList.map(x => x._2.desc).sortBy(_.name)
     sender() ! SystemStatus(connectionStatuses)
   }
 
@@ -64,7 +67,7 @@ class ActorSupervisor(val app: Application) extends InstrumentedActor with Loggi
   protected[this] def handleSocketStarted(creds: Credentials, channel: String, socketId: UUID, socket: ActorRef) = {
     log.debug(s"Socket [$socketId] registered to [${creds.user.username}] with path [${socket.path}].")
     sockets.getOrElseUpdate(channel, ActorSupervisor.emptyMap)(socketId) = {
-      ActorSupervisor.SocketRecord(creds.user.id, creds.user.username, channel, socket, DateUtils.now)
+      ActorSupervisor.SocketRecord(socketId, creds.user.id, creds.user.username, channel, socket, DateUtils.now)
     }
     socketsCounter.inc()
   }
