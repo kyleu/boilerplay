@@ -30,7 +30,7 @@ sealed abstract class SandboxTask(val id: String, val name: String, val descript
 object SandboxTask extends Enum[SandboxTask] with CirceEnum[SandboxTask] {
   case class Result(task: SandboxTask, arg: Option[String], status: String = "OK", result: String, elapsed: Int)
 
-  case object Testbed extends SandboxTask("testbed", "Testbed", "A simple sandbox for messin' around.") {
+  case object Testbed extends SandboxTask("testbed", "Testbed", "A simple sandbox for messing around.") {
     override def call(app: Application, services: ServiceRegistry, argument: Option[String])(implicit trace: TraceData) = {
       Future.successful("All good!")
     }
@@ -40,7 +40,7 @@ object SandboxTask extends Enum[SandboxTask] with CirceEnum[SandboxTask] {
     override def call(app: Application, services: ServiceRegistry, argument: Option[String])(implicit trace: TraceData) = TracingLogic.go(app, argument)
   }
 
-  case object WebCall extends SandboxTask("webcall", "Web Call", "Calls the provided url and returns stats.") {
+  case object WebCall extends SandboxTask("webCall", "Web Call", "Calls the provided url and returns stats.") {
     override def call(app: Application, services: ServiceRegistry, argument: Option[String])(implicit trace: TraceData) = argument match {
       case Some(url) => app.ws.url("sandbox.request", url).get().map { rsp =>
         s"${rsp.status} $url (${util.NumberUtils.withCommas(rsp.bodyAsBytes.size)} bytes)"
@@ -49,31 +49,31 @@ object SandboxTask extends Enum[SandboxTask] with CirceEnum[SandboxTask] {
     }
   }
 
-  case object JsonSerialization extends SandboxTask("jsonserialization", "Json Serialization", "Serializes 1,000 messages with circe.") {
+  case object JsonSerialization extends SandboxTask("jsonSerialization", "Json Serialization", "Serializes 1,000 messages with circe.") {
     override def call(app: Application, services: ServiceRegistry, argument: Option[String])(implicit trace: TraceData) = {
       val pong = models.Pong(util.DateUtils.now)
       val startMs = util.DateUtils.nowMillis
       val json = (0 to 1000).map(_ => util.JsonSerializers.writeResponseMessage(pong))
-      Future.successful("Json: " + (util.DateUtils.nowMillis - startMs) + "ms")
+      Future.successful(s"Json (${json.size}): " + (util.DateUtils.nowMillis - startMs) + "ms")
     }
   }
 
-  case object BinarySerialization extends SandboxTask("binaryserialization", "Binary Serialization", "Serializes 1,000 messages with BooPickle.") {
+  case object BinarySerialization extends SandboxTask("binarySerialization", "Binary Serialization", "Serializes 1,000 messages with BooPickle.") {
     override def call(app: Application, services: ServiceRegistry, argument: Option[String])(implicit trace: TraceData) = {
       val pong = models.Pong(util.DateUtils.now)
       val startMs = util.DateUtils.nowMillis
       val binary = (0 to 1000).map(_ => util.BinarySerializers.writeResponseMessage(pong))
-      Future.successful("Binary: " + (util.DateUtils.nowMillis - startMs) + "ms")
+      Future.successful(s"Binary (${binary.size}): " + (util.DateUtils.nowMillis - startMs) + "ms")
     }
   }
 
-  case object DatabaseBackup extends SandboxTask("databasebackup", "Database Backup", "Backs up the database.") {
+  case object DatabaseBackup extends SandboxTask("databaseBackup", "Database Backup", "Backs up the database.") {
     override def call(app: Application, services: ServiceRegistry, argument: Option[String])(implicit trace: TraceData) = {
       Future.successful(BackupRestore.backup())
     }
   }
 
-  case object DatabaseRestore extends SandboxTask("databaserestore", "Database Restore", "Restores the database.") {
+  case object DatabaseRestore extends SandboxTask("databaseRestore", "Database Restore", "Restores the database.") {
     override def call(app: Application, services: ServiceRegistry, argument: Option[String])(implicit trace: TraceData) = {
       Future.successful(BackupRestore.restore("TODO"))
     }
