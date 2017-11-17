@@ -2,7 +2,7 @@
 <html class="no-js" lang="en">
 
 <head>
-<title>Packaging · Boilerplay</title>
+<title>Serialization · Boilerplay</title>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <meta name="description" content='doc'/>
@@ -48,7 +48,7 @@
   <ul>
     <li><a href="../extend/codeStructure.html" class="page">Code Structure</a></li>
     <li><a href="../extend/addingModels.html" class="page">Adding Models</a></li>
-    <li><a href="../extend/serialization.html" class="page">Serialization</a></li>
+    <li><a href="../extend/serialization.html" class="active page">Serialization</a></li>
     <li><a href="../extend/websocket.html" class="page">Websocket</a></li>
   </ul></li>
   <li><a href="../monitor/index.html" class="page">Monitor</a>
@@ -59,7 +59,7 @@
   <li><a href="../build/index.html" class="page">Build</a>
   <ul>
     <li><a href="../build/sbtTasks.html" class="page">SBT Tasks</a></li>
-    <li><a href="../build/packaging.html" class="active page">Packaging</a></li>
+    <li><a href="../build/packaging.html" class="page">Packaging</a></li>
     <li><a href="../build/kubernetes.html" class="page">Kubernetes</a></li>
   </ul></li>
   <li><a href="../technology.html" class="page">Technology</a></li>
@@ -113,7 +113,7 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
   <ul>
     <li><a href="../extend/codeStructure.html" class="page">Code Structure</a></li>
     <li><a href="../extend/addingModels.html" class="page">Adding Models</a></li>
-    <li><a href="../extend/serialization.html" class="page">Serialization</a></li>
+    <li><a href="../extend/serialization.html" class="active page">Serialization</a></li>
     <li><a href="../extend/websocket.html" class="page">Websocket</a></li>
   </ul></li>
   <li><a href="../monitor/index.html" class="page">Monitor</a>
@@ -124,7 +124,7 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
   <li><a href="../build/index.html" class="page">Build</a>
   <ul>
     <li><a href="../build/sbtTasks.html" class="page">SBT Tasks</a></li>
-    <li><a href="../build/packaging.html" class="active page">Packaging</a></li>
+    <li><a href="../build/packaging.html" class="page">Packaging</a></li>
     <li><a href="../build/kubernetes.html" class="page">Kubernetes</a></li>
   </ul></li>
   <li><a href="../technology.html" class="page">Technology</a></li>
@@ -143,8 +143,8 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 <div class="nav-breadcrumbs">
 <ul>
   <li><a href="../index.html">Boilerplay</a></li>
-  <li><a href="../build/index.html">Build</a></li>
-  <li>Packaging</li>
+  <li><a href="../extend/index.html">Extend</a></li>
+  <li>Serialization</li>
 </ul>
 </div>
 </div>
@@ -152,14 +152,15 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 
 <div class="page-content row">
 <div class="small-12 large-9 column" id="docs">
-<h1><a href="#packaging" name="packaging" class="anchor"><span class="anchor-link"></span></a>Packaging</h1>
-<p>TODO</p>
+<h1><a href="#serialization" name="serialization" class="anchor"><span class="anchor-link"></span></a>Serialization</h1>
+<p>The <code>RequestMessage</code> and <code>ResponseMessage</code> sealed traits contain classes that can be easily be serialized to JSON or a efficient binary form.</p>
+<p>Serialized classes can be passed through <a href="websocket.md">Websockets</a> or written to disk. See the <code>JsonSerializers</code> or <code>BinarySerializers</code> classes for usage examples.</p>
 <div class="source-github">
-The source code for this page can be found <a href="https://github.com/KyleU/boilerplay/tree/master/doc/src/main/paradox/build/packaging.md">here</a>.
+The source code for this page can be found <a href="https://github.com/KyleU/boilerplay/tree/master/doc/src/main/paradox/extend/serialization.md">here</a>.
 </div>
 
 <div class="nav-next">
-<p><strong>Next:</strong> <a href="../build/kubernetes.html">Kubernetes</a></p>
+<p><strong>Next:</strong> <a href="../extend/websocket.html">Websocket</a></p>
 </div>
 </div>
 <div class="large-3 show-for-large column" data-sticky-container>

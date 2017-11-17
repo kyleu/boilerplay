@@ -38,19 +38,23 @@
   <li><a href="gettingStarted.html" class="active page">Getting Started</a></li>
   <li><a href="explore/index.html" class="page">Explore</a>
   <ul>
+    <li><a href="explore/admin.html" class="page">Admin</a></li>
     <li><a href="explore/graphql.html" class="page">GraphQL</a></li>
+    <li><a href="explore/auditing.html" class="page">Auditing</a></li>
     <li><a href="explore/authentication.html" class="page">Authentication</a></li>
+    <li><a href="explore/security.html" class="page">Security</a></li>
   </ul></li>
   <li><a href="extend/index.html" class="page">Extend</a>
   <ul>
+    <li><a href="extend/codeStructure.html" class="page">Code Structure</a></li>
     <li><a href="extend/addingModels.html" class="page">Adding Models</a></li>
+    <li><a href="extend/serialization.html" class="page">Serialization</a></li>
     <li><a href="extend/websocket.html" class="page">Websocket</a></li>
   </ul></li>
   <li><a href="monitor/index.html" class="page">Monitor</a>
   <ul>
     <li><a href="monitor/metrics.html" class="page">Metrics</a></li>
     <li><a href="monitor/tracing.html" class="page">Tracing</a></li>
-    <li><a href="monitor/actors.html" class="page">Actors</a></li>
   </ul></li>
   <li><a href="build/index.html" class="page">Build</a>
   <ul>
@@ -99,19 +103,23 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
   <li><a href="gettingStarted.html" class="active page">Getting Started</a></li>
   <li><a href="explore/index.html" class="page">Explore</a>
   <ul>
+    <li><a href="explore/admin.html" class="page">Admin</a></li>
     <li><a href="explore/graphql.html" class="page">GraphQL</a></li>
+    <li><a href="explore/auditing.html" class="page">Auditing</a></li>
     <li><a href="explore/authentication.html" class="page">Authentication</a></li>
+    <li><a href="explore/security.html" class="page">Security</a></li>
   </ul></li>
   <li><a href="extend/index.html" class="page">Extend</a>
   <ul>
+    <li><a href="extend/codeStructure.html" class="page">Code Structure</a></li>
     <li><a href="extend/addingModels.html" class="page">Adding Models</a></li>
+    <li><a href="extend/serialization.html" class="page">Serialization</a></li>
     <li><a href="extend/websocket.html" class="page">Websocket</a></li>
   </ul></li>
   <li><a href="monitor/index.html" class="page">Monitor</a>
   <ul>
     <li><a href="monitor/metrics.html" class="page">Metrics</a></li>
     <li><a href="monitor/tracing.html" class="page">Tracing</a></li>
-    <li><a href="monitor/actors.html" class="page">Actors</a></li>
   </ul></li>
   <li><a href="build/index.html" class="page">Build</a>
   <ul>
@@ -148,7 +156,7 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 <ul>
   <li>SBT</li>
   <li>PostgreSQL</li>
-  <li>Node.js for building (or change Server.scala)</li>
+  <li>Node.js for building (or change to Rhino in <code>project/Server.scala</code>)</li>
 </ul>
 <h2><a href="#running-the-app" name="running-the-app" class="anchor"><span class="anchor-link"></span></a>Running the app</h2>
 <p>First, either create a Postgres role and database named &ldquo;boilerplay&rdquo;, or change the application.conf to use your existing database.</p>
@@ -156,7 +164,7 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 CREATE DATABASE boilerplay;
 GRANT ALL PRIVILEGES ON DATABASE boilerplay TO boilerplay;
 </code></pre>
-<p>You&rsquo;ll either need Node.js available as &ldquo;node&rdquo; on the path, or change project/Server.scala&rsquo;s EngineType to Rhino.</p>
+<p>You&rsquo;ll either need Node.js available as &ldquo;node&rdquo; on the path, or change <code>project/Server.scala</code>&rsquo;s EngineType to Rhino.</p>
 <p>Now, finally,</p>
 <pre class="prettyprint"><code class="language-shell">$ sbt
 &gt; run
@@ -164,6 +172,7 @@ $ open http://127.0.0.1:9000
 </code></pre>
 <p>As the application starts, it will create database tables and seed data.</p>
 <p>The first account to sign up is created as an Admin, all subsequent users will have a normal user role.</p>
+<p>The project is built on SBT, and can be opened by IntelliJ directly. Plugins are included for Eclipse and Sublime Text.</p>
 <h2><a href="#projects" name="projects" class="anchor"><span class="anchor-link"></span></a>Projects</h2>
 <ul>
   <li><code>server</code> Main web application.</li>
@@ -171,6 +180,7 @@ $ open http://127.0.0.1:9000
   <li><code>sharedJs</code> Shared classes, compiled to Scala.js JavaScript.</li>
   <li><code>client</code> Barebones Scala.js app.</li>
 </ul>
+<p>See <a href="extend/codeStructure.md">Code Structure</a> for more details.</p>
 <div class="source-github">
 The source code for this page can be found <a href="https://github.com/KyleU/boilerplay/tree/master/doc/src/main/paradox/gettingStarted.md">here</a>.
 </div>

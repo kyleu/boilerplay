@@ -38,19 +38,23 @@
   <li><a href="../gettingStarted.html" class="page">Getting Started</a></li>
   <li><a href="../explore/index.html" class="page">Explore</a>
   <ul>
+    <li><a href="../explore/admin.html" class="page">Admin</a></li>
     <li><a href="../explore/graphql.html" class="page">GraphQL</a></li>
+    <li><a href="../explore/auditing.html" class="page">Auditing</a></li>
     <li><a href="../explore/authentication.html" class="page">Authentication</a></li>
+    <li><a href="../explore/security.html" class="page">Security</a></li>
   </ul></li>
   <li><a href="../extend/index.html" class="page">Extend</a>
   <ul>
+    <li><a href="../extend/codeStructure.html" class="page">Code Structure</a></li>
     <li><a href="../extend/addingModels.html" class="page">Adding Models</a></li>
+    <li><a href="../extend/serialization.html" class="page">Serialization</a></li>
     <li><a href="../extend/websocket.html" class="active page">Websocket</a></li>
   </ul></li>
   <li><a href="../monitor/index.html" class="page">Monitor</a>
   <ul>
     <li><a href="../monitor/metrics.html" class="page">Metrics</a></li>
     <li><a href="../monitor/tracing.html" class="page">Tracing</a></li>
-    <li><a href="../monitor/actors.html" class="page">Actors</a></li>
   </ul></li>
   <li><a href="../build/index.html" class="page">Build</a>
   <ul>
@@ -99,19 +103,23 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
   <li><a href="../gettingStarted.html" class="page">Getting Started</a></li>
   <li><a href="../explore/index.html" class="page">Explore</a>
   <ul>
+    <li><a href="../explore/admin.html" class="page">Admin</a></li>
     <li><a href="../explore/graphql.html" class="page">GraphQL</a></li>
+    <li><a href="../explore/auditing.html" class="page">Auditing</a></li>
     <li><a href="../explore/authentication.html" class="page">Authentication</a></li>
+    <li><a href="../explore/security.html" class="page">Security</a></li>
   </ul></li>
   <li><a href="../extend/index.html" class="page">Extend</a>
   <ul>
+    <li><a href="../extend/codeStructure.html" class="page">Code Structure</a></li>
     <li><a href="../extend/addingModels.html" class="page">Adding Models</a></li>
+    <li><a href="../extend/serialization.html" class="page">Serialization</a></li>
     <li><a href="../extend/websocket.html" class="active page">Websocket</a></li>
   </ul></li>
   <li><a href="../monitor/index.html" class="page">Monitor</a>
   <ul>
     <li><a href="../monitor/metrics.html" class="page">Metrics</a></li>
     <li><a href="../monitor/tracing.html" class="page">Tracing</a></li>
-    <li><a href="../monitor/actors.html" class="page">Actors</a></li>
   </ul></li>
   <li><a href="../build/index.html" class="page">Build</a>
   <ul>
@@ -145,7 +153,8 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 <div class="page-content row">
 <div class="small-12 large-9 column" id="docs">
 <h1><a href="#websocket" name="websocket" class="anchor"><span class="anchor-link"></span></a>Websocket</h1>
-<p>The main index page includes the <code>client</code> Scala.js project, and opens a websocket. Every few seconds, it will send a <code>Ping</code> message, await a <code>Pong</code> response, and calculate the latency. To add your own messages, add a case class to <code>RequestMessages.scala</code>.</p>
+<p>The main index page includes the <code>client</code> Scala.js project, and opens a websocket. Every few seconds, it will send a <code>Ping</code> message, await a <code>Pong</code> response, and updates the display&rsquo;s statistics.</p>
+<p>To add your own messages, add a case class to <code>RequestMessages.scala</code> or <code>ResponseMessages.scala</code>. No other steps are needed, see <a href="serialization.md">Serialization</a> for more details. </p>
 <div class="source-github">
 The source code for this page can be found <a href="https://github.com/KyleU/boilerplay/tree/master/doc/src/main/paradox/extend/websocket.md">here</a>.
 </div>
