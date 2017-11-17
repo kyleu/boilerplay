@@ -82,7 +82,7 @@ class NoteController @javax.inject.Inject() (override val app: Application, svc:
 
     notesF.flatMap(notes => auditsF.flatMap(audits => modelF.map {
       case Some(model) => render {
-        case Accepts.Html() => Ok(views.html.admin.note.noteView(request.identity, model, notes, app.config.debug))
+        case Accepts.Html() => Ok(views.html.admin.note.noteView(request.identity, model, notes, audits, app.config.debug))
         case Accepts.Json() => Ok(model.asJson.spaces2).as(JSON)
       }
       case None => NotFound(s"No Note found with id [$id].")

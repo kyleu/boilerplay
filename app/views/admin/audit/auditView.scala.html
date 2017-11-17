@@ -1,5 +1,5 @@
 @* Generated File *@
-@(user: models.user.User, model: models.audit.Audit, notes: Seq[models.note.Note], debug: Boolean)(
+@(user: models.user.User, model: models.audit.Audit, notes: Seq[models.note.Note], audits: Seq[models.audit.AuditRecord], debug: Boolean)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
 )@traceData.logViewClass(getClass)@views.html.admin.layout.page(user, "explore", s"Audit [${model.id}]") {
   <div class="collection with-header">
