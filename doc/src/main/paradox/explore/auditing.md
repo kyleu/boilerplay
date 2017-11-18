@@ -8,5 +8,3 @@ To log your own audits, follow the examples in `NoteService`.
 To view live audit activity, visit `/admin/audit/activity`.
 
 ![Audit activity](auditActivity.png)
-
-TODO
