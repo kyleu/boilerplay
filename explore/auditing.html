@@ -40,6 +40,7 @@
   <ul>
     <li><a href="../explore/admin.html" class="page">Admin</a></li>
     <li><a href="../explore/graphql.html" class="page">GraphQL</a></li>
+    <li><a href="../explore/database.html" class="page">Database</a></li>
     <li><a href="../explore/auditing.html" class="active page">Auditing</a></li>
     <li><a href="../explore/authentication.html" class="page">Authentication</a></li>
     <li><a href="../explore/security.html" class="page">Security</a></li>
@@ -55,6 +56,7 @@
   <ul>
     <li><a href="../monitor/metrics.html" class="page">Metrics</a></li>
     <li><a href="../monitor/tracing.html" class="page">Tracing</a></li>
+    <li><a href="../monitor/actors.html" class="page">Actors</a></li>
   </ul></li>
   <li><a href="../build/index.html" class="page">Build</a>
   <ul>
@@ -105,6 +107,7 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
   <ul>
     <li><a href="../explore/admin.html" class="page">Admin</a></li>
     <li><a href="../explore/graphql.html" class="page">GraphQL</a></li>
+    <li><a href="../explore/database.html" class="page">Database</a></li>
     <li><a href="../explore/auditing.html" class="active page">Auditing</a></li>
     <li><a href="../explore/authentication.html" class="page">Authentication</a></li>
     <li><a href="../explore/security.html" class="page">Security</a></li>
@@ -120,6 +123,7 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
   <ul>
     <li><a href="../monitor/metrics.html" class="page">Metrics</a></li>
     <li><a href="../monitor/tracing.html" class="page">Tracing</a></li>
+    <li><a href="../monitor/actors.html" class="page">Actors</a></li>
   </ul></li>
   <li><a href="../build/index.html" class="page">Build</a>
   <ul>
@@ -153,7 +157,10 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 <div class="page-content row">
 <div class="small-12 large-9 column" id="docs">
 <h1><a href="#auditing" name="auditing" class="anchor"><span class="anchor-link"></span></a>Auditing</h1>
-<p>Models can be automatically audited, admins can search history and view changes in real time.</p>
+<p>Models can be automatically audited, admins can search history and view changes in real time. Audits are optionally persisted to the database, sent to Slack, and pushed to live activity views. </p>
+<p>To log your own audits, follow the examples in <code>NoteService</code>.</p>
+<p>To view live audit activity, visit <code>/admin/audit/activity</code>.</p>
+<p><img src="auditActivity.png" alt="Audit activity" /></p>
 <p>TODO</p>
 <div class="source-github">
 The source code for this page can be found <a href="https://github.com/KyleU/boilerplay/tree/master/doc/src/main/paradox/explore/auditing.md">here</a>.

@@ -2,7 +2,7 @@
 <html class="no-js" lang="en">
 
 <head>
-<title>Adding Models · Boilerplay</title>
+<title>Database · Boilerplay</title>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <meta name="description" content='doc'/>
@@ -40,7 +40,7 @@
   <ul>
     <li><a href="../explore/admin.html" class="page">Admin</a></li>
     <li><a href="../explore/graphql.html" class="page">GraphQL</a></li>
-    <li><a href="../explore/database.html" class="page">Database</a></li>
+    <li><a href="../explore/database.html" class="active page">Database</a></li>
     <li><a href="../explore/auditing.html" class="page">Auditing</a></li>
     <li><a href="../explore/authentication.html" class="page">Authentication</a></li>
     <li><a href="../explore/security.html" class="page">Security</a></li>
@@ -48,7 +48,7 @@
   <li><a href="../extend/index.html" class="page">Extend</a>
   <ul>
     <li><a href="../extend/codeStructure.html" class="page">Code Structure</a></li>
-    <li><a href="../extend/addingModels.html" class="active page">Adding Models</a></li>
+    <li><a href="../extend/addingModels.html" class="page">Adding Models</a></li>
     <li><a href="../extend/serialization.html" class="page">Serialization</a></li>
     <li><a href="../extend/websocket.html" class="page">Websocket</a></li>
   </ul></li>
@@ -107,7 +107,7 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
   <ul>
     <li><a href="../explore/admin.html" class="page">Admin</a></li>
     <li><a href="../explore/graphql.html" class="page">GraphQL</a></li>
-    <li><a href="../explore/database.html" class="page">Database</a></li>
+    <li><a href="../explore/database.html" class="active page">Database</a></li>
     <li><a href="../explore/auditing.html" class="page">Auditing</a></li>
     <li><a href="../explore/authentication.html" class="page">Authentication</a></li>
     <li><a href="../explore/security.html" class="page">Security</a></li>
@@ -115,7 +115,7 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
   <li><a href="../extend/index.html" class="page">Extend</a>
   <ul>
     <li><a href="../extend/codeStructure.html" class="page">Code Structure</a></li>
-    <li><a href="../extend/addingModels.html" class="active page">Adding Models</a></li>
+    <li><a href="../extend/addingModels.html" class="page">Adding Models</a></li>
     <li><a href="../extend/serialization.html" class="page">Serialization</a></li>
     <li><a href="../extend/websocket.html" class="page">Websocket</a></li>
   </ul></li>
@@ -147,8 +147,8 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 <div class="nav-breadcrumbs">
 <ul>
   <li><a href="../index.html">Boilerplay</a></li>
-  <li><a href="../extend/index.html">Extend</a></li>
-  <li>Adding Models</li>
+  <li><a href="../explore/index.html">Explore</a></li>
+  <li>Database</li>
 </ul>
 </div>
 </div>
@@ -156,26 +156,14 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 
 <div class="page-content row">
 <div class="small-12 large-9 column" id="docs">
-<h1><a href="#adding-models" name="adding-models" class="anchor"><span class="anchor-link"></span></a>Adding Models</h1>
-<p>Boilerplay is designed to be extended. For a model that mirrors a database table, you can implement the following:</p>
-<ul>
-  <li>Start with the model itself, create a case class to represent your table, extending <code>DataFieldModel</code>.</li>
-  <li>
-  <p>To save compilation time, add circe codecs to your companion object:</p>
-  <pre><code>  implicit val jsonEncoder: Encoder[Note] = deriveEncoder
-  implicit val jsonDecoder: Decoder[Note] = deriveDecoder
-</code></pre></li>
-  <li>Create a query class by extending <code>BaseQueries[YourModel]</code>. Dig through BaseQueries to unerstand the queries you can expose.</li>
-  <li>Build your service class by extending <code>ModelServiceHelper[YourModel]</code>, and start creating the methods that operate on your models.</li>
-  <li>Add a controller file, extending <code>BaseController</code>, and routes for your actions. See the other subclasses to understand how to create actions effectively.</li>
-  <li>If desired, create a GraphQL schema, optionally extending <code>SchemaHelper</code>, and add the object&rsquo;s fetchers, relations, and fields to the root <code>Schema</code> object.</li>
-</ul>
+<h1><a href="#database" name="database" class="anchor"><span class="anchor-link"></span></a>Database</h1>
+<p>Database connections are regrettably JDBC-based, but an API returning <code>Future</code>s and operating in a different ExecutionContext is provided. To get started, check out the connection configuration in <code>application.conf</code>, the provided <code>JdbcDatabase</code> class, and the files in <code>models.queries</code>. </p>
 <div class="source-github">
-The source code for this page can be found <a href="https://github.com/KyleU/boilerplay/tree/master/doc/src/main/paradox/extend/addingModels.md">here</a>.
+The source code for this page can be found <a href="https://github.com/KyleU/boilerplay/tree/master/doc/src/main/paradox/explore/database.md">here</a>.
 </div>
 
 <div class="nav-next">
-<p><strong>Next:</strong> <a href="../extend/serialization.html">Serialization</a></p>
+<p><strong>Next:</strong> <a href="../explore/auditing.html">Auditing</a></p>
 </div>
 </div>
 <div class="large-3 show-for-large column" data-sticky-container>

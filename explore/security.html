@@ -40,6 +40,7 @@
   <ul>
     <li><a href="../explore/admin.html" class="page">Admin</a></li>
     <li><a href="../explore/graphql.html" class="page">GraphQL</a></li>
+    <li><a href="../explore/database.html" class="page">Database</a></li>
     <li><a href="../explore/auditing.html" class="page">Auditing</a></li>
     <li><a href="../explore/authentication.html" class="page">Authentication</a></li>
     <li><a href="../explore/security.html" class="active page">Security</a></li>
@@ -55,6 +56,7 @@
   <ul>
     <li><a href="../monitor/metrics.html" class="page">Metrics</a></li>
     <li><a href="../monitor/tracing.html" class="page">Tracing</a></li>
+    <li><a href="../monitor/actors.html" class="page">Actors</a></li>
   </ul></li>
   <li><a href="../build/index.html" class="page">Build</a>
   <ul>
@@ -105,6 +107,7 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
   <ul>
     <li><a href="../explore/admin.html" class="page">Admin</a></li>
     <li><a href="../explore/graphql.html" class="page">GraphQL</a></li>
+    <li><a href="../explore/database.html" class="page">Database</a></li>
     <li><a href="../explore/auditing.html" class="page">Auditing</a></li>
     <li><a href="../explore/authentication.html" class="page">Authentication</a></li>
     <li><a href="../explore/security.html" class="active page">Security</a></li>
@@ -120,6 +123,7 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
   <ul>
     <li><a href="../monitor/metrics.html" class="page">Metrics</a></li>
     <li><a href="../monitor/tracing.html" class="page">Tracing</a></li>
+    <li><a href="../monitor/actors.html" class="page">Actors</a></li>
   </ul></li>
   <li><a href="../build/index.html" class="page">Build</a>
   <ul>
@@ -153,7 +157,9 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 <div class="page-content row">
 <div class="small-12 large-9 column" id="docs">
 <h1><a href="#security" name="security" class="anchor"><span class="anchor-link"></span></a>Security</h1>
-<p>TODO</p>
+<p>Controller actions are secured by Silhouette, see <code>BaseController</code> for all of the available methods, and <code>HomeController</code> for examples of their usage.</p>
+<p>Service methods all require a <code>Credentials</code> object to be passed, containing the user and request information. And implicit conversion from <code>SecuredRequest</code> is provided.</p>
+<p>See <a href="authentication.md">authentication</a> for details about the authentication flow.</p>
 <div class="source-github">
 The source code for this page can be found <a href="https://github.com/KyleU/boilerplay/tree/master/doc/src/main/paradox/explore/security.md">here</a>.
 </div>

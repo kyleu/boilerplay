@@ -40,6 +40,7 @@
   <ul>
     <li><a href="../explore/admin.html" class="page">Admin</a></li>
     <li><a href="../explore/graphql.html" class="page">GraphQL</a></li>
+    <li><a href="../explore/database.html" class="page">Database</a></li>
     <li><a href="../explore/auditing.html" class="page">Auditing</a></li>
     <li><a href="../explore/authentication.html" class="page">Authentication</a></li>
     <li><a href="../explore/security.html" class="page">Security</a></li>
@@ -55,6 +56,7 @@
   <ul>
     <li><a href="../monitor/metrics.html" class="page">Metrics</a></li>
     <li><a href="../monitor/tracing.html" class="page">Tracing</a></li>
+    <li><a href="../monitor/actors.html" class="page">Actors</a></li>
   </ul></li>
   <li><a href="../build/index.html" class="page">Build</a>
   <ul>
@@ -105,6 +107,7 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
   <ul>
     <li><a href="../explore/admin.html" class="page">Admin</a></li>
     <li><a href="../explore/graphql.html" class="page">GraphQL</a></li>
+    <li><a href="../explore/database.html" class="page">Database</a></li>
     <li><a href="../explore/auditing.html" class="page">Auditing</a></li>
     <li><a href="../explore/authentication.html" class="page">Authentication</a></li>
     <li><a href="../explore/security.html" class="page">Security</a></li>
@@ -120,6 +123,7 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
   <ul>
     <li><a href="../monitor/metrics.html" class="page">Metrics</a></li>
     <li><a href="../monitor/tracing.html" class="page">Tracing</a></li>
+    <li><a href="../monitor/actors.html" class="page">Actors</a></li>
   </ul></li>
   <li><a href="../build/index.html" class="page">Build</a>
   <ul>
@@ -153,8 +157,9 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 <div class="page-content row">
 <div class="small-12 large-9 column" id="docs">
 <h1><a href="#serialization" name="serialization" class="anchor"><span class="anchor-link"></span></a>Serialization</h1>
-<p>The <code>RequestMessage</code> and <code>ResponseMessage</code> sealed traits contain classes that can be easily be serialized to JSON or a efficient binary form.</p>
+<p>The <code>RequestMessage</code> and <code>ResponseMessage</code> sealed traits contain classes that can be easily be serialized to JSON via circe or a efficient binary form via BooPickle.</p>
 <p>Serialized classes can be passed through <a href="websocket.md">Websockets</a> or written to disk. See the <code>JsonSerializers</code> or <code>BinarySerializers</code> classes for usage examples.</p>
+<p><img src="websocketTrace.png" alt="Websocket trace" /></p>
 <div class="source-github">
 The source code for this page can be found <a href="https://github.com/KyleU/boilerplay/tree/master/doc/src/main/paradox/extend/serialization.md">here</a>.
 </div>

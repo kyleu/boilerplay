@@ -40,6 +40,7 @@
   <ul>
     <li><a href="../explore/admin.html" class="page">Admin</a></li>
     <li><a href="../explore/graphql.html" class="active page">GraphQL</a></li>
+    <li><a href="../explore/database.html" class="page">Database</a></li>
     <li><a href="../explore/auditing.html" class="page">Auditing</a></li>
     <li><a href="../explore/authentication.html" class="page">Authentication</a></li>
     <li><a href="../explore/security.html" class="page">Security</a></li>
@@ -55,6 +56,7 @@
   <ul>
     <li><a href="../monitor/metrics.html" class="page">Metrics</a></li>
     <li><a href="../monitor/tracing.html" class="page">Tracing</a></li>
+    <li><a href="../monitor/actors.html" class="page">Actors</a></li>
   </ul></li>
   <li><a href="../build/index.html" class="page">Build</a>
   <ul>
@@ -105,6 +107,7 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
   <ul>
     <li><a href="../explore/admin.html" class="page">Admin</a></li>
     <li><a href="../explore/graphql.html" class="active page">GraphQL</a></li>
+    <li><a href="../explore/database.html" class="page">Database</a></li>
     <li><a href="../explore/auditing.html" class="page">Auditing</a></li>
     <li><a href="../explore/authentication.html" class="page">Authentication</a></li>
     <li><a href="../explore/security.html" class="page">Security</a></li>
@@ -120,6 +123,7 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
   <ul>
     <li><a href="../monitor/metrics.html" class="page">Metrics</a></li>
     <li><a href="../monitor/tracing.html" class="page">Tracing</a></li>
+    <li><a href="../monitor/actors.html" class="page">Actors</a></li>
   </ul></li>
   <li><a href="../build/index.html" class="page">Build</a>
   <ul>
@@ -153,15 +157,66 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 <div class="page-content row">
 <div class="small-12 large-9 column" id="docs">
 <h1><a href="#graphql" name="graphql" class="anchor"><span class="anchor-link"></span></a>GraphQL</h1>
-<p>A GraphQL endpoint is provided by Sangria, available at <code>/admin/graphql</code>. </p>
-<p>You can also view the schema with GraphQL Voyager by visiting <code>/admin/graphql/voyager</code>.</p>
-<p>To add your own models and services to GraphQL, start with <code>Schema.scala</code>.</p>
+<p>A GraphQL endpoint is provided by GraphiQL and Sangria, available at <code>/admin/graphql</code>. </p>
+<p>Use the following as your first query if you&rsquo;d like to get started:</p>
+<pre><code>query FirstQuery {
+  profile {
+    username
+    email
+  }
+  user(q: &quot;MyUsername&quot;) {
+    results {
+      id
+      username
+      preferences {
+        theme
+      }
+      noteAuthorFkey {
+        text
+      }
+    }
+  }
+  audit(orderBy: { col: &quot;userId&quot;, dir: Descending}, limit: 10) {
+    results {
+      id
+      act
+      app
+      client
+      server
+      userId
+      tags {
+        k
+        v
+      }
+      msg
+      records {
+        id
+      }
+      started
+      completed
+      auditRecordAuditIdFkey {
+        id
+        t
+        pk
+        changes {
+          k
+          o
+          n
+        }
+      }
+    }
+  }
+}
+</code></pre>
+<p>You can also vizualize the schema with GraphQL Voyager by visiting <code>/admin/graphql/voyager</code>.</p>
+<p><img src="graphqlSchema.png" alt="GraphQL Voyager" /></p>
+<p>To add your own models and services to GraphQL, start with <code>Schema.scala</code>, and check out the classes that are referenced.</p>
 <div class="source-github">
 The source code for this page can be found <a href="https://github.com/KyleU/boilerplay/tree/master/doc/src/main/paradox/explore/graphql.md">here</a>.
 </div>
 
 <div class="nav-next">
-<p><strong>Next:</strong> <a href="../explore/auditing.html">Auditing</a></p>
+<p><strong>Next:</strong> <a href="../explore/database.html">Database</a></p>
 </div>
 </div>
 <div class="large-3 show-for-large column" data-sticky-container>
