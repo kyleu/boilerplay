@@ -17,6 +17,7 @@ Boilerplay relies on a whole lot of tremendous open source projects. Here's a fe
 * [Sangria](http://sangria-graphql.org)
 * [Graphiql](https://github.com/graphql/graphiql)
 * [GraphQL Voyager](https://github.com/APIs-guru/graphql-voyager)
+* [akka-visualmailbox](https://github.com/ouven/akka-visualmailbox)
 * [Zipkin](http://zipkin.io)
 * [Materialize CSS](http://materializecss.com)
 * [Enumeratum](https://github.com/lloydmeta/enumeratum)

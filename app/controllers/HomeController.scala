@@ -11,7 +11,7 @@ import play.api.libs.streams.ActorFlow
 import play.api.mvc.{AnyContentAsEmpty, Request, WebSocket}
 import util.Logging
 import util.metrics.InstrumentedActor
-import util.web.MessageFrameFormatter
+import util.web.{MessageFrameFormatter, WebsocketUtils}
 
 import scala.concurrent.Future
 
@@ -57,9 +57,10 @@ class HomeController @javax.inject.Inject() (
 
   def connect(binary: Boolean) = WebSocket.acceptOrResult[RequestMessage, ResponseMessage] { request =>
     implicit val req = Request(request, AnyContentAsEmpty)
+    val connId = UUID.randomUUID()
     app.silhouette.SecuredRequestHandler { secured => Future.successful(HandlerResult(Ok, Some(secured.identity))) }.map {
-      case HandlerResult(_, Some(user)) => Right(ActorFlow.actorRef { out =>
-        HomeController.props(None, app.supervisor, Credentials(user, request.remoteAddress), out, request.remoteAddress)
+      case HandlerResult(_, Some(user)) => Right(WebsocketUtils.actorRef(connId) { out =>
+        HomeController.props(Some(connId), app.supervisor, Credentials(user, request.remoteAddress), out, request.remoteAddress)
       })
       case HandlerResult(_, None) => Left(Redirect(controllers.routes.HomeController.home()).flashing("error" -> "You're not signed in."))
     }

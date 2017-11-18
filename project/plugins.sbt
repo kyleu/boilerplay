@@ -10,7 +10,7 @@ addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.6.7")
 // SBT-Web plugins
 addSbtPlugin("com.typesafe.sbt" % "sbt-web" % "1.4.3")
 
-libraryDependencies += "org.webjars.npm" % "source-map" % "0.5.6"
+libraryDependencies += "org.webjars.npm" % "source-map" % "0.5.7"
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-less" % "1.1.2")
 
@@ -23,9 +23,9 @@ addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.20")
 
 addSbtPlugin("org.scala-native" % "sbt-crossproject" % "0.2.2")
 
-addSbtPlugin("org.scala-native" % "sbt-scalajs-crossproject" % "0.2.2")
+addSbtPlugin("org.scala-native" % "sbt-scalajs-crossproject" % "0.2.2" exclude("org.scala-js", "sbt-scalajs"))
 
-addSbtPlugin("com.vmunier" % "sbt-web-scalajs" % "1.0.6")
+addSbtPlugin("com.vmunier" % "sbt-web-scalajs" % "1.0.6" exclude("org.scala-js", "sbt-scalajs"))
 
 // Source Control
 addSbtPlugin("com.typesafe.sbt" % "sbt-git" % "0.9.3")
@@ -72,7 +72,7 @@ addSbtPlugin("com.github.xuwei-k" % "sbt-class-diagram" % "0.2.1") // classDiagr
 // Documentation
 addSbtPlugin("com.lightbend.paradox" % "sbt-paradox" % "0.3.1")
 
-addSbtPlugin("com.typesafe.sbt" % "sbt-site" % "1.3.1")
+addSbtPlugin("com.typesafe.sbt" % "sbt-site" % "1.3.1" exclude("com.lightbend.paradox", "sbt-paradox"))
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-ghpages" % "0.6.2")
 

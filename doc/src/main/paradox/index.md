@@ -25,7 +25,6 @@ Boilerplay relies on a whole lot of tremendous open source projects. [Here's a f
 * [Auditing](explore/auditing.md) - Models can be automatically audited, admins can search history, add notes, and view changes in real time.
 * [Authentication](explore/authentication.md) - Local sign-in, profile, and change password support.
 * [Security](explore/security.md) - Role based security, with normal and admin roles.
-* [Code Structure](extend/codeStructure.md) - Scala source that is shared between the client and server via Scala.js.
 * [Websocket](extend/websocket.md) - Websocket-driven actor support, with monitoring and tracing.
 * [Metrics](monitor/metrics.md) - Every database query, service call, and web request generates detailed metrics, published to Graphite or Prometheus.
 * [Tracing](monitor/tracing.md) - Detailed Zipkin traces show every aspect of web requests, including detailed microservice tracking.
