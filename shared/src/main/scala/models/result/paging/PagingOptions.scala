@@ -1,7 +1,7 @@
 package models.result.paging
 
 import io.circe.{Decoder, Encoder}
-import io.circe.generic.semiauto._
+import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 
 object PagingOptions {
   case class Range(start: Int, end: Int)

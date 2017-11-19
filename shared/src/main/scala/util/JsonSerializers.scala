@@ -1,8 +1,6 @@
 package util
 
-import io.circe.JsonObject
 import io.circe.generic.extras.Configuration
-import io.circe.generic.extras.auto._
 import io.circe.parser._
 import io.circe.syntax._
 import io.circe.java8.time._

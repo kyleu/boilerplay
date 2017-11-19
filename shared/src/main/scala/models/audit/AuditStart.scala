@@ -1,7 +1,7 @@
 package models.audit
 
 import io.circe.{Decoder, Encoder}
-import io.circe.generic.semiauto._
+import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import models.tag.Tag
 
 object AuditStart {

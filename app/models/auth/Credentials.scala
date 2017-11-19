@@ -2,7 +2,7 @@ package models.auth
 
 import com.mohiva.play.silhouette.api.actions.SecuredRequest
 import io.circe.{Decoder, Encoder}
-import io.circe.generic.semiauto._
+import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import models.user.User
 
 case class Credentials(user: User, remoteAddress: String, tags: Map[String, String] = Map.empty)

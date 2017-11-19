@@ -3,7 +3,7 @@ package models.audit
 import java.util.UUID
 
 import io.circe.{Decoder, Encoder}
-import io.circe.generic.semiauto._
+import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import models.tag.Tag
 
 object AuditComplete {

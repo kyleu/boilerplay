@@ -6,7 +6,7 @@ import com.mohiva.play.silhouette.api.{Identity, LoginInfo}
 import java.time.LocalDateTime
 
 import io.circe.{Decoder, Encoder}
-import io.circe.generic.semiauto._
+import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.java8.time._
 import models.result.data.{DataField, DataFieldModel}
 import util.DateUtils

@@ -3,8 +3,17 @@ package models
 import java.time.LocalDateTime
 import java.util.UUID
 
+import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
+import io.circe.java8.time._
+import io.circe.{Decoder, Encoder}
+
 import models.audit.{Audit, AuditComplete, AuditStart}
 import models.user.UserPreferences
+
+object ResponseMessage {
+  implicit val jsonEncoder: Encoder[ResponseMessage] = deriveEncoder
+  implicit val jsonDecoder: Decoder[ResponseMessage] = deriveDecoder
+}
 
 sealed trait ResponseMessage
 

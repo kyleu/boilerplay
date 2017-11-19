@@ -4,7 +4,7 @@ import java.util.UUID
 
 import io.circe.{Decoder, Encoder}
 import models.result.data.{DataField, DataFieldModel, DataSummary}
-import io.circe.generic.semiauto._
+import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 
 object AuditRecord {
   implicit val jsonEncoder: Encoder[AuditRecord] = deriveEncoder

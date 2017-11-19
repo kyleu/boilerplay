@@ -1,7 +1,7 @@
 package models.result.data
 
 import io.circe.{Decoder, Encoder}
-import io.circe.generic.semiauto._
+import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 
 object DataField {
   implicit val jsonEncoder: Encoder[DataField] = deriveEncoder

@@ -1,7 +1,7 @@
 package models.result.data
 
 import io.circe.{Decoder, Encoder}
-import io.circe.generic.semiauto._
+import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 
 object DataSummary {
   implicit val jsonEncoder: Encoder[DataSummary] = deriveEncoder

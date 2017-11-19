@@ -1,7 +1,7 @@
 package models.result.filter
 
 import io.circe.{Decoder, Encoder}
-import io.circe.generic.semiauto._
+import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 
 object Filter {
   implicit val jsonEncoder: Encoder[Filter] = deriveEncoder

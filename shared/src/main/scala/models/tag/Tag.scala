@@ -1,6 +1,6 @@
 package models.tag
 
-import io.circe.generic.semiauto._
+import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.{Decoder, Encoder}
 
 object Tag {
