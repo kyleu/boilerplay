@@ -8,17 +8,17 @@ import models._
 import java.time.LocalDateTime
 
 import models.auth.Credentials
+import models.supervisor.SocketDescription
 import util.metrics.{InstrumentedActor, MetricsServletActor}
 import util.{DateUtils, Logging}
 
 object ActorSupervisor {
   case class Broadcast(channel: String, msg: ResponseMessage)
-  case class SocketDescription(socketId: UUID, userId: UUID, name: String, channel: String, started: LocalDateTime)
   case class SocketRecord(socketId: UUID, userId: UUID, name: String, channel: String, actorRef: ActorRef, started: LocalDateTime) {
     val desc = SocketDescription(socketId, userId, name, channel, started)
   }
 
-  private val emptyMap = collection.mutable.HashMap.empty[UUID, ActorSupervisor.SocketRecord]
+  private def emptyMap = collection.mutable.HashMap.empty[UUID, ActorSupervisor.SocketRecord]
 }
 
 class ActorSupervisor(val app: Application) extends InstrumentedActor with Logging {
@@ -50,8 +50,8 @@ class ActorSupervisor(val app: Application) extends InstrumentedActor with Loggi
   }
 
   private[this] def handleGetSystemStatus() = {
-    val connectionStatuses = sockets.values.flatten.toList.map(x => x._2.desc).sortBy(_.name)
-    sender() ! SystemStatus(connectionStatuses)
+    val channelStatuses = sockets.mapValues(_.toList.map(x => x._2.desc).sortBy(_.name)).toSeq.sortBy(_._1)
+    sender() ! SystemStatus(channelStatuses)
   }
 
   private[this] def handleSendSocketTrace(ct: SendSocketTrace) = socketById(ct.id) match {

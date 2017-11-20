@@ -1,6 +1,6 @@
 package models.database
 
-import enumeratum._
+import enumeratum.{CirceEnum, Enum, EnumEntry}
 import org.postgresql.jdbc.PgArray
 import org.postgresql.util.PGobject
 
@@ -9,7 +9,7 @@ sealed abstract class DatabaseFieldType[T](val key: String, val isNumeric: Boole
   def opt(row: Row, col: String): Option[T] = row.asOpt[T](col)
 }
 
-object DatabaseFieldType extends Enum[DatabaseFieldType[_]] with DatabaseFieldHelper {
+object DatabaseFieldType extends Enum[DatabaseFieldType[_]] with CirceEnum[DatabaseFieldType[_]] with DatabaseFieldHelper {
   case object StringType extends DatabaseFieldType[String]("string")
 
   case object BooleanType extends DatabaseFieldType[Boolean]("boolean") {

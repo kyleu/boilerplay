@@ -1,16 +1,11 @@
 package models.graphql
 
-import models.audit.{AuditRecordSchema, AuditSchema}
-import models.note.NoteSchema
-import models.sandbox.SandboxSchema
-import models.settings.SettingsSchema
-import models.user.UserSchema
 import sangria.execution.deferred.DeferredResolver
 import sangria.schema._
 
 object Schema {
   // Fetchers
-  val baseFetchers = Seq(UserSchema.userByRoleFetcher, AuditSchema.auditByUserIdFetcher)
+  val baseFetchers = Seq(models.user.UserSchema.userByRoleFetcher, models.audit.AuditSchema.auditByUserIdFetcher)
 
   val modelFetchers = {
     // Start model fetchers
@@ -30,13 +25,14 @@ object Schema {
   val resolver = DeferredResolver.fetchers(baseFetchers ++ modelFetchers: _*)
 
   // Query Types
-  val baseQueryFields = SettingsSchema.queryFields ++ SandboxSchema.queryFields
+  val baseQueryFields = models.supervisor.SocketDecriptionSchema.queryFields ++
+    models.settings.SettingsSchema.queryFields ++
+    models.sandbox.SandboxSchema.queryFields
 
   val modelQueryFields = {
     // Start model query fields
-
-    models.audit.AuditRecordSchema.queryFields ++
-      models.audit.AuditSchema.queryFields ++
+    models.audit.AuditSchema.queryFields ++
+      models.audit.AuditRecordSchema.queryFields ++
       models.note.NoteSchema.queryFields ++
       models.user.UserSchema.queryFields
 
@@ -50,7 +46,7 @@ object Schema {
   )
 
   // Mutation Types
-  val baseMutationFields = SandboxSchema.mutationFields
+  val baseMutationFields = models.sandbox.SandboxSchema.mutationFields
 
   val modelMutationFields = {
     // Start model mutation fields

@@ -1,6 +1,6 @@
 package models.settings
 
-import enumeratum._
+import enumeratum.{Enum, EnumEntry, CirceEnum}
 
 sealed abstract class SettingKey(val title: String, val description: String, val default: String) extends EnumEntry
 

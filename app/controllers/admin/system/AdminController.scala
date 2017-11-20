@@ -28,7 +28,7 @@ class AdminController @javax.inject.Inject() (override val app: Application) ext
     import scala.concurrent.duration._
     implicit val timeout = Timeout(1.second)
     ask(app.supervisor, GetSystemStatus).mapTo[SystemStatus].map { x =>
-      Ok(views.html.admin.sockets(request.identity, x.sockets))
+      Ok(views.html.admin.sockets(request.identity, x.channels))
     }
   }
 }

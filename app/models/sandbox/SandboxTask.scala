@@ -1,6 +1,6 @@
 package models.sandbox
 
-import enumeratum._
+import enumeratum.{Enum, EnumEntry, CirceEnum}
 import models.Application
 import services.ServiceRegistry
 import services.database.BackupRestore

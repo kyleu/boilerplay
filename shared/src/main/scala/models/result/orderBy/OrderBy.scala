@@ -1,6 +1,6 @@
 package models.result.orderBy
 
-import enumeratum._
+import enumeratum.{Enum, EnumEntry, CirceEnum}
 import io.circe.{Decoder, Encoder}
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 

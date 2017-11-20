@@ -1,6 +1,6 @@
 package models.result.filter
 
-import enumeratum._
+import enumeratum.{Enum, EnumEntry, CirceEnum}
 
 sealed abstract class FilterOp extends EnumEntry {
   def vals(v: Seq[String]) = v

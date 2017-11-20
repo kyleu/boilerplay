@@ -8,7 +8,6 @@ import com.mohiva.play.silhouette.api.HandlerResult
 import controllers.BaseController
 import models.auth.Credentials
 import models.{Application, RequestMessage, ResponseMessage}
-import play.api.libs.streams.ActorFlow
 import play.api.mvc.{AnyContentAsEmpty, Request, WebSocket}
 import services.audit.AuditSocketService
 import util.web.{MessageFrameFormatter, WebsocketUtils}

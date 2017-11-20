@@ -7,7 +7,6 @@ import akka.stream.Materializer
 import com.mohiva.play.silhouette.api.HandlerResult
 import models.auth.Credentials
 import models._
-import play.api.libs.streams.ActorFlow
 import play.api.mvc.{AnyContentAsEmpty, Request, WebSocket}
 import util.Logging
 import util.metrics.InstrumentedActor
@@ -22,7 +21,7 @@ object HomeController {
 
     override def preStart() = {
       log.info(s"Starting connection for user [${creds.user.id}: ${creds.user.username}].")
-      supervisor ! SocketStarted(creds, "audit", id, self)
+      supervisor ! SocketStarted(creds, "home", id, self)
       out ! UserSettings(creds.user.id, creds.user.username, creds.user.profile.providerKey, creds.user.preferences)
     }
 

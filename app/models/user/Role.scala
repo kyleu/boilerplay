@@ -2,7 +2,7 @@ package models.user
 
 import java.util.UUID
 
-import enumeratum._
+import enumeratum.{Enum, EnumEntry, CirceEnum}
 
 sealed abstract class Role(override val entryName: String) extends EnumEntry {
   def qualifies(target: Role): Boolean
