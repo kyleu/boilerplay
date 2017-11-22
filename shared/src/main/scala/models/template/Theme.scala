@@ -1,6 +1,6 @@
 package models.template
 
-import enumeratum.values._
+import enumeratum.values.{StringCirceEnum, StringEnum, StringEnumEntry}
 
 import scala.util.Random
 
