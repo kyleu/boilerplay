@@ -1,11 +1,11 @@
 @(user: models.user.User)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
 )@traceData.logViewClass(getClass)@views.html.layout.basic(Some(user), util.Config.projectName + " Schema", scripts = Seq(
-  routes.Assets.versioned("lib/graphql/react.min.js").url,
-  routes.Assets.versioned("lib/graphql/react-dom.min.js").url,
-  routes.Assets.versioned("lib/graphql/voyager.min.js").url
+  routes.Assets.versioned("vendor/graphql/react.min.js").url,
+  routes.Assets.versioned("vendor/graphql/react-dom.min.js").url,
+  routes.Assets.versioned("vendor/graphql/voyager.min.js").url
 ), stylesheets = Seq(
-  routes.Assets.versioned("lib/graphql/voyager.css").url
+  routes.Assets.versioned("vendor/graphql/voyager.css").url
 )) {
   <style>
     .title-area, .type-doc>.doc-navigation {
@@ -37,7 +37,8 @@
     }
 
     GraphQLVoyager.init(document.getElementById('voyager'), {
-      introspection: introspectionProvider
+      "introspection": introspectionProvider,
+      "workerURI": "@routes.Assets.versioned("vendor/graphql/voyager.worker.js").url"
     })
   </script>
 }
