@@ -22,18 +22,15 @@ object DatabaseFieldType extends Enum[DatabaseFieldType[_]] with CirceEnum[Datab
   }
   case object ShortType extends DatabaseFieldType[Short]("short", isNumeric = true)
   case object IntegerType extends DatabaseFieldType[Int]("int", isNumeric = true)
-  case object LongType extends DatabaseFieldType[Long]("long", isNumeric = true)
+  case object LongType extends DatabaseFieldType[Long]("long", isNumeric = true) {
+    override def apply(row: Row, col: String) = longCoerce(row.as[Any](col))
+    override def opt(row: Row, col: String) = row.asOpt[Any](col).map(longCoerce)
+  }
   case object FloatType extends DatabaseFieldType[Float]("float", isNumeric = true)
   case object DoubleType extends DatabaseFieldType[Double]("double", isNumeric = true)
   case object BigDecimalType extends DatabaseFieldType[BigDecimal]("decimal", isNumeric = true) {
-    override def apply(row: Row, col: String) = row.as[Any](col) match {
-      case b: java.math.BigDecimal => new BigDecimal(b)
-      case b: BigDecimal => b
-    }
-    override def opt(row: Row, col: String) = row.asOpt[Any](col).map {
-      case b: java.math.BigDecimal => new BigDecimal(b)
-      case b: BigDecimal => b
-    }
+    override def apply(row: Row, col: String) = bigDecimalCoerce(row.as[Any](col))
+    override def opt(row: Row, col: String) = row.asOpt[Any](col).map(bigDecimalCoerce)
   }
 
   case object DateType extends DatabaseFieldType[java.time.LocalDate]("date") {
@@ -61,6 +58,7 @@ object DatabaseFieldType extends Enum[DatabaseFieldType[_]] with CirceEnum[Datab
     override def opt(row: Row, col: String) = row.asOpt[PGobject](col).map(x => parse(x.getValue).right.get)
   }
 
+  case object CodeType extends DatabaseFieldType[String]("code")
   case object TagsType extends DatabaseFieldType[Seq[models.tag.Tag]]("tags") {
     override def apply(row: Row, col: String) = tagsCoerce(row.as[Any](col))
     override def opt(row: Row, col: String) = row.asOpt[Any](col).map(tagsCoerce)

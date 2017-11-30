@@ -1,6 +1,6 @@
 # Boilerplay
 
-Using the latest technology in the Scala ecosystem, Boilerplay is a pure Scala reactive web application built on Play 2.6, ScalaJS, Silhouette 5, Akka, PostgreSQL 9.5+, and Sangria/GraphQL.
+Using the latest technology in the Scala ecosystem, Boilerplay is a pure Scala reactive web application built on Play 2.6, Scala.js, Silhouette 5, Akka, PostgreSQL 9.5+, and Sangria/GraphQL.
 It provides a good starting point for whatever you want to build.
 
 
