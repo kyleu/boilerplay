@@ -52,7 +52,7 @@ object Dependencies {
     val fontAwesome = "org.webjars" % "font-awesome" % "4.7.0"
     val jquery = "org.webjars" % "jquery" % "2.2.4"
     val materialize = "org.webjars" % "materializecss" % "0.100.2"
-    val moment = "org.webjars" % "momentjs" % "2.19.1"
+    val moment = "org.webjars" % "momentjs" % "2.19.3"
     val mousetrap = "org.webjars" % "mousetrap" % "1.6.0"
   }
 
@@ -87,7 +87,7 @@ object Dependencies {
     val scalatagsVersion = "0.6.7"
 
     val csv = "com.github.tototoshi" %% "scala-csv" % "1.3.5"
-    val betterFiles = "com.github.pathikrit" %% "better-files" % "3.2.0"
+    val betterFiles = "com.github.pathikrit" %% "better-files" % "3.3.1"
     val commonsIo = "commons-io" % "commons-io" % "2.6"
     val scalaGuice = "net.codingwell" %% "scala-guice" % "4.1.1"
   }
