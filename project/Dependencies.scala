@@ -83,6 +83,7 @@ object Dependencies {
     val scapegoatVersion = "1.3.3"
     val enumeratumVersion = "1.5.14"
     val booPickleVersion = "1.2.5"
+    val utestVersion = "0.6.0"
 
     val scalatagsVersion = "0.6.7"
 

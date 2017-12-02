@@ -44,15 +44,15 @@ object AuditRecordQueries extends BaseQueries[AuditRecord]("auditRecord", "audit
   case class GetByAuditIdSeq(auditIdSeq: Seq[UUID]) extends ColSeqQuery(column = "audit_id", values = auditIdSeq)
 
   case class GetByModel(model: String, pk: Seq[Any]) extends Query[Seq[AuditRecord]] {
-    override def name = "get.audit.records.by.model"
-    override def sql = s"""select * from "$tableName" where "t" = ? and "pk" = ?::character varying[]"""
+    override val name = "get.audit.records.by.model"
+    override val sql = s"""select * from "$tableName" where "t" = ? and "pk" = ?::character varying[]"""
     override val values: Seq[Any] = Seq(model, pk)
     override def reduce(rows: Iterator[Row]) = rows.map(fromRow).toList
   }
 
   def insert(model: AuditRecord) = new Statement {
-    override def name: String = "insert"
-    override def sql: String = s"""insert into $tableName ($quotedColumns) values (?, ?, ?, ?, ?)"""
+    override val name: String = "insert"
+    override val sql: String = s"""insert into $tableName ($quotedColumns) values (?, ?, ?, ?, ?)"""
     private[this] val pkArray = "{ " + model.pk.map("\"" + _ + "\"").mkString(", ") + " }"
     private[this] val changesArray = "[ " + model.changes.map(_.asJson.noSpaces).mkString(", ") + " ]"
     override val values: Seq[Any] = Seq(model.id, model.auditId, model.t, pkArray, changesArray)

@@ -12,5 +12,5 @@ object Permission extends Enum[Permission] with CirceEnum[Permission] {
   case object Administrator extends Permission("admin")
   case object Private extends Permission("private")
 
-  override def values = findValues
+  override val values = findValues
 }

@@ -31,7 +31,8 @@ object Shared {
     scalacOptions in (Compile, doc) := Seq("-encoding", "UTF-8"),
     scalacOptions in Test ++= Seq("-Yrangepos"),
 
-    publishMavenStyle := false
+    publishMavenStyle := false,
+    testFrameworks += new TestFramework("utest.runner.Framework")
   )
 
   def withProjects(p: Project, includes: Seq[Project]) = includes.foldLeft(p)((proj, inc) => proj.dependsOn(inc))
@@ -44,7 +45,8 @@ object Shared {
       "io.circe" %%% "circe-parser" % Dependencies.Serialization.circeVersion,
       "io.circe" %%% "circe-java8" % Dependencies.Serialization.circeVersion,
       "com.beachape" %%% "enumeratum-circe" % Dependencies.Utils.enumeratumVersion,
-      "me.chrons" %%% "boopickle" % Dependencies.Utils.booPickleVersion
+      "me.chrons" %%% "boopickle" % Dependencies.Utils.booPickleVersion,
+      "com.lihaoyi" %%% "utest" % Dependencies.Utils.utestVersion % "test"
     )
   ).jsSettings(libraryDependencies += "org.scala-js" %%% "scalajs-java-time" % "0.2.2")
 

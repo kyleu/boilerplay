@@ -53,7 +53,7 @@ abstract class BaseQueries[T <: Product](
 
   protected class Count(key: String, add: String, override val values: Seq[Any] = Nil) extends SingleRowQuery[Int] {
     override val name = s"$key.count." + key
-    override def sql = s"select count(*) as c from ${quote(tableName)} $add".trim
+    override val sql = s"select count(*) as c from ${quote(tableName)} $add".trim
     override def map(row: Row) = row.as[Long]("c").toInt
   }
 

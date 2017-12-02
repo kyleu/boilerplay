@@ -46,15 +46,14 @@ addSbtPlugin("io.get-coursier" % "sbt-coursier" % "1.0.0-RC13")
 // Code Quality
 addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "1.0.0") // scalastyle
 
-// addSbtPlugin("com.sksamuel.scapegoat" %% "sbt-scapegoat" % "1.0.7")
+//addSbtPlugin("com.sksamuel.scapegoat" %% "sbt-scapegoat" % "1.0.7")
 
-// Broken on Windows
-// addSbtPlugin("ch.epfl.scala" % "sbt-scalafix" % "0.4.2")
+//addSbtPlugin("ch.epfl.scala" % "sbt-scalafix" % "0.5.6")
 
 addSbtPlugin("org.scalariform" % "sbt-scalariform" % "1.8.1") // scalariformFormat
 
 // Utilities
-// addSbtPlugin("net.virtual-void" % "sbt-dependency-graph" % "0.8.2") // dependencyGraph
+addSbtPlugin("net.virtual-void" % "sbt-dependency-graph" % "0.9.0") // dependencyGraph
 
 addSbtPlugin("com.timushev.sbt" % "sbt-updates" % "0.3.1") // dependencyUpdates
 
