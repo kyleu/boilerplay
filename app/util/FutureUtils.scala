@@ -1,6 +1,6 @@
 package util
 
-import akka.actor.ActorSystem
+import _root_.akka.actor.ActorSystem
 
 import scala.concurrent.{ExecutionContext, Future}
 
