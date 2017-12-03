@@ -2,7 +2,7 @@
 
 Akka actors can be instrumented with metrics by extending `InstrumentedActor`. 
 
-By uncommenting `` in `application.conf`, actor message flows can be visualized with `akka-visual-mailbox-visualization`. To enable this, run the following:
+By uncommenting `# default-mailbox.mailbox-type` in `application.conf`, actor message flows can be visualized with `akka-visual-mailbox-visualization`. To enable this, run the following:
 
 ```docker run -ti --rm -p 8080:8080 -p 60009:60009/udp ouven/akka-visual-mailbox-visualization```
 
