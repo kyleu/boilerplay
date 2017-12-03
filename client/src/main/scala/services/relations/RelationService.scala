@@ -8,7 +8,7 @@ import org.scalajs.jquery.{JQuery, JQueryEventObject, jQuery => $}
 import util.Logging
 
 @JSExportTopLevel("RelationService")
-class RelationService(url: String) extends Entrypoint("relation", debug = false) {
+class RelationService(url: String) extends Entrypoint("relation") {
 
   Logging.info(s"Relation service running, using [$url].")
 

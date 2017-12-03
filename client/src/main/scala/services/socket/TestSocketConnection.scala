@@ -5,7 +5,7 @@ import services.event.LoggingEventHandler
 import scala.scalajs.js.annotation.{JSExport, JSExportTopLevel}
 
 @JSExportTopLevel("TestSocketConnection")
-class TestSocketConnection(binary: Boolean = true, debug: Boolean = false) extends SocketConnection("test", new LoggingEventHandler, binary, debug) {
+class TestSocketConnection(binary: Boolean = true) extends SocketConnection("test", new LoggingEventHandler, binary) {
   connect("/connect")
 
   @JSExport

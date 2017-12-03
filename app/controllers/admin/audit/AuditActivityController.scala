@@ -21,7 +21,7 @@ class AuditActivityController @javax.inject.Inject() (
 
   import app.contexts.webContext
 
-  private[this] val formatter = new MessageFrameFormatter(debug = app.config.debug)
+  private[this] val formatter = new MessageFrameFormatter()
 
   def activity() = withSession("home") { implicit request => implicit td =>
     Future.successful(Ok(views.html.admin.audit.auditActivity(request.identity, app.config.debug)))

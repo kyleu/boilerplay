@@ -5,13 +5,13 @@ import util.Logging
 object Entrypoint {
   private[this] var initialized = false
 
-  private def initIfNeeded(debug: Boolean) = if (!initialized) {
-    Logging.init(debug)
+  private def initIfNeeded() = if (!initialized) {
+    Logging.init()
     initialized = true
   }
 }
 
-abstract class Entrypoint(val key: String, val debug: Boolean) {
-  Entrypoint.initIfNeeded(debug)
+abstract class Entrypoint(val key: String) {
+  Entrypoint.initIfNeeded()
   Logging.info(s"${util.Config.projectName} started with entrypoint [$key].")
 }

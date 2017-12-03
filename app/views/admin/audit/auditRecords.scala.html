@@ -1,14 +1,46 @@
 @(records: Seq[models.audit.AuditRecord], model: String, pk: Any*)
 <div class="collection-item">
   @if(records.isEmpty) {
-    <i>No audit records available for this @model.</i>
+    <i>
+      No audit records available for this @model.
+    </i>
   } else {
     @records.size @if(records.size == 1) { audit record } else { audit records } available for this @model.
-    @records.map { record =>
-      <div class="model-audit-record">
-        <a href="@controllers.admin.audit.routes.AuditRecordController.view(record.id)" class="theme-text">@record.id</a>
-        <pre>@record</pre>
-      </div>
-    }
+    <table class="bordered">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Audit</th>
+          <th>Type</th>
+          <th>PK</th>
+          <th>Changes</th>
+        </tr>
+      </thead>
+      <tbody>
+        @records.map { record =>
+          <tr>
+            <td><a href="@controllers.admin.audit.routes.AuditRecordController.view(record.id)" class="theme-text">@record.id</a></td>
+            <td><a href="@controllers.admin.audit.routes.AuditController.view(record.auditId)" class="theme-text">@record.auditId</a></td>
+            <td>@record.t</td>
+            <td>@record.pk.mkString(", ")</td>
+            <td>
+              @if(record.changes.isEmpty) {
+                <em>No changes</em>
+              } else {
+                <table>
+                  @record.changes.map { c =>
+                    <tr>
+                      <td>@c.k</td>
+                      <td>@c.o.getOrElse(util.NullUtils.str)</td>
+                      <td>@c.n.getOrElse(util.NullUtils.str)</td>
+                    </tr>
+                  }
+                </table>
+              }
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
   }
 </div>

@@ -10,7 +10,7 @@ import scala.scalajs.js
 import scala.scalajs.js.annotation.JSExportTopLevel
 
 @JSExportTopLevel("FormService")
-class FormService(id: String) extends Entrypoint("form", debug = false) {
+class FormService(id: String) extends Entrypoint("form") {
   val formEl = $("#" + id)
   if (formEl.length != 1) {
     throw new IllegalStateException(s"Found [${formEl.length}] form elements with id [$id].")

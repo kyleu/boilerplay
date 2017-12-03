@@ -48,7 +48,7 @@ class HomeController @javax.inject.Inject() (
 
   import app.contexts.webContext
 
-  private[this] val formatter = new MessageFrameFormatter(debug = app.config.debug)
+  private[this] val formatter = new MessageFrameFormatter()
 
   def home() = withSession("home") { implicit request => implicit td =>
     Future.successful(Ok(views.html.index(request.identity, app.config.debug)))

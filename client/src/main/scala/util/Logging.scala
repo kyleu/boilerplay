@@ -1,33 +1,30 @@
 package util
 
 import org.scalajs.dom
-import org.scalajs.dom.raw.Event
-import org.scalajs.jquery.{JQuery, jQuery => $}
-import scalatags.Text.all._
+import org.scalajs.dom.raw.{Element, Event}
 
+import scalatags.Text.all._
 import scala.scalajs.js.Dynamic.global
 
 object Logging {
   private[this] val showDebug = false
   private[this] var initialized = false
-  private[this] var container: Option[JQuery] = None
+  private[this] var container: Option[Element] = None
 
   private[this] def logElement(level: String, msg: String) = container.foreach { parent =>
-    val el = div(cls := "log-message")(div(cls := "log-timestamp")(util.DateUtils.niceTime(util.DateUtils.now.toLocalTime)), msg)
-    parent.append(el.toString)
+    val el = div(cls := "log-message")(div(cls := "log-timestamp")(util.JavaScriptUtils.niceCurrentTime()), msg)
+    val domEl = dom.document.createElement("div")
+    domEl.innerHTML = el.toString()
+    parent.appendChild(domEl)
+    parent.scrollTop = parent.scrollHeight.toDouble
   }
 
-  def init(debug: Boolean) = {
+  def init() = {
     if (initialized) {
       throw new IllegalStateException("Logging initialized twice!")
     }
     installErrorHandler()
-
-    val logContainerEl = $("#log-container")
-    if (logContainerEl.length == 1) {
-      container = Some(logContainerEl)
-    }
-
+    container = Option(dom.document.getElementById("log-container"))
     initialized = true
   }
 
@@ -56,8 +53,7 @@ object Logging {
     global.console.error(msg)
   }
 
-  private[this] def installErrorHandler() = if (!initialized) {
-    initialized = true
+  private[this] def installErrorHandler() = {
     if (showDebug) {
       dom.window.onerror = (e: Event, source: String, lineno: Int, colno: Int) => {
         info(s"Script error [$e] encountered in [$source:$lineno:$colno]")

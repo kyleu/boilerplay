@@ -4,10 +4,7 @@ import models.RequestMessage
 import services.event.EventHandler
 import util.{BinarySerializers, JsonSerializers, Logging}
 
-abstract class SocketConnection(
-    key: String = "socket", val handler: EventHandler, debug: Boolean = false, val binary: Boolean = false
-) {
-  Logging.init(debug)
+abstract class SocketConnection(key: String, val handler: EventHandler, val binary: Boolean) {
   protected[this] val socket = new NetworkSocket(handler)
 
   def connect(path: String) = {
@@ -30,11 +27,9 @@ abstract class SocketConnection(
   private[this] def sendMessage(rm: RequestMessage): Unit = {
     if (socket.isConnected) {
       if (binary) {
-        val x = BinarySerializers.writeRequestMessage(rm)
-        socket.sendBinary(x)
+        socket.sendBinary(BinarySerializers.writeRequestMessage(rm))
       } else {
-        val x = JsonSerializers.writeRequestMessage(rm, debug = debug)
-        socket.sendString(x)
+        socket.sendString(JsonSerializers.writeRequestMessage(rm))
       }
       handler.onRequestMessage(rm)
     } else {

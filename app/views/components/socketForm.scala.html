@@ -1,4 +1,4 @@
-@(debug: Boolean)
+@()
 <li id="socket-connection-form" class="collection-item">
   <h5>Websocket Connection</h5>
   <div>
@@ -43,7 +43,7 @@
   $(function() {
     $('#websocket-connect-button').on("click", function() {
       var binary = $('#format-binary').is(':checked');
-      window.socket = new TestSocketConnection(binary, @debug);
+      window.socket = new TestSocketConnection(binary);
     });
   });
 </script>
