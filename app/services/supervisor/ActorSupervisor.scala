@@ -43,7 +43,7 @@ class ActorSupervisor(val app: Application) extends InstrumentedActor with Loggi
     case ct: SendSocketTrace => timeReceive(ct) { handleSendSocketTrace(ct) }
     case ct: SendClientTrace => timeReceive(ct) { handleSendClientTrace(ct) }
 
-    case ActorSupervisor.Broadcast(channel, msg) => sockets.getOrElse(channel, ActorSupervisor.emptyMap).foreach(_._2.actorRef ! msg)
+    case ActorSupervisor.Broadcast(channel, msg) => sockets.getOrElse(channel, ActorSupervisor.emptyMap).foreach(_._2.actorRef.tell(msg, self))
 
     case im: InternalMessage => log.warn(s"Unhandled internal message [${im.getClass.getSimpleName}] received.")
     case x => log.warn(s"ActorSupervisor encountered unknown message: ${x.toString}")
@@ -51,17 +51,17 @@ class ActorSupervisor(val app: Application) extends InstrumentedActor with Loggi
 
   private[this] def handleGetSystemStatus() = {
     val channelStatuses = sockets.mapValues(_.toList.map(x => x._2.desc).sortBy(_.name)).toSeq.sortBy(_._1)
-    sender() ! SystemStatus(channelStatuses)
+    sender().tell(SystemStatus(channelStatuses), self)
   }
 
   private[this] def handleSendSocketTrace(ct: SendSocketTrace) = socketById(ct.id) match {
     case Some(c) => c.actorRef forward ct
-    case None => sender() ! ServerError("Unknown Socket", ct.id.toString)
+    case None => sender().tell(ServerError("Unknown Socket", ct.id.toString), self)
   }
 
   private[this] def handleSendClientTrace(ct: SendClientTrace) = socketById(ct.id) match {
     case Some(c) => c.actorRef forward ct
-    case None => sender() ! ServerError("Unknown Client Socket", ct.id.toString)
+    case None => sender().tell(ServerError("Unknown Client Socket", ct.id.toString), self)
   }
 
   protected[this] def handleSocketStarted(creds: Credentials, channel: String, socketId: UUID, socket: ActorRef) = {

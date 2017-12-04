@@ -17,17 +17,17 @@ object AuditSocketService {
 case class AuditSocketService(id: UUID, supervisor: ActorRef, creds: Credentials, out: ActorRef, sourceAddress: String) extends InstrumentedActor with Logging {
   override def preStart() = {
     log.info(s"Starting connection for user [${creds.user.id}: ${creds.user.username}].")
-    supervisor ! SocketStarted(creds, "audit", id, self)
+    supervisor.tell(SocketStarted(creds, "audit", id, self), self)
   }
 
   override def receiveRequest = {
     case mr: MalformedRequest => timeReceive(mr) { log.error(s"MalformedRequest:  [${mr.reason}]: [${mr.content}].") }
 
-    case p: Ping => timeReceive(p) { out ! Pong(p.ts) }
-    case gv: GetVersion => timeReceive(gv) { out ! VersionResponse(Config.version) }
+    case p: Ping => timeReceive(p) { out.tell(Pong(p.ts), self) }
+    case gv: GetVersion => timeReceive(gv) { out.tell(VersionResponse(Config.version), self) }
 
     case im: InternalMessage => handleInternalMessage(im)
-    case rm: ResponseMessage => out ! rm
+    case rm: ResponseMessage => out.tell(rm, self)
     case x => throw new IllegalArgumentException(s"Unhandled request message [${x.getClass.getSimpleName}].")
   }
 
@@ -36,6 +36,6 @@ case class AuditSocketService(id: UUID, supervisor: ActorRef, creds: Credentials
   }
 
   override def postStop() = {
-    supervisor ! SocketStopped(id)
+    supervisor.tell(SocketStopped(id), self)
   }
 }

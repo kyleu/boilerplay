@@ -28,7 +28,7 @@ class AuditCache(supervisor: ActorRef, lookup: AuditLookup) extends Logging {
   def pending = cache.toSeq.sortBy(_._2._3)(util.DateUtils.localDateTimeOrdering)
 
   def onStart(creds: Credentials, id: UUID, msg: AuditStart)(implicit traceData: TraceData) = {
-    supervisor ! ActorSupervisor.Broadcast("audit", models.AuditStartNotification(id, msg))
+    supervisor.tell(ActorSupervisor.Broadcast("audit", models.AuditStartNotification(id, msg)), supervisor)
 
     val f = msg.models.map { model =>
       lookup.getByPk(creds, model.t, model.pk: _*).map(_.map(_.toDataFields).getOrElse {
@@ -52,7 +52,7 @@ class AuditCache(supervisor: ActorRef, lookup: AuditLookup) extends Logging {
     val current = cache.getOrElse(msg.id, throw new IllegalStateException(
       s"Cannot find audit with id [${msg.id}] ($pendingCount in cache)."
     ))
-    supervisor ! ActorSupervisor.Broadcast("audit", models.AuditCompleteNotification(msg))
+    supervisor.tell(ActorSupervisor.Broadcast("audit", models.AuditCompleteNotification(msg)), supervisor)
 
     val updateLookup = Future.sequence(current._2.map { model =>
       lookup.getByPk(creds, model.t, model.pk: _*).map(_.map(_.toDataFields).getOrElse {

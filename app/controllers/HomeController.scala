@@ -21,18 +21,18 @@ object HomeController {
 
     override def preStart() = {
       log.info(s"Starting connection for user [${creds.user.id}: ${creds.user.username}].")
-      supervisor ! SocketStarted(creds, "home", id, self)
-      out ! UserSettings(creds.user.id, creds.user.username, creds.user.profile.providerKey, creds.user.preferences)
+      supervisor.tell(SocketStarted(creds, "home", id, self), self)
+      out.tell(UserSettings(creds.user.id, creds.user.username, creds.user.profile.providerKey, creds.user.preferences), self)
     }
 
     override def receiveRequest = {
-      case p: Ping => timeReceive(p) { out ! Pong(p.ts) }
-      case rm: ResponseMessage => out ! rm
+      case p: Ping => timeReceive(p) { out.tell(Pong(p.ts), self) }
+      case rm: ResponseMessage => out.tell(rm, self)
       case x => throw new IllegalArgumentException(s"Unhandled request message [${x.getClass.getSimpleName}].")
     }
 
     override def postStop() = {
-      supervisor ! SocketStopped(id)
+      supervisor.tell(SocketStopped(id), self)
     }
   }
 
