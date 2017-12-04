@@ -3,6 +3,7 @@ package models.database.jdbc
 import java.sql.{Connection, PreparedStatement, Types}
 import java.util.UUID
 
+import io.circe.Json
 import models.database.{Query, RawQuery, Statement}
 import util.{Logging, NullUtils}
 
@@ -27,10 +28,11 @@ trait Queryable extends Logging {
   }
 
   def valsForJdbc(conn: Connection, vals: Seq[Any]) = vals.map {
-    case x: Seq[_] => conn.createArrayOf("text", x.map(_.toString).toArray)
-    case x: java.time.LocalDateTime => java.sql.Timestamp.valueOf(x)
-    case x: java.time.LocalDate => java.sql.Date.valueOf(x)
-    case x: java.time.LocalTime => java.sql.Time.valueOf(x)
+    case seq: Seq[_] => conn.createArrayOf("text", seq.map(_.toString).toArray)
+    case json: Json => json.spaces2
+    case ldt: java.time.LocalDateTime => java.sql.Timestamp.valueOf(ldt)
+    case ld: java.time.LocalDate => java.sql.Date.valueOf(ld)
+    case lt: java.time.LocalTime => java.sql.Time.valueOf(lt)
     case x => x
   }
 
