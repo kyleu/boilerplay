@@ -56,7 +56,7 @@ class SearchController @javax.inject.Inject() (override val app: Application, se
 
     // End uuid searches
 
-    val auditR = app.auditService.getByPrimaryKey(creds, id).map(_.map { model =>
+    val auditR = app.coreServices.audits.getByPrimaryKey(creds, id).map(_.map { model =>
       views.html.admin.audit.auditSearchResult(model, s"Audit [${model.id}] matched [$q].")
     }.toSeq)
 
@@ -80,7 +80,7 @@ class SearchController @javax.inject.Inject() (override val app: Application, se
 
     // End string searches
 
-    val auditR = app.auditService.searchExact(creds = creds, q = q, limit = Some(5)).map(_.map { model =>
+    val auditR = app.coreServices.audits.searchExact(creds = creds, q = q, limit = Some(5)).map(_.map { model =>
       views.html.admin.audit.auditSearchResult(model, s"Audit [${model.id}] matched [$q].")
     })
 

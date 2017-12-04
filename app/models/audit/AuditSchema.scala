@@ -17,14 +17,14 @@ import util.FutureUtils.graphQlContext
 
 object AuditSchema extends SchemaHelper("audit") {
   implicit val auditPrimaryKeyId = HasId[Audit, UUID](_.id)
-  private[this] def getByPrimaryKeySeq(c: GraphQLContext, idSeq: Seq[UUID]) = c.app.auditService.getByPrimaryKeySeq(c.creds, idSeq)(c.trace)
+  private[this] def getByPrimaryKeySeq(c: GraphQLContext, idSeq: Seq[UUID]) = c.app.coreServices.audits.getByPrimaryKeySeq(c.creds, idSeq)(c.trace)
   val auditByPrimaryKeyFetcher = Fetcher(getByPrimaryKeySeq)
 
   val auditIdArg = Argument("id", uuidType, description = "Returns the Audit matching the provided Id.")
 
   val auditByUserIdRelation = Relation[Audit, UUID]("byUserId", x => Seq(x.id))
   val auditByUserIdFetcher = Fetcher.rel[GraphQLContext, Audit, Audit, UUID](
-    getByPrimaryKeySeq, (c, rels) => c.app.auditService.getByUserIdSeq(c.creds, rels(auditByUserIdRelation))(c.trace)
+    getByPrimaryKeySeq, (c, rels) => c.app.coreServices.audits.getByUserIdSeq(c.creds, rels(auditByUserIdRelation))(c.trace)
   )
 
   implicit lazy val auditType: ObjectType[GraphQLContext, Audit] = deriveObjectType(
@@ -45,7 +45,7 @@ object AuditSchema extends SchemaHelper("audit") {
     name = "audit",
     fieldType = auditResultType,
     arguments = queryArg :: reportFiltersArg :: orderBysArg :: limitArg :: offsetArg :: Nil,
-    resolve = c => traceF(c.ctx, "search")(td => runSearch(c.ctx.app.auditService, c, td).map(toResult))
+    resolve = c => traceF(c.ctx, "search")(td => runSearch(c.ctx.app.coreServices.audits, c, td).map(toResult))
   ))
 
   val auditMutationType = ObjectType(
@@ -59,7 +59,7 @@ object AuditSchema extends SchemaHelper("audit") {
         fieldType = OptionType(auditType),
         resolve = c => {
           val dataFields = c.args.arg(DataFieldSchema.dataFieldsArg)
-          traceF(c.ctx, "create")(tn => c.ctx.app.auditService.create(c.ctx.creds, dataFields)(tn))
+          traceF(c.ctx, "create")(tn => c.ctx.app.coreServices.audits.create(c.ctx.creds, dataFields)(tn))
         }
       ),
       Field(
@@ -69,7 +69,7 @@ object AuditSchema extends SchemaHelper("audit") {
         fieldType = auditType,
         resolve = c => {
           val dataFields = c.args.arg(DataFieldSchema.dataFieldsArg)
-          traceF(c.ctx, "update")(tn => c.ctx.app.auditService.update(c.ctx.creds, c.args.arg(auditIdArg), dataFields)(tn).map(_._1))
+          traceF(c.ctx, "update")(tn => c.ctx.app.coreServices.audits.update(c.ctx.creds, c.args.arg(auditIdArg), dataFields)(tn).map(_._1))
         }
       ),
       Field(
@@ -77,7 +77,7 @@ object AuditSchema extends SchemaHelper("audit") {
         description = Some("Removes the Note with the provided id."),
         arguments = auditIdArg :: Nil,
         fieldType = auditType,
-        resolve = c => traceF(c.ctx, "remove")(tn => c.ctx.app.auditService.remove(c.ctx.creds, c.args.arg(auditIdArg))(tn))
+        resolve = c => traceF(c.ctx, "remove")(tn => c.ctx.app.coreServices.audits.remove(c.ctx.creds, c.args.arg(auditIdArg))(tn))
       )
     )
   )

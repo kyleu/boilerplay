@@ -38,7 +38,7 @@ trait UserEditHelper { this: UserController =>
         profile = loginInfo,
         role = role
       )
-      app.userService.insert(request, user).flatMap { userSaved =>
+      app.coreServices.users.insert(request, user).flatMap { userSaved =>
         val authInfo = hasher.hash(form("password"))
         for {
           _ <- authInfoRepository.add(loginInfo, authInfo)
@@ -54,14 +54,14 @@ trait UserEditHelper { this: UserController =>
 
   def editForm(id: UUID) = withSession("user.edit.form", admin = true) { implicit request => implicit td =>
     val call = controllers.admin.user.routes.UserController.edit(id)
-    app.userService.getByPrimaryKey(request, id).map {
+    app.coreServices.users.getByPrimaryKey(request, id).map {
       case Some(model) => Ok(views.html.admin.user.userForm(request.identity, model, s"User [$id]", call))
       case None => NotFound(s"No user found with id [$id].")
     }
   }
 
   def edit(id: UUID) = withSession("admin.user.save", admin = true) { implicit request => implicit td =>
-    app.userService.getByPrimaryKey(request, id).map { u =>
+    app.coreServices.users.getByPrimaryKey(request, id).map { u =>
       val user = u.getOrElse(throw new IllegalStateException(s"Invalid user [$id]."))
       val isSelf = request.identity.id == id
 
@@ -85,14 +85,14 @@ trait UserEditHelper { this: UserController =>
       } else if (isSelf && (role != Role.Admin) && user.role == Role.Admin) {
         Redirect(controllers.admin.user.routes.UserController.edit(id)).flashing("error" -> "You cannot remove your own admin role.")
       } else {
-        app.userService.updateFields(request, id, newUsername, newEmail, newPassword, role, user.profile.providerKey)
+        app.coreServices.users.updateFields(request, id, newUsername, newEmail, newPassword, role, user.profile.providerKey)
         Redirect(controllers.admin.user.routes.UserController.view(id))
       }
     }
   }
 
   def remove(id: UUID) = withSession("admin.user.remove", admin = true) { implicit request => implicit td =>
-    app.userService.remove(request, id)
+    app.coreServices.users.remove(request, id)
     Future.successful(Redirect(controllers.admin.user.routes.UserController.list()))
   }
 }

@@ -33,12 +33,12 @@ object UserSchema extends SchemaHelper("user") {
   implicit val profileType = deriveObjectType[GraphQLContext, UserProfile](ObjectTypeDescription("Information about the current session."))
 
   implicit val userPrimaryKeyId = HasId[User, UUID](_.id)
-  private[this] def getByPrimaryKeySeq(c: GraphQLContext, idSeq: Seq[UUID]) = c.app.userService.getByPrimaryKeySeq(c.creds, idSeq)(c.trace)
+  private[this] def getByPrimaryKeySeq(c: GraphQLContext, idSeq: Seq[UUID]) = c.app.coreServices.users.getByPrimaryKeySeq(c.creds, idSeq)(c.trace)
   val userByPrimaryKeyFetcher = Fetcher(getByPrimaryKeySeq)
 
   val userByRoleRelation = Relation[User, Role]("byRole", x => Seq(x.role))
   val userByRoleFetcher = Fetcher.rel[GraphQLContext, User, User, UUID](
-    getByPrimaryKeySeq, (c, rels) => c.app.userService.getByRoleSeq(rels(userByRoleRelation))(c.trace)
+    getByPrimaryKeySeq, (c, rels) => c.app.coreServices.users.getByRoleSeq(rels(userByRoleRelation))(c.trace)
   )
 
   implicit val loginInfoType = deriveObjectType[GraphQLContext, LoginInfo](ObjectTypeDescription("Information about login credentials."))
@@ -78,7 +78,7 @@ object UserSchema extends SchemaHelper("user") {
       name = "user",
       fieldType = userResultType,
       arguments = queryArg :: reportFiltersArg :: orderBysArg :: limitArg :: offsetArg :: Nil,
-      resolve = c => traceF(c.ctx, "search")(td => runSearch(c.ctx.app.userService, c, td).map(toResult))
+      resolve = c => traceF(c.ctx, "search")(td => runSearch(c.ctx.app.coreServices.users, c, td).map(toResult))
     ),
     Field(
       name = "userByRole",

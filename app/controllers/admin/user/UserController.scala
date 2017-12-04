@@ -17,9 +17,9 @@ class UserController @javax.inject.Inject() (
     override val app: Application, svc: UserService, val authInfoRepository: AuthInfoRepository, val hasher: PasswordHasher, noteS: NoteService
 ) extends BaseController("user") with UserEditHelper with UserSearchHelper {
   def view(id: UUID) = withSession("user.view", admin = true) { implicit request => implicit td =>
-    val modelF = app.userService.getByPrimaryKey(request, id)
-    val notesF = app.noteService.getFor("user", id)
-    val auditsF = app.auditRecordService.getByModel(request, "user", id)
+    val modelF = app.coreServices.users.getByPrimaryKey(request, id)
+    val notesF = app.coreServices.notes.getFor("user", id)
+    val auditsF = app.coreServices.auditRecords.getByModel(request, "user", id)
 
     notesF.flatMap(notes => auditsF.flatMap(audits => modelF.map {
       case Some(model) => render {

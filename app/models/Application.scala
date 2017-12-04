@@ -25,6 +25,15 @@ import scala.concurrent.Future
 
 object Application {
   var initialized = false
+
+  @javax.inject.Singleton
+  class CoreServices @javax.inject.Inject() (
+      val users: UserService,
+      val settings: SettingsService,
+      val audits: AuditService,
+      val auditRecords: AuditRecordService,
+      val notes: ModelNoteService
+  )
 }
 
 @javax.inject.Singleton
@@ -34,11 +43,7 @@ class Application @javax.inject.Inject() (
     val lifecycle: ApplicationLifecycle,
     val playEnv: Environment,
     val actorSystem: ActorSystem,
-    val userService: UserService,
-    val settingsService: SettingsService,
-    val auditService: AuditService,
-    val auditRecordService: AuditRecordService,
-    val noteService: ModelNoteService,
+    val coreServices: Application.CoreServices,
     val silhouette: Silhouette[AuthEnv],
     val ws: TracingWSClient,
     val tracing: TracingService
@@ -67,7 +72,7 @@ class Application @javax.inject.Inject() (
 
     ApplicationDatabase.open(config.cnf, tracing)
     MasterDdl.init()
-    settingsService.load()
+    coreServices.settings.load()
 
     true
   }

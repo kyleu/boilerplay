@@ -15,14 +15,14 @@ import util.FutureUtils.graphQlContext
 
 object AuditRecordSchema extends SchemaHelper("auditRecord") {
   implicit val auditRecordPrimaryKeyId = HasId[AuditRecord, UUID](_.id)
-  private[this] def getByPrimaryKeySeq(c: GraphQLContext, idSeq: Seq[UUID]) = c.app.auditRecordService.getByPrimaryKeySeq(c.creds, idSeq)(c.trace)
+  private[this] def getByPrimaryKeySeq(c: GraphQLContext, idSeq: Seq[UUID]) = c.app.coreServices.auditRecords.getByPrimaryKeySeq(c.creds, idSeq)(c.trace)
   val auditRecordByPrimaryKeyFetcher = Fetcher(getByPrimaryKeySeq)
 
   val auditRecordIdArg = Argument("id", uuidType, description = "Returns the Audit Record matching the provided Id.")
 
   val auditRecordByAuditIdRelation = Relation[AuditRecord, UUID]("byAuditId", x => Seq(x.auditId))
   val auditRecordByAuditIdFetcher = Fetcher.rel[GraphQLContext, AuditRecord, AuditRecord, UUID](
-    getByPrimaryKeySeq, (c, rels) => c.app.auditRecordService.getByAuditIdSeq(c.creds, rels(auditRecordByAuditIdRelation))(c.trace)
+    getByPrimaryKeySeq, (c, rels) => c.app.coreServices.auditRecords.getByAuditIdSeq(c.creds, rels(auditRecordByAuditIdRelation))(c.trace)
   )
 
   implicit lazy val auditFieldType: ObjectType[GraphQLContext, AuditField] = deriveObjectType()

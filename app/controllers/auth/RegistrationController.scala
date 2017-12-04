@@ -26,7 +26,7 @@ class RegistrationController @javax.inject.Inject() (
   import app.contexts.webContext
 
   def registrationForm(email: Option[String] = None) = withoutSession("form") { implicit request => implicit td =>
-    if (app.settingsService.allowRegistration) {
+    if (app.coreServices.settings.allowRegistration) {
       val form = UserForms.registrationForm.fill(RegistrationData(
         username = email.map(e => if (e.contains('@')) { e.substring(0, e.indexOf('@')) } else { "" }).getOrElse(""),
         email = email.getOrElse("")
@@ -38,7 +38,7 @@ class RegistrationController @javax.inject.Inject() (
   }
 
   def register = withoutSession("register") { implicit request => implicit td =>
-    if (!app.settingsService.allowRegistration) {
+    if (!app.coreServices.settings.allowRegistration) {
       throw new IllegalStateException("You cannot sign up at this time. Contact your administrator.")
     }
     UserForms.registrationForm.bindFromRequest.fold(
@@ -54,7 +54,7 @@ class RegistrationController @javax.inject.Inject() (
           )
           case None =>
             val authInfo = hasher.hash(data.password)
-            val role = Role.withName(app.settingsService(SettingKey.DefaultNewUserRole))
+            val role = Role.withName(app.coreServices.settings(SettingKey.DefaultNewUserRole))
             val user = User(
               id = UUID.randomUUID,
               username = data.username,
@@ -63,7 +63,7 @@ class RegistrationController @javax.inject.Inject() (
               role = role
             )
             val creds = Credentials(user, request.remoteAddress)
-            app.userService.insert(creds, user).flatMap { userSaved =>
+            app.coreServices.users.insert(creds, user).flatMap { userSaved =>
               AuditHelper.onInsert("user", Seq(userSaved.id.toString), userSaved.toDataFields, creds)
               val result = request.session.get("returnUrl") match {
                 case Some(url) => Redirect(url).withSession(request.session - "returnUrl")
