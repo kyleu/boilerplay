@@ -28,7 +28,7 @@ object DataFieldSchema {
       case _ => Left(VarCoercionViolation)
     },
     coerceInput = {
-      case ast.StringValue(id, _, _) => Right(id)
+      case ast.StringValue(id, _, _, _, _) => Right(id)
       case ast.BooleanValue(id, _, _) => Right(id.toString)
       case ast.IntValue(id, _, _) => Right(id.toString)
       case ast.BigIntValue(id, _, _) => Right(id.toString)

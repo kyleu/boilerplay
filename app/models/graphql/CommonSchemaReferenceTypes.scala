@@ -25,7 +25,7 @@ protected[graphql] trait CommonSchemaReferenceTypes {
       case _ => Left(UuidCoercionViolation)
     },
     coerceInput = {
-      case sangria.ast.StringValue(s, _, _) => parseUuid(s)
+      case sangria.ast.StringValue(s, _, _, _, _) => parseUuid(s)
       case _ => Left(UuidCoercionViolation)
     }
   )
@@ -44,7 +44,7 @@ protected[graphql] trait CommonSchemaReferenceTypes {
       case _ => Left(JsonCoercionViolation)
     },
     coerceInput = {
-      case sangria.ast.StringValue(s, _, _) => parseJson(s)
+      case sangria.ast.StringValue(s, _, _, _, _) => parseJson(s)
       case _ => Left(JsonCoercionViolation)
     }
   )
@@ -58,7 +58,7 @@ protected[graphql] trait CommonSchemaReferenceTypes {
       case _ => Left(Base64CoercionViolation)
     },
     coerceInput = {
-      case sangria.ast.StringValue(s, _, _) => Right(Base64.decodeBase64(s))
+      case sangria.ast.StringValue(s, _, _, _, _) => Right(Base64.decodeBase64(s))
       case _ => Left(Base64CoercionViolation)
     }
   )

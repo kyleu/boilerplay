@@ -33,13 +33,13 @@ object Dependencies {
   }
 
   object Database {
-    val hikariCp = "com.zaxxer" % "HikariCP" % "2.7.3"
-    val mysql = "mysql" % "mysql-connector-java" % "5.1.44" // 6.0 is all different
+    val hikariCp = "com.zaxxer" % "HikariCP" % "2.7.4"
+    val mysql = "mysql" % "mysql-connector-java" % "5.1.45" // 6.0 is all different
     val postgres = "org.postgresql" % "postgresql" % "9.4.1212"
   }
 
   object GraphQL {
-    val sangria = "org.sangria-graphql" %% "sangria" % "1.3.2"
+    val sangria = "org.sangria-graphql" %% "sangria" % "1.3.3"
     val playJson = "org.sangria-graphql" %% "sangria-play-json" % "1.0.4"
     val circe = "org.sangria-graphql" %% "sangria-circe" % "1.1.0"
   }
@@ -88,7 +88,7 @@ object Dependencies {
     val scalatagsVersion = "0.6.7"
 
     val csv = "com.github.tototoshi" %% "scala-csv" % "1.3.5"
-    val betterFiles = "com.github.pathikrit" %% "better-files" % "3.3.1"
+    val betterFiles = "com.github.pathikrit" %% "better-files" % "3.4.0"
     val commonsIo = "commons-io" % "commons-io" % "2.6"
     val scalaGuice = "net.codingwell" %% "scala-guice" % "4.1.1"
   }

@@ -72,7 +72,8 @@ object Server {
   lazy val server = {
     val ret = Project(id = Shared.projectId, base = file(".")).enablePlugins(
       SbtWeb, play.sbt.PlayScala, JavaAppPackaging, diagram.ClassDiagramPlugin,
-      UniversalPlugin, LinuxPlugin, DebianPlugin, RpmPlugin, DockerPlugin, WindowsPlugin, JDKPackagerPlugin).settings(serverSettings: _*).settings(Packaging.settings: _*)
+      UniversalPlugin, LinuxPlugin, DebianPlugin, RpmPlugin, DockerPlugin, WindowsPlugin, JDKPackagerPlugin
+    ).settings(serverSettings: _*).settings(Packaging.settings: _*)
 
     Shared.withProjects(ret, Seq(Shared.sharedJvm, Utilities.metrics))
   }
