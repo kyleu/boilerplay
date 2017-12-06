@@ -1,10 +1,10 @@
 package util
 
 object Config {
-  val projectId = "boilerplay"
-  val projectName = "Boilerplay"
-  val projectUrl = "https://github.com/KyleU/boilerplay"
-  val adminEmail = "admin@boilerplay.com"
-  val version = "0.1"
-  val pageSize = 100
+  final val projectId = "boilerplay"
+  final val projectName = "Boilerplay"
+  final val projectUrl = "https://github.com/KyleU/boilerplay"
+  final val adminEmail = "admin@boilerplay.com"
+  final val version = "0.1"
+  final val pageSize = 100
 }

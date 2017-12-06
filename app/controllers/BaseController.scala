@@ -1,10 +1,8 @@
 package controllers
 
-import java.net.InetAddress
-
 import com.mohiva.play.silhouette.api.actions.{SecuredRequest, UserAwareRequest}
+import io.prometheus.client.Histogram
 import models.Application
-import models.audit.{AuditModelPk, AuditStart}
 import models.auth.{AuthEnv, Credentials}
 import models.user.Role
 import play.api.mvc._
@@ -12,18 +10,26 @@ import util.Logging
 import util.metrics.Instrumented
 import util.tracing.TraceData
 import util.web.TracingFilter
-import scala.language.implicitConversions
 
+import scala.language.implicitConversions
 import scala.concurrent.{ExecutionContext, Future}
 
-abstract class BaseController(val name: String) extends InjectedController with Instrumented with Logging {
+abstract class BaseController(val name: String) extends InjectedController with Logging {
+  private[this] def cn(x: Any) = x.getClass.getSimpleName.replaceAllLiterally("$", "")
+
   protected def app: Application
+
+  protected[this] lazy val metricsName = util.Config.projectId + "_" + cn(this)
+  protected[this] lazy val requestHistogram = Histogram.build(
+    metricsName + "_request",
+    s"Controller request metrics for [$metricsName]"
+  ).labelNames("method").register()
 
   protected def withoutSession(action: String)(
     block: UserAwareRequest[AuthEnv, AnyContent] => TraceData => Future[Result]
   )(implicit ec: ExecutionContext) = {
     app.silhouette.UserAwareAction.async { implicit request =>
-      metrics.timer(name + "." + action).timeFuture {
+      Instrumented.timeFuture(requestHistogram, name + "_" + action) {
         app.tracing.trace(name + ".controller." + action) { td =>
           ControllerUtilities.enhanceRequest(request, request.identity, td.span)
           block(request)(td)
@@ -40,7 +46,7 @@ abstract class BaseController(val name: String) extends InjectedController with 
         case Some(u) => if (admin && u.role != Role.Admin) {
           failRequest(request)
         } else {
-          metrics.timer(name + "." + action).timeFuture {
+          Instrumented.timeFuture(requestHistogram, name + "_" + action) {
             app.tracing.trace(name + ".controller." + action) { td =>
               ControllerUtilities.enhanceRequest(request, Some(u), td.span)
               val r = SecuredRequest(u, request.authenticator.get, request)

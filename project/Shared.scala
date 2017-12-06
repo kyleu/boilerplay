@@ -35,8 +35,6 @@ object Shared {
     testFrameworks += new TestFramework("utest.runner.Framework")
   )
 
-  def withProjects(p: Project, includes: Seq[Project]) = includes.foldLeft(p)((proj, inc) => proj.dependsOn(inc))
-
   lazy val shared = (crossProject(JSPlatform, JVMPlatform).crossType(CrossType.Pure) in file("shared")).settings(commonSettings: _*).settings(
     libraryDependencies ++= Seq(
       "io.circe" %%% "circe-core" % Dependencies.Serialization.circeVersion,

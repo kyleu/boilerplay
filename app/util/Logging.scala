@@ -1,67 +1,53 @@
 package util
 
+import io.prometheus.client.Gauge
 import org.slf4j.{LoggerFactory, MarkerFactory}
 import play.api.{Logger, MarkerContext}
-import util.metrics.Instrumented
 
-object Logging extends Instrumented {
-  private[this] val traceMeter = metrics.meter("log.trace")
-  private[this] val debugMeter = metrics.meter("log.debug")
-  private[this] val infoMeter = metrics.meter("log.info")
-  private[this] val warnMeter = metrics.meter("log.warn")
-  private[this] val errorMeter = metrics.meter("log.error")
-
-  private[this] var callback: Option[(Int, String) => Unit] = None
-
-  def setCallback(f: (Int, String) => Unit) = callback = Some(f)
+object Logging {
+  private[this] lazy val gauge = Gauge.build(util.Config.projectId + "_logging", "Logging statistics.").labelNames("level").register()
 
   case class CustomLogger(name: String) extends Logger(LoggerFactory.getLogger(name)) {
     implicit val mc = MarkerContext(MarkerFactory.getMarker(name))
 
     override def trace(message: => String)(implicit mc: play.api.MarkerContext) = {
-      traceMeter.mark()
+      gauge.labels("trace").inc()
       super.trace(message)
     }
     override def trace(message: => String, error: => Throwable)(implicit mc: play.api.MarkerContext) = {
-      traceMeter.mark()
+      gauge.labels("trace").inc()
       super.trace(message, error)
     }
     override def debug(message: => String)(implicit mc: play.api.MarkerContext) = {
-      debugMeter.mark()
+      gauge.labels("debug").inc()
       super.debug(message)
     }
     override def debug(message: => String, error: => Throwable)(implicit mc: play.api.MarkerContext) = {
-      debugMeter.mark()
+      gauge.labels("debug").inc()
       super.debug(message, error)
     }
     override def info(message: => String)(implicit mc: play.api.MarkerContext) = {
-      callback.foreach(_(1, message))
-      infoMeter.mark()
+      gauge.labels("info").inc()
       super.info(message)
     }
     override def info(message: => String, error: => Throwable)(implicit mc: play.api.MarkerContext) = {
-      callback.foreach(_(1, message))
-      infoMeter.mark()
+      gauge.labels("info").inc()
       super.info(message, error)
     }
     override def warn(message: => String)(implicit mc: play.api.MarkerContext) = {
-      callback.foreach(_(2, message))
-      warnMeter.mark()
+      gauge.labels("warn").inc()
       super.warn(message)
     }
     override def warn(message: => String, error: => Throwable)(implicit mc: play.api.MarkerContext) = {
-      callback.foreach(_(2, message))
-      warnMeter.mark()
+      gauge.labels("warn").inc()
       super.warn(message, error)
     }
     override def error(message: => String)(implicit mc: play.api.MarkerContext) = {
-      callback.foreach(_(3, message))
-      errorMeter.mark()
+      gauge.labels("error").inc()
       super.error(message)
     }
     override def error(message: => String, error: => Throwable)(implicit mc: play.api.MarkerContext) = {
-      callback.foreach(_(3, message))
-      errorMeter.mark()
+      gauge.labels("error").inc()
       super.error(message, error)
     }
     def errorThenThrow(message: => String)(implicit mc: play.api.MarkerContext) = {

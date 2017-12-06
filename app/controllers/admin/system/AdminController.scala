@@ -3,7 +3,6 @@ package controllers.admin.system
 import akka.util.Timeout
 import controllers.BaseController
 import models.{Application, GetSystemStatus, SystemStatus}
-import services.supervisor.ActorSupervisor
 
 import scala.concurrent.Future
 

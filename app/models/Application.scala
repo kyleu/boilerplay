@@ -3,7 +3,6 @@ package models
 import java.util.TimeZone
 
 import akka.actor.{ActorSystem, Props}
-import com.codahale.metrics.SharedMetricRegistries
 import com.mohiva.play.silhouette.api.Silhouette
 import models.auth.AuthEnv
 import play.api.Environment
@@ -13,7 +12,7 @@ import services.file.FileService
 import services.supervisor.ActorSupervisor
 import services.user.UserService
 import services.cache.CacheService
-import services.audit.{AuditRecordService, AuditService}
+import services.audit.AuditService
 import services.note.ModelNoteService
 import services.settings.SettingsService
 import util.{Config, FutureUtils, Logging}
@@ -62,8 +61,7 @@ class Application @javax.inject.Inject() (
     TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
     System.setProperty("user.timezone", "UTC")
 
-    SharedMetricRegistries.remove("default")
-    SharedMetricRegistries.add("default", Instrumented.metricRegistry)
+    if (config.metrics.prometheusEnabled) { Instrumented.start() }
 
     lifecycle.addStopHook(() => Future.successful(stop()))
 
@@ -79,7 +77,7 @@ class Application @javax.inject.Inject() (
   private[this] def stop() = {
     ApplicationDatabase.close()
     CacheService.close()
-    tracing.close()
-    SharedMetricRegistries.remove("default")
+    if (config.metrics.tracingEnabled) { tracing.close() }
+    if (config.metrics.prometheusEnabled) { Instrumented.stop() }
   }
 }

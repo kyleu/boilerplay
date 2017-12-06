@@ -48,13 +48,13 @@ class TracingService @javax.inject.Inject() (actorSystem: ActorSystem, cnf: Metr
   private[this] val reporter = AsyncReporter.create(sender)
   private[this] val samp = Sampler.create(cnf.tracingSampleRate)
   private[this] val ctx = MDCCurrentTraceContext.create()
-  val builder = Tracing.newBuilder().localServiceName(cnf.tracingService).reporter(reporter).currentTraceContext(ctx).traceId128Bit(true).sampler(samp)
+  val builder = Tracing.newBuilder().localServiceName(util.Config.projectId).reporter(reporter).currentTraceContext(ctx).traceId128Bit(true).sampler(samp)
   val tracing = builder.build()
 
   if (!cnf.tracingEnabled) {
     tracing.setNoop(true)
   } else {
-    val loc = s"${cnf.tracingServer}:${cnf.tracingPort}@${cnf.tracingService}"
+    val loc = s"${cnf.tracingServer}:${cnf.tracingPort}@${util.Config.projectId}"
     log.info(s"Tracing enabled, sending results to [$loc] using sample rate [${cnf.tracingSampleRate}].")
   }
   private[this] val tracer: Tracer = tracing.tracer

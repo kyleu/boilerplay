@@ -21,10 +21,10 @@ case class AuditSocketService(id: UUID, supervisor: ActorRef, creds: Credentials
   }
 
   override def receiveRequest = {
-    case mr: MalformedRequest => timeReceive(mr) { log.error(s"MalformedRequest:  [${mr.reason}]: [${mr.content}].") }
+    case mr: MalformedRequest => log.error(s"MalformedRequest:  [${mr.reason}]: [${mr.content}].")
 
-    case p: Ping => timeReceive(p) { out.tell(Pong(p.ts), self) }
-    case gv: GetVersion => timeReceive(gv) { out.tell(VersionResponse(Config.version), self) }
+    case p: Ping => out.tell(Pong(p.ts), self)
+    case _: GetVersion => out.tell(VersionResponse(Config.version), self)
 
     case im: InternalMessage => handleInternalMessage(im)
     case rm: ResponseMessage => out.tell(rm, self)

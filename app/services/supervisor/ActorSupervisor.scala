@@ -9,7 +9,7 @@ import java.time.LocalDateTime
 
 import models.auth.Credentials
 import models.supervisor.SocketDescription
-import util.metrics.{InstrumentedActor, MetricsServletActor}
+import util.metrics.InstrumentedActor
 import util.{DateUtils, Logging}
 
 object ActorSupervisor {
@@ -24,10 +24,10 @@ object ActorSupervisor {
 class ActorSupervisor(val app: Application) extends InstrumentedActor with Logging {
   private[this] val sockets = collection.mutable.HashMap.empty[String, collection.mutable.HashMap[UUID, ActorSupervisor.SocketRecord]]
   private[this] def socketById(id: UUID) = sockets.values.find(_.contains(id)).flatMap(_.get(id))
-  private[this] val socketsCounter = metrics.counter("active-connections")
+
+  private[this] val socketsCount = gauge("active_connections", "Actor Supervisor active connections.")
 
   override def preStart() = {
-    context.actorOf(MetricsServletActor.props(app.config.metrics), "metrics-servlet")
     log.debug(s"Actor Supervisor started for [${util.Config.projectId}].")
   }
 
@@ -36,12 +36,12 @@ class ActorSupervisor(val app: Application) extends InstrumentedActor with Loggi
   }
 
   override def receiveRequest = {
-    case ss: SocketStarted => timeReceive(ss) { handleSocketStarted(ss.creds, ss.channel, ss.socketId, ss.conn) }
-    case ss: SocketStopped => timeReceive(ss) { handleSocketStopped(ss.socketId) }
+    case ss: SocketStarted => handleSocketStarted(ss.creds, ss.channel, ss.socketId, ss.conn)
+    case ss: SocketStopped => handleSocketStopped(ss.socketId)
 
-    case GetSystemStatus => timeReceive(GetSystemStatus) { handleGetSystemStatus() }
-    case ct: SendSocketTrace => timeReceive(ct) { handleSendSocketTrace(ct) }
-    case ct: SendClientTrace => timeReceive(ct) { handleSendClientTrace(ct) }
+    case GetSystemStatus => handleGetSystemStatus()
+    case ct: SendSocketTrace => handleSendSocketTrace(ct)
+    case ct: SendClientTrace => handleSendClientTrace(ct)
 
     case ActorSupervisor.Broadcast(channel, msg) => sockets.getOrElse(channel, ActorSupervisor.emptyMap).foreach(_._2.actorRef.tell(msg, self))
 
@@ -69,7 +69,7 @@ class ActorSupervisor(val app: Application) extends InstrumentedActor with Loggi
     sockets.getOrElseUpdate(channel, ActorSupervisor.emptyMap)(socketId) = {
       ActorSupervisor.SocketRecord(socketId, creds.user.id, creds.user.username, channel, socket, DateUtils.now)
     }
-    socketsCounter.inc()
+    socketsCount.inc()
   }
 
   protected[this] def handleSocketStopped(id: UUID) = {
@@ -78,6 +78,6 @@ class ActorSupervisor(val app: Application) extends InstrumentedActor with Loggi
         log.debug(s"Connection [$id] [${sock.actorRef.path}] removed from channel [${channel._1}].")
       }
     }
-    socketsCounter.dec()
+    socketsCount.dec()
   }
 }

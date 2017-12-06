@@ -57,15 +57,11 @@ object Dependencies {
   }
 
   object Metrics {
-    val version = "3.2.5"
-    val metrics = "nl.grons" %% "metrics-scala" % "3.5.9"
-    val jvm = "io.dropwizard.metrics" % "metrics-jvm" % version exclude("org.slf4j", "slf4j-api")
-    val ehcache = "io.dropwizard.metrics" % "metrics-ehcache" % version exclude("org.slf4j", "slf4j-api") intransitive ()
-    val healthChecks = "io.dropwizard.metrics" % "metrics-healthchecks" % version exclude("org.slf4j", "slf4j-api") intransitive ()
-    val json = "io.dropwizard.metrics" % "metrics-json" % version exclude("org.slf4j", "slf4j-api")
-    val jettyServlet = "org.eclipse.jetty" % "jetty-servlet" % "9.4.7.v20170914"
-    val servlets = "io.dropwizard.metrics" % "metrics-servlets" % version intransitive ()
-    val graphite = "io.dropwizard.metrics" % "metrics-graphite" % version intransitive ()
+    val version = "0.1.0"
+    val metrics = "io.prometheus" % "simpleclient" % version
+    val metricsJvm = "io.prometheus" % "simpleclient_hotspot" % version
+    val metricsHttp = "io.prometheus" % "simpleclient_httpserver" % version
+    val metricsPush = "io.prometheus" % "simpleclient_pushgateway" % version
   }
 
   object Tracing {

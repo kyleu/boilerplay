@@ -26,7 +26,7 @@ object HomeController {
     }
 
     override def receiveRequest = {
-      case p: Ping => timeReceive(p) { out.tell(Pong(p.ts), self) }
+      case p: Ping => out.tell(Pong(p.ts), self)
       case rm: ResponseMessage => out.tell(rm, self)
       case x => throw new IllegalArgumentException(s"Unhandled request message [${x.getClass.getSimpleName}].")
     }

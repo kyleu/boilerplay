@@ -28,11 +28,13 @@ object Server {
   private[this] val dependencies = {
     import Dependencies._
     Seq(
+      Tracing.brave, Tracing.http, Tracing.logging, Metrics.metrics, Metrics.metricsJvm, Metrics.metricsHttp, Metrics.metricsPush,
       Akka.actor, Akka.logging, Akka.visualMailbox, Play.filters, Play.guice, Play.ws, Play.json, Play.cache,
       Database.mysql, Database.postgres, Database.hikariCp, GraphQL.sangria, GraphQL.playJson, GraphQL.circe,
       Authentication.silhouette, Authentication.hasher, Authentication.persistence, Authentication.crypto,
       WebJars.jquery, WebJars.fontAwesome, WebJars.materialize, WebJars.moment, WebJars.mousetrap,
-      Utils.csv, Utils.scalaGuice, Utils.commonsIo, Utils.betterFiles, Akka.testkit, Play.test, Testing.scalaTest)
+      Utils.csv, Utils.scalaGuice, Utils.commonsIo, Utils.betterFiles, Akka.testkit, Play.test, Testing.scalaTest
+    )
   }
 
   private[this] lazy val serverSettings = Shared.commonSettings ++ Seq(
@@ -69,12 +71,8 @@ object Server {
     mainClass in assembly := Some(Shared.projectName)
   )
 
-  lazy val server = {
-    val ret = Project(id = Shared.projectId, base = file(".")).enablePlugins(
-      SbtWeb, play.sbt.PlayScala, JavaAppPackaging, diagram.ClassDiagramPlugin,
-      UniversalPlugin, LinuxPlugin, DebianPlugin, RpmPlugin, DockerPlugin, WindowsPlugin, JDKPackagerPlugin
-    ).settings(serverSettings: _*).settings(Packaging.settings: _*)
-
-    Shared.withProjects(ret, Seq(Shared.sharedJvm, Utilities.metrics))
-  }
+  lazy val server = Project(id = Shared.projectId, base = file(".")).enablePlugins(
+    SbtWeb, play.sbt.PlayScala, JavaAppPackaging, diagram.ClassDiagramPlugin,
+    UniversalPlugin, LinuxPlugin, DebianPlugin, RpmPlugin, DockerPlugin, WindowsPlugin, JDKPackagerPlugin
+  ).settings(serverSettings: _*).settings(Packaging.settings: _*).dependsOn(Shared.sharedJvm)
 }

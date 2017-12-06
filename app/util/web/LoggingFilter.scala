@@ -3,39 +3,22 @@ package util.web
 import javax.inject.Inject
 
 import akka.stream.Materializer
-import com.codahale.metrics.Meter
-import play.api.http.Status
+import io.prometheus.client.Histogram
 import util.FutureUtils.defaultContext
 import play.api.mvc._
 import util.Logging
-import util.metrics.Instrumented
 
 import scala.concurrent.Future
 
-class LoggingFilter @Inject() (override implicit val mat: Materializer) extends Filter with Logging with Instrumented {
-  val prefix = "boilerplay.requests."
-
-  val knownStatuses = Seq(
-    Status.OK, Status.BAD_REQUEST, Status.FORBIDDEN, Status.NOT_FOUND,
-    Status.CREATED, Status.TEMPORARY_REDIRECT, Status.INTERNAL_SERVER_ERROR, Status.CONFLICT,
-    Status.UNAUTHORIZED, Status.NOT_MODIFIED
-  )
-
-  lazy val statusCodes: Map[Int, Meter] = knownStatuses.map(s => s -> metricRegistry.meter(prefix + s.toString)).toMap
-
-  lazy val requestsTimer = metricRegistry.timer(s"${prefix}requestTimer")
-  lazy val activeRequests = metricRegistry.counter(s"${prefix}activeRequests")
-  lazy val otherStatuses = metricRegistry.meter(s"${prefix}other")
+class LoggingFilter @Inject() (override implicit val mat: Materializer) extends Filter with Logging {
+  val metricsName = util.Config.projectId + "_http_requests"
+  private[this] lazy val requestHistogram = Histogram.build(metricsName, s"HTTP request statistics.").register()
 
   def apply(nextFilter: (RequestHeader) => Future[Result])(request: RequestHeader): Future[Result] = {
-    val startTime = System.currentTimeMillis
-    val context = requestsTimer.time()
-    activeRequests.inc()
+    val timer = requestHistogram.startTimer()
 
     def logCompleted(result: Result): Unit = {
-      activeRequests.dec()
-      context.stop()
-      statusCodes.getOrElse(result.header.status, otherStatuses).mark()
+      timer.close()
     }
 
     nextFilter(request).transform(
@@ -44,10 +27,9 @@ class LoggingFilter @Inject() (override implicit val mat: Materializer) extends 
         if (request.path.startsWith("/assets")) {
           result
         } else {
-          val endTime = System.currentTimeMillis
-          val requestTime = endTime - startTime
-          log.info(s"${result.header.status} (${requestTime}ms): ${request.method} ${request.uri}")
-          result.withHeaders("X-Request-Time-Ms" -> requestTime.toString)
+          val requestTime = timer.observeDuration()
+          log.info(s"${result.header.status} (${requestTime}s): ${request.method} ${request.uri}")
+          result.withHeaders("X-Request-Time-Ms" -> (requestTime * 1000).toInt.toString)
         }
       },
       exception => {

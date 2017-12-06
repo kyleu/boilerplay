@@ -6,13 +6,12 @@ import com.google.common.net.InetAddresses
 import models.database.{DatabaseConfig, RawQuery, Statement}
 import util.FutureUtils.databaseContext
 import util.Logging
-import util.metrics.Instrumented
 import util.tracing.{TraceData, TracingService}
 import zipkin.Endpoint
 
 import scala.concurrent.Future
 
-trait Database[Conn] extends Instrumented with Logging {
+trait Database[Conn] extends Logging {
   protected[this] def key: String
 
   def transaction[A](f: (TraceData, Conn) => A)(implicit traceData: TraceData): A
