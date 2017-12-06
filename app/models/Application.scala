@@ -31,7 +31,6 @@ object Application {
       val users: UserService,
       val settings: SettingsService,
       val audits: AuditService,
-      val auditRecords: AuditRecordService,
       val notes: ModelNoteService
   )
 }

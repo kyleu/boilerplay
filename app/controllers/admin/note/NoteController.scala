@@ -3,10 +3,11 @@ package controllers.admin.note
 import controllers.BaseController
 import io.circe.syntax._
 import java.util.UUID
+
 import models.Application
 import models.note.NoteResult
 import models.result.orderBy.OrderBy
-import services.audit.AuditRoutes
+import services.audit.{AuditRecordService, AuditRoutes}
 
 import scala.concurrent.Future
 import services.note.NoteService
@@ -14,7 +15,7 @@ import util.FutureUtils.defaultContext
 import util.web.ControllerUtils.acceptsCsv
 
 @javax.inject.Singleton
-class NoteController @javax.inject.Inject() (override val app: Application, svc: NoteService) extends BaseController("note") {
+class NoteController @javax.inject.Inject() (override val app: Application, svc: NoteService, auditRecordS: AuditRecordService) extends BaseController("note") {
   def createForm = withSession("create.form", admin = true) { implicit request => implicit td =>
     val cancel = controllers.admin.note.routes.NoteController.list()
     val call = controllers.admin.note.routes.NoteController.create()
@@ -78,7 +79,7 @@ class NoteController @javax.inject.Inject() (override val app: Application, svc:
   def view(id: java.util.UUID) = withSession("view", admin = true) { implicit request => implicit td =>
     val modelF = svc.getByPrimaryKey(request, id)
     val notesF = app.coreServices.notes.getFor("note", id)
-    val auditsF = app.coreServices.auditRecords.getByModel(request, "note", id)
+    val auditsF = auditRecordS.getByModel(request, "note", id)
 
     notesF.flatMap(notes => auditsF.flatMap(audits => modelF.map {
       case Some(model) => render {

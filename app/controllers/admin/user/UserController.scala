@@ -8,18 +8,20 @@ import controllers.BaseController
 import io.circe.syntax._
 import models.Application
 import models.result.RelationCount
+import services.audit.AuditRecordService
 import services.note.NoteService
 import services.user.UserService
 import util.FutureUtils.defaultContext
 
 @javax.inject.Singleton
 class UserController @javax.inject.Inject() (
-    override val app: Application, svc: UserService, val authInfoRepository: AuthInfoRepository, val hasher: PasswordHasher, noteS: NoteService
+    override val app: Application, svc: UserService, val authInfoRepository: AuthInfoRepository, val hasher: PasswordHasher,
+    noteS: NoteService, auditRecordS: AuditRecordService
 ) extends BaseController("user") with UserEditHelper with UserSearchHelper {
   def view(id: UUID) = withSession("user.view", admin = true) { implicit request => implicit td =>
     val modelF = app.coreServices.users.getByPrimaryKey(request, id)
     val notesF = app.coreServices.notes.getFor("user", id)
-    val auditsF = app.coreServices.auditRecords.getByModel(request, "user", id)
+    val auditsF = auditRecordS.getByModel(request, "user", id)
 
     notesF.flatMap(notes => auditsF.flatMap(audits => modelF.map {
       case Some(model) => render {
