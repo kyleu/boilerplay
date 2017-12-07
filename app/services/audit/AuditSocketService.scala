@@ -14,7 +14,7 @@ object AuditSocketService {
     Props(AuditSocketService(id.getOrElse(UUID.randomUUID), supervisor, creds, out, sourceAddress))
   }
 
-  private lazy val metricsName = util.Config.projectId + "_player_socket_service"
+  private lazy val metricsName = util.Config.projectId + "_audit_socket_service"
   private lazy val receiveHistogram = Histogram.build(metricsName + "_receive", s"Message metrics for [$metricsName]").labelNames("msg").register()
   private lazy val errorCounter = Counter.build(metricsName + "_exception", s"Exception metrics for [$metricsName]").labelNames("msg", "ex").register()
 }
