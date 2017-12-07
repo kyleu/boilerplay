@@ -2,22 +2,28 @@ package controllers
 
 import java.util.UUID
 
-import akka.actor.{ActorRef, ActorSystem, Props}
+import akka.actor.{Actor, ActorRef, ActorSystem, Props}
 import akka.stream.Materializer
 import com.mohiva.play.silhouette.api.HandlerResult
-import models.auth.Credentials
+import io.prometheus.client.{Counter, Histogram}
 import models._
+import models.auth.Credentials
 import play.api.mvc.{AnyContentAsEmpty, Request, WebSocket}
 import util.Logging
-import util.metrics.InstrumentedActor
+import util.metrics.Instrumented
 import util.web.{MessageFrameFormatter, WebsocketUtils}
 
 import scala.concurrent.Future
 
 object HomeController {
+  private lazy val metricsName = util.Config.projectId + "_player_socket_service"
+  private lazy val receiveHistogram = Histogram.build(metricsName + "_receive", s"Message metrics for [$metricsName]").labelNames("msg").register()
+  private lazy val errorCounter = Counter.build(metricsName + "_exception", s"Exception metrics for [$metricsName]").labelNames("msg", "ex").register()
+  private[this] def time(msg: Any, f: => Unit) = Instrumented.timeReceive(msg, receiveHistogram, errorCounter)(f)
+
   case class SocketService(
       id: UUID, supervisor: ActorRef, creds: Credentials, out: ActorRef, sourceAddress: String
-  ) extends InstrumentedActor with Logging {
+  ) extends Actor with Logging {
 
     override def preStart() = {
       log.info(s"Starting connection for user [${creds.user.id}: ${creds.user.username}].")
@@ -25,9 +31,9 @@ object HomeController {
       out.tell(UserSettings(creds.user.id, creds.user.username, creds.user.profile.providerKey, creds.user.preferences), self)
     }
 
-    override def receiveRequest = {
-      case p: Ping => out.tell(Pong(p.ts), self)
-      case rm: ResponseMessage => out.tell(rm, self)
+    override def receive = {
+      case p: Ping => time(p, out.tell(Pong(p.ts), self))
+      case rm: ResponseMessage => time(rm, out.tell(rm, self))
       case x => throw new IllegalArgumentException(s"Unhandled request message [${x.getClass.getSimpleName}].")
     }
 

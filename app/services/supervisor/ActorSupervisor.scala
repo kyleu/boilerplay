@@ -3,13 +3,14 @@ package services.supervisor
 import java.util.UUID
 
 import akka.actor.SupervisorStrategy.Stop
-import akka.actor.{ActorRef, OneForOneStrategy, SupervisorStrategy}
+import akka.actor.{Actor, ActorRef, OneForOneStrategy, SupervisorStrategy}
 import models._
 import java.time.LocalDateTime
 
+import io.prometheus.client.{Counter, Gauge, Histogram}
 import models.auth.Credentials
 import models.supervisor.SocketDescription
-import util.metrics.InstrumentedActor
+import util.metrics.Instrumented
 import util.{DateUtils, Logging}
 
 object ActorSupervisor {
@@ -21,11 +22,14 @@ object ActorSupervisor {
   private def emptyMap = collection.mutable.HashMap.empty[UUID, ActorSupervisor.SocketRecord]
 }
 
-class ActorSupervisor(val app: Application) extends InstrumentedActor with Logging {
+class ActorSupervisor(val app: Application) extends Actor with Logging {
   private[this] val sockets = collection.mutable.HashMap.empty[String, collection.mutable.HashMap[UUID, ActorSupervisor.SocketRecord]]
   private[this] def socketById(id: UUID) = sockets.values.find(_.contains(id)).flatMap(_.get(id))
 
-  private[this] val socketsCount = gauge("active_connections", "Actor Supervisor active connections.")
+  private[this] lazy val metricsName = util.Config.projectId + "_actor_supervisor"
+  private[this] lazy val receiveHistogram = Histogram.build(metricsName + "_receive", s"Message metrics for [$metricsName]").labelNames("msg").register()
+  private[this] lazy val errorCounter = Counter.build(metricsName + "_exception", s"Exception metrics for [$metricsName]").labelNames("msg", "ex").register()
+  private[this] val socketsCount = Gauge.build(metricsName + "_active_connections", "Actor Supervisor active actors.").labelNames("id").register()
 
   override def preStart() = {
     log.debug(s"Actor Supervisor started for [${util.Config.projectId}].")
@@ -35,15 +39,17 @@ class ActorSupervisor(val app: Application) extends InstrumentedActor with Loggi
     case _ => Stop
   }
 
-  override def receiveRequest = {
-    case ss: SocketStarted => handleSocketStarted(ss.creds, ss.channel, ss.socketId, ss.conn)
-    case ss: SocketStopped => handleSocketStopped(ss.socketId)
+  private[this] def time(msg: Any, f: => Unit) = Instrumented.timeReceive(msg, receiveHistogram, errorCounter)(f)
 
-    case GetSystemStatus => handleGetSystemStatus()
-    case ct: SendSocketTrace => handleSendSocketTrace(ct)
-    case ct: SendClientTrace => handleSendClientTrace(ct)
+  override def receive = {
+    case ss: SocketStarted => time(ss, handleSocketStarted(ss.creds, ss.channel, ss.socketId, ss.conn))
+    case ss: SocketStopped => time(ss, handleSocketStopped(ss.socketId))
 
-    case ActorSupervisor.Broadcast(channel, msg) => sockets.getOrElse(channel, ActorSupervisor.emptyMap).foreach(_._2.actorRef.tell(msg, self))
+    case GetSystemStatus => time(GetSystemStatus, handleGetSystemStatus())
+    case sst: SendSocketTrace => time(sst, handleSendSocketTrace(sst))
+    case sct: SendClientTrace => time(sct, handleSendClientTrace(sct))
+
+    case b: ActorSupervisor.Broadcast => time(b, sockets.getOrElse(b.channel, ActorSupervisor.emptyMap).foreach(_._2.actorRef.tell(b.msg, self)))
 
     case im: InternalMessage => log.warn(s"Unhandled internal message [${im.getClass.getSimpleName}] received.")
     case x => log.warn(s"ActorSupervisor encountered unknown message: ${x.toString}")
