@@ -62,5 +62,5 @@ object Logging {
 }
 
 trait Logging {
-  protected[this] val log = Logging.CustomLogger(s"boilerplay.${this.getClass.getSimpleName.replace("$", "")}")
+  protected[this] val log = Logging.CustomLogger(s"${util.Config.projectId}.${this.getClass.getSimpleName.replace("$", "")}")
 }
