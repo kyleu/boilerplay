@@ -10,7 +10,7 @@
         <h5><i class="fa @models.template.Icons.note"></i> @title</h5>
       </div>
       <div class="collection-item">
-        <table class="highlight">
+        <table>
           <tbody>
             <tr>
               <td>
@@ -23,20 +23,26 @@
             </tr>
             <tr>
               <td>
-                <input type="checkbox" name="relType.include" id="relType.include" value="true" class="data-input" data-type="string" data-name="relType" />
-                <label for="relType.include">Type</label>
+                <input type="checkbox" name="relType.include" id="relType.include" value="true" @if(isNew) { checked="checked" } class="data-input nullable" data-type="string" data-name="relType" />
+                <label for="relType.include">Rel Type</label>
               </td>
               <td>
-                <input id="input-relType" type="text" name="relType" value="@model.relType" />
+                <div class="nullable-input-container">
+                  <input id="input-relType" class="nullable" type="text" name="relType" value="@model.relType" />
+                  <div class="nullable-link" id="nullable-relType">@util.NullUtils.str</div>
+                </div>
               </td>
             </tr>
             <tr>
               <td>
-                <input type="checkbox" name="relPk.include" id="relPk.include" value="true" class="data-input" data-type="string" data-name="relPk" />
-                <label for="relPk.include">PK</label>
+                <input type="checkbox" name="relPk.include" id="relPk.include" value="true" @if(isNew) { checked="checked" } class="data-input nullable" data-type="string" data-name="relPk" />
+                <label for="relPk.include">Rel Pk</label>
               </td>
               <td>
-                <input id="input-relPk" type="text" name="relPk" value="@model.relPk" />
+                <div class="nullable-input-container">
+                  <input id="input-relPk" class="nullable" type="text" name="relPk" value="@model.relPk" />
+                  <div class="nullable-link" id="nullable-relPk">@util.NullUtils.str</div>
+                </div>
               </td>
             </tr>
             <tr>

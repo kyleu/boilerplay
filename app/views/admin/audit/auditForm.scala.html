@@ -10,7 +10,7 @@
         <h5><i class="fa @models.template.Icons.audit"></i> @title</h5>
       </div>
       <div class="collection-item">
-        <table class="highlight">
+        <table>
           <tbody>
             <tr>
               <td>
@@ -41,7 +41,7 @@
             </tr>
             <tr>
               <td>
-                <input type="checkbox" name="client.include" id="client.include" value="true" class="data-input" data-type="string" data-name="client" />
+                <input type="checkbox" name="client.include" id="client.include" value="true" @if(isNew) { checked="checked" } class="data-input" data-type="string" data-name="client" />
                 <label for="client.include">Client</label>
               </td>
               <td>
@@ -50,7 +50,7 @@
             </tr>
             <tr>
               <td>
-                <input type="checkbox" name="server.include" id="server.include" value="true" class="data-input" data-type="string" data-name="server" />
+                <input type="checkbox" name="server.include" id="server.include" value="true" @if(isNew) { checked="checked" } class="data-input" data-type="string" data-name="server" />
                 <label for="server.include">Server</label>
               </td>
               <td>
@@ -59,7 +59,7 @@
             </tr>
             <tr>
               <td>
-                <input type="checkbox" name="userId.include" id="userId.include" value="true" class="data-input" data-type="uuid" data-name="userId" />
+                <input type="checkbox" name="userId.include" id="userId.include" value="true" @if(isNew) { checked="checked" } class="data-input" data-type="uuid" data-name="userId" />
                 <label for="userId.include">User Id</label>
               </td>
               <td>
@@ -68,11 +68,20 @@
             </tr>
             <tr>
               <td>
-                <input type="checkbox" name="tags.include" id="tags.include" value="true" @if(isNew) { checked="checked" } class="data-input" data-type="unknown" data-name="tags" />
+                <input type="checkbox" name="tags.include" id="tags.include" value="true" @if(isNew) { checked="checked" } class="data-input" data-type="hstore" data-name="tags" />
                 <label for="tags.include">Tags</label>
               </td>
               <td>
                 <input id="input-tags" type="text" name="tags" value="@model.tags" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <input type="checkbox" name="msg.include" id="msg.include" value="true" @if(isNew) { checked="checked" } class="data-input" data-type="string" data-name="msg" />
+                <label for="msg.include">Msg</label>
+              </td>
+              <td>
+                <input id="input-msg" type="text" name="msg" value="@model.msg" />
               </td>
             </tr>
             <tr>

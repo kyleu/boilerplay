@@ -10,7 +10,7 @@
         <h5><i class="fa @models.template.Icons.auditRecord"></i> @title</h5>
       </div>
       <div class="collection-item">
-        <table class="highlight">
+        <table>
           <tbody>
             <tr>
               <td>
@@ -27,7 +27,15 @@
                 <label for="auditId.include">Audit Id</label>
               </td>
               <td>
-                <input id="input-auditId" type="text" name="auditId" value="@model.auditId" />
+                <div class="autocomplete" id="autocomplete-auditId">
+                  <div class="ac-input">
+                    <div class="input-field">
+                      <i class="fa @models.template.Icons.audit prefix" title="Audit"></i>
+                      <input id="input-auditId" class="lookup" data-model="audit" data-url="@controllers.admin.audit.routes.AuditController.autocomplete()" data-activates="dropdown-auditId" data-beloworigin="true" autocomplete="off" type="text" name="auditId" value="@model.auditId" />
+                    </div>
+                  </div>
+                  <ul id="dropdown-auditId" class="dropdown-content ac-dropdown"></ul>
+                </div>
               </td>
             </tr>
             <tr>
@@ -50,7 +58,7 @@
             </tr>
             <tr>
               <td>
-                <input type="checkbox" name="changes.include" id="changes.include" value="true" @if(isNew) { checked="checked" } class="data-input" data-type="unknown" data-name="changes" />
+                <input type="checkbox" name="changes.include" id="changes.include" value="true" @if(isNew) { checked="checked" } class="data-input" data-type="json" data-name="changes" />
                 <label for="changes.include">Changes</label>
               </td>
               <td>
