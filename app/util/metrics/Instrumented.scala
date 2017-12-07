@@ -3,15 +3,17 @@ package util.metrics
 import io.prometheus.client.Histogram
 import io.prometheus.client.exporter.HTTPServer
 import io.prometheus.client.hotspot.DefaultExports
+import util.Logging
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 
-object Instrumented {
+object Instrumented extends Logging {
   private[this] var server: Option[HTTPServer] = None
 
-  def start() = {
-    server = Some(new HTTPServer(9001))
+  def start(port: Int) = {
+    log.info(s"Exposing Prometheus metrics on port [$port].")
+    server = Some(new HTTPServer(port))
     DefaultExports.initialize()
   }
 

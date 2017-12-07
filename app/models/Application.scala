@@ -61,7 +61,7 @@ class Application @javax.inject.Inject() (
     TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
     System.setProperty("user.timezone", "UTC")
 
-    if (config.metrics.prometheusEnabled) { Instrumented.start() }
+    if (config.metrics.prometheusEnabled) { Instrumented.start(config.metrics.prometheusPort) }
 
     lifecycle.addStopHook(() => Future.successful(stop()))
 
