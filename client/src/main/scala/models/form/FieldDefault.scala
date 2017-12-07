@@ -15,6 +15,24 @@ object FieldDefault {
       throw new IllegalStateException(s"Found [${input.length}] $t input elements with id [input-$name].")
     }
 
+    if (input.hasClass("nullable")) {
+      val nullable = $(s"#nullable-$name", formEl)
+      if (nullable.length != 1) {
+        throw new IllegalStateException(s"Found [${nullable.length}] $t nullable elements with id [nullable-$name].")
+      }
+      var lastVal: Option[String] = None
+      nullable.click { e: JQueryEventObject =>
+        lastVal match {
+          case Some(v) =>
+            lastVal = None
+            input.value(v)
+          case None =>
+            lastVal = Some(input.value().toString)
+            input.value(util.NullUtils.str)
+        }
+      }
+    }
+
     if (input.hasClass("lookup")) {
       val model = input.data("model").toString
       val url = input.data("url").toString

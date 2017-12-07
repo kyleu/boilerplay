@@ -14,16 +14,17 @@ object ControllerUtilities {
     val form = rawForm.getOrElse(Map.empty).mapValues(_.head)
     val fields = form.toSeq.filter(x => x._1.endsWith(".include") && x._2 == "true").map(_._1.stripSuffix(".include"))
     def valFor(f: String) = form.get(f) match {
-      case Some(x) => x
+      case Some(x) if x == util.NullUtils.str => None
+      case Some(x) => Some(x)
       case None => form.get(f + "-date") match {
         case Some(d) => form.get(f + "-time") match {
-          case Some(t) => s"$d $t"
+          case Some(t) => Some(s"$d $t")
           case None => throw new IllegalStateException(s"Cannot find matching time value for included date field [$f].")
         }
         case None => throw new IllegalStateException(s"Cannot find value for included field [$f].")
       }
     }
-    fields.map(f => DataField(f, Some(valFor(f))))
+    fields.map(f => DataField(f, valFor(f)))
   }
 
   def jsonFor(request: Request[AnyContent]) = {
