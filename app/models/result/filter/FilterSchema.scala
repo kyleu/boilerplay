@@ -7,13 +7,13 @@ import sangria.marshalling.circe._
 import models.result.data.DataFieldSchema
 
 object FilterSchema {
-  implicit val filterOpType = CommonSchema.deriveEnumeratumType[FilterOp](
+  implicit val filterOpType: EnumType[FilterOp] = CommonSchema.deriveEnumeratumType[FilterOp](
     name = "FilterOperation",
     description = "Various operation to apply in filters.",
     values = FilterOp.values.map(t => t -> t.toString).toList
   )
 
-  implicit val filterType = deriveObjectType[GraphQLContext, Filter](
+  implicit val filterType: ObjectType[GraphQLContext, Filter] = deriveObjectType[GraphQLContext, Filter](
     ObjectTypeDescription("Options for filtering the results.")
   )
 

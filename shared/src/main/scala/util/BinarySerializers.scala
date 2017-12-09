@@ -1,13 +1,14 @@
 package util
 
 import java.nio.ByteBuffer
+import java.time.LocalDateTime
 
 import boopickle.Default._
 import models.user.UserPreferences
 import models.{RequestMessage, ResponseMessage}
 
 object BinarySerializers {
-  implicit val ldtPickler = transformPickler((t: Long) => util.DateUtils.fromMillis(t))(x => util.DateUtils.toMillis(x))
+  implicit val ldtPickler: Pickler[LocalDateTime] = transformPickler((t: Long) => util.DateUtils.fromMillis(t))(x => util.DateUtils.toMillis(x))
   implicit val requestPickler: Pickler[RequestMessage] = generatePickler[RequestMessage]
   implicit val responsePickler: Pickler[ResponseMessage] = generatePickler[ResponseMessage]
 

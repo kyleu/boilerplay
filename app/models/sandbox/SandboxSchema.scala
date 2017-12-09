@@ -5,7 +5,7 @@ import sangria.macros.derive._
 import sangria.schema._
 
 object SandboxSchema {
-  implicit val sandboxTaskEnum = CommonSchema.deriveEnumeratumType(
+  implicit val sandboxTaskEnum: EnumType[SandboxTask] = CommonSchema.deriveEnumeratumType(
     name = "SandboxTask",
     description = "One-off tests that don't deserve a UI of their own.",
     values = SandboxTask.values.map(t => t -> t.description).toList
@@ -20,7 +20,7 @@ object SandboxSchema {
     Field("description", StringType, Some("The description of the sandbox task."), resolve = _.value.description)
   ))
 
-  implicit val sandboxResultType = deriveObjectType[GraphQLContext, SandboxTask.Result](
+  implicit val sandboxResultType: ObjectType[GraphQLContext, SandboxTask.Result] = deriveObjectType[GraphQLContext, SandboxTask.Result](
     ObjectTypeName("SandboxResult"),
     DocumentField("task", "The task used to provide the result."),
     DocumentField("status", "The result status, usually \"OK\"."),

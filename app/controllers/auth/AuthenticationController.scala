@@ -7,6 +7,7 @@ import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
 import controllers.BaseController
 import models.Application
 import models.user.UserForms
+import play.api.mvc.Result
 import services.user.UserSearchService
 
 import scala.concurrent.Future
@@ -54,7 +55,7 @@ class AuthenticationController @javax.inject.Inject() (
   }
 
   def signOut = withSession("signout") { implicit request => implicit td =>
-    implicit val result = Redirect(controllers.routes.HomeController.home())
+    implicit val result: Result = Redirect(controllers.routes.HomeController.home())
     app.silhouette.env.eventBus.publish(LogoutEvent(request.identity, request))
     app.silhouette.env.authenticatorService.discard(request.authenticator, result)
   }

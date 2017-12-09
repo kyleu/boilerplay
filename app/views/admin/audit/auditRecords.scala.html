@@ -5,7 +5,7 @@
       No audit records available for this @model.
     </i>
   } else {
-    @records.size @if(records.size == 1) { audit record } else { audit records } available for this @model.
+    @records.size @if(records.lengthCompare(1) == 0) { audit record } else { audit records } available for this @model.
     <table class="bordered">
       <thead>
         <tr>

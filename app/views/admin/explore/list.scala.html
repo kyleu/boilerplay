@@ -52,11 +52,11 @@
     </div>
     <div>
     @if(offset > 0) { <a class="prev-link theme-text" href="@calls.prev">Prev Page</a> }
-    @if(rows.size >= limit) { <a class="next-link theme-text" href="@calls.next">Next Page</a> }
+    @if(rows.lengthCompare(limit) >= 0) { <a class="next-link theme-text" href="@calls.next">Next Page</a> }
     </div>
   }
 } else {
   @views.html.admin.explore.listTable(cols, rows, modelPlural, calls.orderBy, orderBy, orderAsc)
   @if(offset > 0) { <a class="prev-link theme-text left" href="@calls.prev">Prev Page</a> }
-  @if(rows.size >= limit) { <div><a class="next-link theme-text right" href="@calls.next">Next Page</a></div> }
+  @if(rows.lengthCompare(limit) >= 0) { <div><a class="next-link theme-text right" href="@calls.next">Next Page</a></div> }
 }

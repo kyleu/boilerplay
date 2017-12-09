@@ -14,8 +14,10 @@ import sangria.schema._
 import util.FutureUtils.graphQlContext
 
 object AuditRecordSchema extends SchemaHelper("auditRecord") {
-  implicit val auditRecordPrimaryKeyId = HasId[AuditRecord, UUID](_.id)
-  private[this] def getByPrimaryKeySeq(c: GraphQLContext, idSeq: Seq[UUID]) = c.services.auditServices.auditRecordService.getByPrimaryKeySeq(c.creds, idSeq)(c.trace)
+  implicit val auditRecordPrimaryKeyId: HasId[AuditRecord, UUID] = HasId[AuditRecord, UUID](_.id)
+  private[this] def getByPrimaryKeySeq(c: GraphQLContext, idSeq: Seq[UUID]) = {
+    c.services.auditServices.auditRecordService.getByPrimaryKeySeq(c.creds, idSeq)(c.trace)
+  }
   val auditRecordByPrimaryKeyFetcher = Fetcher(getByPrimaryKeySeq)
 
   val auditRecordIdArg = Argument("id", uuidType, description = "Returns the Audit Record matching the provided Id.")

@@ -19,10 +19,10 @@ object SocketDecriptionSchema extends SchemaHelper("note") {
     name = "sockets",
     fieldType = ListType(socketDecriptionType),
     arguments = channelArg :: socketIdArg :: Nil,
-    resolve = c => traceF(c.ctx, "search")(td => {
+    resolve = c => traceF(c.ctx, "search")(_ => {
       import akka.pattern.ask
       import scala.concurrent.duration._
-      implicit val timeout = Timeout(1.second)
+      implicit val timeout: Timeout = Timeout(1.second)
 
       ask(c.ctx.app.supervisor, GetSystemStatus).mapTo[SystemStatus].map { x =>
         x.channels.flatMap(_._2).filter(s => c.arg(channelArg).forall(_ == s.channel) && c.arg(socketIdArg).forall(_ == s.socketId))

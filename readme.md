@@ -30,6 +30,6 @@ The project is built on SBT, and can be opened by IntelliJ directly. Plugins are
 
 ## License
 
-The code is licensed under [CC0-1.0](./license). 
+The code is licensed under [CC0-1.0](license). 
 
 You can basically do whatever you want with the code, no attribution required. Make it your own! 

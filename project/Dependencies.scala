@@ -2,18 +2,18 @@ import sbt._
 
 object Dependencies {
   object Play {
-    private[this] val version = "2.6.7"
+    private[this] val version = "2.6.9"
     val lib = "com.typesafe.play" %% "play" % version
     val filters = play.sbt.PlayImport.filters
     val ws = play.sbt.PlayImport.ws
     val guice = play.sbt.PlayImport.guice
     val cache = play.sbt.PlayImport.ehcache
-    val json = "com.typesafe.play" %% "play-json" % "2.6.7"
+    val json = "com.typesafe.play" %% "play-json" % "2.6.8"
     val test = "com.typesafe.play" %% "play-test" % version % "test"
   }
 
   object Akka {
-    private[this] val version = "2.5.7"
+    private[this] val version = "2.5.8"
     val actor = "com.typesafe.akka" %% "akka-actor" % version
     val remote = "com.typesafe.akka" %% "akka-remote" % version
     val logging = "com.typesafe.akka" %% "akka-slf4j" % version
@@ -65,9 +65,9 @@ object Dependencies {
   }
 
   object Tracing {
-    private[this] val version = "4.6.0"
+    private[this] val version = "4.11.0"
     val brave = "io.zipkin.brave" % "brave-core" % version
-    val http = "io.zipkin.reporter" % "zipkin-sender-okhttp3" % "1.1.0"
+    val http = "io.zipkin.reporter" % "zipkin-sender-okhttp3" % "1.1.2"
     val logging = "io.zipkin.brave" % "brave-context-slf4j" % version
   }
 

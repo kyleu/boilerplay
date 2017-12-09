@@ -61,7 +61,7 @@ class NoteService @javax.inject.Inject() (override val tracing: TracingService) 
 
   // Mutations
   def insert(creds: Credentials, model: Note)(implicit trace: TraceData) = {
-    traceF("insert")(td => ApplicationDatabase.executeF(NoteQueries.insert(model))(td).map {
+    traceF("insert")(td => ApplicationDatabase.executeF(NoteQueries.insert(model))(td).flatMap {
       case 1 => getByPrimaryKey(creds, model.id)(td).map {
         case Some(n) =>
           services.audit.AuditHelper.onInsert("Note", Seq(n.id.toString), n.toDataFields, creds)

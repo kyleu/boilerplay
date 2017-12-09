@@ -61,7 +61,7 @@ abstract class BaseController(val name: String) extends InjectedController with 
 
   protected def getTraceData(implicit requestHeader: RequestHeader) = requestHeader.attrs(TracingFilter.traceKey)
 
-  protected implicit def toCredentials(request: SecuredRequest[AuthEnv, _]) = Credentials.fromRequest(request)
+  protected implicit def toCredentials(request: SecuredRequest[AuthEnv, _]): Credentials = Credentials.fromRequest(request)
 
   protected def modelForm(rawForm: Option[Map[String, Seq[String]]]) = ControllerUtilities.modelForm(rawForm)
 

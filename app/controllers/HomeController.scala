@@ -8,7 +8,7 @@ import com.mohiva.play.silhouette.api.HandlerResult
 import io.prometheus.client.{Counter, Histogram}
 import models._
 import models.auth.Credentials
-import play.api.mvc.{AnyContentAsEmpty, Request, WebSocket}
+import play.api.mvc.{AnyContent, AnyContentAsEmpty, Request, WebSocket}
 import util.Logging
 import util.metrics.Instrumented
 import util.web.{MessageFrameFormatter, WebsocketUtils}
@@ -61,7 +61,7 @@ class HomeController @javax.inject.Inject() (
   }
 
   def connect(binary: Boolean) = WebSocket.acceptOrResult[RequestMessage, ResponseMessage] { request =>
-    implicit val req = Request(request, AnyContentAsEmpty)
+    implicit val req: Request[AnyContent] = Request(request, AnyContentAsEmpty)
     val connId = UUID.randomUUID()
     app.silhouette.SecuredRequestHandler { secured => Future.successful(HandlerResult(Ok, Some(secured.identity))) }.map {
       case HandlerResult(_, Some(user)) => Right(WebsocketUtils.actorRef(connId) { out =>

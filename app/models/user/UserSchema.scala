@@ -18,21 +18,21 @@ import sangria.execution.deferred.{Fetcher, HasId, Relation}
 import util.FutureUtils.graphQlContext
 
 object UserSchema extends SchemaHelper("user") {
-  implicit val roleEnum = CommonSchema.deriveEnumeratumType(
+  implicit val roleEnum: EnumType[Role] = CommonSchema.deriveEnumeratumType(
     name = "RoleEnum",
     description = "The role of the system user.",
     values = Role.values.map(t => t -> t.entryName).toList
   )
 
-  implicit val themeEnum = CommonSchema.deriveStringEnumeratumType(
+  implicit val themeEnum: EnumType[Theme] = CommonSchema.deriveStringEnumeratumType(
     name = "ThemeEnum",
     description = "The selected theme color.",
     values = Theme.values.map(t => t -> t.color).toList
   )
 
-  implicit val profileType = deriveObjectType[GraphQLContext, UserProfile](ObjectTypeDescription("Information about the current session."))
+  implicit val profileType: ObjectType[GraphQLContext, UserProfile] = deriveObjectType(ObjectTypeDescription("Information about the current session."))
 
-  implicit val userPrimaryKeyId = HasId[User, UUID](_.id)
+  implicit val userPrimaryKeyId: HasId[User, UUID] = HasId[User, UUID](_.id)
   private[this] def getByPrimaryKeySeq(c: GraphQLContext, idSeq: Seq[UUID]) = c.app.coreServices.users.getByPrimaryKeySeq(c.creds, idSeq)(c.trace)
   val userByPrimaryKeyFetcher = Fetcher(getByPrimaryKeySeq)
 
@@ -41,8 +41,10 @@ object UserSchema extends SchemaHelper("user") {
     getByPrimaryKeySeq, (c, rels) => c.app.coreServices.users.getByRoleSeq(rels(userByRoleRelation))(c.trace)
   )
 
-  implicit val loginInfoType = deriveObjectType[GraphQLContext, LoginInfo](ObjectTypeDescription("Information about login credentials."))
-  implicit val userPreferenceType = deriveObjectType[GraphQLContext, UserPreferences](ObjectTypeDescription("Information about users of the system."))
+  implicit val loginInfoType: ObjectType[GraphQLContext, LoginInfo] = deriveObjectType(ObjectTypeDescription("Information about login credentials."))
+  implicit val userPreferenceType: ObjectType[GraphQLContext, UserPreferences] = {
+    deriveObjectType(ObjectTypeDescription("Information about users of the system."))
+  }
   implicit lazy val userType: ObjectType[GraphQLContext, User] = deriveObjectType(
     AddFields(
       Field(

@@ -21,7 +21,7 @@ object DateTimeSchema {
     case Failure(_) => Left(LocalDateTimeCoercionViolation)
   }
 
-  implicit val localDateTimeType = ScalarType[LocalDateTime](
+  implicit val localDateTimeType: ScalarType[LocalDateTime] = ScalarType[LocalDateTime](
     name = "DateTime",
     description = Some("A string representing a date, in format [yyyy-MM-dd HH:mm:ss]."),
     coerceOutput = (dt, caps) => if (caps.contains(DateSupport)) {
@@ -44,7 +44,7 @@ object DateTimeSchema {
     case Failure(_) => Left(LocalDateCoercionViolation)
   }
 
-  implicit val localDateType = ScalarType[LocalDate](
+  implicit val localDateType: ScalarType[LocalDate] = ScalarType[LocalDate](
     name = "Date",
     description = Some("A string representing a date, in format [yyyy-MM-dd]."),
     coerceOutput = (d, caps) => if (caps.contains(DateSupport)) {
@@ -67,7 +67,7 @@ object DateTimeSchema {
     case Failure(_) => Left(LocalDateCoercionViolation)
   }
 
-  implicit val localTimeType = ScalarType[LocalTime](
+  implicit val localTimeType: ScalarType[LocalTime] = ScalarType[LocalTime](
     name = "Time",
     description = Some("A string representing the time, in format [HH:mm:ss]."),
     coerceOutput = (t, _) => fmtLocalTime.format(t),

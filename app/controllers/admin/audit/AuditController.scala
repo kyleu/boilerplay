@@ -83,7 +83,7 @@ class AuditController @javax.inject.Inject() (
 
     notesF.flatMap(notes => auditsF.flatMap(audits => modelF.map {
       case Some(model) => render {
-        case Accepts.Html() => Ok(views.html.admin.audit.auditView(request.identity, model, notes, Nil, app.config.debug))
+        case Accepts.Html() => Ok(views.html.admin.audit.auditView(request.identity, model, notes, audits, app.config.debug))
         case Accepts.Json() => Ok(model.asJson.spaces2).as(JSON)
       }
       case None => NotFound(s"No Audit found with id [$id].")

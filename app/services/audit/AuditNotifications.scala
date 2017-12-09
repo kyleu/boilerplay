@@ -12,7 +12,7 @@ object AuditNotifications extends Logging {
   def persist(a: Audit)(implicit trace: TraceData) = {
     log.debug(s"Persisting audit [${a.id}]...")
     val ret = ApplicationDatabase.executeF(AuditQueries.insert(a)).map { _ =>
-      val f = FutureUtils.acc(a.records, (r: AuditRecord) => ApplicationDatabase.executeF(AuditRecordQueries.insert(r)).map { _ =>
+      FutureUtils.acc(a.records, (r: AuditRecord) => ApplicationDatabase.executeF(AuditRecordQueries.insert(r)).map { _ =>
         log.debug(s"Persisted audit record [${r.id}] for audit [${a.id}].")
       })(FutureUtils.serviceContext).map { _ =>
         log.debug(s"Persisted audit [${a.id}] with [${a.records.size}] records.")

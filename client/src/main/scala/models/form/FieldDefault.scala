@@ -21,7 +21,7 @@ object FieldDefault {
         throw new IllegalStateException(s"Found [${nullable.length}] $t nullable elements with id [nullable-$name].")
       }
       var lastVal: Option[String] = None
-      nullable.click { e: JQueryEventObject =>
+      nullable.click { _: JQueryEventObject =>
         lastVal match {
           case Some(v) =>
             lastVal = None
@@ -40,7 +40,7 @@ object FieldDefault {
 
       val dyn = js.Dynamic.global.$(s"#input-$name", formEl)
 
-      val autocomplete = dyn.materialize_autocomplete(js.Dynamic.literal(
+      dyn.materialize_autocomplete(js.Dynamic.literal(
         limit = 5,
         multiple = js.Dynamic.literal(enable = false),
         dropdown = js.Dynamic.literal(

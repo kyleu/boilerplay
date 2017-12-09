@@ -19,7 +19,7 @@
           <label for="input-theme" class="theme-text">Theme</label>
           <div id="theme-choices">
             @models.template.Theme.values.map { t =>
-              <div id="swatch-@t" class="swatch z-depth-1" data-name="@t" data-color="@t.color" style="background-color : @t.color;">
+              <div id="swatch-@t" class="swatch z-depth-1" data-name="@t" data-color="@t.color" style="background-color: @t.color;">
                 <i class="indicator fa @models.template.Icons.check white-text"></i>
               </div>
             }

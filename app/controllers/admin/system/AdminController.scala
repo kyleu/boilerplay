@@ -25,7 +25,7 @@ class AdminController @javax.inject.Inject() (override val app: Application) ext
   def dumpSockets = withSession("admin.sockets", admin = true) { implicit request => implicit td =>
     import akka.pattern.ask
     import scala.concurrent.duration._
-    implicit val timeout = Timeout(1.second)
+    implicit val timeout: Timeout = Timeout(1.second)
     ask(app.supervisor, GetSystemStatus).mapTo[SystemStatus].map { x =>
       Ok(views.html.admin.sockets(request.identity, x.channels))
     }

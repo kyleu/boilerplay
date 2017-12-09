@@ -3,13 +3,13 @@ package util
 import io.circe.generic.extras.Configuration
 import io.circe.parser._
 import io.circe.syntax._
-import io.circe.java8.time._ // TODO REMOVE
+import io.circe.java8.time._
 
 import models.user.UserPreferences
 import models.{RequestMessage, ResponseMessage}
 
 object JsonSerializers {
-  private[this] implicit val config = Configuration.default.withDefaults
+  private[this] implicit val config: Configuration = Configuration.default.withDefaults
 
   def toJson(s: String) = parse(s) match {
     case Right(json) => json

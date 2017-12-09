@@ -54,7 +54,7 @@ class RelationService(url: String) extends Entrypoint("relation") {
 
   $.get(url = url, data = scalajs.js.Dynamic.literal(), success = (data: String) => {
     import io.circe.parser._
-    val ret = decode[Seq[RelationCount]](data) match {
+    decode[Seq[RelationCount]](data) match {
       case Right(seq) => seq.foreach(rc => processCount(rc.model, rc.field, rc.count))
       case Left(x) => throw x
     }

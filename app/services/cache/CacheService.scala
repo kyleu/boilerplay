@@ -40,17 +40,15 @@ object CacheService {
     Option(cache.get(key)).map(_.getObjectValue)
   }
 
-  def getAs[T](key: String)(implicit ct: ClassTag[T]): Option[T] = {
-    get(key).map { item =>
-      if (TypeUtils.isInstance(item, ct.runtimeClass)) {
-        item match {
-          case t: T => Some(t)
-          case _ => None
-        }
-      } else {
-        None
+  def getAs[T](key: String)(implicit ct: ClassTag[T]): Option[T] = get(key).flatMap { item =>
+    if (TypeUtils.isInstance(item, ct.runtimeClass)) {
+      item match {
+        case t: T => Some(t)
+        case _ => None
       }
-    }.getOrElse(None)
+    } else {
+      None
+    }
   }
 
   def remove(key: String) = cache.remove(key)

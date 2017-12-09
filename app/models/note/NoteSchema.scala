@@ -16,7 +16,7 @@ import sangria.schema._
 import util.FutureUtils.graphQlContext
 
 object NoteSchema extends SchemaHelper("note") {
-  implicit val notePrimaryKeyId = HasId[Note, UUID](_.id)
+  implicit val notePrimaryKeyId: HasId[Note, UUID] = HasId[Note, UUID](_.id)
   private[this] def getByPrimaryKeySeq(c: GraphQLContext, idSeq: Seq[UUID]) = {
     c.services.noteServices.noteService.getByPrimaryKeySeq(c.creds, idSeq)(c.trace)
   }

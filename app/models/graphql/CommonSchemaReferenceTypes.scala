@@ -16,7 +16,7 @@ protected[graphql] trait CommonSchemaReferenceTypes {
     case Failure(_) => Left(UuidCoercionViolation)
   }
 
-  implicit val uuidType = ScalarType[java.util.UUID](
+  implicit val uuidType: ScalarType[java.util.UUID] = ScalarType[java.util.UUID](
     name = "UUID",
     description = Some("A string representing a UUID, in format [00000000-0000-0000-0000-000000000000]."),
     coerceOutput = (u, _) => u.toString,
@@ -35,7 +35,7 @@ protected[graphql] trait CommonSchemaReferenceTypes {
     case Left(_) => Left(UuidCoercionViolation)
   }
 
-  implicit val jsonType = ScalarType[io.circe.Json](
+  implicit val jsonType: ScalarType[io.circe.Json] = ScalarType[io.circe.Json](
     name = "JSON",
     description = Some("A string representation of JSON."),
     coerceOutput = (u, _) => u.spaces2,
@@ -49,7 +49,7 @@ protected[graphql] trait CommonSchemaReferenceTypes {
     }
   )
 
-  implicit val byteArrayType = ScalarType[Array[Byte]](
+  implicit val byteArrayType: ScalarType[Array[Byte]] = ScalarType[Array[Byte]](
     name = "Base64",
     description = Some("A binary array of bytes, encoded with Base64."),
     coerceOutput = (u, _) => Base64.encodeBase64(u),

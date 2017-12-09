@@ -13,7 +13,7 @@ import scala.concurrent.duration._
 class SandboxController @javax.inject.Inject() (override val app: Application, services: ServiceRegistry) extends BaseController("sandbox") {
   import app.contexts.webContext
 
-  implicit val timeout = Timeout(10.seconds)
+  implicit val timeout: Timeout = Timeout(10.seconds)
 
   def list = withSession("sandbox.list", admin = true) { implicit request => implicit td =>
     Future.successful(Ok(views.html.admin.sandbox.sandboxList(request.identity)))
