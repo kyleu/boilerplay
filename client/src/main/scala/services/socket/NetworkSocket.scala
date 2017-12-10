@@ -58,7 +58,7 @@ class NetworkSocket(handler: EventHandler) {
   }
 
   private[this] def onErrorEvent(event: ErrorEvent) = {
-    handler.onError("Websocket error: " + event)
+    handler.onError(event)
     event
   }
 

@@ -7,6 +7,7 @@ import services.ui.UserManager
 import util.{DateUtils, Logging}
 
 import scala.scalajs.js.timers.setTimeout
+import org.scalajs.dom.raw.ErrorEvent
 
 trait EventHandler {
   private[this] def sendPing(): Unit = {
@@ -32,8 +33,9 @@ trait EventHandler {
     case _ => Logging.warn(s"Received unknown message of type [${msg.getClass.getSimpleName}].")
   }
 
-  def onError(err: String): Unit = {
-    Logging.error(s"Socket error: [$err]")
+  def onError(err: ErrorEvent): Unit = {
+    Logging.error(s"Socket error")
+    Logging.logJs(err)
   }
 
   def onClose(): Unit = {

@@ -4,6 +4,7 @@ import models.{Pong, RequestMessage, ResponseMessage}
 import org.scalajs.jquery.{jQuery => $}
 import services.socket.NetworkMessage
 import util.Logging
+import org.scalajs.dom.raw.ErrorEvent
 
 class LoggingEventHandler() extends EventHandler {
   private[this] def getConnEl(key: String) = {
@@ -46,6 +47,6 @@ class LoggingEventHandler() extends EventHandler {
     super.onLatency(ms)
   }
 
-  override def onError(err: String): Unit = super.onError(err)
+  override def onError(err: ErrorEvent): Unit = super.onError(err)
   override def onClose(): Unit = super.onClose()
 }
