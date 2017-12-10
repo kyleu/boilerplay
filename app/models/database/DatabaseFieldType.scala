@@ -64,19 +64,19 @@ object DatabaseFieldType extends Enum[DatabaseFieldType[_]] with CirceEnum[Datab
     override def opt(row: Row, col: String) = row.asOpt[Any](col).map(tagsCoerce)
   }
 
-  case object ByteArrayType extends DatabaseFieldType[Array[Byte]]("byteArray") {
+  case object ByteArrayType extends DatabaseFieldType[Seq[Byte]]("byteArray") {
     override def apply(row: Row, col: String) = row.as[PgArray](col).getArray.asInstanceOf[Array[Byte]]
     override def opt(row: Row, col: String) = row.asOpt[PgArray](col).map(_.asInstanceOf[Array[Byte]])
   }
-  case object LongArrayType extends DatabaseFieldType[Array[Long]]("longArray") {
+  case object LongArrayType extends DatabaseFieldType[Seq[Long]]("longArray") {
     override def apply(row: Row, col: String) = row.as[PgArray](col).getArray.asInstanceOf[Array[Long]]
     override def opt(row: Row, col: String) = row.asOpt[PgArray](col).map(_.asInstanceOf[Array[Long]])
   }
-  case object StringArrayType extends DatabaseFieldType[Array[String]]("stringArray") {
+  case object StringArrayType extends DatabaseFieldType[Seq[String]]("stringArray") {
     override def apply(row: Row, col: String) = row.as[PgArray](col).getArray.asInstanceOf[Array[String]]
     override def opt(row: Row, col: String) = row.asOpt[PgArray](col).map(_.asInstanceOf[Array[String]])
   }
-  case object UuidArrayType extends DatabaseFieldType[Array[java.util.UUID]]("uuidArray") {
+  case object UuidArrayType extends DatabaseFieldType[Seq[java.util.UUID]]("uuidArray") {
     override def apply(row: Row, col: String) = row.as[PgArray](col).getArray.asInstanceOf[Array[java.util.UUID]]
     override def opt(row: Row, col: String) = row.asOpt[PgArray](col).map(_.asInstanceOf[Array[java.util.UUID]])
   }

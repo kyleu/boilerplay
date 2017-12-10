@@ -67,6 +67,18 @@ object SandboxTask extends Enum[SandboxTask] with CirceEnum[SandboxTask] {
     }
   }
 
+  case object CopyTable extends SandboxTask("copyTable", "Copy Table", "Copy a database table, in preparation for new DDL.") {
+    override def call(app: Application, services: ServiceRegistry, argument: Option[String])(implicit trace: TraceData) = {
+      argument.map(a => TableLogic.copyTable(app, a)).getOrElse(Future.successful("Argument required."))
+    }
+  }
+
+  case object RestoreTable extends SandboxTask("restoreTable", "Restore Table", "Restores a database table.") {
+    override def call(app: Application, services: ServiceRegistry, argument: Option[String])(implicit trace: TraceData) = {
+      argument.map(a => TableLogic.restoreTable(app, a)).getOrElse(Future.successful("Argument required."))
+    }
+  }
+
   case object DatabaseBackup extends SandboxTask("databaseBackup", "Database Backup", "Backs up the database.") {
     override def call(app: Application, services: ServiceRegistry, argument: Option[String])(implicit trace: TraceData) = {
       Future.successful(BackupRestore.backup())
