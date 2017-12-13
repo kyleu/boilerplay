@@ -67,6 +67,7 @@ class Application @javax.inject.Inject() (
 
     FileService.setRootDir(config.dataDir)
 
+    SystemDatabase.open(config.cnf, tracing)
     ApplicationDatabase.open(config.cnf, tracing)
     MasterDdl.init()
     coreServices.settings.load()
@@ -76,6 +77,7 @@ class Application @javax.inject.Inject() (
 
   private[this] def stop() = {
     ApplicationDatabase.close()
+    SystemDatabase.close()
     CacheService.close()
     if (config.metrics.tracingEnabled) { tracing.close() }
     if (config.metrics.prometheusEnabled) { Instrumented.stop() }

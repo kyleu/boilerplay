@@ -29,9 +29,9 @@ object MasterDdl extends Logging {
   }
 
   def init()(implicit trace: TraceData) = {
-    if (!ApplicationDatabase.query(DdlQueries.DoesTableExist("ddl"))) {
+    if (!SystemDatabase.query(DdlQueries.DoesTableExist("ddl"))) {
       log.info("Creating DDL table.")
-      ApplicationDatabase.execute(DdlQueries.CreateDdlTable)
+      SystemDatabase.execute(DdlQueries.CreateDdlTable)
     }
 
     val ids = ApplicationDatabase.query(DdlQueries.GetIds)
@@ -40,15 +40,15 @@ object MasterDdl extends Logging {
     val candidates = files.filterNot(f => ids.contains(f.id))
     val result = candidates.map { f =>
       log.info(s"Applying [${f.statements.size}] statements for DDL [${f.id}:${f.name}].")
-      ApplicationDatabase.transaction { (txTd, conn) =>
+      SystemDatabase.transaction { (txTd, conn) =>
         val results = f.statements.map { sql =>
           val statement = DdlStatement(sql._1)
           log.debug("Applying DDL statement [" + statement.sql.take(64) + "...].")
-          val result = ApplicationDatabase.execute(statement, Some(conn))(txTd)
+          val result = SystemDatabase.execute(statement, Some(conn))(txTd)
           log.debug("Applied DDL statement [" + statement.sql.take(64) + "...].")
           result
         }
-        ApplicationDatabase.execute(DdlQueries.insert(f))
+        SystemDatabase.execute(DdlQueries.insert(f))
         results
       }
     }
