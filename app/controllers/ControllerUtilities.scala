@@ -3,7 +3,7 @@ package controllers
 import brave.Span
 import io.circe.Json
 import models.result.data.DataField
-import models.user.User
+import models.user.SystemUser
 import play.api.mvc._
 import sangria.marshalling.MarshallingUtil._
 import sangria.marshalling.circe._
@@ -33,7 +33,7 @@ object ControllerUtilities {
     playJson.convertMarshaled[Json]
   }
 
-  def enhanceRequest(request: Request[AnyContent], user: Option[User], trace: Span) = {
+  def enhanceRequest(request: Request[AnyContent], user: Option[SystemUser], trace: Span) = {
     trace.tag(TraceKeys.HTTP_REQUEST_SIZE, request.body.asText.map(_.length).orElse(request.body.asRaw.map(_.size)).getOrElse(0).toString)
     user.foreach { u =>
       trace.tag("user.id", u.id.toString)

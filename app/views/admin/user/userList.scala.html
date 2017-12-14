@@ -1,4 +1,4 @@
-@(user: models.user.User, q: Option[String], orderBy: Option[String], orderAsc: Boolean, totalCount: Option[Int], users: Seq[models.user.User], limit: Int, offset: Int)(
+@(user: models.user.SystemUser, q: Option[String], orderBy: Option[String], orderAsc: Boolean, totalCount: Option[Int], users: Seq[models.user.SystemUser], limit: Int, offset: Int)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
 )
 
@@ -23,11 +23,11 @@
   rows = users.map(model => views.html.admin.user.userDataRow(model)),
   totalCount = totalCount,
   calls = models.result.web.ListCalls(
-    newCall = Some(controllers.admin.user.routes.UserController.createForm()),
-    orderBy = Some(controllers.admin.user.routes.UserController.list(q, _, _, Some(limit), Some(0))),
-    search = Some(controllers.admin.user.routes.UserController.list(None, orderBy, orderAsc, Some(limit), None)),
-    next = controllers.admin.user.routes.UserController.list(q, orderBy, orderAsc, Some(limit), Some(offset + limit)),
-    prev = controllers.admin.user.routes.UserController.list(q, orderBy, orderAsc, Some(limit), Some(offset - limit))
+    newCall = Some(controllers.admin.user.routes.SystemUserController.createForm()),
+    orderBy = Some(controllers.admin.user.routes.SystemUserController.list(q, _, _, Some(limit), Some(0))),
+    search = Some(controllers.admin.user.routes.SystemUserController.list(None, orderBy, orderAsc, Some(limit), None)),
+    next = controllers.admin.user.routes.SystemUserController.list(q, orderBy, orderAsc, Some(limit), Some(offset + limit)),
+    prev = controllers.admin.user.routes.SystemUserController.list(q, orderBy, orderAsc, Some(limit), Some(offset - limit))
   ),
   limit = limit,
   offset = offset,

@@ -8,14 +8,14 @@ import controllers.BaseController
 import models.Application
 import models.user.UserForms
 import play.api.mvc.Result
-import services.user.UserSearchService
+import services.user.SystemUserSearchService
 
 import scala.concurrent.Future
 
 @javax.inject.Singleton
 class AuthenticationController @javax.inject.Inject() (
     override val app: Application,
-    userSearchService: UserSearchService,
+    userSearchService: SystemUserSearchService,
     credentialsProvider: CredentialsProvider
 ) extends BaseController("authentication") {
   import app.contexts.webContext

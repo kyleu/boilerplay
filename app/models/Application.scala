@@ -10,7 +10,7 @@ import play.api.inject.ApplicationLifecycle
 import services.database._
 import services.file.FileService
 import services.supervisor.ActorSupervisor
-import services.user.UserService
+import services.user.SystemUserService
 import services.cache.CacheService
 import services.audit.AuditService
 import services.note.ModelNoteService
@@ -27,7 +27,7 @@ object Application {
 
   @javax.inject.Singleton
   class CoreServices @javax.inject.Inject() (
-      val users: UserService,
+      val users: SystemUserService,
       val settings: SettingsService,
       val audits: AuditService,
       val notes: ModelNoteService

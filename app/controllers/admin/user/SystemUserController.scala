@@ -10,12 +10,12 @@ import models.Application
 import models.result.RelationCount
 import services.audit.AuditRecordService
 import services.note.NoteService
-import services.user.UserService
+import services.user.SystemUserService
 import util.FutureUtils.defaultContext
 
 @javax.inject.Singleton
-class UserController @javax.inject.Inject() (
-    override val app: Application, svc: UserService, val authInfoRepository: AuthInfoRepository, val hasher: PasswordHasher,
+class SystemUserController @javax.inject.Inject() (
+    override val app: Application, svc: SystemUserService, val authInfoRepository: AuthInfoRepository, val hasher: PasswordHasher,
     noteS: NoteService, auditRecordS: AuditRecordService
 ) extends BaseController("user") with UserEditHelper with UserSearchHelper {
   def view(id: UUID) = withSession("user.view", admin = true) { implicit request => implicit td =>

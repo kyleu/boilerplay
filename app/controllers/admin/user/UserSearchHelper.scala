@@ -4,7 +4,7 @@ import io.circe.syntax._
 import models.result.orderBy.OrderBy
 import models.user.UserResult
 
-trait UserSearchHelper { this: UserController =>
+trait UserSearchHelper { this: SystemUserController =>
   import app.contexts.webContext
 
   def list(q: Option[String], orderBy: Option[String], orderAsc: Boolean, limit: Option[Int], offset: Option[Int]) = {

@@ -1,4 +1,4 @@
-@(user: models.user.User, modelSeq: Seq[models.ddl.DdlFile])(
+@(user: models.user.SystemUser, modelSeq: Seq[models.ddl.DdlFile])(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
 )@traceData.logViewClass(getClass)@views.html.admin.layout.page(user, "status", "DDL Files") {
   <ul class="collection with-header">

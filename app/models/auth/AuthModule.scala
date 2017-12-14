@@ -17,7 +17,7 @@ import net.codingwell.scalaguice.ScalaModule
 import util.FutureUtils.defaultContext
 import play.api.libs.ws.WSClient
 import play.api.mvc.DefaultCookieHeaderEncoding
-import services.user.{PasswordInfoService, UserSearchService}
+import services.user.{PasswordInfoService, SystemUserSearchService}
 
 object AuthModule {
   val encKey = "dead60d84c1a41648ae258b57e8b5727"
@@ -41,7 +41,7 @@ class AuthModule extends AbstractModule with ScalaModule {
   def provideEnvironment(
     authenticatorService: AuthenticatorService[CookieAuthenticator],
     eventBus: EventBus,
-    userSearchService: UserSearchService
+    userSearchService: SystemUserSearchService
   ): Environment[AuthEnv] = {
     Environment[AuthEnv](userSearchService, authenticatorService, Seq.empty, eventBus)
   }

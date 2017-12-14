@@ -1,4 +1,4 @@
-create table if not exists "users" (
+create table if not exists "system_users" (
   "id" uuid primary key,
   "username" character varying(256) unique,
   "prefs" character varying(4096) not null,

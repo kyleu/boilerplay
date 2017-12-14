@@ -16,10 +16,10 @@ case class UserResult(
     override val orderBys: Seq[OrderBy] = Nil,
     override val totalCount: Int = 0,
     override val paging: PagingOptions = PagingOptions(),
-    override val results: Seq[User] = Nil,
+    override val results: Seq[SystemUser] = Nil,
     override val durationMs: Int = 0,
     override val occurred: LocalDateTime = util.DateUtils.now
-) extends BaseResult[User]
+) extends BaseResult[SystemUser]
 
 object UserResult {
   implicit val jsonEncoder: Encoder[UserResult] = deriveEncoder
@@ -27,7 +27,7 @@ object UserResult {
 
   def fromRecords(
     q: Option[String], filters: Seq[Filter], orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int],
-    startMs: Long, totalCount: Int, results: Seq[User]
+    startMs: Long, totalCount: Int, results: Seq[SystemUser]
   ) = {
     val paging = PagingOptions.from(totalCount, limit, offset)
     val durationMs = (System.currentTimeMillis - startMs).toInt

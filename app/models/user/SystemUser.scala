@@ -11,21 +11,21 @@ import io.circe.java8.time._
 import models.result.data.{DataField, DataFieldModel}
 import util.DateUtils
 
-object User {
+object SystemUser {
   private[this] implicit val jsonLoginInfoEncoder: Encoder[LoginInfo] = deriveEncoder
   private[this] implicit val jsonLoginInfoDecoder: Decoder[LoginInfo] = deriveDecoder
 
-  implicit val jsonEncoder: Encoder[User] = deriveEncoder
-  implicit val jsonDecoder: Decoder[User] = deriveDecoder
+  implicit val jsonEncoder: Encoder[SystemUser] = deriveEncoder
+  implicit val jsonDecoder: Decoder[SystemUser] = deriveDecoder
 
-  def empty() = User(
+  def empty() = SystemUser(
     id = UUID.randomUUID,
     username = "",
     preferences = UserPreferences.empty,
     profile = LoginInfo("anonymous", "guest")
   )
 
-  val system = User(
+  val system = SystemUser(
     id = UUID.fromString("88888888-8888-8888-8888-888888888888"),
     username = "",
     preferences = UserPreferences.empty,
@@ -33,7 +33,7 @@ object User {
   )
 }
 
-case class User(
+case class SystemUser(
     id: UUID,
     username: String,
     preferences: UserPreferences,

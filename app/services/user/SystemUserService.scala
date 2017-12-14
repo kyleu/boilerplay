@@ -11,7 +11,7 @@ import models.queries.auth._
 import models.result.data.DataField
 import models.result.filter.Filter
 import models.result.orderBy.OrderBy
-import models.user.{Role, User}
+import models.user.{Role, SystemUser}
 import services.ModelServiceHelper
 import services.database.SystemDatabase
 import services.cache.UserCache
@@ -21,7 +21,7 @@ import util.tracing.{TraceData, TracingService}
 import scala.concurrent.Future
 
 @javax.inject.Singleton
-class UserService @javax.inject.Inject() (override val tracing: TracingService, hasher: PasswordHasher) extends ModelServiceHelper[User]("user") {
+class SystemUserService @javax.inject.Inject() (override val tracing: TracingService, hasher: PasswordHasher) extends ModelServiceHelper[SystemUser]("user") {
   def getByPrimaryKey(creds: Credentials, id: UUID)(implicit trace: TraceData) = traceF("get.by.primary.key") { td =>
     SystemDatabase.queryF(UserQueries.getByPrimaryKey(id))(td)
   }
@@ -60,7 +60,7 @@ class UserService @javax.inject.Inject() (override val tracing: TracingService, 
     SystemDatabase.queryF(UserSearchQueries.IsUsernameInUse(name))(td)
   }
 
-  def insert(creds: Credentials, model: User)(implicit trace: TraceData) = traceF("insert") { td =>
+  def insert(creds: Credentials, model: SystemUser)(implicit trace: TraceData) = traceF("insert") { td =>
     SystemDatabase.executeF(UserQueries.insert(model))(td).map { _ =>
       log.info(s"Inserted user [$model].")
       UserCache.cacheUser(model)
@@ -90,7 +90,7 @@ class UserService @javax.inject.Inject() (override val tracing: TracingService, 
     })
   }
 
-  def updateUser(creds: Credentials, model: User)(implicit trace: TraceData) = traceF("update") { td =>
+  def updateUser(creds: Credentials, model: SystemUser)(implicit trace: TraceData) = traceF("update") { td =>
     SystemDatabase.executeF(UserQueries.UpdateUser(model))(td).map { rowsAffected =>
       if (rowsAffected != 1) { throw new IllegalStateException(s"Attempt to update user [${model.id}] affected [$rowsAffected}] rows.") }
       log.info(s"Updated user [$model].")
@@ -146,7 +146,7 @@ class UserService @javax.inject.Inject() (override val tracing: TracingService, 
     }
   }
 
-  def csvFor(operation: String, totalCount: Int, rows: Seq[User])(implicit trace: TraceData) = {
+  def csvFor(operation: String, totalCount: Int, rows: Seq[SystemUser])(implicit trace: TraceData) = {
     traceB("export.csv")(td => util.CsvUtils.csvFor(Some(key), totalCount, rows, UserQueries.fields)(td))
   }
 }

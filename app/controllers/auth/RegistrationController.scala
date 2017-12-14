@@ -12,14 +12,14 @@ import models.auth.Credentials
 import models.settings.SettingKey
 import models.user._
 import services.audit.AuditHelper
-import services.user.UserSearchService
+import services.user.SystemUserSearchService
 
 import scala.concurrent.Future
 
 @javax.inject.Singleton
 class RegistrationController @javax.inject.Inject() (
     override val app: Application,
-    userSearchService: UserSearchService,
+    userSearchService: SystemUserSearchService,
     authInfoRepository: AuthInfoRepository,
     hasher: PasswordHasher
 ) extends BaseController("registration") {
@@ -55,7 +55,7 @@ class RegistrationController @javax.inject.Inject() (
           case None =>
             val authInfo = hasher.hash(data.password)
             val role = Role.withName(app.coreServices.settings(SettingKey.DefaultNewUserRole))
-            val user = User(
+            val user = SystemUser(
               id = UUID.randomUUID,
               username = data.username,
               preferences = UserPreferences.empty,

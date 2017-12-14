@@ -1,4 +1,4 @@
-@(user: Option[models.user.User])<ul id="dropdown-user" class="dropdown-content">
+@(user: Option[models.user.SystemUser])<ul id="dropdown-user" class="dropdown-content">
   @if(user.isEmpty) {
   <li><a class="theme-text" href="@controllers.auth.routes.AuthenticationController.signInForm()">Sign In</a></li>
   } else {

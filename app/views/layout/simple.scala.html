@@ -1,4 +1,4 @@
-@(user: Option[models.user.User], title: String, mainDivClass: String = "static-container container", scripts: Seq[String] = Nil)(content: Html)(
+@(user: Option[models.user.SystemUser], title: String, mainDivClass: String = "static-container container", scripts: Seq[String] = Nil)(content: Html)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
 )@layout.materialize(user, title, scripts = scripts, stylesheets = Seq(controllers.routes.Assets.versioned("stylesheets/boilerplay.min.css").url)) {
   <header>

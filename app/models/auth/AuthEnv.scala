@@ -2,9 +2,9 @@ package models.auth
 
 import com.mohiva.play.silhouette.api.Env
 import com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticator
-import models.user.User
+import models.user.SystemUser
 
 trait AuthEnv extends Env {
-  type I = User
+  type I = SystemUser
   type A = CookieAuthenticator
 }

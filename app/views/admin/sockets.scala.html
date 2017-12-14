@@ -1,4 +1,4 @@
-@(user: models.user.User, channels: Seq[(String, Seq[models.supervisor.SocketDescription])])(
+@(user: models.user.SystemUser, channels: Seq[(String, Seq[models.supervisor.SocketDescription])])(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
 )@traceData.logViewClass(getClass)@views.html.admin.layout.page(user, "status", util.Config.projectName + " Status") {
   <ul class="collection with-header">
@@ -25,7 +25,7 @@
             @channel._2.map { socket =>
               <tr>
                 <td>@socket.socketId</td>
-                <td><a href="@controllers.admin.user.routes.UserController.view(socket.userId)" class="theme-text">@socket.userId</a></td>
+                <td><a href="@controllers.admin.user.routes.SystemUserController.view(socket.userId)" class="theme-text">@socket.userId</a></td>
                 <td>@socket.name</td>
                 <td>@socket.started</td>
               </tr>

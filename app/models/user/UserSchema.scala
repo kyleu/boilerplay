@@ -32,12 +32,12 @@ object UserSchema extends SchemaHelper("user") {
 
   implicit val profileType: ObjectType[GraphQLContext, UserProfile] = deriveObjectType(ObjectTypeDescription("Information about the current session."))
 
-  implicit val userPrimaryKeyId: HasId[User, UUID] = HasId[User, UUID](_.id)
+  implicit val userPrimaryKeyId: HasId[SystemUser, UUID] = HasId[SystemUser, UUID](_.id)
   private[this] def getByPrimaryKeySeq(c: GraphQLContext, idSeq: Seq[UUID]) = c.app.coreServices.users.getByPrimaryKeySeq(c.creds, idSeq)(c.trace)
   val userByPrimaryKeyFetcher = Fetcher(getByPrimaryKeySeq)
 
-  val userByRoleRelation = Relation[User, Role]("byRole", x => Seq(x.role))
-  val userByRoleFetcher = Fetcher.rel[GraphQLContext, User, User, UUID](
+  val userByRoleRelation = Relation[SystemUser, Role]("byRole", x => Seq(x.role))
+  val userByRoleFetcher = Fetcher.rel[GraphQLContext, SystemUser, SystemUser, UUID](
     getByPrimaryKeySeq, (c, rels) => c.app.coreServices.users.getByRoleSeq(rels(userByRoleRelation))(c.trace)
   )
 
@@ -45,7 +45,7 @@ object UserSchema extends SchemaHelper("user") {
   implicit val userPreferenceType: ObjectType[GraphQLContext, UserPreferences] = {
     deriveObjectType(ObjectTypeDescription("Information about users of the system."))
   }
-  implicit lazy val userType: ObjectType[GraphQLContext, User] = deriveObjectType(
+  implicit lazy val userType: ObjectType[GraphQLContext, SystemUser] = deriveObjectType(
     AddFields(
       Field(
         name = "noteAuthorFkey",
@@ -59,7 +59,7 @@ object UserSchema extends SchemaHelper("user") {
 
   implicit lazy val userResultType: ObjectType[GraphQLContext, UserResult] = deriveObjectType()
 
-  private[this] def toResult(r: SearchResult[User]) = {
+  private[this] def toResult(r: SearchResult[SystemUser]) = {
     UserResult(paging = r.paging, filters = r.args.filters, orderBys = r.args.orderBys, totalCount = r.count, results = r.results, durationMs = r.dur)
   }
 

@@ -13,7 +13,7 @@ object AuditRoutes extends Logging {
     case "audit" => controllers.admin.audit.routes.AuditController.view(uuidArg(arg(0)))
     case "auditrecord" => controllers.admin.audit.routes.AuditRecordController.view(uuidArg(arg(0)))
     case "note" => controllers.admin.note.routes.NoteController.view(uuidArg(arg(0)))
-    case "user" => controllers.admin.user.routes.UserController.view(uuidArg(arg(0)))
+    case "user" => controllers.admin.user.routes.SystemUserController.view(uuidArg(arg(0)))
 
     /* End audit calls */
 

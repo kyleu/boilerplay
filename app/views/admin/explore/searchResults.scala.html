@@ -1,4 +1,4 @@
-@(q: String, results: Seq[Html], user: models.user.User)(
+@(q: String, results: Seq[Html], user: models.user.SystemUser)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
 )@traceData.logViewClass(getClass)@views.html.admin.layout.page(user, "explore", "Search Results") {
   <ul class="collection with-header">

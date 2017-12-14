@@ -1,4 +1,4 @@
-@(user: models.user.User, startJson: String, debug: Boolean)(
+@(user: models.user.SystemUser, startJson: String, debug: Boolean)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
 )@traceData.logViewClass(getClass)@views.html.admin.layout.page(user, "audit", "Audit Test Form") {
   <div class="row">

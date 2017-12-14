@@ -1,4 +1,4 @@
-@(user: models.user.User, activeSection: String)
+@(user: models.user.SystemUser, activeSection: String)
 @views.html.components.userDropdown(Some(user))
 
 <header>
@@ -53,7 +53,7 @@
   <li><a href="@controllers.admin.audit.routes.AuditController.list()"><i class="fa @models.template.Icons.audit"></i> Audit</a></li>
   <li><a href="@controllers.admin.audit.routes.AuditRecordController.list()"><i class="fa @models.template.Icons.auditRecord"></i> Audit Record</a></li>
   <li><a href="@controllers.admin.note.routes.NoteController.list()"><i class="fa @models.template.Icons.note"></i> Note</a></li>
-  <li><a href="@controllers.admin.user.routes.UserController.list()"><i class="fa @models.template.Icons.user"></i> User</a></li>
+  <li><a href="@controllers.admin.user.routes.SystemUserController.list()"><i class="fa @models.template.Icons.user"></i> User</a></li>
 
   <!-- End model list routes -->
 </ul>

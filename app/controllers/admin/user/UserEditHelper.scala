@@ -4,16 +4,16 @@ import java.util.UUID
 
 import com.mohiva.play.silhouette.api.{LoginInfo, SignUpEvent}
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
-import models.user.{Role, User, UserPreferences}
+import models.user.{Role, SystemUser, UserPreferences}
 import util.web.ControllerUtils
 
 import scala.concurrent.Future
 
-trait UserEditHelper { this: UserController =>
+trait UserEditHelper { this: SystemUserController =>
   import app.contexts.webContext
   def createForm = withSession("user.createForm", admin = true) { implicit request => implicit td =>
-    val call = controllers.admin.user.routes.UserController.create()
-    Future.successful(Ok(views.html.admin.user.userForm(request.identity, models.user.User.empty(), "New User", call, isNew = true)))
+    val call = controllers.admin.user.routes.SystemUserController.create()
+    Future.successful(Ok(views.html.admin.user.userForm(request.identity, models.user.SystemUser.empty(), "New User", call, isNew = true)))
   }
 
   def create() = withSession("user.create", admin = true) { implicit request => implicit td =>
@@ -27,11 +27,11 @@ trait UserEditHelper { this: UserController =>
     val username = form("username").trim
 
     if (username.isEmpty) {
-      Future.successful(Redirect(controllers.admin.user.routes.UserController.createForm()).flashing("error" -> "Username is required."))
+      Future.successful(Redirect(controllers.admin.user.routes.SystemUserController.createForm()).flashing("error" -> "Username is required."))
     } else if (loginInfo.providerKey.isEmpty) {
-      Future.successful(Redirect(controllers.admin.user.routes.UserController.createForm()).flashing("error" -> "Email Address is required."))
+      Future.successful(Redirect(controllers.admin.user.routes.SystemUserController.createForm()).flashing("error" -> "Email Address is required."))
     } else {
-      val user = User(
+      val user = SystemUser(
         id = id,
         username = username,
         preferences = UserPreferences.empty,
@@ -46,14 +46,14 @@ trait UserEditHelper { this: UserController =>
           _ <- app.silhouette.env.authenticatorService.init(authenticator)
         } yield {
           app.silhouette.env.eventBus.publish(SignUpEvent(userSaved, request))
-          Redirect(controllers.admin.user.routes.UserController.view(id)).flashing("success" -> s"User [${form("email")}] added.")
+          Redirect(controllers.admin.user.routes.SystemUserController.view(id)).flashing("success" -> s"User [${form("email")}] added.")
         }
       }
     }
   }
 
   def editForm(id: UUID) = withSession("user.edit.form", admin = true) { implicit request => implicit td =>
-    val call = controllers.admin.user.routes.UserController.edit(id)
+    val call = controllers.admin.user.routes.SystemUserController.edit(id)
     app.coreServices.users.getByPrimaryKey(request, id).map {
       case Some(model) => Ok(views.html.admin.user.userForm(request.identity, model, s"User [$id]", call))
       case None => NotFound(s"No user found with id [$id].")
@@ -79,20 +79,20 @@ trait UserEditHelper { this: UserController =>
       }
 
       if (newUsername.isEmpty) {
-        Redirect(controllers.admin.user.routes.UserController.edit(id)).flashing("error" -> "Username is required.")
+        Redirect(controllers.admin.user.routes.SystemUserController.edit(id)).flashing("error" -> "Username is required.")
       } else if (newEmail.isEmpty) {
-        Redirect(controllers.admin.user.routes.UserController.edit(id)).flashing("error" -> "Email Address is required.")
+        Redirect(controllers.admin.user.routes.SystemUserController.edit(id)).flashing("error" -> "Email Address is required.")
       } else if (isSelf && (role != Role.Admin) && user.role == Role.Admin) {
-        Redirect(controllers.admin.user.routes.UserController.edit(id)).flashing("error" -> "You cannot remove your own admin role.")
+        Redirect(controllers.admin.user.routes.SystemUserController.edit(id)).flashing("error" -> "You cannot remove your own admin role.")
       } else {
         app.coreServices.users.updateFields(request, id, newUsername, newEmail, newPassword, role, user.profile.providerKey)
-        Redirect(controllers.admin.user.routes.UserController.view(id))
+        Redirect(controllers.admin.user.routes.SystemUserController.view(id))
       }
     }
   }
 
   def remove(id: UUID) = withSession("admin.user.remove", admin = true) { implicit request => implicit td =>
     app.coreServices.users.remove(request, id)
-    Future.successful(Redirect(controllers.admin.user.routes.UserController.list()))
+    Future.successful(Redirect(controllers.admin.user.routes.SystemUserController.list()))
   }
 }

@@ -22,7 +22,7 @@ object Role extends Enum[Role] with CirceEnum[Role] {
     override def qualifies(target: Role) = target == Role.User
   }
 
-  def matchPermissions(user: Option[User], owner: UUID, model: String, perm: String, value: Permission) = {
+  def matchPermissions(user: Option[SystemUser], owner: UUID, model: String, perm: String, value: Permission) = {
     if (user.map(_.id).contains(owner)) {
       true -> s"You are the owner of this $model."
     } else {

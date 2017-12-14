@@ -1,4 +1,4 @@
-@(user: models.user.User, devmode: Boolean)(
+@(user: models.user.SystemUser, devmode: Boolean)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
 )@traceData.logViewClass(getClass)@views.html.admin.layout.page(user, "audit", "Audit Activity") {
   <div class="row">
