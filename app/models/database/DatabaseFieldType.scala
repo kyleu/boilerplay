@@ -73,8 +73,8 @@ object DatabaseFieldType extends Enum[DatabaseFieldType[_]] with CirceEnum[Datab
     override def opt(row: Row, col: String) = row.asOpt[PgArray](col).map(_.asInstanceOf[Array[Long]])
   }
   case object StringArrayType extends DatabaseFieldType[Seq[String]]("stringArray") {
-    override def apply(row: Row, col: String) = row.as[PgArray](col).getArray.asInstanceOf[Array[String]]
-    override def opt(row: Row, col: String) = row.asOpt[PgArray](col).map(_.asInstanceOf[Array[String]])
+    override def apply(row: Row, col: String) = row.as[PgArray](col).getArray.asInstanceOf[Array[Any]].map(_.toString)
+    override def opt(row: Row, col: String) = row.asOpt[PgArray](col).map(_.getArray.asInstanceOf[Array[Any]].map(_.toString))
   }
   case object UuidArrayType extends DatabaseFieldType[Seq[java.util.UUID]]("uuidArray") {
     override def apply(row: Row, col: String) = row.as[PgArray](col).getArray.asInstanceOf[Array[java.util.UUID]]

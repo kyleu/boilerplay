@@ -17,7 +17,7 @@ import models.template.Theme
 import sangria.execution.deferred.{Fetcher, HasId, Relation}
 import util.FutureUtils.graphQlContext
 
-object UserSchema extends SchemaHelper("user") {
+object SystemUserSchema extends SchemaHelper("user") {
   implicit val roleEnum: EnumType[Role] = CommonSchema.deriveEnumeratumType(
     name = "RoleEnum",
     description = "The role of the system user.",
@@ -32,20 +32,20 @@ object UserSchema extends SchemaHelper("user") {
 
   implicit val profileType: ObjectType[GraphQLContext, UserProfile] = deriveObjectType(ObjectTypeDescription("Information about the current session."))
 
-  implicit val userPrimaryKeyId: HasId[SystemUser, UUID] = HasId[SystemUser, UUID](_.id)
+  implicit val systemUserPrimaryKeyId: HasId[SystemUser, UUID] = HasId[SystemUser, UUID](_.id)
   private[this] def getByPrimaryKeySeq(c: GraphQLContext, idSeq: Seq[UUID]) = c.app.coreServices.users.getByPrimaryKeySeq(c.creds, idSeq)(c.trace)
-  val userByPrimaryKeyFetcher = Fetcher(getByPrimaryKeySeq)
+  val systemUserByPrimaryKeyFetcher = Fetcher(getByPrimaryKeySeq)
 
-  val userByRoleRelation = Relation[SystemUser, Role]("byRole", x => Seq(x.role))
-  val userByRoleFetcher = Fetcher.rel[GraphQLContext, SystemUser, SystemUser, UUID](
-    getByPrimaryKeySeq, (c, rels) => c.app.coreServices.users.getByRoleSeq(rels(userByRoleRelation))(c.trace)
+  val systemUserByRoleRelation = Relation[SystemUser, Role]("byRole", x => Seq(x.role))
+  val systemUserByRoleFetcher = Fetcher.rel[GraphQLContext, SystemUser, SystemUser, UUID](
+    getByPrimaryKeySeq, (c, rels) => c.app.coreServices.users.getByRoleSeq(rels(systemUserByRoleRelation))(c.trace)
   )
 
   implicit val loginInfoType: ObjectType[GraphQLContext, LoginInfo] = deriveObjectType(ObjectTypeDescription("Information about login credentials."))
   implicit val userPreferenceType: ObjectType[GraphQLContext, UserPreferences] = {
     deriveObjectType(ObjectTypeDescription("Information about users of the system."))
   }
-  implicit lazy val userType: ObjectType[GraphQLContext, SystemUser] = deriveObjectType(
+  implicit lazy val systemUserType: ObjectType[GraphQLContext, SystemUser] = deriveObjectType(
     AddFields(
       Field(
         name = "noteAuthorFkey",
@@ -57,10 +57,10 @@ object UserSchema extends SchemaHelper("user") {
     )
   )
 
-  implicit lazy val userResultType: ObjectType[GraphQLContext, UserResult] = deriveObjectType()
+  implicit lazy val systemUserResultType: ObjectType[GraphQLContext, SystemUserResult] = deriveObjectType()
 
   private[this] def toResult(r: SearchResult[SystemUser]) = {
-    UserResult(paging = r.paging, filters = r.args.filters, orderBys = r.args.orderBys, totalCount = r.count, results = r.results, durationMs = r.dur)
+    SystemUserResult(paging = r.paging, filters = r.args.filters, orderBys = r.args.orderBys, totalCount = r.count, results = r.results, durationMs = r.dur)
   }
 
   val userIdArg = Argument("id", uuidType, description = "Returns the User matching the provided Id.")
@@ -78,15 +78,15 @@ object UserSchema extends SchemaHelper("user") {
     ),
     Field(
       name = "user",
-      fieldType = userResultType,
+      fieldType = systemUserResultType,
       arguments = queryArg :: reportFiltersArg :: orderBysArg :: limitArg :: offsetArg :: Nil,
       resolve = c => traceF(c.ctx, "search")(td => runSearch(c.ctx.app.coreServices.users, c, td).map(toResult))
     ),
     Field(
       name = "userByRole",
-      fieldType = ListType(userType),
+      fieldType = ListType(systemUserType),
       arguments = roleArg :: Nil,
-      resolve = c => userByRoleFetcher.deferRelSeq(userByRoleRelation, c.arg(roleArg))
+      resolve = c => systemUserByRoleFetcher.deferRelSeq(systemUserByRoleRelation, c.arg(roleArg))
     )
   )
 
@@ -98,28 +98,28 @@ object UserSchema extends SchemaHelper("user") {
         name = "create",
         description = Some("Creates a new User using the provided fields."),
         arguments = DataFieldSchema.dataFieldsArg :: Nil,
-        fieldType = OptionType(userType),
+        fieldType = OptionType(systemUserType),
         resolve = c => {
           val dataFields = c.args.arg(DataFieldSchema.dataFieldsArg)
-          traceF(c.ctx, "create")(tn => c.ctx.services.userServices.userService.create(c.ctx.creds, dataFields)(tn))
+          traceF(c.ctx, "create")(tn => c.ctx.services.systemUserServices.systemUserService.create(c.ctx.creds, dataFields)(tn))
         }
       ),
       Field(
         name = "update",
         description = Some("Updates the User with the provided id."),
         arguments = userIdArg :: DataFieldSchema.dataFieldsArg :: Nil,
-        fieldType = userType,
+        fieldType = systemUserType,
         resolve = c => {
           val dataFields = c.args.arg(DataFieldSchema.dataFieldsArg)
-          traceF(c.ctx, "update")(tn => c.ctx.services.userServices.userService.update(c.ctx.creds, c.args.arg(userIdArg), dataFields)(tn).map(_._1))
+          traceF(c.ctx, "update")(tn => c.ctx.services.systemUserServices.systemUserService.update(c.ctx.creds, c.args.arg(userIdArg), dataFields)(tn).map(_._1))
         }
       ),
       Field(
         name = "remove",
         description = Some("Removes the User with the provided id."),
         arguments = userIdArg :: Nil,
-        fieldType = userType,
-        resolve = c => traceF(c.ctx, "remove")(tn => c.ctx.services.userServices.userService.remove(c.ctx.creds, c.args.arg(userIdArg))(tn))
+        fieldType = systemUserType,
+        resolve = c => traceF(c.ctx, "remove")(tn => c.ctx.services.systemUserServices.systemUserService.remove(c.ctx.creds, c.args.arg(userIdArg))(tn))
       )
     )
   )

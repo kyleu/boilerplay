@@ -49,6 +49,7 @@ object Packaging {
     packageName in Docker := packageName.value,
     dockerExposedVolumes := Seq(s"/opt/${Shared.projectId}"),
     version in Docker := version.value,
+    dockerUsername := Some(Shared.projectId),
 
     // JDK Packager
     jdkAppIcon := (sourceDirectory.value ** iconGlob).getPaths.headOption.map(file),

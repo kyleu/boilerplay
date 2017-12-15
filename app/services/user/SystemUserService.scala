@@ -5,7 +5,6 @@ import java.util.UUID
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.util.PasswordHasher
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
-import models.AuditNotification
 import models.auth.Credentials
 import models.queries.auth._
 import models.result.data.DataField

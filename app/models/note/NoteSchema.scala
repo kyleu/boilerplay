@@ -9,7 +9,7 @@ import models.result.data.DataFieldSchema
 import models.result.filter.FilterSchema._
 import models.result.orderBy.OrderBySchema._
 import models.result.paging.PagingSchema.pagingOptionsType
-import models.user.UserSchema
+import models.user.SystemUserSchema
 import sangria.execution.deferred.{Fetcher, HasId, Relation}
 import sangria.macros.derive._
 import sangria.schema._
@@ -33,8 +33,8 @@ object NoteSchema extends SchemaHelper("note") {
     AddFields(
       Field(
         name = "authorRel",
-        fieldType = UserSchema.userType,
-        resolve = ctx => UserSchema.userByPrimaryKeyFetcher.defer(ctx.value.author)
+        fieldType = SystemUserSchema.systemUserType,
+        resolve = ctx => SystemUserSchema.systemUserByPrimaryKeyFetcher.defer(ctx.value.author)
       )
     )
   )

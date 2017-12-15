@@ -6,7 +6,7 @@ class ServiceRegistry @javax.inject.Inject() (
 
     val auditServices: services.audit.AuditServiceRegistry,
     val noteServices: services.note.NoteServiceRegistry,
-    val userServices: services.user.UserServiceRegistry,
+    val systemUserServices: services.user.SystemUserServiceRegistry,
 
     /* End model service files */
 

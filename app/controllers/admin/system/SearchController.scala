@@ -48,8 +48,8 @@ class SearchController @javax.inject.Inject() (override val app: Application, se
     val note = services.noteServices.noteService.getByPrimaryKey(creds, id).map(_.map { model =>
       views.html.admin.note.noteSearchResult(model, s"Note [${model.id}] matched [$q].")
     }.toSeq)
-    val user = services.userServices.userService.getByPrimaryKey(creds, id).map(_.map { model =>
-      views.html.admin.user.userSearchResult(model, s"User [${model.id}] matched [$q].")
+    val user = services.systemUserServices.systemUserService.getByPrimaryKey(creds, id).map(_.map { model =>
+      views.html.admin.user.systemUserSearchResult(model, s"User [${model.id}] matched [$q].")
     }.toSeq)
 
     val uuidSearches = Seq[Future[Seq[Html]]](auditRecord, note, user)
@@ -72,8 +72,8 @@ class SearchController @javax.inject.Inject() (override val app: Application, se
     val note = services.noteServices.noteService.searchExact(creds = creds, q = q, limit = Some(5)).map(_.map { model =>
       views.html.admin.note.noteSearchResult(model, s"Note [${model.id}] matched [$q].")
     })
-    val user = services.userServices.userService.searchExact(creds = creds, q = q, limit = Some(5)).map(_.map { model =>
-      views.html.admin.user.userSearchResult(model, s"User [${model.id}] matched [$q].")
+    val user = services.systemUserServices.systemUserService.searchExact(creds = creds, q = q, limit = Some(5)).map(_.map { model =>
+      views.html.admin.user.systemUserSearchResult(model, s"User [${model.id}] matched [$q].")
     })
 
     val stringSearches = Seq[Future[Seq[Html]]](auditRecord, note, user)

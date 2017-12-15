@@ -13,7 +13,7 @@ trait UserEditHelper { this: SystemUserController =>
   import app.contexts.webContext
   def createForm = withSession("user.createForm", admin = true) { implicit request => implicit td =>
     val call = controllers.admin.user.routes.SystemUserController.create()
-    Future.successful(Ok(views.html.admin.user.userForm(request.identity, models.user.SystemUser.empty(), "New User", call, isNew = true)))
+    Future.successful(Ok(views.html.admin.user.systemUserForm(request.identity, models.user.SystemUser.empty(), "New User", call, isNew = true)))
   }
 
   def create() = withSession("user.create", admin = true) { implicit request => implicit td =>
@@ -55,7 +55,7 @@ trait UserEditHelper { this: SystemUserController =>
   def editForm(id: UUID) = withSession("user.edit.form", admin = true) { implicit request => implicit td =>
     val call = controllers.admin.user.routes.SystemUserController.edit(id)
     app.coreServices.users.getByPrimaryKey(request, id).map {
-      case Some(model) => Ok(views.html.admin.user.userForm(request.identity, model, s"User [$id]", call))
+      case Some(model) => Ok(views.html.admin.user.systemUserForm(request.identity, model, s"User [$id]", call))
       case None => NotFound(s"No user found with id [$id].")
     }
   }

@@ -11,7 +11,7 @@ import models.result.paging.PagingOptions
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.java8.time._
 
-case class UserResult(
+case class SystemUserResult(
     override val filters: Seq[Filter] = Nil,
     override val orderBys: Seq[OrderBy] = Nil,
     override val totalCount: Int = 0,
@@ -21,9 +21,9 @@ case class UserResult(
     override val occurred: LocalDateTime = util.DateUtils.now
 ) extends BaseResult[SystemUser]
 
-object UserResult {
-  implicit val jsonEncoder: Encoder[UserResult] = deriveEncoder
-  implicit val jsonDecoder: Decoder[UserResult] = deriveDecoder
+object SystemUserResult {
+  implicit val jsonEncoder: Encoder[SystemUserResult] = deriveEncoder
+  implicit val jsonDecoder: Decoder[SystemUserResult] = deriveDecoder
 
   def fromRecords(
     q: Option[String], filters: Seq[Filter], orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int],
@@ -31,6 +31,6 @@ object UserResult {
   ) = {
     val paging = PagingOptions.from(totalCount, limit, offset)
     val durationMs = (System.currentTimeMillis - startMs).toInt
-    UserResult(paging = paging, filters = filters, orderBys = orderBys, totalCount = totalCount, results = results, durationMs = durationMs)
+    SystemUserResult(paging = paging, filters = filters, orderBys = orderBys, totalCount = totalCount, results = results, durationMs = durationMs)
   }
 }

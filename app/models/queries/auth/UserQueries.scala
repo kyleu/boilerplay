@@ -11,7 +11,7 @@ import models.result.filter.Filter
 import models.user.{Role, SystemUser, UserPreferences}
 import util.JsonSerializers
 
-object UserQueries extends BaseQueries[SystemUser]("user", "users") {
+object UserQueries extends BaseQueries[SystemUser]("user", "system_users") {
   override val fields = Seq(
     DatabaseField("id"), DatabaseField("username"), DatabaseField("prefs"), DatabaseField("email"), DatabaseField("role"), DatabaseField("created")
   )

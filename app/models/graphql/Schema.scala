@@ -5,7 +5,7 @@ import sangria.schema._
 
 object Schema {
   // Fetchers
-  val baseFetchers = Seq(models.user.UserSchema.userByRoleFetcher, models.audit.AuditSchema.auditByUserIdFetcher)
+  val baseFetchers = Seq(models.user.SystemUserSchema.systemUserByRoleFetcher, models.audit.AuditSchema.auditByUserIdFetcher)
 
   val modelFetchers = {
     // Start model fetchers
@@ -16,7 +16,7 @@ object Schema {
       models.audit.AuditSchema.auditByPrimaryKeyFetcher,
       models.note.NoteSchema.noteByAuthorFetcher,
       models.note.NoteSchema.noteByPrimaryKeyFetcher,
-      models.user.UserSchema.userByPrimaryKeyFetcher
+      models.user.SystemUserSchema.systemUserByPrimaryKeyFetcher
     )
 
     // End model fetchers
@@ -34,7 +34,7 @@ object Schema {
     models.audit.AuditSchema.queryFields ++
       models.audit.AuditRecordSchema.queryFields ++
       models.note.NoteSchema.queryFields ++
-      models.user.UserSchema.queryFields
+      models.user.SystemUserSchema.queryFields
 
     // End model query fields
   }
@@ -54,7 +54,7 @@ object Schema {
     models.audit.AuditRecordSchema.mutationFields ++
       models.audit.AuditSchema.mutationFields ++
       models.note.NoteSchema.mutationFields ++
-      models.user.UserSchema.mutationFields
+      models.user.SystemUserSchema.mutationFields
 
     // End model mutation fields
   }

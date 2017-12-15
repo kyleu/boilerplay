@@ -20,7 +20,7 @@ class AuditLookup @javax.inject.Inject() (registry: ServiceRegistry) extends Log
 
     case "auditrecord" => registry.auditServices.auditRecordService.getByPrimaryKey(creds, uuidArg(arg(0)))
     case "note" => registry.noteServices.noteService.getByPrimaryKey(creds, uuidArg(arg(0)))
-    case "user" => registry.userServices.userService.getByPrimaryKey(creds, uuidArg(arg(0)))
+    case "user" => registry.systemUserServices.systemUserService.getByPrimaryKey(creds, uuidArg(arg(0)))
 
     /* End registry lookups */
     case _ =>

@@ -20,7 +20,7 @@
   ),
   orderBy = orderBy,
   orderAsc = orderAsc,
-  rows = users.map(model => views.html.admin.user.userDataRow(model)),
+  rows = users.map(model => views.html.admin.user.systemUserDataRow(model)),
   totalCount = totalCount,
   calls = models.result.web.ListCalls(
     newCall = Some(controllers.admin.user.routes.SystemUserController.createForm()),
