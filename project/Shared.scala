@@ -46,7 +46,7 @@ object Shared {
       "me.chrons" %%% "boopickle" % Dependencies.Utils.booPickleVersion,
       "com.lihaoyi" %%% "utest" % Dependencies.Utils.utestVersion % "test"
     )
-  ).jsSettings(libraryDependencies += "org.scala-js" %%% "scalajs-java-time" % "0.2.2")
+  ).jsSettings(libraryDependencies += "org.scala-js" %%% "scalajs-java-time" % "0.2.2").jvmSettings(libraryDependencies += Dependencies.ScalaJS.jvmStubs)
 
   lazy val sharedJs = shared.js.enablePlugins(ScalaJSWeb)
 

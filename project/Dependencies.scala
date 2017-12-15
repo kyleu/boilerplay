@@ -72,7 +72,9 @@ object Dependencies {
   }
 
   object ScalaJS {
+    val scalaJSVersion = "0.6.20"
     val jQueryVersion = "0.9.2"
+    val jvmStubs = "org.scala-js" %% "scalajs-stubs" % scalaJSVersion % "provided"
   }
 
   object Utils {
