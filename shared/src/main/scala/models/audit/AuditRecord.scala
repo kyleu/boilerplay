@@ -6,17 +6,20 @@ import io.circe.{Decoder, Encoder}
 import models.result.data.{DataField, DataFieldModel, DataSummary}
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 
+import scala.scalajs.js.annotation.{JSExport, JSExportTopLevel}
+
 object AuditRecord {
   implicit val jsonEncoder: Encoder[AuditRecord] = deriveEncoder
   implicit val jsonDecoder: Decoder[AuditRecord] = deriveDecoder
 }
 
+@JSExportTopLevel(util.Config.projectId + ".AuditRecord")
 case class AuditRecord(
-    id: UUID = UUID.randomUUID,
-    auditId: UUID = UUID.randomUUID,
-    t: String = "default",
-    pk: Seq[String] = Seq.empty,
-    changes: Seq[AuditField] = Nil
+    @JSExport id: UUID = UUID.randomUUID,
+    @JSExport auditId: UUID = UUID.randomUUID,
+    @JSExport t: String = "default",
+    @JSExport pk: Seq[String] = Seq.empty,
+    @JSExport changes: Seq[AuditField] = Nil
 ) extends DataFieldModel {
   override def toDataFields = Seq(
     DataField("id", Some(id.toString)),

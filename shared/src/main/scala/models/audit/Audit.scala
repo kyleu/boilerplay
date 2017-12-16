@@ -10,25 +10,26 @@ import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.java8.time._
 import models.tag.Tag
 
+import scala.scalajs.js.annotation.{JSExport, JSExportTopLevel}
+
 object Audit {
   implicit val jsonEncoder: Encoder[Audit] = deriveEncoder
   implicit val jsonDecoder: Decoder[Audit] = deriveDecoder
-
-  lazy val serverName = InetAddress.getLocalHost.getHostName
 }
 
+@JSExportTopLevel(util.Config.projectId + ".Audit")
 case class Audit(
-    id: UUID = UUID.randomUUID,
-    act: String,
-    app: String = util.Config.projectId,
-    client: String,
-    server: String = Audit.serverName,
-    userId: UUID,
-    tags: Seq[Tag] = Nil,
-    msg: String = "n/a",
-    records: Seq[AuditRecord] = Nil,
-    started: LocalDateTime = util.DateUtils.now,
-    completed: LocalDateTime = util.DateUtils.now
+    @JSExport id: UUID = UUID.randomUUID,
+    @JSExport act: String = "?",
+    @JSExport app: String = util.Config.projectId,
+    @JSExport client: String = "?",
+    @JSExport server: String = "?",
+    @JSExport userId: UUID = UUID.randomUUID,
+    @JSExport tags: Seq[Tag] = Nil,
+    @JSExport msg: String = "n/a",
+    @JSExport records: Seq[AuditRecord] = Nil,
+    @JSExport started: LocalDateTime = util.DateUtils.now,
+    @JSExport completed: LocalDateTime = util.DateUtils.now
 ) extends DataFieldModel {
   override def toDataFields = Seq(
     DataField("id", Some(id.toString)),
