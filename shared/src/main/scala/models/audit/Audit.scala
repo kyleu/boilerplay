@@ -1,6 +1,5 @@
 package models.audit
 
-import java.net.InetAddress
 import java.time.LocalDateTime
 import java.util.UUID
 

@@ -1,5 +1,6 @@
 package services.audit
 
+import java.net.InetAddress
 import java.util.UUID
 
 import models.audit._
@@ -10,6 +11,7 @@ import util.tracing.TraceData
 import util.{Logging, NullUtils}
 
 object AuditHelper extends Logging {
+  private[this] val server = InetAddress.getLocalHost.getHostName
   private[this] var inst: Option[AuditService] = None
   private[this] def getInst = inst.getOrElse(throw new IllegalStateException("Not initialized."))
 
@@ -27,7 +29,7 @@ object AuditHelper extends Logging {
     val msg = s"Inserted new [$t] with [${fields.size}] fields:"
     val auditId = UUID.randomUUID
     val records = Seq(AuditRecord(auditId = auditId, t = t, pk = pk, changes = fields.map(f => AuditField(f.k, None, f.v))))
-    onAudit(Audit(id = auditId, act = "insert", client = creds.remoteAddress, userId = creds.user.id, msg = msg, records = records))
+    onAudit(Audit(id = auditId, act = "insert", server = server, client = creds.remoteAddress, userId = creds.user.id, msg = msg, records = records))
   }
 
   def onUpdate(
@@ -41,14 +43,14 @@ object AuditHelper extends Logging {
     val msg = s"Updated [${changes.size}] fields of $t[${pk.map(id => id.k + ": " + id.v.getOrElse(NullUtils.str)).mkString(", ")}]:\n"
     val auditId = UUID.randomUUID
     val records = Seq(AuditRecord(auditId = auditId, t = t, changes = changes))
-    onAudit(Audit(id = auditId, act = "update", client = creds.remoteAddress, userId = creds.user.id, msg = msg, records = records))
+    onAudit(Audit(id = auditId, act = "update", server = server, client = creds.remoteAddress, userId = creds.user.id, msg = msg, records = records))
   }
 
   def onRemove(t: String, pk: Seq[String], fields: Seq[DataField], creds: Credentials)(implicit trace: TraceData) = {
     val msg = s"Removed [$t] with [${fields.size}] fields:"
     val auditId = UUID.randomUUID
     val records = Seq(AuditRecord(auditId = auditId, t = t, pk = pk, changes = fields.map(f => AuditField(f.k, None, f.v))))
-    onAudit(Audit(id = auditId, act = "remove", client = creds.remoteAddress, userId = creds.user.id, msg = msg, records = records))
+    onAudit(Audit(id = auditId, act = "remove", server = server, client = creds.remoteAddress, userId = creds.user.id, msg = msg, records = records))
   }
 
   def pk(t: String, v: Any*) = AuditModelPk(t, v.map(_.toString))
