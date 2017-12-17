@@ -7,7 +7,7 @@ import models.queries.EngineHelper.quote
 
 object UserSearchQueries {
   private[this] val engine = "postgres"
-  private[this] val tableName = UserQueries.tableName
+  private[this] val tableName = SystemUserQueries.tableName
 
   case class IsUsernameInUse(name: String) extends SingleRowQuery[Boolean] {
     override val sql = s"""select count(*) as c from ${quote(tableName, engine)} where ${quote("username", engine)} = ?"""

@@ -101,7 +101,7 @@ object SystemUserSchema extends SchemaHelper("user") {
         fieldType = OptionType(systemUserType),
         resolve = c => {
           val dataFields = c.args.arg(DataFieldSchema.dataFieldsArg)
-          traceF(c.ctx, "create")(tn => c.ctx.services.systemUserServices.systemUserService.create(c.ctx.creds, dataFields)(tn))
+          traceF(c.ctx, "create")(tn => c.ctx.services.userServices.systemUserService.create(c.ctx.creds, dataFields)(tn))
         }
       ),
       Field(
@@ -111,7 +111,7 @@ object SystemUserSchema extends SchemaHelper("user") {
         fieldType = systemUserType,
         resolve = c => {
           val dataFields = c.args.arg(DataFieldSchema.dataFieldsArg)
-          traceF(c.ctx, "update")(tn => c.ctx.services.systemUserServices.systemUserService.update(c.ctx.creds, c.args.arg(userIdArg), dataFields)(tn).map(_._1))
+          traceF(c.ctx, "update")(tn => c.ctx.services.userServices.systemUserService.update(c.ctx.creds, c.args.arg(userIdArg), dataFields)(tn).map(_._1))
         }
       ),
       Field(
@@ -119,7 +119,7 @@ object SystemUserSchema extends SchemaHelper("user") {
         description = Some("Removes the User with the provided id."),
         arguments = userIdArg :: Nil,
         fieldType = systemUserType,
-        resolve = c => traceF(c.ctx, "remove")(tn => c.ctx.services.systemUserServices.systemUserService.remove(c.ctx.creds, c.args.arg(userIdArg))(tn))
+        resolve = c => traceF(c.ctx, "remove")(tn => c.ctx.services.userServices.systemUserService.remove(c.ctx.creds, c.args.arg(userIdArg))(tn))
       )
     )
   )

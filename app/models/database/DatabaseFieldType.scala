@@ -48,7 +48,10 @@ object DatabaseFieldType extends Enum[DatabaseFieldType[_]] with CirceEnum[Datab
 
   case object RefType extends DatabaseFieldType[String]("ref")
   case object XmlType extends DatabaseFieldType[String]("xml")
-  case object UuidType extends DatabaseFieldType[java.util.UUID]("uuid")
+  case object UuidType extends DatabaseFieldType[java.util.UUID]("uuid") {
+    override def apply(row: Row, col: String) = uuidCoerce(row.as[Any](col))
+    override def opt(row: Row, col: String) = row.asOpt[Any](col).map(uuidCoerce)
+  }
 
   case object ObjectType extends DatabaseFieldType[String]("object")
   case object StructType extends DatabaseFieldType[String]("struct")
