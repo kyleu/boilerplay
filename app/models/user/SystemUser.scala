@@ -54,6 +54,6 @@ case class SystemUser(
 
   def toSummary = {
     val title = username + " (" + id + ")"
-    models.result.data.DataSummary(model = "user", pk = Seq(id.toString), title = title)
+    models.result.data.DataSummary(model = "systemUser", pk = Seq(id.toString), title = title)
   }
 }

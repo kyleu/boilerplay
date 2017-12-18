@@ -13,7 +13,7 @@ import scala.concurrent.Future
 @javax.inject.Singleton
 class ModelNoteController @javax.inject.Inject() (override val app: Application, svc: ModelNoteService) extends BaseController("note") {
   def view(model: String, pk: String) = withSession("list", admin = true) { implicit request => implicit td =>
-    svc.getFor(model, pk).map(notes => render {
+    svc.getFor(request, model, pk).map(notes => render {
       case Accepts.Html() => Ok(views.html.admin.note.modelNoteList(request.identity, notes, model, pk))
       case Accepts.Json() => Ok(notes.asJson.spaces2).as(JSON)
       case acceptsCsv() => Ok(svc.csvFor(model + " " + pk.mkString("/"), 0, notes)).as("text/csv")

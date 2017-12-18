@@ -76,7 +76,7 @@ class AuditRecordController @javax.inject.Inject() (
 
   def view(id: java.util.UUID) = withSession("view", admin = true) { implicit request => implicit td =>
     val modelF = svc.getByPrimaryKey(request, id)
-    val notesF = app.coreServices.notes.getFor("auditRecord", id)
+    val notesF = app.coreServices.notes.getFor(request, "auditRecord", id)
     val auditsF = svc.getByModel(request, "auditRecord", id)
 
     notesF.flatMap(notes => auditsF.flatMap(audits => modelF.map {

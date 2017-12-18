@@ -35,6 +35,11 @@ object NoteSchema extends SchemaHelper("note") {
         name = "authorRel",
         fieldType = SystemUserSchema.systemUserType,
         resolve = ctx => SystemUserSchema.systemUserByPrimaryKeyFetcher.defer(ctx.value.author)
+      ),
+      Field(
+        name = "relatedNotes",
+        fieldType = ListType(NoteSchema.noteType),
+        resolve = c => c.ctx.app.coreServices.notes.getFor(c.ctx.creds, "note", c.value.id)(c.ctx.trace)
       )
     )
   )

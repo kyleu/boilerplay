@@ -1,9 +1,11 @@
 package models.audit
 
 import java.util.UUID
+
 import models.graphql.{GraphQLContext, SchemaHelper}
 import models.graphql.CommonSchema._
 import models.graphql.DateTimeSchema._
+import models.note.NoteSchema
 import models.result.data.DataFieldSchema
 import models.result.filter.FilterSchema._
 import models.result.orderBy.OrderBySchema._
@@ -35,6 +37,11 @@ object AuditRecordSchema extends SchemaHelper("auditRecord") {
         name = "auditIdRel",
         fieldType = AuditSchema.auditType,
         resolve = ctx => AuditSchema.auditByPrimaryKeyFetcher.defer(ctx.value.auditId)
+      ),
+      Field(
+        name = "relatedNotes",
+        fieldType = ListType(NoteSchema.noteType),
+        resolve = c => c.ctx.app.coreServices.notes.getFor(c.ctx.creds, "auditRecord", c.value.id)(c.ctx.trace)
       )
     )
   )

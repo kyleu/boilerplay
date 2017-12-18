@@ -17,7 +17,7 @@ import models.template.Theme
 import sangria.execution.deferred.{Fetcher, HasId, Relation}
 import util.FutureUtils.graphQlContext
 
-object SystemUserSchema extends SchemaHelper("user") {
+object SystemUserSchema extends SchemaHelper("systemUser") {
   implicit val roleEnum: EnumType[Role] = CommonSchema.deriveEnumeratumType(
     name = "RoleEnum",
     description = "The role of the system user.",
@@ -53,6 +53,11 @@ object SystemUserSchema extends SchemaHelper("user") {
         resolve = c => NoteSchema.noteByAuthorFetcher.deferRelSeq(
           NoteSchema.noteByAuthorRelation, c.value.id
         )
+      ),
+      Field(
+        name = "relatedNotes",
+        fieldType = ListType(NoteSchema.noteType),
+        resolve = c => c.ctx.app.coreServices.notes.getFor(c.ctx.creds, "systemUser", c.value.id)(c.ctx.trace)
       )
     )
   )
@@ -77,13 +82,13 @@ object SystemUserSchema extends SchemaHelper("user") {
       }
     ),
     Field(
-      name = "user",
+      name = "systemUser",
       fieldType = systemUserResultType,
       arguments = queryArg :: reportFiltersArg :: orderBysArg :: limitArg :: offsetArg :: Nil,
       resolve = c => traceF(c.ctx, "search")(td => runSearch(c.ctx.app.coreServices.users, c, td).map(toResult))
     ),
     Field(
-      name = "userByRole",
+      name = "systemUserByRole",
       fieldType = ListType(systemUserType),
       arguments = roleArg :: Nil,
       resolve = c => systemUserByRoleFetcher.deferRelSeq(systemUserByRoleRelation, c.arg(roleArg))
@@ -91,8 +96,8 @@ object SystemUserSchema extends SchemaHelper("user") {
   )
 
   val userMutationType = ObjectType(
-    name = "user",
-    description = "Mutations for Users.",
+    name = "systemUser",
+    description = "Mutations for System Users.",
     fields = fields[GraphQLContext, Unit](
       Field(
         name = "create",
@@ -124,5 +129,5 @@ object SystemUserSchema extends SchemaHelper("user") {
     )
   )
 
-  val mutationFields = fields[GraphQLContext, Unit](Field(name = "user", fieldType = userMutationType, resolve = _ => ()))
+  val mutationFields = fields[GraphQLContext, Unit](Field(name = "systemUser", fieldType = userMutationType, resolve = _ => ()))
 }

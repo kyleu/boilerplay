@@ -6,6 +6,7 @@ import models.graphql.{GraphQLContext, SchemaHelper}
 import models.graphql.CommonSchema._
 import models.graphql.DateTimeSchema._
 import models.audit.AuditRecordSchema._
+import models.note.NoteSchema
 import models.result.data.DataFieldSchema
 import models.result.filter.FilterSchema._
 import models.result.orderBy.OrderBySchema._
@@ -35,6 +36,11 @@ object AuditSchema extends SchemaHelper("audit") {
         resolve = c => AuditRecordSchema.auditRecordByAuditIdFetcher.deferRelSeq(
           AuditRecordSchema.auditRecordByAuditIdRelation, c.value.id
         )
+      ),
+      Field(
+        name = "relatedNotes",
+        fieldType = ListType(NoteSchema.noteType),
+        resolve = c => c.ctx.app.coreServices.notes.getFor(c.ctx.creds, "audit", c.value.id)(c.ctx.trace)
       )
     )
   )

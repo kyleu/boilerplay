@@ -20,7 +20,9 @@ import util.tracing.{TraceData, TracingService}
 import scala.concurrent.Future
 
 @javax.inject.Singleton
-class SystemUserService @javax.inject.Inject() (override val tracing: TracingService, hasher: PasswordHasher) extends ModelServiceHelper[SystemUser]("user") {
+class SystemUserService @javax.inject.Inject() (
+  override val tracing: TracingService, hasher: PasswordHasher
+) extends ModelServiceHelper[SystemUser]("systemUser") {
   def getByPrimaryKey(creds: Credentials, id: UUID)(implicit trace: TraceData) = traceF("get.by.primary.key") { td =>
     SystemDatabase.queryF(SystemUserQueries.getByPrimaryKey(id))(td)
   }
@@ -69,7 +71,7 @@ class SystemUserService @javax.inject.Inject() (override val tracing: TracingSer
 
   def create(creds: Credentials, fields: Seq[DataField])(implicit trace: TraceData) = traceF("create") { td =>
     SystemDatabase.executeF(SystemUserQueries.create(fields))(td).flatMap { _ =>
-      services.audit.AuditHelper.onInsert("User", Seq(fieldVal(fields, "id")), fields, creds)
+      services.audit.AuditHelper.onInsert("SystemUser", Seq(fieldVal(fields, "id")), fields, creds)
       getByPrimaryKey(creds, UUID.fromString(fieldVal(fields, "id")))
     }
   }
@@ -80,7 +82,7 @@ class SystemUserService @javax.inject.Inject() (override val tracing: TracingSer
       case Some(current) => SystemDatabase.executeF(SystemUserQueries.update(id, fields))(td).flatMap { _ =>
         getByPrimaryKey(creds, id)(td).map {
           case Some(newModel) =>
-            services.audit.AuditHelper.onUpdate("User", Seq(DataField("id", Some(id.toString))), current.toDataFields, fields, creds)
+            services.audit.AuditHelper.onUpdate("SystemUser", Seq(DataField("id", Some(id.toString))), current.toDataFields, fields, creds)
             newModel -> s"Updated [${fields.size}] fields of Identity [$id]."
           case None => throw new IllegalStateException(s"Cannot find Identity matching [$id].")
         }
@@ -102,7 +104,7 @@ class SystemUserService @javax.inject.Inject() (override val tracing: TracingSer
     getByPrimaryKey(creds, id)(txTd).flatMap {
       case Some(model) =>
         UserCache.getUser(id).foreach { user =>
-          services.audit.AuditHelper.onRemove("User", Seq(id.toString), user.toDataFields, creds)
+          services.audit.AuditHelper.onRemove("SystemUser", Seq(id.toString), user.toDataFields, creds)
         }
         SystemDatabase.executeF(SystemUserQueries.removeByPrimaryKey(id), Some(conn))(txTd).flatMap { _ =>
           SystemDatabase.executeF(PasswordInfoQueries.removeByPrimaryKey(Seq(model.profile.providerID, model.profile.providerKey)), Some(conn)).map { _ =>
@@ -136,7 +138,7 @@ class SystemUserService @javax.inject.Inject() (override val tracing: TracingSer
             val authInfo = hasher.hash(p)
             SystemDatabase.executeF(PasswordInfoQueries.UpdatePasswordInfo(loginInfo, authInfo)).map { _ =>
               UserCache.removeUser(id)
-              services.audit.AuditHelper.onInsert("user", Seq(id.toString), fields, creds)
+              services.audit.AuditHelper.onInsert("SystemUser", Seq(id.toString), fields, creds)
               id
             }
           case _ => Future.successful(id)

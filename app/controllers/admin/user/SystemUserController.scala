@@ -20,7 +20,7 @@ class SystemUserController @javax.inject.Inject() (
 ) extends BaseController("user") with UserEditHelper with UserSearchHelper {
   def view(id: UUID) = withSession("user.view", admin = true) { implicit request => implicit td =>
     val modelF = app.coreServices.users.getByPrimaryKey(request, id)
-    val notesF = app.coreServices.notes.getFor("user", id)
+    val notesF = app.coreServices.notes.getFor(request, "user", id)
     val auditsF = auditRecordS.getByModel(request, "user", id)
 
     notesF.flatMap(notes => auditsF.flatMap(audits => modelF.map {
