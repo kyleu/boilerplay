@@ -21,7 +21,7 @@ import scala.concurrent.Future
 
 @javax.inject.Singleton
 class SystemUserService @javax.inject.Inject() (
-  override val tracing: TracingService, hasher: PasswordHasher
+    override val tracing: TracingService, hasher: PasswordHasher
 ) extends ModelServiceHelper[SystemUser]("systemUser") {
   def getByPrimaryKey(creds: Credentials, id: UUID)(implicit trace: TraceData) = traceF("get.by.primary.key") { td =>
     SystemDatabase.queryF(SystemUserQueries.getByPrimaryKey(id))(td)
