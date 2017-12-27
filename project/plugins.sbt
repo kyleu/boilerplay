@@ -41,7 +41,7 @@ addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.3.1")
 addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "0.14.5")
 
 // Dependency Resolution
-addSbtPlugin("io.get-coursier" % "sbt-coursier" % "1.0.0-RC13")
+addSbtPlugin("io.get-coursier" % "sbt-coursier" % "1.0.0")
 
 // Code Quality
 addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "1.0.0") // scalastyle
