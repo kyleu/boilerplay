@@ -2,7 +2,7 @@ import sbt._
 
 object Dependencies {
   object Play {
-    private[this] val version = "2.6.9"
+    private[this] val version = "2.6.10"
     val lib = "com.typesafe.play" %% "play" % version
     val filters = play.sbt.PlayImport.filters
     val ws = play.sbt.PlayImport.ws
@@ -41,18 +41,18 @@ object Dependencies {
   object GraphQL {
     val sangria = "org.sangria-graphql" %% "sangria" % "1.3.3"
     val playJson = "org.sangria-graphql" %% "sangria-play-json" % "1.0.4"
-    val circe = "org.sangria-graphql" %% "sangria-circe" % "1.1.0"
+    val circe = "org.sangria-graphql" %% "sangria-circe" % "1.1.1"
   }
 
   object Serialization {
-    val circeVersion = "0.8.0"
+    val circeVersion = "0.9.0-M3"
   }
 
   object WebJars {
     val fontAwesome = "org.webjars" % "font-awesome" % "4.7.0"
     val jquery = "org.webjars" % "jquery" % "2.2.4"
     val materialize = "org.webjars" % "materializecss" % "0.100.2"
-    val moment = "org.webjars" % "momentjs" % "2.19.3"
+    val moment = "org.webjars" % "momentjs" % "2.20.1"
     val mousetrap = "org.webjars" % "mousetrap" % "1.6.0"
   }
 
@@ -72,7 +72,7 @@ object Dependencies {
   }
 
   object ScalaJS {
-    val scalaJSVersion = "0.6.20"
+    val scalaJSVersion = "0.6.21"
     val jQueryVersion = "0.9.2"
     val jvmStubs = "org.scala-js" %% "scalajs-stubs" % scalaJSVersion % "provided"
   }
@@ -81,7 +81,7 @@ object Dependencies {
     val scapegoatVersion = "1.3.3"
     val enumeratumVersion = "1.5.14"
     val booPickleVersion = "1.2.5"
-    val utestVersion = "0.6.0"
+    val utestVersion = "0.6.3"
 
     val scalatagsVersion = "0.6.7"
 

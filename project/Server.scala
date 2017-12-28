@@ -16,8 +16,6 @@ import com.typesafe.sbt.web.Import._
 import com.typesafe.sbt.web.SbtWeb
 import play.routes.compiler.InjectedRoutesGenerator
 import play.sbt.PlayImport.PlayKeys
-import play.sbt.routes.RoutesKeys.routesGenerator
-import play.sbt.PlayImport.PlayKeys._
 import play.sbt.routes.RoutesKeys
 import webscalajs.WebScalaJS.autoImport._
 import sbt.Keys._
@@ -47,9 +45,10 @@ object Server {
     libraryDependencies ++= dependencies,
 
     // Play
-    routesGenerator := InjectedRoutesGenerator,
+    RoutesKeys.routesGenerator := InjectedRoutesGenerator,
     RoutesKeys.routesImport += "util.web.QueryStringUtils._",
-    externalizeResources := false,
+    PlayKeys.externalizeResources := false,
+    PlayKeys.devSettings := Seq("play.server.akka.requestTimeout" -> "infinite"),
 
     // Scala.js
     scalaJSProjects := Seq(Client.client),
@@ -67,6 +66,11 @@ object Server {
     git.remoteRepo := scmInfo.value.get.connection,
 
     // Fat-Jar Assembly
+    assemblyJarName in assembly := Shared.projectId + ".jar",
+    assemblyMergeStrategy in assembly := {
+      case "play/reference-overrides.conf" => MergeStrategy.concat
+      case x => (assemblyMergeStrategy in assembly).value(x)
+    },
     fullClasspath in assembly += Attributed.blank(PlayKeys.playPackageAssets.value),
     mainClass in assembly := Some(Shared.projectName)
   )
