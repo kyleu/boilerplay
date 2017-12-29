@@ -5,6 +5,7 @@ import java.util.UUID
 import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.api.util.PasswordHasher
 import controllers.BaseController
+import controllers.admin.ServiceController
 import io.circe.syntax._
 import models.Application
 import models.result.RelationCount
@@ -17,7 +18,7 @@ import util.FutureUtils.defaultContext
 class SystemUserController @javax.inject.Inject() (
     override val app: Application, svc: SystemUserService, val authInfoRepository: AuthInfoRepository, val hasher: PasswordHasher,
     noteS: NoteService, auditRecordS: AuditRecordService
-) extends BaseController("user") with UserEditHelper with UserSearchHelper {
+) extends ServiceController(svc) with UserEditHelper with UserSearchHelper {
   def view(id: UUID) = withSession("user.view", admin = true) { implicit request => implicit td =>
     val modelF = app.coreServices.users.getByPrimaryKey(request, id)
     val notesF = app.coreServices.notes.getFor(request, "user", id)

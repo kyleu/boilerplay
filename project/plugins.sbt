@@ -52,6 +52,8 @@ addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "1.0.0") // scalastyl
 
 addSbtPlugin("org.scalariform" % "sbt-scalariform" % "1.8.1") // scalariformFormat
 
+addSbtPlugin("com.github.sbt" % "sbt-cpd" % "2.0.0")
+
 // Utilities
 addSbtPlugin("net.virtual-void" % "sbt-dependency-graph" % "0.9.0") // dependencyGraph
 

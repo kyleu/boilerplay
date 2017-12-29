@@ -6,6 +6,8 @@ import sbtcrossproject.CrossPlugin.autoImport._
 import scalajscrossproject.ScalaJSCrossPlugin.autoImport.{JSCrossProjectOps, JSPlatform}
 import sbtcrossproject.{crossProject, CrossType}
 
+import com.github.sbt.cpd.CpdKeys.cpdSkipDuplicateFiles
+
 object Shared {
   val projectId = "boilerplay"
   val projectName = "Boilerplay"
@@ -32,7 +34,9 @@ object Shared {
     scalacOptions in Test ++= Seq("-Yrangepos"),
 
     publishMavenStyle := false,
-    testFrameworks += new TestFramework("utest.runner.Framework")
+    testFrameworks += new TestFramework("utest.runner.Framework"),
+
+    cpdSkipDuplicateFiles := true
   )
 
   lazy val shared = (crossProject(JSPlatform, JVMPlatform).crossType(CrossType.Pure) in file("shared")).settings(commonSettings: _*).settings(

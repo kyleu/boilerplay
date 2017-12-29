@@ -1,22 +1,22 @@
 /* Generated File */
 package controllers.admin.audit
 
-import controllers.BaseController
 import io.circe.syntax._
 import java.util.UUID
+
+import controllers.admin.ServiceController
 import models.Application
 import models.audit.AuditRecordResult
 import models.result.data.DataSummary._
 import models.result.orderBy.OrderBy
+
 import scala.concurrent.Future
 import services.audit.AuditRecordService
 import util.FutureUtils.defaultContext
 import util.web.ControllerUtils.acceptsCsv
 
 @javax.inject.Singleton
-class AuditRecordController @javax.inject.Inject() (
-    override val app: Application, svc: AuditRecordService
-) extends BaseController("auditRecord") {
+class AuditRecordController @javax.inject.Inject() (override val app: Application, svc: AuditRecordService) extends ServiceController(svc) {
   def createForm = withSession("create.form", admin = true) { implicit request => implicit td =>
     val cancel = controllers.admin.audit.routes.AuditRecordController.list()
     val call = controllers.admin.audit.routes.AuditRecordController.create()
@@ -36,11 +36,7 @@ class AuditRecordController @javax.inject.Inject() (
     withSession("list", admin = true) { implicit request => implicit td =>
       val startMs = util.DateUtils.nowMillis
       val orderBys = OrderBy.forVals(orderBy, orderAsc).toSeq
-      val f = q match {
-        case Some(query) if query.nonEmpty => svc.searchWithCount(request, query, Nil, orderBys, limit.orElse(Some(100)), offset)
-        case _ => svc.getAllWithCount(request, Nil, orderBys, limit.orElse(Some(100)), offset)
-      }
-      f.map(r => render {
+      searchWithCount(q, orderBys, limit, offset).map(r => render {
         case Accepts.Html() => Ok(views.html.admin.audit.auditRecordList(
           request.identity, Some(r._1), r._2, q, orderBy, orderAsc, limit.getOrElse(100), offset.getOrElse(0)
         ))
@@ -53,11 +49,7 @@ class AuditRecordController @javax.inject.Inject() (
   def autocomplete(q: Option[String], orderBy: Option[String], orderAsc: Boolean, limit: Option[Int]) = {
     withSession("autocomplete", admin = true) { implicit request => implicit td =>
       val orderBys = OrderBy.forVals(orderBy, orderAsc).toSeq
-      val f = q match {
-        case Some(query) if query.nonEmpty => svc.search(request, query, Nil, orderBys, limit.orElse(Some(5)), None)
-        case _ => svc.getAll(request, Nil, orderBys, limit.orElse(Some(5)))
-      }
-      f.map(r => Ok(r.map(_.toSummary).asJson.spaces2).as(JSON))
+      search(q, orderBys, limit, None).map(r => Ok(r.map(_.toSummary).asJson.spaces2).as(JSON))
     }
   }
 

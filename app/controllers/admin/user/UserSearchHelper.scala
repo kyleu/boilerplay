@@ -11,11 +11,7 @@ trait UserSearchHelper { this: SystemUserController =>
     withSession("user.list", admin = true) { implicit request => implicit td =>
       val startMs = util.DateUtils.nowMillis
       val orderBys = OrderBy.forVals(col = orderBy, asc = orderAsc).toSeq
-      val f = q match {
-        case Some(query) if query.nonEmpty => app.coreServices.users.searchWithCount(request, query, Nil, orderBys, limit.orElse(Some(100)), offset)
-        case _ => app.coreServices.users.getAllWithCount(request, Nil, orderBys, limit.orElse(Some(100)), offset)
-      }
-      f.map(r => render {
+      searchWithCount(q, orderBys, limit, offset).map(r => render {
         case Accepts.Html() => Ok(views.html.admin.user.systemUserList(
           request.identity, q, orderBy, orderAsc, Some(r._1), r._2, limit.getOrElse(100), offset.getOrElse(0)
         ))
@@ -27,11 +23,7 @@ trait UserSearchHelper { this: SystemUserController =>
   def autocomplete(q: Option[String], orderBy: Option[String], orderAsc: Boolean, limit: Option[Int]) = {
     withSession("user.autocomplete", admin = true) { implicit request => implicit td =>
       val orderBys = OrderBy.forVals(col = orderBy, asc = orderAsc).toSeq
-      val f = q match {
-        case Some(query) if query.nonEmpty => app.coreServices.users.search(request, query, Nil, orderBys, limit.orElse(Some(5)), None)
-        case _ => app.coreServices.users.getAll(request, Nil, orderBys, limit.orElse(Some(5)))
-      }
-      f.map(r => Ok(r.map(_.toSummary).asJson.spaces2).as(JSON))
+      search(q, orderBys, limit, None).map(r => Ok(r.map(_.toSummary).asJson.spaces2).as(JSON))
     }
   }
 }
