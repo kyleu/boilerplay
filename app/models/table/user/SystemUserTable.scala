@@ -17,6 +17,14 @@ object SystemUserTable {
   val query = TableQuery[SystemUserTable]
 
   def getByPrimaryKey(id: UUID) = query.filter(_.id === id).result.headOption
+  def getByPrimaryKeySeq(ids: Seq[UUID]) = query.filter(_.id.inSet(ids)).result
+
+  def getByRoleSeq(roles: Seq[Role]) = query.filter(_.role.inSet(roles)).result
+
+  def removeByPrimaryKey(id: UUID) = query.filter(_.id === id).delete
+
+  def insert(model: SystemUser) = query += model
+  def insertBatch(seq: Seq[SystemUser]) = query ++= seq
 }
 
 class SystemUserTable(tag: Tag) extends Table[SystemUser](tag, "system_user") {

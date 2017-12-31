@@ -10,6 +10,7 @@ import models.queries.auth._
 import models.result.data.DataField
 import models.result.filter.Filter
 import models.result.orderBy.OrderBy
+import models.table.user.SystemUserTable
 import models.user.{Role, SystemUser}
 import services.ModelServiceHelper
 import services.database.ApplicationDatabase
@@ -24,14 +25,14 @@ class SystemUserService @javax.inject.Inject() (
     override val tracing: TracingService, hasher: PasswordHasher
 ) extends ModelServiceHelper[SystemUser]("systemUser") {
   def getByPrimaryKey(creds: Credentials, id: UUID)(implicit trace: TraceData) = traceF("get.by.primary.key") { td =>
-    ApplicationDatabase.queryF(SystemUserQueries.getByPrimaryKey(id))(td)
+    ApplicationDatabase.slick.run(SystemUserTable.getByPrimaryKey(id))(td)
   }
   def getByPrimaryKeySeq(creds: Credentials, idSeq: Seq[UUID])(implicit trace: TraceData) = traceF("get.by.primary.key.sequence") { td =>
-    ApplicationDatabase.queryF(SystemUserQueries.getByPrimaryKeySeq(idSeq))(td)
+    ApplicationDatabase.slick.run(SystemUserTable.getByPrimaryKeySeq(idSeq))(td)
   }
 
   def getByRoleSeq(roleSeq: Seq[Role])(implicit trace: TraceData) = traceF("get.by.role.sequence") { td =>
-    ApplicationDatabase.queryF(SystemUserQueries.getByRoleSeq(roleSeq))(td)
+    ApplicationDatabase.slick.run(SystemUserTable.getByRoleSeq(roleSeq))(td)
   }
 
   override def countAll(creds: Credentials, filters: Seq[Filter] = Nil)(implicit trace: TraceData) = traceF("count.all") { td =>
@@ -62,7 +63,7 @@ class SystemUserService @javax.inject.Inject() (
   }
 
   def insert(creds: Credentials, model: SystemUser)(implicit trace: TraceData) = traceF("insert") { td =>
-    ApplicationDatabase.executeF(SystemUserQueries.insert(model))(td).map { _ =>
+    ApplicationDatabase.slick.run(SystemUserTable.insert(model))(td).map { _ =>
       log.info(s"Inserted user [$model].")
       UserCache.cacheUser(model)
       model
@@ -106,7 +107,7 @@ class SystemUserService @javax.inject.Inject() (
         UserCache.getUser(id).foreach { user =>
           services.audit.AuditHelper.onRemove("SystemUser", Seq(id.toString), user.toDataFields, creds)
         }
-        ApplicationDatabase.executeF(SystemUserQueries.removeByPrimaryKey(id), Some(conn))(txTd).flatMap { _ =>
+        ApplicationDatabase.slick.run(SystemUserTable.removeByPrimaryKey(id))(txTd).flatMap { _ =>
           ApplicationDatabase.executeF(PasswordInfoQueries.removeByPrimaryKey(Seq(model.profile.providerID, model.profile.providerKey)), Some(conn)).map { _ =>
             UserCache.removeUser(id)
             model

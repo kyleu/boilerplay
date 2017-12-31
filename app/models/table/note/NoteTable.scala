@@ -15,7 +15,7 @@ object NoteTable {
 
   def removeByPrimaryKey(id: UUID) = query.filter(_.id === id).delete
 
-  def insert(n: Note) = query += n
+  def insert(model: Note) = query += model
   def insertBatch(seq: Seq[Note]) = query ++= seq
 }
 

@@ -18,14 +18,7 @@ object SystemUserQueries extends BaseQueries[SystemUser]("systemUser", "system_u
   override protected val pkColumns = Seq("id")
   override protected val searchColumns = Seq("id", "username", "email")
 
-  val insert = Insert
-  val insertBatch = InsertBatch
   val create = CreateFields
-  def getByPrimaryKey(id: UUID) = GetByPrimaryKey(Seq(id))
-  def getByPrimaryKeySeq(idSeq: Seq[UUID]) = new ColSeqQuery(column = "id", values = idSeq)
-
-  def getByRole(role: Role) = new ColSeqQuery(column = "role", values = Seq(role))
-  def getByRoleSeq(roleSeq: Seq[Role]) = new ColSeqQuery(column = "role", values = roleSeq.map(_.toString))
 
   def countAll(filters: Seq[Filter] = Nil) = onCountAll(filters)
   def getAll = GetAll
@@ -34,7 +27,6 @@ object SystemUserQueries extends BaseQueries[SystemUser]("systemUser", "system_u
   val searchCount = SearchCount
   val searchExact = SearchExact
 
-  def removeByPrimaryKey(id: UUID) = RemoveByPrimaryKey(Seq(id))
   def update(id: UUID, fields: Seq[DataField]) = UpdateFields(Seq(id), fields)
 
   case class UpdateUser(u: SystemUser) extends Statement {

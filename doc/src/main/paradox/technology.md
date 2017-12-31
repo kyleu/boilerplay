@@ -14,6 +14,7 @@ Boilerplay relies on a whole lot of tremendous open source projects. Here's a fe
 * [Scala.js](https://www.scala-js.org)
 * [Play Framework](https://www.playframework.com)
 * [Akka](http://akka.io)
+* [Slick](http://slick.lightbend.com)
 * [Sangria](http://sangria-graphql.org)
 * [Graphiql](https://github.com/graphql/graphiql)
 * [GraphQL Voyager](https://github.com/APIs-guru/graphql-voyager)
