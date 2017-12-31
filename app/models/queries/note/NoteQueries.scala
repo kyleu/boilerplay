@@ -35,7 +35,7 @@ object NoteQueries extends BaseQueries[Note]("note", "note") {
 
   case class CountByAuthor(author: UUID) extends ColCount(column = "author", values = Seq(author))
   case class GetByAuthor(author: UUID, orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int]) extends SeqQuery(
-    whereClause = Some(quote("author") + "  = ?"), orderBy = ResultFieldHelper.orderClause(fields, engine, orderBys: _*),
+    whereClause = Some(quote("author") + "  = ?"), orderBy = ResultFieldHelper.orderClause(fields, orderBys: _*),
     limit = limit, offset = offset, values = Seq(author)
   )
   case class GetByAuthorSeq(authorSeq: Seq[UUID]) extends ColSeqQuery(column = "author", values = authorSeq)

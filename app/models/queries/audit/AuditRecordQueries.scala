@@ -15,7 +15,7 @@ import org.postgresql.util.PGobject
 import io.circe.syntax._
 import io.circe.parser._
 
-object AuditRecordQueries extends BaseQueries[AuditRecord]("auditRecord", "audit_record", "postgres") {
+object AuditRecordQueries extends BaseQueries[AuditRecord]("auditRecord", "audit_record") {
   override val fields = Seq(
     DatabaseField(title = "Id", prop = "id", col = "id", typ = UuidType),
     DatabaseField(title = "Audit Id", prop = "auditId", col = "audit_id", typ = UuidType),
@@ -38,7 +38,7 @@ object AuditRecordQueries extends BaseQueries[AuditRecord]("auditRecord", "audit
 
   case class CountByAuditId(auditId: UUID) extends ColCount(column = "audit_id", values = Seq(auditId))
   case class GetByAuditId(auditId: UUID, orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int]) extends SeqQuery(
-    whereClause = Some(quote("audit_id") + "  = ?"), orderBy = ResultFieldHelper.orderClause(fields, engine, orderBys: _*),
+    whereClause = Some(quote("audit_id") + "  = ?"), orderBy = ResultFieldHelper.orderClause(fields, orderBys: _*),
     limit = limit, offset = offset, values = Seq(auditId.toString)
   )
   case class GetByAuditIdSeq(auditIdSeq: Seq[UUID]) extends ColSeqQuery(column = "audit_id", values = auditIdSeq)

@@ -50,7 +50,7 @@ object AuditQueries extends BaseQueries[Audit]("audit", "audit") {
 
   case class CountByUserId(user: UUID) extends ColCount(column = "user_id", values = Seq(user))
   case class GetByUserId(user: UUID, orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int]) extends SeqQuery(
-    whereClause = Some(quote("user_id") + "  = ?"), orderBy = ResultFieldHelper.orderClause(fields, engine, orderBys: _*),
+    whereClause = Some(quote("user_id") + "  = ?"), orderBy = ResultFieldHelper.orderClause(fields, orderBys: _*),
     limit = limit, offset = offset, values = Seq(user)
   )
   case class GetByUserIdSeq(userSeq: Seq[UUID]) extends ColSeqQuery(column = "user_id", values = userSeq)

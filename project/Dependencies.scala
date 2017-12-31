@@ -34,7 +34,6 @@ object Dependencies {
 
   object Database {
     val hikariCp = "com.zaxxer" % "HikariCP" % "2.7.4"
-    val mysql = "mysql" % "mysql-connector-java" % "5.1.45" // 6.0 is all different
     val postgres = "org.postgresql" % "postgresql" % "9.4.1212"
   }
 
