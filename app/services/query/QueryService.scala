@@ -1,8 +1,10 @@
 package services.query
 
 import play.api.Configuration
+import slick.dbio.NoStream
 import slick.jdbc.PostgresProfile.api._
-import util.tracing.TracingService
+import slick.sql.SqlAction
+import util.tracing.{TraceData, TracingService}
 
 object QueryService {
   val imports = slick.jdbc.PostgresProfile.api
@@ -10,7 +12,7 @@ object QueryService {
 
 class QueryService(val key: String, configPrefix: String) {
   private[this] var database: Option[Database] = None
-  def db = database.getOrElse(throw new IllegalStateException("QueryService has not been started."))
+  private[this] def db = database.getOrElse(throw new IllegalStateException("QueryService has not been started."))
 
   private[this] var tracingService: Option[TracingService] = None
   private[this] def tracer = tracingService.getOrElse(throw new IllegalStateException("QueryService has not been started."))
@@ -19,6 +21,11 @@ class QueryService(val key: String, configPrefix: String) {
     database.foreach(_ => throw new IllegalStateException("Database already initialized."))
     database = Some(Database.forConfig(configPrefix))
     tracingService = Some(tracing)
+  }
+
+  def run[R](act: SqlAction[R, NoStream, Nothing])(implicit parentTd: TraceData) = tracer.trace("run") { td =>
+    td.span.tag("sql", act.statements.mkString("\n\n"))
+    db.run(act)
   }
 
   def close() = {

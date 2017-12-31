@@ -1,4 +1,4 @@
-package services.settings
+package models.table.settings
 
 import models.settings.{Setting, SettingKey}
 import services.query.QueryService.imports._
@@ -20,5 +20,5 @@ class SettingTable(tag: Tag) extends Table[Setting](tag, "setting_values") {
   def key = column[SettingKey]("k", O.PrimaryKey)
   def value = column[String]("v")
 
-  override val * = (key, value) <> (Setting.tupled, Setting.unapply)
+  override val * = (key, value) <> ((Setting.apply _).tupled, Setting.unapply)
 }

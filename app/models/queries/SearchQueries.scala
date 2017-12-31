@@ -23,7 +23,7 @@ trait SearchQueries[T <: Product] { this: BaseQueries[T] =>
   ) extends Query[Seq[T]] {
     override val name = s"$key.get.all"
     private[this] val (whereClause, orderBy) = {
-      getResultSql(filters = filters, orderBys = orderBys, limit = limit, offset = offset, fields = fields, add = None)
+      getResultSql(filters = filters, orderBys = orderBys, fields = fields, add = None)
     }
     override val sql = getSql(whereClause = whereClause, orderBy = orderBy, limit = limit, offset = offset)
     override val values = filters.flatMap(_.v)
@@ -41,7 +41,7 @@ trait SearchQueries[T <: Product] { this: BaseQueries[T] =>
   ) extends Query[List[T]] {
     override val name = s"$key.search"
     private[this] val (whereClause, orderBy) = {
-      getResultSql(filters = filters, orderBys = orderBys, limit = limit, offset = offset, fields = fields, add = Some(searchClause(q)))
+      getResultSql(filters = filters, orderBys = orderBys, fields = fields, add = Some(searchClause(q)))
     }
     override val sql = getSql(whereClause = whereClause, orderBy = orderBy, limit = limit, offset = offset)
     override val values = filters.flatMap(_.v) ++ searchColumns.map(_ => "%" + q.toLowerCase + "%")

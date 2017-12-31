@@ -15,7 +15,7 @@ import services.cache.CacheService
 import services.audit.AuditService
 import services.note.ModelNoteService
 import services.query.MainDatabase
-import services.settings.SettingService
+import services.settings.SettingsService
 import util.{Config, FutureUtils, Logging}
 import util.FutureUtils.defaultContext
 import util.metrics.Instrumented
@@ -30,7 +30,7 @@ object Application {
   @javax.inject.Singleton
   class CoreServices @javax.inject.Inject() (
       val users: SystemUserService,
-      val settings: SettingService,
+      val settings: SettingsService,
       val audits: AuditService,
       val notes: ModelNoteService
   )

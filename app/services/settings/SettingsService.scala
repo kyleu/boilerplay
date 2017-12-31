@@ -1,15 +1,15 @@
 package services.settings
 
 import models.settings.{Setting, SettingKey}
+import models.table.settings.SettingTable
 import services.query.MainDatabase
 import util.Logging
 import util.tracing.{TraceData, TracingService}
 import services.query.QueryService.imports._
-
 import util.FutureUtils.serviceContext
 
 @javax.inject.Singleton
-class SettingService @javax.inject.Inject() (tracing: TracingService) extends Logging {
+class SettingsService @javax.inject.Inject() (tracing: TracingService) extends Logging {
   private[this] var settings = Seq.empty[Setting]
   private[this] var settingsMap = Map.empty[SettingKey, String]
 
@@ -23,7 +23,7 @@ class SettingService @javax.inject.Inject() (tracing: TracingService) extends Lo
   }
 
   def load()(implicit trace: TraceData) = tracing.trace("settings.service.load") { _ =>
-    MainDatabase.db.run(SettingTable.query.result).map { set =>
+    MainDatabase.run(SettingTable.query.result).map { set =>
       settingsMap = set.map(s => s.key -> s.value).toMap
       settings = SettingKey.values.map(k => Setting(k, settingsMap.getOrElse(k, k.default)))
       log.info(s"Loaded [${set.size}] system settings.")
@@ -39,11 +39,11 @@ class SettingService @javax.inject.Inject() (tracing: TracingService) extends Lo
     val s = Setting(key, value)
     val ret = if (s.isDefault) {
       settingsMap = settingsMap - key
-      MainDatabase.db.run(SettingTable.delete(key))
+      MainDatabase.run(SettingTable.delete(key))
     } else {
-      MainDatabase.db.run(SettingTable.getByPrimaryKey(key)).flatMap {
-        case Some(_) => MainDatabase.db.run(SettingTable.update(s))
-        case None => MainDatabase.db.run(SettingTable.insert(s))
+      MainDatabase.run(SettingTable.getByPrimaryKey(key)).flatMap {
+        case Some(_) => MainDatabase.run(SettingTable.update(s))
+        case None => MainDatabase.run(SettingTable.insert(s))
       }.map { _ =>
         settingsMap = settingsMap + (key -> value)
       }

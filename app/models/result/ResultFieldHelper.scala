@@ -36,10 +36,7 @@ object ResultFieldHelper {
     add.map(f => s"($clauseString) and $f").orElse(Some(clauseString))
   }
 
-  def getResultSql(
-    filters: Seq[Filter], orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None,
-    fields: Seq[DatabaseField] = Nil, add: Option[String] = None
-  ) = {
+  def getResultSql(filters: Seq[Filter], orderBys: Seq[OrderBy] = Nil, fields: Seq[DatabaseField] = Nil, add: Option[String] = None) = {
     filterClause(filters, fields, add) -> orderClause(fields, orderBys: _*)
   }
 }
