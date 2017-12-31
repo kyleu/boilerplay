@@ -9,8 +9,9 @@ import models.queries.note.NoteQueries
 import models.result.data.DataField
 import models.result.filter.Filter
 import models.result.orderBy.OrderBy
+import models.table.note.NoteTable
 import services.ModelServiceHelper
-import services.database.SystemDatabase
+import services.database.ApplicationDatabase
 import util.FutureUtils.serviceContext
 import util.tracing.{TraceData, TracingService}
 
@@ -19,49 +20,49 @@ import scala.concurrent.Future
 @javax.inject.Singleton
 class NoteService @javax.inject.Inject() (override val tracing: TracingService) extends ModelServiceHelper[Note]("note") {
   def getByPrimaryKey(creds: Credentials, id: UUID)(implicit trace: TraceData) = {
-    traceF("get.by.primary.key")(td => SystemDatabase.queryF(NoteQueries.getByPrimaryKey(id))(td))
+    traceF("get.by.primary.key")(td => ApplicationDatabase.slick.run(NoteTable.getByPrimaryKey(id))(td))
   }
   def getByPrimaryKeySeq(creds: Credentials, idSeq: Seq[UUID])(implicit trace: TraceData) = {
-    traceF("get.by.primary.key.seq")(td => SystemDatabase.queryF(NoteQueries.getByPrimaryKeySeq(idSeq))(td))
+    traceF("get.by.primary.key.seq")(td => ApplicationDatabase.slick.run(NoteTable.getByPrimaryKeySeq(idSeq))(td))
   }
 
   override def countAll(creds: Credentials, filters: Seq[Filter] = Nil)(implicit trace: TraceData) = {
-    traceF("get.all.count")(td => SystemDatabase.queryF(NoteQueries.countAll(filters))(td))
+    traceF("get.all.count")(td => ApplicationDatabase.queryF(NoteQueries.countAll(filters))(td))
   }
   override def getAll(
     creds: Credentials, filters: Seq[Filter], orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int] = None
   )(implicit trace: TraceData) = {
-    traceF("get.all")(td => SystemDatabase.queryF(NoteQueries.getAll(filters, orderBys, limit, offset))(td))
+    traceF("get.all")(td => ApplicationDatabase.queryF(NoteQueries.getAll(filters, orderBys, limit, offset))(td))
   }
 
   // Search
   override def searchCount(creds: Credentials, q: String, filters: Seq[Filter])(implicit trace: TraceData) = {
-    traceF("search.count")(td => SystemDatabase.queryF(NoteQueries.searchCount(q, filters))(td))
+    traceF("search.count")(td => ApplicationDatabase.queryF(NoteQueries.searchCount(q, filters))(td))
   }
   override def search(
     creds: Credentials, q: String, filters: Seq[Filter], orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int] = None
   )(implicit trace: TraceData) = {
-    traceF("search")(td => SystemDatabase.queryF(NoteQueries.search(q, filters, orderBys, limit, offset))(td))
+    traceF("search")(td => ApplicationDatabase.queryF(NoteQueries.search(q, filters, orderBys, limit, offset))(td))
   }
 
   def searchExact(
     creds: Credentials, q: String, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData) = {
-    traceF("search.exact")(td => SystemDatabase.queryF(NoteQueries.searchExact(q, orderBys, limit, offset))(td))
+    traceF("search.exact")(td => ApplicationDatabase.queryF(NoteQueries.searchExact(q, orderBys, limit, offset))(td))
   }
 
   def countByAuthor(creds: Credentials, author: UUID)(implicit trace: TraceData) = traceF("count.by.author") { td =>
-    SystemDatabase.queryF(NoteQueries.CountByAuthor(author))(td)
+    ApplicationDatabase.queryF(NoteQueries.CountByAuthor(author))(td)
   }
   def getByAuthor(creds: Credentials, author: UUID, orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int])(implicit trace: TraceData) = {
-    traceF("get.by.author")(td => SystemDatabase.queryF(NoteQueries.GetByAuthor(author, orderBys, limit, offset))(td))
+    traceF("get.by.author")(td => ApplicationDatabase.queryF(NoteQueries.GetByAuthor(author, orderBys, limit, offset))(td))
   }
   def getByAuthorSeq(creds: Credentials, authorSeq: Seq[UUID])(implicit trace: TraceData) = traceF("get.by.author.seq") { td =>
-    SystemDatabase.queryF(NoteQueries.GetByAuthorSeq(authorSeq))(td)
+    ApplicationDatabase.queryF(NoteQueries.GetByAuthorSeq(authorSeq))(td)
   }
 
   // Mutations
   def insert(creds: Credentials, model: Note)(implicit trace: TraceData) = {
-    traceF("insert")(td => SystemDatabase.executeF(NoteQueries.insert(model))(td).flatMap {
+    traceF("insert")(td => ApplicationDatabase.slick.run(NoteTable.insert(model))(td).flatMap {
       case 1 => getByPrimaryKey(creds, model.id)(td).map {
         case Some(n) =>
           services.audit.AuditHelper.onInsert("Note", Seq(n.id.toString), n.toDataFields, creds)
@@ -72,10 +73,10 @@ class NoteService @javax.inject.Inject() (override val tracing: TracingService) 
     })
   }
   def insertBatch(creds: Credentials, models: Seq[Note])(implicit trace: TraceData) = {
-    traceF("insertBatch")(td => SystemDatabase.executeF(NoteQueries.insertBatch(models))(td))
+    traceF("insertBatch")(td => ApplicationDatabase.slick.run(NoteTable.insertBatch(models))(td))
   }
   def create(creds: Credentials, fields: Seq[DataField])(implicit trace: TraceData) = traceF("create") { td =>
-    SystemDatabase.executeF(NoteQueries.create(fields))(td).flatMap { _ =>
+    ApplicationDatabase.executeF(NoteQueries.create(fields))(td).flatMap { _ =>
       services.audit.AuditHelper.onInsert("Note", Seq(fieldVal(fields, "id")), fields, creds)
       getByPrimaryKey(creds, UUID.fromString(fieldVal(fields, "id")))
     }
@@ -85,7 +86,7 @@ class NoteService @javax.inject.Inject() (override val tracing: TracingService) 
     traceF("remove")(td => getByPrimaryKey(creds, id)(td).flatMap {
       case Some(current) =>
         services.audit.AuditHelper.onRemove("Note", Seq(id.toString), current.toDataFields, creds)
-        SystemDatabase.executeF(NoteQueries.removeByPrimaryKey(id))(td).map(_ => current)
+        ApplicationDatabase.slick.run(NoteTable.removeByPrimaryKey(id))(td).map(_ => current)
       case None => throw new IllegalStateException(s"Cannot find Note matching [$id].")
     })
   }
@@ -93,7 +94,7 @@ class NoteService @javax.inject.Inject() (override val tracing: TracingService) 
   def update(creds: Credentials, id: UUID, fields: Seq[DataField])(implicit trace: TraceData) = {
     traceF("update")(td => getByPrimaryKey(creds, id)(td).flatMap {
       case Some(current) if fields.isEmpty => Future.successful(current -> s"No changes required for Note [$id].")
-      case Some(current) => SystemDatabase.executeF(NoteQueries.update(id, fields))(td).flatMap { _ =>
+      case Some(current) => ApplicationDatabase.executeF(NoteQueries.update(id, fields))(td).flatMap { _ =>
         getByPrimaryKey(creds, id)(td).map {
           case Some(newModel) =>
             services.audit.AuditHelper.onUpdate("Note", Seq(DataField("id", Some(id.toString))), current.toDataFields, fields, creds)

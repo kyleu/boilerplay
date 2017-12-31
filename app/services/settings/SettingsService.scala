@@ -1,10 +1,12 @@
 package services.settings
 
-import models.queries.settings.SettingQueries
 import models.settings.{Setting, SettingKey}
-import services.database.SystemDatabase
+import models.table.settings.SettingTable
+import services.database.ApplicationDatabase
 import util.Logging
 import util.tracing.{TraceData, TracingService}
+import services.database.SlickQueryService.imports._
+import util.FutureUtils.serviceContext
 
 @javax.inject.Singleton
 class SettingsService @javax.inject.Inject() (tracing: TracingService) extends Logging {
@@ -20,11 +22,12 @@ class SettingsService @javax.inject.Inject() (tracing: TracingService) extends L
     }
   }
 
-  def load()(implicit trace: TraceData) = tracing.traceBlocking("settings.service.load") { td =>
-    val x = SystemDatabase.query(SettingQueries.getAll())(td).map(s => s.key -> s.value).toMap
-    settingsMap = x
-    settings = SettingKey.values.map(k => Setting(k, settingsMap.getOrElse(k, k.default)))
-    log.debug(s"Loaded [${x.size}] system settings.")
+  def load()(implicit trace: TraceData) = tracing.trace("settings.service.load") { _ =>
+    ApplicationDatabase.slick.run(SettingTable.query.result).map { set =>
+      settingsMap = set.map(s => s.key -> s.value).toMap
+      settings = SettingKey.values.map(k => Setting(k, settingsMap.getOrElse(k, k.default)))
+      log.info(s"Loaded [${set.size}] system settings.")
+    }
   }
 
   def isOverride(key: SettingKey) = settingsMap.isDefinedAt(key)
@@ -32,22 +35,23 @@ class SettingsService @javax.inject.Inject() (tracing: TracingService) extends L
   def getAll = settings
   def getOverrides = settings.filter(s => isOverride(s.key))
 
-  def set(key: SettingKey, value: String)(implicit trace: TraceData) = tracing.traceBlocking("settings.service.set") { td =>
+  def set(key: SettingKey, value: String)(implicit trace: TraceData) = tracing.trace("settings.service.set") { _ =>
     val s = Setting(key, value)
-    if (s.isDefault) {
+    val ret = if (s.isDefault) {
       settingsMap = settingsMap - key
-      SystemDatabase.execute(SettingQueries.removeByPrimaryKey(key))
+      ApplicationDatabase.slick.run(SettingTable.delete(key))
     } else {
-      SystemDatabase.transaction { (txTd, conn) =>
-        SystemDatabase.query(SettingQueries.getByPrimaryKey(key), Some(conn))(txTd) match {
-          case Some(_) => SystemDatabase.execute(SettingQueries.Update(s), Some(conn))(txTd)
-          case None => SystemDatabase.execute(SettingQueries.insert(s), Some(conn))(txTd)
-        }
+      ApplicationDatabase.slick.run(SettingTable.getByPrimaryKey(key)).flatMap {
+        case Some(_) => ApplicationDatabase.slick.run(SettingTable.update(s))
+        case None => ApplicationDatabase.slick.run(SettingTable.insert(s))
+      }.map { _ =>
         settingsMap = settingsMap + (key -> value)
-      }(td)
+      }
     }
-    settings = SettingKey.values.map(k => Setting(k, settingsMap.getOrElse(k, k.default)))
-    value
+    ret.map { _ =>
+      settings = SettingKey.values.map(k => Setting(k, settingsMap.getOrElse(k, k.default)))
+      value
+    }
   }
 
   def allowRegistration = asBool(SettingKey.AllowRegistration)

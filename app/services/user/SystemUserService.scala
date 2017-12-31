@@ -10,9 +10,10 @@ import models.queries.auth._
 import models.result.data.DataField
 import models.result.filter.Filter
 import models.result.orderBy.OrderBy
+import models.table.user.SystemUserTable
 import models.user.{Role, SystemUser}
 import services.ModelServiceHelper
-import services.database.SystemDatabase
+import services.database.ApplicationDatabase
 import services.cache.UserCache
 import util.FutureUtils.serviceContext
 import util.tracing.{TraceData, TracingService}
@@ -24,45 +25,45 @@ class SystemUserService @javax.inject.Inject() (
     override val tracing: TracingService, hasher: PasswordHasher
 ) extends ModelServiceHelper[SystemUser]("systemUser") {
   def getByPrimaryKey(creds: Credentials, id: UUID)(implicit trace: TraceData) = traceF("get.by.primary.key") { td =>
-    SystemDatabase.queryF(SystemUserQueries.getByPrimaryKey(id))(td)
+    ApplicationDatabase.slick.run(SystemUserTable.getByPrimaryKey(id))(td)
   }
   def getByPrimaryKeySeq(creds: Credentials, idSeq: Seq[UUID])(implicit trace: TraceData) = traceF("get.by.primary.key.sequence") { td =>
-    SystemDatabase.queryF(SystemUserQueries.getByPrimaryKeySeq(idSeq))(td)
+    ApplicationDatabase.slick.run(SystemUserTable.getByPrimaryKeySeq(idSeq))(td)
   }
 
   def getByRoleSeq(roleSeq: Seq[Role])(implicit trace: TraceData) = traceF("get.by.role.sequence") { td =>
-    SystemDatabase.queryF(SystemUserQueries.getByRoleSeq(roleSeq))(td)
+    ApplicationDatabase.slick.run(SystemUserTable.getByRoleSeq(roleSeq))(td)
   }
 
   override def countAll(creds: Credentials, filters: Seq[Filter] = Nil)(implicit trace: TraceData) = traceF("count.all") { td =>
-    SystemDatabase.queryF(SystemUserQueries.countAll(filters))(td)
+    ApplicationDatabase.queryF(SystemUserQueries.countAll(filters))(td)
   }
   override def getAll(
     creds: Credentials, filters: Seq[Filter], orderBys: Seq[OrderBy], limit: Option[Int] = None, offset: Option[Int] = None
   )(implicit trace: TraceData) = {
-    traceF("get.all")(td => SystemDatabase.queryF(SystemUserQueries.getAll(filters, orderBys, limit, offset))(td))
+    traceF("get.all")(td => ApplicationDatabase.queryF(SystemUserQueries.getAll(filters, orderBys, limit, offset))(td))
   }
 
   override def searchCount(creds: Credentials, q: String, filters: Seq[Filter])(implicit trace: TraceData) = {
-    traceF("search.count")(td => SystemDatabase.queryF(SystemUserQueries.searchCount(q, filters))(td))
+    traceF("search.count")(td => ApplicationDatabase.queryF(SystemUserQueries.searchCount(q, filters))(td))
   }
   override def search(
     creds: Credentials, q: String, filters: Seq[Filter], orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int]
   )(implicit trace: TraceData) = {
-    traceF("search")(td => SystemDatabase.queryF(SystemUserQueries.search(q, filters, orderBys, limit, offset))(td))
+    traceF("search")(td => ApplicationDatabase.queryF(SystemUserQueries.search(q, filters, orderBys, limit, offset))(td))
   }
   def searchExact(
     creds: Credentials, q: String, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None
   )(implicit trace: TraceData) = {
-    traceF("search.exact")(td => SystemDatabase.queryF(SystemUserQueries.searchExact(q, orderBys, limit, offset))(td))
+    traceF("search.exact")(td => ApplicationDatabase.queryF(SystemUserQueries.searchExact(q, orderBys, limit, offset))(td))
   }
 
   def isUsernameInUse(name: String)(implicit trace: TraceData) = traceF("username.in.use") { td =>
-    SystemDatabase.queryF(UserSearchQueries.IsUsernameInUse(name))(td)
+    ApplicationDatabase.queryF(UserSearchQueries.IsUsernameInUse(name))(td)
   }
 
   def insert(creds: Credentials, model: SystemUser)(implicit trace: TraceData) = traceF("insert") { td =>
-    SystemDatabase.executeF(SystemUserQueries.insert(model))(td).map { _ =>
+    ApplicationDatabase.slick.run(SystemUserTable.insert(model))(td).map { _ =>
       log.info(s"Inserted user [$model].")
       UserCache.cacheUser(model)
       model
@@ -70,7 +71,7 @@ class SystemUserService @javax.inject.Inject() (
   }
 
   def create(creds: Credentials, fields: Seq[DataField])(implicit trace: TraceData) = traceF("create") { td =>
-    SystemDatabase.executeF(SystemUserQueries.create(fields))(td).flatMap { _ =>
+    ApplicationDatabase.executeF(SystemUserQueries.create(fields))(td).flatMap { _ =>
       services.audit.AuditHelper.onInsert("SystemUser", Seq(fieldVal(fields, "id")), fields, creds)
       getByPrimaryKey(creds, UUID.fromString(fieldVal(fields, "id")))
     }
@@ -79,7 +80,7 @@ class SystemUserService @javax.inject.Inject() (
   def update(creds: Credentials, id: UUID, fields: Seq[DataField])(implicit trace: TraceData) = {
     traceF("update")(td => getByPrimaryKey(creds, id)(td).flatMap {
       case Some(current) if fields.isEmpty => Future.successful(current -> s"No changes required for Identity [$id].")
-      case Some(current) => SystemDatabase.executeF(SystemUserQueries.update(id, fields))(td).flatMap { _ =>
+      case Some(current) => ApplicationDatabase.executeF(SystemUserQueries.update(id, fields))(td).flatMap { _ =>
         getByPrimaryKey(creds, id)(td).map {
           case Some(newModel) =>
             services.audit.AuditHelper.onUpdate("SystemUser", Seq(DataField("id", Some(id.toString))), current.toDataFields, fields, creds)
@@ -92,7 +93,7 @@ class SystemUserService @javax.inject.Inject() (
   }
 
   def updateUser(creds: Credentials, model: SystemUser)(implicit trace: TraceData) = traceF("update") { td =>
-    SystemDatabase.executeF(SystemUserQueries.UpdateUser(model))(td).map { rowsAffected =>
+    ApplicationDatabase.executeF(SystemUserQueries.UpdateUser(model))(td).map { rowsAffected =>
       if (rowsAffected != 1) { throw new IllegalStateException(s"Attempt to update user [${model.id}] affected [$rowsAffected}] rows.") }
       log.info(s"Updated user [$model].")
       UserCache.cacheUser(model)
@@ -100,14 +101,14 @@ class SystemUserService @javax.inject.Inject() (
     }
   }
 
-  def remove(creds: Credentials, id: UUID)(implicit trace: TraceData) = traceF("remove")(td => SystemDatabase.transaction { (txTd, conn) =>
+  def remove(creds: Credentials, id: UUID)(implicit trace: TraceData) = traceF("remove")(td => ApplicationDatabase.transaction { (txTd, conn) =>
     getByPrimaryKey(creds, id)(txTd).flatMap {
       case Some(model) =>
         UserCache.getUser(id).foreach { user =>
           services.audit.AuditHelper.onRemove("SystemUser", Seq(id.toString), user.toDataFields, creds)
         }
-        SystemDatabase.executeF(SystemUserQueries.removeByPrimaryKey(id), Some(conn))(txTd).flatMap { _ =>
-          SystemDatabase.executeF(PasswordInfoQueries.removeByPrimaryKey(Seq(model.profile.providerID, model.profile.providerKey)), Some(conn)).map { _ =>
+        ApplicationDatabase.slick.run(SystemUserTable.removeByPrimaryKey(id))(txTd).flatMap { _ =>
+          ApplicationDatabase.executeF(PasswordInfoQueries.removeByPrimaryKey(Seq(model.profile.providerID, model.profile.providerKey)), Some(conn)).map { _ =>
             UserCache.removeUser(id)
             model
           }
@@ -125,9 +126,9 @@ class SystemUserService @javax.inject.Inject() (
         DataField("email", Some(email)),
         DataField("role", Some(role.toString))
       )
-      SystemDatabase.executeF(SystemUserQueries.update(id, fields)).flatMap { _ =>
+      ApplicationDatabase.executeF(SystemUserQueries.update(id, fields)).flatMap { _ =>
         if (email != originalEmail) {
-          SystemDatabase.executeF(PasswordInfoQueries.UpdateEmail(originalEmail, email))
+          ApplicationDatabase.executeF(PasswordInfoQueries.UpdateEmail(originalEmail, email))
         } else {
           Future.successful(0)
         }
@@ -136,7 +137,7 @@ class SystemUserService @javax.inject.Inject() (
           case Some(p) =>
             val loginInfo = LoginInfo(CredentialsProvider.ID, email)
             val authInfo = hasher.hash(p)
-            SystemDatabase.executeF(PasswordInfoQueries.UpdatePasswordInfo(loginInfo, authInfo)).map { _ =>
+            ApplicationDatabase.executeF(PasswordInfoQueries.UpdatePasswordInfo(loginInfo, authInfo)).map { _ =>
               UserCache.removeUser(id)
               services.audit.AuditHelper.onInsert("SystemUser", Seq(id.toString), fields, creds)
               id

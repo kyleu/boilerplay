@@ -30,9 +30,6 @@ object NoteQueries extends BaseQueries[Note]("note", "note") {
   val searchCount = SearchCount
   val searchExact = SearchExact
 
-  def getByPrimaryKey(id: UUID) = GetByPrimaryKey(Seq(id))
-  def getByPrimaryKeySeq(idSeq: Seq[UUID]) = new ColSeqQuery(column = "id", values = idSeq)
-
   case class CountByAuthor(author: UUID) extends ColCount(column = "author", values = Seq(author))
   case class GetByAuthor(author: UUID, orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int]) extends SeqQuery(
     whereClause = Some(quote("author") + "  = ?"), orderBy = ResultFieldHelper.orderClause(fields, orderBys: _*),

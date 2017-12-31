@@ -69,7 +69,6 @@ object AuditQueries extends BaseQueries[Audit]("audit", "audit") {
   )
 
   override protected def toDataSeq(t: Audit) = {
-
     Seq(t.id, t.act, t.app, t.client, t.server, t.userId, models.tag.Tag.toJavaMap(t.tags), t.msg, t.started, t.completed)
   }
 }

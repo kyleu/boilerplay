@@ -16,11 +16,12 @@ import services.audit.AuditService
 import services.note.ModelNoteService
 import services.settings.SettingsService
 import util.{Config, FutureUtils, Logging}
+import util.FutureUtils.defaultContext
 import util.metrics.Instrumented
 import util.tracing.TracingService
 import util.web.TracingWSClient
 
-import scala.concurrent.Future
+import scala.concurrent.{Await, Future}
 
 object Application {
   var initialized = false
@@ -49,7 +50,8 @@ class Application @javax.inject.Inject() (
   if (Application.initialized) {
     log.info("Skipping initialization after failure.")
   } else {
-    start()
+    import scala.concurrent.duration._
+    Await.result(start(), 20.seconds)
   }
 
   val supervisor = actorSystem.actorOf(Props(classOf[ActorSupervisor], this), "supervisor")
@@ -67,17 +69,16 @@ class Application @javax.inject.Inject() (
 
     FileService.setRootDir(config.dataDir)
 
-    SystemDatabase.open(config.cnf, tracing)
     ApplicationDatabase.open(config.cnf, tracing)
     MasterDdl.init()
-    coreServices.settings.load()
-
-    true
+    coreServices.settings.load().map { _ =>
+      true
+    }
   }
 
   private[this] def stop() = {
     ApplicationDatabase.close()
-    SystemDatabase.close()
+
     CacheService.close()
     if (config.metrics.tracingEnabled) { tracing.close() }
     if (config.metrics.prometheusEnabled) { Instrumented.stop() }

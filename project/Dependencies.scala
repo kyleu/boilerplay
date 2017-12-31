@@ -33,8 +33,12 @@ object Dependencies {
   }
 
   object Database {
-    val hikariCp = "com.zaxxer" % "HikariCP" % "2.7.4"
+    val version = "3.2.1"
+
     val postgres = "org.postgresql" % "postgresql" % "9.4.1212"
+    val hikariCp = "com.zaxxer" % "HikariCP" % "2.7.4"
+    val slickCore = "com.typesafe.slick" %% "slick" % version
+    val slickariCp = "com.typesafe.slick" %% "slick-hikaricp" % version
   }
 
   object GraphQL {
