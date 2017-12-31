@@ -20,6 +20,6 @@ object SettingsSchema extends SchemaHelper("settings") {
     name = "setting",
     description = Some("The system setting values for this application."),
     fieldType = ListType(settingType),
-    resolve = c => traceB(c.ctx, "search")(_ => c.ctx.services.settingsService.getAll)
+    resolve = c => traceB(c.ctx, "search")(_ => c.ctx.app.coreServices.settings.getAll)
   ))
 }

@@ -28,7 +28,7 @@ object Server {
     Seq(
       Tracing.brave, Tracing.http, Tracing.logging, Metrics.metrics, Metrics.metricsJvm, Metrics.metricsHttp, Metrics.metricsPush,
       Akka.actor, Akka.logging, Akka.visualMailbox, Play.filters, Play.guice, Play.ws, Play.json, Play.cache,
-      Database.postgres, Database.hikariCp, GraphQL.sangria, GraphQL.playJson, GraphQL.circe,
+      Database.postgres, Database.hikariCp, Database.slickCore, Database.slickariCp, GraphQL.sangria, GraphQL.playJson, GraphQL.circe,
       Authentication.silhouette, Authentication.hasher, Authentication.persistence, Authentication.crypto,
       WebJars.jquery, WebJars.fontAwesome, WebJars.materialize, WebJars.moment, WebJars.mousetrap,
       Utils.csv, Utils.scalaGuice, Utils.commonsIo, Utils.betterFiles, Akka.testkit, Play.test, Testing.scalaTest

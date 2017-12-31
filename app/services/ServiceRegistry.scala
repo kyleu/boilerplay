@@ -9,6 +9,4 @@ class ServiceRegistry @javax.inject.Inject() (
     val userServices: services.user.SystemUserServiceRegistry,
 
     /* End model service files */
-
-    val settingsService: services.settings.SettingsService
 )
