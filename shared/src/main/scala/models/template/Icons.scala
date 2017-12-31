@@ -33,7 +33,7 @@ object Icons {
   val note = "fa-sticky-note-o"
 
   val sandbox = "fa-folder-o"
-  val user = "fa-user"
+  val systemUser = "fa-user"
 
   // Start model icons
   // End model icons

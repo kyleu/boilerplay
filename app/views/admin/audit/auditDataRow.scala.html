@@ -7,7 +7,7 @@
   <td>
     @model.userId.toString.take(8)
     <a class="theme-text" href="@controllers.admin.user.routes.SystemUserController.view(model.userId)">
-      <i class="fa @models.template.Icons.user"></i>
+      <i class="fa @models.template.Icons.systemUser"></i>
     </a>
   </td>
   <td>@models.tag.Tag.toString(model.tags)</td>

@@ -1,6 +1,6 @@
 @(title: String, fieldName: String, key: String, showPublic: Boolean = false)
 <div class="card-panel option-panel">
-  <h6><i class="fa @models.template.Icons.user"></i> @title</h6>
+  <h6><i class="fa @models.template.Icons.systemUser"></i> @title</h6>
   @if(showPublic) { <p>
     <input id="input-@key-visitor" name="@fieldName" type="radio" value="visitor" />
     <label for="input-@key-visitor">Everyone</label>

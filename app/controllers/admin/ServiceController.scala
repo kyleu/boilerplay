@@ -10,7 +10,8 @@ import util.tracing.TraceData
 
 abstract class ServiceController[T](val svc: ModelServiceHelper[T]) extends BaseController(svc.key) {
   def search(q: Option[String], orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int])(
-    implicit request: SecuredRequest[AuthEnv, AnyContent], traceData: TraceData
+    implicit
+    request: SecuredRequest[AuthEnv, AnyContent], traceData: TraceData
   ) = {
     q match {
       case Some(query) if query.nonEmpty => svc.search(request, query, Nil, orderBys, limit.orElse(Some(100)), offset)
@@ -19,7 +20,8 @@ abstract class ServiceController[T](val svc: ModelServiceHelper[T]) extends Base
   }
 
   def searchWithCount(q: Option[String], orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int])(
-    implicit request: SecuredRequest[AuthEnv, AnyContent], traceData: TraceData
+    implicit
+    request: SecuredRequest[AuthEnv, AnyContent], traceData: TraceData
   ) = {
     q match {
       case Some(query) if query.nonEmpty => svc.searchWithCount(request, query, Nil, orderBys, limit.orElse(Some(100)), offset)

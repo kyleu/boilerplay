@@ -5,7 +5,7 @@
     <div class="collection with-header">
       <div class="collection-header">
         <div class="right"><button type="submit" class="btn theme waves-effect waves-light">@if(isNew) {Create} else {Save} User</button></div>
-        <h5><i class="fa @models.template.Icons.user"></i> @title @if(self.id == model.id) { <span>(You)</span> }</h5>
+        <h5><i class="fa @models.template.Icons.systemUser"></i> @title @if(self.id == model.id) { <span>(You)</span> }</h5>
       </div>
       <div class="collection-item">
         <table class="highlight">
