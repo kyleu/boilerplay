@@ -1,10 +1,11 @@
 package models.table.settings
 
 import models.settings.{Setting, SettingKey}
-import services.query.QueryService.imports._
-import services.query.QueryTypes._
+import services.database.SlickQueryService.imports._
 
 object SettingTable {
+  implicit val settingKeyColumnType = MappedColumnType.base[SettingKey, String](b => b.toString, i => SettingKey.withName(i))
+
   val query = TableQuery[SettingTable]
 
   def getByPrimaryKey(key: SettingKey) = query.filter(_.key === key).result.headOption
@@ -15,7 +16,7 @@ object SettingTable {
 }
 
 class SettingTable(tag: Tag) extends Table[Setting](tag, "setting_values") {
-  import services.query.QueryTypes.settingKeyColumnType
+  import SettingTable.settingKeyColumnType
 
   def key = column[SettingKey]("k", O.PrimaryKey)
   def value = column[String]("v")

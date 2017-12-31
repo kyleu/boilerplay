@@ -25,11 +25,15 @@ abstract class JdbcDatabase(override val key: String, configPrefix: String) exte
   private[this] var ds: Option[HikariDataSource] = None
   private[this] def source = ds.getOrElse(throw new IllegalStateException("Database not initialized."))
 
+  private[this] var slickOpt: Option[SlickQueryService] = None
+  def slick = slickOpt.getOrElse(throw new IllegalStateException("Database not initialized."))
+
   def open(cfg: play.api.Configuration, svc: TracingService) = {
     ds.foreach(_ => throw new IllegalStateException("Database already initialized."))
 
     val config = DatabaseConfig.fromConfig(cfg, configPrefix)
     val properties = new Properties
+    val maxPoolSize = 32
 
     val poolConfig = new HikariConfig(properties) {
       setPoolName(util.Config.projectId + "." + key)
@@ -38,7 +42,7 @@ abstract class JdbcDatabase(override val key: String, configPrefix: String) exte
       setPassword(config.password.getOrElse(""))
       setConnectionTimeout(10000)
       setMinimumIdle(1)
-      setMaximumPoolSize(32)
+      setMaximumPoolSize(maxPoolSize)
     }
 
     val poolDataSource = new HikariDataSource(poolConfig)
@@ -46,6 +50,8 @@ abstract class JdbcDatabase(override val key: String, configPrefix: String) exte
     ds = Some(poolDataSource)
 
     start(config, svc)
+
+    slickOpt = Some(new SlickQueryService(key, source, maxPoolSize, svc))
   }
 
   override def transaction[A](f: (TraceData, Connection) => A)(implicit traceData: TraceData) = trace("transaction") { td =>
@@ -94,6 +100,7 @@ abstract class JdbcDatabase(override val key: String, configPrefix: String) exte
   }
 
   override def close() = {
+    slickOpt.foreach(_.close())
     ds.foreach(_.close())
     true
   }

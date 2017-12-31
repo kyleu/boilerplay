@@ -2,10 +2,10 @@ package services.settings
 
 import models.settings.{Setting, SettingKey}
 import models.table.settings.SettingTable
-import services.query.MainDatabase
+import services.database.ApplicationDatabase
 import util.Logging
 import util.tracing.{TraceData, TracingService}
-import services.query.QueryService.imports._
+import services.database.SlickQueryService.imports._
 import util.FutureUtils.serviceContext
 
 @javax.inject.Singleton
@@ -23,7 +23,7 @@ class SettingsService @javax.inject.Inject() (tracing: TracingService) extends L
   }
 
   def load()(implicit trace: TraceData) = tracing.trace("settings.service.load") { _ =>
-    MainDatabase.run(SettingTable.query.result).map { set =>
+    ApplicationDatabase.slick.run(SettingTable.query.result).map { set =>
       settingsMap = set.map(s => s.key -> s.value).toMap
       settings = SettingKey.values.map(k => Setting(k, settingsMap.getOrElse(k, k.default)))
       log.info(s"Loaded [${set.size}] system settings.")
@@ -39,11 +39,11 @@ class SettingsService @javax.inject.Inject() (tracing: TracingService) extends L
     val s = Setting(key, value)
     val ret = if (s.isDefault) {
       settingsMap = settingsMap - key
-      MainDatabase.run(SettingTable.delete(key))
+      ApplicationDatabase.slick.run(SettingTable.delete(key))
     } else {
-      MainDatabase.run(SettingTable.getByPrimaryKey(key)).flatMap {
-        case Some(_) => MainDatabase.run(SettingTable.update(s))
-        case None => MainDatabase.run(SettingTable.insert(s))
+      ApplicationDatabase.slick.run(SettingTable.getByPrimaryKey(key)).flatMap {
+        case Some(_) => ApplicationDatabase.slick.run(SettingTable.update(s))
+        case None => ApplicationDatabase.slick.run(SettingTable.insert(s))
       }.map { _ =>
         settingsMap = settingsMap + (key -> value)
       }

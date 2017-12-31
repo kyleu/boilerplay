@@ -4,17 +4,19 @@ import java.time.LocalDateTime
 import java.util.UUID
 
 import models.note.Note
-import services.query.QueryService.imports._
-import services.query.QueryTypes._
+import services.database.SlickQueryService.imports._
+import models.table.QueryTypes._
 
 object NoteTable {
   val query = TableQuery[NoteTable]
 
   def getByPrimaryKey(id: UUID) = query.filter(_.id === id).result.headOption
-  def getByPrimaryKeySeq(ids: Seq[UUID]) = query.filter(_.id.inSet(ids)).result.headOption
+  def getByPrimaryKeySeq(ids: Seq[UUID]) = query.filter(_.id.inSet(ids)).result
+
+  def removeByPrimaryKey(id: UUID) = query.filter(_.id === id).delete
 
   def insert(n: Note) = query += n
-  def delete(id: UUID) = query.filter(_.id === id).delete
+  def insertBatch(seq: Seq[Note]) = query ++= seq
 }
 
 class NoteTable(tag: Tag) extends Table[Note](tag, "note") {

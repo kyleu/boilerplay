@@ -3,17 +3,17 @@ package services.note
 import models.auth.Credentials
 import models.note.Note
 import models.queries.note.{ModelNoteQueries, NoteQueries}
-import services.database.SystemDatabase
+import services.database.ApplicationDatabase
 import util.tracing.{TraceData, TracingService}
 
 @javax.inject.Singleton
 class ModelNoteService @javax.inject.Inject() (val svc: NoteService, tracing: TracingService) {
   def getFor(creds: Credentials, model: String, pk: Any*)(implicit trace: TraceData) = tracing.trace("get.by.model") { td =>
-    SystemDatabase.queryF(ModelNoteQueries.GetByModel(model, pk.mkString("/")))
+    ApplicationDatabase.queryF(ModelNoteQueries.GetByModel(model, pk.mkString("/")))
   }
 
   def getForSeq(creds: Credentials, models: Seq[(String, String)])(implicit trace: TraceData) = tracing.trace("get.by.model.seq") { td =>
-    SystemDatabase.queryF(ModelNoteQueries.GetByModelSeq(models.map(x => x._1 -> x._2.mkString("/"))))
+    ApplicationDatabase.queryF(ModelNoteQueries.GetByModelSeq(models.map(x => x._1 -> x._2.mkString("/"))))
   }
 
   def csvFor(operation: String, totalCount: Int, rows: Seq[Note])(implicit trace: TraceData) = tracing.traceBlocking("note.service.note") { td =>

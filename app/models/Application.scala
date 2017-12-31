@@ -14,7 +14,6 @@ import services.user.SystemUserService
 import services.cache.CacheService
 import services.audit.AuditService
 import services.note.ModelNoteService
-import services.query.MainDatabase
 import services.settings.SettingsService
 import util.{Config, FutureUtils, Logging}
 import util.FutureUtils.defaultContext
@@ -70,8 +69,6 @@ class Application @javax.inject.Inject() (
 
     FileService.setRootDir(config.dataDir)
 
-    MainDatabase.open(config.cnf, tracing)
-    SystemDatabase.open(config.cnf, tracing)
     ApplicationDatabase.open(config.cnf, tracing)
     MasterDdl.init()
     coreServices.settings.load().map { _ =>
@@ -81,8 +78,6 @@ class Application @javax.inject.Inject() (
 
   private[this] def stop() = {
     ApplicationDatabase.close()
-    SystemDatabase.close()
-    MainDatabase.close()
 
     CacheService.close()
     if (config.metrics.tracingEnabled) { tracing.close() }
