@@ -1,5 +1,7 @@
 package models.table
 
+import java.util.UUID
+
 import com.github.tminglei.slickpg._
 
 trait PostgresProfileEx extends ExPostgresProfile
@@ -13,7 +15,11 @@ trait PostgresProfileEx extends ExPostgresProfile
 
   object APIEx extends API
     with ArrayImplicits with DateTimeImplicits with JsonImplicits with NetImplicits
-    with LTreeImplicits with RangeImplicits with HStoreImplicits with SearchImplicits with SearchAssistants
+    with LTreeImplicits with RangeImplicits with HStoreImplicits with SearchImplicits with SearchAssistants {
+
+    implicit val strSeqTypeMapper: DriverJdbcType[Seq[String]] = new SimpleArrayJdbcType[String]("text").to(_.toSeq)
+    implicit val uuidSeqTypeMapper: DriverJdbcType[Seq[UUID]] = new SimpleArrayJdbcType[UUID]("uuid").to(_.toSeq)
+  }
 }
 
 object PostgresProfileEx extends PostgresProfileEx
