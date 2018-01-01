@@ -69,15 +69,14 @@ class AuditController @javax.inject.Inject() (override val app: Application, svc
   def view(id: java.util.UUID) = withSession("view", admin = true) { implicit request => implicit td =>
     val modelF = svc.getByPrimaryKey(request, id)
     val notesF = app.coreServices.notes.getFor(request, "audit", id)
-    val auditsF = recordS.getByModel(request, "audit", id)
 
-    notesF.flatMap(notes => auditsF.flatMap(audits => modelF.map {
+    notesF.flatMap(notes => modelF.map {
       case Some(model) => render {
-        case Accepts.Html() => Ok(views.html.admin.audit.auditView(request.identity, model, notes, audits, app.config.debug))
+        case Accepts.Html() => Ok(views.html.admin.audit.auditView(request.identity, model, notes, app.config.debug))
         case Accepts.Json() => Ok(model.asJson.spaces2).as(JSON)
       }
       case None => NotFound(s"No Audit found with id [$id].")
-    }))
+    })
   }
 
   def editForm(id: java.util.UUID) = withSession("edit.form", admin = true) { implicit request => implicit td =>
