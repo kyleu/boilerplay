@@ -4,7 +4,6 @@ import java.time.LocalDateTime
 import java.util.UUID
 
 import com.mohiva.play.silhouette.api.LoginInfo
-import models.table.QueryTypes._
 import models.user.{Role, SystemUser, UserPreferences}
 import services.database.SlickQueryService.imports._
 import util.JsonSerializers.{readPreferences, writePreferences}

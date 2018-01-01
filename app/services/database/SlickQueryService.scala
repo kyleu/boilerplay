@@ -2,13 +2,13 @@ package services.database
 
 import javax.sql.DataSource
 
+import models.table.PostgresProfileEx.api._
 import slick.dbio.NoStream
-import slick.jdbc.PostgresProfile.api._
 import slick.sql.SqlAction
 import util.tracing.{TraceData, TracingService}
 
 object SlickQueryService {
-  val imports = slick.jdbc.PostgresProfile.api
+  val imports = models.table.PostgresProfileEx.api
 }
 
 class SlickQueryService(key: String, dataSource: DataSource, maxConnections: Int, tracingService: TracingService) {

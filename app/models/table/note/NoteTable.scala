@@ -5,7 +5,6 @@ import java.util.UUID
 
 import models.note.Note
 import services.database.SlickQueryService.imports._
-import models.table.QueryTypes._
 
 object NoteTable {
   val query = TableQuery[NoteTable]

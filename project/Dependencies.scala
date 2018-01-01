@@ -38,7 +38,9 @@ object Dependencies {
     val postgres = "org.postgresql" % "postgresql" % "9.4.1212"
     val hikariCp = "com.zaxxer" % "HikariCP" % "2.7.4"
     val slickCore = "com.typesafe.slick" %% "slick" % version
-    val slickariCp = "com.typesafe.slick" %% "slick-hikaricp" % version
+    val slickHikariCp = "com.typesafe.slick" %% "slick-hikaricp" % version
+    val slickPg = "com.github.tminglei" %% "slick-pg" % "0.15.4"
+    val slickPgCirce = "com.github.tminglei" %% "slick-pg_circe-json" % "0.15.4"
   }
 
   object GraphQL {
