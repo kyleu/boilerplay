@@ -26,13 +26,13 @@ object SystemUserTable {
   def insertBatch(seq: Seq[SystemUser]) = query ++= seq
 }
 
-class SystemUserTable(tag: Tag) extends Table[SystemUser](tag, "system_user") {
+class SystemUserTable(tag: Tag) extends Table[SystemUser](tag, "system_users") {
   import SystemUserTable.{loginInfoColumnType, roleColumnType, userPreferencesColumnType}
 
   def id = column[UUID]("id", O.PrimaryKey)
   def username = column[String]("username")
-  def preferences = column[UserPreferences]("preferences")
-  def profile = column[LoginInfo]("profile")
+  def preferences = column[UserPreferences]("prefs")
+  def profile = column[LoginInfo]("email")
   def role = column[Role]("role")
   def created = column[LocalDateTime]("created")
 

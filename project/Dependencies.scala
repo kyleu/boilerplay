@@ -39,8 +39,8 @@ object Dependencies {
     val hikariCp = "com.zaxxer" % "HikariCP" % "2.7.4"
     val slickCore = "com.typesafe.slick" %% "slick" % version
     val slickHikariCp = "com.typesafe.slick" %% "slick-hikaricp" % version
-    val slickPg = "com.github.tminglei" %% "slick-pg" % "0.15.4"
-    val slickPgCirce = "com.github.tminglei" %% "slick-pg_circe-json" % "0.15.4"
+    val slickPg = "com.github.tminglei" %% "slick-pg" % "0.15.5"
+    val slickPgCirce = "com.github.tminglei" %% "slick-pg_circe-json" % "0.15.5"
   }
 
   object GraphQL {
@@ -50,11 +50,11 @@ object Dependencies {
   }
 
   object Serialization {
-    val circeVersion = "0.9.0-M3"
+    val circeVersion = "0.9.0"
   }
 
   object WebJars {
-    val fontAwesome = "org.webjars" % "font-awesome" % "4.7.0"
+    val fontAwesome = "org.webjars" % "font-awesome" % "5.0.2"
     val jquery = "org.webjars" % "jquery" % "2.2.4"
     val materialize = "org.webjars" % "materializecss" % "0.100.2"
     val moment = "org.webjars" % "momentjs" % "2.20.1"
@@ -84,7 +84,7 @@ object Dependencies {
 
   object Utils {
     val scapegoatVersion = "1.3.3"
-    val enumeratumVersion = "1.5.14"
+    val enumeratumVersion = "1.5.15"
     val booPickleVersion = "1.2.5"
     val utestVersion = "0.6.3"
 
