@@ -45,6 +45,8 @@ class FormService(id: String) extends Entrypoint("form") {
     ))
   }
 
+  scalajs.js.Dynamic.global.$("select").material_select()
+
   Logging.info(s"Form service started. [${fields.length}] fields.")
 
   private[this] def wireField(checkbox: JQuery) = {

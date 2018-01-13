@@ -2,7 +2,7 @@ import sbt._
 
 object Dependencies {
   object Play {
-    private[this] val version = "2.6.10"
+    private[this] val version = "2.6.11"
     val lib = "com.typesafe.play" %% "play" % version
     val filters = play.sbt.PlayImport.filters
     val ws = play.sbt.PlayImport.ws
@@ -13,7 +13,7 @@ object Dependencies {
   }
 
   object Akka {
-    private[this] val version = "2.5.8"
+    private[this] val version = "2.5.9"
     val actor = "com.typesafe.akka" %% "akka-actor" % version
     val remote = "com.typesafe.akka" %% "akka-remote" % version
     val logging = "com.typesafe.akka" %% "akka-slf4j" % version
@@ -36,7 +36,7 @@ object Dependencies {
     val version = "3.2.1"
 
     val postgres = "org.postgresql" % "postgresql" % "9.4.1212"
-    val hikariCp = "com.zaxxer" % "HikariCP" % "2.7.4"
+    val hikariCp = "com.zaxxer" % "HikariCP" % "2.7.5"
     val slickCore = "com.typesafe.slick" %% "slick" % version
     val slickHikariCp = "com.typesafe.slick" %% "slick-hikaricp" % version
     val slickPg = "com.github.tminglei" %% "slick-pg" % "0.15.5"
@@ -46,7 +46,7 @@ object Dependencies {
   object GraphQL {
     val sangria = "org.sangria-graphql" %% "sangria" % "1.3.3"
     val playJson = "org.sangria-graphql" %% "sangria-play-json" % "1.0.4"
-    val circe = "org.sangria-graphql" %% "sangria-circe" % "1.1.1"
+    val circe = "org.sangria-graphql" %% "sangria-circe" % "1.2.0"
   }
 
   object Serialization {

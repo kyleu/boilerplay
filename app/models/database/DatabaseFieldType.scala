@@ -1,5 +1,6 @@
 package models.database
 
+import enumeratum.values.{StringEnum, StringEnumEntry}
 import enumeratum.{CirceEnum, Enum, EnumEntry}
 import org.postgresql.jdbc.PgArray
 import org.postgresql.util.PGobject
@@ -51,6 +52,11 @@ object DatabaseFieldType extends Enum[DatabaseFieldType[_]] with CirceEnum[Datab
   case object UuidType extends DatabaseFieldType[java.util.UUID]("uuid") {
     override def apply(row: Row, col: String) = uuidCoerce(row.as[Any](col))
     override def opt(row: Row, col: String) = row.asOpt[Any](col).map(uuidCoerce)
+  }
+
+  case class EnumType[T <: StringEnumEntry](t: StringEnum[T]) extends DatabaseFieldType[T]("enum") {
+    override def apply(row: Row, col: String) = t.withValue(row.as[String](col))
+    override def opt(row: Row, col: String) = row.asOpt[String](col).map(t.withValue)
   }
 
   case object ObjectType extends DatabaseFieldType[String]("object")
