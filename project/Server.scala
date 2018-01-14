@@ -47,7 +47,7 @@ object Server {
 
     // Play
     RoutesKeys.routesGenerator := InjectedRoutesGenerator,
-    RoutesKeys.routesImport += "util.web.QueryStringUtils._",
+    RoutesKeys.routesImport ++= Seq("util.web.QueryStringUtils._", "util.web.ModelBindables._"),
     PlayKeys.externalizeResources := false,
     PlayKeys.devSettings := Seq("play.server.akka.requestTimeout" -> "infinite"),
 

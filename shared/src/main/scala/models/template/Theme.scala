@@ -4,7 +4,7 @@ import enumeratum.values.{StringCirceEnum, StringEnum, StringEnumEntry}
 
 import scala.util.Random
 
-sealed abstract class Theme(val value: String, val color: String) extends StringEnumEntry {
+sealed abstract class Theme(override val value: String, val color: String) extends StringEnumEntry {
   override def toString: String = value
 }
 
