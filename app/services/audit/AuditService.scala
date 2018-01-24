@@ -70,7 +70,7 @@ class AuditService @javax.inject.Inject() (
     traceF("search.exact")(td => ApplicationDatabase.queryF(AuditQueries.searchExact(q, orderBys, limit, offset))(td))
   }
 
-  def countByUserId(user: UUID)(implicit trace: TraceData) = traceF("count.by.user") { td =>
+  def countByUserId(creds: Credentials, user: UUID)(implicit trace: TraceData) = traceF("count.by.user") { td =>
     ApplicationDatabase.queryF(AuditQueries.CountByUserId(user))(td)
   }
   def getByUserId(creds: Credentials, id: UUID, orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int])(implicit trace: TraceData) = {
