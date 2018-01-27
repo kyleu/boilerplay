@@ -1,10 +1,12 @@
 package controllers
 
 import com.mohiva.play.silhouette.api.actions.{SecuredRequest, UserAwareRequest}
+import io.circe.{Json, Printer}
 import io.prometheus.client.Histogram
 import models.Application
 import models.auth.{AuthEnv, Credentials}
 import models.user.Role
+import play.api.http.{ContentTypeOf, Writeable}
 import play.api.mvc._
 import util.Logging
 import util.metrics.Instrumented
@@ -62,6 +64,12 @@ abstract class BaseController(val name: String) extends InjectedController with 
   protected def getTraceData(implicit requestHeader: RequestHeader) = requestHeader.attrs(TracingFilter.traceKey)
 
   protected implicit def toCredentials(request: SecuredRequest[AuthEnv, _]): Credentials = Credentials.fromRequest(request)
+
+  private[this] val defaultPrinter = Printer.spaces2
+  protected implicit val contentTypeOfJson: ContentTypeOf[Json] = ContentTypeOf(Some("application/json"))
+  protected implicit def writableOfJson(implicit codec: Codec, printer: Printer = defaultPrinter): Writeable[Json] = {
+    Writeable(a => codec.encode(a.pretty(printer)))
+  }
 
   protected def modelForm(rawForm: Option[Map[String, Seq[String]]]) = ControllerUtilities.modelForm(rawForm)
 
