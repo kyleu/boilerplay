@@ -13,7 +13,11 @@ struct Tag {
 }
 
 struct UUID {
-  1: required string str
+  1: required string v
+}
+
+struct BigDecimal {
+  1: required string v
 }
 
 struct DataField {

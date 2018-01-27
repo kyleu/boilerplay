@@ -1,1 +1,1 @@
-thrift -strict -r -out ../../../../tmp/thriftgen --gen java boilerplay.thrift
+thrift -strict -r -out ../../../../tmp/thriftgen --gen java all.thrift

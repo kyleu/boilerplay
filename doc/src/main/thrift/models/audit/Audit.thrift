@@ -1,7 +1,8 @@
+// Generated File
 namespace java models.audit
 
-include "../common.thrift"
-include "../result.thrift"
+include "../../common.thrift"
+include "../../result.thrift"
 
 struct Audit {
   1: required common.UUID id;
@@ -10,25 +11,10 @@ struct Audit {
   4: required string client;
   5: required string server;
   6: required common.UUID userId;
-  7: required common.Tag tags;
+  7: required list<common.Tag> tags;
   8: required string msg;
-  9: required list<AuditRecord> records;
-  10: required common.LocalDateTime started
-  11: required common.LocalDateTime completed
-}
-
-struct AuditField {
-  1: required string k;
-  2: optional string o;
-  3: optional string n;
-}
-
-struct AuditRecord {
-  1: required common.UUID id;
-  2: required common.UUID auditId;
-  3: required string t;
-  4: required list<string> pk;
-  5: required list<AuditField> changes;
+  9: required common.LocalDateTime started;
+  10: required common.LocalDateTime completed;
 }
 
 struct AuditResult {

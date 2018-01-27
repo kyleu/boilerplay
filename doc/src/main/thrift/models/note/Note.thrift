@@ -1,7 +1,8 @@
+// Generated File
 namespace java models.note
 
-include "../common.thrift"
-include "../result.thrift"
+include "../../common.thrift"
+include "../../result.thrift"
 
 struct Note {
   1: required common.UUID id;
@@ -9,7 +10,7 @@ struct Note {
   3: optional string relPk;
   4: required string text;
   5: required common.UUID author;
-  6: required common.LocalDateTime created
+  6: required common.LocalDateTime created;
 }
 
 struct NoteResult {

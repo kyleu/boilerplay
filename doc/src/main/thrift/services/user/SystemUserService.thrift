@@ -1,88 +1,74 @@
-namespace java services.audit
+// Generated File
+namespace java services.user
 
-include "../common.thrift"
-include "../result.thrift"
-include "../models/user.thrift"
+include "../../common.thrift"
+include "../../result.thrift"
+include "../../models/user/SystemUser.thrift"
 
 service SystemUserService {
-  user.SystemUser getByPrimaryKey(
+  SystemUser.SystemUser getByPrimaryKey(
     1: common.Credentials creds,
-    2: common.UUID id
-  );
-  list<user.SystemUser> getByPrimaryKeySeq(
+    2: required common.UUID id
+  )
+  SystemUser.SystemUser getByPrimaryKeySeq(
     1: common.Credentials creds,
-    2: list<common.UUID> idSeq
-  );
+    2: required list<common.UUID> id
+  )
 
   common.int countAll(
     1: common.Credentials creds,
     2: list<result.Filter> filters
-  );
-  list<user.SystemUser> getAll(
+  )
+  list<SystemUser.SystemUser> getAll(
     1: common.Credentials creds,
     2: list<result.Filter> filters,
     3: list<result.OrderBy> orderBys,
     4: common.int limit,
     5: common.int offset
-  );
+  )
 
   common.int searchCount(
     1: common.Credentials creds,
     2: required string q,
     3: list<result.Filter> filters
-  );
-  list<user.SystemUser> search(
+  )
+  list<SystemUser.SystemUser> search(
     1: common.Credentials creds,
     2: required string q,
     3: list<result.Filter> filters,
     4: list<result.OrderBy> orderBys,
     5: common.int limit,
     6: common.int offset
-  );
-  list<user.SystemUser> searchExact(
+  )
+  list<SystemUser.SystemUser> searchExact(
     1: common.Credentials creds,
     2: required string q,
     3: list<result.OrderBy> orderBys,
     4: common.int limit,
     5: common.int offset
-  );
-
-  common.int countByAuthor(
-    1: common.Credentials creds,
-    2: common.UUID author
   )
-  list<user.SystemUser> getByAuthor(
-    1: common.Credentials creds,
-    2: common.UUID author,
-    3: list<result.OrderBy> orderBys,
-    4: common.int limit,
-    5: common.int offset
-  );
-  list<user.SystemUser> getByAuthorSeq(
-    1: common.Credentials creds,
-    2: list<common.UUID> authorSeq
-  );
 
-  user.SystemUser insert(
+
+  SystemUser.SystemUser insert(
     1: common.Credentials creds,
-    2: user.SystemUser model
+    2: required SystemUser.SystemUser model
   )
   common.int insertBatch(
     1: common.Credentials creds,
-    2: list<user.SystemUser> models
+    2: required list<SystemUser.SystemUser> models
   )
-  user.SystemUser create(
+  SystemUser.SystemUser create(
     1: common.Credentials creds,
-    2: list<common.DataField> fields
+    2: required  common.UUID id,
+    3: list<common.DataField> fields
   )
-
-  user.SystemUser remove(
+  SystemUser.SystemUser remove(
     1: common.Credentials creds,
-    2: common.UUID id
+    2: required  common.UUID id
   )
-  user.SystemUser update(
+  SystemUser.SystemUser update(
     1: common.Credentials creds,
-    2: common.UUID id,
+    2: required  common.UUID id,
     3: list<common.DataField> fields
   )
 }
