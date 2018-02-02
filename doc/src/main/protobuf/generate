@@ -1,0 +1,1 @@
+protoc --descriptor_set_out=../../../../tmp/protogen/export.proto --include_imports --java_out=../../../../tmp/protogen all.proto

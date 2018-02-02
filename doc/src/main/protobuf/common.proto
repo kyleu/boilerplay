@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package common;
+option java_package = "common";
+option java_multiple_files = true;
+
+message Tag {
+    string k = 1;
+    string v = 2;
+}
+
+message DataField {
+    string k = 1;
+    string v = 2;
+}
+
+message Credentials {
+    string user = 1;
+    string remoteAddress = 2;
+    map<string, string> tags = 3;
+}

@@ -39,8 +39,8 @@ object Dependencies {
     val hikariCp = "com.zaxxer" % "HikariCP" % "2.7.6"
     val slickCore = "com.typesafe.slick" %% "slick" % version
     val slickHikariCp = "com.typesafe.slick" %% "slick-hikaricp" % version
-    val slickPg = "com.github.tminglei" %% "slick-pg" % "0.15.6"
-    val slickPgCirce = "com.github.tminglei" %% "slick-pg_circe-json" % "0.15.6"
+    val slickPg = "com.github.tminglei" %% "slick-pg" % "0.15.7"
+    val slickPgCirce = "com.github.tminglei" %% "slick-pg_circe-json" % "0.15.7"
     val slickless = "io.underscore" %% "slickless" % "0.3.2"
   }
 
@@ -55,7 +55,7 @@ object Dependencies {
   }
 
   object WebJars {
-    val fontAwesome = "org.webjars" % "font-awesome" % "5.0.2"
+    val fontAwesome = "org.webjars" % "font-awesome" % "5.0.6"
     val jquery = "org.webjars" % "jquery" % "2.2.4"
     val materialize = "org.webjars" % "materializecss" % "0.100.2"
     val moment = "org.webjars" % "momentjs" % "2.20.1"
@@ -98,6 +98,6 @@ object Dependencies {
   }
 
   object Testing {
-    val scalaTest = "org.scalatest" %% "scalatest" % "3.0.4" % "test"
+    val scalaTest = "org.scalatest" %% "scalatest" % "3.0.5" % "test"
   }
 }

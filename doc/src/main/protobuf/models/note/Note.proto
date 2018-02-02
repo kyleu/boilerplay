@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package models.note;
+option java_package = "models.note";
+option java_multiple_files = true;
+
+import public "result.proto";
+
+message Note {
+    string id = 1;
+    string relType = 2;
+    string relPk = 3;
+    string text = 4;
+    string author = 5;
+    string created = 6;
+}
+
+message NoteResult {
+    repeated common.result.Filter filters = 1;
+    repeated common.result.OrderBy orderBys = 2;
+    int32 totalCount = 3;
+    common.result.PagingOptions paging = 4;
+    repeated Note results = 5;
+    int32 durationMs = 6;
+    string occurred = 7;
+}

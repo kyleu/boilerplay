@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+
+import public "result.proto";
+
+/* Begin generated Thrift model includes */
+import public "models/note/Note.proto";
+/* End generated Thrift model includes */
