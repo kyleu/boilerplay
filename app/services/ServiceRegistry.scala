@@ -1,7 +1,5 @@
 package services
 
-import services.foo.{BarMutationService, BarQueryService}
-
 @javax.inject.Singleton
 class ServiceRegistry @javax.inject.Inject() (
     /* Start model service files */
