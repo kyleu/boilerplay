@@ -36,12 +36,12 @@ object Dependencies {
     val version = "3.2.1"
 
     val postgres = "org.postgresql" % "postgresql" % "9.4.1212"
-    val hikariCp = "com.zaxxer" % "HikariCP" % "2.7.6"
+    val hikariCp = "com.zaxxer" % "HikariCP" % "2.7.7"
     val slickCore = "com.typesafe.slick" %% "slick" % version
     val slickHikariCp = "com.typesafe.slick" %% "slick-hikaricp" % version
     val slickPg = "com.github.tminglei" %% "slick-pg" % "0.15.7"
     val slickPgCirce = "com.github.tminglei" %% "slick-pg_circe-json" % "0.15.7"
-    val slickless = "io.underscore" %% "slickless" % "0.3.2"
+    val slickless = "io.underscore" %% "slickless" % "0.3.3"
   }
 
   object GraphQL {

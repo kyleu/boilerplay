@@ -1,7 +1,8 @@
 package models.graphql
 
 import java.time._
-import sangria.marshalling.DateSupport
+
+import sangria.marshalling.{DateSupport, ToInput}
 import sangria.schema._
 import sangria.validation.ValueCoercionViolation
 
@@ -39,6 +40,8 @@ object DateTimeSchema {
     }
   )
 
+  implicit val localDateTimeToInput: ToInput.ScalarToInput[LocalDateTime] = new ToInput.ScalarToInput()
+
   private[this] def parseLocalDate(s: String) = Try(LocalDate.parse(s, fmtLocalDate)) match {
     case Success(date) => Right(date)
     case Failure(_) => Left(LocalDateCoercionViolation)
@@ -62,6 +65,8 @@ object DateTimeSchema {
     }
   )
 
+  implicit val localDateToInput: ToInput.ScalarToInput[LocalDate] = new ToInput.ScalarToInput()
+
   private[this] def parseLocalTime(s: String) = Try(LocalTime.parse(s, fmtLocalTime)) match {
     case Success(date) => Right(date)
     case Failure(_) => Left(LocalDateCoercionViolation)
@@ -80,4 +85,6 @@ object DateTimeSchema {
       case _ => Left(LocalDateCoercionViolation)
     }
   )
+
+  implicit val localTimeToInput: ToInput.ScalarToInput[LocalTime] = new ToInput.ScalarToInput()
 }
