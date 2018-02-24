@@ -1,3 +1,5 @@
+scapegoatVersion in ThisBuild := Dependencies.Utils.scapegoatVersion
+
 lazy val doc = Documentation.doc
 
 lazy val sharedJs = Shared.sharedJs

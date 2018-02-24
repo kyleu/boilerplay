@@ -19,7 +19,7 @@ addSbtPlugin("com.typesafe.sbt" % "sbt-digest" % "1.1.3")
 addSbtPlugin("com.typesafe.sbt" % "sbt-gzip" % "1.0.2")
 
 // Scala.js
-addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.21")
+addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.22")
 
 addSbtPlugin("org.scala-native" % "sbt-crossproject" % "0.2.2")
 
@@ -46,9 +46,9 @@ addSbtPlugin("io.get-coursier" % "sbt-coursier" % "1.0.0")
 // Code Quality
 addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "1.0.0") // scalastyle
 
-//addSbtPlugin("com.sksamuel.scapegoat" %% "sbt-scapegoat" % "1.0.7")
+addSbtPlugin("com.sksamuel.scapegoat" %% "sbt-scapegoat" % "1.0.7")
 
-//addSbtPlugin("ch.epfl.scala" % "sbt-scalafix" % "0.5.6")
+addSbtPlugin("ch.epfl.scala" % "sbt-scalafix" % "0.5.10")
 
 addSbtPlugin("org.scalariform" % "sbt-scalariform" % "1.8.1") // scalariformFormat
 
@@ -64,6 +64,8 @@ addSbtPlugin("com.orrsella" % "sbt-stats" % "1.0.7") // stats
 // addSbtPlugin("pl.project13.sbt" % "sbt-jol" % "0.1.3") // jol:internals
 
 // addSbtPlugin("com.github.jozic" % "sbt-about-plugins" % "0.1.0") // about-plugins
+
+addSbtPlugin("com.typesafe.sbt" % "sbt-license-report" % "1.2.0")
 
 // Visualization
 addSbtPlugin("com.dwijnand" % "sbt-project-graph" % "0.2.2") // projectsGraphDot

@@ -13,7 +13,7 @@ object Dependencies {
   }
 
   object Akka {
-    private[this] val version = "2.5.9"
+    private[this] val version = "2.5.10"
     val actor = "com.typesafe.akka" %% "akka-actor" % version
     val remote = "com.typesafe.akka" %% "akka-remote" % version
     val logging = "com.typesafe.akka" %% "akka-slf4j" % version
@@ -36,22 +36,22 @@ object Dependencies {
     val version = "3.2.1"
 
     val postgres = "org.postgresql" % "postgresql" % "9.4.1212"
-    val hikariCp = "com.zaxxer" % "HikariCP" % "2.7.7"
+    val hikariCp = "com.zaxxer" % "HikariCP" % "2.7.8"
     val slickCore = "com.typesafe.slick" %% "slick" % version
     val slickHikariCp = "com.typesafe.slick" %% "slick-hikaricp" % version
-    val slickPg = "com.github.tminglei" %% "slick-pg" % "0.15.7"
-    val slickPgCirce = "com.github.tminglei" %% "slick-pg_circe-json" % "0.15.7"
+    val slickPg = "com.github.tminglei" %% "slick-pg" % "0.16.0"
+    val slickPgCirce = "com.github.tminglei" %% "slick-pg_circe-json" % "0.16.0"
     val slickless = "io.underscore" %% "slickless" % "0.3.3"
   }
 
   object GraphQL {
-    val sangria = "org.sangria-graphql" %% "sangria" % "1.3.3"
+    val sangria = "org.sangria-graphql" %% "sangria" % "1.4.0"
     val playJson = "org.sangria-graphql" %% "sangria-play-json" % "1.0.4"
-    val circe = "org.sangria-graphql" %% "sangria-circe" % "1.2.0"
+    val circe = "org.sangria-graphql" %% "sangria-circe" % "1.2.1"
   }
 
   object Serialization {
-    val circeVersion = "0.9.0"
+    val circeVersion = "0.9.1"
   }
 
   object WebJars {
@@ -78,13 +78,13 @@ object Dependencies {
   }
 
   object ScalaJS {
-    val scalaJSVersion = "0.6.21"
+    val scalaJSVersion = "0.6.22"
     val jQueryVersion = "0.9.2"
     val jvmStubs = "org.scala-js" %% "scalajs-stubs" % scalaJSVersion % "provided"
   }
 
   object Utils {
-    val scapegoatVersion = "1.3.3"
+    val scapegoatVersion = "1.3.4"
     val enumeratumVersion = "1.5.15"
     val booPickleVersion = "1.2.5"
     val utestVersion = "0.6.3"
