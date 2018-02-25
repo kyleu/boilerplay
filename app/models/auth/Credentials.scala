@@ -5,7 +5,7 @@ import io.circe.{Decoder, Encoder}
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import models.user.SystemUser
 
-case class Credentials(user: SystemUser, remoteAddress: String, tags: Map[String, String] = Map.empty)
+case class Credentials(user: SystemUser, remoteAddress: String = util.NullUtils.str, tags: Map[String, String] = Map.empty)
 
 object Credentials {
   implicit val jsonEncoder: Encoder[Credentials] = deriveEncoder
