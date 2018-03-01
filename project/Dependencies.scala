@@ -13,7 +13,7 @@ object Dependencies {
   }
 
   object Akka {
-    private[this] val version = "2.5.10"
+    private[this] val version = "2.5.11"
     val actor = "com.typesafe.akka" %% "akka-actor" % version
     val remote = "com.typesafe.akka" %% "akka-remote" % version
     val logging = "com.typesafe.akka" %% "akka-slf4j" % version
@@ -63,7 +63,7 @@ object Dependencies {
   }
 
   object Metrics {
-    val version = "0.2.0"
+    val version = "0.3.0"
     val metrics = "io.prometheus" % "simpleclient" % version
     val metricsJvm = "io.prometheus" % "simpleclient_hotspot" % version
     val metricsHttp = "io.prometheus" % "simpleclient_httpserver" % version
