@@ -1,11 +1,11 @@
-@(records: Seq[models.audit.AuditRecord], model: String, pk: Any*)
+@(records: Seq[models.audit.AuditRecord], model: String, title: String, pk: Any*)
 <div class="collection-item">
   @if(records.isEmpty) {
     <i>
-      No audit records available for this @model.
+      No audit records available for this @title.
     </i>
   } else {
-    @records.size @if(records.lengthCompare(1) == 0) { audit record } else { audit records } available for this @model.
+    @records.size @if(records.lengthCompare(1) == 0) { audit record } else { audit records } available for this @title.
     <table class="bordered">
       <thead>
         <tr>

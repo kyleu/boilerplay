@@ -35,8 +35,8 @@
         </tbody>
       </table>
     </div>
-    @views.html.admin.note.notes(notes, "systemUser", model.id)
-    @views.html.admin.audit.auditRecords(auditRecords, "systemUser", model.id)
+    @views.html.admin.note.notes(notes, "systemUser", "System User", model.id)
+    @views.html.admin.audit.auditRecords(auditRecords, "systemUser", "System User", model.id)
   </div>
   <ul id="model-relations" class="collapsible" data-collapsible="expandable">
     <li id="relation-note-author" data-table="note" data-field="author" data-singular="Note" data-plural="Notes" data-url="@controllers.admin.note.routes.NoteController.byAuthor(model.id, limit = Some(5))">
