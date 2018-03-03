@@ -2,13 +2,13 @@ import sbt._
 
 object Dependencies {
   object Play {
-    private[this] val version = "2.6.11"
+    private[this] val version = "2.6.12"
     val lib = "com.typesafe.play" %% "play" % version
     val filters = play.sbt.PlayImport.filters
     val ws = play.sbt.PlayImport.ws
     val guice = play.sbt.PlayImport.guice
     val cache = play.sbt.PlayImport.ehcache
-    val json = "com.typesafe.play" %% "play-json" % "2.6.8"
+    val json = "com.typesafe.play" %% "play-json" % "2.6.9"
     val test = "com.typesafe.play" %% "play-test" % version % "test"
   }
 

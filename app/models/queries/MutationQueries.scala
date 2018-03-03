@@ -43,6 +43,6 @@ trait MutationQueries[T <: Product] { this: BaseQueries[T] =>
     override val name = s"$key.update.fields"
     private[this] val cols = dataFields.map(f => ResultFieldHelper.sqlForField("update", f.k, fields))
     override val sql = s"""update ${quote(tableName)} set ${cols.map(_ + " = ?").mkString(", ")} where $pkWhereClause"""
-    override val values = dataFields.map(_.v) ++ pks
+    override val values = dataFields.map(f => ResultFieldHelper.valueForField("update", f.k, f.v, fields)) ++ pks
   }
 }

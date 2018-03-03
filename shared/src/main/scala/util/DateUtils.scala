@@ -35,6 +35,6 @@ object DateUtils {
   private[this] val tFmt = new SimpleDateFormat("hh:mm:ss")
   def sqlTimeFromString(s: String) = new java.sql.Time(tFmt.parse(s).getTime)
 
-  private[this] val dtFmt = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
+  private[this] val dtFmt = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss")
   def sqlDateTimeFromString(s: String) = new java.sql.Timestamp(dtFmt.parse(s).getTime)
 }
