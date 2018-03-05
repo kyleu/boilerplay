@@ -1,10 +1,10 @@
+/* Generated File */
 package controllers.admin.user
 
 import java.util.UUID
 
 import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.api.util.PasswordHasher
-import controllers.BaseController
 import controllers.admin.ServiceController
 import io.circe.syntax._
 import models.Application

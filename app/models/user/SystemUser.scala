@@ -41,6 +41,12 @@ case class SystemUser(
     role: Role = Role.User,
     created: LocalDateTime = DateUtils.now
 ) extends Identity with DataFieldModel {
+  val email = profile.providerID
+  val prefs = {
+    import io.circe.syntax._
+    preferences.asJson.spaces2
+  }
+
   def isAdmin = role == Role.Admin
 
   override def toDataFields = Seq(
