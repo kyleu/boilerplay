@@ -17,8 +17,10 @@ trait PostgresProfileEx extends ExPostgresProfile
     with ArrayImplicits with DateTimeImplicits with JsonImplicits with NetImplicits
     with LTreeImplicits with RangeImplicits with HStoreImplicits with SearchImplicits with SearchAssistants {
 
-    implicit val strSeqTypeMapper: DriverJdbcType[Seq[String]] = new SimpleArrayJdbcType[String]("text").to(_.toSeq)
+    implicit val intSeqTypeMapper: DriverJdbcType[Seq[Int]] = new SimpleArrayJdbcType[Int]("int").to(_.toSeq)
+    implicit val longSeqTypeMapper: DriverJdbcType[Seq[Long]] = new SimpleArrayJdbcType[Long]("int").to(_.toSeq)
     implicit val uuidSeqTypeMapper: DriverJdbcType[Seq[UUID]] = new SimpleArrayJdbcType[UUID]("uuid").to(_.toSeq)
+    implicit val strSeqTypeMapper: DriverJdbcType[Seq[String]] = new SimpleArrayJdbcType[String]("text").to(_.toSeq)
   }
 }
 

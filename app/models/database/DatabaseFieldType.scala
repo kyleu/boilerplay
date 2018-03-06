@@ -77,6 +77,10 @@ object DatabaseFieldType extends Enum[DatabaseFieldType[_]] with CirceEnum[Datab
     override def apply(row: Row, col: String) = row.as[PgArray](col).getArray.asInstanceOf[Array[Byte]]
     override def opt(row: Row, col: String) = row.asOpt[PgArray](col).map(_.asInstanceOf[Array[Byte]])
   }
+  case object IntArrayType extends DatabaseFieldType[Seq[Int]]("intArray") {
+    override def apply(row: Row, col: String) = row.as[PgArray](col).getArray.asInstanceOf[Array[Any]].map(intCoerce)
+    override def opt(row: Row, col: String) = row.asOpt[PgArray](col).map(_.getArray.asInstanceOf[Array[Any]].map(intCoerce))
+  }
   case object LongArrayType extends DatabaseFieldType[Seq[Long]]("longArray") {
     override def apply(row: Row, col: String) = row.as[PgArray](col).getArray.asInstanceOf[Array[Long]]
     override def opt(row: Row, col: String) = row.asOpt[PgArray](col).map(_.asInstanceOf[Array[Long]])

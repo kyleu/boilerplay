@@ -13,6 +13,11 @@ trait DatabaseFieldHelper {
     case b: Byte => b
   }
 
+  protected[this] def intCoerce(x: Any) = x match {
+    case i: Int => i
+    case l: Long => l.toInt
+  }
+
   protected[this] def longCoerce(x: Any) = x match {
     case i: Int => i.toLong
     case l: Long => l
