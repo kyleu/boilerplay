@@ -17,6 +17,8 @@ import scala.language.implicitConversions
 import scala.concurrent.{ExecutionContext, Future}
 
 abstract class BaseController(val name: String) extends InjectedController with Logging {
+  type Req = SecuredRequest[AuthEnv, AnyContent]
+
   private[this] def cn(x: Any) = x.getClass.getSimpleName.replaceAllLiterally("$", "")
 
   protected def app: Application
@@ -40,9 +42,7 @@ abstract class BaseController(val name: String) extends InjectedController with 
     }
   }
 
-  protected def withSession(action: String, admin: Boolean = false)(
-    block: SecuredRequest[AuthEnv, AnyContent] => TraceData => Future[Result]
-  )(implicit ec: ExecutionContext) = {
+  protected def withSession(action: String, admin: Boolean = false)(block: Req => TraceData => Future[Result])(implicit ec: ExecutionContext) = {
     app.silhouette.UserAwareAction.async { implicit request =>
       request.identity match {
         case Some(u) => if (admin && u.role != Role.Admin) {
@@ -51,8 +51,7 @@ abstract class BaseController(val name: String) extends InjectedController with 
           Instrumented.timeFuture(requestHistogram, name + "_" + action) {
             app.tracing.trace(name + ".controller." + action) { td =>
               ControllerUtilities.enhanceRequest(request, Some(u), td.span)
-              val r = SecuredRequest(u, request.authenticator.get, request)
-              block(r)(td)
+              block(SecuredRequest(u, request.authenticator.get, request))(td)
             }(getTraceData)
           }
         }

@@ -1,0 +1,46 @@
+@(
+    user: models.user.SystemUser,
+    title: String,
+    svc: (String, Call),
+    args: io.circe.Json,
+    act: Call,
+    result: Option[io.circe.Json],
+    error: Option[(String, String)],
+    debug: Boolean = false
+)(
+    implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
+)@traceData.logViewClass(getClass)@views.html.admin.layout.page(user, "projects", title) {
+  <div class="row">
+    <div class="col s12">
+      <div class="collection with-header">
+        <div class="collection-header">
+          <div class="right"><a class="theme-text" href="@svc._2">@svc._1</a></div>
+          <h4>@title</h4>
+        </div>
+        @error.map { err =>
+          <div class="collection-item">
+            <h5 style="color: #b71c1c;">Error: @err._1</h5>
+            <div>@err._2</div>
+          </div>
+        }
+        <div class="collection-item">
+          <h5>Arguments</h5>
+          <form method="post" action="@act">
+            <div class="input-field">
+              <textarea id="arguments" name="arguments" class="materialize-textarea">@args.spaces2</textarea>
+            </div>
+            <button class="btn theme" type="submit">Call Method</button>
+          </form>
+        </div>
+        @result.map { r =>
+          <div class="collection-item">
+            <h5>Result</h5>
+            <em>@util.DateUtils.niceDateTime(util.DateUtils.now)</em>
+            <pre>@r.spaces2</pre>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+  <script>$(function() { $('textarea').trigger('autoresize'); });</script>
+}
