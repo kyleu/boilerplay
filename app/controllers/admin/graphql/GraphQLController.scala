@@ -5,11 +5,11 @@ import io.circe.Json
 import models.Application
 import models.auth.Credentials
 import sangria.execution.{ErrorWithResolver, QueryAnalysisError}
-import sangria.marshalling.MarshallingUtil._
 import sangria.marshalling.circe._
 import sangria.parser.SyntaxError
 import services.graphql.GraphQLService
 import util.tracing.TraceData
+import util.web.ControllerUtils.{jsonBody, jsonObject}
 
 import scala.concurrent.Future
 
@@ -22,13 +22,7 @@ class GraphQLController @javax.inject.Inject() (override val app: Application, g
   }
 
   def graphqlBody = withSession("graphql.post", admin = true) { implicit request => implicit td =>
-    val json = {
-      import sangria.marshalling.playJson._
-      val playJson = request.body.asJson.getOrElse(play.api.libs.json.JsObject.empty)
-      playJson.convertMarshaled[Json]
-    }
-
-    val body = json.asObject.getOrElse(throw new IllegalStateException(s"Invalid json [$json].")).filter(x => x._1 != "variables").toMap
+    val body = jsonObject(jsonBody(request.body)).filter(x => x._1 != "variables").toMap
     val query = body("query").as[String].getOrElse("{}")
     val variables = body.get("variables").map(x => graphQLService.parseVariables(x.asString.getOrElse("{}")))
     val operation = body.get("operationName").flatMap(_.asString)
