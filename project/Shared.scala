@@ -40,12 +40,7 @@ object Shared {
   )
 
   lazy val shared = (crossProject(JSPlatform, JVMPlatform).crossType(CrossType.Pure) in file("shared")).settings(commonSettings: _*).settings(
-    libraryDependencies ++= Seq(
-      "io.circe" %%% "circe-core" % Dependencies.Serialization.circeVersion,
-      "io.circe" %%% "circe-generic" % Dependencies.Serialization.circeVersion,
-      "io.circe" %%% "circe-generic-extras" % Dependencies.Serialization.circeVersion,
-      "io.circe" %%% "circe-parser" % Dependencies.Serialization.circeVersion,
-      "io.circe" %%% "circe-java8" % Dependencies.Serialization.circeVersion,
+    libraryDependencies ++= Dependencies.Serialization.circeProjects.map(c => "io.circe" %%% c % Dependencies.Serialization.circeVersion) ++ Seq(
       "com.beachape" %%% "enumeratum-circe" % Dependencies.Utils.enumeratumVersion,
       "me.chrons" %%% "boopickle" % Dependencies.Utils.booPickleVersion,
       "com.lihaoyi" %%% "utest" % Dependencies.Utils.utestVersion % "test"

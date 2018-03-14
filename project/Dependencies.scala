@@ -52,6 +52,7 @@ object Dependencies {
 
   object Serialization {
     val circeVersion = "0.9.1"
+    val circeProjects = Seq("circe-core", "circe-generic", "circe-generic-extras", "circe-parser", "circe-java8")
   }
 
   object WebJars {
