@@ -21,7 +21,7 @@
     orderBy = Some(controllers.admin.audit.routes.AuditRecordController.byAuditId(auditId, _, _, Some(limit), Some(0))),
     search = None,
     next = controllers.admin.audit.routes.AuditRecordController.byAuditId(auditId, orderBy, orderAsc, Some(limit), Some(offset + limit)),
-    prev = controllers.admin.audit.routes.AuditRecordController.byAuditId(auditId, orderBy, orderAsc, Some(limit), Some(offset - limit))
+    prev = controllers.admin.audit.routes.AuditRecordController.byAuditId(auditId, orderBy, orderAsc, Some(limit), Some(offset - limit)),
   ),
   limit = limit,
   offset = offset,

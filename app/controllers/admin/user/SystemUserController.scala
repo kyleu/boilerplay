@@ -1,8 +1,6 @@
 /* Generated File */
 package controllers.admin.user
 
-import java.util.UUID
-
 import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.api.util.PasswordHasher
 import controllers.admin.ServiceController
@@ -16,28 +14,29 @@ import util.FutureUtils.defaultContext
 
 @javax.inject.Singleton
 class SystemUserController @javax.inject.Inject() (
-    override val app: Application, svc: SystemUserService, val authInfoRepository: AuthInfoRepository, val hasher: PasswordHasher,
-    noteS: NoteService, auditRecordS: AuditRecordService
+    override val app: Application, svc: SystemUserService, auditRecordSvc: AuditRecordService, val authInfoRepository: AuthInfoRepository, val hasher: PasswordHasher,
+    noteS: NoteService
 ) extends ServiceController(svc) with UserEditHelper with UserSearchHelper {
-  def view(id: UUID) = withSession("user.view", admin = true) { implicit request => implicit td =>
-    val modelF = app.coreServices.users.getByPrimaryKey(request, id)
-    val notesF = app.coreServices.notes.getFor(request, "user", id)
-    val auditsF = auditRecordS.getByModel(request, "user", id)
+  def view(id: java.util.UUID) = withSession("view", admin = true) { implicit request => implicit td =>
+    val modelF = svc.getByPrimaryKey(request, id)
+    val notesF = app.coreServices.notes.getFor(request, "systemUser", id)
+    val auditsF = auditRecordSvc.getByModel(request, "systemUser", id)
 
     notesF.flatMap(notes => auditsF.flatMap(audits => modelF.map {
       case Some(model) => render {
         case Accepts.Html() => Ok(views.html.admin.user.systemUserView(request.identity, model, notes, audits, app.config.debug))
         case Accepts.Json() => Ok(model.asJson.spaces2).as(JSON)
       }
-      case None => NotFound(s"No user found with id [$id].")
+      case None => NotFound(s"No SystemUser found with id [$id].")
     }))
   }
 
   def relationCounts(id: java.util.UUID) = withSession("relation.counts", admin = true) { implicit request => implicit td =>
     val creds = models.auth.Credentials.fromRequest(request)
-    noteS.countByAuthor(creds, id).map { noteCountByAuthor =>
+    val noteByAuthorF = noteS.countByAuthor(creds, id)
+    for (noteC <- noteByAuthorF) yield {
       Ok(Seq(
-        RelationCount(model = "note", field = "author", count = noteCountByAuthor)
+        RelationCount(model = "note", field = "author", count = noteC)
       ).asJson.spaces2).as(JSON)
     }
   }

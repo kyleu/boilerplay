@@ -9,21 +9,21 @@
   icon = models.template.Icons.note,
   cols = Seq(
     "id" -> "Id",
-    "relType" -> "Type",
-    "relPk" -> "PK",
+    "relType" -> "Rel Type",
+    "relPk" -> "Rel Pk",
     "text" -> "Text",
-    "author" -> "Author"
+    "author" -> "Author",
+    "created" -> "Created"
   ),
   orderBy = orderBy,
   orderAsc = orderAsc,
   totalCount = None,
   rows = modelSeq.map(model => views.html.admin.note.noteDataRow(model)),
   calls = models.result.web.ListCalls(
-    newCall = None,
     orderBy = Some(controllers.admin.note.routes.NoteController.byAuthor(author, _, _, Some(limit), Some(0))),
     search = None,
     next = controllers.admin.note.routes.NoteController.byAuthor(author, orderBy, orderAsc, Some(limit), Some(offset + limit)),
-    prev = controllers.admin.note.routes.NoteController.byAuthor(author, orderBy, orderAsc, Some(limit), Some(offset - limit))
+    prev = controllers.admin.note.routes.NoteController.byAuthor(author, orderBy, orderAsc, Some(limit), Some(offset - limit)),
   ),
   limit = limit,
   offset = offset,

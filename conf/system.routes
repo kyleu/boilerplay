@@ -9,6 +9,7 @@ GET         /search              controllers.admin.system.SearchController.searc
 GET         /explore             controllers.admin.system.AdminController.explore
 
 # Start model routes
+
 # End model routes
 
 # Settings

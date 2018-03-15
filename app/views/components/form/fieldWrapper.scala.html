@@ -1,0 +1,14 @@
+@(selected: Boolean, key: String, title: String, nullable: Boolean, dataType: String = "string")(content: Html)<tr>
+  <td>
+    <input type="checkbox" name="@{key}.include" id="@{key}.include" value="true" @if(selected) { checked="checked" } class="data-input" data-type="@dataType" data-name="@key" />
+    <label for="@{key}.include">@title</label>
+  </td>
+  <td>@if(nullable) {
+    <div class="nullable-input-container">
+      @content
+      <div class="nullable-link" id="nullable-@key">@util.NullUtils.str</div>
+    </div>
+  } else {
+    @content
+  }</td>
+</tr>

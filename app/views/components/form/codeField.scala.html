@@ -1,0 +1,5 @@
+@(
+    selected: Boolean, key: String, title: String, value: String, nullable: Boolean, dataType: String = "string"
+)@views.html.components.form.fieldWrapper(selected = selected, key = key, title = title, nullable = nullable, dataType) {
+  <textarea id="input-$prop" name="@key" class="materialize-textarea@if(nullable) { nullable}" style="font-family: monospace, monospace;">@value</textarea>
+}

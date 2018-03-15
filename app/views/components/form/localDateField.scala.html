@@ -1,0 +1,8 @@
+@(
+    selected: Boolean, key: String, title: String, value: Option[java.time.LocalDate], nullable: Boolean
+)@views.html.components.form.fieldWrapper(selected = selected, key = key, title = title, nullable = nullable, dataType = "date") {
+  <div class="input-field">
+    <i class="fa @models.template.Icons.date prefix"></i>
+    <input id="input-@key" class="datepicker@if(nullable) { nullable}" autocomplete="off" type="text" name="@key" value="@value.getOrElse("")" />
+  </div>
+}

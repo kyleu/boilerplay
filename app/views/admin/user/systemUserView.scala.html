@@ -1,14 +1,14 @@
 @* Generated File *@
 @(user: models.user.SystemUser, model: models.user.SystemUser, notes: Seq[models.note.Note], auditRecords: Seq[models.audit.AuditRecord], debug: Boolean)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
-)@traceData.logViewClass(getClass)@views.html.admin.layout.page(user, "explore", s"System User [${model.id}]") {
+)@traceData.logViewClass(getClass)@views.html.admin.layout.page(user, "explore", s"User [${model.id}]") {
   <div class="collection with-header">
     <div class="collection-header">
       <div class="right"><a class="theme-text" href="@controllers.admin.user.routes.SystemUserController.editForm(model.id)">Edit</a></div>
-      <div class="right"><a class="theme-text remove-link" onclick="return confirm('Are you sure you want to remove this System User?')" href="@controllers.admin.user.routes.SystemUserController.remove(model.id)">Remove</a></div>
+      <div class="right"><a class="theme-text remove-link" onclick="return confirm('Are you sure you want to remove this User?')" href="@controllers.admin.user.routes.SystemUserController.remove(model.id)">Remove</a></div>
       <h5>
         <a class="theme-text" href="@controllers.admin.user.routes.SystemUserController.list()"><i class="fa @models.template.Icons.systemUser"></i></a>
-        System User [@model.id]
+        User [@model.id]
       </h5>
     </div>
     <div class="collection-item">
@@ -41,8 +41,8 @@
         </tbody>
       </table>
     </div>
-    @views.html.admin.note.notes(notes, "systemUser", "System User", model.id)
-    @views.html.admin.audit.auditRecords(auditRecords, "systemUser", "System User", model.id)
+    @views.html.admin.note.notes(notes, "systemUser", "User", model.id)
+    @views.html.admin.audit.auditRecords(auditRecords, "systemUser", "User", model.id)
   </div>
 
   <ul id="model-relations" class="collapsible" data-collapsible="expandable">

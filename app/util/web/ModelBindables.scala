@@ -32,5 +32,6 @@ object ModelBindables {
   }
 
   /* Begin model bindables */
+
   /* End model bindables */
 }

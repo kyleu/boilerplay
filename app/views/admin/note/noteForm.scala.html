@@ -12,81 +12,15 @@
       <div class="collection-item">
         <table>
           <tbody>
-            <tr>
-              <td>
-                <input type="checkbox" name="id.include" id="id.include" value="true" @if(isNew) { checked="checked" } class="data-input" data-type="uuid" data-name="id" />
-                <label for="id.include">Id</label>
-              </td>
-              <td>
-                <input id="input-id" type="text" name="id" value="@model.id" />
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <input type="checkbox" name="relType.include" id="relType.include" value="true" @if(isNew) { checked="checked" } class="data-input nullable" data-type="string" data-name="relType" />
-                <label for="relType.include">Rel Type</label>
-              </td>
-              <td>
-                <div class="nullable-input-container">
-                  <input id="input-relType" class="nullable" type="text" name="relType" value="@model.relType" />
-                  <div class="nullable-link" id="nullable-relType">@util.NullUtils.str</div>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <input type="checkbox" name="relPk.include" id="relPk.include" value="true" @if(isNew) { checked="checked" } class="data-input nullable" data-type="string" data-name="relPk" />
-                <label for="relPk.include">Rel Pk</label>
-              </td>
-              <td>
-                <div class="nullable-input-container">
-                  <input id="input-relPk" class="nullable" type="text" name="relPk" value="@model.relPk" />
-                  <div class="nullable-link" id="nullable-relPk">@util.NullUtils.str</div>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <input type="checkbox" name="text.include" id="text.include" value="true" @if(isNew) { checked="checked" } class="data-input" data-type="string" data-name="text" />
-                <label for="text.include">Text</label>
-              </td>
-              <td>
-                <input id="input-text" type="text" name="text" value="@model.text" />
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <input type="checkbox" name="author.include" id="author.include" value="true" @if(isNew) { checked="checked" } class="data-input" data-type="uuid" data-name="author" />
-                <label for="author.include">Author</label>
-              </td>
-              <td>
-                <div class="autocomplete" id="autocomplete-author">
-                  <div class="ac-input">
-                    <div class="input-field">
-                      <i class="fa @models.template.Icons.systemUser prefix" title="User"></i>
-                      <input id="input-author" class="lookup" data-model="user" data-url="@controllers.admin.user.routes.SystemUserController.autocomplete()" data-activates="dropdown-author" data-beloworigin="true" autocomplete="off" type="text" name="author" value="@model.author" />
-                    </div>
-                  </div>
-                  <ul id="dropdown-author" class="dropdown-content ac-dropdown"></ul>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <input type="checkbox" name="created.include" id="created.include" value="true" @if(isNew) { checked="checked" } class="data-input" data-type="timestamp" data-name="created" />
-                <label for="created.include">Created</label>
-              </td>
-              <td>
-                <div class="input-field" style="width: 50%; float: left;">
-                  <i class="fa @models.template.Icons.date prefix"></i>
-                  <input id="input-created-date" class="datepicker" autocomplete="off" type="text" name="created-date" value="@model.created.toLocalDate" />
-                </div>
-                <div class="input-field" style="width: 50%; float: right;">
-                  <i class="fa @models.template.Icons.time prefix"></i>
-                  <input id="input-created-time" class="timepicker" autocomplete="off" type="text" name="created-time" value="@model.created.toLocalTime" />
-                </div>
-              </td>
-            </tr>
+            @views.html.components.form.textField(selected = isNew, key = "id", title = "Id", value = model.id.toString, nullable = false, dataType = "uuid")
+            @views.html.components.form.textField(selected = isNew, key = "relType", title = "Rel Type", value = model.relType.map(_.toString).getOrElse(""), nullable = true)
+            @views.html.components.form.textField(selected = isNew, key = "relPk", title = "Rel Pk", value = model.relPk.map(_.toString).getOrElse(""), nullable = true)
+            @views.html.components.form.textField(selected = isNew, key = "text", title = "Text", value = model.text.toString, nullable = false)
+            @views.html.components.form.autocompleteField(
+              selected = isNew, key = "author", title = "Author", value = model.author.toString, nullable = false, dataType = "uuid",
+              call = controllers.admin.user.routes.SystemUserController.autocomplete(), acType = ("systemUser", "User"), icon = models.template.Icons.systemUser
+            )
+            @views.html.components.form.localDateTimeField(selected = isNew, key = "created", title = "Created", value = model.created, nullable = false, dataType = "timestamp")
           </tbody>
         </table>
       </div>

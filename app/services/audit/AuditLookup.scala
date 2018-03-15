@@ -17,11 +17,9 @@ class AuditLookup @javax.inject.Inject() (registry: ServiceRegistry) extends Log
     creds: Credentials, key: String, arg: (Int) => String
   )(implicit traceData: TraceData): Future[Option[DataFieldModel]] = key.toLowerCase match {
     /* Start registry lookups */
-
     case "auditrecord" => registry.auditServices.auditRecordService.getByPrimaryKey(creds, uuidArg(arg(0)))
     case "note" => registry.noteServices.noteService.getByPrimaryKey(creds, uuidArg(arg(0)))
-    case "user" => registry.userServices.systemUserService.getByPrimaryKey(creds, uuidArg(arg(0)))
-
+    case "systemuser" => registry.userServices.systemUserService.getByPrimaryKey(creds, uuidArg(arg(0)))
     /* End registry lookups */
     case _ =>
       log.warn(s"Attempted to load invalid object type [$key:${arg(0)}].")

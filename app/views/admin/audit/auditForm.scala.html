@@ -12,110 +12,16 @@
       <div class="collection-item">
         <table>
           <tbody>
-            <tr>
-              <td>
-                <input type="checkbox" name="id.include" id="id.include" value="true" @if(isNew) { checked="checked" } class="data-input" data-type="uuid" data-name="id" />
-                <label for="id.include">Id</label>
-              </td>
-              <td>
-                <input id="input-id" type="text" name="id" value="@model.id" />
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <input type="checkbox" name="act.include" id="act.include" value="true" @if(isNew) { checked="checked" } class="data-input" data-type="string" data-name="act" />
-                <label for="act.include">Act</label>
-              </td>
-              <td>
-                <input id="input-act" type="text" name="act" value="@model.act" />
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <input type="checkbox" name="app.include" id="app.include" value="true" @if(isNew) { checked="checked" } class="data-input" data-type="string" data-name="app" />
-                <label for="app.include">App</label>
-              </td>
-              <td>
-                <input id="input-app" type="text" name="app" value="@model.app" />
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <input type="checkbox" name="client.include" id="client.include" value="true" @if(isNew) { checked="checked" } class="data-input" data-type="string" data-name="client" />
-                <label for="client.include">Client</label>
-              </td>
-              <td>
-                <input id="input-client" type="text" name="client" value="@model.client" />
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <input type="checkbox" name="server.include" id="server.include" value="true" @if(isNew) { checked="checked" } class="data-input" data-type="string" data-name="server" />
-                <label for="server.include">Server</label>
-              </td>
-              <td>
-                <input id="input-server" type="text" name="server" value="@model.server" />
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <input type="checkbox" name="userId.include" id="userId.include" value="true" @if(isNew) { checked="checked" } class="data-input" data-type="uuid" data-name="userId" />
-                <label for="userId.include">User Id</label>
-              </td>
-              <td>
-                <input id="input-userId" type="text" name="userId" value="@model.userId" />
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <input type="checkbox" name="tags.include" id="tags.include" value="true" @if(isNew) { checked="checked" } class="data-input" data-type="hstore" data-name="tags" />
-                <label for="tags.include">Tags</label>
-              </td>
-              <td>
-                <input id="input-tags" type="text" name="tags" value="@model.tags" />
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <input type="checkbox" name="msg.include" id="msg.include" value="true" @if(isNew) { checked="checked" } class="data-input" data-type="string" data-name="msg" />
-                <label for="msg.include">Msg</label>
-              </td>
-              <td>
-                <input id="input-msg" type="text" name="msg" value="@model.msg" />
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <input type="checkbox" name="started.include" id="started.include" value="true" @if(isNew) { checked="checked" } class="data-input" data-type="timestamp" data-name="started" />
-                <label for="started.include">Started</label>
-              </td>
-              <td>
-                <div class="input-field" style="width: 50%; float: left;">
-                  <i class="fa @models.template.Icons.date prefix"></i>
-                  <input id="input-started-date" class="datepicker" autocomplete="off" type="text" name="started-date" value="@model.started.toLocalDate" />
-                </div>
-                <div class="input-field" style="width: 50%; float: right;">
-                  <i class="fa @models.template.Icons.time prefix"></i>
-                  <input id="input-started-time" class="timepicker" autocomplete="off" type="text" name="started-time" value="@model.started.toLocalTime" />
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <input type="checkbox" name="completed.include" id="completed.include" value="true" @if(isNew) { checked="checked" } class="data-input" data-type="timestamp" data-name="completed" />
-                <label for="completed.include">Completed</label>
-              </td>
-              <td>
-                <div class="input-field" style="width: 50%; float: left;">
-                  <i class="fa @models.template.Icons.date prefix"></i>
-                  <input id="input-completed-date" class="datepicker" autocomplete="off" type="text" name="completed-date" value="@model.completed.toLocalDate" />
-                </div>
-                <div class="input-field" style="width: 50%; float: right;">
-                  <i class="fa @models.template.Icons.time prefix"></i>
-                  <input id="input-completed-time" class="timepicker" autocomplete="off" type="text" name="completed-time" value="@model.completed.toLocalTime" />
-                </div>
-              </td>
-            </tr>
+            @views.html.components.form.textField(selected = isNew, key = "id", title = "Id", value = model.id.toString, nullable = false, dataType = "uuid")
+            @views.html.components.form.textField(selected = isNew, key = "act", title = "Act", value = model.act.toString, nullable = false)
+            @views.html.components.form.textField(selected = isNew, key = "app", title = "App", value = model.app.toString, nullable = false)
+            @views.html.components.form.textField(selected = isNew, key = "client", title = "Client", value = model.client.toString, nullable = false)
+            @views.html.components.form.textField(selected = isNew, key = "server", title = "Server", value = model.server.toString, nullable = false)
+            @views.html.components.form.textField(selected = isNew, key = "userId", title = "User Id", value = model.userId.toString, nullable = false, dataType = "uuid")
+            @views.html.components.form.textField(selected = isNew, key = "tags", title = "Tags", value = model.tags.toString, nullable = false, dataType = "hstore")
+            @views.html.components.form.textField(selected = isNew, key = "msg", title = "Msg", value = model.msg.toString, nullable = false)
+            @views.html.components.form.localDateTimeField(selected = isNew, key = "started", title = "Started", value = model.started, nullable = false, dataType = "timestamp")
+            @views.html.components.form.localDateTimeField(selected = isNew, key = "completed", title = "Completed", value = model.completed, nullable = false, dataType = "timestamp")
           </tbody>
         </table>
       </div>

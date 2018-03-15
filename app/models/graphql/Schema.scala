@@ -9,7 +9,6 @@ object Schema {
 
   val modelFetchers = {
     // Start model fetchers
-
     Seq(
       models.audit.AuditRecordSchema.auditRecordByAuditIdFetcher,
       models.audit.AuditRecordSchema.auditRecordByPrimaryKeyFetcher,
@@ -18,7 +17,6 @@ object Schema {
       models.note.NoteSchema.noteByPrimaryKeyFetcher,
       models.user.SystemUserSchema.systemUserByPrimaryKeyFetcher
     )
-
     // End model fetchers
   }
 
@@ -31,11 +29,10 @@ object Schema {
 
   val modelQueryFields = {
     // Start model query fields
-    models.audit.AuditSchema.queryFields ++
-      models.audit.AuditRecordSchema.queryFields ++
+    models.audit.AuditRecordSchema.queryFields ++
+      models.audit.AuditSchema.queryFields ++
       models.note.NoteSchema.queryFields ++
       models.user.SystemUserSchema.queryFields
-
     // End model query fields
   }
 
@@ -50,12 +47,10 @@ object Schema {
 
   val modelMutationFields = {
     // Start model mutation fields
-
     models.audit.AuditRecordSchema.mutationFields ++
       models.audit.AuditSchema.mutationFields ++
       models.note.NoteSchema.mutationFields ++
       models.user.SystemUserSchema.mutationFields
-
     // End model mutation fields
   }
 

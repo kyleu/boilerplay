@@ -1,15 +1,14 @@
 /* Generated File */
 package models.user
 
-import java.time.LocalDateTime
-
 import io.circe.{Decoder, Encoder}
+import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
+import io.circe.java8.time._
+import java.time.LocalDateTime
 import models.result.BaseResult
 import models.result.filter.Filter
 import models.result.orderBy.OrderBy
 import models.result.paging.PagingOptions
-import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
-import io.circe.java8.time._
 
 case class SystemUserResult(
     override val filters: Seq[Filter] = Nil,
@@ -26,11 +25,11 @@ object SystemUserResult {
   implicit val jsonDecoder: Decoder[SystemUserResult] = deriveDecoder
 
   def fromRecords(
-    q: Option[String], filters: Seq[Filter], orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int],
+    q: Option[String], filters: Seq[Filter] = Nil, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None,
     startMs: Long, totalCount: Int, results: Seq[SystemUser]
   ) = {
     val paging = PagingOptions.from(totalCount, limit, offset)
-    val durationMs = (System.currentTimeMillis - startMs).toInt
+    val durationMs = (util.DateUtils.nowMillis - startMs).toInt
     SystemUserResult(paging = paging, filters = filters, orderBys = orderBys, totalCount = totalCount, results = results, durationMs = durationMs)
   }
 }

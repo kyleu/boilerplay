@@ -1,22 +1,21 @@
 /* Generated File */
 package controllers.admin.audit
 
+import controllers.admin.ServiceController
 import io.circe.syntax._
 import java.util.UUID
-
-import controllers.admin.ServiceController
 import models.Application
 import models.audit.AuditRecordResult
-import models.result.data.DataSummary._
 import models.result.orderBy.OrderBy
-
 import scala.concurrent.Future
 import services.audit.AuditRecordService
 import util.FutureUtils.defaultContext
 import util.web.ControllerUtils.acceptsCsv
 
 @javax.inject.Singleton
-class AuditRecordController @javax.inject.Inject() (override val app: Application, svc: AuditRecordService) extends ServiceController(svc) {
+class AuditRecordController @javax.inject.Inject() (
+    override val app: Application, svc: AuditRecordService, auditRecordSvc: AuditRecordService
+) extends ServiceController(svc) {
   def createForm = withSession("create.form", admin = true) { implicit request => implicit td =>
     val cancel = controllers.admin.audit.routes.AuditRecordController.list()
     val call = controllers.admin.audit.routes.AuditRecordController.create()
@@ -83,7 +82,9 @@ class AuditRecordController @javax.inject.Inject() (override val app: Applicatio
     val cancel = controllers.admin.audit.routes.AuditRecordController.view(id)
     val call = controllers.admin.audit.routes.AuditRecordController.edit(id)
     svc.getByPrimaryKey(request, id).map {
-      case Some(model) => Ok(views.html.admin.audit.auditRecordForm(request.identity, model, s"Audit Record [$id]", cancel, call, debug = app.config.debug))
+      case Some(model) => Ok(
+        views.html.admin.audit.auditRecordForm(request.identity, model, s"Audit Record [$id]", cancel, call, debug = app.config.debug)
+      )
       case None => NotFound(s"No AuditRecord found with id [$id].")
     }
   }

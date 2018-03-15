@@ -1,0 +1,14 @@
+@(
+    selected: Boolean, key: String, title: String, value: Option[String], nullable: Boolean, dataType: String = "string",
+    call: Call, acType: (String, String), icon: String
+)@views.html.components.form.fieldWrapper(selected = selected, key = key, title = title, nullable = nullable, dataType = dataType) {
+  <div class="autocomplete" id="autocomplete-@key">
+    <div class="ac-input">
+      <div class="input-field">
+        <i class="fa @icon prefix" title="@acType._2"></i>
+        <input id="input-@key" class="lookup@if(nullable) { nullable}" data-model="@acType._1" data-url="@call" data-activates="dropdown-@key" data-beloworigin="true" autocomplete="off" type="text" name="@key" value="@value.getOrElse("")" />
+      </div>
+    </div>
+    <ul id="dropdown-@key" class="dropdown-content ac-dropdown"></ul>
+  </div>
+}

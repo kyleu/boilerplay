@@ -12,59 +12,14 @@
       <div class="collection-item">
         <table>
           <tbody>
-            <tr>
-              <td>
-                <input type="checkbox" name="id.include" id="id.include" value="true" @if(isNew) { checked="checked" } class="data-input" data-type="uuid" data-name="id" />
-                <label for="id.include">Id</label>
-              </td>
-              <td>
-                <input id="input-id" type="text" name="id" value="@model.id" />
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <input type="checkbox" name="auditId.include" id="auditId.include" value="true" @if(isNew) { checked="checked" } class="data-input" data-type="uuid" data-name="auditId" />
-                <label for="auditId.include">Audit Id</label>
-              </td>
-              <td>
-                <div class="autocomplete" id="autocomplete-auditId">
-                  <div class="ac-input">
-                    <div class="input-field">
-                      <i class="fa @models.template.Icons.audit prefix" title="Audit"></i>
-                      <input id="input-auditId" class="lookup" data-model="audit" data-url="@controllers.admin.audit.routes.AuditController.autocomplete()" data-activates="dropdown-auditId" data-beloworigin="true" autocomplete="off" type="text" name="auditId" value="@model.auditId" />
-                    </div>
-                  </div>
-                  <ul id="dropdown-auditId" class="dropdown-content ac-dropdown"></ul>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <input type="checkbox" name="t.include" id="t.include" value="true" @if(isNew) { checked="checked" } class="data-input" data-type="string" data-name="t" />
-                <label for="t.include">T</label>
-              </td>
-              <td>
-                <input id="input-t" type="text" name="t" value="@model.t" />
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <input type="checkbox" name="pk.include" id="pk.include" value="true" @if(isNew) { checked="checked" } class="data-input" data-type="array" data-name="pk" />
-                <label for="pk.include">Pk</label>
-              </td>
-              <td>
-                <input id="input-pk" type="text" name="pk" value="@model.pk" />
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <input type="checkbox" name="changes.include" id="changes.include" value="true" @if(isNew) { checked="checked" } class="data-input" data-type="json" data-name="changes" />
-                <label for="changes.include">Changes</label>
-              </td>
-              <td>
-                <input id="input-changes" type="text" name="changes" value="@model.changes" />
-              </td>
-            </tr>
+            @views.html.components.form.textField(selected = isNew, key = "id", title = "Id", value = model.id.toString, nullable = false, dataType = "uuid")
+            @views.html.components.form.autocompleteField(
+              selected = isNew, key = "auditId", title = "Audit Id", value = model.auditId.toString, nullable = false, dataType = "uuid",
+              call = controllers.admin.audit.routes.AuditController.autocomplete(), acType = ("audit", "Audit"), icon = models.template.Icons.audit
+            )
+            @views.html.components.form.textField(selected = isNew, key = "t", title = "T", value = model.t.toString, nullable = false)
+            @views.html.components.form.textField(selected = isNew, key = "pk", title = "Pk", value = model.pk.toString, nullable = false, dataType = "array")
+            @views.html.components.form.textField(selected = isNew, key = "changes", title = "Changes", value = model.changes.toString, nullable = false, dataType = "json")
           </tbody>
         </table>
       </div>

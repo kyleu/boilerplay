@@ -1,0 +1,12 @@
+@(
+    selected: Boolean, key: String, title: String, value: Option[java.time.LocalDateTime], nullable: Boolean
+)@views.html.components.form.fieldWrapper(selected = selected, key = key, title = title, nullable = nullable, dataType = "timestamp") {
+  <div class="input-field" style="width: 50%; float: left;">
+    <i class="fa @models.template.Icons.date prefix"></i>
+    <input id="input-@{key}-date" class="datepicker" autocomplete="off" type="text" name="@{key}-date" value="@value.map(_.toLocalDate).getOrElse("")" />
+  </div>
+  <div class="input-field" style="width: 50%; float: right;">
+    <i class="fa @models.template.Icons.time prefix"></i>
+    <input id="input-@{key}-time" class="timepicker" autocomplete="off" type="text" name="@{key}-time" value="@value.map(_.toLocalTime).getOrElse("")" />
+  </div>
+}

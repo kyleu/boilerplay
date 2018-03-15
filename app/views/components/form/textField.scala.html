@@ -1,0 +1,5 @@
+@(
+    selected: Boolean, key: String, title: String, value: Option[String], nullable: Boolean, dataType: String = "string"
+)@views.html.components.form.fieldWrapper(selected = selected, key = key, title = title, nullable = nullable, dataType = dataType) {
+  <input id="input-@key" @if(nullable) {class="nullable" }type="text" name="@key" value="@value.getOrElse("")" />
+}

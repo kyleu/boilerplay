@@ -41,19 +41,17 @@ class SearchController @javax.inject.Inject() (override val app: Application, se
 
   private[this] def searchUuid(creds: Credentials, q: String, id: UUID)(implicit timing: TraceData) = {
     // Start uuid searches
-
     val auditRecord = services.auditServices.auditRecordService.getByPrimaryKey(creds, id).map(_.map { model =>
       views.html.admin.audit.auditRecordSearchResult(model, s"Audit Record [${model.id}] matched [$q].")
     }.toSeq)
     val note = services.noteServices.noteService.getByPrimaryKey(creds, id).map(_.map { model =>
       views.html.admin.note.noteSearchResult(model, s"Note [${model.id}] matched [$q].")
     }.toSeq)
-    val user = services.userServices.systemUserService.getByPrimaryKey(creds, id).map(_.map { model =>
+    val systemUser = services.userServices.systemUserService.getByPrimaryKey(creds, id).map(_.map { model =>
       views.html.admin.user.systemUserSearchResult(model, s"User [${model.id}] matched [$q].")
     }.toSeq)
 
-    val uuidSearches = Seq[Future[Seq[Html]]](auditRecord, note, user)
-
+    val uuidSearches = Seq[Future[Seq[Html]]](auditRecord, note, systemUser)
     // End uuid searches
 
     val auditR = app.coreServices.audits.getByPrimaryKey(creds, id).map(_.map { model =>
@@ -65,19 +63,17 @@ class SearchController @javax.inject.Inject() (override val app: Application, se
 
   private[this] def searchString(creds: Credentials, q: String)(implicit timing: TraceData) = {
     // Start string searches
-
-    val auditRecord = services.auditServices.auditRecordService.searchExact(creds = creds, q = q, limit = Some(5)).map(_.map { model =>
+    val auditRecord = services.auditServices.auditRecordService.searchExact(creds, q = q, limit = Some(5)).map(_.map { model =>
       views.html.admin.audit.auditRecordSearchResult(model, s"Audit Record [${model.id}] matched [$q].")
     })
-    val note = services.noteServices.noteService.searchExact(creds = creds, q = q, limit = Some(5)).map(_.map { model =>
+    val note = services.noteServices.noteService.searchExact(creds, q = q, limit = Some(5)).map(_.map { model =>
       views.html.admin.note.noteSearchResult(model, s"Note [${model.id}] matched [$q].")
     })
-    val user = services.userServices.systemUserService.searchExact(creds = creds, q = q, limit = Some(5)).map(_.map { model =>
+    val systemUser = services.userServices.systemUserService.searchExact(creds, q = q, limit = Some(5)).map(_.map { model =>
       views.html.admin.user.systemUserSearchResult(model, s"User [${model.id}] matched [$q].")
     })
 
-    val stringSearches = Seq[Future[Seq[Html]]](auditRecord, note, user)
-
+    val stringSearches = Seq[Future[Seq[Html]]](auditRecord, note, systemUser)
     // End string searches
 
     val auditR = app.coreServices.audits.searchExact(creds = creds, q = q, limit = Some(5)).map(_.map { model =>

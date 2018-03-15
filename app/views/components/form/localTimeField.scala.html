@@ -1,0 +1,8 @@
+@(
+    selected: Boolean, key: String, title: String, value: Option[java.time.LocalTime], nullable: Boolean
+)@views.html.components.form.fieldWrapper(selected = selected, key = key, title = title, nullable = nullable, dataType = "time") {
+  <div class="input-field">
+    <i class="fa @models.template.Icons.time prefix"></i>
+    <input id="input-@key" class="timepicker@if(nullable) { nullable}" autocomplete="off" type="text" name="@key" value="@value.getOrElse("")" />
+  </div>
+}
