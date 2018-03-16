@@ -71,7 +71,7 @@ abstract class JdbcDatabase(override val key: String, configPrefix: String) exte
   }
 
   override def execute(statement: Statement, conn: Option[Connection])(implicit traceData: TraceData) = trace("execute." + statement.name) { td =>
-    td.span.tag("SQL", statement.sql)
+    td.tag("SQL", statement.sql)
     val connection = conn.getOrElse(source.getConnection)
     try {
       time("execute", statement.getClass.getName) { executeUpdate(connection, statement) }
@@ -83,7 +83,7 @@ abstract class JdbcDatabase(override val key: String, configPrefix: String) exte
   }
 
   override def query[A](query: RawQuery[A], conn: Option[Connection])(implicit traceData: TraceData) = trace("query." + query.name) { td =>
-    td.span.tag("SQL", query.sql)
+    td.tag("SQL", query.sql)
     val connection = conn.getOrElse(source.getConnection)
     try {
       time[A]("query", query.getClass.getName)(apply(connection, query))

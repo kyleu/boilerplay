@@ -36,7 +36,7 @@ abstract class SchemaHelper(val name: String) {
       case Some(q) => svc.searchWithCount(c.ctx.creds, q, args.filters, args.orderBys, args.limit, args.offset)(td)
       case _ => svc.getAllWithCount(c.ctx.creds, args.filters, args.orderBys, args.limit, args.offset)(td)
     }
-    c.ctx.trace.span.annotate("Composing search result.")
+    c.ctx.trace.annotate("Composing search result.")
     f.map(x => SearchResult(x._1, x._2, args))
   }
 }

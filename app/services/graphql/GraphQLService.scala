@@ -30,16 +30,16 @@ class GraphQLService @javax.inject.Inject() (tracing: TracingService, registry: 
     app: Application, query: String, variables: Option[Json], operation: Option[String], creds: Credentials, debug: Boolean
   )(implicit t: TraceData) = {
     tracing.trace(s"graphql.service.execute.${operation.getOrElse("adhoc")}") { td =>
-      if (!td.span.isNoop) {
-        td.span.tag("query", query)
-        variables.foreach(v => td.span.tag("variables", v.spaces2))
-        operation.foreach(o => td.span.tag("operation", o))
-        td.span.tag("debug", debug.toString)
+      if (!td.isNoop) {
+        td.tag("query", query)
+        variables.foreach(v => td.tag("variables", v.spaces2))
+        operation.foreach(o => td.tag("operation", o))
+        td.tag("debug", debug.toString)
       }
 
       QueryParser.parse(query) match {
         case Success(ast) =>
-          td.span.annotate("parse.success")
+          td.annotate("parse.success")
           val ret = Executor.execute(
             schema = Schema.schema,
             queryAst = ast,
@@ -55,7 +55,7 @@ class GraphQLService @javax.inject.Inject() (tracing: TracingService, registry: 
           )
           ret
         case Failure(error) =>
-          td.span.annotate(s"parse.failure")
+          td.annotate(s"parse.failure")
           throw error
       }
     }

@@ -35,7 +35,7 @@ abstract class BaseController(val name: String) extends InjectedController with 
     app.silhouette.UserAwareAction.async { implicit request =>
       Instrumented.timeFuture(requestHistogram, name + "_" + action) {
         app.tracing.trace(name + ".controller." + action) { td =>
-          ControllerUtilities.enhanceRequest(request, request.identity, td.span)
+          ControllerUtilities.enhanceRequest(request, request.identity, td)
           block(request)(td)
         }(getTraceData)
       }
@@ -50,7 +50,7 @@ abstract class BaseController(val name: String) extends InjectedController with 
         } else {
           Instrumented.timeFuture(requestHistogram, name + "_" + action) {
             app.tracing.trace(name + ".controller." + action) { td =>
-              ControllerUtilities.enhanceRequest(request, Some(u), td.span)
+              ControllerUtilities.enhanceRequest(request, Some(u), td)
               block(SecuredRequest(u, request.authenticator.get, request))(td)
             }(getTraceData)
           }

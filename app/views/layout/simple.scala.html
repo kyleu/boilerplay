@@ -23,5 +23,5 @@
       @content
     </div>
   </main>
-  <!-- Trace @traceData.span.context.traceId / @traceData.span.context.spanId (@traceData.span.context.sampled) -->
+  @if(!traceData.isNoop) { <!-- Trace @traceData --> }
 }

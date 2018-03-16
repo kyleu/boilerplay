@@ -6,7 +6,7 @@ import com.google.common.net.InetAddresses
 import models.database.{DatabaseConfig, RawQuery, Statement}
 import util.FutureUtils.databaseContext
 import util.Logging
-import util.tracing.{TraceData, TracingService}
+import util.tracing.{TraceData, TraceDataZipkin, TracingService}
 import zipkin.Endpoint
 
 import scala.concurrent.Future
@@ -47,8 +47,10 @@ trait Database[Conn] extends Logging {
 
   protected[this] def prependComment(obj: Object, sql: String) = s"/* ${obj.getClass.getSimpleName.replace("$", "")} */ $sql"
 
-  protected[this] def trace[A](traceName: String)(f: TraceData => A)(implicit traceData: TraceData) = tracing.traceBlocking(key + "." + traceName) { td =>
-    td.span.kind(brave.Span.Kind.CLIENT).remoteEndpoint(endpoint)
-    f(td)
+  protected[this] def trace[A](traceName: String)(f: TraceData => A)(implicit traceData: TraceData) = tracing.traceBlocking(key + "." + traceName) {
+    case td: TraceDataZipkin =>
+      td.span.kind(brave.Span.Kind.CLIENT).remoteEndpoint(endpoint)
+      f(td)
+    case td => f(td)
   }
 }

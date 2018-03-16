@@ -15,7 +15,7 @@ class SlickQueryService(key: String, dataSource: DataSource, maxConnections: Int
   private[this] val db = Database.forDataSource(dataSource, maxConnections = Some(maxConnections))
 
   def run[R](act: SqlAction[R, NoStream, Nothing])(implicit parentTd: TraceData) = tracingService.trace("run") { td =>
-    td.span.tag("sql", act.statements.mkString("\n\n"))
+    td.tag("sql", act.statements.mkString("\n\n"))
     db.run(act)
   }
 

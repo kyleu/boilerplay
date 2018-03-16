@@ -5,7 +5,7 @@ import akka.stream.Materializer
 import play.api.libs.typedmap.TypedKey
 import play.api.mvc.{Filter, RequestHeader, Result}
 import play.api.routing.Router
-import util.tracing.{TraceData, TracingService}
+import util.tracing.{TraceData, TraceDataZipkin, TracingService}
 import zipkin.TraceKeys
 
 import scala.concurrent.Future
@@ -42,7 +42,7 @@ class TracingFilter @Inject() (tracingService: TracingService)(implicit val mat:
       case (k, v) => serverSpan.tag(s"http.query.$k", v.mkString(", "))
     }
 
-    val result = nextFilter(req.addAttr(TracingFilter.traceKey, TraceData(serverSpan)))
+    val result = nextFilter(req.addAttr(TracingFilter.traceKey, TraceDataZipkin(serverSpan)))
     result.onComplete {
       case Failure(t) => tracingService.serverSend(serverSpan, "failed" -> s"Finished with exception: ${t.getMessage}")
       case Success(x) =>

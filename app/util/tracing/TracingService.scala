@@ -17,12 +17,14 @@ import scala.util.{Failure, Success, Try}
 class TracingService @javax.inject.Inject() (actorSystem: ActorSystem, cnf: MetricsConfig) extends Logging {
   implicit val executionContext: ExecutionContext = actorSystem.dispatchers.lookup("context.tracing")
 
-  def noopTrace[A](name: String)(f: TraceData => Future[A]) = f(TraceData(newSpan(Map.empty[String, String])((headers, key) => headers.get(key)).name("noop")))
+  def noopTrace[A](name: String)(f: TraceData => Future[A]) = {
+    f(new TraceData())
+  }
   def topLevelTrace[A](name: String)(f: TraceData => Future[A]) = {
     val span = serverReceived(spanName = name, span = newSpan(Map.empty[String, String])((headers, key) => headers.get(key)))
     span.tag("top.level", "true")
 
-    val result = f(TraceData(span))
+    val result = f(TraceDataZipkin(span))
     result.onComplete {
       case Failure(t) => serverSend(span, "failed" -> s"Finished with exception: ${t.getMessage}")
       case Success(_) => serverSend(span)
@@ -33,7 +35,7 @@ class TracingService @javax.inject.Inject() (actorSystem: ActorSystem, cnf: Metr
     val span = serverReceived(spanName = name, span = newSpan(Map.empty[String, String])((headers, key) => headers.get(key)))
     span.tag("top.level", "true")
     try {
-      val result = f(TraceData(span))
+      val result = f(TraceDataZipkin(span))
       serverSend(span)
       result
     } catch {
@@ -59,29 +61,33 @@ class TracingService @javax.inject.Inject() (actorSystem: ActorSystem, cnf: Metr
   }
   private[this] val tracer: Tracer = tracing.tracer
 
-  def newServerSpan(traceName: String, tags: (String, String)*)(implicit parentData: TraceData) = {
-    val childSpan = tracer.newChild(parentData.span.context()).name(traceName).kind(Span.Kind.SERVER)
-    tags.foreach { case (key, value) => childSpan.tag(key, value) }
-    childSpan.start().tag("thread.id", Thread.currentThread.getName)
+  private[this] def newServerSpan(traceName: String, tags: (String, String)*)(implicit parentData: TraceData) = parentData match {
+    case td: TraceDataZipkin =>
+      val childSpan = tracer.newChild(td.span.context()).name(traceName).kind(Span.Kind.SERVER)
+      tags.foreach { case (key, value) => childSpan.tag(key, value) }
+      childSpan.start().tag("thread.id", Thread.currentThread.getName)
+    case _ => throw new IllegalStateException()
   }
 
-  def traceBlocking[A](traceName: String, tags: (String, String)*)(f: TraceData => A)(implicit parentData: TraceData) = {
-    val childSpan = newServerSpan(traceName, tags: _*)
-    Try(f(TraceData(childSpan))) match {
-      case Success(result) =>
-        childSpan.finish()
-        result
-      case Failure(t) =>
-        childSpan.tag("error.type", t.getClass.getSimpleName.stripSuffix("$"))
-        childSpan.tag("error.message", t.getMessage)
-        childSpan.finish()
-        throw t
-    }
+  def traceBlocking[A](traceName: String, tags: (String, String)*)(f: TraceData => A)(implicit parentData: TraceData) = parentData match {
+    case _: TraceDataZipkin =>
+      val childSpan = newServerSpan(traceName, tags: _*)
+      Try(f(TraceDataZipkin(childSpan))) match {
+        case Success(result) =>
+          childSpan.finish()
+          result
+        case Failure(t) =>
+          childSpan.tag("error.type", t.getClass.getSimpleName.stripSuffix("$"))
+          childSpan.tag("error.message", t.getMessage)
+          childSpan.finish()
+          throw t
+      }
+    case _ => f(parentData)
   }
 
   def trace[A](traceName: String, tags: (String, String)*)(f: TraceData => Future[A])(implicit parentData: TraceData) = {
     val childSpan = newServerSpan(traceName, tags: _*)
-    val result = f(TraceData(childSpan))
+    val result = f(TraceDataZipkin(childSpan))
     result.onComplete {
       case Failure(t) =>
         childSpan.tag("error.type", t.getClass.getSimpleName.stripSuffix("$"))
@@ -105,12 +111,14 @@ class TracingService @javax.inject.Inject() (actorSystem: ActorSystem, cnf: Metr
     Option(contextOrFlags.context()).map(tracer.newChild).getOrElse(tracer.newTrace(contextOrFlags.samplingFlags()))
   }
 
-  def toMap(span: Span) = {
-    val data = collection.mutable.Map[String, String]()
-    tracing.propagation().injector(
-      (carrier: collection.mutable.Map[String, String], key: String, value: String) => carrier += key -> value
-    ).inject(span.context(), data)
-    data.toMap
+  def toMap(td: TraceData) = td match {
+    case tdz: TraceDataZipkin =>
+      val data = collection.mutable.Map[String, String]()
+      tracing.propagation().injector(
+        (carrier: collection.mutable.Map[String, String], key: String, value: String) => carrier += key -> value
+      ).inject(tdz.span.context(), data)
+      data.toMap
+    case _ => Map.empty
   }
 
   def close() = {

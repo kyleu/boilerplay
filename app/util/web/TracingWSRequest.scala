@@ -29,15 +29,15 @@ private class TracingWSRequest(
 
   override def execute() = tracer.trace(spanName) { data =>
     annotate(data, "execute")
-    request.addHttpHeaders(tracer.toMap(data.span).toSeq: _*).execute().map { rsp =>
-      data.span.tag(TraceKeys.HTTP_STATUS_CODE, rsp.status.toString)
-      data.span.tag(TraceKeys.HTTP_RESPONSE_SIZE, rsp.bodyAsBytes.size.toString)
+    request.addHttpHeaders(tracer.toMap(data).toSeq: _*).execute().map { rsp =>
+      data.tag(TraceKeys.HTTP_STATUS_CODE, rsp.status.toString)
+      data.tag(TraceKeys.HTTP_RESPONSE_SIZE, rsp.bodyAsBytes.size.toString)
       rsp
     }
   }(traceData)
   override def stream() = tracer.trace(spanName) { data =>
     annotate(data, "stream")
-    request.addHttpHeaders(tracer.toMap(data.span).toSeq: _*).stream()
+    request.addHttpHeaders(tracer.toMap(data).toSeq: _*).stream()
   }(traceData)
 
   override def execute(method: String) = withMethod(method).execute()
@@ -49,12 +49,12 @@ private class TracingWSRequest(
   override def withCookies(cookies: WSCookie*) = new TracingWSRequest(spanName, request.withCookies(cookies: _*), tracer, traceData)
 
   private[this] def annotate(data: TraceData, callType: String) = {
-    data.span.tag("call", callType)
-    data.span.tag(TraceKeys.HTTP_URL, request.url)
-    data.span.tag(TraceKeys.HTTP_METHOD, request.method)
-    request.headers.get(play.api.http.HeaderNames.CONTENT_LENGTH).map(x => data.span.tag(TraceKeys.HTTP_REQUEST_SIZE, x.headOption.getOrElse("0").toString))
-    request.header("Content-Type").foreach(ct => data.span.tag("contenttype", ct))
-    request.requestTimeout.foreach(t => data.span.tag("timeout", t.toString))
+    data.tag("call", callType)
+    data.tag(TraceKeys.HTTP_URL, request.url)
+    data.tag(TraceKeys.HTTP_METHOD, request.method)
+    request.headers.get(play.api.http.HeaderNames.CONTENT_LENGTH).map(x => data.tag(TraceKeys.HTTP_REQUEST_SIZE, x.headOption.getOrElse("0").toString))
+    request.header("Content-Type").foreach(ct => data.tag("contenttype", ct))
+    request.requestTimeout.foreach(t => data.tag("timeout", t.toString))
     data
   }
 }
