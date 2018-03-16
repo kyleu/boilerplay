@@ -11,6 +11,11 @@ class GraphQLFileService @javax.inject.Inject() (ws: WSClient) {
     case Left(x) => throw x
   }
 
+  def save(path: String, req: GraphQLRequest) = {
+    import io.circe.syntax._
+    FileRepository.writeFile("graphql", path, req.asJson.spaces2)
+  }
+
   def call(req: GraphQLRequest, log: String => Unit) = {
     log(s"Calling GraphQL request [${req.name}], with variables [${req.variablesJson}] and a body of size [${req.bodySize}].")
   }

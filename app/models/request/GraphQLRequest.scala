@@ -12,7 +12,7 @@ object GraphQLRequest {
 }
 
 case class GraphQLRequest(
-    name: String,
+    name: String = "New Query",
     query: String = "query NewQuery {\n  \n}",
     variables: Map[String, String] = Map.empty,
     source: String = "adhoc",

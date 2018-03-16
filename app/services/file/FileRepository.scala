@@ -1,9 +1,10 @@
 package services.file
 
+import better.files.File
+
 object FileRepository {
   def list(key: String, path: Option[String] = None) = {
-    val keyDir = FileService.getDir(key)
-    val d = path.map(keyDir / _).getOrElse(keyDir)
+    val d = path.map(FileService.getDir(key) / _).getOrElse(FileService.getDir(key))
     if (!d.isDirectory || !d.isReadable) {
       throw new IllegalStateException(s"Cannot read [$key] subdirectory at path [${d.pathAsString}].")
     }
@@ -11,12 +12,11 @@ object FileRepository {
   }
 
   def readFile(key: String, path: String) = {
-    val keyDir = FileService.getDir(key)
-    val d = keyDir / path
-    if (!d.isRegularFile || !d.isReadable) {
-      throw new IllegalStateException(s"Cannot read [$key] file at path [${d.pathAsString}].")
+    val f = FileService.getDir(key) / path
+    if (!f.isRegularFile || !f.isReadable) {
+      throw new IllegalStateException(s"Cannot read [$key] file at path [${f.pathAsString}].")
     }
-    d.contentAsString
+    f.contentAsString
   }
 
   def readJson(key: String, path: String) = {
@@ -25,5 +25,10 @@ object FileRepository {
       case Right(json) => json
       case Left(x) => throw x
     }
+  }
+
+  def writeFile(key: String, path: String, content: String) = {
+    val f = FileService.getDir(key) / path
+    f.writeText(content)
   }
 }

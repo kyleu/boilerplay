@@ -11,14 +11,12 @@
       <div><em>Manage the models of the system.</em></div>
     </li>
     <li class="collection-item">
-      <a class="theme-text" href="@controllers.admin.audit.routes.AuditLifecycleController.index()">Manage Audits</a>
-      <div><em>View and modify model additions and changes.</em></div>
-    </li>
-    <li class="collection-item">
-      <a class="theme-text" href="@controllers.admin.graphql.routes.GraphQLController.graphql(None)">GraphQL</a>
+      <a class="theme-text" href="@controllers.admin.graphql.routes.GraphQLRepositoryController.listRoot()">GraphQL</a>
       <div>
-        Query the system using GraphQL
-        (<a class="theme-text" href="@controllers.admin.graphql.routes.SchemaController.voyager()">View Schema</a>).
+        Query the system using GraphQL (
+          or <a class="theme-text" href="@controllers.admin.graphql.routes.GraphQLController.graphql()">build a query</a>
+          or <a class="theme-text" href="@controllers.admin.graphql.routes.SchemaController.voyager()">view the schema</a>
+        ).
       </div>
     </li>
     <li class="collection-item">

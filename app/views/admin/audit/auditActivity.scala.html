@@ -1,6 +1,6 @@
 @(user: models.user.SystemUser, devmode: Boolean)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
-)@traceData.logViewClass(getClass)@views.html.admin.layout.page(user, "audit", "Audit Activity") {
+)@traceData.logViewClass(getClass)@views.html.admin.layout.page(user, "status", "Audit Activity") {
   <div class="row">
     <div class="col s12">
       <ul id="activity-log" class="collection with-header">

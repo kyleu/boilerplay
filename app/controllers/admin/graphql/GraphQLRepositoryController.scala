@@ -8,8 +8,10 @@ import models.request.GraphQLRequest
 import services.file.FileRepository
 import services.graphql.GraphQLFileService
 import util.tracing.TraceData
+import util.web.ControllerUtils
 
 import scala.concurrent.Future
+import scala.util.Try
 import scala.util.control.NonFatal
 
 @javax.inject.Singleton
@@ -18,7 +20,7 @@ class GraphQLRepositoryController @javax.inject.Inject() (override val app: Appl
   private[this] val key = "graphql"
 
   def newQuery() = withSession("new", admin = true) { implicit request => implicit td =>
-    Future.successful(Ok(views.html.admin.graphql.queryDetail(request.identity, "new", GraphQLRequest("New Query"))))
+    Future.successful(Ok(views.html.admin.graphql.queryDetail(request.identity, "new", GraphQLRequest())))
   }
 
   def listRoot = withSession("list", admin = true) { implicit request => implicit td =>
@@ -39,13 +41,21 @@ class GraphQLRepositoryController @javax.inject.Inject() (override val app: Appl
 
   def queryForm(path: String) = withSession("form", admin = true) { implicit request => implicit td =>
     try {
-      Future.successful(Ok(views.html.admin.graphql.queryForm(request.identity, files.read(path))))
+      Future.successful(Ok(views.html.admin.graphql.queryForm(request.identity, path, files.read(path))))
     } catch {
-      case NonFatal(x) => Future.successful(Ok(views.html.admin.graphql.queryForm(request.identity, GraphQLRequest("Parse Error"), Some(x))))
+      case NonFatal(x) => Future.successful(Ok(views.html.admin.graphql.queryForm(request.identity, path, GraphQLRequest("Parse Error"), Some(x))))
     }
   }
 
   def querySave(path: String) = withSession("form", admin = true) { implicit request => implicit td =>
+    val form = ControllerUtils.getForm(request)
+    val req = Try(files.read(path)).toOption.getOrElse(GraphQLRequest()).copy(
+      name = form("name"),
+      query = form("query"),
+      source = "user",
+      author = request.identity.username
+    )
+    files.save(path, req)
     Future.successful(Redirect(controllers.admin.graphql.routes.GraphQLRepositoryController.queryDetail(path)))
   }
 

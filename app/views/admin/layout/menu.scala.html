@@ -13,15 +13,10 @@
       } else {
         <li><a class="dropdown-button" href="@controllers.admin.system.routes.AdminController.explore()" data-activates="dropdown-explore">Explore</a></li>
       }
-      @if(activeSection == "audit") {
-        <li class="active"><a href="@controllers.admin.audit.routes.AuditLifecycleController.index()">Audits</a></li>
-      } else {
-        <li><a href="@controllers.admin.audit.routes.AuditLifecycleController.index()">Audits</a></li>
-      }
       @if(activeSection == "graphql") {
-        <li class="active"><a href="@controllers.admin.graphql.routes.GraphQLController.graphql(None)">GraphQL</a></li>
+        <li class="active"><a href="@controllers.admin.graphql.routes.GraphQLRepositoryController.listRoot()">GraphQL</a></li>
       } else {
-        <li><a href="@controllers.admin.graphql.routes.GraphQLController.graphql(None)">GraphQL</a></li>
+        <li><a href="@controllers.admin.graphql.routes.GraphQLRepositoryController.listRoot()">GraphQL</a></li>
       }
       @if(activeSection == "status") {
         <li class="active"><a href="@controllers.admin.system.routes.AdminController.status()">Status</a></li>
@@ -36,14 +31,14 @@
       </a></li>
     </ul>
 
-    <ul class="search-input input-field right">
+    <div class="search-input input-field right">
       <form action="@controllers.admin.system.routes.SearchController.search()" method="get">
         <input id="search-input" name="q" type="search" />
         <label for="search-input">
           <i class="fa fa-search"></i>
         </label>
       </form>
-    </ul>
+    </div>
   </nav>
 </header>
 
