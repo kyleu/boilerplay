@@ -1,0 +1,20 @@
+@(user: models.user.SystemUser, path: String, query: models.request.GraphQLRequest, err: Option[Throwable] = None)(
+    implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
+)@traceData.logViewClass(getClass)@views.html.admin.layout.page(user, "status", s"GraphQL [${query.name}]") {
+  <div class="row">
+    <div class="col s12">
+      <div class="collection with-header">
+        <div class="collection-header">
+          <div class="right"><a class="theme-text" href="@controllers.admin.graphql.routes.GraphQLRepositoryController.queryForm(path)">Edit</a></div>
+          <h4>@query.name</h4>
+          <em>@path</em>
+        </div>
+        @err.map { e =>
+          <div class="collection-item error">
+            @e.getMessage
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+}

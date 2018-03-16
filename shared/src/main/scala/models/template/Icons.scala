@@ -26,6 +26,10 @@ object Icons {
   val time = "fa-clock-o"
   val calendar = "fa-calendar-o"
 
+  val file = "fa-file-code-o"
+  val directory = "fa-folder-o"
+  val directoryOpen = "fa-folder-open-o"
+
   val dropdownToggle = "fa-angle-down"
 
   val audit = "fa-dot-circle-o"
@@ -36,5 +40,8 @@ object Icons {
   val systemUser = "fa-user"
 
   // Start model icons
+  val ddl = "fa-glass"
+  val passwordInfo = "fa-info-circle"
+  val settingValues = "fa-hand-spock-o"
   // End model icons
 }

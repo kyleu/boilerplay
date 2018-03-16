@@ -1,6 +1,13 @@
 # GraphQL
-GET         /               controllers.admin.graphql.GraphQLController.graphql(query: Option[String] ?= None, variables: Option[String] ?= None)
-POST        /               controllers.admin.graphql.GraphQLController.graphqlBody
+GET         /                    controllers.admin.graphql.GraphQLController.graphql(query: Option[String] ?= None, variables: Option[String] ?= None)
+POST        /                    controllers.admin.graphql.GraphQLController.graphqlBody
 
-GET         /schema         controllers.admin.graphql.SchemaController.renderSchema()
-GET         /voyager        controllers.admin.graphql.SchemaController.voyager()
+GET         /schema              controllers.admin.graphql.SchemaController.renderSchema()
+GET         /voyager             controllers.admin.graphql.SchemaController.voyager()
+
+GET         /new                 controllers.admin.graphql.GraphQLRepositoryController.newQuery
+GET         /list                controllers.admin.graphql.GraphQLRepositoryController.listRoot
+GET         /list/*path          controllers.admin.graphql.GraphQLRepositoryController.listPath(path)
+GET         /detail/*path        controllers.admin.graphql.GraphQLRepositoryController.queryDetail(path)
+GET         /edit/*path          controllers.admin.graphql.GraphQLRepositoryController.queryForm(path)
+POST        /edit/*path          controllers.admin.graphql.GraphQLRepositoryController.querySave(path)

@@ -2,6 +2,6 @@
 package services.user
 
 @javax.inject.Singleton
-class SystemUserServiceRegistry @javax.inject.Inject() (
+class UserServiceRegistry @javax.inject.Inject() (
     val systemUserService: services.user.SystemUserService
 )

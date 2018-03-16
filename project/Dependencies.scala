@@ -33,7 +33,7 @@ object Dependencies {
   }
 
   object Database {
-    val version = "3.2.1"
+    val version = "3.2.2"
 
     val postgres = "org.postgresql" % "postgresql" % "9.4.1212"
     val hikariCp = "com.zaxxer" % "HikariCP" % "2.7.8"
@@ -56,7 +56,7 @@ object Dependencies {
   }
 
   object WebJars {
-    val fontAwesome = "org.webjars" % "font-awesome" % "5.0.6"
+    val fontAwesome = "org.webjars" % "font-awesome" % "4.7.0"
     val jquery = "org.webjars" % "jquery" % "2.2.4"
     val materialize = "org.webjars" % "materializecss" % "0.100.2"
     val moment = "org.webjars" % "momentjs" % "2.20.1"
@@ -95,7 +95,8 @@ object Dependencies {
     val csv = "com.github.tototoshi" %% "scala-csv" % "1.3.5"
     val betterFiles = "com.github.pathikrit" %% "better-files" % "3.4.0"
     val commonsIo = "commons-io" % "commons-io" % "2.6"
-    val scalaGuice = "net.codingwell" %% "scala-guice" % "4.1.1"
+    val scalaGuice = "net.codingwell" %% "scala-guice" % "4.2.0"
+    val scopts = "com.github.scopt" %% "scopt" % "3.7.0"
   }
 
   object Testing {
