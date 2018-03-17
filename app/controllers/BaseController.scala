@@ -29,9 +29,7 @@ abstract class BaseController(val name: String) extends InjectedController with 
     s"Controller request metrics for [$metricsName]"
   ).labelNames("method").register()
 
-  protected def withoutSession(action: String)(
-    block: UserAwareRequest[AuthEnv, AnyContent] => TraceData => Future[Result]
-  )(implicit ec: ExecutionContext) = {
+  protected def withoutSession(action: String)(block: UserAwareRequest[AuthEnv, AnyContent] => TraceData => Future[Result])(implicit ec: ExecutionContext) = {
     app.silhouette.UserAwareAction.async { implicit request =>
       Instrumented.timeFuture(requestHistogram, name + "_" + action) {
         app.tracing.trace(name + ".controller." + action) { td =>
@@ -72,7 +70,7 @@ abstract class BaseController(val name: String) extends InjectedController with 
 
   protected def modelForm(rawForm: Option[Map[String, Seq[String]]]) = ControllerUtilities.modelForm(rawForm)
 
-  private[this] def failRequest(request: UserAwareRequest[AuthEnv, AnyContent]) = {
+  protected def failRequest(request: UserAwareRequest[AuthEnv, AnyContent]) = {
     val msg = request.identity match {
       case Some(_) => "You must be an administrator to access that."
       case None => s"You must sign in or register before accessing ${util.Config.projectName}."

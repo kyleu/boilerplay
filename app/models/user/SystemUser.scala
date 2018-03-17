@@ -31,6 +31,13 @@ object SystemUser {
     preferences = UserPreferences.empty,
     profile = LoginInfo("anonymous", "system")
   )
+
+  val guest = SystemUser(
+    id = UUID.fromString("77777777-7777-7777-7777-777777777777"),
+    username = "",
+    preferences = UserPreferences.empty,
+    profile = LoginInfo("anonymous", "guest")
+  )
 }
 
 case class SystemUser(

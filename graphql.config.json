@@ -1,0 +1,27 @@
+{
+  "schema": {
+    "request": {
+      "url": "http://localhost:9000/admin/graphql",
+      "method": "POST",
+      "postIntrospectionQuery": true,
+      "options": {
+        "headers": {
+          "user-agent": "GraphQL",
+          "admin-graphql-auth": "change_this_secret_key"
+        }
+      }
+    }
+  },
+  "endpoints": [
+    {
+      "name": "Localhost",
+      "url": "http://localhost:9000/admin/graphql",
+      "options": {
+        "headers": {
+          "user-agent": "GraphQL",
+          "admin-graphql-auth": "change_this_secret_key"
+        }
+      }
+    }
+  ]
+}

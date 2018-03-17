@@ -1,4 +1,4 @@
-package models.request
+package models.rest
 
 import java.time.LocalDateTime
 

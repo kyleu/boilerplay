@@ -1,10 +1,10 @@
-{
-  "name" : "New Query 1",
-  "query" : "query NewQuery {\r\n  \r\n}",
-  "variables" : {
-    
-  },
-  "source" : "user",
-  "author" : "Kyle",
-  "created" : "2018-03-16T04:35:51.933"
+query Example {
+  profile {
+    id
+    username
+    email
+    role
+    theme
+    created
+  }
 }

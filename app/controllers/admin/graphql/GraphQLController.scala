@@ -4,6 +4,7 @@ import controllers.BaseController
 import io.circe.Json
 import models.Application
 import models.auth.Credentials
+import models.user.Role
 import sangria.execution.{ErrorWithResolver, QueryAnalysisError}
 import sangria.marshalling.circe._
 import sangria.parser.SyntaxError
@@ -21,16 +22,25 @@ class GraphQLController @javax.inject.Inject() (override val app: Application, g
     Future.successful(Ok(views.html.admin.graphql.graphiql(request.identity)))
   }
 
-  def graphqlBody = withSession("graphql.post", admin = true) { implicit request => implicit td =>
+  def graphqlBody = withoutSession("graphql.post") { implicit request => implicit td =>
+    request.identity match {
+      case Some(u) if u.role == Role.Admin => // All cool, you're an admin
+      case Some(_) => failRequest(request)
+      case None if request.headers.get("admin-graphql-auth").contains(app.config.secretKey) => // All Cool, you can read graphql.config.json
+      case None => failRequest(request)
+    }
+
     val body = jsonObject(jsonBody(request.body)).filter(x => x._1 != "variables").toMap
     val query = body("query").as[String].getOrElse("{}")
     val variables = body.get("variables").map(x => graphQLService.parseVariables(x.asString.getOrElse("{}")))
     val operation = body.get("operationName").flatMap(_.asString)
 
-    executeQuery(query, variables, operation, request, app.config.debug)
+    executeQuery(query, variables, operation, Credentials.fromInsecureRequest(request), app.config.debug)
   }
 
-  def executeQuery(query: String, variables: Option[Json], operation: Option[String], creds: Credentials, debug: Boolean)(implicit data: TraceData) = {
+  private[this] def executeQuery(
+    query: String, variables: Option[Json], operation: Option[String], creds: Credentials, debug: Boolean
+  )(implicit data: TraceData) = {
     try {
       val f = graphQLService.executeQuery(app, query, variables, operation, creds, debug)
       f.map(x => Ok(x.spaces2).as(JSON)).recover {

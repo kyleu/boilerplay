@@ -1,9 +1,7 @@
-package services
-
-import models.request.RestRequest
+import models.rest.RestRequest
 import play.api._
 import play.core.server.{ProdServerStart, RealServerProcess, ServerConfig, ServerProvider}
-import services.request.RestRequestService
+import services.rest.RestRequestService
 
 object Entrypoint {
   def main(args: Array[String]): Unit = if (args.isEmpty) {

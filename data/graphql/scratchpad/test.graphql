@@ -1,0 +1,8 @@
+query Test {
+  service {
+    method(args: "?") {
+      field1
+      field2
+    }
+  }
+}

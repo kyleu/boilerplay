@@ -11,13 +11,12 @@
       <div><em>Manage the models of the system.</em></div>
     </li>
     <li class="collection-item">
-      <a class="theme-text" href="@controllers.admin.graphql.routes.GraphQLRepositoryController.listRoot()">GraphQL</a>
-      <div>
-        Query the system using GraphQL (
-          or <a class="theme-text" href="@controllers.admin.graphql.routes.GraphQLController.graphql()">build a query</a>
-          or <a class="theme-text" href="@controllers.admin.graphql.routes.SchemaController.voyager()">view the schema</a>
-        ).
-      </div>
+      <a class="theme-text" href="@controllers.admin.rest.routes.RestController.index()">Rest Requests</a>
+      <div><em>Send ad-hoc or saved http requests and view the results.</em></div>
+    </li>
+    <li class="collection-item">
+      <a class="theme-text" href="@controllers.admin.graphql.routes.GraphQLController.graphql()">GraphQL</a>
+      <div><em>Query the system using GraphQL or <a class="theme-text" href="@controllers.admin.graphql.routes.SchemaController.voyager()">view the schema</a>.</em></div>
     </li>
     <li class="collection-item">
       <a class="theme-text" href="@controllers.admin.system.routes.AdminController.status()">@util.Config.projectName Status</a>
