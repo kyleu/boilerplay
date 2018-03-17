@@ -36,7 +36,7 @@ trait MutationQueries[T <: Product] { this: BaseQueries[T] =>
     override val name = s"$key.create.fields"
     private[this] val cols = dataFields.map(f => ResultFieldHelper.sqlForField("insert", f.k, fields))
     override val sql = s"""insert into ${quote(tableName)} (${cols.mkString(", ")}) values (${cols.map(_ => "?").mkString(", ")})"""
-    override val values = dataFields.map(_.v)
+    override val values = dataFields.map(f => ResultFieldHelper.valueForField("create", f.k, f.v, fields))
   }
 
   protected case class UpdateFields(pks: Seq[Any], dataFields: Seq[DataField]) extends Statement {

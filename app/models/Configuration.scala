@@ -10,6 +10,7 @@ import util.metrics.MetricsConfig
 class Configuration @javax.inject.Inject() (val cnf: play.api.Configuration, val metrics: MetricsConfig, env: Environment) {
   val debug = env.mode == Mode.Dev
   val dataDir = cnf.get[String]("data.directory").toFile
+  val secretKey = cnf.get[String]("play.http.secret.key")
 
   val slackConfig = SlackConfig(
     enabled = cnf.get[Boolean]("notification.slack.enabled"),

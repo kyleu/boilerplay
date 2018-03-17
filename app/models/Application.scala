@@ -62,6 +62,7 @@ class Application @javax.inject.Inject() (
 
     TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
     System.setProperty("user.timezone", "UTC")
+    util.EncryptionUtils.setKey(config.secretKey)
 
     if (config.metrics.prometheusEnabled) { Instrumented.start(config.metrics.prometheusPort) }
 

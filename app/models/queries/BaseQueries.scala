@@ -11,7 +11,10 @@ abstract class BaseQueries[T <: Product](
   protected def searchColumns: Seq[String] = Nil
   protected def fromRow(row: Row): T
 
-  protected def toDataSeq(t: T): Seq[Any] = t.productIterator.toSeq
+  protected def toDataSeq(t: T): Seq[Any] = t.productIterator.toSeq.zip(fields).map {
+    case x if x._2.typ == DatabaseFieldType.EncryptedStringType => util.EncryptionUtils.encrypt(x._1.toString)
+    case x => x._1
+  }
 
   lazy val quotedColumns = fields.map(f => quote(f.col)).mkString(", ")
   protected def placeholdersFor(seq: Seq[_]) = seq.map(_ => "?").mkString(", ")

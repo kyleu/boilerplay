@@ -1,6 +1,6 @@
 package services.request
 
-import models.request.RestRequest
+import models.rest.RestRequest
 import play.api.libs.ws.WSClient
 
 @javax.inject.Singleton

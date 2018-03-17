@@ -1,7 +1,7 @@
 package models.result
 
 import models.database.DatabaseField
-import models.database.DatabaseFieldType.TimestampType
+import models.database.DatabaseFieldType.{EncryptedStringType, TimestampType}
 import models.queries.EngineHelper
 import models.result.filter._
 import models.result.orderBy.OrderBy
@@ -14,6 +14,7 @@ object ResultFieldHelper {
 
   def valueForField(t: String, field: String, value: Option[String], fields: Seq[DatabaseField]): Option[Any] = fields.find(_.prop == field) match {
     case Some(f) => f.typ match {
+      case EncryptedStringType => value.map(util.EncryptionUtils.encrypt)
       case TimestampType => value.map(util.DateUtils.sqlDateTimeFromString)
       case _ => value
     }
