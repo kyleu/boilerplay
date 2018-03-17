@@ -1,9 +1,10 @@
 package models.sandbox
 
-import enumeratum.{Enum, EnumEntry, CirceEnum}
+import enumeratum.{CirceEnum, Enum, EnumEntry}
 import models.Application
 import services.ServiceRegistry
 import services.database.BackupRestore
+import services.rest.RestRepository
 import util.FutureUtils.defaultContext
 import util.Logging
 import util.tracing.TraceData
@@ -49,21 +50,13 @@ object SandboxTask extends Enum[SandboxTask] with CirceEnum[SandboxTask] {
     }
   }
 
-  case object JsonSerialization extends SandboxTask("jsonSerialization", "Json Serialization", "Serializes 1,000 messages with circe.") {
+  case object RestCall extends SandboxTask("restCall", "Rest Call", "Calls the provided url and returns the response.") {
     override def call(app: Application, services: ServiceRegistry, argument: Option[String])(implicit trace: TraceData) = {
-      val pong = models.Pong(util.DateUtils.now)
-      val startMs = util.DateUtils.nowMillis
-      val json = (0 to 1000).map(_ => util.JsonSerializers.writeResponseMessage(pong))
-      Future.successful(s"Json (${json.size}): " + (util.DateUtils.nowMillis - startMs) + "ms")
-    }
-  }
-
-  case object BinarySerialization extends SandboxTask("binarySerialization", "Binary Serialization", "Serializes 1,000 messages with BooPickle.") {
-    override def call(app: Application, services: ServiceRegistry, argument: Option[String])(implicit trace: TraceData) = {
-      val pong = models.Pong(util.DateUtils.now)
-      val startMs = util.DateUtils.nowMillis
-      val binary = (0 to 1000).map(_ => util.BinarySerializers.writeResponseMessage(pong))
-      Future.successful(s"Binary (${binary.size}): " + (util.DateUtils.nowMillis - startMs) + "ms")
+      RestRepository.reload()
+      argument match {
+        case Some(path) => Future.successful(RestRepository.repo.requests.get(path).toString)
+        case None => Future.successful(RestRepository.repo.configs.mkString("\n"))
+      }
     }
   }
 

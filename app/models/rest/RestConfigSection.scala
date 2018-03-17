@@ -1,7 +1,7 @@
-package models.rest.config
+package models.rest
 
-import io.circe.{Decoder, Encoder}
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
+import io.circe.{Decoder, Encoder}
 
 object RestConfigSection {
   implicit val jsonEncoder: Encoder[RestConfigSection] = deriveEncoder
