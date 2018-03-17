@@ -1,3 +1,8 @@
 {
-
+  "name": "Example GET Request",
+  "protocol": "http",
+  "domain": "google.com",
+  "source": "example",
+  "author": "Kyle U",
+  "created": "2018-03-01T00:00"
 }

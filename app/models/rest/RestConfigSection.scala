@@ -1,7 +1,6 @@
 package models.rest
 
-import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
-import io.circe.{Decoder, Encoder}
+import util.JsonSerializers.Circe._
 
 object RestConfigSection {
   implicit val jsonEncoder: Encoder[RestConfigSection] = deriveEncoder

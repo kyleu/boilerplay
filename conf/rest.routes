@@ -1,2 +1,3 @@
 # Rest Requests
 GET         /                    controllers.admin.rest.RestController.index
+GET         /dump                controllers.admin.rest.RestController.dump

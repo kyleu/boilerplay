@@ -41,25 +41,6 @@ object SandboxTask extends Enum[SandboxTask] with CirceEnum[SandboxTask] {
     override def call(app: Application, services: ServiceRegistry, argument: Option[String])(implicit trace: TraceData) = TracingLogic.go(app, argument)
   }
 
-  case object WebCall extends SandboxTask("webCall", "Web Call", "Calls the provided url and returns stats.") {
-    override def call(app: Application, services: ServiceRegistry, argument: Option[String])(implicit trace: TraceData) = argument match {
-      case Some(url) => app.ws.url("sandbox.request", url).get().map { rsp =>
-        s"${rsp.status} $url (${util.NumberUtils.withCommas(rsp.bodyAsBytes.size)} bytes)"
-      }
-      case None => Future.successful("No url provided...")
-    }
-  }
-
-  case object RestCall extends SandboxTask("restCall", "Rest Call", "Calls the provided url and returns the response.") {
-    override def call(app: Application, services: ServiceRegistry, argument: Option[String])(implicit trace: TraceData) = {
-      RestRepository.reload()
-      argument match {
-        case Some(path) => Future.successful(RestRepository.repo.requests.get(path).toString)
-        case None => Future.successful(RestRepository.repo.configs.mkString("\n"))
-      }
-    }
-  }
-
   case object CopyTable extends SandboxTask("copyTable", "Copy Table", "Copy a database table, in preparation for new DDL.") {
     override def call(app: Application, services: ServiceRegistry, argument: Option[String])(implicit trace: TraceData) = {
       argument.map(a => TableLogic.copyTable(app, a)).getOrElse(Future.successful("Argument required."))

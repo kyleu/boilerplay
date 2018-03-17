@@ -1,14 +1,11 @@
-import models.rest.RestRequest
 import play.api._
 import play.core.server.{ProdServerStart, RealServerProcess, ServerConfig, ServerProvider}
-import services.rest.RestRequestService
 
 object Entrypoint {
   def main(args: Array[String]): Unit = if (args.isEmpty) {
     startServer(new RealServerProcess(args))
   } else {
-    val req = RestRequest(name = "Default REST Request", url = "https://google.com")
-    new RestRequestService(util.NullUtils.inst).call(req, s => println(s))
+    throw new IllegalStateException("TODO: Parse arguments.")
   }
 
   def startServer(process: RealServerProcess) = {

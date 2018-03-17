@@ -2,50 +2,34 @@ package models.rest
 
 import java.time.LocalDateTime
 
-import enumeratum.{CirceEnum, Enum, EnumEntry}
-import io.circe.{Decoder, Encoder, Json}
-import io.circe.java8.time._
-import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
+import util.JsonSerializers.Circe._
 
 object RestRequest {
   implicit val jsonEncoder: Encoder[RestRequest] = deriveEncoder
   implicit val jsonDecoder: Decoder[RestRequest] = deriveDecoder
-
-  sealed abstract class ContentType(t: String) extends EnumEntry
-
-  object ContentType extends Enum[ContentType] with CirceEnum[ContentType] {
-    implicit val jsonEncoder: Encoder[ContentType] = deriveEncoder
-    implicit val jsonDecoder: Decoder[ContentType] = deriveDecoder
-
-    case object Form extends ContentType("application/x-www-form-urlencoded")
-    case object Json extends ContentType("application/json")
-
-    override val values = findValues
-  }
-
-  sealed trait Method extends EnumEntry
-
-  object Method extends Enum[Method] with CirceEnum[Method] {
-    implicit val jsonEncoder: Encoder[Method] = deriveEncoder
-    implicit val jsonDecoder: Decoder[Method] = deriveDecoder
-
-    case object Get extends Method
-    case object Post extends Method
-
-    override val values = findValues
-  }
+  val default = RestRequest(name = "Default Request")
 }
 
 case class RestRequest(
     name: String,
-    url: String,
-    method: RestRequest.Method = RestRequest.Method.Get,
-    contentType: RestRequest.ContentType = RestRequest.ContentType.Json,
-    body: Option[Json] = None,
+    protocol: Protocol = Protocol.Http,
+    domain: String = "localhost",
+    port: Option[Int] = None,
+    path: String = "/",
+    method: Method = Method.Get,
+    contentType: ContentType = ContentType.Json,
+    accept: MimeType = MimeType.Json,
+    body: Option[RequestBody] = None,
     source: String = "adhoc",
     author: String = "Unknown",
     created: LocalDateTime = util.DateUtils.now
 ) {
-  lazy val bodyString = body.map(_.spaces2)
-  lazy val bodySize = bodyString.map(_.length).getOrElse(0)
+  lazy val url = s"$protocol://$domain${port.map(":" + _).getOrElse("")}$path"
+
+  override lazy val toString = {
+    val sb = new StringBuilder()
+    def add(s: String) = sb.append(s + "\n")
+    add(s"${method.toString.toUpperCase} $path HTTP/1.1")
+    sb.toString
+  }
 }
