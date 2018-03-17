@@ -3,11 +3,9 @@ package models.audit
 import java.time.LocalDateTime
 import java.util.UUID
 
-import io.circe.{Decoder, Encoder}
 import models.result.data.{DataField, DataFieldModel, DataSummary}
-import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
-import io.circe.java8.time._
 import models.tag.Tag
+import util.JsonSerializers.Circe._
 
 import scala.scalajs.js.annotation.{JSExport, JSExportTopLevel}
 

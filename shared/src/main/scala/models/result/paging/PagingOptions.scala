@@ -1,7 +1,6 @@
 package models.result.paging
 
-import io.circe.{Decoder, Encoder}
-import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
+import util.JsonSerializers.Circe._
 
 object PagingOptions {
   case class Range(start: Int, end: Int)

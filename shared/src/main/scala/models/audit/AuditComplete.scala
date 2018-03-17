@@ -2,9 +2,8 @@ package models.audit
 
 import java.util.UUID
 
-import io.circe.{Decoder, Encoder}
-import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import models.tag.Tag
+import util.JsonSerializers.Circe._
 
 object AuditComplete {
   implicit val jsonEncoder: Encoder[AuditComplete] = deriveEncoder

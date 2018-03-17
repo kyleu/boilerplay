@@ -3,10 +3,8 @@ package models.note
 import java.time.LocalDateTime
 import java.util.UUID
 
-import io.circe.{Decoder, Encoder}
-import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
-import io.circe.java8.time._
 import models.result.data.{DataField, DataFieldModel, DataSummary}
+import util.JsonSerializers.Circe._
 
 object Note {
   implicit val jsonEncoder: Encoder[Note] = deriveEncoder

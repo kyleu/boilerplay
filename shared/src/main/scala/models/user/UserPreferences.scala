@@ -1,8 +1,8 @@
 package models.user
 
 import io.circe.{Decoder, Encoder}
-import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import models.template.Theme
+import util.JsonSerializers.Circe._
 
 object UserPreferences {
   implicit val jsonEncoder: Encoder[UserPreferences] = deriveEncoder

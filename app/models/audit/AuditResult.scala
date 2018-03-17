@@ -1,14 +1,13 @@
 /* Generated File */
 package models.audit
 
-import io.circe.{Decoder, Encoder}
-import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
-import io.circe.java8.time._
 import java.time.LocalDateTime
+
 import models.result.BaseResult
 import models.result.filter.Filter
 import models.result.orderBy.OrderBy
 import models.result.paging.PagingOptions
+import util.JsonSerializers.Circe._
 
 case class AuditResult(
     override val filters: Seq[Filter] = Nil,

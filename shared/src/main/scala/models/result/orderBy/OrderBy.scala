@@ -1,8 +1,7 @@
 package models.result.orderBy
 
-import enumeratum.{Enum, EnumEntry, CirceEnum}
-import io.circe.{Decoder, Encoder}
-import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
+import enumeratum.{CirceEnum, Enum, EnumEntry}
+import util.JsonSerializers.Circe._
 
 object OrderBy {
   implicit val jsonEncoder: Encoder[OrderBy] = deriveEncoder

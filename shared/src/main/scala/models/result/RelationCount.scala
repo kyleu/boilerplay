@@ -1,7 +1,6 @@
 package models.result
 
-import io.circe.{Decoder, Encoder}
-import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
+import util.JsonSerializers.Circe._
 
 object RelationCount {
   implicit val jsonEncoder: Encoder[RelationCount] = deriveEncoder

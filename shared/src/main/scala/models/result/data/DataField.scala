@@ -1,7 +1,6 @@
 package models.result.data
 
-import io.circe.{Decoder, Encoder}
-import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
+import util.JsonSerializers.Circe._
 
 import scala.scalajs.js.annotation.{JSExport, JSExportTopLevel}
 

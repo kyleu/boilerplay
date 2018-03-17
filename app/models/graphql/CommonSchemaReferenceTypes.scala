@@ -30,10 +30,7 @@ protected[graphql] trait CommonSchemaReferenceTypes {
     }
   )
 
-  private[this] def parseJson(s: String) = io.circe.parser.parse(s) match {
-    case Right(u) => Right(u)
-    case Left(_) => Left(UuidCoercionViolation)
-  }
+  private[this] def parseJson(s: String) = io.circe.parser.parse(s).left.map(_ => UuidCoercionViolation)
 
   implicit val jsonType: ScalarType[io.circe.Json] = ScalarType[io.circe.Json](
     name = "JSON",

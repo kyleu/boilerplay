@@ -2,9 +2,7 @@ package models.ddl
 
 import java.time.LocalDateTime
 
-import io.circe.{Decoder, Encoder}
-import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
-import io.circe.java8.time._
+import util.JsonSerializers.Circe._
 
 object DdlFile {
   implicit val jsonEncoder: Encoder[DdlFile] = deriveEncoder

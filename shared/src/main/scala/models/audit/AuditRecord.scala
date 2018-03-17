@@ -2,9 +2,8 @@ package models.audit
 
 import java.util.UUID
 
-import io.circe.{Decoder, Encoder}
 import models.result.data.{DataField, DataFieldModel, DataSummary}
-import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
+import util.JsonSerializers.Circe._
 
 import scala.scalajs.js.annotation.{JSExport, JSExportTopLevel}
 
