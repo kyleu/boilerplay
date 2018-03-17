@@ -1,6 +1,6 @@
 package models.result.data
 
-import util.JsonSerializers.Circe._
+import util.JsonSerializers._
 
 import scala.scalajs.js.annotation.{JSExport, JSExportTopLevel}
 

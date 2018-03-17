@@ -2,7 +2,7 @@ package models.auth
 
 import com.mohiva.play.silhouette.api.actions.{SecuredRequest, UserAwareRequest}
 import models.user.SystemUser
-import util.JsonSerializers.Circe._
+import util.JsonSerializers._
 
 case class Credentials(user: SystemUser, remoteAddress: String = util.NullUtils.str, tags: Map[String, String] = Map.empty)
 

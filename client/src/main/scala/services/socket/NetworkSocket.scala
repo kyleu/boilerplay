@@ -2,11 +2,12 @@ package services.socket
 
 import java.nio.ByteBuffer
 
+import io.circe.parser.decode
 import models.ResponseMessage
 import org.scalajs.dom.raw._
 import services.event.EventHandler
 import util.ArrayBufferOps
-import util.{BinarySerializers, JsonSerializers}
+import util.BinarySerializers
 
 import scala.scalajs.js.typedarray.{ArrayBuffer, TypedArrayBuffer}
 
@@ -70,8 +71,10 @@ class NetworkSocket(handler: EventHandler) {
   private[this] def onMessageEvent(event: MessageEvent): Unit = event.data match {
     case s: String =>
       NetworkMessage.receivedBytes += s.getBytes.length
-      val msg = JsonSerializers.readResponseMessage(s)
-      process(msg)
+      process(decode[ResponseMessage](s) match {
+        case Right(x) => x
+        case Left(err) => throw err
+      })
     case b: Blob =>
       val reader = new FileReader()
       def onLoadEnd(ev: ProgressEvent) = {

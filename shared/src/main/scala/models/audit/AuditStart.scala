@@ -1,7 +1,7 @@
 package models.audit
 
 import models.tag.Tag
-import util.JsonSerializers.Circe._
+import util.JsonSerializers._
 
 object AuditStart {
   implicit val jsonEncoder: Encoder[AuditStart] = deriveEncoder

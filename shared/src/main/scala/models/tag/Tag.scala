@@ -1,6 +1,6 @@
 package models.tag
 
-import util.JsonSerializers.Circe._
+import util.JsonSerializers._
 
 object Tag {
   implicit val jsonEncoder: Encoder[Tag] = deriveEncoder

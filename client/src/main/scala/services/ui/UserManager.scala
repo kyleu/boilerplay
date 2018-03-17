@@ -2,7 +2,7 @@ package services.ui
 
 import java.util.UUID
 
-import models.UserSettings
+import models.ResponseMessage.UserSettings
 import models.user.UserPreferences
 
 object UserManager {

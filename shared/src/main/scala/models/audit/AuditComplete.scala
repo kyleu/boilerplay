@@ -3,7 +3,7 @@ package models.audit
 import java.util.UUID
 
 import models.tag.Tag
-import util.JsonSerializers.Circe._
+import util.JsonSerializers._
 
 object AuditComplete {
   implicit val jsonEncoder: Encoder[AuditComplete] = deriveEncoder

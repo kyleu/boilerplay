@@ -6,7 +6,10 @@ import akka.actor.{Actor, ActorRef, ActorSystem, Props}
 import akka.stream.Materializer
 import com.mohiva.play.silhouette.api.HandlerResult
 import io.prometheus.client.{Counter, Histogram}
-import models._
+import models.InternalMessage.{SocketStarted, SocketStopped}
+import models.RequestMessage.Ping
+import models.{Application, RequestMessage, ResponseMessage}
+import models.ResponseMessage.{Pong, UserSettings}
 import models.auth.Credentials
 import play.api.mvc.{AnyContent, AnyContentAsEmpty, Request, WebSocket}
 import util.Logging

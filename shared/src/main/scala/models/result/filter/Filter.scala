@@ -1,6 +1,6 @@
 package models.result.filter
 
-import util.JsonSerializers.Circe._
+import util.JsonSerializers._
 
 object Filter {
   implicit val jsonEncoder: Encoder[Filter] = deriveEncoder

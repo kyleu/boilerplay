@@ -1,7 +1,7 @@
 package models.supervisor
 
 import akka.util.Timeout
-import models.{GetSystemStatus, SystemStatus}
+import models.InternalMessage.{GetSystemStatus, SystemStatus}
 import models.graphql.CommonSchema._
 import models.graphql.DateTimeSchema._
 import models.graphql.{GraphQLContext, SchemaHelper}

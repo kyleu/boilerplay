@@ -1,8 +1,9 @@
 package models.rest
 
 import io.circe.syntax._
-import io.circe.{Decoder, Encoder, HCursor, Json}
+import io.circe.{HCursor, Json}
 import org.apache.commons.codec.binary.Base64
+import util.JsonSerializers._
 
 object RequestBody {
   implicit val jsonEncoder: Encoder[RequestBody] = {

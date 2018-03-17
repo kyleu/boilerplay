@@ -2,7 +2,8 @@ package controllers.admin.system
 
 import akka.util.Timeout
 import controllers.BaseController
-import models.{Application, GetSystemStatus, SystemStatus}
+import models.Application
+import models.InternalMessage.{GetSystemStatus, SystemStatus}
 
 import scala.concurrent.Future
 

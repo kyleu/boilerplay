@@ -1,6 +1,6 @@
 package models.audit
 
-import util.JsonSerializers.Circe._
+import util.JsonSerializers._
 
 object AuditField {
   implicit val jsonEncoder: Encoder[AuditField] = deriveEncoder

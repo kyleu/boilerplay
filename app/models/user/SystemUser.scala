@@ -6,7 +6,7 @@ import java.util.UUID
 import com.mohiva.play.silhouette.api.{Identity, LoginInfo}
 import models.result.data.{DataField, DataFieldModel}
 import util.DateUtils
-import util.JsonSerializers.Circe._
+import util.JsonSerializers._
 
 object SystemUser {
   private[this] implicit val jsonLoginInfoEncoder: Encoder[LoginInfo] = deriveEncoder

@@ -1,6 +1,6 @@
 package models.rest
 
-import util.JsonSerializers.Circe._
+import util.JsonSerializers._
 
 object RestConfigSection {
   implicit val jsonEncoder: Encoder[RestConfigSection] = deriveEncoder

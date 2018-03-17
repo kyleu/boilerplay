@@ -1,6 +1,6 @@
 package services.event
 
-import models.{Pong, RequestMessage, ResponseMessage}
+import models.{RequestMessage, ResponseMessage}
 import org.scalajs.jquery.{jQuery => $}
 import services.socket.NetworkMessage
 import util.Logging

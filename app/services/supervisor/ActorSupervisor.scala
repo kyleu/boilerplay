@@ -4,10 +4,12 @@ import java.util.UUID
 
 import akka.actor.SupervisorStrategy.Stop
 import akka.actor.{Actor, ActorRef, OneForOneStrategy, SupervisorStrategy}
-import models._
 import java.time.LocalDateTime
 
 import io.prometheus.client.{Counter, Gauge, Histogram}
+import models.InternalMessage._
+import models.ResponseMessage.ServerError
+import models.{Application, InternalMessage, ResponseMessage}
 import models.auth.Credentials
 import models.supervisor.SocketDescription
 import util.metrics.Instrumented

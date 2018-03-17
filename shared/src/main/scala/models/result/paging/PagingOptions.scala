@@ -1,6 +1,6 @@
 package models.result.paging
 
-import util.JsonSerializers.Circe._
+import util.JsonSerializers._
 
 object PagingOptions {
   case class Range(start: Int, end: Int)

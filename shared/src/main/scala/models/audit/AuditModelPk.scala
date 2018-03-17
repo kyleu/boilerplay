@@ -1,6 +1,6 @@
 package models.audit
 
-import util.JsonSerializers.Circe._
+import util.JsonSerializers._
 
 object AuditModelPk {
   implicit val jsonEncoder: Encoder[AuditModelPk] = deriveEncoder

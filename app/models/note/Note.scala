@@ -4,7 +4,7 @@ import java.time.LocalDateTime
 import java.util.UUID
 
 import models.result.data.{DataField, DataFieldModel, DataSummary}
-import util.JsonSerializers.Circe._
+import util.JsonSerializers._
 
 object Note {
   implicit val jsonEncoder: Encoder[Note] = deriveEncoder

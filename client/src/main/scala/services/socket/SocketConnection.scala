@@ -29,7 +29,7 @@ abstract class SocketConnection(key: String, val handler: EventHandler, val bina
       if (binary) {
         socket.sendBinary(BinarySerializers.writeRequestMessage(rm))
       } else {
-        socket.sendString(JsonSerializers.writeRequestMessage(rm))
+        socket.sendString(new io.circe.syntax.EncoderOps(rm).asJson.spaces2)
       }
       handler.onRequestMessage(rm)
     } else {

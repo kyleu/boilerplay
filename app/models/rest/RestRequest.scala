@@ -2,7 +2,7 @@ package models.rest
 
 import java.time.LocalDateTime
 
-import util.JsonSerializers.Circe._
+import util.JsonSerializers._
 
 object RestRequest {
   implicit val jsonEncoder: Encoder[RestRequest] = deriveEncoder

@@ -3,7 +3,7 @@ package services.rest
 import better.files.File
 import models.rest.{RequestBody, RestConfigSection, RestFolder, RestRequest}
 import services.file.FileService
-import util.JsonSerializers.Circe._
+import util.JsonSerializers._
 import util.Logging
 
 object RestRepository extends Logging {

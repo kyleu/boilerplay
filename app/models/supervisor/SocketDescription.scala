@@ -3,7 +3,7 @@ package models.supervisor
 import java.time.LocalDateTime
 import java.util.UUID
 
-import util.JsonSerializers.Circe._
+import util.JsonSerializers._
 
 object SocketDescription {
   implicit val jsonEncoder: Encoder[SocketDescription] = deriveEncoder

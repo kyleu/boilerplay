@@ -3,7 +3,7 @@ package models.audit
 import java.util.UUID
 
 import models.result.data.{DataField, DataFieldModel, DataSummary}
-import util.JsonSerializers.Circe._
+import util.JsonSerializers._
 
 import scala.scalajs.js.annotation.{JSExport, JSExportTopLevel}
 

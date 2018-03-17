@@ -4,7 +4,10 @@ import java.util.UUID
 
 import akka.actor.{Actor, ActorRef, Props}
 import io.prometheus.client.{Counter, Histogram}
-import models._
+import models.{InternalMessage, ResponseMessage}
+import models.InternalMessage.{SocketStarted, SocketStopped}
+import models.RequestMessage._
+import models.ResponseMessage._
 import models.auth.Credentials
 import util.{Config, Logging}
 import util.metrics.Instrumented

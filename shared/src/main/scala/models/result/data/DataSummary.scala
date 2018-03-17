@@ -1,6 +1,6 @@
 package models.result.data
 
-import util.JsonSerializers.Circe._
+import util.JsonSerializers._
 
 object DataSummary {
   implicit val jsonEncoder: Encoder[DataSummary] = deriveEncoder

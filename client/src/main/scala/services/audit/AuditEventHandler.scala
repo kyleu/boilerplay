@@ -1,6 +1,7 @@
 package services.audit
 
-import models._
+import models.ResponseMessage
+import models.ResponseMessage.{AuditCompleteNotification, AuditNotification, AuditStartNotification}
 import models.audit.{AuditCompleteTemplate, AuditStartTemplate, AuditTemplate}
 import services.event.EventHandler
 import org.scalajs.jquery.{jQuery => $}

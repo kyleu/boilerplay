@@ -1,6 +1,7 @@
 package services.event
 
-import models._
+import models.{RequestMessage, ResponseMessage}
+import models.ResponseMessage.{Pong, ServerError, UserSettings}
 import services.notification.NotificationService
 import services.socket.NetworkMessage
 import services.ui.UserManager
@@ -11,7 +12,7 @@ import org.scalajs.dom.raw.ErrorEvent
 
 trait EventHandler {
   private[this] def sendPing(): Unit = {
-    NetworkMessage.sendMessage(Ping(DateUtils.now))
+    NetworkMessage.sendMessage(models.RequestMessage.Ping(DateUtils.now))
     setTimeout(10000)(sendPing())
   }
 

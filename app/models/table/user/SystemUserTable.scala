@@ -6,12 +6,15 @@ import java.util.UUID
 import com.mohiva.play.silhouette.api.LoginInfo
 import models.user.{Role, SystemUser, UserPreferences}
 import services.database.SlickQueryService.imports._
-import util.JsonSerializers.{readPreferences, writePreferences}
+import io.circe.syntax.EncoderOps
 
 object SystemUserTable {
   implicit val loginInfoColumnType = MappedColumnType.base[LoginInfo, String](b => b.providerKey, i => LoginInfo("credentials", i))
   implicit val roleColumnType = MappedColumnType.base[Role, String](b => b.toString, i => Role.withName(i))
-  implicit val userPreferencesColumnType = MappedColumnType.base[UserPreferences, String](b => writePreferences(b), i => readPreferences(i))
+  implicit val userPreferencesColumnType = MappedColumnType.base[UserPreferences, String](
+    tmap = b => new EncoderOps(b).asJson.spaces2,
+    tcomap = i => UserPreferences.readFrom(i)
+  )
 
   val query = TableQuery[SystemUserTable]
 

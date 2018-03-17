@@ -2,12 +2,11 @@
 package models.user
 
 import java.time.LocalDateTime
-
 import models.result.BaseResult
 import models.result.filter.Filter
 import models.result.orderBy.OrderBy
 import models.result.paging.PagingOptions
-import util.JsonSerializers.Circe._
+import util.JsonSerializers._
 
 case class SystemUserResult(
     override val filters: Seq[Filter] = Nil,

@@ -1,7 +1,7 @@
 package models.rest
 
 import better.files.File
-import util.JsonSerializers.Circe._
+import util.JsonSerializers._
 
 object RestFolder {
   implicit val jsonEncoder: Encoder[RestFolder] = deriveEncoder
