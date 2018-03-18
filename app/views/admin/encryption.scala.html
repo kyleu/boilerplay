@@ -1,7 +1,7 @@
 @(user: models.user.SystemUser, unenc: String = "", enc: String = "")(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
 )@traceData.logViewClass(getClass)@views.html.admin.layout.page(user, "", util.Config.projectName + " Administration") {
-  <form method="post" action="">
+  <form method="post" action="@controllers.admin.system.routes.EncryptionController.post">
   <ul class="collection with-header">
     <li class="collection-header">
       <h5>Encryption</h5>
@@ -13,6 +13,10 @@
       </div>
     </li>
     <li class="collection-item">
+      <div class="right">
+        <button class="btn"><i class="fa @models.template.Icons.upArrow"></i> Decrypt</button>
+      </div>
+      <button class="btn"><i class="fa @models.template.Icons.downArrow"></i> Encrypt</button>
     </li>
     <li class="collection-item">
       <div class="input-field">

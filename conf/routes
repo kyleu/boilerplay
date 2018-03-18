@@ -14,9 +14,6 @@ GET         /robots.txt                              controllers.HomeController.
 ->          /admin/user                              user.Routes
 # End model route files
 
-# Utility
-GET         /*path/                                  controllers.HomeController.untrail(path: String)
-
 # Authentication
 GET         /signup                                  controllers.auth.RegistrationController.registrationForm(email: Option[String] ?= None)
 POST        /signup                                  controllers.auth.RegistrationController.register

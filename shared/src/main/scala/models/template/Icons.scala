@@ -4,6 +4,9 @@ object Icons {
   val sortAsc = "fa-sort-asc"
   val sortDesc = "fa-sort-desc"
 
+  val upArrow = "fa-sort-asc"
+  val downArrow = "fa-sort-desc"
+
   val bars = "fa-bars"
   val spin = "fa-spin"
   val settings = "fa-gear"
@@ -26,7 +29,7 @@ object Icons {
   val time = "fa-clock-o"
   val calendar = "fa-calendar-o"
 
-  val file = "fa-file-code-o"
+  val file = "fa-file-text-o"
   val directory = "fa-folder-o"
   val directoryOpen = "fa-folder-open-o"
 

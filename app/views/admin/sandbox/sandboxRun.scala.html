@@ -9,13 +9,13 @@
           <em>@result.status: @{result.elapsed}ms</em>
         </div>
         <div class="collection-item">
-          <pre class="sandbox-result" style="margin: 20px 0;">@result.result</pre>
-        </div>
-        <div class="collection-item">
           <form action="@controllers.admin.system.routes.SandboxController.run(result.task.id)">
             <input name="arg" value="@result.arg" placeholder="Argument" />
             <button class="btn theme" type="submit">Run Again</button>
           </form>
+        </div>
+        <div class="collection-item">
+          <pre class="sandbox-result" style="margin: 20px 0;">@result.result</pre>
         </div>
       </div>
     </div>

@@ -1,6 +1,6 @@
 {
-  "name": "Example GET Request",
-  "protocol": "http",
+  "name": "example",
+  "title": "Example GET Request",
   "domain": "google.com",
   "source": "example",
   "author": "Kyle U",

@@ -1,0 +1,23 @@
+POST /sth-buy/ticketing_services.aspx?dsn=sandbox&apikey=hQGI9oGB5LJBfdSZKgfF55zjAvIs5vkQ HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+Cookie: SID=RhcRhj_GRCPVO7koldsfP3GYv5qv0mlpVzelRQEupmwWZYKumecq1gHUcuzZ8SNnlrhHqcDqLf6QBRh1; BID=pHtNm3qrERszxL76P7R77ulfH2HU97YPjuy0fBZYU_sA8UM6kBOxJzlkDGBslUIaExy5YAkfZ2LQAlH9S1YB; CID=QC5nIpLl9kWSy_yKu4qCT8OfHPgWZ8xcxzKsjHEudQANAav1ByLr1TFYMRqXpfWJrA5J; QTKN=; ASP.NET_SessionId=scy4xf0hhar3lqyta4vt1siq
+Host: app.ticketmaster.com
+Connection: close
+User-Agent: Paw/3.1.5 (Macintosh; OS X/10.13.3) GCDHTTPRequest
+Content-Length: 233
+
+{
+  "command1": {
+    "uid": "fev525",
+    "cmd": "shopping_cart",
+    "dsn": "sandbox",
+    "order_num": 1774438,
+    "calling_reason": "B"
+  },
+  "header": {
+    "src_sys_type": 2,
+    "ver": 1,
+    "archtics_version": "v999"
+  }
+}

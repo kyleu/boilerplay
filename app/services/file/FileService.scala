@@ -22,4 +22,11 @@ object FileService extends Logging {
     }
     d
   }
+
+  def getContent(f: File) = f.contentAsString
+
+  def getJsonContent(f: File) = io.circe.parser.parse(getContent(f)) match {
+    case Right(json) => json
+    case Left(x) => throw new IllegalStateException(s"Invalid json for file [${f.pathAsString}]: ${getContent(f)}]", x)
+  }
 }

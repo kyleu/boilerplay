@@ -19,6 +19,10 @@ POST        /settings            controllers.admin.system.SettingsController.sav
 # DDL Files
 GET         /ddl                 controllers.admin.system.DdlFileController.list
 
+# Encryption
+GET         /encrypt             controllers.admin.system.EncryptionController.form
+POST        /encrypt             controllers.admin.system.EncryptionController.post
+
 # Sandboxes
 GET         /sandbox             controllers.admin.system.SandboxController.list
 GET         /sandbox/:key        controllers.admin.system.SandboxController.run(key, arg: Option[String] ?= None)

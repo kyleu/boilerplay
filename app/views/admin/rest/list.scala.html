@@ -1,0 +1,35 @@
+@(user: models.user.SystemUser, folder: models.rest.RestFolder, query: Option[String])(
+    implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
+)@traceData.logViewClass(getClass)@views.html.admin.layout.page(user, "rest", "Rest Requests") {
+  <div class="static-container container">
+    <div class="collection with-header file-listing">
+      <div class="collection-header">
+        <div class="right">@if(folder.isRoot) {
+          <a class="theme-text" href="@controllers.admin.rest.routes.RestController.reloadRoot()">Reload</a>
+        } else {
+          <a class="theme-text" href="@controllers.admin.rest.routes.RestController.reload(folder.path)">Reload</a>
+        }</div>
+        <h4>@folder.title</h4>
+        @folder.path
+      </div>
+      <div class="collection-item">
+        @views.html.admin.rest.listFolder(folder.path, folder.folders, folder.requests)
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript">
+    function toggleFolder(q) {
+      var els = q.children('.elements');
+      els.toggle();
+      if(els.is(":visible")) {
+        q.children('.title').children('.folder-icon').addClass("@models.template.Icons.directoryOpen").removeClass("@models.template.Icons.directory")
+      } else {
+        q.children('.title').children('.folder-icon').addClass("@models.template.Icons.directory").removeClass("@models.template.Icons.directoryOpen")
+      }
+    }
+
+    $(function() {
+      $('.folder .title').on('click', function() { toggleFolder($(this).parent()); return false; });
+    });
+  </script>
+}

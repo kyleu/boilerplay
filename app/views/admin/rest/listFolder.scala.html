@@ -1,0 +1,16 @@
+@(path: String, folders: Seq[models.rest.RestFolder], requests: Seq[(String, models.rest.RestRequest)])
+@folders.map { childFolder =>
+  <div id="@childFolder.pathNormalized" class="folder">
+    <span class="title"><i class="fa folder-icon @models.template.Icons.directoryOpen"></i></span>
+    <a class="theme-text" href="@controllers.admin.rest.routes.RestController.view(childFolder.path)">@childFolder.title</a>
+    <div id="@childFolder.pathNormalized-elements" class="elements">
+      @views.html.admin.rest.listFolder(childFolder.path, childFolder.folders, childFolder.requests)
+    </div>
+  </div>
+}
+@requests.map { request =>
+  <div class="file">
+    <i class="fa @models.template.Icons.file"></i>
+    <a class="theme-text" href="@controllers.admin.rest.routes.RestController.view(request._2.fullPath)"> @request._2.title</a>
+  </div>
+}

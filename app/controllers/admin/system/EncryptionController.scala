@@ -15,7 +15,7 @@ class EncryptionController @javax.inject.Inject() (override val app: Application
   }
 
   def post() = withSession("list", admin = true) { implicit request => implicit td =>
-    val form = ControllerUtils.getForm(request)
+    val form = ControllerUtils.getForm(request.body)
     val action = form.get("action")
     val (unenc, enc) = action match {
       case Some("encrypt") =>

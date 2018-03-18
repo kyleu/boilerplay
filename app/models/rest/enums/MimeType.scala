@@ -1,12 +1,12 @@
-package models.rest
+package models.rest.enums
 
 import enumeratum.{CirceEnum, Enum, EnumEntry}
 
-sealed abstract class MimeType(val t: String, val isReturned: Boolean = true) extends EnumEntry
+sealed abstract class MimeType(val mt: String, val isReturned: Boolean = true) extends EnumEntry
 
 object MimeType extends Enum[MimeType] with CirceEnum[MimeType] {
-  case object Text extends MimeType("text/plain")
   case object Html extends MimeType("text/html")
+  case object Text extends MimeType("text/plain")
   case object Json extends MimeType("application/json")
   case object Xml extends MimeType("application/xml")
   case object Xhtml extends MimeType("application/xhtml+xml")
@@ -22,5 +22,5 @@ object MimeType extends Enum[MimeType] with CirceEnum[MimeType] {
 
   case class Custom(mimeType: String) extends MimeType(mimeType)
 
-  override val values = findValues
+  override lazy val values = findValues
 }

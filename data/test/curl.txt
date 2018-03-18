@@ -1,0 +1,19 @@
+curl -X "POST" "https://app.ticketmaster.com/sth-buy/ticketing_services.aspx?dsn=dcunited&apikey=hQGI9oGB5LJBfdSZKgfF55zjAvIs5vkQ" \
+     -H 'foo: bar' \
+     -H 'x: y' \
+     -H 'Content-Type: application/json' \
+     -H 'Cookie: SID=RhcRhj_GRCPVO7koldsfP3GYv5qv0mlpVzelRQEupmwWZYKumecq1gHUcuzZ8SNnlrhHqcDqLf6QBRh1; BID=pHtNm3qrERszxL76P7R77ulfH2HU97YPjuy0fBZYU_sA8UM6kBOxJzlkDGBslUIaExy5YAkfZ2LQAlH9S1YB; CID=QC5nIpLl9kWSy_yKu4qCT8OfHPgWZ8xcxzKsjHEudQANAav1ByLr1TFYMRqXpfWJrA5J; QTKN=; ASP.NET_SessionId=scy4xf0hhar3lqyta4vt1siq' \
+     -d $'{
+  "command1": {
+    "call_reason": "S",
+    "dsn": "dcunited",
+    "uid": "FEV525",
+    "cmd": "customer_query",
+    "acct_id": "1610935"
+  },
+  "header": {
+    "src_sys_type": 2,
+    "ver": 1,
+    "archtics_version": "v613"
+  }
+}'

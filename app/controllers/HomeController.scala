@@ -74,10 +74,6 @@ class HomeController @javax.inject.Inject() (
     }
   }(formatter.transformer(binary))
 
-  def untrail(path: String) = Action.async {
-    Future.successful(MovedPermanently(s"/$path"))
-  }
-
   def externalLink(url: String) = withSession("external.link") { implicit request => implicit td =>
     Future.successful(Redirect(if (url.startsWith("http")) { url } else { "http://" + url }))
   }

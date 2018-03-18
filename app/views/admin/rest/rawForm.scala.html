@@ -1,0 +1,15 @@
+@(user: models.user.SystemUser, req: models.rest.RestRequest)(
+    implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
+)@traceData.logViewClass(getClass)@views.html.admin.layout.page(user, "rest", req.title) {
+  <form method="post" action="@controllers.admin.rest.routes.RestController.save(req.path)">
+    <div class="row">
+      <div class="col l2 s12">
+        <div class="input-field">
+          <textarea title="Json Content" id="json" name="json" class="materialize-textarea">@io.circe.syntax.EncoderOps(req).asJson.spaces2</textarea>
+        </div>
+      </div>
+      <button class="btn theme" type="submit">Save Request</button>
+    </div>
+  </form>
+  <script>$(function() { $('textarea').trigger('autoresize'); });</script>
+}
