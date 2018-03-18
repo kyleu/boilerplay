@@ -21,7 +21,7 @@ object EncryptionUtils {
     Base64.encodeBase64String(cipher.doFinal(value.getBytes("UTF-8")))
   }
 
-  def decrypt(encryptedValue: String, throwOnError: Boolean = true) = try {
+  def decrypt(encryptedValue: String, throwOnError: Boolean = false) = try {
     val cipher: Cipher = Cipher.getInstance("AES/ECB/PKCS5PADDING")
     cipher.init(Cipher.DECRYPT_MODE, spec)
     new String(cipher.doFinal(Base64.decodeBase64(encryptedValue)))

@@ -13,8 +13,8 @@ sealed abstract class DatabaseFieldType[T](val key: String, val isNumeric: Boole
 object DatabaseFieldType extends Enum[DatabaseFieldType[_]] with CirceEnum[DatabaseFieldType[_]] with DatabaseFieldHelper {
   case object StringType extends DatabaseFieldType[String]("string")
   case object EncryptedStringType extends DatabaseFieldType[String]("encrypted") {
-    override def apply(row: Row, col: String) = util.EncryptionUtils.decrypt(row.as[String](col), throwOnError = false)
-    override def opt(row: Row, col: String) = row.asOpt[String](col).map(v => util.EncryptionUtils.decrypt(v, throwOnError = false))
+    override def apply(row: Row, col: String) = util.EncryptionUtils.decrypt(row.as[String](col))
+    override def opt(row: Row, col: String) = row.asOpt[String](col).map(v => util.EncryptionUtils.decrypt(v))
   }
 
   case object BooleanType extends DatabaseFieldType[Boolean]("boolean") {

@@ -7,7 +7,7 @@
       "options": {
         "headers": {
           "user-agent": "GraphQL",
-          "admin-graphql-auth": "change_this_secret_key"
+          "admin-graphql-auth": "XQG40vp7n5onULHu4n/wDg=="
         }
       }
     }
@@ -19,7 +19,7 @@
       "options": {
         "headers": {
           "user-agent": "GraphQL",
-          "admin-graphql-auth": "change_this_secret_key"
+          "admin-graphql-auth": "XQG40vp7n5onULHu4n/wDg=="
         }
       }
     }

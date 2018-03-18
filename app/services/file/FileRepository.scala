@@ -1,7 +1,5 @@
 package services.file
 
-import better.files.File
-
 object FileRepository {
   def list(key: String, path: Option[String] = None) = {
     val d = path.map(FileService.getDir(key) / _).getOrElse(FileService.getDir(key))
