@@ -16,7 +16,7 @@ class SettingsController @javax.inject.Inject() (override val app: Application) 
   }
 
   def saveSettings = withSession("settings.save", admin = true) { implicit request => implicit td =>
-    val form = ControllerUtils.getForm(request)
+    val form = ControllerUtils.getForm(request.body)
     form.foreach { x =>
       SettingKey.withNameOption(x._1) match {
         case Some(settingKey) => app.coreServices.settings.set(settingKey, x._2)

@@ -17,7 +17,7 @@ trait UserEditHelper { this: SystemUserController =>
   }
 
   def create() = withSession("user.create", admin = true) { implicit request => implicit td =>
-    val form = ControllerUtils.getForm(request)
+    val form = ControllerUtils.getForm(request.body)
     val id = UUID.randomUUID
     val loginInfo = LoginInfo(CredentialsProvider.ID, form("email").trim)
     val role = form.get("role") match {
@@ -65,7 +65,7 @@ trait UserEditHelper { this: SystemUserController =>
       val user = u.getOrElse(throw new IllegalStateException(s"Invalid user [$id]."))
       val isSelf = request.identity.id == id
 
-      val form = ControllerUtils.getForm(request)
+      val form = ControllerUtils.getForm(request.body)
       val newUsername = form("username")
       val newEmail = form("email")
       val newPassword = form.get("password") match {

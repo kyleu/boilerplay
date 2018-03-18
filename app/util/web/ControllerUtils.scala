@@ -2,13 +2,15 @@ package util.web
 
 import io.circe.Json
 import play.api.data.FormError
-import play.api.mvc.{Accepting, AnyContent, Request}
+import play.api.mvc.{Accepting, AnyContent}
 
 object ControllerUtils {
   val acceptsCsv = Accepting("text/csv")
 
-  def getForm(request: Request[AnyContent]) = request.body.asFormUrlEncoded match {
-    case Some(f) => f.mapValues(x => x.headOption.getOrElse(throw new IllegalStateException("Empty form element.")))
+  def getForm(body: AnyContent, prefix: Option[String] = None) = body.asFormUrlEncoded match {
+    case Some(f) =>
+      val fullMap = f.mapValues(x => x.headOption.getOrElse(throw new IllegalStateException("Empty form element.")))
+      prefix.map(p => fullMap.filterKeys(_.startsWith(p)).map(x => x._1.stripPrefix(p) -> x._2)).getOrElse(fullMap)
     case None => throw new IllegalStateException("Missing form post.")
   }
 

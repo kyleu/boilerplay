@@ -15,9 +15,7 @@
     <meta property="og:title" content="@title" />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="en_US" />
-    @defining(user.map(_.preferences.theme).getOrElse(models.template.Theme.BlueGrey)) { theme =>
-    <link id="favicon-link" rel="shortcut icon" type="image/png" href="@controllers.routes.Assets.versioned(s"images/ui/favicon/icon-$theme@2x.png")">
-    }
+    <link id="favicon-link" rel="shortcut icon" type="image/png" href="@controllers.routes.Assets.versioned(s"images/ui/favicon/favicon.png")">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="manifest" href="/manifest.json">
     <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
