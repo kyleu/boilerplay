@@ -38,7 +38,7 @@ class GraphQLController @javax.inject.Inject() (override val app: Application, g
     if (allowed) {
       val body = jsonObject(jsonBody(request.body)).filter(x => x._1 != "variables").toMap
       val query = body("query").as[String].getOrElse("{}")
-      val variables = body.get("variables").map(x => graphQLService.parseVariables(x.asString.getOrElse("{}")))
+      val variables = body.get("variables").map(x => graphQLService.parseVariables(x.toString))
       val operation = body.get("operationName").flatMap(_.asString)
 
       executeQuery(query, variables, operation, Credentials.fromInsecureRequest(request), app.config.debug)
