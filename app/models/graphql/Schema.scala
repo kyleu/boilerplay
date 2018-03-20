@@ -38,7 +38,7 @@ object Schema {
 
   val enumQueryFields = {
     // Start enum query fields
-
+    Seq.empty[Field[GraphQLContext, Unit]]
     // End enum query fields
   }
 
