@@ -7,11 +7,18 @@ import com.mohiva.play.silhouette.api.LoginInfo
 import models.user.{Role, SystemUser, UserPreferences}
 import services.database.SlickQueryService.imports._
 import io.circe.syntax.EncoderOps
+import slick.jdbc.JdbcType
 
 object SystemUserTable {
-  implicit val loginInfoColumnType = MappedColumnType.base[LoginInfo, String](b => b.providerKey, i => LoginInfo("credentials", i))
-  implicit val roleColumnType = MappedColumnType.base[Role, String](b => b.toString, i => Role.withName(i))
-  implicit val userPreferencesColumnType = MappedColumnType.base[UserPreferences, String](
+  implicit val loginInfoColumnType: JdbcType[LoginInfo] = MappedColumnType.base[LoginInfo, String](
+    tmap = b => b.providerKey,
+    tcomap = i => LoginInfo("credentials", i)
+  )
+  implicit val roleColumnType: JdbcType[Role] = MappedColumnType.base[Role, String](
+    tmap = b => b.toString,
+    tcomap = i => Role.withName(i)
+  )
+  implicit val userPreferencesColumnType: JdbcType[UserPreferences] = MappedColumnType.base[UserPreferences, String](
     tmap = b => new EncoderOps(b).asJson.spaces2,
     tcomap = i => UserPreferences.readFrom(i)
   )
@@ -30,7 +37,7 @@ object SystemUserTable {
 }
 
 class SystemUserTable(tag: Tag) extends Table[SystemUser](tag, "system_users") {
-  import SystemUserTable.{loginInfoColumnType, roleColumnType, userPreferencesColumnType}
+  import models.table.user.SystemUserTable.{loginInfoColumnType, roleColumnType, userPreferencesColumnType}
 
   def id = column[UUID]("id", O.PrimaryKey)
   def username = column[String]("username")

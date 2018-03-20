@@ -2,9 +2,13 @@ package models.table.settings
 
 import models.settings.{Setting, SettingKey}
 import services.database.SlickQueryService.imports._
+import slick.jdbc.JdbcType
 
 object SettingTable {
-  implicit val settingKeyColumnType = MappedColumnType.base[SettingKey, String](b => b.toString, i => SettingKey.withName(i))
+  implicit val settingKeyColumnType: JdbcType[SettingKey] = MappedColumnType.base[SettingKey, String](
+    tmap = b => b.toString,
+    tcomap = i => SettingKey.withName(i)
+  )
 
   val query = TableQuery[SettingTable]
 
@@ -16,7 +20,7 @@ object SettingTable {
 }
 
 class SettingTable(tag: Tag) extends Table[Setting](tag, "setting_values") {
-  import SettingTable.settingKeyColumnType
+  import models.table.settings.SettingTable.settingKeyColumnType
 
   def key = column[SettingKey]("k", O.PrimaryKey)
   def value = column[String]("v")

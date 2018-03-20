@@ -1,4 +1,4 @@
-package models.rest
+package models.rest.config
 
 import util.JsonSerializers._
 

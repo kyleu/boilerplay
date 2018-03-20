@@ -1,4 +1,5 @@
-@(user: models.user.SystemUser, folder: models.rest.RestFolder, query: Option[String])(
+@import models.rest.request.RequestFolder
+@(user: models.user.SystemUser, folder: RequestFolder, query: Option[String])(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
 )@traceData.logViewClass(getClass)@views.html.admin.layout.page(user, "rest", "Rest Requests") {
   <div class="static-container container">
@@ -7,13 +8,13 @@
         <div class="right">@if(folder.isRoot) {
           <a class="theme-text" href="@controllers.admin.rest.routes.RestController.reloadRoot()">Reload</a>
         } else {
-          <a class="theme-text" href="@controllers.admin.rest.routes.RestController.reload(folder.path)">Reload</a>
+          <a class="theme-text" href="@controllers.admin.rest.routes.RestController.reload(folder.location)">Reload</a>
         }</div>
         <h4>@folder.title</h4>
-        @folder.path
+        @folder.location
       </div>
       <div class="collection-item">
-        @views.html.admin.rest.listFolder(folder.path, folder.folders, folder.requests)
+        @views.html.admin.rest.listFolder(folder.location, folder.folders, folder.requests)
       </div>
     </div>
   </div>

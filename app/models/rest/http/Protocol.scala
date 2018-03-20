@@ -1,4 +1,4 @@
-package models.rest.enums
+package models.rest.http
 
 import enumeratum.values.{StringCirceEnum, StringEnum, StringEnumEntry}
 

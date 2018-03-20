@@ -1,0 +1,12 @@
+@(user: models.user.SystemUser, title: String, section: String, vals: Seq[Html])(
+    implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
+)@traceData.logViewClass(getClass)@views.html.admin.layout.page(user, section, title) {
+  <ul class="collection with-header">
+    <li class="collection-header">
+      <h5>@title</h5>
+    </li>
+    @vals.map { v =>
+    <li class="collection-item">@v</li>
+    }
+  </ul>
+}

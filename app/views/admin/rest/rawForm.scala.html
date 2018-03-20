@@ -1,7 +1,8 @@
-@(user: models.user.SystemUser, req: models.rest.RestRequest)(
+@import models.rest.request.RestRequest
+@(user: models.user.SystemUser, req: RestRequest)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
 )@traceData.logViewClass(getClass)@views.html.admin.layout.page(user, "rest", req.title) {
-  <form method="post" action="@controllers.admin.rest.routes.RestController.save(req.path)">
+  <form method="post" action="@controllers.admin.rest.routes.RestController.save(req.fileLocation)">
     <div class="row">
       <div class="col l2 s12">
         <div class="input-field">

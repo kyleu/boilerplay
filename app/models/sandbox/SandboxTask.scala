@@ -4,6 +4,7 @@ import enumeratum.{CirceEnum, Enum, EnumEntry}
 import models.Application
 import services.ServiceRegistry
 import services.database.BackupRestore
+import services.rest.parse.RestRequestTests
 import util.FutureUtils.defaultContext
 import util.Logging
 import util.tracing.TraceData
@@ -38,7 +39,7 @@ object SandboxTask extends Enum[SandboxTask] with CirceEnum[SandboxTask] {
 
   case object RestRequest extends SandboxTask("restRequest", "Rest Request", "Tests the http request subsystem.") {
     override def call(app: Application, services: ServiceRegistry, argument: Option[String])(implicit trace: TraceData) = {
-      models.rest.RestRequestTests.run(argument)
+      RestRequestTests.run(argument)
     }
   }
 

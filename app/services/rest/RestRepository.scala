@@ -1,6 +1,7 @@
 package services.rest
 
-import models.rest.{RestConfigSection, RestFolder}
+import models.rest.config.RestConfigSection
+import models.rest.request.RequestFolder
 import services.file.FileService
 import util.JsonSerializers._
 import util.Logging
@@ -20,7 +21,7 @@ object RestRepository extends Logging {
 
   def repo = activeRepo.getOrElse(reload())
 
-  private[this] def loadRequests = RestFolder.fromDir(dir / "request", RestRequestOps.loadRestRequest)
+  private[this] def loadRequests = RestFolderOps.fromDir(dir / "request", RestRequestOps.loadRestRequest)
 
   private[this] def loadConfigs = {
     val (sections, files) = (dir / "config").list.partition(_.isDirectory)
@@ -29,4 +30,4 @@ object RestRepository extends Logging {
   }
 }
 
-case class RestRepository(configs: Seq[RestConfigSection], requests: RestFolder)
+case class RestRepository(configs: Seq[RestConfigSection], requests: RequestFolder)

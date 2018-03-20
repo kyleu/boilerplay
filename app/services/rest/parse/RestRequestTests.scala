@@ -1,6 +1,7 @@
-package models.rest
+package services.rest.parse
 
-import models.rest.parse.HttpParser
+import models.rest.http.{RestBody, RestHeader}
+import models.rest.request.RestRequest
 import services.file.FileService
 
 import scala.concurrent.Future
@@ -28,7 +29,12 @@ object RestRequestTests {
 
   private[this] def testCurl() = {
     val src = (FileService.getDir("test") / "curl.txt").contentAsString
-    val req = RestRequest(name = "CurlTest", title = "Curl Test")
+    val req = RestRequest(
+      name = "CurlTest",
+      title = "Curl Test",
+      headers = Seq(RestHeader("foo", "bar")),
+      body = Some(RestBody.JsonContent("{\n  \"x\": \"y\"\n}"))
+    )
     val json = io.circe.syntax.EncoderOps(req).asJson.spaces2
     val tgt = RestRequestSerializers.toCurl(req)
     val status = if (src.trim != tgt.trim) {

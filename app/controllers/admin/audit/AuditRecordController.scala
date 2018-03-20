@@ -9,13 +9,14 @@ import models.audit.AuditRecordResult
 import models.result.orderBy.OrderBy
 import scala.concurrent.Future
 import services.audit.AuditRecordService
-import util.FutureUtils.defaultContext
 import util.web.ControllerUtils.acceptsCsv
 
 @javax.inject.Singleton
 class AuditRecordController @javax.inject.Inject() (
     override val app: Application, svc: AuditRecordService, auditRecordSvc: AuditRecordService
 ) extends ServiceController(svc) {
+  import app.contexts.webContext
+
   def createForm = withSession("create.form", admin = true) { implicit request => implicit td =>
     val cancel = controllers.admin.audit.routes.AuditRecordController.list()
     val call = controllers.admin.audit.routes.AuditRecordController.create()

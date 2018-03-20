@@ -1,13 +1,13 @@
 # Rest Requests
-GET         /                    controllers.admin.rest.RestController.root(q: Option[String] ?= None)
-GET         /reload              controllers.admin.rest.RestController.reloadRoot()
-GET         /dump                controllers.admin.rest.RestController.dump
+GET         /                        controllers.admin.rest.RestController.root(q: Option[String] ?= None)
+GET         /reload                  controllers.admin.rest.RestController.reloadRoot()
+GET         /dump                    controllers.admin.rest.RestController.dump
 
-GET         /view/*path          controllers.admin.rest.RestController.view(path: String)
-GET         /reload/*path        controllers.admin.rest.RestController.reload(path: String)
-GET         /raw/*path           controllers.admin.rest.RestController.raw(path: String)
-GET         /edit/*path          controllers.admin.rest.RestController.form(path: String)
-POST        /edit/*path          controllers.admin.rest.RestController.save(path: String)
+GET         /view/*location          controllers.admin.rest.RestController.view(location: String)
+GET         /reload/*location        controllers.admin.rest.RestController.reload(location: String)
+GET         /raw/*location           controllers.admin.rest.RestController.raw(location: String)
+GET         /edit/*location          controllers.admin.rest.RestController.form(location: String)
+POST        /edit/*location          controllers.admin.rest.RestController.save(location: String)
 
-GET         /run/*path           controllers.admin.rest.RestController.run(path: String)
+GET         /run/*location           controllers.admin.rest.RestController.run(location: String)
 

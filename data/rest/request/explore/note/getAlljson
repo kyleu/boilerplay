@@ -1,0 +1,26 @@
+{
+  "name" : "getAll",
+  "folder" : null,
+  "title" : "Get All Notes",
+  "method" : "get",
+  "url" : {
+    "protocol" : "http",
+    "domain" : "localhost",
+    "port" : null,
+    "path" : "explore/note",
+    "queryParams" : [
+    ]
+  },
+  "contentType" : "Json",
+  "charset" : null,
+  "accept" : "Json",
+  "userAgent" : null,
+  "headers" : [
+  ],
+  "cookies" : [
+  ],
+  "body" : null,
+  "source" : "api",
+  "author" : "generated",
+  "created" : "2018-03-01T00:00:00"
+}

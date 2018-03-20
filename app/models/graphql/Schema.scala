@@ -36,10 +36,16 @@ object Schema {
     // End model query fields
   }
 
+  val enumQueryFields = {
+    // Start enum query fields
+
+    // End enum query fields
+  }
+
   val queryType = ObjectType(
     name = "Query",
     description = "The main query interface.",
-    fields = (baseQueryFields ++ modelQueryFields).sortBy(_.name)
+    fields = (baseQueryFields ++ modelQueryFields ++ enumQueryFields).sortBy(_.name)
   )
 
   // Mutation Types

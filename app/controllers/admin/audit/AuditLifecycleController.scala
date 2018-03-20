@@ -6,13 +6,13 @@ import controllers.{BaseController, ControllerUtilities}
 import io.circe.syntax._
 import models.Application
 import models.audit._
-import services.audit.{AuditHelper, AuditService}
+import services.audit.AuditHelper
 import util.DateUtils
 
 import scala.concurrent.Future
 
 @javax.inject.Singleton
-class AuditLifecycleController @javax.inject.Inject() (override val app: Application, svc: AuditService) extends BaseController("audit") {
+class AuditLifecycleController @javax.inject.Inject() (override val app: Application) extends BaseController("audit") {
   import app.contexts.webContext
 
   def index() = withSession("index") { implicit request => implicit td =>

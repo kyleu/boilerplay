@@ -35,6 +35,10 @@ object Icons {
 
   val dropdownToggle = "fa-angle-down"
 
+  val url = "fa-location-arrow"
+  val header = "fa-tag"
+  val requestBody = "fa-file-code-o"
+
   val audit = "fa-dot-circle-o"
   val auditRecord = "fa-dot-circle-o"
   val note = "fa-sticky-note-o"

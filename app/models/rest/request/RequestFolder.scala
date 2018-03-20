@@ -1,12 +1,10 @@
-package models.rest
+package models.rest.request
 
-import better.files.File
-import services.file.FileService
 import util.JsonSerializers._
 
-object RestFolder {
-  implicit val jsonEncoder: Encoder[RestFolder] = deriveEncoder
-  implicit val jsonDecoder: Decoder[RestFolder] = deriveDecoder
+object RequestFolder {
+  implicit val jsonEncoder: Encoder[RequestFolder] = deriveEncoder
+  implicit val jsonDecoder: Decoder[RequestFolder] = deriveDecoder
 
   case class PackageIndexFile(title: String, description: Option[String] = None, author: Option[String] = None)
 
@@ -14,41 +12,21 @@ object RestFolder {
     implicit val jsonEncoder: Encoder[PackageIndexFile] = deriveEncoder
     implicit val jsonDecoder: Decoder[PackageIndexFile] = deriveDecoder
   }
-
-  private[this] def loadIndexJson(file: File, nameDefault: String) = FileService.getJsonContent(file).as[PackageIndexFile] match {
-    case Right(pf) => Some(pf)
-    case Left(_) => None
-  }
-
-  def fromDir(dir: File, loadRestRequest: File => RestRequest): RestFolder = {
-    val (folders, files) = dir.list.partition(_.isDirectory)
-    val (packageFiles, requests) = files.partition(_.name == "index.json")
-    val packageFile = packageFiles.toSeq.headOption.flatMap(x => loadIndexJson(x, dir.name))
-    RestFolder(
-      name = dir.name,
-      path = FileService.getDir("rest/request").relativize(dir).toString.stripPrefix("/"),
-      title = packageFile.map(_.title).getOrElse(dir.name),
-      description = packageFile.flatMap(_.description),
-      author = packageFile.flatMap(_.author),
-      folders = folders.map(RestFolder.fromDir(_, loadRestRequest)).toList,
-      requests = requests.map(x => x.name.stripPrefix("/").stripSuffix(".json") -> loadRestRequest(x)).toList
-    )
-  }
 }
 
-case class RestFolder(
+case class RequestFolder(
     name: String,
-    path: String,
+    location: String,
     title: String,
     description: Option[String],
     author: Option[String],
-    folders: Seq[RestFolder] = Nil,
+    folders: Seq[RequestFolder] = Nil,
     requests: Seq[(String, RestRequest)] = Nil
 ) {
-  val pathNormalized = path.replaceAllLiterally("/", "-")
-  val isRoot = path.isEmpty
+  val pathNormalized = location.replaceAllLiterally("/", "-")
+  val isRoot = location.isEmpty
 
-  def getResource(path: String): Either[RestFolder, RestRequest] = {
+  def getResource(path: String): Either[RequestFolder, RestRequest] = {
     path.stripPrefix("/").stripSuffix(".json") match {
       case x if x.contains('/') =>
         val n = x.substring(0, x.indexOf('/'))

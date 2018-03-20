@@ -1,7 +1,7 @@
 package services.rest
 
 import better.files.File
-import models.rest.RestConfigSection
+import models.rest.config.RestConfigSection
 import services.file.FileService
 import util.Logging
 

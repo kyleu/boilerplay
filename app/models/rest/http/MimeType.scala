@@ -1,4 +1,4 @@
-package models.rest.enums
+package models.rest.http
 
 import enumeratum.{CirceEnum, Enum, EnumEntry}
 
@@ -23,4 +23,5 @@ object MimeType extends Enum[MimeType] with CirceEnum[MimeType] {
   case class Custom(mimeType: String) extends MimeType(mimeType)
 
   override lazy val values = findValues
+  def forString(s: String) = values.find(_.mt == s).getOrElse(Custom(s))
 }

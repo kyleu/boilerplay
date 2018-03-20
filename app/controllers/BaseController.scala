@@ -49,7 +49,8 @@ abstract class BaseController(val name: String) extends InjectedController with 
           Instrumented.timeFuture(requestHistogram, name + "_" + action) {
             app.tracing.trace(name + ".controller." + action) { td =>
               ControllerUtilities.enhanceRequest(request, Some(u), td)
-              block(SecuredRequest(u, request.authenticator.get, request))(td)
+              val auth = request.authenticator.getOrElse(throw new IllegalStateException("No auth!"))
+              block(SecuredRequest(u, auth, request))(td)
             }(getTraceData)
           }
         }

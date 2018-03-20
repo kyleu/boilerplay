@@ -1,14 +1,34 @@
-@(user: models.user.SystemUser, req: models.rest.RestRequest)(
+@import models.rest.request.RestRequest
+@(user: models.user.SystemUser, req: RestRequest)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
-)@traceData.logViewClass(getClass)@views.html.admin.layout.page(user, "rest", "Rest Requests") {
+)@traceData.logViewClass(getClass)@views.html.admin.layout.page(user, "rest", req.title) {
   <div class="static-container container">
-    <div class="collection with-header">
-      <div class="collection-header">
-        <h4>@req.title</h4>
+    <div class="collection-header">
+      <div class="right">
+        <a class="btn-flat theme-text" href="@controllers.admin.rest.routes.RestController.form(req.fileLocation)">Edit</a>
+        <a class="btn theme" href="@controllers.admin.rest.routes.RestController.run(req.fileLocation)">Run</a>
       </div>
-      <div class="collection-item">
-        Details!
-      </div>
+      <h4>@req.title</h4>
     </div>
+    <ul class="collapsible" data-collapsible="expandable">
+      <li>
+        <div class="collapsible-header active"><i class="fa @models.template.Icons.url"></i> @req.url</div>
+        <div class="collapsible-body">
+          <span>Lorem ipsum dolor sit amet.</span>
+        </div>
+      </li>
+      <li>
+        <div class="collapsible-header active"><i class="fa @models.template.Icons.header"></i> Request Headers</div>
+        <div class="collapsible-body">
+          <span>Lorem ipsum dolor sit amet.</span>
+        </div>
+      </li>
+      <li>
+        <div class="collapsible-header active"><i class="fa @models.template.Icons.requestBody"></i> Request Body</div>
+        <div class="collapsible-body">
+          <span>Lorem ipsum dolor sit amet.</span>
+        </div>
+      </li>
+    </ul>
   </div>
 }

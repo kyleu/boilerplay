@@ -13,7 +13,7 @@
 
 @roleRadio(name: String, r: models.user.Role, selected: models.user.Role, title: String) = {
   <div>
-    <input type="radio" id="role-@name-@r" name="@name" value="@r" @if(selected == r) { checked="checked" }></input>
+    <input type="radio" id="role-@name-@r" name="@name" value="@r" @if(selected == r) { checked="checked" } />
     <label for="role-@name-@r">@title</label>
   </div>
 }
@@ -31,11 +31,11 @@
             <div class="col s12">
             @defining(settingService.allowRegistration) { allowRegistration =>
               <div>
-                <input type="radio" id="AllowRegistration-true" name="@SettingKey.AllowRegistration" value="true" @if(allowRegistration) { checked="checked" }></input>
+                <input type="radio" id="AllowRegistration-true" name="@SettingKey.AllowRegistration" value="true" @if(allowRegistration) { checked="checked" } />
                 <label for="AllowRegistration-true">Yes</label>
               </div>
               <div>
-                <input type="radio" id="AllowRegistration-false" name="@SettingKey.AllowRegistration" value="false" @if(!allowRegistration) { checked="checked" }></input>
+                <input type="radio" id="AllowRegistration-false" name="@SettingKey.AllowRegistration" value="false" @if(!allowRegistration) { checked="checked" } />
                 <label for="AllowRegistration-false">No</label>
               </div>
             }

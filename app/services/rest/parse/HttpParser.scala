@@ -1,7 +1,6 @@
-package models.rest.parse
+package services.rest.parse
 
-import models.rest.{RestHeader, RestRequest}
-import models.rest.enums.Method
+import models.rest.http.{Method, RestHeader}
 
 import scala.io.Source
 
