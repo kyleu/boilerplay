@@ -1,17 +1,12 @@
 package models.settings
 
-import models.graphql.{CommonSchema, GraphQLContext, SchemaHelper}
+import models.graphql.{GraphQLContext, SchemaHelper}
 import sangria.execution.deferred.HasId
 import sangria.macros.derive._
 import sangria.schema._
+import models.settings.SettingKeySchema.settingKeyEnumType
 
 object SettingsSchema extends SchemaHelper("settings") {
-  implicit val settingKeyEnum: EnumType[SettingKey] = CommonSchema.deriveEnumeratumType(
-    name = "SettingKeyEnum",
-    description = "The possible system settings for this application.",
-    values = SettingKey.values.map(t => t -> t.description).toList
-  )
-
   val settingPrimaryKeyId = HasId[Setting, SettingKey](_.key)
 
   implicit lazy val settingType: ObjectType[GraphQLContext, Setting] = deriveObjectType()

@@ -1,6 +1,6 @@
-@(user: models.user.SystemUser, activeSection: String, title: String, scripts: Seq[String] = Nil)(content: Html)(
+@(user: models.user.SystemUser, activeSection: String, title: String, scripts: Seq[String] = Nil, stylesheets: Seq[String] = Nil)(content: Html)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
-)@traceData.logViewClass(getClass)@layout.materialize(user = Some(user), title = title, scripts = scripts) {
+)@traceData.logViewClass(getClass)@layout.materialize(user = Some(user), title = title, scripts = scripts, stylesheets = stylesheets) {
   @views.html.admin.layout.menu(user, activeSection)
   <main>
     @flash.get("error").map { err =>

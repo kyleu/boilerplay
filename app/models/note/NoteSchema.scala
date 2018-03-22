@@ -54,7 +54,7 @@ object NoteSchema extends SchemaHelper("note") {
   ))
 
   val noteMutationType = ObjectType(
-    name = "note",
+    name = "NoteMutations",
     description = "Mutations for Notes.",
     fields = fields[GraphQLContext, Unit](
       Field(

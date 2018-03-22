@@ -7,7 +7,7 @@ import slick.jdbc.JdbcType
 object SettingTable {
   implicit val settingKeyColumnType: JdbcType[SettingKey] = MappedColumnType.base[SettingKey, String](
     tmap = b => b.toString,
-    tcomap = i => SettingKey.withName(i)
+    tcomap = i => SettingKey.withValue(i)
   )
 
   val query = TableQuery[SettingTable]
