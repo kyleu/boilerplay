@@ -11,3 +11,5 @@ POST        /edit/*location          controllers.admin.rest.RestController.save(
 
 GET         /run/*location           controllers.admin.rest.RestController.run(location: String)
 
+GET         /openapi.yaml            controllers.admin.rest.OpenApiController.yaml()
+GET         /ui                      controllers.admin.rest.OpenApiController.ui()

@@ -59,8 +59,7 @@ object Dependencies {
     val fontAwesome = "org.webjars" % "font-awesome" % "4.7.0"
     val jquery = "org.webjars" % "jquery" % "2.2.4"
     val materialize = "org.webjars" % "materializecss" % "0.100.2"
-    val moment = "org.webjars" % "momentjs" % "2.20.1"
-    val mousetrap = "org.webjars" % "mousetrap" % "1.6.0"
+    val swaggerUi = "org.webjars" % "swagger-ui" % "3.12.1"
   }
 
   object Metrics {
