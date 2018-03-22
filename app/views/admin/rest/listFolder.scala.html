@@ -1,6 +1,4 @@
-@import models.rest.request.RestRequest
-@import models.rest.request.RequestFolder
-@(path: String, folders: Seq[RequestFolder], requests: Seq[(String, RestRequest)])
+@(path: String, folders: Seq[models.rest.request.RequestFolder], requests: Seq[(String, models.rest.request.RestRequest)])
 @folders.map { childFolder =>
   <div id="@childFolder.pathNormalized" class="folder">
     <span class="title"><i class="fa folder-icon @models.template.Icons.directoryOpen"></i></span>

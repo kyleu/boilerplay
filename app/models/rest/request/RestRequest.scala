@@ -15,6 +15,7 @@ case class RestRequest(
     name: String,
     folder: Option[String] = None,
     title: String,
+    description: Option[String] = None,
     method: Method = Method.Get,
     url: RestUrl = RestUrl(),
     contentType: MimeType = MimeType.Json,
@@ -28,7 +29,7 @@ case class RestRequest(
     author: String = "Unknown",
     created: LocalDateTime = util.DateUtils.now
 ) {
-  lazy val fileLocation = (folder.getOrElse("/") + name).stripPrefix("/")
+  lazy val fileLocation = (folder.getOrElse("") + "/" + name).stripPrefix("/")
 
   lazy val finalHeaders = {
     def getHeader(k: String) = headers.find(_.k == k).map(_.v)

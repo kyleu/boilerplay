@@ -12,19 +12,22 @@ object RestRequestOps extends Logging {
 
   def loadRestRequest(file: File) = {
     val p = dir.relativize(file.parent).toString
-    FileService.getJsonContent(file).as[RestRequest] match {
+    val json = FileService.getJsonContent(file)
+    json.as[RestRequest] match {
       case Right(req) => if (req.fileLocation == p) {
         req
       } else {
         //throw new IllegalStateException(s"File [${req.name}] at path [$p] has invalid path [${req.path}].")
-        val copy = req.copy(url = req.url.copy(path = p))
+        val copy = req.copy(folder = Some(p))
         saveRequest(copy)
         copy
       }
       case Left(x) => RestRequest(
         name = file.name.stripSuffix(".json"),
-        title = "Parse Error",
-        url = RestUrl(domain = x.getClass.getSimpleName.stripSuffix("$"), path = p),
+        folder = Some(p),
+        title = json.asObject.flatMap(_.apply("title").map(_.as[String].map(_ + " (error)").getOrElse("No Title"))).getOrElse("Parse Error"),
+        description = Some("[Parse Error]"),
+        url = RestUrl(path = p),
         body = Some(RestBody.JsonContent(Json.obj(
           "status" -> Json.fromString("error"),
           "err" -> Json.fromString(x.getClass.getSimpleName),
@@ -36,7 +39,7 @@ object RestRequestOps extends Logging {
   }
 
   def saveRequest(request: RestRequest) = {
-    val f = dir / request.url.path / (request.name + "json")
+    val f = dir / request.url.path / (request.name + ".json")
     if (f.exists) {
       log.info(s"Overwriting request [${request.title}] at [${request.fileLocation}].")
       f.delete()

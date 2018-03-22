@@ -1,8 +1,27 @@
 {
-  "name": "example",
-  "title": "Example GET Request",
-  "domain": "google.com",
-  "source": "example",
-  "author": "Kyle U",
-  "created": "2018-03-01T00:00"
+  "name" : "example",
+  "folder" : "",
+  "title" : "Example GET Request",
+  "description" : null,
+  "method" : "get",
+  "url" : {
+    "protocol" : "http",
+    "domain" : "localhost",
+    "port" : null,
+    "path" : "",
+    "queryParams" : [
+    ]
+  },
+  "contentType" : "Json",
+  "charset" : null,
+  "accept" : "Json",
+  "userAgent" : null,
+  "headers" : [
+  ],
+  "cookies" : [
+  ],
+  "body" : null,
+  "source" : "example",
+  "author" : "Kyle U",
+  "created" : "2018-03-01T00:00:00"
 }

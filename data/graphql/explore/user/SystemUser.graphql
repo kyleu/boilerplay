@@ -1,0 +1,32 @@
+# Queries the system for Users.
+query SystemUser {
+  systemUser(
+    q: null, # Or string literal
+    filters: null, # Or filters of type `{ k: "", o: Equal, v: "" }`
+    orderBy: null, # Or orderBy of type `{ col: "", dir: Ascending }`
+    limit: null, # Or number
+    offset: null # Or number
+  ) {
+    totalCount
+    paging {
+      current
+      next
+      itemsPerPage
+    }
+    results {
+      id
+      username
+      preferences {
+        theme
+      }
+      profile {
+        providerID
+        providerKey
+      }
+      role
+      created
+    }
+    durationMs
+    occurred
+  }
+}

@@ -18,5 +18,5 @@ case class RestUrl(
   lazy val queryParamString = if (queryParams.isEmpty) { "" } else { "?" + queryParams.mkString("&") }
   lazy val location = if (path.isEmpty) { "/" } else { path } + queryParamString
 
-  override lazy val toString = s"${protocol.value}://$domain${port.map(":" + _).getOrElse("")}$location"
+  override lazy val toString = s"${protocol.value}://$domain${port.map(":" + _).getOrElse("")}/${location.stripPrefix("/")}"
 }
