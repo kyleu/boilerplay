@@ -13,9 +13,10 @@ class OpenApiController @javax.inject.Inject() (override val app: Application) e
   import app.contexts.webContext
 
   private[this] def loadJson(key: String) = {
-    val content = Source.fromInputStream(getClass.getClassLoader.getResourceAsStream(key)).getLines.filterNot(_.trim.startsWith("//")).mkString("\n")
+    val resource = Option(getClass.getClassLoader.getResourceAsStream(key)).getOrElse(throw new IllegalStateException(s"Cannot load [$key] from classpath."))
+    val content = Source.fromInputStream(resource).getLines.filterNot(_.trim.startsWith("//")).mkString("\n")
     io.circe.parser.parse(content) match {
-      case Left(x) => throw x
+      case Left(x) => throw new IllegalStateException(s"Cannot parse json from [$key].", x)
       case Right(json) => json
     }
   }

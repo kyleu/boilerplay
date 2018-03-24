@@ -9,15 +9,15 @@ class JsonIncludeParser(loadJson: String => Json) {
 
   def parseWithIncludes(key: String): Json = {
     val filename = if (key.endsWith(".json")) { key } else { key + ".json" }
-    val path = filename.lastIndexOf('/') match {
-      case -1 => ""
-      case x => filename.substring(0, x + 1)
+    val (path, fn) = filename.lastIndexOf('/') match {
+      case -1 => "" -> filename
+      case x => filename.substring(0, x + 1) -> filename.substring(x + 1)
     }
     val jsonContent = loadJson(key)
-    modify(path, jsonContent)
+    modify(path, fn, jsonContent)
   }
 
-  def modify(path: String, json: Json): Json = try {
+  def modify(path: String, fn: String, json: Json): Json = try {
     json.asObject match {
       case Some(o) => Json.obj(o.toList.flatMap {
         case (k, v) if k.startsWith(includeKey) =>
@@ -30,12 +30,13 @@ class JsonIncludeParser(loadJson: String => Json) {
           case Some(s) if s.startsWith(includeKey) =>
             val incVal = path + s.drop(includeKey.length)
             Seq(k -> parseWithIncludes(incVal))
-          case _ => Seq(k -> modify(path, v))
+          case _ => Seq(k -> modify(path, fn, v))
         }
       }: _*)
       case None => json
     }
   } catch {
-    case NonFatal(x) => throw new IllegalStateException(s"Unable to parse json from [$path].", x)
+    case x: IllegalStateException => throw x
+    case NonFatal(x) => throw new IllegalStateException(s"Unable to parse json from [$path$fn].", x)
   }
 }
