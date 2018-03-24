@@ -9,6 +9,7 @@ GET         /robots.txt                              controllers.HomeController.
 ->          /admin/rest                              rest.Routes
 
 # Start model route files
+->          /admin/settings                          settings.Routes
 ->          /admin/audit                             audit.Routes
 ->          /admin/note                              note.Routes
 ->          /admin/user                              user.Routes

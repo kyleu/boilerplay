@@ -1,4 +1,24 @@
 // Generated File
 {
-  "status": "TODO"
+  "/admin/settings/settingKey": {
+    "get": {
+      "summary": "Lists the possible SettingKey values.",
+      "operationId": "models.settings.SettingKey.list",
+      "tags": ["settings"],
+      "responses": {
+        "200": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }

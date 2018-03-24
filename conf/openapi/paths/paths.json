@@ -1,7 +1,14 @@
 {
   "#include:common.json": "*",
+
+  // Start enum models
+  "#include:settings/settingKey.json": "*",
+  // End enum models
+
+  // Start schema models
   "#include:audit/audit.json": "*",
   "#include:audit/auditRecord.json": "*",
   "#include:note/note.json": "*",
   "#include:user/systemUser.json": "*"
+  // End schema models
 }

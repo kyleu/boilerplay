@@ -13,7 +13,7 @@ class OpenApiController @javax.inject.Inject() (override val app: Application) e
   import app.contexts.webContext
 
   private[this] def loadJson(key: String) = {
-    val content = Source.fromInputStream(getClass.getClassLoader.getResourceAsStream(key)).getLines.filterNot(_.startsWith("//")).mkString("\n")
+    val content = Source.fromInputStream(getClass.getClassLoader.getResourceAsStream(key)).getLines.filterNot(_.trim.startsWith("//")).mkString("\n")
     io.circe.parser.parse(content) match {
       case Left(x) => throw x
       case Right(json) => json
