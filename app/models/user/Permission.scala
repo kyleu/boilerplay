@@ -1,6 +1,6 @@
 package models.user
 
-import enumeratum.{Enum, EnumEntry, CirceEnum}
+import enumeratum.{CirceEnum, Enum, EnumEntry}
 
 sealed abstract class Permission(val id: String) extends EnumEntry {
   override val toString = id

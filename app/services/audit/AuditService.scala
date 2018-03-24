@@ -12,7 +12,6 @@ import models.{Application, Configuration}
 import play.api.inject.Injector
 import services.ModelServiceHelper
 import services.database.ApplicationDatabase
-import services.supervisor.ActorSupervisor
 import util.FutureUtils.serviceContext
 import util.tracing.{TraceData, TracingService}
 import util.web.TracingWSClient
@@ -25,10 +24,8 @@ class AuditService @javax.inject.Inject() (
 ) extends ModelServiceHelper[Audit]("audit") {
   lazy val supervisor = inject.instanceOf(classOf[Application]).supervisor
   AuditHelper.init(this)
-  lazy val cache = new AuditCache(supervisor, lookup)
 
   def callback(a: Audit)(implicit trace: TraceData) = if (a.records.exists(_.changes.nonEmpty)) {
-    supervisor.tell(ActorSupervisor.Broadcast("audit", models.ResponseMessage.AuditNotification(a)), supervisor)
     AuditNotifications.postToSlack(ws, config.slackConfig, a)
     AuditNotifications.persist(a)
     log.info(a.changeLog)

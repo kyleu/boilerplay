@@ -6,7 +6,6 @@ import java.util.UUID
 import models.audit._
 import models.auth.Credentials
 import models.result.data.DataField
-import models.tag.Tag
 import util.tracing.TraceData
 import util.{Logging, NullUtils}
 
@@ -21,9 +20,6 @@ object AuditHelper extends Logging {
   }
 
   def onAudit(audit: Audit)(implicit trace: TraceData) = getInst.callback(audit)
-
-  def onStart(creds: Credentials, id: UUID, msg: AuditStart)(implicit traceData: TraceData) = getInst.cache.onStart(creds, id, msg)
-  def onComplete(creds: Credentials, msg: AuditComplete)(implicit traceData: TraceData) = getInst.cache.onComplete(creds, msg)
 
   def onInsert(t: String, pk: Seq[String], fields: Seq[DataField], creds: Credentials)(implicit trace: TraceData) = {
     val msg = s"Inserted new [$t] with [${fields.size}] fields:"
@@ -51,10 +47,5 @@ object AuditHelper extends Logging {
     val auditId = UUID.randomUUID
     val records = Seq(AuditRecord(auditId = auditId, t = t, pk = pk, changes = fields.map(f => AuditField(f.k, None, f.v))))
     onAudit(Audit(id = auditId, act = "remove", server = server, client = creds.remoteAddress, userId = creds.user.id, msg = msg, records = records))
-  }
-
-  def pk(t: String, v: Any*) = AuditModelPk(t, v.map(_.toString))
-  def auditStart(models: AuditModelPk*)(creds: Credentials, act: String = "development", tags: Seq[Tag] = Seq.empty) = {
-    AuditStart(action = act, app = Some(util.Config.projectId), client = creds.remoteAddress, tags = tags, models = models)
   }
 }

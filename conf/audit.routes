@@ -1,13 +1,3 @@
-# Lifecycle Routes
-GET         /                                        controllers.admin.audit.AuditLifecycleController.index
-GET         /test                                    controllers.admin.audit.AuditLifecycleController.testForm
-POST        /start                                   controllers.admin.audit.AuditLifecycleController.start
-POST        /complete                                controllers.admin.audit.AuditLifecycleController.complete
-
-# Audit Activity
-GET         /activity                                controllers.admin.audit.AuditActivityController.activity
-GET         /activity/connect                        controllers.admin.audit.AuditActivityController.connect(binary: Boolean ?= false)
-
 # Audit Record Routes
 GET         /auditRecord                             controllers.admin.audit.AuditRecordController.list(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None)
 GET         /auditRecord/autocomplete                controllers.admin.audit.AuditRecordController.autocomplete(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None)
@@ -20,10 +10,10 @@ POST        /auditRecord/:id                         controllers.admin.audit.Aud
 GET         /auditRecord/:id/remove                  controllers.admin.audit.AuditRecordController.remove(id: java.util.UUID)
 
 # Audit Routes
+GET         /                                        controllers.admin.audit.AuditController.list(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None)
 GET         /autocomplete                            controllers.admin.audit.AuditController.autocomplete(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None)
 GET         /form                                    controllers.admin.audit.AuditController.createForm
 POST        /                                        controllers.admin.audit.AuditController.create
-GET         /list                                    controllers.admin.audit.AuditController.list(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None)
 GET         /:id/counts                              controllers.admin.audit.AuditController.relationCounts(id: java.util.UUID)
 GET         /byUserId/:userId                        controllers.admin.audit.AuditController.byUserId(userId: java.util.UUID, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None)
 GET         /:id/form                                controllers.admin.audit.AuditController.editForm(id: java.util.UUID)

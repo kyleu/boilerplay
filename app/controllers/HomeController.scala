@@ -31,7 +31,7 @@ object HomeController {
     override def preStart() = {
       log.info(s"Starting connection for user [${creds.user.id}: ${creds.user.username}].")
       supervisor.tell(SocketStarted(creds, "home", id, self), self)
-      out.tell(UserSettings(creds.user.id, creds.user.username, creds.user.profile.providerKey, creds.user.preferences), self)
+      out.tell(UserSettings(creds.user.id, creds.user.username, creds.user.profile.providerKey), self)
     }
 
     override def receive = {

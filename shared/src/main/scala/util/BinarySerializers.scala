@@ -4,7 +4,6 @@ import java.nio.ByteBuffer
 import java.time.{LocalDate, LocalDateTime, LocalTime}
 
 import boopickle.Default._
-import models.user.UserPreferences
 import models.{RequestMessage, ResponseMessage}
 
 object BinarySerializers {
@@ -19,9 +18,6 @@ object BinarySerializers {
     bb.get(arr)
     arr
   }
-
-  def readPreferences(b: Array[Byte]) = Unpickle[UserPreferences].fromBytes(ByteBuffer.wrap(b))
-  def writePreferences(p: UserPreferences) = toByteArray(Pickle.intoBytes(p))
 
   def readRequestMessage(b: ByteBuffer) = Unpickle[RequestMessage].fromBytes(b)
   def writeRequestMessage(rm: RequestMessage) = toByteArray(Pickle.intoBytes(rm))
