@@ -4,15 +4,18 @@
   <div class="static-container container">
     <div class="collection with-header file-listing">
       <div class="collection-header">
+        @if(folder.isRoot) {
+          <div class="right"><a class="btn theme" href="@controllers.admin.rest.routes.OpenApiController.ui()">OpenAPI</a></div>
+        }
+        <h4>@folder.title</h4>
+        @folder.location
+      </div>
+      <div class="collection-item">
         <div class="right">@if(folder.isRoot) {
           <a class="theme-text" href="@controllers.admin.rest.routes.RestController.reloadRoot()">Reload</a>
         } else {
           <a class="theme-text" href="@controllers.admin.rest.routes.RestController.reload(folder.location)">Reload</a>
         }</div>
-        <h4>@folder.title</h4>
-        @folder.location
-      </div>
-      <div class="collection-item">
         @views.html.admin.rest.listFolder(folder.location, folder.folders, folder.requests)
       </div>
     </div>

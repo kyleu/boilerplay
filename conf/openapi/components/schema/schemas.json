@@ -1,8 +1,11 @@
 {
   "#include:common.json": "*",
   "#include:system.json": "*",
+
+  // Start model schemas
   "#include:audit/audit.json": "*",
   "#include:audit/auditRecord.json": "*",
   "#include:note/note.json": "*",
   "#include:user/systemUser.json": "*"
+  // End model schemas
 }
