@@ -1,0 +1,69 @@
+// Generated File
+{
+  "note.Note": {
+    "required": [
+      "id",
+      "text",
+      "author",
+      "created"
+    ],
+    "properties": {
+      "id": {
+        "type": "string",
+        "example": "00000000-0000-0000-0000-000000000000"
+      },
+      "relType": {
+        "type": "string"
+      },
+      "relPk": {
+        "type": "string"
+      },
+      "text": {
+        "type": "string"
+      },
+      "author": {
+        "type": "string",
+        "example": "00000000-0000-0000-0000-000000000000"
+      },
+      "created": {
+        "type": "string",
+        "example": "2018-01-01 00:00:00"
+      }
+    }
+  },
+  "note.NoteResult": {
+    "properties": {
+      "filters": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/common.Filter"
+        }
+      },
+      "orderBys": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/common.OrderBy"
+        }
+      },
+      "totalCount": {
+        "type": "integer"
+      },
+      "paging": {
+        "$ref": "#/components/schemas/common.PagingOptions"
+      },
+      "results": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/note.Note"
+        }
+      },
+      "durationMs": {
+        "type": "integer"
+      },
+      "occurred": {
+        "type": "string",
+        "example": "2018-01-01 00:00:00"
+      }
+    }
+  }
+}

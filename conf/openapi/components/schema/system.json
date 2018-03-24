@@ -1,0 +1,44 @@
+{
+  "system.Pong": {
+    "required": [
+      "timestamp"
+    ],
+    "properties": {
+      "timestamp": {
+        "type": "integer",
+        "format": "int64",
+        "default": 0
+      }
+    }
+  },
+  "system.UserProfile": {
+    "required": [
+      "id",
+      "username",
+      "email",
+      "role",
+      "theme",
+      "created"
+    ],
+    "properties": {
+      "id": {
+        "type": "string"
+      },
+      "username": {
+        "type": "string"
+      },
+      "email": {
+        "type": "string"
+      },
+      "role": {
+        "type": "string"
+      },
+      "theme": {
+        "type": "string"
+      },
+      "created": {
+        "type": "string"
+      }
+    }
+  }
+}

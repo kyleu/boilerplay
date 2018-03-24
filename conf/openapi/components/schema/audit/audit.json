@@ -1,0 +1,94 @@
+{
+  "audit.Audit": {
+    "required": [
+      "id",
+      "act",
+      "app",
+      "client",
+      "server",
+      "userId",
+      "tags",
+      "records",
+      "started",
+      "completed"
+    ],
+    "properties": {
+      "id": {
+        "type": "string",
+        "example": "00000000-0000-0000-0000-000000000000"
+      },
+      "act": {
+        "type": "string",
+        "default": "insert"
+      },
+      "app": {
+        "type": "string"
+      },
+      "client": {
+        "type": "string"
+      },
+      "server": {
+        "type": "string"
+      },
+      "userId": {
+        "type": "string",
+        "example": "00000000-0000-0000-0000-000000000000"
+      },
+      "tags": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/common.Tag"
+        }
+      },
+      "records": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/audit.Audit"
+        }
+      },
+      "started": {
+        "type": "string",
+        "example": "2018-01-01 00:00:00"
+      },
+      "completed": {
+        "type": "string",
+        "example": "2018-01-01 00:00:00"
+      }
+    }
+  },
+  "audit.AuditResult": {
+    "properties": {
+      "filters": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/common.Filter"
+        }
+      },
+      "orderBys": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/common.OrderBy"
+        }
+      },
+      "totalCount": {
+        "type": "integer"
+      },
+      "paging": {
+        "$ref": "#/components/schemas/common.PagingOptions"
+      },
+      "results": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/audit.Audit"
+        }
+      },
+      "durationMs": {
+        "type": "integer"
+      },
+      "occurred": {
+        "type": "string",
+        "example": "2018-01-01 00:00:00"
+      }
+    }
+  }
+}

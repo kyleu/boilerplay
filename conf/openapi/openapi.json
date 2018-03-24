@@ -1,0 +1,13 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "OpenAPI Specification",
+    "description": "Entities and methods for our Rest API."
+  },
+  "paths": "#include:paths/paths.json",
+  "components": {
+    "schemas": "#include:components/schema/schemas.json",
+    "parameters": "#include:components/parameters.json"
+  }
+}

@@ -5,13 +5,14 @@ import io.circe.{Json, Printer}
 import io.prometheus.client.Histogram
 import models.Application
 import models.auth.{AuthEnv, Credentials}
+import models.result.data.DataField
 import models.user.Role
 import play.api.http.{ContentTypeOf, Writeable}
 import play.api.mvc._
 import util.Logging
 import util.metrics.Instrumented
 import util.tracing.TraceData
-import util.web.TracingFilter
+import util.web.{ControllerUtils, TracingFilter}
 
 import scala.language.implicitConversions
 import scala.concurrent.{ExecutionContext, Future}
@@ -69,7 +70,10 @@ abstract class BaseController(val name: String) extends InjectedController with 
     Writeable(a => codec.encode(a.pretty(printer)))
   }
 
-  protected def modelForm(rawForm: Option[Map[String, Seq[String]]]) = ControllerUtilities.modelForm(rawForm)
+  protected def modelForm(body: AnyContent) = body.asFormUrlEncoded match {
+    case Some(x) => ControllerUtilities.modelForm(x)
+    case None => ControllerUtils.jsonBody(body).as[Seq[DataField]].getOrElse(throw new IllegalStateException("Json must be an array of DataFields."))
+  }
 
   protected def failRequest(request: UserAwareRequest[AuthEnv, AnyContent]) = {
     val msg = request.identity match {

@@ -1,0 +1,204 @@
+{
+  "/admin/audit/list": {
+    "get": {
+      "summary": "Queries and filters the system Audit entities.",
+      "operationId": "audit.Audit.list",
+      "tags": [
+        "audit"
+      ],
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/q"
+        },
+        {
+          "$ref": "#/components/parameters/orderBy"
+        },
+        {
+          "$ref": "#/components/parameters/orderAsc"
+        },
+        {
+          "$ref": "#/components/parameters/limit"
+        },
+        {
+          "$ref": "#/components/parameters/offset"
+        }
+      ],
+      "responses": {
+        "200": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/audit.AuditResult"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/admin/audit": {
+    "post": {
+      "summary": "Creates a new Audit entity.",
+      "operationId": "audit.Audit.create",
+      "tags": [
+        "audit"
+      ],
+      "requestBody" : {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/common.DataField"
+              }
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/audit.Audit"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/admin/audit/{id}": {
+    "get": {
+      "summary": "View the Audit entity matching the provided [id].",
+      "operationId": "audit.Audit.view",
+      "tags": [
+        "audit"
+      ],
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "schema": {
+            "type": "string",
+            "example": "00000000-0000-0000-0000-000000000000"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/audit.Audit"
+              }
+            }
+          }
+        }
+      }
+    },
+    "post": {
+      "summary": "Updates the Audit entity matching the provided [id] using the provided fields.",
+      "operationId": "audit.Audit.edit",
+      "tags": [
+        "audit"
+      ],
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "schema": {
+            "type": "string",
+            "example": "00000000-0000-0000-0000-000000000000"
+          }
+        }
+      ],
+      "requestBody" : {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/common.DataField"
+              }
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/audit.Audit"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/admin/audit/byUserId/{userId}": {
+    "get": {
+      "summary": "Finds the Audit entities associated to the provided [userId].",
+      "operationId": "audit.Audit.byUserId",
+      "tags": [
+        "audit"
+      ],
+      "parameters": [
+        {
+          "name": "userId",
+          "in": "path",
+          "schema": {
+            "type": "string",
+            "default": "00000000-0000-0000-0000-000000000000"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/audit.Audit"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/admin/audit/{id}/remove": {
+    "get": {
+      "summary": "Removes the Audit entity matching the provided [id].",
+      "operationId": "audit.Audit.remove",
+      "tags": [
+        "audit"
+      ],
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "schema": {
+            "type": "string",
+            "example": "00000000-0000-0000-0000-000000000000"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/audit.Audit"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

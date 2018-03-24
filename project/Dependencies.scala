@@ -33,7 +33,7 @@ object Dependencies {
   }
 
   object Database {
-    val version = "3.2.2"
+    val version = "3.2.3"
 
     val postgres = "org.postgresql" % "postgresql" % "9.4.1212"
     val hikariCp = "com.zaxxer" % "HikariCP" % "2.7.8"
@@ -59,7 +59,7 @@ object Dependencies {
     val fontAwesome = "org.webjars" % "font-awesome" % "4.7.0"
     val jquery = "org.webjars" % "jquery" % "2.2.4"
     val materialize = "org.webjars" % "materializecss" % "0.100.2"
-    val swaggerUi = "org.webjars" % "swagger-ui" % "3.12.1"
+    val swaggerUi = "org.webjars" % "swagger-ui" % "3.13.0"
   }
 
   object Metrics {

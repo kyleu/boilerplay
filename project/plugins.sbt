@@ -48,7 +48,7 @@ addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "1.0.0") // scalastyl
 
 addSbtPlugin("com.sksamuel.scapegoat" %% "sbt-scapegoat" % "1.0.7")
 
-addSbtPlugin("ch.epfl.scala" % "sbt-scalafix" % "0.5.10")
+// addSbtPlugin("ch.epfl.scala" % "sbt-scalafix" % "0.5.10")
 
 addSbtPlugin("org.scalariform" % "sbt-scalariform" % "1.8.1") // scalariformFormat
 

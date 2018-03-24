@@ -1,0 +1,47 @@
+{
+  "q": {
+    "name": "q",
+    "in": "query",
+    "description": "Filter the entities by the provided string.",
+    "required": false,
+    "schema": {
+      "type": "string"
+    }
+  },
+  "orderBy": {
+    "name": "orderBy",
+    "in": "query",
+    "description": "Sort the returned entities by the provided property.",
+    "required": false,
+    "schema": {
+      "type": "string"
+    }
+  },
+  "orderAsc": {
+    "name": "orderAsc",
+    "in": "query",
+    "description": "Sort the returned entities in the provided direction.",
+    "required": false,
+    "schema": {
+      "type": "boolean"
+    }
+  },
+  "limit": {
+    "name": "limit",
+    "in": "query",
+    "description": "Limits the returned entities to, at most, the provided amount.",
+    "required": false,
+    "schema": {
+      "type": "integer"
+    }
+  },
+  "offset": {
+    "name": "offset",
+    "in": "query",
+    "description": "Starts the returned entities after skipping the provided amount.",
+    "required": false,
+    "schema": {
+      "type": "integer"
+    }
+  }
+}

@@ -10,8 +10,8 @@ import util.tracing.TraceData
 import zipkin.TraceKeys
 
 object ControllerUtilities {
-  def modelForm(rawForm: Option[Map[String, Seq[String]]]) = {
-    val form = rawForm.getOrElse(Map.empty).mapValues(_.headOption.getOrElse(throw new IllegalStateException(s"Empty form field.")))
+  def modelForm(rawForm: Map[String, Seq[String]]) = {
+    val form = rawForm.mapValues(_.headOption.getOrElse(throw new IllegalStateException(s"Empty form field.")))
     val fields = form.toSeq.filter(x => x._1.endsWith(".include") && x._2 == "true").map(_._1.stripSuffix(".include"))
     def valFor(f: String) = form.get(f) match {
       case Some(x) if x == util.NullUtils.str => None

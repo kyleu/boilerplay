@@ -26,7 +26,7 @@ class AuditRecordController @javax.inject.Inject() (
   }
 
   def create = withSession("create", admin = true) { implicit request => implicit td =>
-    svc.create(request, modelForm(request.body.asFormUrlEncoded)).map {
+    svc.create(request, modelForm(request.body)).map {
       case Some(model) => Redirect(controllers.admin.audit.routes.AuditRecordController.view(model.id))
       case None => Redirect(controllers.admin.audit.routes.AuditRecordController.list())
     }
@@ -91,8 +91,7 @@ class AuditRecordController @javax.inject.Inject() (
   }
 
   def edit(id: java.util.UUID) = withSession("edit", admin = true) { implicit request => implicit td =>
-    val fields = modelForm(request.body.asFormUrlEncoded)
-    svc.update(request, id = id, fields = fields).map(res => render {
+    svc.update(request, id = id, fields = modelForm(request.body)).map(res => render {
       case Accepts.Html() => Redirect(controllers.admin.audit.routes.AuditRecordController.view(res._1.id)).flashing("success" -> res._2)
       case Accepts.Json() => Ok(res.asJson.spaces2).as(JSON)
     })

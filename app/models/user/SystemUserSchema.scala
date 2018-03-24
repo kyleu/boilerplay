@@ -76,10 +76,7 @@ object SystemUserSchema extends SchemaHelper("systemUser") {
       name = "profile",
       description = Some("Returns information about the currently logged in user."),
       fieldType = profileType,
-      resolve = c => traceB(c.ctx, "profile") { _ =>
-        val u = c.ctx.creds.user
-        UserProfile(u.id, u.username, u.profile.providerKey, u.role, u.preferences.theme, u.created)
-      }
+      resolve = c => traceB(c.ctx, "profile")(_ => UserProfile.fromUser(c.ctx.creds.user))
     ),
     Field(
       name = "systemUser",

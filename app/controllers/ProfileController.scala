@@ -5,7 +5,7 @@ import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.api.util.{Credentials, PasswordHasher}
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
 import models.Application
-import models.user.UserForms
+import models.user.{UserForms, UserProfile}
 import util.web.ControllerUtils
 
 import scala.concurrent.Future
@@ -20,7 +20,10 @@ class ProfileController @javax.inject.Inject() (
   import app.contexts.webContext
 
   def view = withSession("view") { implicit request => implicit td =>
-    Future.successful(Ok(views.html.profile.view(request.identity)))
+    Future.successful(render {
+      case Accepts.Html() => Ok(views.html.profile.view(request.identity))
+      case Accepts.Json() => Ok(io.circe.syntax.EncoderOps(UserProfile.fromUser(request.identity)).asJson.spaces2).as(JSON)
+    })
   }
 
   def save = withSession("view") { implicit request => implicit td =>
