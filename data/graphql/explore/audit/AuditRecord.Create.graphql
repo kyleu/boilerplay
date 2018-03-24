@@ -1,0 +1,16 @@
+# Creates a new AuditRecord entity.
+mutation AuditRecordCreate {
+  auditRecord {
+    create(fields: [{k: "", v: ""}]) {
+      id
+      auditId
+      t
+      pk
+      changes {
+        k
+        n
+        o
+      }
+    }
+  }
+}

@@ -1,0 +1,14 @@
+# Generated File
+# Creates a new SystemUser entity.
+mutation SystemUserCreate {
+  systemUser {
+    create(fields: [{k: "", v: ""}]) {
+      id
+      username
+      prefs
+      email
+      role
+      created
+    }
+  }
+}
