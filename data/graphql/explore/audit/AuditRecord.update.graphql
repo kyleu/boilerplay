@@ -1,3 +1,4 @@
+# Generated File
 # Updates a single AuditRecord entity using the provided fields.
 mutation AuditRecordUpdate {
   auditRecord {
@@ -6,11 +7,7 @@ mutation AuditRecordUpdate {
       auditId
       t
       pk
-      changes {
-        k
-        n
-        o
-      }
+      changes
     }
   }
 }

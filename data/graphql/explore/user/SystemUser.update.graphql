@@ -1,12 +1,16 @@
-# Generated File
 # Updates a single SystemUser entity using the provided fields.
 mutation SystemUserUpdate {
   systemUser {
     update(id: "00000000-0000-0000-0000-000000000000", fields: [{k: "", v: ""}]) {
       id
       username
-      prefs
-      email
+      preferences {
+        theme
+      }
+      profile {
+        providerID
+        providerKey
+      }
       role
       created
     }

@@ -1,3 +1,4 @@
+# Generated File
 # Queries the system for Audit Records.
 query AuditRecord {
   auditRecord(
@@ -18,11 +19,7 @@ query AuditRecord {
       auditId
       t
       pk
-      changes {
-        k
-        n
-        o
-      }
+      changes
     }
     durationMs
     occurred

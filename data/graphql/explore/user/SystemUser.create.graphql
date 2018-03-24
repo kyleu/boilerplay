@@ -1,12 +1,16 @@
-# Generated File
 # Creates a new SystemUser entity.
 mutation SystemUserCreate {
   systemUser {
     create(fields: [{k: "", v: ""}]) {
       id
       username
-      prefs
-      email
+      preferences {
+        theme
+      }
+      profile {
+        providerID
+        providerKey
+      }
       role
       created
     }

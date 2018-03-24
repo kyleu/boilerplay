@@ -1,3 +1,4 @@
+# Generated File
 # Remove a single AuditRecord entity from the system.
 mutation AuditRecordRemove {
   auditRecord {
@@ -6,11 +7,7 @@ mutation AuditRecordRemove {
       auditId
       t
       pk
-      changes {
-        k
-        n
-        o
-      }
+      changes
     }
   }
 }
