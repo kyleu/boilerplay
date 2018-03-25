@@ -25,7 +25,7 @@ class OpenApiController @javax.inject.Inject() (override val app: Application) e
 
   lazy val jsonContent = try {
     val json = new JsonIncludeParser(loadJson).parseWithIncludes(rootFilename)
-    Future.successful(Ok(json).as(JSON))
+    Future.successful(Ok(json))
   } catch {
     case NonFatal(x) =>
       log.error(s"Unable to parse json includes from [$rootFilename].", x)

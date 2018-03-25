@@ -15,7 +15,7 @@ class SettingKeyController @javax.inject.Inject() (override val app: models.Appl
   def list = withSession("list", admin = true) { implicit request => implicit td =>
     Future.successful(render {
       case Accepts.Html() => Ok(views.html.admin.layout.listPage(request.identity, "SettingKey", "explore", SettingKey.values.map(x => Html(x.toString))))
-      case Accepts.Json() => Ok(SettingKey.values.asJson.spaces2).as(JSON)
+      case Accepts.Json() => Ok(SettingKey.values.asJson)
       case acceptsCsv() => Ok(SettingKey.values.mkString(", ")).as("text/csv")
     })
   }

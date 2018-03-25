@@ -79,7 +79,7 @@ class HomeController @javax.inject.Inject() (
   }
 
   def ping(timestamp: Long) = withSession("ping") { implicit request => implicit td =>
-    Future.successful(Ok("{ \"timestamp\": " + timestamp + " }").as(JSON))
+    Future.successful(Ok(io.circe.Json.obj("timestamp" -> io.circe.Json.fromLong(timestamp))))
   }
 
   def robots() = withSession("robots") { implicit request => implicit td =>

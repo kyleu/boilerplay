@@ -15,7 +15,7 @@ trait UserSearchHelper { this: SystemUserController =>
         case Accepts.Html() => Ok(views.html.admin.user.systemUserList(
           request.identity, q, orderBy, orderAsc, Some(r._1), r._2, limit.getOrElse(100), offset.getOrElse(0)
         ))
-        case Accepts.Json() => Ok(SystemUserResult.fromRecords(q, Nil, orderBys, limit, offset, startMs, r._1, r._2).asJson.spaces2).as(JSON)
+        case Accepts.Json() => Ok(SystemUserResult.fromRecords(q, Nil, orderBys, limit, offset, startMs, r._1, r._2).asJson)
       })
     }
   }
@@ -23,7 +23,7 @@ trait UserSearchHelper { this: SystemUserController =>
   def autocomplete(q: Option[String], orderBy: Option[String], orderAsc: Boolean, limit: Option[Int]) = {
     withSession("user.autocomplete", admin = true) { implicit request => implicit td =>
       val orderBys = OrderBy.forVals(col = orderBy, asc = orderAsc).toSeq
-      search(q, orderBys, limit, None).map(r => Ok(r.map(_.toSummary).asJson.spaces2).as(JSON))
+      search(q, orderBys, limit, None).map(r => Ok(r.map(_.toSummary).asJson))
     }
   }
 }

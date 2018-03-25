@@ -34,7 +34,7 @@ abstract class BaseController(val name: String) extends InjectedController with 
     app.silhouette.UserAwareAction.async { implicit request =>
       Instrumented.timeFuture(requestHistogram, name + "_" + action) {
         app.tracing.trace(name + ".controller." + action) { td =>
-          ControllerUtilities.enhanceRequest(request, request.identity, td)
+          ControllerUtils.enhanceRequest(request, request.identity, td)
           block(request)(td)
         }(getTraceData)
       }
@@ -49,7 +49,7 @@ abstract class BaseController(val name: String) extends InjectedController with 
         } else {
           Instrumented.timeFuture(requestHistogram, name + "_" + action) {
             app.tracing.trace(name + ".controller." + action) { td =>
-              ControllerUtilities.enhanceRequest(request, Some(u), td)
+              ControllerUtils.enhanceRequest(request, Some(u), td)
               val auth = request.authenticator.getOrElse(throw new IllegalStateException("No auth!"))
               block(SecuredRequest(u, auth, request))(td)
             }(getTraceData)
@@ -71,7 +71,7 @@ abstract class BaseController(val name: String) extends InjectedController with 
   }
 
   protected def modelForm(body: AnyContent) = body.asFormUrlEncoded match {
-    case Some(x) => ControllerUtilities.modelForm(x)
+    case Some(x) => ControllerUtils.modelForm(x)
     case None => ControllerUtils.jsonBody(body).as[Seq[DataField]].getOrElse(throw new IllegalStateException("Json must be an array of DataFields."))
   }
 

@@ -22,7 +22,7 @@ class ProfileController @javax.inject.Inject() (
   def view = withSession("view") { implicit request => implicit td =>
     Future.successful(render {
       case Accepts.Html() => Ok(views.html.profile.view(request.identity))
-      case Accepts.Json() => Ok(io.circe.syntax.EncoderOps(UserProfile.fromUser(request.identity)).asJson.spaces2).as(JSON)
+      case Accepts.Json() => Ok(io.circe.syntax.EncoderOps(UserProfile.fromUser(request.identity)).asJson)
     })
   }
 

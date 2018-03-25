@@ -1,5 +1,5 @@
 {
-  "/admin/audit/list": {
+  "/admin/audit": {
     "get": {
       "summary": "Queries and filters the system Audit entities.",
       "operationId": "audit.Audit.list",
@@ -34,9 +34,7 @@
           }
         }
       }
-    }
-  },
-  "/admin/audit": {
+    },
     "post": {
       "summary": "Creates a new Audit entity.",
       "operationId": "audit.Audit.create",

@@ -42,7 +42,7 @@ class NoteController @javax.inject.Inject() (override val app: Application, svc:
         case Accepts.Html() => Ok(views.html.admin.note.noteList(
           request.identity, Some(r._1), r._2, q, orderBy, orderAsc, limit.getOrElse(100), offset.getOrElse(0)
         ))
-        case Accepts.Json() => Ok(NoteResult.fromRecords(q, Nil, orderBys, limit, offset, startMs, r._1, r._2).asJson.spaces2).as(JSON)
+        case Accepts.Json() => Ok(NoteResult.fromRecords(q, Nil, orderBys, limit, offset, startMs, r._1, r._2).asJson)
         case acceptsCsv() => Ok(svc.csvFor("Note", r._1, r._2)).as("text/csv")
       })
     }
@@ -51,7 +51,7 @@ class NoteController @javax.inject.Inject() (override val app: Application, svc:
   def autocomplete(q: Option[String], orderBy: Option[String], orderAsc: Boolean, limit: Option[Int]) = {
     withSession("autocomplete", admin = true) { implicit request => implicit td =>
       val orderBys = OrderBy.forVals(orderBy, orderAsc).toSeq
-      search(q, orderBys, limit, None).map(r => Ok(r.map(_.toSummary).asJson.spaces2).as(JSON))
+      search(q, orderBys, limit, None).map(r => Ok(r.map(_.toSummary).asJson))
     }
   }
 
@@ -62,7 +62,7 @@ class NoteController @javax.inject.Inject() (override val app: Application, svc:
         case Accepts.Html() => Ok(views.html.admin.note.noteByAuthor(
           request.identity, author, models, orderBy, orderAsc, limit.getOrElse(5), offset.getOrElse(0)
         ))
-        case Accepts.Json() => Ok(models.asJson.spaces2).as(JSON)
+        case Accepts.Json() => Ok(models.asJson)
         case acceptsCsv() => Ok(svc.csvFor("Note by author", 0, models)).as("text/csv")
       })
     }
@@ -75,7 +75,7 @@ class NoteController @javax.inject.Inject() (override val app: Application, svc:
     notesF.flatMap(notes => modelF.map {
       case Some(model) => render {
         case Accepts.Html() => Ok(views.html.admin.note.noteView(request.identity, model, notes, app.config.debug))
-        case Accepts.Json() => Ok(model.asJson.spaces2).as(JSON)
+        case Accepts.Json() => Ok(model.asJson)
       }
       case None => NotFound(s"No Note found with id [$id].")
     })
@@ -93,14 +93,14 @@ class NoteController @javax.inject.Inject() (override val app: Application, svc:
   def edit(id: java.util.UUID) = withSession("edit", admin = true) { implicit request => implicit td =>
     svc.update(request, id = id, fields = modelForm(request.body)).map(res => render {
       case Accepts.Html() => Redirect(controllers.admin.note.routes.NoteController.view(res._1.id)).flashing("success" -> res._2)
-      case Accepts.Json() => Ok(res.asJson.spaces2).as(JSON)
+      case Accepts.Json() => Ok(res.asJson)
     })
   }
 
   def remove(id: java.util.UUID) = withSession("remove", admin = true) { implicit request => implicit td =>
     svc.remove(request, id = id).map(_ => render {
       case Accepts.Html() => Redirect(controllers.admin.note.routes.NoteController.list())
-      case Accepts.Json() => Ok("{ \"status\": \"removed\" }").as(JSON)
+      case Accepts.Json() => Ok(io.circe.Json.obj("status" -> io.circe.Json.fromString("removed")))
     })
   }
 }
