@@ -1,13 +1,15 @@
 package services.rest
 
+import java.net.ConnectException
 import java.time.LocalDateTime
 
 import models.rest.http._
 import models.rest.request.RestRequest
 import models.rest.response.RestResponse
 import play.api.libs.ws.{WSClient, WSResponse}
-
 import util.FutureUtils.serviceContext
+
+import scala.concurrent.Future
 
 @javax.inject.Singleton
 class RestRequestService @javax.inject.Inject() (ws: WSClient) {
@@ -19,7 +21,9 @@ class RestRequestService @javax.inject.Inject() (ws: WSClient) {
 
     val wsr = ws.url(req.url.toString).withMethod(req.method.value).addHttpHeaders(req.headers.map(x => x.k -> x.v): _*)
 
-    wsr.stream().map(parseResponse(req, started, _))
+    wsr.stream().map(parseResponse(req, started, _)).recoverWith {
+      case c: ConnectException => Future.successful(RestResponse.forException(req, c))
+    }
   }
 
   def parseResponse(req: RestRequest, started: LocalDateTime, rsp: WSResponse, logs: Seq[String] = Nil) = {
@@ -33,7 +37,7 @@ class RestRequestService @javax.inject.Inject() (ws: WSClient) {
     }
     RestResponse(
       title = req.title,
-      sourcePath = req.fileLocation,
+      source = None,
       started = started,
       completed = util.DateUtils.now,
 

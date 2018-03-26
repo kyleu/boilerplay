@@ -14,17 +14,8 @@ object RestRequestOps extends Logging {
     val p = dir.relativize(file.parent).toString
     val json = FileService.getJsonContent(file)
     json.as[RestRequest] match {
-      case Right(req) => if (req.fileLocation == p) {
-        req
-      } else {
-        //throw new IllegalStateException(s"File [${req.name}] at path [$p] has invalid path [${req.path}].")
-        val copy = req.copy(folder = Some(p))
-        saveRequest(copy)
-        copy
-      }
+      case Right(req) => req
       case Left(x) => RestRequest(
-        name = file.name.stripSuffix(".json"),
-        folder = Some(p),
         title = json.asObject.flatMap(_.apply("title").map(_.as[String].map(_ + " (error)").getOrElse("No Title"))).getOrElse("Parse Error"),
         description = Some("[Parse Error]"),
         url = RestUrl(path = p),
@@ -38,16 +29,24 @@ object RestRequestOps extends Logging {
     }
   }
 
-  def saveRequest(request: RestRequest) = {
-    val f = dir / request.url.path / (request.name + ".json")
+  def saveRequest(location: String, request: RestRequest) = {
+    val f = location.lastIndexOf('/') match {
+      case -1 => dir / (location + ".json")
+      case idx => dir / location.substring(0, idx) / (location.substring(idx + 1) + ".json")
+    }
     if (f.exists) {
-      log.info(s"Overwriting request [${request.title}] at [${request.fileLocation}].")
+      log.info(s"Overwriting request [${request.title}] at [$location].")
       f.delete()
     } else {
-      log.info(s"Saving new request [${request.title}] to [${request.fileLocation}].")
+      log.info(s"Saving new request [${request.title}] to [$location].")
     }
     val json = io.circe.syntax.EncoderOps(request).asJson
     f.writeText(json.spaces2 + "\n")
-    request
+    RestRepository.reload(Some("request/" + location))
+    RestRepository.getRequest(location)
   }
+
+  def fromForm(r: RestRequest, form: Map[String, String]) = r.copy(
+    title = form.getOrElse("title", r.title)
+  )
 }

@@ -41,6 +41,6 @@ case class RequestFolder(
     }
   }
 
-  def getFile(path: String) = getResource(path).right.getOrElse(throw new IllegalStateException(" is a folder, not a request file."))
-  def getFolder(path: String) = getResource(path).left.getOrElse(throw new IllegalStateException(" is a request file, not a folder."))
+  def getRequest(path: String) = getResource(path).right.getOrElse(throw new IllegalStateException(path + " is a folder, not a request file."))
+  def getFolder(path: String) = getResource(path).left.getOrElse(throw new IllegalStateException(path + " is a request file, not a folder."))
 }

@@ -16,7 +16,7 @@ object RestRequestTests {
 
   private[this] def testRaw() = {
     val src = (FileService.getDir("test") / "raw.txt").contentAsString
-    val parsed = HttpParser.parse("test", "Test Request", src)
+    val parsed = HttpParser.parse("Test Request", src)
     val json = io.circe.syntax.EncoderOps(parsed).asJson.spaces2
     val tgt = RestRequestSerializers.toRaw(parsed)
     val status = if (src.trim != tgt.trim) {
@@ -30,7 +30,6 @@ object RestRequestTests {
   private[this] def testCurl() = {
     val src = (FileService.getDir("test") / "curl.txt").contentAsString
     val req = RestRequest(
-      name = "CurlTest",
       title = "Curl Test",
       headers = Seq(RestHeader("foo", "bar")),
       body = Some(RestBody.JsonContent("{\n  \"x\": \"y\"\n}"))

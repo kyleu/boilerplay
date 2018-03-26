@@ -5,7 +5,7 @@ import models.rest.http.{Method, RestHeader}
 import scala.io.Source
 
 object HttpParser {
-  def parse(name: String, title: String, content: String) = {
+  def parse(title: String, content: String) = {
     var requestLine = ""
     var headerLines = Seq.empty[(String, String)]
     var bodyLines = Seq.empty[String]
@@ -25,7 +25,7 @@ object HttpParser {
     val (method, path, version) = parseRequestLine(requestLine)
     val headers = headerLines.map(h => RestHeader(h._1.trim, h._2.trim))
     val body = bodyLines.mkString("\n").trim()
-    RestRequestParser.fromFields(name, title, method, path, version, headers, if (body.isEmpty) { None } else { Some(body) })
+    RestRequestParser.fromFields(title, method, path, version, headers, if (body.isEmpty) { None } else { Some(body) })
   }
 
   private[this] def parseRequestLine(requestLine: String) = requestLine.split(' ').toList match {

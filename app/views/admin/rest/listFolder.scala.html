@@ -11,6 +11,6 @@
 @requests.map { request =>
   <div class="file">
     <i class="fa @models.template.Icons.file"></i>
-    <a class="theme-text" href="@controllers.admin.rest.routes.RestController.view(request._2.fileLocation)"> @request._2.title</a>
+    <a class="theme-text" href="@controllers.admin.rest.routes.RestController.view((path + "/" + request._1).stripPrefix("/"))"> @request._2.title</a>
   </div>
 }

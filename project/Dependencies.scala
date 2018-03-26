@@ -85,7 +85,7 @@ object Dependencies {
 
   object Utils {
     val scapegoatVersion = "1.3.4"
-    val enumeratumVersion = "1.5.15"
+    val enumeratumCirceVersion = "1.5.15"
     val booPickleVersion = "1.2.5"
     val utestVersion = "0.6.3"
 

@@ -1,12 +1,35 @@
-@(user: models.user.SystemUser, req:  models.rest.request.RestRequest)(
+@(user: models.user.SystemUser, location: String, req: models.rest.request.RestRequest)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
 )@traceData.logViewClass(getClass)@views.html.admin.layout.page(user, "rest", req.title) {
-  <form method="post" action="@controllers.admin.rest.routes.RestController.save(req.fileLocation)">
-    <div class="row">
-      <div class="col l2 s12">
-        @req
-        Form!
+  <div class="static-container container">
+    <form method="post" action="@controllers.admin.rest.routes.RestController.save(location)">
+      <div class="collection-header input-field">
+        <input class="form-control" name="title" style="font-size: 125%;" value="@req.title" />
       </div>
-    </div>
-  </form>
+      <ul class="collapsible" data-collapsible="expandable">
+        <li>
+          <div class="collapsible-header active"><i class="fa @models.template.Icons.url"></i> @req.url</div>
+          <div class="collapsible-body">
+            <span>Lorem ipsum dolor sit amet.</span>
+          </div>
+        </li>
+        <li>
+          <div class="collapsible-header active"><i class="fa @models.template.Icons.header"></i> Request Headers</div>
+          <div class="collapsible-body">
+            <span>Lorem ipsum dolor sit amet.</span>
+          </div>
+        </li>
+        <li>
+          <div class="collapsible-header active"><i class="fa @models.template.Icons.requestBody"></i> Request Body</div>
+          <div class="collapsible-body">
+            <span>Lorem ipsum dolor sit amet.</span>
+          </div>
+        </li>
+      </ul>
+      <div>
+        <button type="submit" class="btn theme right" type="submit">Save</button>
+        <a class="btn-flat theme-text" href="@controllers.admin.rest.routes.RestController.view(location)">Cancel</a>
+      </div>
+    </form>
+  </div>
 }

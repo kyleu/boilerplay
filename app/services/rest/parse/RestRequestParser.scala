@@ -4,7 +4,7 @@ import models.rest.http._
 import models.rest.request.RestRequest
 
 object RestRequestParser {
-  def fromFields(name: String, title: String, method: Method, path: String, version: String, headers: Seq[RestHeader], body: Option[String]) = {
+  def fromFields(title: String, method: Method, path: String, version: String, headers: Seq[RestHeader], body: Option[String]) = {
     var contentType: MimeType = MimeType.Json
     var accept: MimeType = MimeType.Html
 
@@ -24,9 +24,7 @@ object RestRequestParser {
     })
 
     RestRequest(
-      name = name,
       title = title,
-      folder = Some(path),
       method = method,
       contentType = contentType,
       accept = accept,

@@ -10,22 +10,28 @@ import util.tracing.TraceData
 import util.web.ControllerUtils
 
 import scala.concurrent.Future
+import scala.util.control.NonFatal
 
 @javax.inject.Singleton
 class RestController @javax.inject.Inject() (override val app: Application, svc: RestRequestService) extends BaseController("rest") {
   import app.contexts.webContext
 
-  def viewFor(resource: Either[RequestFolder, RestRequest], q: Option[String] = None)(implicit request: Req, td: TraceData) = resource match {
-    case Left(folder) =>
-      td.tag("loc", folder.location)
-      Future.successful(Ok(views.html.admin.rest.list(request.identity, folder, q)))
-    case Right(req) =>
-      td.tag("loc", req.fileLocation)
-      Future.successful(Ok(views.html.admin.rest.detail(request.identity, req)))
+  def viewFor(location: String, resource: Either[RequestFolder, RestRequest], q: Option[String] = None)(implicit request: Req, td: TraceData) = {
+    td.tag("loc", location)
+    resource match {
+      case Left(folder) => Future.successful(render {
+        case Accepts.Html() => Ok(views.html.admin.rest.list(request.identity, folder, q))
+        case Accepts.Json() => Ok(io.circe.syntax.EncoderOps(folder).asJson)
+      })
+      case Right(req) => Future.successful(render {
+        case Accepts.Html() => Ok(views.html.admin.rest.detail(request.identity, location, req))
+        case Accepts.Json() => Ok(io.circe.syntax.EncoderOps(req).asJson)
+      })
+    }
   }
 
   def root(q: Option[String]) = withSession("index", admin = true) { implicit request => implicit td =>
-    viewFor(Left(services.rest.RestRepository.repo.requests), q)
+    viewFor("/", Left(services.rest.RestRepository.repo.requests), q)
   }
 
   def reloadRoot() = withSession("reload", admin = true) { implicit request => implicit td =>
@@ -38,7 +44,7 @@ class RestController @javax.inject.Inject() (override val app: Application, svc:
   }
 
   def view(location: String) = withSession("view", admin = true) { implicit request => implicit td =>
-    viewFor(RestRepository.repo.requests.getResource(location))
+    viewFor(location, RestRepository.getResource(location))
   }
 
   def reload(location: String) = withSession("reload", admin = true) { implicit request => implicit td =>
@@ -47,7 +53,7 @@ class RestController @javax.inject.Inject() (override val app: Application, svc:
   }
 
   def raw(location: String) = withSession("raw", admin = true) { implicit request => implicit td =>
-    RestRepository.repo.requests.getResource(location) match {
+    RestRepository.getResource(location) match {
       case Right(file) => Future.successful(Ok(file.asJson))
       case Left(folder) => Future.successful(Ok(folder.asJson))
     }
@@ -55,22 +61,27 @@ class RestController @javax.inject.Inject() (override val app: Application, svc:
 
   def form(location: String) = withSession("form", admin = true) { implicit request => implicit td =>
     td.tag("location", location)
-    val req = RestRepository.repo.requests.getFile(location)
-    Future.successful(Ok(views.html.admin.rest.form(request.identity, req)))
+    val req = RestRepository.getRequest(location)
+    Future.successful(Ok(views.html.admin.rest.form(request.identity, location, req)))
   }
 
   def save(location: String) = withSession("save", admin = true) { implicit request => implicit td =>
     val req = requestFromBody(location, request.body)
     td.tag("location", location)
-    val result = RestRequestOps.saveRequest(req)
-    Future.successful(Redirect(controllers.admin.rest.routes.RestController.view(result.fileLocation)))
+    RestRequestOps.saveRequest(location, req)
+    RestRepository.reload(Some(location))
+    Future.successful(Redirect(controllers.admin.rest.routes.RestController.view(location)))
   }
 
   def run(location: String) = withSession("run", admin = true) { implicit request => implicit td =>
     td.tag("location", location)
-    val req = RestRepository.repo.requests.getFile(location)
-    svc.call(req, println)
-    Future.successful(Ok(io.circe.syntax.EncoderOps(req).asJson))
+    val req = RestRepository.getRequest(location)
+    svc.call(req, log.info(_)).map { rsp =>
+      render {
+        case Accepts.Html() => Ok(views.html.admin.rest.response(rsp))
+        case Accepts.Json() => Ok(io.circe.syntax.EncoderOps(rsp).asJson)
+      }
+    }
   }
 
   private[this] def requestFromBody(location: String, body: AnyContent)(implicit request: Req, td: TraceData) = try {
@@ -79,12 +90,6 @@ class RestController @javax.inject.Inject() (override val app: Application, svc:
       case Left(x) => throw x
     }
   } catch {
-    case _: IllegalStateException =>
-      val form = ControllerUtils.getForm(request.body)
-      val (p, n) = location.lastIndexOf('/') match {
-        case -1 => "" -> location
-        case x => location.substring(0, x) -> location.substring(x + 1)
-      }
-      RestRequest(name = n, title = form.getOrElse("title", n), folder = Some(p))
+    case NonFatal(_) => RestRequestOps.fromForm(RestRepository.getRequest(location), ControllerUtils.getForm(request.body))
   }
 }

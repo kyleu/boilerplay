@@ -1,7 +1,7 @@
 package services.rest
 
 import models.rest.config.RestConfigSection
-import models.rest.request.RequestFolder
+import models.rest.request.{RequestFolder, RestRequest}
 import services.file.FileService
 import util.JsonSerializers._
 import util.Logging
@@ -13,13 +13,20 @@ object RestRepository extends Logging {
   implicit val jsonEncoder: Encoder[RestRepository] = deriveEncoder
   implicit val jsonDecoder: Decoder[RestRepository] = deriveDecoder
 
-  def reload(path: Option[String] = None) = {
-    val repo = RestRepository(loadConfigs, loadRequests)
-    activeRepo = Some(repo)
-    repo
-  }
+  def repo: RestRepository = activeRepo.getOrElse(reload())
 
-  def repo = activeRepo.getOrElse(reload())
+  def getRequest(location: String) = repo.requests.getRequest(location)
+  def getFolder(location: String) = repo.requests.getFolder(location)
+  def getResource(location: String) = repo.requests.getResource(location)
+
+  def reload(path: Option[String] = None): RestRepository = {
+    val r = path match {
+      case Some(p) => RestRepository(repo.configs, loadRequests) // TODO Reload only p
+      case None => RestRepository(loadConfigs, loadRequests)
+    }
+    activeRepo = Some(r)
+    r
+  }
 
   private[this] def loadRequests = RestFolderOps.fromDir(dir / "request", RestRequestOps.loadRestRequest)
 
