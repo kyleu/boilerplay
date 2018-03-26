@@ -1,15 +1,2 @@
-# Rest Requests
-GET         /                        controllers.admin.rest.RestController.root(q: Option[String] ?= None)
-GET         /reload                  controllers.admin.rest.RestController.reloadRoot()
-GET         /dump                    controllers.admin.rest.RestController.dump
-
-GET         /view/*location          controllers.admin.rest.RestController.view(location: String)
-GET         /reload/*location        controllers.admin.rest.RestController.reload(location: String)
-GET         /raw/*location           controllers.admin.rest.RestController.raw(location: String)
-GET         /edit/*location          controllers.admin.rest.RestController.form(location: String)
-POST        /edit/*location          controllers.admin.rest.RestController.save(location: String)
-
-GET         /run/*location           controllers.admin.rest.RestController.run(location: String)
-
-GET         /openapi                 controllers.admin.rest.OpenApiController.ui()
-GET         /openapi.json            controllers.admin.rest.OpenApiController.json()
+GET        /                    controllers.admin.rest.OpenApiController.ui()
+GET        /openapi.json        controllers.admin.rest.OpenApiController.json()
