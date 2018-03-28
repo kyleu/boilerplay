@@ -1,11 +1,10 @@
+// Generated File
 {
   "/admin/audit/auditRecord": {
     "get": {
       "summary": "Queries and filters the system AuditRecord entities.",
       "operationId": "audit.AuditRecord.list",
-      "tags": [
-        "audit"
-      ],
+      "tags": ["audit"],
       "parameters": [
         {
           "$ref": "#/components/parameters/q"
@@ -32,16 +31,32 @@
               }
             }
           }
+        },
+        "4XX": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/common.NotFound"
+              }
+            }
+          }
+        },
+        "5XX": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/common.Error"
+              }
+            }
+          }
         }
       }
     },
     "post": {
       "summary": "Creates a new AuditRecord entity.",
       "operationId": "audit.AuditRecord.create",
-      "tags": [
-        "audit"
-      ],
-      "requestBody" : {
+      "tags": ["audit"],
+      "requestBody": {
         "content": {
           "application/json": {
             "schema": {
@@ -59,6 +74,24 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/audit.AuditRecord"
+              }
+            }
+          }
+        },
+        "4XX": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/common.NotFound"
+              }
+            }
+          }
+        },
+        "5XX": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/common.Error"
               }
             }
           }
@@ -70,9 +103,7 @@
     "get": {
       "summary": "View the AuditRecord entity matching the provided [id].",
       "operationId": "audit.AuditRecord.view",
-      "tags": [
-        "audit"
-      ],
+      "tags": ["audit"],
       "parameters": [
         {
           "name": "id",
@@ -92,15 +123,31 @@
               }
             }
           }
+        },
+        "4XX": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/common.NotFound"
+              }
+            }
+          }
+        },
+        "5XX": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/common.Error"
+              }
+            }
+          }
         }
       }
     },
     "post": {
       "summary": "Updates the AuditRecord entity matching the provided [id] using the provided fields.",
       "operationId": "audit.AuditRecord.edit",
-      "tags": [
-        "audit"
-      ],
+      "tags": ["audit"],
       "parameters": [
         {
           "name": "id",
@@ -111,7 +158,7 @@
           }
         }
       ],
-      "requestBody" : {
+      "requestBody": {
         "content": {
           "application/json": {
             "schema": {
@@ -132,6 +179,24 @@
               }
             }
           }
+        },
+        "4XX": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/common.NotFound"
+              }
+            }
+          }
+        },
+        "5XX": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/common.Error"
+              }
+            }
+          }
         }
       }
     }
@@ -140,16 +205,14 @@
     "get": {
       "summary": "Finds the AuditRecord entities associated to the provided [auditId].",
       "operationId": "audit.AuditRecord.byAuditId",
-      "tags": [
-        "audit"
-      ],
+      "tags": ["audit"],
       "parameters": [
         {
           "name": "auditId",
           "in": "path",
           "schema": {
             "type": "string",
-            "default": "00000000-0000-0000-0000-000000000000"
+            "example": "00000000-0000-0000-0000-000000000000"
           }
         }
       ],
@@ -165,6 +228,24 @@
               }
             }
           }
+        },
+        "4XX": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/common.NotFound"
+              }
+            }
+          }
+        },
+        "5XX": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/common.Error"
+              }
+            }
+          }
         }
       }
     }
@@ -173,9 +254,7 @@
     "get": {
       "summary": "Removes the AuditRecord entity matching the provided [id].",
       "operationId": "audit.AuditRecord.remove",
-      "tags": [
-        "audit"
-      ],
+      "tags": ["audit"],
       "parameters": [
         {
           "name": "id",
@@ -192,6 +271,24 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/audit.AuditRecord"
+              }
+            }
+          }
+        },
+        "4XX": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/common.NotFound"
+              }
+            }
+          }
+        },
+        "5XX": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/common.Error"
               }
             }
           }

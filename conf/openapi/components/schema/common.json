@@ -126,5 +126,37 @@
         "type": "string"
       }
     }
+  },
+  "common.Error": {
+    "properties": {
+      "status": {
+        "type": "string",
+        "example": "error"
+      },
+      "t": {
+        "type": "string",
+        "example": "IllegalStateException"
+      },
+      "message": {
+        "type": "string",
+        "example": "..."
+      },
+      "location": {
+        "type": "string",
+        "example": "Foo.scala:123"
+      }
+    }
+  },
+  "common.NotFound": {
+    "properties": {
+      "status": {
+        "type": "integer",
+        "example": "404"
+      },
+      "message": {
+        "type": "string",
+        "example": "Resource not found"
+      }
+    }
   }
 }
