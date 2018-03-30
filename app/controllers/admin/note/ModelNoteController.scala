@@ -1,12 +1,12 @@
 package controllers.admin.note
 
 import controllers.BaseController
+import controllers.admin.ServiceController
 import io.circe.syntax._
 import models.Application
 import models.note.Note
 import services.note.ModelNoteService
 import util.FutureUtils.defaultContext
-import util.web.ControllerUtils.acceptsCsv
 
 import scala.concurrent.Future
 
@@ -16,7 +16,7 @@ class ModelNoteController @javax.inject.Inject() (override val app: Application,
     svc.getFor(request, model, pk).map(notes => render {
       case Accepts.Html() => Ok(views.html.admin.note.modelNoteList(request.identity, notes, model, pk))
       case Accepts.Json() => Ok(notes.asJson)
-      case acceptsCsv() => Ok(svc.csvFor(model + " " + pk.mkString("/"), 0, notes)).as("text/csv")
+      case ServiceController.acceptsCsv() => Ok(svc.csvFor(model + " " + pk.mkString("/"), 0, notes)).as("text/csv")
     })
   }
 

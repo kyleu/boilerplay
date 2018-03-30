@@ -7,12 +7,13 @@ import controllers.admin.ServiceController
 import models.Application
 import models.note.NoteResult
 import models.result.orderBy.OrderBy
+import play.api.http.MimeTypes
 import services.audit.{AuditRecordService, AuditRoutes}
 
 import scala.concurrent.Future
 import services.note.NoteService
 import util.FutureUtils.defaultContext
-import util.web.ControllerUtils.acceptsCsv
+import util.ReftreeUtils._
 
 @javax.inject.Singleton
 class NoteController @javax.inject.Inject() (override val app: Application, svc: NoteService, auditRecordS: AuditRecordService) extends ServiceController(svc) {
@@ -34,16 +35,18 @@ class NoteController @javax.inject.Inject() (override val app: Application, svc:
     }
   }
 
-  def list(q: Option[String], orderBy: Option[String], orderAsc: Boolean, limit: Option[Int], offset: Option[Int]) = {
+  def list(q: Option[String], orderBy: Option[String], orderAsc: Boolean, limit: Option[Int], offset: Option[Int], t: Option[String] = None) = {
     withSession("list", admin = true) { implicit request => implicit td =>
       val startMs = util.DateUtils.nowMillis
       val orderBys = OrderBy.forVals(orderBy, orderAsc).toSeq
-      searchWithCount(q, orderBys, limit, offset).map(r => render {
-        case Accepts.Html() => Ok(views.html.admin.note.noteList(
+      searchWithCount(q, orderBys, limit, offset).map(r => renderChoice(t) {
+        case MimeTypes.HTML => Ok(views.html.admin.note.noteList(
           request.identity, Some(r._1), r._2, q, orderBy, orderAsc, limit.getOrElse(100), offset.getOrElse(0)
         ))
-        case Accepts.Json() => Ok(NoteResult.fromRecords(q, Nil, orderBys, limit, offset, startMs, r._1, r._2).asJson)
-        case acceptsCsv() => Ok(svc.csvFor("Note", r._1, r._2)).as("text/csv")
+        case MimeTypes.JSON => Ok(NoteResult.fromRecords(q, Nil, orderBys, limit, offset, startMs, r._1, r._2).asJson)
+        case ServiceController.MimeTypes.png => Ok(renderToPng(v = r._2)).as(ServiceController.MimeTypes.png)
+        case ServiceController.MimeTypes.svg => Ok(renderToSvg(v = r._2)).as(ServiceController.MimeTypes.svg)
+        case ServiceController.MimeTypes.csv => Ok(svc.csvFor("Note", r._1, r._2)).as("text/csv")
       })
     }
   }
@@ -55,27 +58,31 @@ class NoteController @javax.inject.Inject() (override val app: Application, svc:
     }
   }
 
-  def byAuthor(author: UUID, orderBy: Option[String], orderAsc: Boolean, limit: Option[Int], offset: Option[Int]) = {
+  def byAuthor(author: UUID, orderBy: Option[String], orderAsc: Boolean, limit: Option[Int], offset: Option[Int], t: Option[String] = None) = {
     withSession("get.by.author", admin = true) { implicit request => implicit td =>
       val orderBys = OrderBy.forVals(orderBy, orderAsc).toSeq
-      svc.getByAuthor(request, author, orderBys, limit, offset).map(models => render {
-        case Accepts.Html() => Ok(views.html.admin.note.noteByAuthor(
+      svc.getByAuthor(request, author, orderBys, limit, offset).map(models => renderChoice(t) {
+        case MimeTypes.HTML => Ok(views.html.admin.note.noteByAuthor(
           request.identity, author, models, orderBy, orderAsc, limit.getOrElse(5), offset.getOrElse(0)
         ))
-        case Accepts.Json() => Ok(models.asJson)
-        case acceptsCsv() => Ok(svc.csvFor("Note by author", 0, models)).as("text/csv")
+        case MimeTypes.JSON => Ok(models.asJson)
+        case ServiceController.MimeTypes.png => Ok(renderToPng(v = models)).as(ServiceController.MimeTypes.png)
+        case ServiceController.MimeTypes.svg => Ok(renderToSvg(v = models)).as(ServiceController.MimeTypes.svg)
+        case ServiceController.MimeTypes.csv => Ok(svc.csvFor("Note by author", 0, models)).as("text/csv")
       })
     }
   }
 
-  def view(id: java.util.UUID) = withSession("view", admin = true) { implicit request => implicit td =>
+  def view(id: java.util.UUID, t: Option[String] = None) = withSession("view", admin = true) { implicit request => implicit td =>
     val modelF = svc.getByPrimaryKey(request, id)
     val notesF = app.coreServices.notes.getFor(request, "note", id)
 
     notesF.flatMap(notes => modelF.map {
-      case Some(model) => render {
-        case Accepts.Html() => Ok(views.html.admin.note.noteView(request.identity, model, notes, app.config.debug))
-        case Accepts.Json() => Ok(model.asJson)
+      case Some(model) => renderChoice(t) {
+        case MimeTypes.HTML => Ok(views.html.admin.note.noteView(request.identity, model, notes, app.config.debug))
+        case MimeTypes.JSON => Ok(model.asJson)
+        case ServiceController.MimeTypes.png => Ok(renderToPng(v = model)).as(ServiceController.MimeTypes.png)
+        case ServiceController.MimeTypes.svg => Ok(renderToSvg(v = model)).as(ServiceController.MimeTypes.svg)
       }
       case None => NotFound(s"No Note found with id [$id].")
     })

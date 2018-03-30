@@ -1,10 +1,10 @@
 # Note Routes
-GET         /                                                         controllers.admin.note.NoteController.list(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None)
+GET         /                                                         controllers.admin.note.NoteController.list(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None)
 GET         /autocomplete                                             controllers.admin.note.NoteController.autocomplete(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None)
 GET         /form                                                     controllers.admin.note.NoteController.createForm
 POST        /                                                         controllers.admin.note.NoteController.create
-GET         /byAuthor/:author                                         controllers.admin.note.NoteController.byAuthor(author: java.util.UUID, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None)
-GET         /:id                                                      controllers.admin.note.NoteController.view(id: java.util.UUID)
+GET         /byAuthor/:author                                         controllers.admin.note.NoteController.byAuthor(author: java.util.UUID, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None)
+GET         /:id                                                      controllers.admin.note.NoteController.view(id: java.util.UUID, t: Option[String] ?= None)
 GET         /:id/form                                                 controllers.admin.note.NoteController.editForm(id: java.util.UUID)
 POST        /:id                                                      controllers.admin.note.NoteController.edit(id: java.util.UUID)
 GET         /:id/remove                                               controllers.admin.note.NoteController.remove(id: java.util.UUID)

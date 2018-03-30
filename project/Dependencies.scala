@@ -96,6 +96,7 @@ object Dependencies {
     val commonsIo = "commons-io" % "commons-io" % "2.6"
     val scalaGuice = "net.codingwell" %% "scala-guice" % "4.2.0"
     val scopts = "com.github.scopt" %% "scopt" % "3.7.0"
+    val reftree = "org.stanch" %% "reftree" % "1.1.3"
   }
 
   object Testing {

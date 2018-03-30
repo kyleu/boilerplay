@@ -22,10 +22,10 @@ object Note {
 
 case class Note(
     id: UUID = UUID.randomUUID(),
-    relType: Option[String],
-    relPk: Option[String],
-    text: String,
-    author: UUID,
+    relType: Option[String] = None,
+    relPk: Option[String] = None,
+    text: String = "???",
+    author: UUID = UUID.randomUUID,
     created: LocalDateTime = util.DateUtils.now
 ) extends DataFieldModel {
   override def toDataFields = Seq(

@@ -4,8 +4,10 @@
     svc: (String, Call),
     args: io.circe.Json,
     act: Call,
-    result: Option[io.circe.Json],
-    error: Option[(String, String)],
+    result: Option[io.circe.Json] = None,
+    error: Option[(String, String)] = None,
+    started: Option[java.time.LocalDateTime] = None,
+    completed: Option[java.time.LocalDateTime] = None,
     debug: Boolean = false
 )(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
@@ -34,8 +36,15 @@
         </div>
         @result.map { r =>
           <div class="collection-item">
+            @started.map { s =>
+              @completed.map { c =>
+                <div class="right">@{util.NumberUtils.withCommas(util.DateUtils.toMillis(c) - util.DateUtils.toMillis(s))}ms</div>
+              }
+            }
             <h5>Result</h5>
-            <em>@util.DateUtils.niceDateTime(util.DateUtils.now)</em>
+            @started.map { s =>
+              <em>@util.DateUtils.niceDateTime(s)</em>
+            }
             <pre>@r.spaces2</pre>
           </div>
         }

@@ -7,9 +7,10 @@ import java.util.UUID
 import models.Application
 import models.audit.AuditRecordResult
 import models.result.orderBy.OrderBy
+import play.api.http.MimeTypes
 import scala.concurrent.Future
 import services.audit.AuditRecordService
-import util.web.ControllerUtils.acceptsCsv
+import util.ReftreeUtils._
 
 @javax.inject.Singleton
 class AuditRecordController @javax.inject.Inject() (
@@ -32,16 +33,18 @@ class AuditRecordController @javax.inject.Inject() (
     }
   }
 
-  def list(q: Option[String], orderBy: Option[String], orderAsc: Boolean, limit: Option[Int], offset: Option[Int]) = {
+  def list(q: Option[String], orderBy: Option[String], orderAsc: Boolean, limit: Option[Int], offset: Option[Int], t: Option[String] = None) = {
     withSession("list", admin = true) { implicit request => implicit td =>
       val startMs = util.DateUtils.nowMillis
       val orderBys = OrderBy.forVals(orderBy, orderAsc).toSeq
-      searchWithCount(q, orderBys, limit, offset).map(r => render {
-        case Accepts.Html() => Ok(views.html.admin.audit.auditRecordList(
+      searchWithCount(q, orderBys, limit, offset).map(r => renderChoice(t) {
+        case ServiceController.MimeTypes.csv => Ok(svc.csvFor("AuditRecord", r._1, r._2)).as("text/csv")
+        case MimeTypes.HTML => Ok(views.html.admin.audit.auditRecordList(
           request.identity, Some(r._1), r._2, q, orderBy, orderAsc, limit.getOrElse(100), offset.getOrElse(0)
         ))
-        case Accepts.Json() => Ok(AuditRecordResult.fromRecords(q, Nil, orderBys, limit, offset, startMs, r._1, r._2).asJson)
-        case acceptsCsv() => Ok(svc.csvFor("AuditRecord", r._1, r._2)).as("text/csv")
+        case MimeTypes.JSON => Ok(AuditRecordResult.fromRecords(q, Nil, orderBys, limit, offset, startMs, r._1, r._2).asJson)
+        case ServiceController.MimeTypes.png => Ok(renderToPng(v = r._2)).as(ServiceController.MimeTypes.png)
+        case ServiceController.MimeTypes.svg => Ok(renderToSvg(v = r._2)).as(ServiceController.MimeTypes.svg)
       })
     }
   }
@@ -53,27 +56,31 @@ class AuditRecordController @javax.inject.Inject() (
     }
   }
 
-  def byAuditId(auditId: UUID, orderBy: Option[String], orderAsc: Boolean, limit: Option[Int], offset: Option[Int]) = {
+  def byAuditId(auditId: UUID, orderBy: Option[String], orderAsc: Boolean, limit: Option[Int], offset: Option[Int], t: Option[String] = None) = {
     withSession("get.by.auditId", admin = true) { implicit request => implicit td =>
       val orderBys = OrderBy.forVals(orderBy, orderAsc).toSeq
-      svc.getByAuditId(request, auditId, orderBys, limit, offset).map(models => render {
-        case Accepts.Html() => Ok(views.html.admin.audit.auditRecordByAuditId(
+      svc.getByAuditId(request, auditId, orderBys, limit, offset).map(models => renderChoice(t) {
+        case ServiceController.MimeTypes.csv => Ok(svc.csvFor("AuditRecord by auditId", 0, models)).as("text/csv")
+        case MimeTypes.HTML => Ok(views.html.admin.audit.auditRecordByAuditId(
           request.identity, auditId, models, orderBy, orderAsc, limit.getOrElse(5), offset.getOrElse(0)
         ))
-        case Accepts.Json() => Ok(models.asJson)
-        case acceptsCsv() => Ok(svc.csvFor("AuditRecord by auditId", 0, models)).as("text/csv")
+        case MimeTypes.JSON => Ok(models.asJson)
+        case ServiceController.MimeTypes.png => Ok(renderToPng(v = models)).as(ServiceController.MimeTypes.png)
+        case ServiceController.MimeTypes.svg => Ok(renderToSvg(v = models)).as(ServiceController.MimeTypes.svg)
       })
     }
   }
 
-  def view(id: java.util.UUID) = withSession("view", admin = true) { implicit request => implicit td =>
+  def view(id: java.util.UUID, t: Option[String] = None) = withSession("view", admin = true) { implicit request => implicit td =>
     val modelF = svc.getByPrimaryKey(request, id)
     val notesF = app.coreServices.notes.getFor(request, "auditRecord", id)
 
     notesF.flatMap(notes => modelF.map {
-      case Some(model) => render {
-        case Accepts.Html() => Ok(views.html.admin.audit.auditRecordView(request.identity, model, notes, app.config.debug))
-        case Accepts.Json() => Ok(model.asJson)
+      case Some(model) => renderChoice(t) {
+        case MimeTypes.HTML => Ok(views.html.admin.audit.auditRecordView(request.identity, model, notes, app.config.debug))
+        case MimeTypes.JSON => Ok(model.asJson)
+        case ServiceController.MimeTypes.png => Ok(renderToPng(v = model)).as(ServiceController.MimeTypes.png)
+        case ServiceController.MimeTypes.svg => Ok(renderToSvg(v = model)).as(ServiceController.MimeTypes.svg)
       }
       case None => NotFound(s"No AuditRecord found with id [$id].")
     })

@@ -2,11 +2,11 @@
 package controllers.admin.settings
 
 import controllers.BaseController
+import controllers.admin.ServiceController
 import io.circe.syntax._
 import models.settings.SettingKey
 import play.twirl.api.Html
 import scala.concurrent.Future
-import util.web.ControllerUtils.acceptsCsv
 
 @javax.inject.Singleton
 class SettingKeyController @javax.inject.Inject() (override val app: models.Application) extends BaseController("settingKey") {
@@ -16,7 +16,7 @@ class SettingKeyController @javax.inject.Inject() (override val app: models.Appl
     Future.successful(render {
       case Accepts.Html() => Ok(views.html.admin.layout.listPage(request.identity, "SettingKey", "explore", SettingKey.values.map(x => Html(x.toString))))
       case Accepts.Json() => Ok(SettingKey.values.asJson)
-      case acceptsCsv() => Ok(SettingKey.values.mkString(", ")).as("text/csv")
+      case ServiceController.acceptsCsv() => Ok(SettingKey.values.mkString(", ")).as("text/csv")
     })
   }
 }
