@@ -3,7 +3,7 @@ import webscalajs.ScalaJSWeb
 import sbt.Keys._
 import sbt._
 
-import sbtcrossproject.CrossPlugin.autoImport._
+import org.portablescala.sbtplatformdeps.PlatformDepsPlugin.autoImport._
 import scalajscrossproject.ScalaJSCrossPlugin.autoImport.{toScalaJSGroupID => _, _}
 
 object Client {

@@ -2,9 +2,10 @@ import webscalajs.ScalaJSWeb
 import sbt.Keys._
 import sbt._
 
-import sbtcrossproject.CrossPlugin.autoImport._
-import scalajscrossproject.ScalaJSCrossPlugin.autoImport.{JSCrossProjectOps, JSPlatform}
+import org.portablescala.sbtplatformdeps.PlatformDepsPlugin.autoImport._
 import sbtcrossproject.{crossProject, CrossType}
+import sbtcrossproject.CrossPlugin.autoImport._
+import scalajscrossproject.ScalaJSCrossPlugin.autoImport.{toScalaJSGroupID => _, _}
 
 import com.github.sbt.cpd.CpdKeys.cpdSkipDuplicateFiles
 
@@ -38,7 +39,7 @@ object Shared {
     cpdSkipDuplicateFiles := true
   )
 
-  lazy val shared = (crossProject(JSPlatform, JVMPlatform).crossType(CrossType.Pure) in file("shared")).settings(commonSettings: _*).settings(
+  lazy val shared = (crossProject(JSPlatform, JVMPlatform).withoutSuffixFor(JVMPlatform).crossType(CrossType.Pure) in file("shared")).settings(commonSettings: _*).settings(
     libraryDependencies ++= Dependencies.Serialization.circeProjects.map(c => "io.circe" %%% c % Dependencies.Serialization.circeVersion) ++ Seq(
       "com.beachape" %%% "enumeratum-circe" % Dependencies.Utils.enumeratumCirceVersion,
       "me.chrons" %%% "boopickle" % Dependencies.Utils.booPickleVersion,
