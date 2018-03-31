@@ -2,7 +2,6 @@
 package controllers.admin.audit
 
 import controllers.admin.ServiceController
-import io.circe.syntax._
 import java.util.UUID
 import models.Application
 import models.audit.AuditRecordResult
@@ -10,6 +9,7 @@ import models.result.orderBy.OrderBy
 import play.api.http.MimeTypes
 import scala.concurrent.Future
 import services.audit.AuditRecordService
+import util.JsonSerializers._
 import util.ReftreeUtils._
 
 @javax.inject.Singleton
@@ -38,7 +38,7 @@ class AuditRecordController @javax.inject.Inject() (
       val startMs = util.DateUtils.nowMillis
       val orderBys = OrderBy.forVals(orderBy, orderAsc).toSeq
       searchWithCount(q, orderBys, limit, offset).map(r => renderChoice(t) {
-        case ServiceController.MimeTypes.csv => Ok(svc.csvFor("AuditRecord", r._1, r._2)).as("text/csv")
+        case ServiceController.MimeTypes.csv => csvResponse("AuditRecord", svc.csvFor(r._1, r._2))
         case MimeTypes.HTML => Ok(views.html.admin.audit.auditRecordList(
           request.identity, Some(r._1), r._2, q, orderBy, orderAsc, limit.getOrElse(100), offset.getOrElse(0)
         ))
@@ -60,7 +60,7 @@ class AuditRecordController @javax.inject.Inject() (
     withSession("get.by.auditId", admin = true) { implicit request => implicit td =>
       val orderBys = OrderBy.forVals(orderBy, orderAsc).toSeq
       svc.getByAuditId(request, auditId, orderBys, limit, offset).map(models => renderChoice(t) {
-        case ServiceController.MimeTypes.csv => Ok(svc.csvFor("AuditRecord by auditId", 0, models)).as("text/csv")
+        case ServiceController.MimeTypes.csv => csvResponse("AuditRecord by auditId", svc.csvFor(0, models))
         case MimeTypes.HTML => Ok(views.html.admin.audit.auditRecordByAuditId(
           request.identity, auditId, models, orderBy, orderAsc, limit.getOrElse(5), offset.getOrElse(0)
         ))

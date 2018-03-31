@@ -18,8 +18,7 @@ object FileRepository {
   }
 
   def readJson(key: String, path: String) = {
-    import io.circe.parser._
-    parse(readFile(key, path)) match {
+    util.JsonSerializers.parseJson(readFile(key, path)) match {
       case Right(json) => json
       case Left(x) => throw x
     }

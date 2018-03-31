@@ -28,9 +28,7 @@ object Shared {
     scalaVersion := Shared.Versions.scala,
 
     scalacOptions ++= compileOptions,
-    scalacOptions in (Compile, console) ~= (_.filterNot(Set(
-      "-Ywarn-unused:imports",
-      "-Xfatal-warnings"))),
+    scalacOptions in (Compile, console) ~= (_.filterNot(Set("-Ywarn-unused:imports", "-Xfatal-warnings"))),
     scalacOptions in (Compile, doc) := Seq("-encoding", "UTF-8"),
     scalacOptions in Test ++= Seq("-Yrangepos"),
 

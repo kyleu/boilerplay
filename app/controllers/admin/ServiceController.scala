@@ -51,4 +51,9 @@ abstract class ServiceController[T](val svc: ModelServiceHelper[T]) extends Base
     case Some("svg") => f(ServiceController.MimeTypes.svg)
     case Some(x) => throw new IllegalStateException(s"Unhandled output format [$x].")
   }
+
+  def csvResponse(filename: String, content: String) = {
+    val fn = if (filename.endsWith(".csv")) { filename } else { filename + ".csv" }
+    Ok(content).as(ServiceController.MimeTypes.csv).withHeaders("Content-Disposition" -> s"""inline; filename="$fn.csv"""")
+  }
 }

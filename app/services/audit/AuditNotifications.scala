@@ -23,7 +23,7 @@ object AuditNotifications extends Logging {
   }
 
   def postToSlack(ws: TracingWSClient, config: SlackConfig, a: Audit)(implicit trace: TraceData) = if (config.enabled) {
-    import io.circe.syntax._
+    import util.JsonSerializers._
 
     val body = Map(
       "channel" -> config.channel,

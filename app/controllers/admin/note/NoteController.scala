@@ -1,6 +1,5 @@
 package controllers.admin.note
 
-import io.circe.syntax._
 import java.util.UUID
 
 import controllers.admin.ServiceController
@@ -13,6 +12,7 @@ import services.audit.{AuditRecordService, AuditRoutes}
 import scala.concurrent.Future
 import services.note.NoteService
 import util.FutureUtils.defaultContext
+import util.JsonSerializers._
 import util.ReftreeUtils._
 
 @javax.inject.Singleton
@@ -40,13 +40,13 @@ class NoteController @javax.inject.Inject() (override val app: Application, svc:
       val startMs = util.DateUtils.nowMillis
       val orderBys = OrderBy.forVals(orderBy, orderAsc).toSeq
       searchWithCount(q, orderBys, limit, offset).map(r => renderChoice(t) {
+        case ServiceController.MimeTypes.csv => csvResponse("Note", svc.csvFor(r._1, r._2)).as("text/csv")
         case MimeTypes.HTML => Ok(views.html.admin.note.noteList(
           request.identity, Some(r._1), r._2, q, orderBy, orderAsc, limit.getOrElse(100), offset.getOrElse(0)
         ))
         case MimeTypes.JSON => Ok(NoteResult.fromRecords(q, Nil, orderBys, limit, offset, startMs, r._1, r._2).asJson)
         case ServiceController.MimeTypes.png => Ok(renderToPng(v = r._2)).as(ServiceController.MimeTypes.png)
         case ServiceController.MimeTypes.svg => Ok(renderToSvg(v = r._2)).as(ServiceController.MimeTypes.svg)
-        case ServiceController.MimeTypes.csv => Ok(svc.csvFor("Note", r._1, r._2)).as("text/csv")
       })
     }
   }
@@ -62,13 +62,13 @@ class NoteController @javax.inject.Inject() (override val app: Application, svc:
     withSession("get.by.author", admin = true) { implicit request => implicit td =>
       val orderBys = OrderBy.forVals(orderBy, orderAsc).toSeq
       svc.getByAuthor(request, author, orderBys, limit, offset).map(models => renderChoice(t) {
+        case ServiceController.MimeTypes.csv => csvResponse("Note by author", svc.csvFor(0, models)).as("text/csv")
         case MimeTypes.HTML => Ok(views.html.admin.note.noteByAuthor(
           request.identity, author, models, orderBy, orderAsc, limit.getOrElse(5), offset.getOrElse(0)
         ))
         case MimeTypes.JSON => Ok(models.asJson)
         case ServiceController.MimeTypes.png => Ok(renderToPng(v = models)).as(ServiceController.MimeTypes.png)
         case ServiceController.MimeTypes.svg => Ok(renderToSvg(v = models)).as(ServiceController.MimeTypes.svg)
-        case ServiceController.MimeTypes.csv => Ok(svc.csvFor("Note by author", 0, models)).as("text/csv")
       })
     }
   }

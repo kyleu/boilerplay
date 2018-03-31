@@ -7,6 +7,7 @@ import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
 import models.Application
 import models.user.{UserForms, UserProfile}
 import util.web.ControllerUtils
+import util.JsonSerializers._
 
 import scala.concurrent.Future
 
@@ -22,7 +23,7 @@ class ProfileController @javax.inject.Inject() (
   def view = withSession("view") { implicit request => implicit td =>
     Future.successful(render {
       case Accepts.Html() => Ok(views.html.profile.view(request.identity))
-      case Accepts.Json() => Ok(io.circe.syntax.EncoderOps(UserProfile.fromUser(request.identity)).asJson)
+      case Accepts.Json() => Ok(UserProfile.fromUser(request.identity).asJson)
     })
   }
 

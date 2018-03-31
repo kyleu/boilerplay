@@ -54,7 +54,6 @@ case class SystemUser(
 ) extends Identity with DataFieldModel {
   val email = profile.providerID
   val prefs = {
-    import io.circe.syntax._
     preferences.asJson.spaces2
   }
 

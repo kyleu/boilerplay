@@ -3,7 +3,6 @@ package controllers.admin.audit
 import java.util.UUID
 
 import controllers.admin.ServiceController
-import io.circe.syntax._
 import models.Application
 import models.audit.{Audit, AuditResult}
 import models.result.RelationCount
@@ -14,6 +13,7 @@ import scala.concurrent.Future
 import services.audit.{AuditRecordService, AuditService}
 import util.FutureUtils.defaultContext
 import util.ReftreeUtils._
+import util.JsonSerializers._
 
 @javax.inject.Singleton
 class AuditController @javax.inject.Inject() (override val app: Application, svc: AuditService, recordS: AuditRecordService) extends ServiceController(svc) {

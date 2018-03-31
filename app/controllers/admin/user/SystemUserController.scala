@@ -4,7 +4,6 @@ package controllers.admin.user
 import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.api.util.PasswordHasher
 import controllers.admin.ServiceController
-import io.circe.syntax._
 import models.Application
 import models.result.RelationCount
 import play.api.http.MimeTypes
@@ -12,6 +11,7 @@ import services.audit.AuditRecordService
 import services.note.NoteService
 import services.user.SystemUserService
 import util.FutureUtils.defaultContext
+import util.JsonSerializers._
 import util.ReftreeUtils._
 
 @javax.inject.Singleton

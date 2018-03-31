@@ -1,10 +1,10 @@
 package util.web
 
-import io.circe.Json
 import models.result.data.DataField
 import models.user.SystemUser
 import play.api.data.FormError
 import play.api.mvc.{AnyContent, Request}
+import util.JsonSerializers.Json
 import util.tracing.TraceData
 import zipkin.TraceKeys
 
@@ -26,7 +26,7 @@ object ControllerUtils {
   }.getOrElse(throw new IllegalStateException("Http post with json body required."))
 
   def jsonFormOrBody(body: AnyContent, key: String) = {
-    body.asFormUrlEncoded.map(_(key).head).map(io.circe.parser.parse).map(_.right.get).getOrElse(jsonBody(body))
+    body.asFormUrlEncoded.map(_(key).head).map(util.JsonSerializers.parseJson).map(_.right.get).getOrElse(jsonBody(body))
   }
 
   def jsonObject(json: Json) = json.asObject.getOrElse(throw new IllegalStateException("Json is not an object."))

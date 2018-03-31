@@ -5,6 +5,7 @@ import java.util.UUID
 import akka.actor.{Actor, ActorRef, ActorSystem, Props}
 import akka.stream.Materializer
 import com.mohiva.play.silhouette.api.HandlerResult
+import io.circe.Json
 import io.prometheus.client.{Counter, Histogram}
 import models.InternalMessage.{SocketStarted, SocketStopped}
 import models.RequestMessage.Ping
@@ -79,7 +80,7 @@ class HomeController @javax.inject.Inject() (
   }
 
   def ping(timestamp: Long) = withSession("ping") { implicit request => implicit td =>
-    Future.successful(Ok(io.circe.Json.obj("timestamp" -> io.circe.Json.fromLong(timestamp))))
+    Future.successful(Ok(Json.obj("timestamp" -> Json.fromLong(timestamp))))
   }
 
   def robots() = withSession("robots") { implicit request => implicit td =>

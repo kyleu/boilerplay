@@ -1,11 +1,11 @@
 package controllers.admin.system
 
 import controllers.BaseController
-import io.circe.syntax._
 import models.Application
 import models.ddl.DdlQueries
 import services.database.ApplicationDatabase
 import util.FutureUtils.defaultContext
+import util.JsonSerializers._
 
 import scala.concurrent.Future
 

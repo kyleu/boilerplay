@@ -1,11 +1,11 @@
 package controllers.admin.user
 
 import controllers.admin.ServiceController
-import io.circe.syntax._
 import models.result.orderBy.OrderBy
 import models.user.SystemUserResult
 import play.api.http.MimeTypes
 import util.ReftreeUtils._
+import util.JsonSerializers._
 
 trait UserSearchHelper { this: SystemUserController =>
   import app.contexts.webContext

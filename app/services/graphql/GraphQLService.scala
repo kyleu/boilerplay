@@ -1,7 +1,6 @@
 package services.graphql
 
 import io.circe.Json
-import io.circe.parser._
 import models.Application
 import models.auth.Credentials
 import models.graphql.{GraphQLContext, Schema, TracingExtension}
@@ -64,7 +63,7 @@ class GraphQLService @javax.inject.Inject() (tracing: TracingService, registry: 
   def parseVariables(variables: String) = if (variables.trim == "" || variables.trim == "null") {
     Json.obj()
   } else {
-    parse(variables) match {
+    util.JsonSerializers.parseJson(variables) match {
       case Right(x) => x
       case Left(_) => Json.obj()
     }

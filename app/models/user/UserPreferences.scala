@@ -1,7 +1,5 @@
 package models.user
 
-import io.circe.parser.decode
-import io.circe.{Decoder, Encoder}
 import models.template.Theme
 import util.JsonSerializers._
 
@@ -11,7 +9,7 @@ object UserPreferences {
 
   val empty = UserPreferences()
 
-  def readFrom(s: String) = decode[UserPreferences](s) match {
+  def readFrom(s: String) = decodeJson[UserPreferences](s) match {
     case Right(x) => x
     case Left(_) => UserPreferences.empty
   }

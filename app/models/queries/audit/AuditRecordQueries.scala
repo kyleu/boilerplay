@@ -12,8 +12,7 @@ import models.result.data.DataField
 import models.result.filter.Filter
 import models.result.orderBy.OrderBy
 import org.postgresql.util.PGobject
-import io.circe.syntax._
-import io.circe.parser._
+import util.JsonSerializers._
 
 object AuditRecordQueries extends BaseQueries[AuditRecord]("auditRecord", "audit_record") {
   override val fields = Seq(
@@ -69,6 +68,6 @@ object AuditRecordQueries extends BaseQueries[AuditRecord]("auditRecord", "audit
     auditId = UuidType(row, "audit_id"),
     t = StringType(row, "t"),
     pk = StringArrayType(row, "pk"),
-    changes = parse(row.as[PGobject]("changes").getValue).right.get.as[List[AuditField]].right.get
+    changes = parseJson(row.as[PGobject]("changes").getValue).right.get.as[List[AuditField]].right.get
   )
 }

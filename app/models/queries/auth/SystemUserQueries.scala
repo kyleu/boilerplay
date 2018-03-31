@@ -9,7 +9,7 @@ import models.queries.BaseQueries
 import models.result.data.DataField
 import models.result.filter.Filter
 import models.user.{Role, SystemUser, UserPreferences}
-import io.circe.syntax.EncoderOps
+import util.JsonSerializers._
 
 object SystemUserQueries extends BaseQueries[SystemUser]("systemUser", "system_users") {
   override val fields = Seq(
@@ -32,13 +32,13 @@ object SystemUserQueries extends BaseQueries[SystemUser]("systemUser", "system_u
   case class UpdateUser(u: SystemUser) extends Statement {
     override val name = s"$key.update.user"
     override val sql = updateSql(Seq("username", "prefs", "email", "role"))
-    override val values = Seq(u.username, new EncoderOps(u.preferences).asJson.spaces2, u.profile.providerKey, u.role.toString, u.id)
+    override val values = Seq(u.username, u.preferences.asJson.spaces2, u.profile.providerKey, u.role.toString, u.id)
   }
 
   case class SetPreferences(userId: UUID, prefs: UserPreferences) extends Statement {
     override val name = s"$key.set.preferences"
     override val sql = updateSql(Seq("prefs"))
-    override val values = Seq(new EncoderOps(prefs).asJson.spaces2, userId)
+    override val values = Seq(prefs.asJson.spaces2, userId)
   }
 
   case class SetRole(id: UUID, role: Role) extends Statement {
@@ -73,6 +73,6 @@ object SystemUserQueries extends BaseQueries[SystemUser]("systemUser", "system_u
   }
 
   override protected def toDataSeq(u: SystemUser) = Seq(
-    u.id.toString, u.username, new EncoderOps(u.preferences).asJson.spaces2, u.profile.providerKey, u.role.toString, u.created
+    u.id.toString, u.username, u.preferences.asJson.spaces2, u.profile.providerKey, u.role.toString, u.created
   )
 }

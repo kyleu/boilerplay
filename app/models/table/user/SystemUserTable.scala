@@ -6,8 +6,8 @@ import java.util.UUID
 import com.mohiva.play.silhouette.api.LoginInfo
 import models.user.{Role, SystemUser, UserPreferences}
 import services.database.SlickQueryService.imports._
-import io.circe.syntax.EncoderOps
 import slick.jdbc.JdbcType
+import util.JsonSerializers._
 
 object SystemUserTable {
   implicit val loginInfoColumnType: JdbcType[LoginInfo] = MappedColumnType.base[LoginInfo, String](
@@ -19,7 +19,7 @@ object SystemUserTable {
     tcomap = i => Role.withName(i)
   )
   implicit val userPreferencesColumnType: JdbcType[UserPreferences] = MappedColumnType.base[UserPreferences, String](
-    tmap = b => new EncoderOps(b).asJson.spaces2,
+    tmap = b => b.asJson.spaces2,
     tcomap = i => UserPreferences.readFrom(i)
   )
 

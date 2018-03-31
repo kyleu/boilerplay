@@ -25,7 +25,7 @@ object FileService extends Logging {
 
   def getContent(f: File) = f.contentAsString
 
-  def getJsonContent(f: File) = io.circe.parser.parse(getContent(f)) match {
+  def getJsonContent(f: File) = util.JsonSerializers.parseJson(getContent(f)) match {
     case Right(json) => json
     case Left(x) => throw new IllegalStateException(s"Invalid json for file [${f.pathAsString}]: ${getContent(f)}]", x)
   }

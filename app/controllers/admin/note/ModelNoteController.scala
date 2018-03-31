@@ -2,11 +2,11 @@ package controllers.admin.note
 
 import controllers.BaseController
 import controllers.admin.ServiceController
-import io.circe.syntax._
 import models.Application
 import models.note.Note
 import services.note.ModelNoteService
 import util.FutureUtils.defaultContext
+import util.JsonSerializers._
 
 import scala.concurrent.Future
 

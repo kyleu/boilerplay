@@ -1,5 +1,6 @@
 package util.web
 
+import io.circe.Json
 import javax.inject._
 import play.api.http.{DefaultHttpErrorHandler, MimeTypes}
 import play.api._
@@ -53,15 +54,15 @@ class ErrorHandler @Inject() (
     Future.successful(Results.BadRequest(views.html.error.badRequest(request.path, error)(request.session, request.flash, td)))
   }
 
-  private[this] def jsonError(request: RequestHeader, ex: UsefulException) = Future.successful(Results.InternalServerError(io.circe.Json.obj(
-    "status" -> io.circe.Json.fromString("error"),
-    "t" -> io.circe.Json.fromString(ex.getClass.getSimpleName),
-    "message" -> io.circe.Json.fromString(ex.getMessage),
-    "location" -> io.circe.Json.fromString(ex.getStackTrace.headOption.map(_.toString).getOrElse("n/a"))
+  private[this] def jsonError(request: RequestHeader, ex: UsefulException) = Future.successful(Results.InternalServerError(Json.obj(
+    "status" -> Json.fromString("error"),
+    "t" -> Json.fromString(ex.getClass.getSimpleName),
+    "message" -> Json.fromString(ex.getMessage),
+    "location" -> Json.fromString(ex.getStackTrace.headOption.map(_.toString).getOrElse("n/a"))
   ).spaces2).as(MimeTypes.JSON))
 
-  private[this] def jsonNotFound(request: RequestHeader, statusCode: Int, message: String) = Future.successful(Results.NotFound(io.circe.Json.obj(
-    "status" -> io.circe.Json.fromInt(statusCode),
-    "message" -> io.circe.Json.fromString(message)
+  private[this] def jsonNotFound(request: RequestHeader, statusCode: Int, message: String) = Future.successful(Results.NotFound(Json.obj(
+    "status" -> Json.fromInt(statusCode),
+    "message" -> Json.fromString(message)
   ).spaces2).as(MimeTypes.JSON))
 }

@@ -103,7 +103,7 @@ class AuditRecordService @javax.inject.Inject() (override val tracing: TracingSe
     })
   }
 
-  def csvFor(operation: String, totalCount: Int, rows: Seq[AuditRecord])(implicit trace: TraceData) = {
+  def csvFor(totalCount: Int, rows: Seq[AuditRecord])(implicit trace: TraceData) = {
     traceB("export.csv")(td => util.CsvUtils.csvFor(Some(key), totalCount, rows, AuditRecordQueries.fields)(td))
   }
 }

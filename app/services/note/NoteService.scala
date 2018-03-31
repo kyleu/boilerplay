@@ -145,7 +145,7 @@ class NoteService @javax.inject.Inject() (override val tracing: TracingService) 
     })
   }
 
-  def csvFor(operation: String, totalCount: Int, rows: Seq[Note])(implicit trace: TraceData) = {
+  def csvFor(totalCount: Int, rows: Seq[Note])(implicit trace: TraceData) = {
     traceB("export.csv")(td => util.CsvUtils.csvFor(Some(key), totalCount, rows, NoteQueries.fields)(td))
   }
 }

@@ -2,7 +2,8 @@ package services.socket
 
 import models.RequestMessage
 import services.event.EventHandler
-import util.{BinarySerializers, JsonSerializers, Logging}
+import util.{BinarySerializers, Logging}
+import util.JsonSerializers._
 
 abstract class SocketConnection(key: String, val handler: EventHandler, val binary: Boolean) {
   protected[this] val socket = new NetworkSocket(handler)
@@ -29,7 +30,7 @@ abstract class SocketConnection(key: String, val handler: EventHandler, val bina
       if (binary) {
         socket.sendBinary(BinarySerializers.writeRequestMessage(rm))
       } else {
-        socket.sendString(new io.circe.syntax.EncoderOps(rm).asJson.spaces2)
+        socket.sendString(rm.asJson.spaces2)
       }
       handler.onRequestMessage(rm)
     } else {

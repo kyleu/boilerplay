@@ -3,10 +3,10 @@ package controllers.admin.settings
 
 import controllers.BaseController
 import controllers.admin.ServiceController
-import io.circe.syntax._
 import models.settings.SettingKey
 import play.twirl.api.Html
 import scala.concurrent.Future
+import util.JsonSerializers._
 
 @javax.inject.Singleton
 class SettingKeyController @javax.inject.Inject() (override val app: models.Application) extends BaseController("settingKey") {
