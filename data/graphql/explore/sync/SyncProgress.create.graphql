@@ -1,0 +1,12 @@
+# Generated File
+# Creates a new SyncProgress entity.
+mutation SyncProgressCreate {
+  syncProgress {
+    create(fields: [{k: "", v: ""}]) {
+      key
+      status
+      message
+      lastTime
+    }
+  }
+}

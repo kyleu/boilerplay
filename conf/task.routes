@@ -1,0 +1,11 @@
+# Generated File
+# Scheduled Task Run Routes
+GET         /                                                         controllers.admin.task.ScheduledTaskRunController.list(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None)
+GET         /autocomplete                                            controllers.admin.task.ScheduledTaskRunController.autocomplete(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None)
+GET         /form                                                    controllers.admin.task.ScheduledTaskRunController.createForm
+POST        /                                                         controllers.admin.task.ScheduledTaskRunController.create
+GET         /:id                                                      controllers.admin.task.ScheduledTaskRunController.view(id: java.util.UUID, t: Option[String] ?= None)
+GET         /:id/form                                                 controllers.admin.task.ScheduledTaskRunController.editForm(id: java.util.UUID)
+POST        /:id                                                      controllers.admin.task.ScheduledTaskRunController.edit(id: java.util.UUID)
+GET         /:id/remove                                               controllers.admin.task.ScheduledTaskRunController.remove(id: java.util.UUID)
+

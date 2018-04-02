@@ -1,0 +1,38 @@
+@* Generated File *@
+@(user: models.user.SystemUser, model: models.sync.SyncProgress, notes: Seq[models.note.Note], debug: Boolean)(
+    implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
+)@traceData.logViewClass(getClass)@views.html.admin.layout.page(user, "explore", s"Sync Progress [${model.key}]") {
+  <div class="collection with-header">
+    <div class="collection-header">
+      <div class="right"><a class="theme-text" href="@controllers.admin.sync.routes.SyncProgressController.editForm(model.key)">Edit</a></div>
+      <div class="right"><a class="theme-text remove-link" onclick="return confirm('Are you sure you want to remove this Sync Progress?')" href="@controllers.admin.sync.routes.SyncProgressController.remove(model.key)">Remove</a></div>
+      <h5>
+        <a class="theme-text" href="@controllers.admin.sync.routes.SyncProgressController.list()"><i class="fa @models.template.Icons.syncProgress"></i></a>
+        Sync Progress [@model.key]
+      </h5>
+    </div>
+    <div class="collection-item">
+      <table class="highlight">
+        <tbody>
+          <tr>
+            <th>Key</th>
+            <td>@model.key</td>
+          </tr>
+          <tr>
+            <th>Status</th>
+            <td>@model.status</td>
+          </tr>
+          <tr>
+            <th>Message</th>
+            <td>@model.message</td>
+          </tr>
+          <tr>
+            <th>Last Time</th>
+            <td>@model.lastTime</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    @views.html.admin.note.notes(notes, "syncProgress", "Sync Progress", model.key)
+  </div>
+}

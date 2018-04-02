@@ -1,0 +1,9 @@
+@* Generated File *@
+@(model: models.task.ScheduledTaskRun, hit: String)<div class="search-result">
+  <div class="right">Scheduled Task Run</div>
+  <div>
+    <i class="fa @models.template.Icons.scheduledTaskRun"></i>
+    <a class="theme-text" href="@controllers.admin.task.routes.ScheduledTaskRunController.view(model.id)">@model.id</a>
+  </div>
+  <em>@hit</em>
+</div>

@@ -1,0 +1,11 @@
+# Generated File
+# Sync Progress Routes
+GET         /                                                         controllers.admin.sync.SyncProgressController.list(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None)
+GET         /autocomplete                                            controllers.admin.sync.SyncProgressController.autocomplete(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None)
+GET         /form                                                    controllers.admin.sync.SyncProgressController.createForm
+POST        /                                                         controllers.admin.sync.SyncProgressController.create
+GET         /:key                                                     controllers.admin.sync.SyncProgressController.view(key: String, t: Option[String] ?= None)
+GET         /:key/form                                                controllers.admin.sync.SyncProgressController.editForm(key: String)
+POST        /:key                                                     controllers.admin.sync.SyncProgressController.edit(key: String)
+GET         /:key/remove                                              controllers.admin.sync.SyncProgressController.remove(key: String)
+

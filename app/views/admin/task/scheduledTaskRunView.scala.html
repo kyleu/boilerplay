@@ -1,0 +1,50 @@
+@* Generated File *@
+@(user: models.user.SystemUser, model: models.task.ScheduledTaskRun, notes: Seq[models.note.Note], debug: Boolean)(
+    implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
+)@traceData.logViewClass(getClass)@views.html.admin.layout.page(user, "explore", s"Scheduled Task Run [${model.id}]") {
+  <div class="collection with-header">
+    <div class="collection-header">
+      <div class="right"><a class="theme-text" href="@controllers.admin.task.routes.ScheduledTaskRunController.editForm(model.id)">Edit</a></div>
+      <div class="right"><a class="theme-text remove-link" onclick="return confirm('Are you sure you want to remove this Scheduled Task Run?')" href="@controllers.admin.task.routes.ScheduledTaskRunController.remove(model.id)">Remove</a></div>
+      <h5>
+        <a class="theme-text" href="@controllers.admin.task.routes.ScheduledTaskRunController.list()"><i class="fa @models.template.Icons.scheduledTaskRun"></i></a>
+        Scheduled Task Run [@model.id]
+      </h5>
+    </div>
+    <div class="collection-item">
+      <table class="highlight">
+        <tbody>
+          <tr>
+            <th>Id</th>
+            <td>@model.id</td>
+          </tr>
+          <tr>
+            <th>Task</th>
+            <td>@model.task</td>
+          </tr>
+          <tr>
+            <th>Arguments</th>
+            <td>@model.arguments</td>
+          </tr>
+          <tr>
+            <th>Status</th>
+            <td>@model.status</td>
+          </tr>
+          <tr>
+            <th>Output</th>
+            <td><pre>@model.output<pre></td>
+          </tr>
+          <tr>
+            <th>Started</th>
+            <td>@model.started</td>
+          </tr>
+          <tr>
+            <th>Completed</th>
+            <td>@model.completed</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    @views.html.admin.note.notes(notes, "scheduledTaskRun", "Scheduled Task Run", model.id)
+  </div>
+}

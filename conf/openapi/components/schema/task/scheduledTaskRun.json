@@ -1,0 +1,78 @@
+// Generated File
+{
+  "task.ScheduledTaskRun": {
+    "required": [
+      "id",
+      "task",
+      "arguments",
+      "status",
+      "output",
+      "started",
+      "completed"
+    ],
+    "properties": {
+      "id": {
+        "type": "string",
+        "example": "00000000-0000-0000-0000-000000000000"
+      },
+      "task": {
+        "type": "string"
+      },
+      "arguments": {
+        "type": "array",
+        "items": {
+          "type": "_varchar"
+        }
+      },
+      "status": {
+        "type": "string"
+      },
+      "output": {
+        "type": "object"
+      },
+      "started": {
+        "type": "string",
+        "example": "2018-01-01 00:00:00"
+      },
+      "completed": {
+        "type": "string",
+        "example": "2018-01-01 00:00:00"
+      }
+    }
+  },
+  "task.ScheduledTaskRunResult": {
+    "properties": {
+      "filters": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/common.Filter"
+        }
+      },
+      "orderBys": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/common.OrderBy"
+        }
+      },
+      "totalCount": {
+        "type": "integer"
+      },
+      "paging": {
+        "$ref": "#/components/schemas/common.PagingOptions"
+      },
+      "results": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/task.ScheduledTaskRun"
+        }
+      },
+      "durationMs": {
+        "type": "integer"
+      },
+      "occurred": {
+        "type": "string",
+        "example": "2018-01-01 00:00:00"
+      }
+    }
+  }
+}

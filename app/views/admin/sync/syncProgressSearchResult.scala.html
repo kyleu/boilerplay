@@ -1,0 +1,9 @@
+@* Generated File *@
+@(model: models.sync.SyncProgress, hit: String)<div class="search-result">
+  <div class="right">Sync Progress</div>
+  <div>
+    <i class="fa @models.template.Icons.syncProgress"></i>
+    <a class="theme-text" href="@controllers.admin.sync.routes.SyncProgressController.view(model.key)">@model.key</a>
+  </div>
+  <em>@hit</em>
+</div>

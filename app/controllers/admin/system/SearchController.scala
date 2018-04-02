@@ -47,11 +47,14 @@ class SearchController @javax.inject.Inject() (override val app: Application, se
     val note = services.noteServices.noteService.getByPrimaryKey(creds, id).map(_.map { model =>
       views.html.admin.note.noteSearchResult(model, s"Note [${model.id}] matched [$q].")
     }.toSeq)
+    val scheduledTaskRun = services.taskServices.scheduledTaskRunService.getByPrimaryKey(creds, id).map(_.map { model =>
+      views.html.admin.task.scheduledTaskRunSearchResult(model, s"Scheduled Task Run [${model.id}] matched [$q].")
+    }.toSeq)
     val systemUser = services.userServices.systemUserService.getByPrimaryKey(creds, id).map(_.map { model =>
       views.html.admin.user.systemUserSearchResult(model, s"User [${model.id}] matched [$q].")
     }.toSeq)
 
-    val uuidSearches = Seq[Future[Seq[Html]]](auditRecord, note, systemUser)
+    val uuidSearches = Seq[Future[Seq[Html]]](auditRecord, note, scheduledTaskRun, systemUser)
     // End uuid searches
 
     val auditR = app.coreServices.audits.getByPrimaryKey(creds, id).map(_.map { model =>
@@ -69,11 +72,17 @@ class SearchController @javax.inject.Inject() (override val app: Application, se
     val note = services.noteServices.noteService.searchExact(creds, q = q, limit = Some(5)).map(_.map { model =>
       views.html.admin.note.noteSearchResult(model, s"Note [${model.id}] matched [$q].")
     })
+    val scheduledTaskRun = services.taskServices.scheduledTaskRunService.searchExact(creds, q = q, limit = Some(5)).map(_.map { model =>
+      views.html.admin.task.scheduledTaskRunSearchResult(model, s"Scheduled Task Run [${model.id}] matched [$q].")
+    })
+    val syncProgress = services.syncServices.syncProgressService.searchExact(creds, q = q, limit = Some(5)).map(_.map { model =>
+      views.html.admin.sync.syncProgressSearchResult(model, s"Sync Progress [${model.key}] matched [$q].")
+    })
     val systemUser = services.userServices.systemUserService.searchExact(creds, q = q, limit = Some(5)).map(_.map { model =>
       views.html.admin.user.systemUserSearchResult(model, s"User [${model.id}] matched [$q].")
     })
 
-    val stringSearches = Seq[Future[Seq[Html]]](auditRecord, note, systemUser)
+    val stringSearches = Seq[Future[Seq[Html]]](auditRecord, note, scheduledTaskRun, syncProgress, systemUser)
     // End string searches
 
     val auditR = app.coreServices.audits.searchExact(creds = creds, q = q, limit = Some(5)).map(_.map { model =>

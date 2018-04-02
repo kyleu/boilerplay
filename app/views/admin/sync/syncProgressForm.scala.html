@@ -1,0 +1,27 @@
+@* Generated File *@
+@(user: models.user.SystemUser, model: models.sync.SyncProgress, title: String, cancel: Call, act: Call, isNew: Boolean = false, debug: Boolean = false)(
+    implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
+)@traceData.logViewClass(getClass)@views.html.admin.layout.page(user, "explore", title) {
+  <form id="form-edit-syncProgress" action="@act" method="post">
+    <div class="collection with-header">
+      <div class="collection-header">
+        <div class="right"><button type="submit" class="btn theme">@if(isNew) {Create} else {Save} Sync Progress</button></div>
+        <div class="right"><a href="@cancel" class="theme-text cancel-link">Cancel</a></div>
+        <h5><i class="fa @models.template.Icons.syncProgress"></i> @title</h5>
+      </div>
+      <div class="collection-item">
+        <table>
+          <tbody>
+            @views.html.components.form.textField(selected = isNew, key = "key", title = "Key", value = Some(model.key.toString), nullable = false)
+            @views.html.components.form.textField(selected = isNew, key = "status", title = "Status", value = Some(model.status.toString), nullable = false)
+            @views.html.components.form.textField(selected = isNew, key = "message", title = "Message", value = Some(model.message.toString), nullable = false)
+            @views.html.components.form.localDateTimeField(selected = isNew, key = "lastTime", title = "Last Time", value = Some(model.lastTime), nullable = false)
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </form>
+}
+@views.html.components.includeScalaJs(debug)
+@views.html.components.includeAutocomplete(debug)
+<script>$(function() { new FormService('form-edit-syncProgress'); })</script>

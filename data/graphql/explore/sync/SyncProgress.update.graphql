@@ -1,0 +1,12 @@
+# Generated File
+# Updates a single SyncProgress entity using the provided fields.
+mutation SyncProgressUpdate {
+  syncProgress {
+    update(key: "", fields: [{k: "", v: ""}]) {
+      key
+      status
+      message
+      lastTime
+    }
+  }
+}

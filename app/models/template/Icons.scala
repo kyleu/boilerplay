@@ -41,14 +41,16 @@ object Icons {
 
   val audit = "fa-dot-circle-o"
   val auditRecord = "fa-dot-circle-o"
+  val ddl = "fa-database"
   val note = "fa-sticky-note-o"
-
+  val passwordInfo = "fa-lock"
   val sandbox = "fa-folder-o"
+  val scheduledTaskRun = "fa-clock-o"
+  val settingValue = "fa-cog"
+  val syncProgress = "fa-refresh"
   val systemUser = "fa-user"
 
   // Start model icons
-  val ddl = "fa-glass"
-  val passwordInfo = "fa-info-circle"
   val settingValues = "fa-hand-spock-o"
   // End model icons
 }

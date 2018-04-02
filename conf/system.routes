@@ -1,28 +1,26 @@
-# Admin
-GET         /                    controllers.admin.system.AdminController.index
-GET         /status              controllers.admin.system.AdminController.status
-GET         /sockets             controllers.admin.system.AdminController.dumpSockets
-GET         /metrics             controllers.admin.system.MetricsController.showMetrics
+GET         /                      controllers.admin.system.AdminController.index
+GET         /status                controllers.admin.system.AdminController.status
+GET         /sockets               controllers.admin.system.AdminController.dumpSockets
+GET         /metrics               controllers.admin.system.MetricsController.showMetrics
 
-# Explore
-GET         /search              controllers.admin.system.SearchController.search(q ?= "")
-GET         /explore             controllers.admin.system.AdminController.explore
+GET         /search                controllers.admin.system.SearchController.search(q ?= "")
+GET         /explore               controllers.admin.system.AdminController.explore
 
 # Start model routes
 
 # End model routes
 
-# Settings
-GET         /settings            controllers.admin.system.SettingsController.settings
-POST        /settings            controllers.admin.system.SettingsController.saveSettings
+GET         /settings              controllers.admin.system.SettingsController.settings
+POST        /settings              controllers.admin.system.SettingsController.saveSettings
 
-# DDL Files
-GET         /ddl                 controllers.admin.system.DdlFileController.list
+GET         /ddl                   controllers.admin.system.DdlFileController.list
 
-# Encryption
-GET         /encrypt             controllers.admin.system.EncryptionController.form
-POST        /encrypt             controllers.admin.system.EncryptionController.post
+GET         /encrypt               controllers.admin.system.EncryptionController.form
+POST        /encrypt               controllers.admin.system.EncryptionController.post
 
-# Sandboxes
-GET         /sandbox             controllers.admin.system.SandboxController.list
-GET         /sandbox/:key        controllers.admin.system.SandboxController.run(key, arg: Option[String] ?= None)
+GET         /schedule/             controllers.admin.system.ScheduleController.list
+GET         /schedule/reset        controllers.admin.system.ScheduleController.reset()
+GET         /schedule/:key         controllers.admin.system.ScheduleController.run(key)
+
+GET         /sandbox               controllers.admin.system.SandboxController.list
+GET         /sandbox/:key          controllers.admin.system.SandboxController.run(key, arg: Option[String] ?= None)

@@ -1,0 +1,20 @@
+@(user: models.user.SystemUser, tasks: Seq[models.task.scheduled.ScheduledTask], syncs: Seq[models.sync.SyncProgress])(
+    implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
+)@traceData.logViewClass(getClass)@views.html.admin.layout.page(user, "status", "Scheduled Tasks") {
+  <ul class="collection with-header">
+    <li class="collection-header">
+      <div class="right"><a class="theme-text" href="@controllers.admin.system.routes.ScheduleController.run("all")">Run All</a></div>
+      <h5><i class="fa @models.template.Icons.sandbox"></i> Scheduled Tasks</h5>
+      @tasks.size scheduled tasks available. <a class="theme-text" href="@controllers.admin.system.routes.ScheduleController.reset">Reset statuses</a>
+    </li>
+    @tasks.map { task =>
+      <li class="collection-item">
+        <div class="right">@syncs.find(_.key == task.key).map(_.lastTime).map(util.DateUtils.niceDateTime).getOrElse("...")</div>
+        <div><a class="theme-text" href="@controllers.admin.system.routes.ScheduleController.run(task.key)">@task.title</a></div>
+        @task.description.map { desc =>
+          <em>@desc</em>
+        }
+      </li>
+    }
+  </ul>
+}

@@ -9,6 +9,8 @@
   "#include:audit/audit.json": "*",
   "#include:audit/auditRecord.json": "*",
   "#include:note/note.json": "*",
+  "#include:sync/syncProgress.json": "*",
+  "#include:task/scheduledTaskRun.json": "*",
   "#include:user/systemUser.json": "*"
   // End schema paths
 }

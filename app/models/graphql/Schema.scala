@@ -15,6 +15,8 @@ object Schema {
       models.audit.AuditSchema.auditByPrimaryKeyFetcher,
       models.note.NoteSchema.noteByAuthorFetcher,
       models.note.NoteSchema.noteByPrimaryKeyFetcher,
+      models.sync.SyncProgressSchema.syncProgressByPrimaryKeyFetcher,
+      models.task.ScheduledTaskRunSchema.scheduledTaskRunByPrimaryKeyFetcher,
       models.user.SystemUserSchema.systemUserByPrimaryKeyFetcher
     )
     // End model fetchers
@@ -32,6 +34,8 @@ object Schema {
     models.audit.AuditRecordSchema.queryFields ++
       models.audit.AuditSchema.queryFields ++
       models.note.NoteSchema.queryFields ++
+      models.sync.SyncProgressSchema.queryFields ++
+      models.task.ScheduledTaskRunSchema.queryFields ++
       models.user.SystemUserSchema.queryFields
     // End model query fields
   }
@@ -56,6 +60,8 @@ object Schema {
     models.audit.AuditRecordSchema.mutationFields ++
       models.audit.AuditSchema.mutationFields ++
       models.note.NoteSchema.mutationFields ++
+      models.sync.SyncProgressSchema.mutationFields ++
+      models.task.ScheduledTaskRunSchema.mutationFields ++
       models.user.SystemUserSchema.mutationFields
     // End model mutation fields
   }
