@@ -1,4 +1,4 @@
-create table "scheduled_task_run" (
+create table if not exists "scheduled_task_run" (
   "id" uuid not null primary key,
   "task" varchar(64) not null,
   "arguments" varchar(64)[] not null,
@@ -8,7 +8,7 @@ create table "scheduled_task_run" (
   "completed" timestamp without time zone not null
 );
 
-create table "sync_progress" (
+create table if not exists "sync_progress" (
   "key" varchar(128) not null primary key,
   "status" varchar(128) not null,
   "message" text not null,

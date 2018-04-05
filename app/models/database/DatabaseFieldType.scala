@@ -76,7 +76,7 @@ object DatabaseFieldType extends Enum[DatabaseFieldType[_]] with CirceEnum[Datab
     override def opt(row: Row, col: String) = row.asOpt[Any](col).map(tagsCoerce)
   }
 
-  case object ByteArrayType extends DatabaseFieldType[Seq[Byte]]("byteArray") {
+  case object ByteArrayType extends DatabaseFieldType[Array[Byte]]("byteArray") {
     override def apply(row: Row, col: String) = row.as[PgArray](col).getArray.asInstanceOf[Array[Byte]]
     override def opt(row: Row, col: String) = row.asOpt[PgArray](col).map(_.asInstanceOf[Array[Byte]])
   }
