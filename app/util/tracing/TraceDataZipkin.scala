@@ -2,7 +2,7 @@ package util.tracing
 
 import brave.Span
 
-case class TraceDataZipkin(span: Span) extends TraceData {
+final case class TraceDataZipkin(span: Span) extends TraceData {
   override val isNoop = span.isNoop
 
   override def tag(k: String, v: String) = span.tag(k, v)

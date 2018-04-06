@@ -8,6 +8,8 @@ import util.tracing.{TraceData, TracingService}
 import services.database.SlickQueryService.imports._
 import util.FutureUtils.serviceContext
 
+import scala.concurrent.Future
+
 @javax.inject.Singleton
 class SettingsService @javax.inject.Inject() (tracing: TracingService) extends Logging {
   private[this] var settings = Seq.empty[Setting]
@@ -17,7 +19,7 @@ class SettingsService @javax.inject.Inject() (tracing: TracingService) extends L
   def asBool(key: SettingKey) = apply(key) == "true"
   def getOrSet(key: SettingKey, s: => String)(implicit trace: TraceData) = tracing.traceBlocking("get.or.set") { td =>
     settingsMap.get(key) match {
-      case Some(v) => v
+      case Some(v) => Future.successful(v)
       case None => set(key, s)(td)
     }
   }

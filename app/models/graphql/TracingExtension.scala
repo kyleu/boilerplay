@@ -13,40 +13,29 @@ import sangria.renderer.SchemaRenderer
 import scala.collection.JavaConverters._
 
 object TracingExtension extends Middleware[Any] with MiddlewareExtension[Any] with MiddlewareAfterField[Any] with MiddlewareErrorField[Any] {
-  case class QueryTrace(startTime: Instant, startNanos: Long, fieldData: ConcurrentLinkedQueue[Value])
+  final case class QueryTrace(startTime: Instant, startNanos: Long, fieldData: ConcurrentLinkedQueue[Value])
 
-  type QueryVal = QueryTrace
-  type FieldVal = Long
+  override type QueryVal = QueryTrace
+  override type FieldVal = Long
 
-  def beforeQuery(context: MiddlewareQueryContext[Any, _, _]) =
+  override def beforeQuery(context: MiddlewareQueryContext[Any, _, _]) =
     QueryTrace(Instant.now(), System.nanoTime(), new ConcurrentLinkedQueue)
 
-  def afterQuery(queryVal: QueryVal, context: MiddlewareQueryContext[Any, _, _]) = ()
+  override def afterQuery(queryVal: QueryVal, context: MiddlewareQueryContext[Any, _, _]) = ()
 
-  def beforeField(queryVal: QueryVal, mctx: MiddlewareQueryContext[Any, _, _], ctx: Context[Any, _]) =
+  override def beforeField(queryVal: QueryVal, mctx: MiddlewareQueryContext[Any, _, _], ctx: Context[Any, _]) =
     continue(System.nanoTime())
 
-  def afterField(queryVal: QueryVal, fieldVal: FieldVal, value: Any, mctx: MiddlewareQueryContext[Any, _, _], ctx: Context[Any, _]) = {
+  override def afterField(queryVal: QueryVal, fieldVal: FieldVal, value: Any, mctx: MiddlewareQueryContext[Any, _, _], ctx: Context[Any, _]) = {
     updateMetric(queryVal, fieldVal, ctx)
     None
   }
 
-  def fieldError(queryVal: QueryVal, fieldVal: FieldVal, error: Throwable, mctx: MiddlewareQueryContext[Any, _, _], ctx: Context[Any, _]) = {
+  override def fieldError(queryVal: QueryVal, fieldVal: FieldVal, error: Throwable, mctx: MiddlewareQueryContext[Any, _, _], ctx: Context[Any, _]) = {
     updateMetric(queryVal, fieldVal, ctx)
   }
 
-  def updateMetric(queryVal: QueryVal, fieldVal: FieldVal, ctx: Context[Any, _]): Unit = queryVal.fieldData.add(
-    ObjectValue(Vector(
-      ObjectField("path", ListValue(ctx.path.path.map(queryAstResultMarshaller.scalarNode(_, "Any", Set.empty)))),
-      ObjectField("fieldName", StringValue(ctx.field.name)),
-      ObjectField("parentType", StringValue(ctx.parentType.name)),
-      ObjectField("returnType", StringValue(SchemaRenderer.renderTypeName(ctx.field.fieldType))),
-      ObjectField("startOffset", BigIntValue(fieldVal - queryVal.startNanos)),
-      ObjectField("duration", BigIntValue(System.nanoTime() - fieldVal))
-    ))
-  )
-
-  def afterQueryExtensions(queryVal: QueryVal, context: MiddlewareQueryContext[Any, _, _]): Vector[Extension[_]] = Vector(Extension(
+  override def afterQueryExtensions(queryVal: QueryVal, context: MiddlewareQueryContext[Any, _, _]): Vector[Extension[_]] = Vector(Extension(
     ObjectValue(Vector(
       ObjectField("tracing", ObjectValue(Vector(
         ObjectField("version", IntValue(1)),
@@ -59,4 +48,15 @@ object TracingExtension extends Middleware[Any] with MiddlewareExtension[Any] wi
       )))
     )): Value
   ))
+
+  private[this] def updateMetric(queryVal: QueryVal, fieldVal: FieldVal, ctx: Context[Any, _]): Unit = queryVal.fieldData.add(
+    ObjectValue(Vector(
+      ObjectField("path", ListValue(ctx.path.path.map(queryAstResultMarshaller.scalarNode(_, "Any", Set.empty)))),
+      ObjectField("fieldName", StringValue(ctx.field.name)),
+      ObjectField("parentType", StringValue(ctx.parentType.name)),
+      ObjectField("returnType", StringValue(SchemaRenderer.renderTypeName(ctx.field.fieldType))),
+      ObjectField("startOffset", BigIntValue(fieldVal - queryVal.startNanos)),
+      ObjectField("duration", BigIntValue(System.nanoTime() - fieldVal))
+    ))
+  )
 }

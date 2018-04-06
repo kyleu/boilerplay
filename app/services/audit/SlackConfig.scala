@@ -1,6 +1,6 @@
 package services.audit
 
-case class SlackConfig(
+final case class SlackConfig(
     enabled: Boolean,
     url: String,
     channel: String = "#general",

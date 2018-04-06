@@ -29,7 +29,9 @@ object Instrumented extends Logging {
     try {
       f
     } catch {
-      case NonFatal(x) => error.labels(cn(msg), cn(x)).inc()
+      case NonFatal(x) =>
+        error.labels(cn(msg), cn(x)).inc()
+        throw x
     } finally {
       t.close()
     }

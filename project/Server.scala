@@ -1,3 +1,4 @@
+import com.sksamuel.scapegoat.sbt.ScapegoatSbtPlugin.autoImport.{scapegoatIgnoredFiles, scapegoatDisabledInspections}
 import com.typesafe.sbt.GitPlugin.autoImport.git
 import com.typesafe.sbt.digest.Import._
 import com.typesafe.sbt.gzip.Import._
@@ -79,7 +80,10 @@ object Server {
       case x => (assemblyMergeStrategy in assembly).value(x)
     },
     fullClasspath in assembly += Attributed.blank(PlayKeys.playPackageAssets.value),
-    mainClass in assembly := Some(Shared.projectName)
+    mainClass in assembly := Some(Shared.projectName),
+
+    scapegoatIgnoredFiles := Seq(".*/Routes.scala", ".*/RoutesPrefix.scala", ".*/*ReverseRoutes.scala", ".*/*.template.scala"),
+    scapegoatDisabledInspections := Seq("UnusedMethodParameter")
   )
 
   lazy val server = Project(id = Shared.projectId, base = file(".")).enablePlugins(

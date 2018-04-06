@@ -20,7 +20,7 @@ object Note {
   )
 }
 
-case class Note(
+final case class Note(
     id: UUID = UUID.randomUUID(),
     relType: Option[String] = None,
     relPk: Option[String] = None,
@@ -30,9 +30,9 @@ case class Note(
 ) extends DataFieldModel {
   override def toDataFields = Seq(
     DataField("id", Some(id.toString)),
-    DataField("relType", relType.map(_.toString)),
-    DataField("relPk", relPk.map(_.toString)),
-    DataField("text", Some(text.toString)),
+    DataField("relType", relType),
+    DataField("relPk", relPk),
+    DataField("text", Some(text)),
     DataField("author", Some(author.toString)),
     DataField("created", Some(created.toString))
   )

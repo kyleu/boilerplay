@@ -41,9 +41,11 @@ object ModelBindables {
     override def bind(key: String, value: String) = settingKeyExtractor(stringBinder.bind(key, value))
     override def unbind(key: String, x: SettingKey) = x.value
   }
-  implicit def settingKeyQueryStringBindable(implicit stringBinder: QueryStringBindable[String]): QueryStringBindable[SettingKey] = new QueryStringBindable[SettingKey] {
-    override def bind(key: String, params: Map[String, Seq[String]]) = stringBinder.bind(key, params).map(settingKeyExtractor)
-    override def unbind(key: String, x: SettingKey) = x.value
+  implicit def settingKeyQueryStringBindable(implicit stringBinder: QueryStringBindable[String]): QueryStringBindable[SettingKey] = {
+    new QueryStringBindable[SettingKey] {
+      override def bind(key: String, params: Map[String, Seq[String]]) = stringBinder.bind(key, params).map(settingKeyExtractor)
+      override def unbind(key: String, x: SettingKey) = x.value
+    }
   }
 
   /* End model bindables */

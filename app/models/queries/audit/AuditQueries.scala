@@ -12,8 +12,6 @@ import models.result.filter.Filter
 import models.result.orderBy.OrderBy
 import models.tag.Tag
 
-import scala.collection.JavaConverters._
-
 object AuditQueries extends BaseQueries[Audit]("audit", "audit") {
   override val fields = Seq(
     DatabaseField(title = "Id", prop = "id", col = "id", typ = UuidType),
@@ -31,29 +29,33 @@ object AuditQueries extends BaseQueries[Audit]("audit", "audit") {
   override protected val searchColumns = Seq("id", "act", "app", "client", "server", "user_id", "tags")
 
   def countAll(filters: Seq[Filter] = Nil) = onCountAll(filters)
-  def getAll = GetAll
+  def getAll(filters: Seq[Filter] = Nil, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) = {
+    new GetAll(filters, orderBys, limit, offset)
+  }
 
-  val search = Search
-  val searchCount = SearchCount
-  val searchExact = SearchExact
+  def search(q: String, filters: Seq[Filter] = Nil, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) = {
+    new Search(q, filters, orderBys, limit, offset)
+  }
+  def searchCount(q: String, filters: Seq[Filter] = Nil) = new SearchCount(q, filters)
+  def searchExact(q: String, orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int]) = new SearchExact(q, orderBys, limit, offset)
 
-  def getByPrimaryKey(id: UUID) = GetByPrimaryKey(Seq(id))
+  def getByPrimaryKey(id: UUID) = new GetByPrimaryKey(Seq(id))
   def getByPrimaryKeySeq(idSeq: Seq[UUID]) = new ColSeqQuery(column = "id", values = idSeq)
 
-  def insert(model: Audit) = Insert(model)
-  def insertBatch(models: Seq[Audit]) = InsertBatch(models)
-  def create(dataFields: Seq[DataField]) = CreateFields(dataFields)
+  def insert(model: Audit) = new Insert(model)
+  def insertBatch(models: Seq[Audit]) = new InsertBatch(models)
+  def create(dataFields: Seq[DataField]) = new CreateFields(dataFields)
 
-  def removeByPrimaryKey(id: UUID) = RemoveByPrimaryKey(Seq[Any](id))
+  def removeByPrimaryKey(id: UUID) = new RemoveByPrimaryKey(Seq[Any](id))
 
-  def update(id: UUID, fields: Seq[DataField]) = UpdateFields(Seq[Any](id), fields)
+  def update(id: UUID, fields: Seq[DataField]) = new UpdateFields(Seq[Any](id), fields)
 
-  case class CountByUserId(user: UUID) extends ColCount(column = "user_id", values = Seq(user))
-  case class GetByUserId(user: UUID, orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int]) extends SeqQuery(
+  final case class CountByUserId(user: UUID) extends ColCount(column = "user_id", values = Seq(user))
+  final case class GetByUserId(user: UUID, orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int]) extends SeqQuery(
     whereClause = Some(quote("user_id") + "  = ?"), orderBy = ResultFieldHelper.orderClause(fields, orderBys: _*),
     limit = limit, offset = offset, values = Seq(user)
   )
-  case class GetByUserIdSeq(userSeq: Seq[UUID]) extends ColSeqQuery(column = "user_id", values = userSeq)
+  final case class GetByUserIdSeq(userSeq: Seq[UUID]) extends ColSeqQuery(column = "user_id", values = userSeq)
 
   override protected def fromRow(row: Row) = Audit(
     id = UuidType(row, "id"),
@@ -69,6 +71,6 @@ object AuditQueries extends BaseQueries[Audit]("audit", "audit") {
   )
 
   override protected def toDataSeq(t: Audit) = {
-    Seq(t.id, t.act, t.app, t.client, t.server, t.userId, models.tag.Tag.toJavaMap(t.tags), t.msg, t.started, t.completed)
+    Seq[Any](t.id, t.act, t.app, t.client, t.server, t.userId, models.tag.Tag.toJavaMap(t.tags), t.msg, t.started, t.completed)
   }
 }

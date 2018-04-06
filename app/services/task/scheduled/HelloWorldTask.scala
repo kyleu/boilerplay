@@ -14,7 +14,7 @@ class HelloWorldTask @javax.inject.Inject() () extends ScheduledTask(
   runFrequencySeconds = 600
 ) {
   override def run(creds: Credentials, log: String => Unit)(implicit td: TraceData) = {
-    log(s"Hello, world!")
+    log("Hello, world!")
     Future.successful(false)
   }
 }

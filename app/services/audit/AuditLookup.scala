@@ -11,7 +11,9 @@ import scala.concurrent.Future
 
 @javax.inject.Singleton
 class AuditLookup @javax.inject.Inject() (registry: ServiceRegistry) extends Logging {
-  def getByPk(creds: Credentials, model: String, pk: String*)(implicit traceData: TraceData) = getModel(creds, model, getArg(pk, _))
+  def getByPk(creds: Credentials, model: String, pk: String*)(implicit traceData: TraceData) = {
+    getModel(creds, model, getArg(pk.toIndexedSeq, _))
+  }
 
   private[this] def getModel(
     creds: Credentials, key: String, arg: (Int) => String

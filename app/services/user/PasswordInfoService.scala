@@ -14,7 +14,7 @@ import scala.concurrent.Future
 class PasswordInfoService @javax.inject.Inject() (tracingService: TracingService) extends DelegableAuthInfoDAO[PasswordInfo] {
 
   override def find(loginInfo: LoginInfo) = tracingService.noopTrace("password.find") { implicit td =>
-    Future.successful(ApplicationDatabase.query(PasswordInfoQueries.getByPrimaryKey(Seq(loginInfo.providerID, loginInfo.providerKey))))
+    Future.successful(ApplicationDatabase.query(PasswordInfoQueries.getByPrimaryKey(loginInfo.providerID, loginInfo.providerKey)))
   }
 
   override def add(loginInfo: LoginInfo, authInfo: PasswordInfo) = tracingService.noopTrace("password.add") { implicit td =>
@@ -36,6 +36,6 @@ class PasswordInfoService @javax.inject.Inject() (tracingService: TracingService
   }
 
   override def remove(loginInfo: LoginInfo) = tracingService.topLevelTrace("password.remove") { implicit td =>
-    ApplicationDatabase.executeF(PasswordInfoQueries.removeByPrimaryKey(Seq(loginInfo.providerID, loginInfo.providerKey))).map(_ => {})
+    ApplicationDatabase.executeF(PasswordInfoQueries.removeByPrimaryKey(loginInfo.providerID, loginInfo.providerKey)).map(_ => {})
   }
 }

@@ -25,7 +25,7 @@ class ScheduledTaskService @javax.inject.Inject() (
     tracingService: TracingService,
     syncService: SyncService
 ) extends Logging {
-  def initSchedule(system: ActorSystem, creds: Credentials, args: Seq[String], delaySecs: Int = 5, intervalSecs: Int = 15)(implicit td: TraceData) = {
+  def initSchedule(system: ActorSystem, creds: Credentials, args: Seq[String], delaySecs: Int = 5, intervalSecs: Int = 15)(implicit td: TraceData): Unit = {
     if (config.scheduledTaskEnabled) {
       import scala.concurrent.duration._
       log.info(s"Scheduling task to run every [$intervalSecs] seconds, after an initial [$delaySecs] second delay.")

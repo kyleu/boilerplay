@@ -2,7 +2,7 @@ package models.user
 
 import models.template.Theme
 
-case class ProfileData(
+final case class ProfileData(
     username: String,
     theme: Theme
 )

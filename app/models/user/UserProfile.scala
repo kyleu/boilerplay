@@ -14,7 +14,7 @@ object UserProfile {
   def fromUser(u: SystemUser) = UserProfile(u.id, u.username, u.profile.providerKey, u.role, u.preferences.theme, u.created)
 }
 
-case class UserProfile(
+final case class UserProfile(
     id: UUID,
     username: String,
     email: String,

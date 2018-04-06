@@ -6,4 +6,4 @@ object DatabaseField {
   def apply(title: String, name: String, typ: DatabaseFieldType[_]) = new DatabaseField(title, name, name, typ)
 }
 
-case class DatabaseField(title: String, prop: String, col: String, typ: DatabaseFieldType[_])
+final case class DatabaseField(title: String, prop: String, col: String, typ: DatabaseFieldType[_])

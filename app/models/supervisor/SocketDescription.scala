@@ -10,4 +10,4 @@ object SocketDescription {
   implicit val jsonDecoder: Decoder[SocketDescription] = deriveDecoder
 }
 
-case class SocketDescription(socketId: UUID, userId: UUID, name: String, channel: String, started: LocalDateTime)
+final case class SocketDescription(socketId: UUID, userId: UUID, name: String, channel: String, started: LocalDateTime)

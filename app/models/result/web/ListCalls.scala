@@ -2,7 +2,7 @@ package models.result.web
 
 import play.api.mvc.Call
 
-case class ListCalls(
+final case class ListCalls(
     newCall: Option[Call] = None,
     orderBy: Option[(Option[String], Boolean) => Call] = None,
     search: Option[Call] = None,

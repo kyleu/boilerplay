@@ -7,18 +7,18 @@ import util.FutureUtils.serviceContext
 import util.tracing.TraceData
 
 object TableLogic {
-  private[this] case class CountRows(table: String) extends Query[Long] {
+  final private[this] case class CountRows(table: String) extends Query[Long] {
     override def name = "countRows"
     override def sql = s"select count(*) c from $table"
-    override def reduce(rows: Iterator[Row]) = rows.toSeq.head.as[Long]("c")
+    override def reduce(rows: Iterator[Row]) = rows.toSeq.headOption.getOrElse(throw new IllegalStateException("No count.")).as[Long]("c")
   }
 
-  private[this] case class CopyRows(src: String, dest: String) extends Statement {
+  final private[this] case class CopyRows(src: String, dest: String) extends Statement {
     override def name = "copyRows"
     override def sql = s"create table $dest as (select * from $src)"
   }
 
-  private[this] case class MoveRows(src: String, dest: String, cols: String) extends Statement {
+  final private[this] case class MoveRows(src: String, dest: String, cols: String) extends Statement {
     override def name = "moveRows"
     override def sql = s"insert into $dest ($cols) (select $cols from $src)"
   }

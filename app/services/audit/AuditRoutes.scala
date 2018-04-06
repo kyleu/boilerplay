@@ -5,7 +5,7 @@ import services.audit.AuditArgs._
 import util.Logging
 
 object AuditRoutes extends Logging {
-  def getViewRoute(key: String, id: Seq[String]) = routeFor(key, getArg(id, _))
+  def getViewRoute(key: String, id: IndexedSeq[String]) = routeFor(key, getArg(id, _))
 
   private[this] def routeFor(key: String, arg: (Int) => String): Call = key.toLowerCase match {
     /* Start audit calls */

@@ -10,7 +10,7 @@ object SyncProgress {
   implicit val jsonDecoder: Decoder[SyncProgress] = deriveDecoder
 }
 
-case class SyncProgress(
+final case class SyncProgress(
     key: String = "",
     status: String = "",
     message: String = "",
@@ -23,5 +23,5 @@ case class SyncProgress(
     DataField("lastTime", Some(lastTime.toString))
   )
 
-  def toSummary = DataSummary(model = "syncProgress", pk = Seq(key.toString), title = s"$key / $status / $message / $lastTime ($key)")
+  def toSummary = DataSummary(model = "syncProgress", pk = Seq(key), title = s"$key / $status / $message / $lastTime ($key)")
 }

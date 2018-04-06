@@ -12,7 +12,7 @@ object Audit {
   implicit val jsonDecoder: Decoder[Audit] = deriveDecoder
 }
 
-case class Audit(
+final case class Audit(
     id: UUID = UUID.randomUUID,
     act: String = "?",
     app: String = util.Config.projectId,
@@ -27,10 +27,10 @@ case class Audit(
 ) extends DataFieldModel {
   override def toDataFields = Seq(
     DataField("id", Some(id.toString)),
-    DataField("act", Some(act.toString)),
-    DataField("app", Some(app.toString)),
-    DataField("client", Some(client.toString)),
-    DataField("server", Some(server.toString)),
+    DataField("act", Some(act)),
+    DataField("app", Some(app)),
+    DataField("client", Some(client)),
+    DataField("server", Some(server)),
     DataField("userId", Some(userId.toString)),
     DataField("tags", Some(tags.toString)),
     DataField("msg", Some(msg)),

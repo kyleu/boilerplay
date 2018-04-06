@@ -89,7 +89,7 @@ object NoteSchema extends SchemaHelper("note") {
 
   val mutationFields = fields[GraphQLContext, Unit](Field(name = "note", fieldType = noteMutationType, resolve = _ => ()))
 
-  private[this] def toResult(r: SearchResult[Note]) = {
+  private[this] def toResult(r: SchemaHelper.SearchResult[Note]) = {
     NoteResult(paging = r.paging, filters = r.args.filters, orderBys = r.args.orderBys, totalCount = r.count, results = r.results, durationMs = r.dur)
   }
 }

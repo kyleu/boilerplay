@@ -25,10 +25,7 @@ object HomeController {
   private lazy val errorCounter = Counter.build(metricsName + "_exception", s"Exception metrics for [$metricsName]").labelNames("msg", "ex").register()
   private[this] def time(msg: Any, f: => Unit) = Instrumented.timeReceive(msg, receiveHistogram, errorCounter)(f)
 
-  case class SocketService(
-      id: UUID, supervisor: ActorRef, creds: Credentials, out: ActorRef, sourceAddress: String
-  ) extends Actor with Logging {
-
+  final case class SocketService(id: UUID, supervisor: ActorRef, creds: Credentials, out: ActorRef, sourceAddress: String) extends Actor with Logging {
     override def preStart() = {
       log.info(s"Starting connection for user [${creds.user.id}: ${creds.user.username}].")
       supervisor.tell(SocketStarted(creds, "home", id, self), self)

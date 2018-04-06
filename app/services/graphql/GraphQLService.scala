@@ -23,7 +23,7 @@ class GraphQLService @javax.inject.Inject() (tracing: TracingService, registry: 
       HandledException(message = e.getMessage, additionalFields = Map.empty)
   }
 
-  private[this] val rejectComplexQueries = QueryReducer.rejectComplexQueries[Any](1000, (_, _) => new IllegalArgumentException(s"Query is too complex."))
+  private[this] val rejectComplexQueries = QueryReducer.rejectComplexQueries[Any](1000, (_, _) => new IllegalArgumentException("Query is too complex."))
 
   def executeQuery(
     app: Application, query: String, variables: Option[Json], operation: Option[String], creds: Credentials, debug: Boolean
@@ -49,12 +49,12 @@ class GraphQLService @javax.inject.Inject() (tracing: TracingService, registry: 
             exceptionHandler = exceptionHandler,
             maxQueryDepth = Some(10),
             queryValidator = QueryValidator.default,
-            queryReducers = List(rejectComplexQueries),
+            queryReducers = List[QueryReducer[GraphQLContext, _]](rejectComplexQueries),
             middleware = if (debug) { TracingExtension :: Nil } else { Nil }
           )
           ret
         case Failure(error) =>
-          td.annotate(s"parse.failure")
+          td.annotate("parse.failure")
           throw error
       }
     }

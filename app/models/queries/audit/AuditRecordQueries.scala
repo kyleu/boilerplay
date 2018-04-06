@@ -26,23 +26,27 @@ object AuditRecordQueries extends BaseQueries[AuditRecord]("auditRecord", "audit
   override protected val searchColumns = Seq("id", "t", "pk", "changes")
 
   def countAll(filters: Seq[Filter] = Nil) = onCountAll(filters)
-  def getAll = GetAll
+  def getAll(filters: Seq[Filter] = Nil, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) = {
+    new GetAll(filters, orderBys, limit, offset)
+  }
 
-  val search = Search
-  val searchCount = SearchCount
-  val searchExact = SearchExact
+  def search(q: String, filters: Seq[Filter] = Nil, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) = {
+    new Search(q, filters, orderBys, limit, offset)
+  }
+  def searchCount(q: String, filters: Seq[Filter] = Nil) = new SearchCount(q, filters)
+  def searchExact(q: String, orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int]) = new SearchExact(q, orderBys, limit, offset)
 
-  def getByPrimaryKey(id: UUID) = GetByPrimaryKey(Seq(id))
+  def getByPrimaryKey(id: UUID) = new GetByPrimaryKey(Seq(id))
   def getByPrimaryKeySeq(idSeq: Seq[UUID]) = new ColSeqQuery(column = "id", values = idSeq)
 
-  case class CountByAuditId(auditId: UUID) extends ColCount(column = "audit_id", values = Seq(auditId))
-  case class GetByAuditId(auditId: UUID, orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int]) extends SeqQuery(
+  final case class CountByAuditId(auditId: UUID) extends ColCount(column = "audit_id", values = Seq(auditId))
+  final case class GetByAuditId(auditId: UUID, orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int]) extends SeqQuery(
     whereClause = Some(quote("audit_id") + "  = ?"), orderBy = ResultFieldHelper.orderClause(fields, orderBys: _*),
     limit = limit, offset = offset, values = Seq(auditId.toString)
   )
-  case class GetByAuditIdSeq(auditIdSeq: Seq[UUID]) extends ColSeqQuery(column = "audit_id", values = auditIdSeq)
+  final case class GetByAuditIdSeq(auditIdSeq: Seq[UUID]) extends ColSeqQuery(column = "audit_id", values = auditIdSeq)
 
-  case class GetByModel(model: String, pk: Seq[Any]) extends Query[Seq[AuditRecord]] {
+  final case class GetByModel(model: String, pk: Seq[Any]) extends Query[Seq[AuditRecord]] {
     override val name = "get.audit.records.by.model"
     override val sql = s"""select * from "$tableName" where "t" = ? and "pk" = ?::character varying[]"""
     override val values: Seq[Any] = Seq(model, pk)
@@ -54,14 +58,14 @@ object AuditRecordQueries extends BaseQueries[AuditRecord]("auditRecord", "audit
     override val sql: String = s"""insert into $tableName ($quotedColumns) values (?, ?, ?, ?, ?)"""
     private[this] val pkArray = "{ " + model.pk.map("\"" + _ + "\"").mkString(", ") + " }"
     private[this] val changesArray = "[ " + model.changes.map(_.asJson.noSpaces).mkString(", ") + " ]"
-    override val values: Seq[Any] = Seq(model.id, model.auditId, model.t, pkArray, changesArray)
+    override val values: Seq[Any] = Seq[Any](model.id, model.auditId, model.t, pkArray, changesArray)
   }
-  def insertBatch(models: Seq[AuditRecord]) = InsertBatch(models)
-  def create(dataFields: Seq[DataField]) = CreateFields(dataFields)
+  def insertBatch(models: Seq[AuditRecord]) = new InsertBatch(models)
+  def create(dataFields: Seq[DataField]) = new CreateFields(dataFields)
 
-  def removeByPrimaryKey(id: UUID) = RemoveByPrimaryKey(Seq[Any](id))
+  def removeByPrimaryKey(id: UUID) = new RemoveByPrimaryKey(Seq[Any](id))
 
-  def update(id: UUID, fields: Seq[DataField]) = UpdateFields(Seq[Any](id), fields)
+  def update(id: UUID, fields: Seq[DataField]) = new UpdateFields(Seq[Any](id), fields)
 
   override protected def fromRow(row: Row) = AuditRecord(
     id = UuidType(row, "id"),

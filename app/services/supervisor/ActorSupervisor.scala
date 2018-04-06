@@ -16,8 +16,8 @@ import util.metrics.Instrumented
 import util.{DateUtils, Logging}
 
 object ActorSupervisor {
-  case class Broadcast(channel: String, msg: ResponseMessage)
-  case class SocketRecord(socketId: UUID, userId: UUID, name: String, channel: String, actorRef: ActorRef, started: LocalDateTime) {
+  final case class Broadcast(channel: String, msg: ResponseMessage)
+  final case class SocketRecord(socketId: UUID, userId: UUID, name: String, channel: String, actorRef: ActorRef, started: LocalDateTime) {
     val desc = SocketDescription(socketId, userId, name, channel, started)
   }
 

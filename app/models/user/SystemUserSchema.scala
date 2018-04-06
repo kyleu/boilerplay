@@ -64,7 +64,7 @@ object SystemUserSchema extends SchemaHelper("systemUser") {
 
   implicit lazy val systemUserResultType: ObjectType[GraphQLContext, SystemUserResult] = deriveObjectType()
 
-  private[this] def toResult(r: SearchResult[SystemUser]) = {
+  private[this] def toResult(r: SchemaHelper.SearchResult[SystemUser]) = {
     SystemUserResult(paging = r.paging, filters = r.args.filters, orderBys = r.args.orderBys, totalCount = r.count, results = r.results, durationMs = r.dur)
   }
 

@@ -18,7 +18,7 @@ trait SearchQueries[T <: Product] { this: BaseQueries[T] =>
 
   protected def onCountAll(filters: Seq[Filter] = Nil) = new Count("all", s"${whereClause(filters)}", filters.flatMap(_.v))
 
-  protected case class GetAll(
+  protected class GetAll(
       filters: Seq[Filter] = Nil, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None
   ) extends Query[Seq[T]] {
     override val name = s"$key.get.all"
@@ -30,13 +30,13 @@ trait SearchQueries[T <: Product] { this: BaseQueries[T] =>
     override def reduce(rows: Iterator[Row]) = rows.map(fromRow).toList
   }
 
-  protected case class SearchCount(q: String, filters: Seq[Filter] = Nil) extends Count(
+  protected class SearchCount(q: String, filters: Seq[Filter] = Nil) extends Count(
     key = "search",
     add = whereClause(filters, add = Some(searchClause(q))),
     values = if (q.isEmpty) { filters.flatMap(_.v) } else { filters.flatMap(_.v) ++ searchColumns.map(_ => "%" + q + "%") }
   )
 
-  protected case class Search(
+  protected class Search(
       q: String, filters: Seq[Filter] = Nil, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None
   ) extends Query[List[T]] {
     override val name = s"$key.search"
@@ -48,7 +48,7 @@ trait SearchQueries[T <: Product] { this: BaseQueries[T] =>
     override def reduce(rows: Iterator[Row]) = rows.map(fromRow).toList
   }
 
-  protected case class SearchExact(q: String, orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int]) extends Query[List[T]] {
+  protected class SearchExact(q: String, orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int]) extends Query[List[T]] {
     override val name = s"$key.search.exact"
     private[this] val whereClause = searchColumns.map(searchCol).mkString(" or ")
     override val sql = getSql(whereClause = Some(whereClause), orderBy = orderClause(fields, orderBys: _*), limit = limit, offset = offset)

@@ -8,6 +8,8 @@ import util.{FutureUtils, Logging}
 import util.tracing.TraceData
 import util.web.TracingWSClient
 
+import scala.concurrent.Future
+
 object AuditNotifications extends Logging {
   def persist(a: Audit)(implicit trace: TraceData) = {
     log.debug(s"Persisting audit [${a.id}]...")
@@ -43,6 +45,7 @@ object AuditNotifications extends Logging {
     }
     ret.failed.foreach(x => log.warn("Unable to post to Slack.", x))
     ret
+  } else {
+    Future.successful("Skipped")
   }
-
 }

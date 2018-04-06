@@ -61,6 +61,6 @@ object DdlFile {
   }
 }
 
-case class DdlFile(id: Int, name: String, sql: String, applied: LocalDateTime) {
+final case class DdlFile(id: Int, name: String, sql: String, applied: LocalDateTime) {
   lazy val statements = DdlFile.split(sql)
 }

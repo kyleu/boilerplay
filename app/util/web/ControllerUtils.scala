@@ -26,7 +26,8 @@ object ControllerUtils {
   }.getOrElse(throw new IllegalStateException("Http post with json body required."))
 
   def jsonFormOrBody(body: AnyContent, key: String) = {
-    body.asFormUrlEncoded.map(_(key).head).map(util.JsonSerializers.parseJson).map(_.right.get).getOrElse(jsonBody(body))
+    val content = body.asFormUrlEncoded.map(_(key).headOption.getOrElse(throw new IllegalStateException(s"Missing form field [$key].")))
+    content.map(util.JsonSerializers.parseJson).map(_.right.get).getOrElse(jsonBody(body))
   }
 
   def jsonObject(json: Json) = json.asObject.getOrElse(throw new IllegalStateException("Json is not an object."))
@@ -40,7 +41,7 @@ object ControllerUtils {
   }
 
   def modelForm(rawForm: Map[String, Seq[String]]) = {
-    val form = rawForm.mapValues(_.headOption.getOrElse(throw new IllegalStateException(s"Empty form field.")))
+    val form = rawForm.mapValues(_.headOption.getOrElse(throw new IllegalStateException("Empty form field.")))
     val fields = form.toSeq.filter(x => x._1.endsWith(".include") && x._2 == "true").map(_._1.stripSuffix(".include"))
     def valFor(f: String) = form.get(f) match {
       case Some(x) if x == util.NullUtils.str => None
@@ -57,7 +58,7 @@ object ControllerUtils {
   }
 
   def enhanceRequest(request: Request[AnyContent], user: Option[SystemUser], trace: TraceData) = {
-    trace.tag(TraceKeys.HTTP_REQUEST_SIZE, request.body.asText.map(_.length).orElse(request.body.asRaw.map(_.size)).getOrElse(0).toString)
+    trace.tag(TraceKeys.HTTP_REQUEST_SIZE, request.body.asText.map(_.length).orElse(request.body.asRaw.map(_.size.toInt)).getOrElse(0).toString)
     user.foreach { u =>
       trace.tag("user.id", u.id.toString)
       trace.tag("user.username", u.username)

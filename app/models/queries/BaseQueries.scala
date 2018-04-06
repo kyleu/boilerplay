@@ -34,7 +34,7 @@ abstract class BaseQueries[T <: Product](
     offset.map(x => s" offset $x")
   ).flatten.mkString(" ")
 
-  protected case class GetByPrimaryKey(override val values: Seq[Any]) extends FlatSingleRowQuery[T] {
+  protected class GetByPrimaryKey(override val values: Seq[Any]) extends FlatSingleRowQuery[T] {
     override val name = s"$key.get.by.primary.key"
     override val sql = s"""select $quotedColumns from ${quote(tableName)} where $pkWhereClause"""
     override def flatMap(row: Row) = Some(fromRow(row))

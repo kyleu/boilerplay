@@ -44,7 +44,7 @@ object SystemUser {
   )
 }
 
-case class SystemUser(
+final case class SystemUser(
     id: UUID,
     username: String,
     preferences: UserPreferences,

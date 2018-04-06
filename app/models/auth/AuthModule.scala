@@ -8,7 +8,9 @@ import com.mohiva.play.silhouette.api.util._
 import com.mohiva.play.silhouette.api.{Environment, EventBus, Silhouette, SilhouetteProvider}
 import com.mohiva.play.silhouette.crypto.{JcaCrypter, JcaCrypterSettings, JcaSigner, JcaSignerSettings}
 import com.mohiva.play.silhouette.impl.authenticators.{CookieAuthenticator, CookieAuthenticatorService}
-import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
+import com.mohiva.play.silhouette.impl.providers.{CredentialsProvider, DefaultSocialStateHandler, OAuth2Settings, SocialStateHandler}
+import com.mohiva.play.silhouette.impl.providers.oauth2.GoogleProvider
+import com.mohiva.play.silhouette.impl.providers.state.CsrfStateItemHandler
 import com.mohiva.play.silhouette.impl.util.{DefaultFingerprintGenerator, SecureRandomIDGenerator}
 import com.mohiva.play.silhouette.password.BCryptPasswordHasher
 import com.mohiva.play.silhouette.persistence.repositories.DelegableAuthInfoRepository
@@ -18,10 +20,6 @@ import util.FutureUtils.defaultContext
 import play.api.libs.ws.WSClient
 import play.api.mvc.DefaultCookieHeaderEncoding
 import services.user.{PasswordInfoService, SystemUserSearchService}
-
-object AuthModule {
-  val encKey = "dead60d84c1a41648ae258b57e8b5727"
-}
 
 class AuthModule extends AbstractModule with ScalaModule {
   override def configure() = {
@@ -47,15 +45,13 @@ class AuthModule extends AbstractModule with ScalaModule {
   }
 
   @Provides
-  def provideAuthenticatorCrypter(): Crypter = {
-    val settings = JcaCrypterSettings(AuthModule.encKey)
-    new JcaCrypter(settings)
+  def provideAuthenticatorCrypter(config: Configuration): Crypter = {
+    new JcaCrypter(JcaCrypterSettings(config.secretKey))
   }
 
   @Provides
-  def provideCookieSigner(): Signer = {
-    val config = JcaSignerSettings(AuthModule.encKey)
-    new JcaSigner(config)
+  def provideSigner(config: Configuration): Signer = {
+    new JcaSigner(JcaSignerSettings(config.secretKey))
   }
 
   @Provides
@@ -64,7 +60,7 @@ class AuthModule extends AbstractModule with ScalaModule {
     fpg: FingerprintGenerator, idg: IDGenerator, config: Configuration, clock: Clock
   ): AuthenticatorService[CookieAuthenticator] = {
     val authenticatorEncoder = new CrypterAuthenticatorEncoder(crypter)
-    new CookieAuthenticatorService(config.cookieAuthSettings, None, cookieSigner, encoding, authenticatorEncoder, fpg, idg, clock)
+    new CookieAuthenticatorService(config.authCookieSettings, None, cookieSigner, encoding, authenticatorEncoder, fpg, idg, clock)
   }
 
   @Provides
@@ -76,5 +72,15 @@ class AuthModule extends AbstractModule with ScalaModule {
   @Provides
   def provideAuthInfoRepository(passwordInfoService: PasswordInfoService): AuthInfoRepository = {
     new DelegableAuthInfoRepository(passwordInfoService)
+  }
+
+  @Provides
+  def provideSocialStateHandler(csrfStateItemHandler: CsrfStateItemHandler, signer: JcaSigner): SocialStateHandler = {
+    new DefaultSocialStateHandler(Set(csrfStateItemHandler), signer)
+  }
+
+  @Provides
+  def provideGoogleProvider(httpLayer: HTTPLayer, socialStateHandler: SocialStateHandler, config: Configuration): GoogleProvider = {
+    new GoogleProvider(httpLayer, socialStateHandler, config.authGoogleSettings)
   }
 }

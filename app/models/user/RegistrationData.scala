@@ -1,6 +1,6 @@
 package models.user
 
-case class RegistrationData(
+final case class RegistrationData(
     username: String = "",
     email: String = "",
     password: String = "",

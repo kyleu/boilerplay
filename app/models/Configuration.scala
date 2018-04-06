@@ -2,6 +2,7 @@ package models
 
 import better.files._
 import com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorSettings
+import com.mohiva.play.silhouette.impl.providers.OAuth2Settings
 import play.api.{Environment, Mode}
 import services.audit.SlackConfig
 import util.metrics.MetricsConfig
@@ -21,7 +22,23 @@ class Configuration @javax.inject.Inject() (val cnf: play.api.Configuration, val
     iconUrl = cnf.get[String]("notification.slack.iconUrl")
   )
 
-  val cookieAuthSettings = {
+  val authGoogleSettings = {
+    val cfg = cnf.get[play.api.Configuration]("silhouette.authenticator.google")
+    OAuth2Settings(
+      authorizationURL = None,
+      accessTokenURL = "???",
+      redirectURL = None,
+      apiURL = None,
+      clientID = "???",
+      clientSecret = "???",
+      scope = None,
+      authorizationParams = Map.empty,
+      accessTokenParams = Map.empty,
+      customProperties = Map.empty
+    )
+  }
+
+  val authCookieSettings = {
     import scala.concurrent.duration._
     val cfg = cnf.get[play.api.Configuration]("silhouette.authenticator.cookie")
 

@@ -10,7 +10,7 @@ object DatabaseConfig {
   }
 }
 
-case class DatabaseConfig(
+final case class DatabaseConfig(
     host: String = "localhost",
     port: Int = 5432,
     username: String,

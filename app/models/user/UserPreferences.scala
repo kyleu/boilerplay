@@ -15,6 +15,6 @@ object UserPreferences {
   }
 }
 
-case class UserPreferences(
+final case class UserPreferences(
     theme: Theme = Theme.BlueGrey
 )

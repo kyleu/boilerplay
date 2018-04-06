@@ -88,7 +88,7 @@ class TracingService @javax.inject.Inject() (actorSystem: ActorSystem, cnf: Metr
   def trace[A](traceName: String, tags: (String, String)*)(f: TraceData => Future[A])(implicit parentData: TraceData) = {
     val childSpan = newServerSpan(traceName, tags: _*)
     val result = f(TraceDataZipkin(childSpan))
-    result.onComplete {
+    result.onComplete[Unit] {
       case Failure(t) =>
         childSpan.tag("error.type", t.getClass.getSimpleName.stripSuffix("$"))
         childSpan.tag("error.message", t.getMessage)

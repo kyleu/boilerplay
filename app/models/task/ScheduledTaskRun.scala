@@ -12,7 +12,7 @@ object ScheduledTaskRun {
   implicit val jsonDecoder: Decoder[ScheduledTaskRun] = deriveDecoder
 }
 
-case class ScheduledTaskRun(
+final case class ScheduledTaskRun(
     id: UUID = UUID.randomUUID,
     task: String = "",
     arguments: Seq[String] = Seq.empty,

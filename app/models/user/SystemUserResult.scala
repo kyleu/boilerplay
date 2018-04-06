@@ -8,7 +8,7 @@ import models.result.orderBy.OrderBy
 import models.result.paging.PagingOptions
 import util.JsonSerializers._
 
-case class SystemUserResult(
+final case class SystemUserResult(
     override val filters: Seq[Filter] = Nil,
     override val orderBys: Seq[OrderBy] = Nil,
     override val totalCount: Int = 0,

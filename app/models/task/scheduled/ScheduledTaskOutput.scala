@@ -11,7 +11,7 @@ object ScheduledTaskOutput {
   implicit val jsonEncoder: Encoder[ScheduledTaskOutput] = deriveEncoder
   implicit val jsonDecoder: Decoder[ScheduledTaskOutput] = deriveDecoder
 
-  case class Log(msg: String, offset: Int)
+  final case class Log(msg: String, offset: Int)
 
   object Log {
     implicit val jsonEncoder: Encoder[ScheduledTaskOutput.Log] = deriveEncoder
@@ -19,7 +19,7 @@ object ScheduledTaskOutput {
   }
 }
 
-case class ScheduledTaskOutput(
+final case class ScheduledTaskOutput(
     userId: UUID,
     username: String,
     status: String,

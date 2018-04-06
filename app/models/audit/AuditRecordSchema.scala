@@ -91,7 +91,7 @@ object AuditRecordSchema extends SchemaHelper("auditRecord") {
 
   val mutationFields = fields[GraphQLContext, Unit](Field(name = "auditRecord", fieldType = auditRecordMutationType, resolve = _ => ()))
 
-  private[this] def toResult(r: SearchResult[AuditRecord]) = {
+  private[this] def toResult(r: SchemaHelper.SearchResult[AuditRecord]) = {
     AuditRecordResult(paging = r.paging, filters = r.args.filters, orderBys = r.args.orderBys, totalCount = r.count, results = r.results, durationMs = r.dur)
   }
 }

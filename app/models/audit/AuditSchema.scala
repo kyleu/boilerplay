@@ -90,7 +90,7 @@ object AuditSchema extends SchemaHelper("audit") {
 
   val mutationFields = fields[GraphQLContext, Unit](Field(name = "audit", fieldType = auditMutationType, resolve = _ => ()))
 
-  private[this] def toResult(r: SearchResult[Audit]) = {
+  private[this] def toResult(r: SchemaHelper.SearchResult[Audit]) = {
     AuditResult(paging = r.paging, filters = r.args.filters, orderBys = r.args.orderBys, totalCount = r.count, results = r.results, durationMs = r.dur)
   }
 }

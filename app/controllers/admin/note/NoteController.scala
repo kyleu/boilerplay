@@ -28,7 +28,7 @@ class NoteController @javax.inject.Inject() (override val app: Application, svc:
   def create = withSession("create", admin = true) { implicit request => implicit td =>
     svc.create(request, modelForm(request.body)).map {
       case Some(note) => Redirect(note.relType match {
-        case Some(model) => AuditRoutes.getViewRoute(model, note.relPk.map(_.split("/")).getOrElse(Array.empty[String]).toSeq)
+        case Some(model) => AuditRoutes.getViewRoute(model, note.relPk.map(_.split("/")).getOrElse(Array.empty[String]).toIndexedSeq)
         case None => controllers.admin.note.routes.NoteController.view(note.id)
       }).flashing("success" -> s"Note [${note.id}] saved succesfully")
       case None => Redirect(controllers.admin.note.routes.NoteController.list()).flashing("success" -> "Note saved succesfully.")

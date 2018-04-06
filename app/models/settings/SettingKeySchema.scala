@@ -14,6 +14,6 @@ object SettingKeySchema extends SchemaHelper("settingKey") {
   val queryFields = fields[GraphQLContext, Unit](Field(
     name = "settingKey",
     fieldType = ListType(settingKeyEnumType),
-    resolve = c => traceB(c.ctx, "list")(td => SettingKey.values)
+    resolve = c => traceB(c.ctx, "list")(_ => SettingKey.values)
   ))
 }

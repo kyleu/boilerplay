@@ -39,7 +39,11 @@ object DateUtils {
   private[this] val dtFmtDefault = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
   private[this] val dtFmtAmPm = new SimpleDateFormat("yyyy-MM-dd hh:mma")
   def sqlDateTimeFromString(s: String) = {
-    def parse(sdf: SimpleDateFormat) = try { Some(new java.sql.Timestamp(sdf.parse(s).getTime)) } catch { case c: java.text.ParseException => None }
+    def parse(sdf: SimpleDateFormat) = try {
+      Some(new java.sql.Timestamp(sdf.parse(s).getTime))
+    } catch {
+      case _: java.text.ParseException => None
+    }
     parse(dtFmtIso).orElse(parse(dtFmtDefault)).orElse(parse(dtFmtAmPm)).getOrElse(throw new IllegalStateException(s"Cannot parse timestamp from [$s]."))
   }
 }

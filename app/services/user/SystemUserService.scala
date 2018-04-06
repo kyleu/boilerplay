@@ -108,7 +108,7 @@ class SystemUserService @javax.inject.Inject() (
           services.audit.AuditHelper.onRemove("SystemUser", Seq(id.toString), user.toDataFields, creds)
         }
         ApplicationDatabase.slick.run(SystemUserTable.removeByPrimaryKey(id))(txTd).flatMap { _ =>
-          ApplicationDatabase.executeF(PasswordInfoQueries.removeByPrimaryKey(Seq(model.profile.providerID, model.profile.providerKey)), Some(conn)).map { _ =>
+          ApplicationDatabase.executeF(PasswordInfoQueries.removeByPrimaryKey(model.profile.providerID, model.profile.providerKey), Some(conn)).map { _ =>
             UserCache.removeUser(id)
             model
           }

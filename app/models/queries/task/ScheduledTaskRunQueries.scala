@@ -27,57 +27,61 @@ object ScheduledTaskRunQueries extends BaseQueries[ScheduledTaskRun]("scheduledT
   override protected val searchColumns = Seq("id", "task", "arguments", "status", "started")
 
   def countAll(filters: Seq[Filter] = Nil) = onCountAll(filters)
-  def getAll = GetAll
+  def getAll(filters: Seq[Filter] = Nil, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) = {
+    new GetAll(filters, orderBys, limit, offset)
+  }
 
-  val search = Search
-  val searchCount = SearchCount
-  val searchExact = SearchExact
+  def search(q: String, filters: Seq[Filter] = Nil, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) = {
+    new Search(q, filters, orderBys, limit, offset)
+  }
+  def searchCount(q: String, filters: Seq[Filter] = Nil) = new SearchCount(q, filters)
+  def searchExact(q: String, orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int]) = new SearchExact(q, orderBys, limit, offset)
 
-  def getByPrimaryKey(id: UUID) = GetByPrimaryKey(Seq(id))
+  def getByPrimaryKey(id: UUID) = new GetByPrimaryKey(Seq(id))
   def getByPrimaryKeySeq(idSeq: Seq[UUID]) = new ColSeqQuery(column = "id", values = idSeq)
 
-  case class CountByArguments(arguments: Array[Any]) extends ColCount(column = "arguments", values = Seq(arguments))
-  case class GetByArguments(arguments: Array[Any], orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) extends SeqQuery(
+  final case class CountByArguments(arguments: Array[Any]) extends ColCount(column = "arguments", values = Seq(arguments))
+  final case class GetByArguments(arguments: Array[Any], orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) extends SeqQuery(
     whereClause = Some(quote("arguments") + "  = ?"), orderBy = ResultFieldHelper.orderClause(fields, orderBys: _*),
     limit = limit, offset = offset, values = Seq(arguments)
   )
-  case class GetByArgumentsSeq(argumentsSeq: Seq[Array[Any]]) extends ColSeqQuery(column = "arguments", values = argumentsSeq)
+  final case class GetByArgumentsSeq(argumentsSeq: Seq[Array[Any]]) extends ColSeqQuery(column = "arguments", values = argumentsSeq)
 
-  case class CountById(id: UUID) extends ColCount(column = "id", values = Seq(id))
-  case class GetById(id: UUID, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) extends SeqQuery(
+  final case class CountById(id: UUID) extends ColCount(column = "id", values = Seq(id))
+  final case class GetById(id: UUID, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) extends SeqQuery(
     whereClause = Some(quote("id") + "  = ?"), orderBy = ResultFieldHelper.orderClause(fields, orderBys: _*),
     limit = limit, offset = offset, values = Seq(id)
   )
-  case class GetByIdSeq(idSeq: Seq[UUID]) extends ColSeqQuery(column = "id", values = idSeq)
+  final case class GetByIdSeq(idSeq: Seq[UUID]) extends ColSeqQuery(column = "id", values = idSeq)
 
-  case class CountByStarted(started: LocalDateTime) extends ColCount(column = "started", values = Seq(started))
-  case class GetByStarted(started: LocalDateTime, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) extends SeqQuery(
+  final case class CountByStarted(started: LocalDateTime) extends ColCount(column = "started", values = Seq(started))
+  final case class GetByStarted(started: LocalDateTime, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) extends SeqQuery(
     whereClause = Some(quote("started") + "  = ?"), orderBy = ResultFieldHelper.orderClause(fields, orderBys: _*),
     limit = limit, offset = offset, values = Seq(started)
   )
-  case class GetByStartedSeq(startedSeq: Seq[LocalDateTime]) extends ColSeqQuery(column = "started", values = startedSeq)
+  final case class GetByStartedSeq(startedSeq: Seq[LocalDateTime]) extends ColSeqQuery(column = "started", values = startedSeq)
 
-  case class CountByStatus(status: String) extends ColCount(column = "status", values = Seq(status))
-  case class GetByStatus(status: String, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) extends SeqQuery(
+  final case class CountByStatus(status: String) extends ColCount(column = "status", values = Seq(status))
+  final case class GetByStatus(status: String, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) extends SeqQuery(
     whereClause = Some(quote("status") + "  = ?"), orderBy = ResultFieldHelper.orderClause(fields, orderBys: _*),
     limit = limit, offset = offset, values = Seq(status)
   )
-  case class GetByStatusSeq(statusSeq: Seq[String]) extends ColSeqQuery(column = "status", values = statusSeq)
+  final case class GetByStatusSeq(statusSeq: Seq[String]) extends ColSeqQuery(column = "status", values = statusSeq)
 
-  case class CountByTask(task: String) extends ColCount(column = "task", values = Seq(task))
-  case class GetByTask(task: String, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) extends SeqQuery(
+  final case class CountByTask(task: String) extends ColCount(column = "task", values = Seq(task))
+  final case class GetByTask(task: String, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) extends SeqQuery(
     whereClause = Some(quote("task") + "  = ?"), orderBy = ResultFieldHelper.orderClause(fields, orderBys: _*),
     limit = limit, offset = offset, values = Seq(task)
   )
-  case class GetByTaskSeq(taskSeq: Seq[String]) extends ColSeqQuery(column = "task", values = taskSeq)
+  final case class GetByTaskSeq(taskSeq: Seq[String]) extends ColSeqQuery(column = "task", values = taskSeq)
 
-  def insert(model: ScheduledTaskRun) = Insert(model)
-  def insertBatch(models: Seq[ScheduledTaskRun]) = InsertBatch(models)
-  def create(dataFields: Seq[DataField]) = CreateFields(dataFields)
+  def insert(model: ScheduledTaskRun) = new Insert(model)
+  def insertBatch(models: Seq[ScheduledTaskRun]) = new InsertBatch(models)
+  def create(dataFields: Seq[DataField]) = new CreateFields(dataFields)
 
-  def removeByPrimaryKey(id: UUID) = RemoveByPrimaryKey(Seq[Any](id))
+  def removeByPrimaryKey(id: UUID) = new RemoveByPrimaryKey(Seq[Any](id))
 
-  def update(id: UUID, fields: Seq[DataField]) = UpdateFields(Seq[Any](id), fields)
+  def update(id: UUID, fields: Seq[DataField]) = new UpdateFields(Seq[Any](id), fields)
 
   override def fromRow(row: Row) = ScheduledTaskRun(
     id = UuidType(row, "id"),

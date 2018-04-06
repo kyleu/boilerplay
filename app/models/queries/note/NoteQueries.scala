@@ -25,64 +25,68 @@ object NoteQueries extends BaseQueries[Note]("note", "note") {
   override protected val searchColumns = Seq("id", "rel_type", "rel_pk", "text", "author", "created")
 
   def countAll(filters: Seq[Filter] = Nil) = onCountAll(filters)
-  def getAll = GetAll
+  def getAll(filters: Seq[Filter] = Nil, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) = {
+    new GetAll(filters, orderBys, limit, offset)
+  }
 
-  val search = Search
-  val searchCount = SearchCount
-  val searchExact = SearchExact
+  def search(q: String, filters: Seq[Filter] = Nil, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) = {
+    new Search(q, filters, orderBys, limit, offset)
+  }
+  def searchCount(q: String, filters: Seq[Filter] = Nil) = new SearchCount(q, filters)
+  def searchExact(q: String, orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int]) = new SearchExact(q, orderBys, limit, offset)
 
-  def getByPrimaryKey(id: UUID) = GetByPrimaryKey(Seq(id))
+  def getByPrimaryKey(id: UUID) = new GetByPrimaryKey(Seq(id))
   def getByPrimaryKeySeq(idSeq: Seq[UUID]) = new ColSeqQuery(column = "id", values = idSeq)
 
-  case class CountByAuthor(author: UUID) extends ColCount(column = "author", values = Seq(author))
-  case class GetByAuthor(author: UUID, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) extends SeqQuery(
+  final case class CountByAuthor(author: UUID) extends ColCount(column = "author", values = Seq(author))
+  final case class GetByAuthor(author: UUID, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) extends SeqQuery(
     whereClause = Some(quote("author") + "  = ?"), orderBy = ResultFieldHelper.orderClause(fields, orderBys: _*),
     limit = limit, offset = offset, values = Seq(author)
   )
-  case class GetByAuthorSeq(authorSeq: Seq[UUID]) extends ColSeqQuery(column = "author", values = authorSeq)
+  final case class GetByAuthorSeq(authorSeq: Seq[UUID]) extends ColSeqQuery(column = "author", values = authorSeq)
 
-  case class CountByCreated(created: LocalDateTime) extends ColCount(column = "created", values = Seq(created))
-  case class GetByCreated(created: LocalDateTime, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) extends SeqQuery(
+  final case class CountByCreated(created: LocalDateTime) extends ColCount(column = "created", values = Seq(created))
+  final case class GetByCreated(created: LocalDateTime, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) extends SeqQuery(
     whereClause = Some(quote("created") + "  = ?"), orderBy = ResultFieldHelper.orderClause(fields, orderBys: _*),
     limit = limit, offset = offset, values = Seq(created)
   )
-  case class GetByCreatedSeq(createdSeq: Seq[LocalDateTime]) extends ColSeqQuery(column = "created", values = createdSeq)
+  final case class GetByCreatedSeq(createdSeq: Seq[LocalDateTime]) extends ColSeqQuery(column = "created", values = createdSeq)
 
-  case class CountById(id: UUID) extends ColCount(column = "id", values = Seq(id))
-  case class GetById(id: UUID, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) extends SeqQuery(
+  final case class CountById(id: UUID) extends ColCount(column = "id", values = Seq(id))
+  final case class GetById(id: UUID, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) extends SeqQuery(
     whereClause = Some(quote("id") + "  = ?"), orderBy = ResultFieldHelper.orderClause(fields, orderBys: _*),
     limit = limit, offset = offset, values = Seq(id)
   )
-  case class GetByIdSeq(idSeq: Seq[UUID]) extends ColSeqQuery(column = "id", values = idSeq)
+  final case class GetByIdSeq(idSeq: Seq[UUID]) extends ColSeqQuery(column = "id", values = idSeq)
 
-  case class CountByRelPk(relPk: String) extends ColCount(column = "rel_pk", values = Seq(relPk))
-  case class GetByRelPk(relPk: String, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) extends SeqQuery(
+  final case class CountByRelPk(relPk: String) extends ColCount(column = "rel_pk", values = Seq(relPk))
+  final case class GetByRelPk(relPk: String, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) extends SeqQuery(
     whereClause = Some(quote("rel_pk") + "  = ?"), orderBy = ResultFieldHelper.orderClause(fields, orderBys: _*),
     limit = limit, offset = offset, values = Seq(relPk)
   )
-  case class GetByRelPkSeq(relPkSeq: Seq[String]) extends ColSeqQuery(column = "rel_pk", values = relPkSeq)
+  final case class GetByRelPkSeq(relPkSeq: Seq[String]) extends ColSeqQuery(column = "rel_pk", values = relPkSeq)
 
-  case class CountByRelType(relType: String) extends ColCount(column = "rel_type", values = Seq(relType))
-  case class GetByRelType(relType: String, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) extends SeqQuery(
+  final case class CountByRelType(relType: String) extends ColCount(column = "rel_type", values = Seq(relType))
+  final case class GetByRelType(relType: String, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) extends SeqQuery(
     whereClause = Some(quote("rel_type") + "  = ?"), orderBy = ResultFieldHelper.orderClause(fields, orderBys: _*),
     limit = limit, offset = offset, values = Seq(relType)
   )
-  case class GetByRelTypeSeq(relTypeSeq: Seq[String]) extends ColSeqQuery(column = "rel_type", values = relTypeSeq)
+  final case class GetByRelTypeSeq(relTypeSeq: Seq[String]) extends ColSeqQuery(column = "rel_type", values = relTypeSeq)
 
-  case class CountByText(text: String) extends ColCount(column = "text", values = Seq(text))
-  case class GetByText(text: String, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) extends SeqQuery(
+  final case class CountByText(text: String) extends ColCount(column = "text", values = Seq(text))
+  final case class GetByText(text: String, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) extends SeqQuery(
     whereClause = Some(quote("text") + "  = ?"), orderBy = ResultFieldHelper.orderClause(fields, orderBys: _*),
     limit = limit, offset = offset, values = Seq(text)
   )
-  case class GetByTextSeq(textSeq: Seq[String]) extends ColSeqQuery(column = "text", values = textSeq)
+  final case class GetByTextSeq(textSeq: Seq[String]) extends ColSeqQuery(column = "text", values = textSeq)
 
-  def insert(model: Note) = Insert(model)
-  def insertBatch(models: Seq[Note]) = InsertBatch(models)
-  def create(dataFields: Seq[DataField]) = CreateFields(dataFields)
+  def insert(model: Note) = new Insert(model)
+  def insertBatch(models: Seq[Note]) = new InsertBatch(models)
+  def create(dataFields: Seq[DataField]) = new CreateFields(dataFields)
 
-  def removeByPrimaryKey(id: UUID) = RemoveByPrimaryKey(Seq[Any](id))
+  def removeByPrimaryKey(id: UUID) = new RemoveByPrimaryKey(Seq[Any](id))
 
-  def update(id: UUID, fields: Seq[DataField]) = UpdateFields(Seq[Any](id), fields)
+  def update(id: UUID, fields: Seq[DataField]) = new UpdateFields(Seq[Any](id), fields)
 
   override def fromRow(row: Row) = Note(
     id = UuidType(row, "id"),

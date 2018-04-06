@@ -26,7 +26,7 @@ object UserForms {
     )
   )(ProfileData.apply)(ProfileData.unapply))
 
-  case class PasswordChange(oldPassword: String, newPassword: String, confirm: String)
+  final case class PasswordChange(oldPassword: String, newPassword: String, confirm: String)
 
   val changePasswordForm = Form(mapping(
     "old" -> nonEmptyText,

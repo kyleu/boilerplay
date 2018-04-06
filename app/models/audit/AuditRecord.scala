@@ -10,7 +10,7 @@ object AuditRecord {
   implicit val jsonDecoder: Decoder[AuditRecord] = deriveDecoder
 }
 
-case class AuditRecord(
+final case class AuditRecord(
     id: UUID = UUID.randomUUID,
     auditId: UUID = UUID.randomUUID,
     t: String = "default",
@@ -20,7 +20,7 @@ case class AuditRecord(
   override def toDataFields = Seq(
     DataField("id", Some(id.toString)),
     DataField("auditId", Some(auditId.toString)),
-    DataField("t", Some(t.toString)),
+    DataField("t", Some(t)),
     DataField("pk", Some(pk.toString)),
     DataField("changes", Some(changes.toString))
   )

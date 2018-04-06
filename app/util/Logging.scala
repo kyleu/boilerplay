@@ -7,7 +7,7 @@ import play.api.{Logger, MarkerContext}
 object Logging {
   private[this] lazy val gauge = Gauge.build(util.Config.projectId + "_logging", "Logging statistics.").labelNames("level").register()
 
-  case class CustomLogger(name: String) extends Logger(LoggerFactory.getLogger(name)) {
+  final case class CustomLogger(name: String) extends Logger(LoggerFactory.getLogger(name)) {
     implicit val mc: MarkerContext = MarkerContext(MarkerFactory.getMarker(name))
 
     override def trace(message: => String)(implicit mc: play.api.MarkerContext) = {
