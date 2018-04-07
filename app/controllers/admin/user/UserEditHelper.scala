@@ -21,7 +21,7 @@ trait UserEditHelper { this: SystemUserController =>
     val id = UUID.randomUUID
     val loginInfo = LoginInfo(CredentialsProvider.ID, form("email").trim)
     val role = form.get("role") match {
-      case Some(r) => Role.withName(r)
+      case Some(r) => Role.withValue(r)
       case None => Role.User
     }
     val username = form("username").trim
@@ -85,7 +85,7 @@ trait UserEditHelper { this: SystemUserController =>
       } else if (isSelf && (role != Role.Admin) && user.role == Role.Admin) {
         Redirect(controllers.admin.user.routes.SystemUserController.edit(id)).flashing("error" -> "You cannot remove your own admin role.")
       } else {
-        app.coreServices.users.updateFields(request, id, newUsername, newEmail, newPassword, role, user.profile.providerKey)
+        app.coreServices.users.updateFields(request, id, newUsername, CredentialsProvider.ID, newEmail, newPassword, role, user.profile.providerKey)
         Redirect(controllers.admin.user.routes.SystemUserController.view(id))
       }
     }

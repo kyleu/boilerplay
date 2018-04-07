@@ -43,7 +43,7 @@
 
       @settingPanel(SettingKey.DefaultNewUserRole) {
         <div class="collection-item">
-          @defining(models.user.Role.withName(settingService(SettingKey.DefaultNewUserRole))) { newUserRole =>
+          @defining(models.user.Role.withValue(settingService(SettingKey.DefaultNewUserRole))) { newUserRole =>
             @roleRadio(SettingKey.DefaultNewUserRole.toString, models.user.Role.User, newUserRole, "Registered Users")
             @roleRadio(SettingKey.DefaultNewUserRole.toString, models.user.Role.Admin, newUserRole, "Administrators")
           }

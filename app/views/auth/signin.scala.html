@@ -1,4 +1,4 @@
-@(user: Option[models.user.SystemUser], form: Form[com.mohiva.play.silhouette.api.util.Credentials], allowRegistration: Boolean)(
+@(user: Option[models.user.SystemUser], form: Form[com.mohiva.play.silhouette.api.util.Credentials], providers: Seq[String], allowRegistration: Boolean)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
 )@traceData.logViewClass(getClass)@layout.simple(user = user, title = "Sign in to " + util.Config.projectName) {
   <form method="post" action="@controllers.auth.routes.AuthenticationController.authenticateCredentials()">
@@ -6,12 +6,19 @@
       <div class="col s12">
         <div class="card">
           <div class="card-content">
+            @if(providers.nonEmpty) {
+              <div class="right">@providers.map { p =>
+                <a class="theme-text" href="@controllers.auth.routes.SocialAuthController.authenticate(p)">
+                  @if(p == "google") { Sign in with Google } else { @p }
+                </a>
+              }</div>
+            }
             <span class="card-title">Sign in to @util.Config.projectName</span>
             <p>
               This account is only for this installation of @util.Config.projectName.
               No information leaves your server, this is only a local account.
             </p>
-            <div class="row">
+            <div class="row" style="margin-top: 32px;">
               <div class="input-field col s12">
                 <input id="input-email" type="email" class="form-control validate" name="email" value="@form("email").value" />
                 <label for="input-email">Email</label>

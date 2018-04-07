@@ -22,6 +22,7 @@ GET         /signup                                  controllers.auth.Registrati
 POST        /signup                                  controllers.auth.RegistrationController.register
 GET         /signin                                  controllers.auth.AuthenticationController.signInForm
 POST        /signin                                  controllers.auth.AuthenticationController.authenticateCredentials
+GET         /signin/:provider                        controllers.auth.SocialAuthController.authenticate(provider)
 GET         /signout                                 controllers.auth.AuthenticationController.signOut
 
 # Profile

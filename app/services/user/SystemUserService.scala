@@ -10,7 +10,6 @@ import models.queries.auth._
 import models.result.data.DataField
 import models.result.filter.Filter
 import models.result.orderBy.OrderBy
-import models.table.user.SystemUserTable
 import models.user.{Role, SystemUser}
 import services.ModelServiceHelper
 import services.database.ApplicationDatabase
@@ -25,14 +24,18 @@ class SystemUserService @javax.inject.Inject() (
     override val tracing: TracingService, hasher: PasswordHasher
 ) extends ModelServiceHelper[SystemUser]("systemUser") {
   def getByPrimaryKey(creds: Credentials, id: UUID)(implicit trace: TraceData) = traceF("get.by.primary.key") { td =>
-    ApplicationDatabase.slick.run(SystemUserTable.getByPrimaryKey(id))(td)
+    ApplicationDatabase.queryF(SystemUserQueries.getByPrimaryKey(id))(td)
   }
   def getByPrimaryKeySeq(creds: Credentials, idSeq: Seq[UUID])(implicit trace: TraceData) = traceF("get.by.primary.key.sequence") { td =>
-    ApplicationDatabase.slick.run(SystemUserTable.getByPrimaryKeySeq(idSeq))(td)
+    ApplicationDatabase.queryF(SystemUserQueries.getByPrimaryKeySeq(idSeq))(td)
   }
 
   def getByRoleSeq(roleSeq: Seq[Role])(implicit trace: TraceData) = traceF("get.by.role.sequence") { td =>
-    ApplicationDatabase.slick.run(SystemUserTable.getByRoleSeq(roleSeq))(td)
+    ApplicationDatabase.queryF(SystemUserQueries.GetByRoleSeq(roleSeq))(td)
+  }
+
+  def getByUsername(username: String)(implicit trace: TraceData) = traceF("get.by.username") { td =>
+    ApplicationDatabase.queryF(SystemUserQueries.FindUserByUsername(username))(td)
   }
 
   override def countAll(creds: Credentials, filters: Seq[Filter] = Nil)(implicit trace: TraceData) = traceF("count.all") { td =>
@@ -63,7 +66,7 @@ class SystemUserService @javax.inject.Inject() (
   }
 
   def insert(creds: Credentials, model: SystemUser)(implicit trace: TraceData) = traceF("insert") { td =>
-    ApplicationDatabase.slick.run(SystemUserTable.insert(model))(td).map { _ =>
+    ApplicationDatabase.executeF(SystemUserQueries.insert(model))(td).map { _ =>
       log.info(s"Inserted user [$model].")
       UserCache.cacheUser(model)
       model
@@ -107,7 +110,7 @@ class SystemUserService @javax.inject.Inject() (
         UserCache.getUser(id).foreach { user =>
           services.audit.AuditHelper.onRemove("SystemUser", Seq(id.toString), user.toDataFields, creds)
         }
-        ApplicationDatabase.slick.run(SystemUserTable.removeByPrimaryKey(id))(txTd).flatMap { _ =>
+        ApplicationDatabase.executeF(SystemUserQueries.removeByPrimaryKey(id))(txTd).flatMap { _ =>
           ApplicationDatabase.executeF(PasswordInfoQueries.removeByPrimaryKey(model.profile.providerID, model.profile.providerKey), Some(conn)).map { _ =>
             UserCache.removeUser(id)
             model
@@ -118,24 +121,25 @@ class SystemUserService @javax.inject.Inject() (
   }(td))
 
   def updateFields(
-    creds: Credentials, id: UUID, username: String, email: String, password: Option[String], role: Role, originalEmail: String
+    creds: Credentials, id: UUID, username: String, provider: String, key: String, password: Option[String], role: Role, originalEmail: String
   )(implicit trace: TraceData) = {
     traceF("update.fields") { _ =>
       val fields = Seq(
         DataField("username", Some(username)),
-        DataField("email", Some(email)),
+        DataField("provider", Some(provider)),
+        DataField("key", Some(key)),
         DataField("role", Some(role.toString))
       )
       ApplicationDatabase.executeF(SystemUserQueries.update(id, fields)).flatMap { _ =>
-        if (email != originalEmail) {
-          ApplicationDatabase.executeF(PasswordInfoQueries.UpdateEmail(originalEmail, email))
+        if (key != originalEmail) {
+          ApplicationDatabase.executeF(PasswordInfoQueries.UpdateEmail(originalEmail, key))
         } else {
           Future.successful(0)
         }
       }.flatMap { _ =>
         password match {
           case Some(p) =>
-            val loginInfo = LoginInfo(CredentialsProvider.ID, email)
+            val loginInfo = LoginInfo(CredentialsProvider.ID, key)
             val authInfo = hasher.hash(p)
             ApplicationDatabase.executeF(PasswordInfoQueries.UpdatePasswordInfo(loginInfo, authInfo)).map { _ =>
               UserCache.removeUser(id)

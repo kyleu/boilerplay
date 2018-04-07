@@ -20,7 +20,7 @@ object Shared {
 
   val compileOptions = Seq(
     "-target:jvm-1.8", "-encoding", "UTF-8", "-feature", "-deprecation", "-explaintypes", "-feature", "-unchecked",
-    "–Xcheck-null", "-Xfatal-warnings", /* "-Xlint", */ "-Xcheckinit", "-Xfuture",
+    "–Xcheck-null", "-Xfatal-warnings", /* "-Xlint", */ "-Xcheckinit", "-Xfuture", "-Yrangepos",
     "-Yno-adapted-args", "-Ywarn-dead-code", "-Ywarn-inaccessible", "-Ywarn-nullary-override", "-Ywarn-numeric-widen", "-Ywarn-infer-any"
   )
 
@@ -31,7 +31,6 @@ object Shared {
     scalacOptions ++= compileOptions,
     scalacOptions in (Compile, console) ~= (_.filterNot(Set("-Ywarn-unused:imports", "-Xfatal-warnings"))),
     scalacOptions in (Compile, doc) := Seq("-encoding", "UTF-8"),
-    scalacOptions in Test ++= Seq("-Yrangepos"),
 
     publishMavenStyle := false,
     testFrameworks += new TestFramework("utest.runner.Framework"),
@@ -39,16 +38,15 @@ object Shared {
     cpdSkipDuplicateFiles := true
   )
 
-  lazy val shared = {
-    val p = crossProject(JSPlatform, JVMPlatform).withoutSuffixFor(JVMPlatform).crossType(CrossType.Pure) in file("shared")
-    p.settings(commonSettings: _*).settings(
-      libraryDependencies ++= Dependencies.Serialization.circeProjects.map(c => "io.circe" %%% c % Dependencies.Serialization.circeVersion) ++ Seq(
-        "com.beachape" %%% "enumeratum-circe" % Dependencies.Utils.enumeratumCirceVersion,
-        "me.chrons" %%% "boopickle" % Dependencies.Utils.booPickleVersion,
-        "com.lihaoyi" %%% "utest" % Dependencies.Utils.utestVersion % "test"
-      )
-    ).jsSettings(libraryDependencies += "org.scala-js" %%% "scalajs-java-time" % "0.2.2").jvmSettings(libraryDependencies += Dependencies.ScalaJS.jvmStubs)
-  }
+  lazy val shared = (crossProject(JSPlatform, JVMPlatform).withoutSuffixFor(JVMPlatform).crossType(CrossType.Pure) in file("shared")).settings(
+    commonSettings: _*
+  ).settings(
+    libraryDependencies ++= Dependencies.Serialization.circeProjects.map(c => "io.circe" %%% c % Dependencies.Serialization.circeVersion) ++ Seq(
+      "com.beachape" %%% "enumeratum-circe" % Dependencies.Utils.enumeratumCirceVersion,
+      "me.chrons" %%% "boopickle" % Dependencies.Utils.booPickleVersion,
+      "com.lihaoyi" %%% "utest" % Dependencies.Utils.utestVersion % "test"
+    )
+  ).jsSettings(libraryDependencies += "org.scala-js" %%% "scalajs-java-time" % "0.2.2").jvmSettings(libraryDependencies += Dependencies.ScalaJS.jvmStubs)
 
   lazy val sharedJs = shared.js.enablePlugins(ScalaJSWeb)
 

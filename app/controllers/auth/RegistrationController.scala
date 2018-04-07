@@ -11,7 +11,6 @@ import models.Application
 import models.auth.Credentials
 import models.settings.SettingKey
 import models.user._
-import services.audit.AuditHelper
 import services.user.SystemUserSearchService
 
 import scala.concurrent.Future
@@ -54,7 +53,7 @@ class RegistrationController @javax.inject.Inject() (
           )
           case None =>
             val authInfo = hasher.hash(data.password)
-            val role = Role.withName(app.coreServices.settings(SettingKey.DefaultNewUserRole))
+            val role = Role.withValue(app.coreServices.settings(SettingKey.DefaultNewUserRole))
             val user = SystemUser(
               id = UUID.randomUUID,
               username = data.username,

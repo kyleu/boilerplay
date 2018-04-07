@@ -22,22 +22,6 @@ class Configuration @javax.inject.Inject() (val cnf: play.api.Configuration, val
     iconUrl = cnf.get[String]("notification.slack.iconUrl")
   )
 
-  val authGoogleSettings = {
-    val cfg = cnf.get[play.api.Configuration]("silhouette.authenticator.google")
-    OAuth2Settings(
-      authorizationURL = None,
-      accessTokenURL = "???",
-      redirectURL = None,
-      apiURL = None,
-      clientID = "???",
-      clientSecret = "???",
-      scope = None,
-      authorizationParams = Map.empty,
-      accessTokenParams = Map.empty,
-      customProperties = Map.empty
-    )
-  }
-
   val authCookieSettings = {
     import scala.concurrent.duration._
     val cfg = cnf.get[play.api.Configuration]("silhouette.authenticator.cookie")
@@ -51,6 +35,22 @@ class Configuration @javax.inject.Inject() (val cnf: play.api.Configuration, val
       cookieMaxAge = Some(cfg.get[Int]("maxAge").seconds),
       authenticatorIdleTimeout = Some(cfg.get[Int]("idleTimeout").seconds),
       authenticatorExpiry = cfg.get[Int]("expiry").seconds
+    )
+  }
+
+  val authGoogleSettings = {
+    val cfg = cnf.get[play.api.Configuration]("silhouette.authenticator.google")
+    OAuth2Settings(
+      authorizationURL = Some(cfg.get[String]("authorization")),
+      accessTokenURL = cfg.get[String]("accessToken"),
+      redirectURL = Some(cfg.get[String]("redirect")),
+      apiURL = None,
+      clientID = cfg.get[String]("clientId"),
+      clientSecret = cfg.get[String]("clientSecret"),
+      scope = Some(cfg.get[String]("scope")),
+      authorizationParams = Map.empty,
+      accessTokenParams = Map.empty,
+      customProperties = Map.empty
     )
   }
 }

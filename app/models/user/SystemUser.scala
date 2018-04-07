@@ -63,7 +63,8 @@ final case class SystemUser(
     DataField("id", Some(id.toString)),
     DataField("username", Some(username)),
     DataField("preferences", Some(preferences.toString)),
-    DataField("profile", Some(profile.toString)),
+    DataField("provider", Some(profile.providerID)),
+    DataField("key", Some(profile.providerKey)),
     DataField("role", Some(role.toString)),
     DataField("created", Some(created.toString))
   )

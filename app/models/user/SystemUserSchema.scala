@@ -18,10 +18,10 @@ import sangria.execution.deferred.{Fetcher, HasId, Relation}
 import util.FutureUtils.graphQlContext
 
 object SystemUserSchema extends SchemaHelper("systemUser") {
-  implicit val roleEnum: EnumType[Role] = CommonSchema.deriveEnumeratumType(
+  implicit val roleEnum: EnumType[Role] = CommonSchema.deriveStringEnumeratumType(
     name = "RoleEnum",
     description = "The role of the system user.",
-    values = Role.values.map(t => t -> t.entryName).toList
+    values = Role.values.map(t => t -> t.value).toList
   )
 
   implicit val themeEnum: EnumType[Theme] = CommonSchema.deriveStringEnumeratumType(

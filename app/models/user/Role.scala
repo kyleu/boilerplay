@@ -2,15 +2,15 @@ package models.user
 
 import java.util.UUID
 
-import enumeratum.{Enum, EnumEntry, CirceEnum}
+import enumeratum.values.{StringEnum, StringEnumEntry, StringCirceEnum}
 
-sealed abstract class Role(override val entryName: String) extends EnumEntry {
+sealed abstract class Role(override val value: String) extends StringEnumEntry {
   def qualifies(target: Role): Boolean
-  override def toString = entryName
+  override def toString = value
 }
 
-object Role extends Enum[Role] with CirceEnum[Role] {
-  def apply(role: String): Role = Role.withName(role)
+object Role extends StringEnum[Role] with StringCirceEnum[Role] {
+  def apply(role: String): Role = Role.withValue(role)
   def unapply(role: Role): Option[String] = Some(role.toString)
 
   override val values = findValues

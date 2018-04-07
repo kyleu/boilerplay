@@ -3,14 +3,15 @@ package models.auth
 import com.google.inject.{AbstractModule, Provides}
 import com.mohiva.play.silhouette.api.crypto.{Crypter, CrypterAuthenticatorEncoder, Signer}
 import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
-import com.mohiva.play.silhouette.api.services.AuthenticatorService
+import com.mohiva.play.silhouette.api.services.{AuthenticatorService, AvatarService}
 import com.mohiva.play.silhouette.api.util._
 import com.mohiva.play.silhouette.api.{Environment, EventBus, Silhouette, SilhouetteProvider}
 import com.mohiva.play.silhouette.crypto.{JcaCrypter, JcaCrypterSettings, JcaSigner, JcaSignerSettings}
 import com.mohiva.play.silhouette.impl.authenticators.{CookieAuthenticator, CookieAuthenticatorService}
-import com.mohiva.play.silhouette.impl.providers.{CredentialsProvider, DefaultSocialStateHandler, OAuth2Settings, SocialStateHandler}
+import com.mohiva.play.silhouette.impl.providers._
 import com.mohiva.play.silhouette.impl.providers.oauth2.GoogleProvider
-import com.mohiva.play.silhouette.impl.providers.state.CsrfStateItemHandler
+import com.mohiva.play.silhouette.impl.providers.state.{CsrfStateItemHandler, CsrfStateSettings}
+import com.mohiva.play.silhouette.impl.services.GravatarService
 import com.mohiva.play.silhouette.impl.util.{DefaultFingerprintGenerator, SecureRandomIDGenerator}
 import com.mohiva.play.silhouette.password.BCryptPasswordHasher
 import com.mohiva.play.silhouette.persistence.repositories.DelegableAuthInfoRepository
@@ -19,7 +20,7 @@ import net.codingwell.scalaguice.ScalaModule
 import util.FutureUtils.defaultContext
 import play.api.libs.ws.WSClient
 import play.api.mvc.DefaultCookieHeaderEncoding
-import services.user.{PasswordInfoService, SystemUserSearchService}
+import services.user.{OAuth2InfoService, PasswordInfoService, SystemUserSearchService}
 
 class AuthModule extends AbstractModule with ScalaModule {
   override def configure() = {
@@ -70,17 +71,30 @@ class AuthModule extends AbstractModule with ScalaModule {
   }
 
   @Provides
-  def provideAuthInfoRepository(passwordInfoService: PasswordInfoService): AuthInfoRepository = {
-    new DelegableAuthInfoRepository(passwordInfoService)
+  def provideAuthInfoRepository(passwordInfoService: PasswordInfoService, oauth2InfoService: OAuth2InfoService): AuthInfoRepository = {
+    new DelegableAuthInfoRepository(passwordInfoService, oauth2InfoService)
   }
 
   @Provides
-  def provideSocialStateHandler(csrfStateItemHandler: CsrfStateItemHandler, signer: JcaSigner): SocialStateHandler = {
+  def provideAvatarService(httpLayer: HTTPLayer): AvatarService = new GravatarService(httpLayer)
+
+  @Provides
+  def provideCsrfStateItemHandler(idGenerator: IDGenerator, signer: Signer, configuration: Configuration): CsrfStateItemHandler = {
+    new CsrfStateItemHandler(CsrfStateSettings(secureCookie = false), idGenerator, signer)
+  }
+
+  @Provides
+  def provideSocialStateHandler(csrfStateItemHandler: CsrfStateItemHandler, signer: Signer): SocialStateHandler = {
     new DefaultSocialStateHandler(Set(csrfStateItemHandler), signer)
   }
 
   @Provides
   def provideGoogleProvider(httpLayer: HTTPLayer, socialStateHandler: SocialStateHandler, config: Configuration): GoogleProvider = {
     new GoogleProvider(httpLayer, socialStateHandler, config.authGoogleSettings)
+  }
+
+  @Provides
+  def provideSocialProviderRegistry(googleProvider: GoogleProvider) = {
+    SocialProviderRegistry(Seq(googleProvider))
   }
 }
