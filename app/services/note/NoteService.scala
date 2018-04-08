@@ -134,8 +134,12 @@ class NoteService @javax.inject.Inject() (override val tracing: TracingService) 
   def update(creds: Credentials, id: UUID, fields: Seq[DataField])(implicit trace: TraceData) = {
     traceF("update")(td => getByPrimaryKey(creds, id)(td).flatMap {
       case Some(current) if fields.isEmpty => Future.successful(current -> s"No changes required for Note [$id].")
-      case Some(current) => ApplicationDatabase.executeF(NoteQueries.update(id, fields))(td).map { _ =>
-        current -> s"Updated [${fields.size}] fields of Note [$id]."
+      case Some(current) => ApplicationDatabase.executeF(NoteQueries.update(id, fields))(td).flatMap { _ =>
+        getByPrimaryKey(creds, id)(td).map {
+          case Some(newModel) =>
+            newModel -> s"Updated [${fields.size}] fields of Note [$id]."
+          case None => throw new IllegalStateException(s"Cannot find Note matching [$id].")
+        }
       }
       case None => throw new IllegalStateException(s"Cannot find Note matching [$id].")
     })

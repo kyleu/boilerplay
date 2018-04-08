@@ -24,18 +24,20 @@
             <td>@record.t</td>
             <td>@record.pk.mkString(", ")</td>
             <td>
-              @if(record.changes.isEmpty) {
-                <em>No changes</em>
-              } else {
-                <table>
-                  @record.changes.map { c =>
+              @defining(record.changes.as[Seq[models.audit.AuditField]].right.get) { changes =>
+                @if(changes.isEmpty) {
+                  <em>No changes</em>
+                } else {
+                  <table>
+                  @changes.map { c =>
                     <tr>
                       <td>@c.k</td>
                       <td>@c.o.getOrElse(util.NullUtils.str)</td>
                       <td>@c.n.getOrElse(util.NullUtils.str)</td>
                     </tr>
                   }
-                </table>
+                  </table>
+                }
               }
             </td>
           </tr>

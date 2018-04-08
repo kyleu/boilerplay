@@ -1,4 +1,3 @@
-@* Generated File *@
 @(user: models.user.SystemUser, model: models.user.SystemUser, notes: Seq[models.note.Note], auditRecords: Seq[models.audit.AuditRecord], debug: Boolean)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
 )@traceData.logViewClass(getClass)@views.html.admin.layout.page(user, "explore", s"User [${model.id}]") {
@@ -23,12 +22,16 @@
             <td>@model.username</td>
           </tr>
           <tr>
-            <th>Prefs</th>
-            <td>@model.prefs</td>
+            <th>Provider</th>
+            <td>@model.profile.providerID</td>
           </tr>
           <tr>
-            <th>Email</th>
-            <td>@model.email</td>
+            <th>Key</th>
+            <td>@model.profile.providerKey</td>
+          </tr>
+          <tr>
+            <th>Prefs</th>
+            <td>@model.prefs</td>
           </tr>
           <tr>
             <th>Role</th>

@@ -51,6 +51,7 @@ object Icons {
   val systemUser = "fa-user"
 
   // Start model icons
+  val oAuth2Info = "fa-lemon-o"
   val settingValues = "fa-hand-spock-o"
   // End model icons
 }

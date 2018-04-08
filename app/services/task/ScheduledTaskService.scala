@@ -75,7 +75,7 @@ class ScheduledTaskService @javax.inject.Inject() (
         if (tasksToRun.isEmpty) {
           Future.successful(Nil)
         } else {
-          log.info(s"Running scheduled tasks [${tasksToRun.map(_.key).mkString(", ")}].")
+          log.debug(s"Running scheduled tasks [${tasksToRun.map(_.key).mkString(", ")}].")
           Future.sequence(tasksToRun.map { task =>
             go(id, creds, args, task, trace).map { o =>
               ScheduledTaskRun(id = id, task = task.key, arguments = args, status = o.status, output = o.asJson, started = o.start, completed = o.end)
@@ -113,7 +113,7 @@ class ScheduledTaskService @javax.inject.Inject() (
         status = status, logs = logs,
         start = start, end = util.DateUtils.now
       )
-      log.info(s"Completed scheduled task [${task.key}] with args [${args.mkString(", ")}] in [${ret.durationMs}ms].")
+      log.debug(s"Completed scheduled task [${task.key}] with args [${args.mkString(", ")}] in [${ret.durationMs}ms].")
       ret
     }
 

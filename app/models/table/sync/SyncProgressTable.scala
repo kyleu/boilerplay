@@ -17,7 +17,7 @@ class SyncProgressTable(tag: Tag) extends Table[models.sync.SyncProgress](tag, "
   val message = column[String]("message")
   val lastTime = column[LocalDateTime]("last_time")
 
-  val pk = primaryKey("pk_sync_progress", key)
+  val modelPrimaryKey = primaryKey("pk_sync_progress", key)
 
   override val * = (key, status, message, lastTime) <> (
     (models.sync.SyncProgress.apply _).tupled,

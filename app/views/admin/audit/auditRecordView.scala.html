@@ -1,3 +1,4 @@
+@* Generated File *@
 @(user: models.user.SystemUser, model: models.audit.AuditRecord, notes: Seq[models.note.Note], debug: Boolean)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
 )@traceData.logViewClass(getClass)@views.html.admin.layout.page(user, "explore", s"Audit Record [${model.id}]") {
@@ -6,7 +7,7 @@
       <div class="right"><a class="theme-text" href="@controllers.admin.audit.routes.AuditRecordController.editForm(model.id)">Edit</a></div>
       <div class="right"><a class="theme-text remove-link" onclick="return confirm('Are you sure you want to remove this Audit Record?')" href="@controllers.admin.audit.routes.AuditRecordController.remove(model.id)">Remove</a></div>
       <h5>
-        <i class="fa @models.template.Icons.auditRecord"></i>
+        <a class="theme-text" href="@controllers.admin.audit.routes.AuditRecordController.list()"><i class="fa @models.template.Icons.auditRecord"></i></a>
         Audit Record [@model.id]
       </h5>
     </div>
@@ -34,9 +35,7 @@
           </tr>
           <tr>
             <th>Changes</th>
-            <td>@model.changes.map { c =>
-              <div>@c</div>
-            }</td>
+            <td><pre>@model.changes<pre></td>
           </tr>
         </tbody>
       </table>

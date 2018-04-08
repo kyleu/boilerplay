@@ -1,3 +1,4 @@
+@* Generated File *@
 @(user: models.user.SystemUser, totalCount: Option[Int], modelSeq: Seq[models.audit.AuditRecord], q: Option[String], orderBy: Option[String], orderAsc: Boolean, limit: Int, offset: Int)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
 )@traceData.logViewClass(getClass)
@@ -7,10 +8,8 @@
   modelPlural = "Audit Records",
   icon = models.template.Icons.auditRecord,
   cols = Seq(
-    "id" -> "Id",
     "t" -> "T",
-    "pk" -> "Pk",
-    "changes" -> "Changes"
+    "pk" -> "Pk"
   ),
   totalCount = totalCount,
   rows = modelSeq.map(model => views.html.admin.audit.auditRecordDataRow(model)),
@@ -21,10 +20,9 @@
     orderBy = Some(controllers.admin.audit.routes.AuditRecordController.list(q, _, _, Some(limit), Some(0))),
     search = Some(controllers.admin.audit.routes.AuditRecordController.list(None, orderBy, orderAsc, Some(limit), None)),
     next = controllers.admin.audit.routes.AuditRecordController.list(q, orderBy, orderAsc, Some(limit), Some(offset + limit)),
-    prev = controllers.admin.audit.routes.AuditRecordController.list(q, orderBy, orderAsc, Some(limit), Some(offset - limit)),
+    prev = controllers.admin.audit.routes.AuditRecordController.list(q, orderBy, orderAsc, Some(limit), Some(offset - limit))
   ),
   limit = limit,
   offset = offset,
-  section = "audit",
   q = q
 )

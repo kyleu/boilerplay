@@ -22,7 +22,7 @@ class ScheduledTaskRunTable(tag: Tag) extends Table[models.task.ScheduledTaskRun
   val started = column[LocalDateTime]("started")
   val completed = column[LocalDateTime]("completed")
 
-  val pk = primaryKey("pk_scheduled_task_run", id)
+  val modelPrimaryKey = primaryKey("pk_scheduled_task_run", id)
 
   override val * = (id, task, arguments, status, output, started, completed) <> (
     (models.task.ScheduledTaskRun.apply _).tupled,

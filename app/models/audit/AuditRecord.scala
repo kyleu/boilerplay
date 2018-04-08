@@ -1,7 +1,8 @@
+/* Generated File */
 package models.audit
 
+import io.circe.Json
 import java.util.UUID
-
 import models.result.data.{DataField, DataFieldModel, DataSummary}
 import util.JsonSerializers._
 
@@ -13,9 +14,9 @@ object AuditRecord {
 final case class AuditRecord(
     id: UUID = UUID.randomUUID,
     auditId: UUID = UUID.randomUUID,
-    t: String = "default",
+    t: String = "",
     pk: Seq[String] = Seq.empty,
-    changes: Seq[AuditField] = Nil
+    changes: Json = Json.obj()
 ) extends DataFieldModel {
   override def toDataFields = Seq(
     DataField("id", Some(id.toString)),

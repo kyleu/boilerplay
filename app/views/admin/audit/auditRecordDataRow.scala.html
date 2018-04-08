@@ -1,8 +1,5 @@
+@* Generated File *@
 @(model: models.audit.AuditRecord)<tr>
-  <td><a href="@controllers.admin.audit.routes.AuditRecordController.view(model.id)" class="theme-text">@model.id</a></td>
   <td>@model.t</td>
   <td>@model.pk</td>
-  <td>@model.changes.map { c =>
-    <div>@c</div>
-  }</td>
 </tr>

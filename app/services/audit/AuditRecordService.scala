@@ -4,7 +4,9 @@ import java.util.UUID
 
 import models.audit.AuditRecord
 import models.auth.Credentials
+import models.database.{Query, Row}
 import models.queries.audit.AuditRecordQueries
+import models.queries.audit.AuditRecordQueries.{fromRow, tableName}
 import models.result.data.DataField
 import models.result.filter.Filter
 import models.result.orderBy.OrderBy
@@ -14,6 +16,15 @@ import util.FutureUtils.serviceContext
 import util.tracing.{TraceData, TracingService}
 
 import scala.concurrent.Future
+
+object AuditRecordService {
+  final case class GetByModel(model: String, pk: Seq[Any]) extends Query[Seq[AuditRecord]] {
+    override val name = "get.audit.records.by.model"
+    override val sql = s"""select * from "$tableName" where "t" = ? and "pk" = ?::character varying[]"""
+    override val values: Seq[Any] = Seq(model, pk)
+    override def reduce(rows: Iterator[Row]) = rows.map(fromRow).toList
+  }
+}
 
 @javax.inject.Singleton
 class AuditRecordService @javax.inject.Inject() (override val tracing: TracingService) extends ModelServiceHelper[AuditRecord]("auditRecord") {
@@ -25,7 +36,7 @@ class AuditRecordService @javax.inject.Inject() (override val tracing: TracingSe
   }
 
   def getByModel(creds: Credentials, model: String, pk: Any*)(implicit trace: TraceData) = {
-    ApplicationDatabase.queryF(AuditRecordQueries.GetByModel(model, pk))
+    ApplicationDatabase.queryF(AuditRecordService.GetByModel(model, pk))
   }
 
   override def countAll(creds: Credentials, filters: Seq[Filter] = Nil)(implicit trace: TraceData) = {

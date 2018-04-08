@@ -124,8 +124,12 @@ class ScheduledTaskRunService @javax.inject.Inject() (override val tracing: Trac
   def update(creds: Credentials, id: UUID, fields: Seq[DataField])(implicit trace: TraceData) = {
     traceF("update")(td => getByPrimaryKey(creds, id)(td).flatMap {
       case Some(current) if fields.isEmpty => Future.successful(current -> s"No changes required for Scheduled Task Run [$id].")
-      case Some(current) => ApplicationDatabase.executeF(ScheduledTaskRunQueries.update(id, fields))(td).map { _ =>
-        current -> s"Updated [${fields.size}] fields of Scheduled Task Run [$id]."
+      case Some(current) => ApplicationDatabase.executeF(ScheduledTaskRunQueries.update(id, fields))(td).flatMap { _ =>
+        getByPrimaryKey(creds, id)(td).map {
+          case Some(newModel) =>
+            newModel -> s"Updated [${fields.size}] fields of Scheduled Task Run [$id]."
+          case None => throw new IllegalStateException(s"Cannot find ScheduledTaskRun matching [$id].")
+        }
       }
       case None => throw new IllegalStateException(s"Cannot find ScheduledTaskRun matching [$id].")
     })
