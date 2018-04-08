@@ -15,15 +15,14 @@ https://kyleu.github.io/boilerplay
 * Role based security, with normal and admin roles.
 * Full admin suite for user management, reporting, and real-time session observation.
 * GraphQL schema and query interface, with shared queries and mutations.
-* Scala source that is shared between the client and server via Scala.js.
+* OpenAPI/Swagger definitions for all routes, along with a packaged UI.
+* Scala source code, shared between the client and server via Scala.js.
+* JDBC queries, Slick definitions, and an instrumented database access layer. 
 * Websocket-driven actor support, with monitoring and tracing.
 * Binary and JSON serialization, provided by circe and Boopickle.
 
 
 ## Contributing
-
-All Scala code is formatted by Scalariform, and passes all checks from Scalastyle and Scapegoat. No Scala file is longer than 100 lines, no line
-longer than 140 characters, and all warnings are treated as errors. Tests are part of the main source tree so they can be run from the browser.
 
 The project is built on SBT, and can be opened by IntelliJ directly. Plugins are included for Eclipse and Sublime Text.
 
