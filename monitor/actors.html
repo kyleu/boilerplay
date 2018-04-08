@@ -158,7 +158,7 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 <div class="small-12 large-9 column" id="docs">
 <h1><a href="#actors" name="actors" class="anchor"><span class="anchor-link"></span></a>Actors</h1>
 <p>Akka actors can be instrumented with metrics by extending <code>InstrumentedActor</code>. </p>
-<p>By uncommenting `<code>in</code>application.conf<code>, actor message flows can be visualized with</code>akka-visual-mailbox-visualization`. To enable this, run the following:</p>
+<p>By uncommenting <code># default-mailbox.mailbox-type</code> in <code>application.conf</code>, actor message flows can be visualized with <code>akka-visual-mailbox-visualization</code>. To enable this, run the following:</p>
 <p><code>docker run -ti --rm -p 8080:8080 -p 60009:60009/udp ouven/akka-visual-mailbox-visualization</code></p>
 <p>Then, load <a href="http://localhost:8080">http://localhost:8080</a> to see your actors&rsquo; message flow.</p>
 <p><img src="akkaVisualization.png" alt="akka-visualmailbox" /></p>
@@ -208,7 +208,7 @@ The source code for this page can be found <a href="https://github.com/KyleU/boi
 
 <!--
 <div class="copyright">
-<span class="text">&copy; 2017</span>
+<span class="text">&copy; 2018</span>
 <a href="https://www.example.com" class="logo">logo</a>
 </div>
 -->

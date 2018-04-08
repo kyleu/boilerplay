@@ -158,6 +158,8 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 <div class="small-12 large-9 column" id="docs">
 <h1><a href="#database" name="database" class="anchor"><span class="anchor-link"></span></a>Database</h1>
 <p>Database connections are regrettably JDBC-based, but an API returning <code>Future</code>s and operating in a different ExecutionContext is provided. To get started, check out the connection configuration in <code>application.conf</code>, the provided <code>JdbcDatabase</code> class, and the files in <code>models.queries</code>. </p>
+<p>Slick table definitions are also provided, see <code>ApplicationDatabase.slick.run()</code>.</p>
+<p>Postgres 9.5+ is the preferred database, but earlier versions are <a href="../troubleshooting.md">supported</a>.</p>
 <div class="source-github">
 The source code for this page can be found <a href="https://github.com/KyleU/boilerplay/tree/master/doc/src/main/paradox/explore/database.md">here</a>.
 </div>
@@ -204,7 +206,7 @@ The source code for this page can be found <a href="https://github.com/KyleU/boi
 
 <!--
 <div class="copyright">
-<span class="text">&copy; 2017</span>
+<span class="text">&copy; 2018</span>
 <a href="https://www.example.com" class="logo">logo</a>
 </div>
 -->
