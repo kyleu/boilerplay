@@ -5,7 +5,7 @@ import java.util.UUID
 import com.github.tminglei.slickpg._
 
 trait PostgresProfileEx extends ExPostgresProfile
-  with PgArraySupport with PgDate2Support with PgRangeSupport with PgHStoreSupport
+  with PgArraySupport with PgDate2Support /* with PgRangeSupport */ with PgHStoreSupport
   with PgCirceJsonSupport with PgSearchSupport with PgNetSupport with PgLTreeSupport {
   def pgjson = "jsonb"
 
@@ -15,7 +15,7 @@ trait PostgresProfileEx extends ExPostgresProfile
 
   object APIEx extends API
     with ArrayImplicits with DateTimeImplicits with JsonImplicits with NetImplicits
-    with LTreeImplicits with RangeImplicits with HStoreImplicits with SearchImplicits with SearchAssistants {
+    with LTreeImplicits /* with RangeImplicits */ with HStoreImplicits with SearchImplicits with SearchAssistants {
 
     implicit val intSeqTypeMapper: DriverJdbcType[Seq[Int]] = new SimpleArrayJdbcType[Int]("int").to(_.toSeq)
     implicit val longSeqTypeMapper: DriverJdbcType[Seq[Long]] = new SimpleArrayJdbcType[Long]("int").to(_.toSeq)

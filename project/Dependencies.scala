@@ -2,7 +2,7 @@ import sbt._
 
 object Dependencies {
   object Play {
-    private[this] val version = "2.6.12"
+    private[this] val version = "2.6.13"
     val lib = "com.typesafe.play" %% "play" % version
     val filters = play.sbt.PlayImport.filters
     val ws = play.sbt.PlayImport.ws
@@ -36,11 +36,11 @@ object Dependencies {
     val version = "3.2.3"
 
     val postgres = "org.postgresql" % "postgresql" % "9.4.1212"
-    val hikariCp = "com.zaxxer" % "HikariCP" % "2.7.8"
+    val hikariCp = "com.zaxxer" % "HikariCP" % "2.7.9"
     val slickCore = "com.typesafe.slick" %% "slick" % version
     val slickHikariCp = "com.typesafe.slick" %% "slick-hikaricp" % version
-    val slickPg = "com.github.tminglei" %% "slick-pg" % "0.16.0"
-    val slickPgCirce = "com.github.tminglei" %% "slick-pg_circe-json" % "0.16.0"
+    val slickPg = "com.github.tminglei" %% "slick-pg" % "0.16.1"
+    val slickPgCirce = "com.github.tminglei" %% "slick-pg_circe-json" % "0.16.1"
     val slickless = "io.underscore" %% "slickless" % "0.3.3"
   }
 
@@ -51,7 +51,7 @@ object Dependencies {
   }
 
   object Serialization {
-    val circeVersion = "0.9.1"
+    val circeVersion = "0.9.3"
     val circeProjects = Seq("circe-core", "circe-generic", "circe-generic-extras", "circe-parser", "circe-java8")
   }
 
@@ -59,7 +59,7 @@ object Dependencies {
     val fontAwesome = "org.webjars" % "font-awesome" % "4.7.0"
     val jquery = "org.webjars" % "jquery" % "2.2.4"
     val materialize = "org.webjars" % "materializecss" % "0.100.2"
-    val swaggerUi = "org.webjars" % "swagger-ui" % "3.13.0"
+    val swaggerUi = "org.webjars" % "swagger-ui" % "3.13.3"
   }
 
   object Metrics {
@@ -85,9 +85,9 @@ object Dependencies {
 
   object Utils {
     val scapegoatVersion = "1.3.4"
-    val enumeratumCirceVersion = "1.5.15"
+    val enumeratumCirceVersion = "1.5.17"
     val booPickleVersion = "1.2.5"
-    val utestVersion = "0.6.3"
+    val utestVersion = "0.6.4"
 
     val scalatagsVersion = "0.6.7"
 
