@@ -51,7 +51,7 @@ class SearchController @javax.inject.Inject() (override val app: Application, se
       views.html.admin.task.scheduledTaskRunSearchResult(model, s"Scheduled Task Run [${model.id}] matched [$q].")
     }.toSeq)
     val systemUser = services.userServices.systemUserService.getByPrimaryKey(creds, id).map(_.map { model =>
-      views.html.admin.user.systemUserSearchResult(model, s"User [${model.id}] matched [$q].")
+      views.html.admin.user.systemUserSearchResult(model, s"System User [${model.id}] matched [$q].")
     }.toSeq)
 
     val uuidSearches = Seq[Future[Seq[Html]]](auditRecord, note, scheduledTaskRun, systemUser)
@@ -79,7 +79,7 @@ class SearchController @javax.inject.Inject() (override val app: Application, se
       views.html.admin.sync.syncProgressSearchResult(model, s"Sync Progress [${model.key}] matched [$q].")
     })
     val systemUser = services.userServices.systemUserService.searchExact(creds, q = q, limit = Some(5)).map(_.map { model =>
-      views.html.admin.user.systemUserSearchResult(model, s"User [${model.id}] matched [$q].")
+      views.html.admin.user.systemUserSearchResult(model, s"System User [${model.id}] matched [$q].")
     })
 
     val stringSearches = Seq[Future[Seq[Html]]](auditRecord, note, scheduledTaskRun, syncProgress, systemUser)

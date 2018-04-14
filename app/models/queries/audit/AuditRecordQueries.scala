@@ -21,7 +21,7 @@ object AuditRecordQueries extends BaseQueries[AuditRecord]("auditRecord", "audit
     DatabaseField(title = "Changes", prop = "changes", col = "changes", typ = JsonType)
   )
   override protected val pkColumns = Seq("id")
-  override protected val searchColumns = Seq("t", "pk")
+  override protected val searchColumns = Seq("id", "t", "pk")
 
   def countAll(filters: Seq[Filter] = Nil) = onCountAll(filters)
   def getAll(filters: Seq[Filter] = Nil, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) = {
@@ -43,6 +43,13 @@ object AuditRecordQueries extends BaseQueries[AuditRecord]("auditRecord", "audit
     limit = limit, offset = offset, values = Seq(auditId)
   )
   final case class GetByAuditIdSeq(auditIdSeq: Seq[UUID]) extends ColSeqQuery(column = "audit_id", values = auditIdSeq)
+
+  final case class CountById(id: UUID) extends ColCount(column = "id", values = Seq(id))
+  final case class GetById(id: UUID, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) extends SeqQuery(
+    whereClause = Some(quote("id") + "  = ?"), orderBy = ResultFieldHelper.orderClause(fields, orderBys: _*),
+    limit = limit, offset = offset, values = Seq(id)
+  )
+  final case class GetByIdSeq(idSeq: Seq[UUID]) extends ColSeqQuery(column = "id", values = idSeq)
 
   final case class CountByPk(pk: Array[Any]) extends ColCount(column = "pk", values = Seq(pk))
   final case class GetByPk(pk: Array[Any], orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) extends SeqQuery(

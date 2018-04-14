@@ -18,7 +18,7 @@
             @views.html.components.form.textField(selected = isNew, key = "text", title = "Text", value = Some(model.text.toString), nullable = false)
             @views.html.components.form.autocompleteField(
               selected = isNew, key = "author", title = "Author", value = Some(model.author.toString), nullable = false, dataType = "uuid",
-              call = controllers.admin.user.routes.SystemUserController.autocomplete(), acType = ("systemUser", "User"), icon = models.template.Icons.systemUser
+              call = controllers.admin.user.routes.SystemUserController.autocomplete(), acType = ("systemUser", "System User"), icon = models.template.Icons.systemUser
             )
             @views.html.components.form.localDateTimeField(selected = isNew, key = "created", title = "Created", value = Some(model.created), nullable = false)
           </tbody>

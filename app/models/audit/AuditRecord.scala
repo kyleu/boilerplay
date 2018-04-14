@@ -26,5 +26,5 @@ final case class AuditRecord(
     DataField("changes", Some(changes.toString))
   )
 
-  def toSummary = DataSummary(model = "auditRecord", pk = Seq(id.toString), title = s"$t / $pk ($id)")
+  def toSummary = DataSummary(model = "auditRecord", pk = Seq(id.toString), title = s"$id / $t / $pk ($id)")
 }

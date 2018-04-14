@@ -1,5 +1,5 @@
 # Generated File
-# Queries the system for Sync Progresss.
+# Queries the system for Sync Progresses.
 query SyncProgress {
   syncProgress(
     q: null, # Or string literal

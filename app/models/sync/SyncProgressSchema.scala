@@ -36,7 +36,7 @@ object SyncProgressSchema extends SchemaHelper("syncProgress") {
 
   val syncProgressMutationType = ObjectType(
     name = "SyncProgressMutations",
-    description = "Mutations for Sync Progresss.",
+    description = "Mutations for Sync Progresses.",
     fields = fields[GraphQLContext, Unit](
       Field(
         name = "create",
