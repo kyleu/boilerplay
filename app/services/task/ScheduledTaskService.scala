@@ -29,7 +29,7 @@ class ScheduledTaskService @javax.inject.Inject() (
     if (config.scheduledTaskEnabled) {
       import scala.concurrent.duration._
       log.info(s"Scheduling task to run every [$intervalSecs] seconds, after an initial [$delaySecs] second delay.")
-      system.scheduler.schedule(delaySecs.seconds, intervalSecs.seconds, () => runAll(creds, args))
+      system.scheduler.schedule(delaySecs.seconds, intervalSecs.seconds, (() => runAll(creds, args)): Runnable)
     } else {
       log.info("Scheduled task is disabled.")
     }
