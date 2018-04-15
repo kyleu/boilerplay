@@ -50,6 +50,15 @@ object SandboxTask extends Enum[SandboxTask] with CirceEnum[SandboxTask] {
     override def call(cfg: Config)(implicit trace: TraceData) = TracingLogic.go(cfg.app, cfg.argument)
   }
 
+  case object WebCall extends SandboxTask("webCall", "Web Call", "Calls the provided url and returns stats.") {
+    override def call(cfg: Config)(implicit trace: TraceData) = cfg.argument match {
+      case Some(url) => cfg.app.ws.url("sandbox.request", url).get().map { rsp =>
+        s"${rsp.status} $url (${util.NumberUtils.withCommas(rsp.bodyAsBytes.size)} bytes)"
+      }
+      case None => Future.successful("No url provided...")
+    }
+  }
+
   case object CopyTable extends SandboxTask("copyTable", "Copy Table", "Copy a database table, in preparation for new DDL.") {
     override def call(cfg: Config)(implicit trace: TraceData) = {
       cfg.argument.map(a => TableLogic.copyTable(cfg.app, a)).getOrElse(Future.successful("Argument required."))
@@ -82,3 +91,4 @@ object SandboxTask extends Enum[SandboxTask] with CirceEnum[SandboxTask] {
 
   override val values = findValues
 }
+
