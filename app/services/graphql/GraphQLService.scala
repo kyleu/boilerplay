@@ -42,7 +42,7 @@ class GraphQLService @javax.inject.Inject() (tracing: TracingService, registry: 
           val ret = Executor.execute(
             schema = Schema.schema,
             queryAst = ast,
-            userContext = GraphQLContext(app, registry, creds, td),
+            userContext = GraphQLContext(app, this, registry, creds, td),
             operationName = operation,
             variables = variables.getOrElse(Json.obj()),
             deferredResolver = Schema.resolver,

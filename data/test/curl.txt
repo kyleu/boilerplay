@@ -1,9 +1,0 @@
-curl -X "POST" "http://localhost/" \
-     -H 'Content-Type: application/json; charset=utf-8' \
-     -H 'Accept: application/json' \
-     -H 'Host: localhost' \
-     -H 'foo: bar' \
-     -H 'Content-Length: 14' \
-     -d $'{
-  "x": "y"
-}'

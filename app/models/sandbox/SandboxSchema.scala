@@ -41,7 +41,7 @@ object SandboxSchema {
       fieldType = sandboxResultType,
       description = Some("Allows calling of sandbox tests."),
       arguments = sandboxTaskArg :: sandboxArgumentArg :: Nil,
-      resolve = c => c.arg(sandboxTaskArg).run(c.ctx.app, c.ctx.services, c.arg(sandboxArgumentArg))(c.ctx.trace)
+      resolve = c => c.arg(sandboxTaskArg).run(SandboxTask.Config(c.ctx.app, c.ctx.services, c.ctx.svc, c.arg(sandboxArgumentArg)))(c.ctx.trace)
     )
   )
 }

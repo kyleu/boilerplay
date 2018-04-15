@@ -2,6 +2,7 @@ logs
 conf/generated.keystore
 project/project/target
 project/target
+doc/src/main/graphdoc
 target
 tmp
 .history
