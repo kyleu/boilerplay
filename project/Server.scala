@@ -80,7 +80,7 @@ object Server {
       case x => (assemblyMergeStrategy in assembly).value(x)
     },
     fullClasspath in assembly += Attributed.blank(PlayKeys.playPackageAssets.value),
-    mainClass in assembly := Some(Shared.projectName),
+    mainClass in assembly := Some("Entrypoint"),
 
     scapegoatIgnoredFiles := Seq(".*/Routes.scala", ".*/RoutesPrefix.scala", ".*/*ReverseRoutes.scala", ".*/*.template.scala"),
     scapegoatDisabledInspections := Seq("UnusedMethodParameter")

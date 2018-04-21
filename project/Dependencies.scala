@@ -91,9 +91,9 @@ object Dependencies {
 
     val scalatagsVersion = "0.6.7"
 
-    val csv = "com.github.tototoshi" %% "scala-csv" % "1.3.5"
     val betterFiles = "com.github.pathikrit" %% "better-files" % "3.4.0"
     val commonsIo = "commons-io" % "commons-io" % "2.6"
+    val csv = "com.github.tototoshi" %% "scala-csv" % "1.3.5"
     val scalaGuice = "net.codingwell" %% "scala-guice" % "4.2.0"
     val scopts = "com.github.scopt" %% "scopt" % "3.7.0"
     val reftree = "org.stanch" %% "reftree" % "1.1.3"
