@@ -38,15 +38,15 @@ abstract class ServiceController[T](val svc: ModelServiceHelper[T]) extends Base
 
   protected def renderChoice(t: Option[String])(f: String => Result)(implicit request: RequestHeader) = t match {
     case None => render {
-      case ServiceController.acceptsCsv() => f(ServiceController.MimeTypes.csv)
       case Accepts.Html() => f(MimeTypes.HTML)
       case Accepts.Json() => f(MimeTypes.JSON)
+      case ServiceController.acceptsCsv() => f(ServiceController.MimeTypes.csv)
       case ServiceController.acceptsPng() => f(ServiceController.MimeTypes.png)
       case ServiceController.acceptsSvg() => f(ServiceController.MimeTypes.svg)
     }
-    case Some("csv") => f(ServiceController.MimeTypes.csv)
     case Some("html") => f(MimeTypes.HTML)
     case Some("json") => f(MimeTypes.JSON)
+    case Some("csv") => f(ServiceController.MimeTypes.csv)
     case Some("png") => f(ServiceController.MimeTypes.png)
     case Some("svg") => f(ServiceController.MimeTypes.svg)
     case Some(x) => throw new IllegalStateException(s"Unhandled output format [$x].")
