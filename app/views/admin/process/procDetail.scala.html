@@ -1,0 +1,23 @@
+@(user: models.user.SystemUser, proc: models.process.CachedProc)(
+    implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
+)@traceData.logViewClass(getClass)@views.html.admin.layout.page(user = user, activeSection = "status", title = s"[${proc.cmd.mkString(" ")}] Process") {
+  <div class="row">
+    <div class="col s12">
+      <div class="collection with-header">
+        <div class="collection-header">
+          <h5>Process @proc.cmd.mkString(" ")</h5>
+          <em>@proc.started.map(util.DateUtils.niceDateTime)</em>
+        </div>
+        <div class="collection-item">
+          <form action="@controllers.admin.system.routes.ProcessController.run()">
+            <input name="cmd" value="@proc.cmd.mkString(" ")" placeholder="Run Again" />
+            <button class="btn theme" type="submit">Run Again</button>
+          </form>
+        </div>
+        <div class="collection-item">
+          <pre class="sandbox-result" style="margin: 20px 0;">@proc.toString</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+}

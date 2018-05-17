@@ -1,39 +1,44 @@
 package services.process
 
-import scala.sys.process._
-import java.io.OutputStream
+import java.util.UUID
+
+import models.auth.Credentials
+import models.process.CachedProc
+import models.user.Role
 
 object ProcessService {
-  case class Proc(
-      cmd: Seq[String],
-      out: String => Unit,
-      err: String => Unit,
-      log: String => Unit
-  ) {
-    val startMs = System.currentTimeMillis
+  private[this] val activeProcesses = collection.mutable.HashMap.empty[UUID, CachedProc]
+  private[this] val completedProcesses = collection.mutable.HashMap.empty[UUID, CachedProc]
 
-    def run() = {
-      def inHandler(in: OutputStream) = {}
-      val p = cmd.run(new ProcessIO(
-        in = inHandler,
-        out = o => scala.io.Source.fromInputStream(o).getLines.foreach(out),
-        err = e => scala.io.Source.fromInputStream(e).getLines.foreach(err)
-      ))
-      val exitCode = p.exitValue()
-      log(s"Ran [${cmd.mkString(" ")}] in [${System.currentTimeMillis - startMs}ms] with exit code [$exitCode].")
+  def getActive = activeProcesses.values.toIndexedSeq.sortBy(p => p.started.map(util.DateUtils.toMillis)).reverse
+
+  def getProc(id: UUID) = activeProcesses.get(id).orElse(completedProcesses.get(id)).getOrElse {
+    throw new IllegalStateException(s"Cannot find process with id [$id].")
+  }
+
+  def isAllowed(creds: Credentials, cmd: Seq[String]) = creds.user.role.qualifies(Role.Admin)
+
+  def start(creds: Credentials, cmd: Seq[String], onOutput: CachedProc.Output => Unit, onComplete: (Int, Long) => Unit, async: Boolean = false) = {
+    if (!isAllowed(creds, cmd)) {
+      throw new IllegalStateException(s"User [${creds.user.id}] is not allowed to run command [${cmd.mkString(" ")}].")
     }
-
-    def in(s: String) = {
-
+    val p = CachedProc(cmd, onOutput, onComplete)
+    activeProcesses(p.id) = p
+    if (async) {
+      new Thread(() => p.run())
+    } else {
+      p.run()
     }
+    p
   }
 
   def main(args: Array[String]): Unit = {
-    val cmd = args.toList match {
-      case Nil => Seq("ls", "/")
-      case c => c
-    }
-    val p = Proc(cmd, println _, println _, println _)
-    println(p.run())
+    val cmd = if (args.isEmpty) { Seq("ls", "/") } else { args.toSeq }
+    start(
+      creds = Credentials.system,
+      cmd = cmd,
+      onOutput = o => println(o),
+      onComplete = (e, d) => println(s"[res] ${util.DateUtils.now} - Completed in [${d}ms] with exit code [$e].")
+    )
   }
 }
