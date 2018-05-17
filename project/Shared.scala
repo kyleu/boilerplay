@@ -14,7 +14,7 @@ object Shared {
 
   object Versions {
     val app = "1.0.0"
-    val scala = "2.12.4"
+    val scala = "2.12.6"
   }
 
   val compileOptions = Seq(

@@ -26,7 +26,8 @@ object SystemUser {
     id = UUID.fromString("88888888-8888-8888-8888-888888888888"),
     username = "",
     preferences = UserPreferences.empty,
-    profile = LoginInfo("anonymous", "system")
+    profile = LoginInfo("anonymous", "system"),
+    role = Role.Admin
   )
 
   val guest = SystemUser(
@@ -40,7 +41,8 @@ object SystemUser {
     id = UUID.fromString("44444444-4444-4444-4444-444444444444"),
     username = "api",
     preferences = UserPreferences.empty,
-    profile = LoginInfo("anonymous", "api")
+    profile = LoginInfo("anonymous", "api"),
+    role = Role.Admin
   )
 }
 

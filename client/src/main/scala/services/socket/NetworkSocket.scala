@@ -45,7 +45,7 @@ class NetworkSocket(handler: EventHandler) {
     connecting = true
     val socket = new WebSocket(url)
     socket.onopen = { (event: Event) => onConnectEvent(event) }
-    socket.onerror = { (event: ErrorEvent) => onErrorEvent(event) }
+    socket.onerror = { (event: Event) => onErrorEvent(event) }
     socket.onmessage = { (event: MessageEvent) => onMessageEvent(event) }
     socket.onclose = { (event: Event) => onCloseEvent(event) }
     ws = Some(socket)
@@ -58,7 +58,7 @@ class NetworkSocket(handler: EventHandler) {
     event
   }
 
-  private[this] def onErrorEvent(event: ErrorEvent) = {
+  private[this] def onErrorEvent(event: Event) = {
     handler.onError(event)
     event
   }

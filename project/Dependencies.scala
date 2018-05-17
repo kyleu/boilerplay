@@ -45,7 +45,7 @@ object Dependencies {
   }
 
   object GraphQL {
-    val sangria = "org.sangria-graphql" %% "sangria" % "1.4.0"
+    val sangria = "org.sangria-graphql" %% "sangria" % "1.4.1"
     val playJson = "org.sangria-graphql" %% "sangria-play-json" % "1.0.4"
     val circe = "org.sangria-graphql" %% "sangria-circe" % "1.2.1"
   }
@@ -56,14 +56,14 @@ object Dependencies {
   }
 
   object WebJars {
-    val fontAwesome = "org.webjars" % "font-awesome" % "4.7.0"
-    val jquery = "org.webjars" % "jquery" % "2.2.4"
-    val materialize = "org.webjars" % "materializecss" % "0.100.2"
-    val swaggerUi = "org.webjars" % "swagger-ui" % "3.13.6"
+    val fontAwesome = "org.webjars" % "font-awesome" % "4.7.0" intransitive()
+    val jquery = "org.webjars" % "jquery" % "2.2.4" intransitive()
+    val materialize = "org.webjars" % "materializecss" % "0.100.2" intransitive()
+    val swaggerUi = "org.webjars" % "swagger-ui" % "3.14.0" intransitive()
   }
 
   object Metrics {
-    val version = "0.3.0"
+    val version = "0.4.0"
     val metrics = "io.prometheus" % "simpleclient" % version
     val metricsJvm = "io.prometheus" % "simpleclient_hotspot" % version
     val metricsHttp = "io.prometheus" % "simpleclient_httpserver" % version
@@ -79,7 +79,7 @@ object Dependencies {
 
   object ScalaJS {
     val scalaJSVersion = "0.6.22"
-    val jQueryVersion = "0.9.2"
+    val jQueryVersion = "0.9.3"
     val jvmStubs = "org.scala-js" %% "scalajs-stubs" % scalaJSVersion % "provided"
   }
 
