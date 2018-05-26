@@ -2,7 +2,7 @@
     selected: Boolean, key: String, title: String, value: Option[String], options: Seq[(String, String)], nullable: Boolean, dataType: String = "enum"
 )@views.html.components.form.fieldWrapper(selected = selected, key = key, title = title, nullable = nullable, dataType = dataType) {
   <div class="input-field">
-    <select id="input-@key" name=@key">
+    <select id="input-@key" name="@key">
       @if(nullable) {<option value="@util.NullUtils.str" @if(value.isEmpty) { selected="selected" }>@util.NullUtils.str (null)</option>}
       @options.map { v =>
       <option @if(value.contains(v._1)) { selected="selected" } value="@v._1">@v._2</option>

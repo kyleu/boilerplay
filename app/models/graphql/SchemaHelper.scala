@@ -5,7 +5,7 @@ import java.time.LocalDateTime
 import models.result.filter.{Filter, FilterSchema}
 import models.result.orderBy.{OrderBy, OrderBySchema}
 import models.result.paging.PagingOptions
-import sangria.schema.{Args, Context}
+import sangria.schema.{Args, Argument, Context, Field, OutputType, fields}
 import services.ModelServiceHelper
 import util.tracing.TraceData
 import util.FutureUtils.graphQlContext
@@ -24,7 +24,11 @@ abstract class SchemaHelper(val name: String) {
   protected def traceF[A](ctx: GraphQLContext, k: String)(f: TraceData => Future[A]) = ctx.app.tracing.trace(name + ".schema." + k)(f)(ctx.trace)
   protected def traceB[A](ctx: GraphQLContext, k: String)(f: TraceData => A) = ctx.app.tracing.traceBlocking(name + ".schema." + k)(f)(ctx.trace)
 
-  def argsFor(args: Args) = SchemaHelper.SearchArgs(
+  protected def field[Out](name: String, t: OutputType[Out], f: (Context[GraphQLContext, Unit], TraceData) => Future[Out], args: Argument[_]*) = {
+    Field[GraphQLContext, Unit, Out, Out](name = name, fieldType = t, arguments = args.toList, resolve = c => traceF(c.ctx, name)(td => f(c, td)))
+  }
+
+  protected def argsFor(args: Args) = SchemaHelper.SearchArgs(
     start = util.DateUtils.now,
     filters = args.arg(FilterSchema.reportFiltersArg).getOrElse(Nil),
     orderBys = args.arg(OrderBySchema.orderBysArg).getOrElse(Nil),
@@ -32,7 +36,7 @@ abstract class SchemaHelper(val name: String) {
     offset = args.arg(CommonSchema.offsetArg)
   )
 
-  def runSearch[T](svc: ModelServiceHelper[T], c: Context[GraphQLContext, Unit], td: TraceData) = {
+  protected def runSearch[T](svc: ModelServiceHelper[T], c: Context[GraphQLContext, Unit], td: TraceData) = {
     val args = argsFor(c.args)
     val f = c.arg(CommonSchema.queryArg) match {
       case Some(q) => svc.searchWithCount(c.ctx.creds, q, args.filters, args.orderBys, args.limit, args.offset)(td)
