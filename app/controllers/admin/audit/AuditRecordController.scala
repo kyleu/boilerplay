@@ -38,11 +38,11 @@ class AuditRecordController @javax.inject.Inject() (
       val startMs = util.DateUtils.nowMillis
       val orderBys = OrderBy.forVals(orderBy, orderAsc).toSeq
       searchWithCount(q, orderBys, limit, offset).map(r => renderChoice(t) {
-        case ServiceController.MimeTypes.csv => csvResponse("AuditRecord", svc.csvFor(r._1, r._2))
         case MimeTypes.HTML => Ok(views.html.admin.audit.auditRecordList(
           request.identity, Some(r._1), r._2, q, orderBy, orderAsc, limit.getOrElse(100), offset.getOrElse(0)
         ))
         case MimeTypes.JSON => Ok(AuditRecordResult.fromRecords(q, Nil, orderBys, limit, offset, startMs, r._1, r._2).asJson)
+        case ServiceController.MimeTypes.csv => csvResponse("AuditRecord", svc.csvFor(r._1, r._2))
         case ServiceController.MimeTypes.png => Ok(renderToPng(v = r._2)).as(ServiceController.MimeTypes.png)
         case ServiceController.MimeTypes.svg => Ok(renderToSvg(v = r._2)).as(ServiceController.MimeTypes.svg)
       })
@@ -60,11 +60,11 @@ class AuditRecordController @javax.inject.Inject() (
     withSession("get.by.auditId", admin = true) { implicit request => implicit td =>
       val orderBys = OrderBy.forVals(orderBy, orderAsc).toSeq
       svc.getByAuditId(request, auditId, orderBys, limit, offset).map(models => renderChoice(t) {
-        case ServiceController.MimeTypes.csv => csvResponse("AuditRecord by auditId", svc.csvFor(0, models))
         case MimeTypes.HTML => Ok(views.html.admin.audit.auditRecordByAuditId(
           request.identity, auditId, models, orderBy, orderAsc, limit.getOrElse(5), offset.getOrElse(0)
         ))
         case MimeTypes.JSON => Ok(models.asJson)
+        case ServiceController.MimeTypes.csv => csvResponse("AuditRecord by auditId", svc.csvFor(0, models))
         case ServiceController.MimeTypes.png => Ok(renderToPng(v = models)).as(ServiceController.MimeTypes.png)
         case ServiceController.MimeTypes.svg => Ok(renderToSvg(v = models)).as(ServiceController.MimeTypes.svg)
       })

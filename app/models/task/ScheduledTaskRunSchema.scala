@@ -13,6 +13,7 @@ import models.result.paging.PagingSchema.pagingOptionsType
 import sangria.execution.deferred.{Fetcher, HasId}
 import sangria.macros.derive._
 import sangria.schema._
+import scala.concurrent.Future
 import util.FutureUtils.graphQlContext
 
 object ScheduledTaskRunSchema extends SchemaHelper("scheduledTaskRun") {
@@ -28,48 +29,32 @@ object ScheduledTaskRunSchema extends SchemaHelper("scheduledTaskRun") {
 
   implicit lazy val scheduledTaskRunResultType: ObjectType[GraphQLContext, ScheduledTaskRunResult] = deriveObjectType()
 
-  val queryFields = fields[GraphQLContext, Unit](Field(
-    name = "scheduledTaskRun",
-    fieldType = scheduledTaskRunResultType,
-    arguments = queryArg :: reportFiltersArg :: orderBysArg :: limitArg :: offsetArg :: Nil,
-    resolve = c => traceF(c.ctx, "search")(td => runSearch(c.ctx.services.taskServices.scheduledTaskRunService, c, td).map(toResult))
-  ))
+  val queryFields = fields(
+    unitField(name = "scheduledTaskRun", desc = Some("Retrieves a single Scheduled Task Run using its primary key."), t = OptionType(scheduledTaskRunType), f = (c, td) => {
+      c.ctx.services.taskServices.scheduledTaskRunService.getByPrimaryKey(c.ctx.creds, c.args.arg(scheduledTaskRunIdArg))(td)
+    }, scheduledTaskRunIdArg),
+    unitField(name = "scheduledTaskRuns", desc = Some("Searches for Scheduled Task Runs using the provided arguments."), t = scheduledTaskRunResultType, f = (c, td) => {
+      runSearch(c.ctx.services.taskServices.scheduledTaskRunService, c, td).map(toResult)
+    }, queryArg, reportFiltersArg, orderBysArg, limitArg, offsetArg)
+  )
 
   val scheduledTaskRunMutationType = ObjectType(
     name = "ScheduledTaskRunMutations",
     description = "Mutations for Scheduled Task Runs.",
-    fields = fields[GraphQLContext, Unit](
-      Field(
-        name = "create",
-        description = Some("Creates a new Scheduled Task Run using the provided fields."),
-        arguments = DataFieldSchema.dataFieldsArg :: Nil,
-        fieldType = OptionType(scheduledTaskRunType),
-        resolve = c => {
-          val dataFields = c.args.arg(DataFieldSchema.dataFieldsArg)
-          traceF(c.ctx, "create")(tn => c.ctx.services.taskServices.scheduledTaskRunService.create(c.ctx.creds, dataFields)(tn))
-        }
-      ),
-      Field(
-        name = "update",
-        description = Some("Updates the Scheduled Task Run with the provided id."),
-        arguments = scheduledTaskRunIdArg :: DataFieldSchema.dataFieldsArg :: Nil,
-        fieldType = scheduledTaskRunType,
-        resolve = c => {
-          val dataFields = c.args.arg(DataFieldSchema.dataFieldsArg)
-          traceF(c.ctx, "update")(tn => c.ctx.services.taskServices.scheduledTaskRunService.update(c.ctx.creds, c.args.arg(scheduledTaskRunIdArg), dataFields)(tn).map(_._1))
-        }
-      ),
-      Field(
-        name = "remove",
-        description = Some("Removes the Scheduled Task Run with the provided id."),
-        arguments = scheduledTaskRunIdArg :: Nil,
-        fieldType = scheduledTaskRunType,
-        resolve = c => traceF(c.ctx, "remove")(tn => c.ctx.services.taskServices.scheduledTaskRunService.remove(c.ctx.creds, c.args.arg(scheduledTaskRunIdArg))(tn))
-      )
+    fields = fields(
+      unitField(name = "create", desc = Some("Creates a new Scheduled Task Run using the provided fields."), t = OptionType(scheduledTaskRunType), f = (c, td) => {
+        c.ctx.services.taskServices.scheduledTaskRunService.create(c.ctx.creds, c.args.arg(DataFieldSchema.dataFieldsArg))(td)
+      }, DataFieldSchema.dataFieldsArg),
+      unitField(name = "update", desc = Some("Updates the Scheduled Task Run with the provided id."), t = OptionType(scheduledTaskRunType), f = (c, td) => {
+        c.ctx.services.taskServices.scheduledTaskRunService.update(c.ctx.creds, c.args.arg(scheduledTaskRunIdArg), c.args.arg(DataFieldSchema.dataFieldsArg))(td).map(_._1)
+      }, scheduledTaskRunIdArg, DataFieldSchema.dataFieldsArg),
+      unitField(name = "remove", desc = Some("Removes the Scheduled Task Run with the provided id."), t = scheduledTaskRunType, f = (c, td) => {
+        c.ctx.services.taskServices.scheduledTaskRunService.remove(c.ctx.creds, c.args.arg(scheduledTaskRunIdArg))(td)
+      }, scheduledTaskRunIdArg)
     )
   )
 
-  val mutationFields = fields[GraphQLContext, Unit](Field(name = "scheduledTaskRun", fieldType = scheduledTaskRunMutationType, resolve = _ => ()))
+  val mutationFields = fields(unitField(name = "scheduledTaskRun", desc = None, t = scheduledTaskRunMutationType, f = (c, td) => Future.successful(())))
 
   private[this] def toResult(r: SchemaHelper.SearchResult[ScheduledTaskRun]) = {
     ScheduledTaskRunResult(paging = r.paging, filters = r.args.filters, orderBys = r.args.orderBys, totalCount = r.count, results = r.results, durationMs = r.dur)

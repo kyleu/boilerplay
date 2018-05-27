@@ -12,6 +12,7 @@ import models.result.paging.PagingSchema.pagingOptionsType
 import sangria.execution.deferred.{Fetcher, HasId}
 import sangria.macros.derive._
 import sangria.schema._
+import scala.concurrent.Future
 import util.FutureUtils.graphQlContext
 
 object SyncProgressSchema extends SchemaHelper("syncProgress") {
@@ -27,48 +28,32 @@ object SyncProgressSchema extends SchemaHelper("syncProgress") {
 
   implicit lazy val syncProgressResultType: ObjectType[GraphQLContext, SyncProgressResult] = deriveObjectType()
 
-  val queryFields = fields[GraphQLContext, Unit](Field(
-    name = "syncProgress",
-    fieldType = syncProgressResultType,
-    arguments = queryArg :: reportFiltersArg :: orderBysArg :: limitArg :: offsetArg :: Nil,
-    resolve = c => traceF(c.ctx, "search")(td => runSearch(c.ctx.services.syncServices.syncProgressService, c, td).map(toResult))
-  ))
+  val queryFields = fields(
+    unitField(name = "syncProgress", desc = Some("Retrieves a single Sync Progress using its primary key."), t = OptionType(syncProgressType), f = (c, td) => {
+      c.ctx.services.syncServices.syncProgressService.getByPrimaryKey(c.ctx.creds, c.args.arg(syncProgressKeyArg))(td)
+    }, syncProgressKeyArg),
+    unitField(name = "syncProgresses", desc = Some("Searches for Sync Progresses using the provided arguments."), t = syncProgressResultType, f = (c, td) => {
+      runSearch(c.ctx.services.syncServices.syncProgressService, c, td).map(toResult)
+    }, queryArg, reportFiltersArg, orderBysArg, limitArg, offsetArg)
+  )
 
   val syncProgressMutationType = ObjectType(
     name = "SyncProgressMutations",
     description = "Mutations for Sync Progresses.",
-    fields = fields[GraphQLContext, Unit](
-      Field(
-        name = "create",
-        description = Some("Creates a new Sync Progress using the provided fields."),
-        arguments = DataFieldSchema.dataFieldsArg :: Nil,
-        fieldType = OptionType(syncProgressType),
-        resolve = c => {
-          val dataFields = c.args.arg(DataFieldSchema.dataFieldsArg)
-          traceF(c.ctx, "create")(tn => c.ctx.services.syncServices.syncProgressService.create(c.ctx.creds, dataFields)(tn))
-        }
-      ),
-      Field(
-        name = "update",
-        description = Some("Updates the Sync Progress with the provided key."),
-        arguments = syncProgressKeyArg :: DataFieldSchema.dataFieldsArg :: Nil,
-        fieldType = syncProgressType,
-        resolve = c => {
-          val dataFields = c.args.arg(DataFieldSchema.dataFieldsArg)
-          traceF(c.ctx, "update")(tn => c.ctx.services.syncServices.syncProgressService.update(c.ctx.creds, c.args.arg(syncProgressKeyArg), dataFields)(tn).map(_._1))
-        }
-      ),
-      Field(
-        name = "remove",
-        description = Some("Removes the Sync Progress with the provided id."),
-        arguments = syncProgressKeyArg :: Nil,
-        fieldType = syncProgressType,
-        resolve = c => traceF(c.ctx, "remove")(tn => c.ctx.services.syncServices.syncProgressService.remove(c.ctx.creds, c.args.arg(syncProgressKeyArg))(tn))
-      )
+    fields = fields(
+      unitField(name = "create", desc = Some("Creates a new Sync Progress using the provided fields."), t = OptionType(syncProgressType), f = (c, td) => {
+        c.ctx.services.syncServices.syncProgressService.create(c.ctx.creds, c.args.arg(DataFieldSchema.dataFieldsArg))(td)
+      }, DataFieldSchema.dataFieldsArg),
+      unitField(name = "update", desc = Some("Updates the Sync Progress with the provided key."), t = OptionType(syncProgressType), f = (c, td) => {
+        c.ctx.services.syncServices.syncProgressService.update(c.ctx.creds, c.args.arg(syncProgressKeyArg), c.args.arg(DataFieldSchema.dataFieldsArg))(td).map(_._1)
+      }, syncProgressKeyArg, DataFieldSchema.dataFieldsArg),
+      unitField(name = "remove", desc = Some("Removes the Sync Progress with the provided id."), t = syncProgressType, f = (c, td) => {
+        c.ctx.services.syncServices.syncProgressService.remove(c.ctx.creds, c.args.arg(syncProgressKeyArg))(td)
+      }, syncProgressKeyArg)
     )
   )
 
-  val mutationFields = fields[GraphQLContext, Unit](Field(name = "syncProgress", fieldType = syncProgressMutationType, resolve = _ => ()))
+  val mutationFields = fields(unitField(name = "syncProgress", desc = None, t = syncProgressMutationType, f = (c, td) => Future.successful(())))
 
   private[this] def toResult(r: SchemaHelper.SearchResult[SyncProgress]) = {
     SyncProgressResult(paging = r.paging, filters = r.args.filters, orderBys = r.args.orderBys, totalCount = r.count, results = r.results, durationMs = r.dur)

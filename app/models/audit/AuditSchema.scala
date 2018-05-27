@@ -16,6 +16,8 @@ import sangria.macros.derive._
 import sangria.schema._
 import util.FutureUtils.graphQlContext
 
+import scala.concurrent.Future
+
 object AuditSchema extends SchemaHelper("audit") {
   implicit val auditPrimaryKeyId: HasId[Audit, UUID] = HasId[Audit, UUID](_.id)
   private[this] def getByPrimaryKeySeq(c: GraphQLContext, idSeq: Seq[UUID]) = c.app.coreServices.audits.getByPrimaryKeySeq(c.creds, idSeq)(c.trace)
@@ -47,48 +49,32 @@ object AuditSchema extends SchemaHelper("audit") {
 
   implicit lazy val auditResultType: ObjectType[GraphQLContext, AuditResult] = deriveObjectType()
 
-  val queryFields = fields[GraphQLContext, Unit](Field(
-    name = "audit",
-    fieldType = auditResultType,
-    arguments = queryArg :: reportFiltersArg :: orderBysArg :: limitArg :: offsetArg :: Nil,
-    resolve = c => traceF(c.ctx, "search")(td => runSearch(c.ctx.app.coreServices.audits, c, td).map(toResult))
-  ))
+  val queryFields = fields(
+    unitField(name = "audit", desc = Some("Retrieves a single Audit using its primary key."), t = OptionType(auditType), f = (c, td) => {
+      c.ctx.app.coreServices.audits.getByPrimaryKey(c.ctx.creds, c.args.arg(auditIdArg))(td)
+    }, auditIdArg),
+    unitField(name = "audits", desc = Some("Searches for Audits using the provided arguments."), t = auditResultType, f = (c, td) => {
+      runSearch(c.ctx.app.coreServices.audits, c, td).map(toResult)
+    }, queryArg, reportFiltersArg, orderBysArg, limitArg, offsetArg)
+  )
 
   val auditMutationType = ObjectType(
     name = "audit",
     description = "Mutations for Audits.",
-    fields = fields[GraphQLContext, Unit](
-      Field(
-        name = "create",
-        description = Some("Creates a new Audit using the provided fields."),
-        arguments = DataFieldSchema.dataFieldsArg :: Nil,
-        fieldType = OptionType(auditType),
-        resolve = c => {
-          val dataFields = c.args.arg(DataFieldSchema.dataFieldsArg)
-          traceF(c.ctx, "create")(tn => c.ctx.app.coreServices.audits.create(c.ctx.creds, dataFields)(tn))
-        }
-      ),
-      Field(
-        name = "update",
-        description = Some("Updates the Audit with the provided id."),
-        arguments = auditIdArg :: DataFieldSchema.dataFieldsArg :: Nil,
-        fieldType = auditType,
-        resolve = c => {
-          val dataFields = c.args.arg(DataFieldSchema.dataFieldsArg)
-          traceF(c.ctx, "update")(tn => c.ctx.app.coreServices.audits.update(c.ctx.creds, c.args.arg(auditIdArg), dataFields)(tn).map(_._1))
-        }
-      ),
-      Field(
-        name = "remove",
-        description = Some("Removes the Note with the provided id."),
-        arguments = auditIdArg :: Nil,
-        fieldType = auditType,
-        resolve = c => traceF(c.ctx, "remove")(tn => c.ctx.app.coreServices.audits.remove(c.ctx.creds, c.args.arg(auditIdArg))(tn))
-      )
+    fields = fields(
+      unitField(name = "create", desc = Some("Creates a new Audit using the provided fields."), t = OptionType(auditType), f = (c, td) => {
+        c.ctx.app.coreServices.audits.create(c.ctx.creds, c.args.arg(DataFieldSchema.dataFieldsArg))(td)
+      }, DataFieldSchema.dataFieldsArg),
+      unitField(name = "update", desc = Some("Updates the Audit with the provided id."), t = OptionType(auditType), f = (c, td) => {
+        c.ctx.app.coreServices.audits.update(c.ctx.creds, c.args.arg(auditIdArg), c.args.arg(DataFieldSchema.dataFieldsArg))(td).map(_._1)
+      }, auditIdArg, DataFieldSchema.dataFieldsArg),
+      unitField(name = "remove", desc = Some("Removes the Audit with the provided id."), t = auditType, f = (c, td) => {
+        c.ctx.app.coreServices.audits.remove(c.ctx.creds, c.args.arg(auditIdArg))(td)
+      }, auditIdArg)
     )
   )
 
-  val mutationFields = fields[GraphQLContext, Unit](Field(name = "audit", fieldType = auditMutationType, resolve = _ => ()))
+  val mutationFields = fields(unitField(name = "audit", desc = None, t = auditMutationType, f = (c, td) => Future.successful(())))
 
   private[this] def toResult(r: SchemaHelper.SearchResult[Audit]) = {
     AuditResult(paging = r.paging, filters = r.args.filters, orderBys = r.args.orderBys, totalCount = r.count, results = r.results, durationMs = r.dur)

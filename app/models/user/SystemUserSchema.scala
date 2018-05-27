@@ -17,6 +17,8 @@ import models.template.Theme
 import sangria.execution.deferred.{Fetcher, HasId, Relation}
 import util.FutureUtils.graphQlContext
 
+import scala.concurrent.Future
+
 object SystemUserSchema extends SchemaHelper("systemUser") {
   implicit val roleEnum: EnumType[Role] = CommonSchema.deriveStringEnumeratumType(
     name = "RoleEnum",
@@ -48,7 +50,7 @@ object SystemUserSchema extends SchemaHelper("systemUser") {
   implicit lazy val systemUserType: ObjectType[GraphQLContext, SystemUser] = deriveObjectType(
     AddFields(
       Field(
-        name = "noteAuthorFkey",
+        name = "authoredNotes",
         fieldType = ListType(NoteSchema.noteType),
         resolve = c => NoteSchema.noteByAuthorFetcher.deferRelSeq(
           NoteSchema.noteByAuthorRelation, c.value.id
@@ -64,26 +66,19 @@ object SystemUserSchema extends SchemaHelper("systemUser") {
 
   implicit lazy val systemUserResultType: ObjectType[GraphQLContext, SystemUserResult] = deriveObjectType()
 
-  private[this] def toResult(r: SchemaHelper.SearchResult[SystemUser]) = {
-    SystemUserResult(paging = r.paging, filters = r.args.filters, orderBys = r.args.orderBys, totalCount = r.count, results = r.results, durationMs = r.dur)
-  }
-
-  val userIdArg = Argument("id", uuidType, description = "Returns the User matching the provided Id.")
+  val systemUserIdArg = Argument("id", uuidType, description = "Returns the User matching the provided Id.")
   val roleArg = Argument("role", roleEnum, description = "Filters the results to a provided SandboxTask.")
 
   val queryFields = fields[GraphQLContext, Unit](
-    Field(
-      name = "profile",
-      description = Some("Returns information about the currently logged in user."),
-      fieldType = profileType,
-      resolve = c => traceB(c.ctx, "profile")(_ => UserProfile.fromUser(c.ctx.creds.user))
-    ),
-    Field(
-      name = "systemUser",
-      fieldType = systemUserResultType,
-      arguments = queryArg :: reportFiltersArg :: orderBysArg :: limitArg :: offsetArg :: Nil,
-      resolve = c => traceF(c.ctx, "search")(td => runSearch(c.ctx.app.coreServices.users, c, td).map(toResult))
-    ),
+    unitField(name = "profile", desc = Some("Returns information about the currently logged in user."), t = profileType, f = (c, td) => {
+      Future.successful(UserProfile.fromUser(c.ctx.creds.user))
+    }),
+    unitField(name = "systemUser", desc = Some("Retrieves a single System User using its primary key."), t = OptionType(systemUserType), f = (c, td) => {
+      c.ctx.services.userServices.systemUserService.getByPrimaryKey(c.ctx.creds, c.args.arg(systemUserIdArg))(td)
+    }, systemUserIdArg),
+    unitField(name = "systemUsers", desc = Some("Searches for System Users using the provided arguments."), t = systemUserResultType, f = (c, td) => {
+      runSearch(c.ctx.services.userServices.systemUserService, c, td).map(toResult)
+    }, queryArg, reportFiltersArg, orderBysArg, limitArg, offsetArg),
     Field(
       name = "systemUserByRole",
       fieldType = ListType(systemUserType),
@@ -95,36 +90,22 @@ object SystemUserSchema extends SchemaHelper("systemUser") {
   val userMutationType = ObjectType(
     name = "systemUser",
     description = "Mutations for System Users.",
-    fields = fields[GraphQLContext, Unit](
-      Field(
-        name = "create",
-        description = Some("Creates a new User using the provided fields."),
-        arguments = DataFieldSchema.dataFieldsArg :: Nil,
-        fieldType = OptionType(systemUserType),
-        resolve = c => {
-          val dataFields = c.args.arg(DataFieldSchema.dataFieldsArg)
-          traceF(c.ctx, "create")(tn => c.ctx.services.userServices.systemUserService.create(c.ctx.creds, dataFields)(tn))
-        }
-      ),
-      Field(
-        name = "update",
-        description = Some("Updates the User with the provided id."),
-        arguments = userIdArg :: DataFieldSchema.dataFieldsArg :: Nil,
-        fieldType = systemUserType,
-        resolve = c => {
-          val dataFields = c.args.arg(DataFieldSchema.dataFieldsArg)
-          traceF(c.ctx, "update")(tn => c.ctx.services.userServices.systemUserService.update(c.ctx.creds, c.args.arg(userIdArg), dataFields)(tn).map(_._1))
-        }
-      ),
-      Field(
-        name = "remove",
-        description = Some("Removes the User with the provided id."),
-        arguments = userIdArg :: Nil,
-        fieldType = systemUserType,
-        resolve = c => traceF(c.ctx, "remove")(tn => c.ctx.services.userServices.systemUserService.remove(c.ctx.creds, c.args.arg(userIdArg))(tn))
-      )
+    fields = fields(
+      unitField(name = "create", desc = Some("Creates a new System User using the provided fields."), t = OptionType(systemUserType), f = (c, td) => {
+        c.ctx.services.userServices.systemUserService.create(c.ctx.creds, c.args.arg(DataFieldSchema.dataFieldsArg))(td)
+      }, DataFieldSchema.dataFieldsArg),
+      unitField(name = "update", desc = Some("Updates the System User with the provided id."), t = OptionType(systemUserType), f = (c, td) => {
+        c.ctx.services.userServices.systemUserService.update(c.ctx.creds, c.args.arg(systemUserIdArg), c.args.arg(DataFieldSchema.dataFieldsArg))(td).map(_._1)
+      }, systemUserIdArg, DataFieldSchema.dataFieldsArg),
+      unitField(name = "remove", desc = Some("Removes the System User with the provided id."), t = systemUserType, f = (c, td) => {
+        c.ctx.services.userServices.systemUserService.remove(c.ctx.creds, c.args.arg(systemUserIdArg))(td)
+      }, systemUserIdArg)
     )
   )
 
-  val mutationFields = fields[GraphQLContext, Unit](Field(name = "systemUser", fieldType = userMutationType, resolve = _ => ()))
+  val mutationFields = fields(unitField(name = "systemUser", desc = None, t = userMutationType, f = (c, td) => Future.successful(())))
+
+  private[this] def toResult(r: SchemaHelper.SearchResult[SystemUser]) = {
+    SystemUserResult(paging = r.paging, filters = r.args.filters, orderBys = r.args.orderBys, totalCount = r.count, results = r.results, durationMs = r.dur)
+  }
 }

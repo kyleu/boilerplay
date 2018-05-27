@@ -6,15 +6,19 @@ import sangria.macros.derive._
 import sangria.schema._
 import models.settings.SettingKeySchema.settingKeyEnumType
 
+import scala.concurrent.Future
+
 object SettingsSchema extends SchemaHelper("settings") {
   val settingPrimaryKeyId = HasId[Setting, SettingKey](_.key)
 
   implicit lazy val settingType: ObjectType[GraphQLContext, Setting] = deriveObjectType()
 
-  val queryFields = fields[GraphQLContext, Unit](Field(
-    name = "setting",
-    description = Some("The system setting values for this application."),
-    fieldType = ListType(settingType),
-    resolve = c => traceB(c.ctx, "search")(_ => c.ctx.app.coreServices.settings.getAll)
-  ))
+  val queryFields = fields(
+    unitField(
+      name = "setting",
+      desc = Some("The system setting values for this application."),
+      t = ListType(settingType),
+      f = (c, td) => Future.successful(c.ctx.app.coreServices.settings.getAll)
+    )
+  )
 }

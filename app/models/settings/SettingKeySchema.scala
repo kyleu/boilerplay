@@ -1,8 +1,9 @@
 /* Generated File */
 package models.settings
 
-import models.graphql.{CommonSchema, GraphQLContext, SchemaHelper}
-import sangria.schema.{EnumType, Field, ListType, fields}
+import models.graphql.{CommonSchema, SchemaHelper}
+import sangria.schema.{EnumType, ListType, fields}
+import scala.concurrent.Future
 
 object SettingKeySchema extends SchemaHelper("settingKey") {
   implicit val settingKeyEnumType: EnumType[SettingKey] = CommonSchema.deriveStringEnumeratumType(
@@ -11,9 +12,7 @@ object SettingKeySchema extends SchemaHelper("settingKey") {
     values = SettingKey.values.map(t => t -> t.value).toList
   )
 
-  val queryFields = fields[GraphQLContext, Unit](Field(
-    name = "settingKey",
-    fieldType = ListType(settingKeyEnumType),
-    resolve = c => traceB(c.ctx, "list")(_ => SettingKey.values)
-  ))
+  val queryFields = fields(
+    unitField(name = "settingKey", desc = None, t = ListType(settingKeyEnumType), f = (c, td) => Future.successful(SettingKey.values))
+  )
 }

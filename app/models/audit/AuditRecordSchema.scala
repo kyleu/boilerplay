@@ -15,6 +15,8 @@ import sangria.macros.derive._
 import sangria.schema._
 import util.FutureUtils.graphQlContext
 
+import scala.concurrent.Future
+
 object AuditRecordSchema extends SchemaHelper("auditRecord") {
   implicit val auditRecordPrimaryKeyId: HasId[AuditRecord, UUID] = HasId[AuditRecord, UUID](_.id)
   private[this] def getByPrimaryKeySeq(c: GraphQLContext, idSeq: Seq[UUID]) = {
@@ -48,48 +50,32 @@ object AuditRecordSchema extends SchemaHelper("auditRecord") {
 
   implicit lazy val auditRecordResultType: ObjectType[GraphQLContext, AuditRecordResult] = deriveObjectType()
 
-  val queryFields = fields[GraphQLContext, Unit](Field(
-    name = "auditRecord",
-    fieldType = auditRecordResultType,
-    arguments = queryArg :: reportFiltersArg :: orderBysArg :: limitArg :: offsetArg :: Nil,
-    resolve = c => traceF(c.ctx, "search")(td => runSearch(c.ctx.services.auditServices.auditRecordService, c, td).map(toResult))
-  ))
+  val queryFields = fields(
+    unitField(name = "auditRecord", desc = Some("Retrieves a single Audit Record using its primary key."), t = OptionType(auditRecordType), f = (c, td) => {
+      c.ctx.services.auditServices.auditRecordService.getByPrimaryKey(c.ctx.creds, c.args.arg(auditRecordIdArg))(td)
+    }, auditRecordIdArg),
+    unitField(name = "auditRecords", desc = Some("Searches for Audit Records using the provided arguments."), t = auditRecordResultType, f = (c, td) => {
+      runSearch(c.ctx.services.auditServices.auditRecordService, c, td).map(toResult)
+    }, queryArg, reportFiltersArg, orderBysArg, limitArg, offsetArg)
+  )
 
   val auditRecordMutationType = ObjectType(
     name = "auditRecord",
     description = "Mutations for Audit Records.",
-    fields = fields[GraphQLContext, Unit](
-      Field(
-        name = "create",
-        description = Some("Creates a new Audit Record using the provided fields."),
-        arguments = DataFieldSchema.dataFieldsArg :: Nil,
-        fieldType = OptionType(auditRecordType),
-        resolve = c => {
-          val dataFields = c.args.arg(DataFieldSchema.dataFieldsArg)
-          traceF(c.ctx, "create")(tn => c.ctx.services.auditServices.auditRecordService.create(c.ctx.creds, dataFields)(tn))
-        }
-      ),
-      Field(
-        name = "update",
-        description = Some("Updates the Audit Record with the provided id."),
-        arguments = auditRecordIdArg :: DataFieldSchema.dataFieldsArg :: Nil,
-        fieldType = auditRecordType,
-        resolve = c => traceF(c.ctx, "update") { tn =>
-          val dataFields = c.args.arg(DataFieldSchema.dataFieldsArg)
-          c.ctx.services.auditServices.auditRecordService.update(c.ctx.creds, c.args.arg(auditRecordIdArg), dataFields)(tn).map(_._1)
-        }
-      ),
-      Field(
-        name = "remove",
-        description = Some("Removes the Audit Record with the provided id."),
-        arguments = auditRecordIdArg :: Nil,
-        fieldType = auditRecordType,
-        resolve = c => traceF(c.ctx, "remove")(tn => c.ctx.services.auditServices.auditRecordService.remove(c.ctx.creds, c.args.arg(auditRecordIdArg))(tn))
-      )
+    fields = fields(
+      unitField(name = "create", desc = Some("Creates a new Audit Record using the provided fields."), t = OptionType(auditRecordType), f = (c, td) => {
+        c.ctx.services.auditServices.auditRecordService.create(c.ctx.creds, c.args.arg(DataFieldSchema.dataFieldsArg))(td)
+      }, DataFieldSchema.dataFieldsArg),
+      unitField(name = "update", desc = Some("Updates the Audit Record with the provided id."), t = OptionType(auditRecordType), f = (c, td) => {
+        c.ctx.services.auditServices.auditRecordService.update(c.ctx.creds, c.args.arg(auditRecordIdArg), c.args.arg(DataFieldSchema.dataFieldsArg))(td).map(_._1)
+      }, auditRecordIdArg, DataFieldSchema.dataFieldsArg),
+      unitField(name = "remove", desc = Some("Removes the Audit Record with the provided id."), t = auditRecordType, f = (c, td) => {
+        c.ctx.services.auditServices.auditRecordService.remove(c.ctx.creds, c.args.arg(auditRecordIdArg))(td)
+      }, auditRecordIdArg)
     )
   )
 
-  val mutationFields = fields[GraphQLContext, Unit](Field(name = "auditRecord", fieldType = auditRecordMutationType, resolve = _ => ()))
+  val mutationFields = fields(unitField(name = "auditRecord", desc = None, t = auditRecordMutationType, f = (c, td) => Future.successful(())))
 
   private[this] def toResult(r: SchemaHelper.SearchResult[AuditRecord]) = {
     AuditRecordResult(paging = r.paging, filters = r.args.filters, orderBys = r.args.orderBys, totalCount = r.count, results = r.results, durationMs = r.dur)

@@ -24,9 +24,24 @@ abstract class SchemaHelper(val name: String) {
   protected def traceF[A](ctx: GraphQLContext, k: String)(f: TraceData => Future[A]) = ctx.app.tracing.trace(name + ".schema." + k)(f)(ctx.trace)
   protected def traceB[A](ctx: GraphQLContext, k: String)(f: TraceData => A) = ctx.app.tracing.traceBlocking(name + ".schema." + k)(f)(ctx.trace)
 
-  protected def field[Out](name: String, t: OutputType[Out], f: (Context[GraphQLContext, Unit], TraceData) => Future[Out], args: Argument[_]*) = {
-    Field[GraphQLContext, Unit, Out, Out](name = name, fieldType = t, arguments = args.toList, resolve = c => traceF(c.ctx, name)(td => f(c, td)))
+  protected def typedField[In, Out](
+    name: String,
+    desc: Option[String],
+    t: OutputType[Out],
+    f: (Context[GraphQLContext, In], TraceData) => Future[Out],
+    args: Argument[_]*
+  ): Field[GraphQLContext, In] = {
+    Field[GraphQLContext, In, Out, Out](name = name, description = desc, fieldType = t, arguments = args.toList, resolve = c => {
+      traceF(c.ctx, name)(td => f(c, td))
+    })
   }
+  protected def unitField[Out](
+    name: String,
+    desc: Option[String],
+    t: OutputType[Out],
+    f: (Context[GraphQLContext, Unit], TraceData) => Future[Out],
+    args: Argument[_]*
+  ): Field[GraphQLContext, Unit] = typedField(name, desc, t, f, args: _*)
 
   protected def argsFor(args: Args) = SchemaHelper.SearchArgs(
     start = util.DateUtils.now,

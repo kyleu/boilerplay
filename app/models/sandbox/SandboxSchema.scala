@@ -1,10 +1,12 @@
 package models.sandbox
 
-import models.graphql.{CommonSchema, GraphQLContext}
+import models.graphql.{CommonSchema, GraphQLContext, SchemaHelper}
 import sangria.macros.derive._
 import sangria.schema._
 
-object SandboxSchema {
+import scala.concurrent.Future
+
+object SandboxSchema extends SchemaHelper("sandbox") {
   implicit val sandboxTaskEnum: EnumType[SandboxTask] = CommonSchema.deriveEnumeratumType(
     name = "SandboxTask",
     description = "One-off tests that don't deserve a UI of their own.",
@@ -28,20 +30,16 @@ object SandboxSchema {
     DocumentField("result", "String detailing the results of this task.")
   )
 
-  val queryFields = fields[GraphQLContext, Unit](Field(
+  val queryFields = fields(unitField(
     name = "sandbox",
-    fieldType = ListType(sandboxTaskType),
-    description = Some("Returns a list of one-off sandbox tests."),
-    resolve = _ => SandboxTask.values
+    desc = Some("Returns a list of one-off sandbox tests."),
+    t = ListType(sandboxTaskType),
+    f = (c, td) => {
+      Future.successful(SandboxTask.values)
+    }
   ))
 
-  val mutationFields = fields[GraphQLContext, Unit](
-    Field(
-      name = "sandbox",
-      fieldType = sandboxResultType,
-      description = Some("Allows calling of sandbox tests."),
-      arguments = sandboxTaskArg :: sandboxArgumentArg :: Nil,
-      resolve = c => c.arg(sandboxTaskArg).run(SandboxTask.Config(c.ctx.app, c.ctx.services, c.ctx.svc, c.arg(sandboxArgumentArg)))(c.ctx.trace)
-    )
-  )
+  val mutationFields = fields(unitField(name = "sandbox", desc = Some("Allows calling of sandbox tests."), t = sandboxResultType, f = (c, td) => {
+    c.arg(sandboxTaskArg).run(SandboxTask.Config(c.ctx.app, c.ctx.services, c.ctx.svc, c.arg(sandboxArgumentArg)))(c.ctx.trace)
+  }, sandboxTaskArg, sandboxArgumentArg))
 }
