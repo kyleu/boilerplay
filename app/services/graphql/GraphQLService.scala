@@ -2,13 +2,11 @@ package services.graphql
 
 import io.circe.Json
 import models.Application
-import models.auth.Credentials
 import models.graphql.{GraphQLContext, Schema, TracingExtension}
 import sangria.execution.{ExceptionHandler, Executor, HandledException, QueryReducer}
 import sangria.marshalling.circe._
 import sangria.parser.QueryParser
 import sangria.validation.QueryValidator
-import services.ServiceRegistry
 import util.FutureUtils.graphQlContext
 import util.tracing.{TraceData, TracingService}
 import util.Logging
@@ -16,7 +14,7 @@ import util.Logging
 import scala.util.{Failure, Success}
 
 @javax.inject.Singleton
-class GraphQLService @javax.inject.Inject() (tracing: TracingService, registry: ServiceRegistry) extends Logging {
+class GraphQLService @javax.inject.Inject() (tracing: TracingService) extends Logging {
   protected val exceptionHandler = ExceptionHandler {
     case (_, e: IllegalStateException) =>
       log.warn("Error encountered while running GraphQL query.", e)
@@ -26,7 +24,7 @@ class GraphQLService @javax.inject.Inject() (tracing: TracingService, registry: 
   private[this] val rejectComplexQueries = QueryReducer.rejectComplexQueries[Any](1000, (_, _) => new IllegalArgumentException("Query is too complex."))
 
   def executeQuery(
-    app: Application, query: String, variables: Option[Json], operation: Option[String], creds: Credentials, debug: Boolean
+    app: Application, query: String, variables: Option[Json], operation: Option[String], debug: Boolean
   )(implicit t: TraceData) = {
     tracing.trace(s"graphql.service.execute.${operation.getOrElse("adhoc")}") { td =>
       if (!td.isNoop) {
@@ -42,7 +40,7 @@ class GraphQLService @javax.inject.Inject() (tracing: TracingService, registry: 
           val ret = Executor.execute(
             schema = Schema.schema,
             queryAst = ast,
-            userContext = GraphQLContext(app, this, registry, creds, td),
+            userContext = GraphQLContext(app, this, td),
             operationName = operation,
             variables = variables.getOrElse(Json.obj()),
             deferredResolver = Schema.resolver,

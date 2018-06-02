@@ -1,35 +1,12 @@
 GET         /                                        controllers.HomeController.home
-GET         /ping                                    controllers.HomeController.ping(timestamp: Long)
-GET         /connect                                 controllers.HomeController.connect(binary: Boolean ?= false)
 GET         /robots.txt                              controllers.HomeController.robots
 
-# Admin
-->          /admin/system                            system.Routes
-->          /admin/graphql                           graphql.Routes
-->          /admin/rest                              rest.Routes
+# GraphQL
+GET         /graphql                                 controllers.GraphQLController.graphql(query: Option[String] ?= None, variables: Option[String] ?= None)
+POST        /graphql                                 controllers.GraphQLController.graphqlBody
 
-# Start model route files
-->          /admin/settings                          settings.Routes
-->          /admin/audit                             audit.Routes
-->          /admin/note                              note.Routes
-->          /admin/sync                              sync.Routes
-->          /admin/task                              task.Routes
-->          /admin/user                              user.Routes
-# End model route files
-
-# Authentication
-GET         /signup                                  controllers.auth.RegistrationController.registrationForm(email: Option[String] ?= None)
-POST        /signup                                  controllers.auth.RegistrationController.register
-GET         /signin                                  controllers.auth.AuthenticationController.signInForm
-POST        /signin                                  controllers.auth.AuthenticationController.authenticateCredentials
-GET         /signin/:provider                        controllers.auth.SocialAuthController.authenticate(provider)
-GET         /signout                                 controllers.auth.AuthenticationController.signOut
-
-# Profile
-GET         /profile                                 controllers.ProfileController.view
-POST        /profile                                 controllers.ProfileController.save
-GET         /password/change                         controllers.ProfileController.changePasswordForm
-POST        /password/change                         controllers.ProfileController.changePassword
+GET         /schema                                  controllers.GraphQLController.renderSchema()
+GET         /voyager                                 controllers.GraphQLController.voyager()
 
 # Assets
 GET         /browserconfig.xml                       controllers.Assets.at(file = "browserconfig.xml")

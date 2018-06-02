@@ -1,6 +1,5 @@
 package models.graphql
 
-import models.tag.Tag
 import sangria.macros.derive._
 import sangria.schema._
 
@@ -22,6 +21,4 @@ object CommonSchema extends CommonSchemaValueTypes with CommonSchemaReferenceTyp
     description = Some(description),
     values = values.map(t => EnumValue(name = t._1.toString, value = t._1, description = Some(t._2))).toList
   )
-
-  implicit lazy val tagType: ObjectType[GraphQLContext, Tag] = deriveObjectType()
 }

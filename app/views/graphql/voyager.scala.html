@@ -1,0 +1,44 @@
+@()(
+    implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
+)@traceData.logViewClass(getClass)@views.html.layout.basic(util.Config.projectName + " Schema", scripts = Seq(
+  routes.Assets.versioned("vendor/graphql/react.min.js").url,
+  routes.Assets.versioned("vendor/graphql/react-dom.min.js").url,
+  routes.Assets.versioned("vendor/graphql/voyager.min.js").url
+), stylesheets = Seq(
+  routes.Assets.versioned("vendor/graphql/voyager.css").url
+)) {
+  <style>
+    .title-area, .type-doc>.doc-navigation {
+      display: none;
+    }
+  </style>
+
+  <main id="voyager">Loading...</main>
+  <script>
+    function introspectionProvider(introspectionQuery) {
+      return fetch('/graphql', {
+        method: 'post',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({query: introspectionQuery}),
+        credentials: 'include'
+      }).then(function (response) {
+        return response.text();
+      }).then(function (responseBody) {
+        try {
+          return JSON.parse(responseBody);
+        } catch (error) {
+          console.log(error);
+          return responseBody;
+        }
+      });
+    }
+
+    GraphQLVoyager.init(document.getElementById('voyager'), {
+      "introspection": introspectionProvider,
+      "workerURI": "@routes.Assets.versioned("vendor/graphql/voyager.worker.js").url"
+    })
+  </script>
+}

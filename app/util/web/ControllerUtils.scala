@@ -1,7 +1,5 @@
 package util.web
 
-import models.result.data.DataField
-import models.user.SystemUser
 import play.api.data.FormError
 import play.api.mvc.{AnyContent, Request}
 import util.JsonSerializers.Json
@@ -40,30 +38,7 @@ object ControllerUtils {
     }).toMap
   }
 
-  def modelForm(rawForm: Map[String, Seq[String]]) = {
-    val form = rawForm.mapValues(_.headOption.getOrElse(throw new IllegalStateException("Empty form field.")))
-    val fields = form.toSeq.filter(x => x._1.endsWith(".include") && x._2 == "true").map(_._1.stripSuffix(".include"))
-    def valFor(f: String) = form.get(f) match {
-      case Some(x) if x == util.NullUtils.str => None
-      case Some(x) => Some(x)
-      case None => form.get(f + "-date") match {
-        case Some(d) => form.get(f + "-time") match {
-          case Some(t) => Some(s"$d $t")
-          case None => throw new IllegalStateException(s"Cannot find matching time value for included date field [$f].")
-        }
-        case None => throw new IllegalStateException(s"Cannot find value for included field [$f].")
-      }
-    }
-    fields.map(f => DataField(f, valFor(f)))
-  }
-
-  def enhanceRequest(request: Request[AnyContent], user: Option[SystemUser], trace: TraceData) = {
+  def enhanceRequest(request: Request[AnyContent], trace: TraceData) = {
     trace.tag(TraceKeys.HTTP_REQUEST_SIZE, request.body.asText.map(_.length).orElse(request.body.asRaw.map(_.size.toInt)).getOrElse(0).toString)
-    user.foreach { u =>
-      trace.tag("user.id", u.id.toString)
-      trace.tag("user.username", u.username)
-      trace.tag("user.email", u.profile.providerKey)
-      trace.tag("user.role", u.role.toString)
-    }
   }
 }

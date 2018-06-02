@@ -18,13 +18,6 @@ addSbtPlugin("com.typesafe.sbt" % "sbt-digest" % "1.1.4")
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-gzip" % "1.0.2")
 
-// Scala.js
-addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject" % "0.4.0")
-
-addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.22")
-
-addSbtPlugin("com.vmunier" % "sbt-web-scalajs" % "1.0.7" exclude("org.scala-js", "sbt-scalajs"))
-
 // Source Control
 addSbtPlugin("com.typesafe.sbt" % "sbt-git" % "0.9.3")
 
@@ -70,13 +63,6 @@ addSbtPlugin("com.typesafe.sbt" % "sbt-license-report" % "1.2.0")
 addSbtPlugin("com.dwijnand" % "sbt-project-graph" % "0.2.2") // projectsGraphDot
 
 addSbtPlugin("com.github.xuwei-k" % "sbt-class-diagram" % "0.2.1") // classDiagram
-
-// Documentation
-addSbtPlugin("com.lightbend.paradox" % "sbt-paradox" % "0.3.3")
-
-addSbtPlugin("com.typesafe.sbt" % "sbt-site" % "1.3.2" exclude("com.lightbend.paradox", "sbt-paradox"))
-
-addSbtPlugin("com.typesafe.sbt" % "sbt-ghpages" % "0.6.2")
 
 // IDE Integration
 addSbtPlugin("com.orrsella" % "sbt-sublime" % "1.1.2")

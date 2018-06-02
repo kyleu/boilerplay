@@ -24,26 +24,6 @@ object Dependencies {
     val testkit = "com.typesafe.akka" %% "akka-testkit" % version % "test"
   }
 
-  object Authentication {
-    private[this] val version = "5.0.4"
-    val silhouette = "com.mohiva" %% "play-silhouette" % version
-    val hasher = "com.mohiva" %% "play-silhouette-password-bcrypt" % version
-    val persistence = "com.mohiva" %% "play-silhouette-persistence" % version
-    val crypto = "com.mohiva" %% "play-silhouette-crypto-jca" % version
-  }
-
-  object Database {
-    val version = "3.2.3"
-
-    val postgres = "org.postgresql" % "postgresql" % "9.4.1212"
-    val hikariCp = "com.zaxxer" % "HikariCP" % "2.7.9"
-    val slickCore = "com.typesafe.slick" %% "slick" % version
-    val slickHikariCp = "com.typesafe.slick" %% "slick-hikaricp" % version
-    val slickPg = "com.github.tminglei" %% "slick-pg" % "0.16.1"
-    val slickPgCirce = "com.github.tminglei" %% "slick-pg_circe-json" % "0.16.1"
-    val slickless = "io.underscore" %% "slickless" % "0.3.3"
-  }
-
   object GraphQL {
     val sangria = "org.sangria-graphql" %% "sangria" % "1.4.1"
     val playJson = "org.sangria-graphql" %% "sangria-play-json" % "1.0.4"
@@ -59,7 +39,6 @@ object Dependencies {
     val fontAwesome = "org.webjars" % "font-awesome" % "4.7.0" intransitive()
     val jquery = "org.webjars" % "jquery" % "2.2.4" intransitive()
     val materialize = "org.webjars" % "materializecss" % "0.100.2" intransitive()
-    val swaggerUi = "org.webjars" % "swagger-ui" % "3.14.2" intransitive()
   }
 
   object Metrics {
@@ -77,16 +56,8 @@ object Dependencies {
     val logging = "io.zipkin.brave" % "brave-context-slf4j" % version
   }
 
-  object ScalaJS {
-    val scalaJSVersion = "0.6.22"
-    val jQueryVersion = "0.9.3"
-    val jvmStubs = "org.scala-js" %% "scalajs-stubs" % scalaJSVersion % "provided"
-  }
-
   object Utils {
     val scapegoatVersion = "1.3.5"
-    val enumeratumCirceVersion = "1.5.17"
-    val booPickleVersion = "1.2.5"
     val utestVersion = "0.6.4"
 
     val scalatagsVersion = "0.6.7"
@@ -94,9 +65,8 @@ object Dependencies {
     val betterFiles = "com.github.pathikrit" %% "better-files" % "3.5.0"
     val commonsIo = "commons-io" % "commons-io" % "2.6"
     val csv = "com.github.tototoshi" %% "scala-csv" % "1.3.5"
+    val enumeratumCirce = "com.beachape" %% "enumeratum-circe" % "1.5.17"
     val scalaGuice = "net.codingwell" %% "scala-guice" % "4.2.1"
-    val scopts = "com.github.scopt" %% "scopt" % "3.7.0"
-    val reftree = "org.stanch" %% "reftree" % "1.2.0"
   }
 
   object Testing {

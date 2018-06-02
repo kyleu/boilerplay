@@ -18,7 +18,6 @@ import com.typesafe.sbt.web.SbtWeb
 import play.routes.compiler.InjectedRoutesGenerator
 import play.sbt.PlayImport.PlayKeys
 import play.sbt.routes.RoutesKeys
-import webscalajs.WebScalaJS.autoImport._
 import sbt.Keys._
 import sbt._
 import sbtassembly.AssemblyPlugin.autoImport._
@@ -31,14 +30,11 @@ object Server {
       Metrics.metrics, Metrics.metricsJvm, Metrics.metricsHttp, Metrics.metricsPush,
       Akka.actor, Akka.logging, Akka.visualMailbox,
       Play.filters, Play.guice, Play.ws, Play.json, Play.cache,
-      Database.postgres, Database.hikariCp,
-      Database.slickCore, Database.slickHikariCp, Database.slickPg, Database.slickPgCirce, Database.slickless,
       GraphQL.sangria, GraphQL.playJson, GraphQL.circe,
-      Authentication.silhouette, Authentication.hasher, Authentication.persistence, Authentication.crypto,
-      WebJars.jquery, WebJars.fontAwesome, WebJars.materialize, WebJars.swaggerUi,
-      Utils.csv, Utils.scalaGuice, Utils.commonsIo, Utils.betterFiles, Utils.scopts, Utils.reftree,
+      WebJars.jquery, WebJars.fontAwesome, WebJars.materialize,
+      Utils.csv, Utils.scalaGuice, Utils.commonsIo, Utils.betterFiles, Utils.enumeratumCirce,
       Akka.testkit, Play.test, Testing.scalaTest
-    )
+    ) ++ Dependencies.Serialization.circeProjects.map(c => "io.circe" %% c % Dependencies.Serialization.circeVersion)
   }
 
   private[this] lazy val serverSettings = Shared.commonSettings ++ Seq(
@@ -53,17 +49,13 @@ object Server {
 
     // Play
     RoutesKeys.routesGenerator := InjectedRoutesGenerator,
-    RoutesKeys.routesImport ++= Seq("util.web.QueryStringUtils._", "util.web.ModelBindables._"),
+    RoutesKeys.routesImport ++= Seq("util.web.QueryStringUtils._"),
     PlayKeys.externalizeResources := false,
     PlayKeys.devSettings := Seq("play.server.akka.requestTimeout" -> "infinite"),
     PlayKeys.playDefaultPort := 9000,
 
-    // Scala.js
-    scalaJSProjects := Seq(Client.client),
-
     // Sbt-Web
     JsEngineKeys.engineType := JsEngineKeys.EngineType.Node,
-    pipelineStages in Assets := Seq(scalaJSPipeline),
     pipelineStages := Seq(digest, gzip),
     includeFilter in (Assets, LessKeys.less) := "*.less",
     excludeFilter in (Assets, LessKeys.less) := "_*.less",
@@ -89,5 +81,5 @@ object Server {
   lazy val server = Project(id = Shared.projectId, base = file(".")).enablePlugins(
     SbtWeb, play.sbt.PlayScala, JavaAppPackaging, diagram.ClassDiagramPlugin,
     UniversalPlugin, LinuxPlugin, DebianPlugin, RpmPlugin, DockerPlugin, WindowsPlugin, JDKPackagerPlugin
-  ).settings(serverSettings: _*).settings(Packaging.settings: _*).dependsOn(Shared.sharedJvm)
+  ).settings(serverSettings: _*).settings(Packaging.settings: _*)
 }

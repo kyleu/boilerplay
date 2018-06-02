@@ -1,3 +1,0 @@
-# Generated File
-GET         /settingKey                                               controllers.admin.settings.SettingKeyController.list()
-

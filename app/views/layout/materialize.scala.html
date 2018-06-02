@@ -1,7 +1,6 @@
-@(user: Option[models.user.SystemUser], title: String, scripts: Seq[String] = Nil, stylesheets: Seq[String] = Nil)(content: Html)(
+@(title: String, scripts: Seq[String] = Nil, stylesheets: Seq[String] = Nil)(content: Html)(
     implicit session: Session, flash: Flash, traceData: util.tracing.TraceData
 )@views.html.layout.basic(
-  user,
   title,
   scripts = Seq(
     controllers.routes.Assets.versioned("lib/jquery/jquery.js").url,

@@ -1,6 +1,0 @@
-# GraphQL
-GET         /                    controllers.admin.graphql.GraphQLController.graphql(query: Option[String] ?= None, variables: Option[String] ?= None)
-POST        /                    controllers.admin.graphql.GraphQLController.graphqlBody
-
-GET         /schema              controllers.admin.graphql.SchemaController.renderSchema()
-GET         /voyager             controllers.admin.graphql.SchemaController.voyager()

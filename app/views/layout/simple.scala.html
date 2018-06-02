@@ -1,18 +1,9 @@
-@(user: Option[models.user.SystemUser], title: String, mainDivClass: String = "static-container container", scripts: Seq[String] = Nil, stylesheets: Seq[String] = Nil)(content: Html)(
+@(title: String, mainDivClass: String = "static-container container", scripts: Seq[String] = Nil, stylesheets: Seq[String] = Nil)(content: Html)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
-)@layout.materialize(user, title, scripts = scripts, stylesheets = controllers.routes.Assets.versioned("stylesheets/boilerplay.min.css").url +: stylesheets) {
+)@layout.materialize(title, scripts = scripts, stylesheets = controllers.routes.Assets.versioned("stylesheets/boilerplay.min.css").url +: stylesheets) {
   <header>
-    @views.html.layout.themeStyles(user.map(_.preferences.theme).getOrElse(models.template.Theme.BlueGrey))
-
-    @views.html.components.userDropdown(user)
-
     <nav id="topnav" class="theme">
       <a href="@controllers.routes.HomeController.home()" class="brand-logo center">@util.Config.projectName</a>
-      <ul class="right hide-on-small-only">
-        <li><a class="dropdown-button" href="@routes.ProfileController.view()" data-activates="dropdown-user">
-          @user.map(_.username).getOrElse("Guest") <i id="user-dropdown-toggle" class="fa @models.template.Icons.dropdownToggle right"></i>
-        </a></li>
-      </ul>
     </nav>
   </header>
 

@@ -1,12 +1,6 @@
 import com.github.sbt.cpd.CpdKeys.cpdSkipDuplicateFiles
-import org.portablescala.sbtplatformdeps.PlatformDepsPlugin.autoImport._
 import sbt.Keys._
 import sbt._
-import sbtassembly.AssemblyPlugin.autoImport._
-import sbtcrossproject.CrossPlugin.autoImport._
-import sbtcrossproject.{CrossType, crossProject}
-import scalajscrossproject.ScalaJSCrossPlugin.autoImport.{toScalaJSGroupID => _, _}
-import webscalajs.ScalaJSWeb
 
 object Shared {
   val projectId = "boilerplay"
@@ -34,43 +28,6 @@ object Shared {
     publishMavenStyle := false,
     testFrameworks += new TestFramework("utest.runner.Framework"),
 
-    cpdSkipDuplicateFiles := true,
-
-    test in assembly := {},
-    assemblyMergeStrategy in assembly := {
-      case PathList("javax", "servlet", _ @ _*) => MergeStrategy.first
-      case PathList("javax", "xml", _ @ _*) => MergeStrategy.first
-      case PathList(p @ _*) if p.last.contains("about_jetty-") => MergeStrategy.discard
-      case PathList("org", "apache", "commons", "logging", _ @ _*) => MergeStrategy.first
-      case PathList("org", "w3c", "dom", _ @ _*) => MergeStrategy.first
-      case PathList("org", "w3c", "dom", "events", _ @ _*) => MergeStrategy.first
-      case PathList("javax", "annotation", _ @ _*) => MergeStrategy.first
-      case PathList("net", "jcip", "annotations", _ @ _*) => MergeStrategy.first
-      case PathList("play", "api", "libs", "ws", _ @ _*) => MergeStrategy.first
-      case PathList("META-INF", "io.netty.versions.properties") => MergeStrategy.first
-      case PathList("sqlj", _ @ _*) => MergeStrategy.first
-      case PathList("play", "reference-overrides.conf") => MergeStrategy.first
-      case "module-info.class" => MergeStrategy.discard
-      case "messages" => MergeStrategy.concat
-      case "pom.xml" => MergeStrategy.discard
-      case "JS_DEPENDENCIES" => MergeStrategy.discard
-      case "pom.properties" => MergeStrategy.discard
-      case "application.conf" => MergeStrategy.concat
-      case x => (assemblyMergeStrategy in assembly).value(x)
-    }
+    cpdSkipDuplicateFiles := true
   )
-
-  lazy val shared = (crossProject(JSPlatform, JVMPlatform).withoutSuffixFor(JVMPlatform).crossType(CrossType.Pure) in file("shared")).settings(
-    commonSettings: _*
-  ).settings(
-    libraryDependencies ++= Dependencies.Serialization.circeProjects.map(c => "io.circe" %%% c % Dependencies.Serialization.circeVersion) ++ Seq(
-      "com.beachape" %%% "enumeratum-circe" % Dependencies.Utils.enumeratumCirceVersion,
-      "me.chrons" %%% "boopickle" % Dependencies.Utils.booPickleVersion,
-      "com.lihaoyi" %%% "utest" % Dependencies.Utils.utestVersion % "test"
-    )
-  ).jsSettings(libraryDependencies += "org.scala-js" %%% "scalajs-java-time" % "0.2.2").jvmSettings(libraryDependencies += Dependencies.ScalaJS.jvmStubs)
-
-  lazy val sharedJs = shared.js.enablePlugins(ScalaJSWeb)
-
-  lazy val sharedJvm = shared.jvm
 }

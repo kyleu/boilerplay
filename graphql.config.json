@@ -1,27 +1,15 @@
 {
   "schema": {
     "request": {
-      "url": "http://localhost:9000/admin/graphql",
+      "url": "http://localhost:9000/graphql",
       "method": "POST",
-      "postIntrospectionQuery": true,
-      "options": {
-        "headers": {
-          "user-agent": "GraphQL",
-          "admin-graphql-auth": "XQG40vp7n5onULHu4n/wDg=="
-        }
-      }
+      "postIntrospectionQuery": true
     }
   },
   "endpoints": [
     {
       "name": "Localhost",
-      "url": "http://localhost:9000/admin/graphql",
-      "options": {
-        "headers": {
-          "user-agent": "GraphQL",
-          "admin-graphql-auth": "XQG40vp7n5onULHu4n/wDg=="
-        }
-      }
+      "url": "http://localhost:9000/graphql"
     }
   ]
 }

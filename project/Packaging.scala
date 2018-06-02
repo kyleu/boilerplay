@@ -7,6 +7,7 @@ import com.typesafe.sbt.packager.windows
 import com.typesafe.sbt.packager.windows.WindowsPlugin.autoImport.Windows
 import sbt.Keys._
 import sbt._
+import sbtassembly.AssemblyPlugin.autoImport._
 
 object Packaging {
   private[this] lazy val iconGlob = sys.props("os.name").toLowerCase match {
@@ -56,7 +57,30 @@ object Packaging {
     jdkPackagerBasename := Shared.projectName,
     name in JDKPackager := Shared.projectName,
 
-    javaOptions in Universal ++= Seq("-J-Xmx2g", "-J-Xms256m", s"-Dproject=${Shared.projectId}")
+    javaOptions in Universal ++= Seq("-J-Xmx2g", "-J-Xms256m", s"-Dproject=${Shared.projectId}"),
+
+    test in assembly := {},
+    assemblyMergeStrategy in assembly := {
+      case PathList("javax", "servlet", _ @ _*) => MergeStrategy.first
+      case PathList("javax", "xml", _ @ _*) => MergeStrategy.first
+      case PathList(p @ _*) if p.last.contains("about_jetty-") => MergeStrategy.discard
+      case PathList("org", "apache", "commons", "logging", _ @ _*) => MergeStrategy.first
+      case PathList("org", "w3c", "dom", _ @ _*) => MergeStrategy.first
+      case PathList("org", "w3c", "dom", "events", _ @ _*) => MergeStrategy.first
+      case PathList("javax", "annotation", _ @ _*) => MergeStrategy.first
+      case PathList("net", "jcip", "annotations", _ @ _*) => MergeStrategy.first
+      case PathList("play", "api", "libs", "ws", _ @ _*) => MergeStrategy.first
+      case PathList("META-INF", "io.netty.versions.properties") => MergeStrategy.first
+      case PathList("sqlj", _ @ _*) => MergeStrategy.first
+      case PathList("play", "reference-overrides.conf") => MergeStrategy.first
+      case "module-info.class" => MergeStrategy.discard
+      case "messages" => MergeStrategy.concat
+      case "pom.xml" => MergeStrategy.discard
+      case "JS_DEPENDENCIES" => MergeStrategy.discard
+      case "pom.properties" => MergeStrategy.discard
+      case "application.conf" => MergeStrategy.concat
+      case x => (assemblyMergeStrategy in assembly).value(x)
+    }
   )
 
   private[this] def makeWindowsFeatures(mappings: Seq[(File, String)]): Seq[windows.WindowsFeature] = {
