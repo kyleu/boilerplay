@@ -56,6 +56,7 @@ object Server {
     RoutesKeys.routesImport ++= Seq("util.web.QueryStringUtils._", "util.web.ModelBindables._"),
     PlayKeys.externalizeResources := false,
     PlayKeys.devSettings := Seq("play.server.akka.requestTimeout" -> "infinite"),
+    PlayKeys.playDefaultPort := 9000,
 
     // Scala.js
     scalaJSProjects := Seq(Client.client),

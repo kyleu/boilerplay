@@ -2,7 +2,7 @@ import sbt._
 
 object Dependencies {
   object Play {
-    private[this] val version = "2.6.13"
+    private[this] val version = "2.6.15"
     val lib = "com.typesafe.play" %% "play" % version
     val filters = play.sbt.PlayImport.filters
     val ws = play.sbt.PlayImport.ws
@@ -13,7 +13,7 @@ object Dependencies {
   }
 
   object Akka {
-    private[this] val version = "2.5.12"
+    private[this] val version = "2.5.13"
     val actor = "com.typesafe.akka" %% "akka-actor" % version
     val remote = "com.typesafe.akka" %% "akka-remote" % version
     val logging = "com.typesafe.akka" %% "akka-slf4j" % version
@@ -59,7 +59,7 @@ object Dependencies {
     val fontAwesome = "org.webjars" % "font-awesome" % "4.7.0" intransitive()
     val jquery = "org.webjars" % "jquery" % "2.2.4" intransitive()
     val materialize = "org.webjars" % "materializecss" % "0.100.2" intransitive()
-    val swaggerUi = "org.webjars" % "swagger-ui" % "3.14.0" intransitive()
+    val swaggerUi = "org.webjars" % "swagger-ui" % "3.14.2" intransitive()
   }
 
   object Metrics {
@@ -84,19 +84,19 @@ object Dependencies {
   }
 
   object Utils {
-    val scapegoatVersion = "1.3.4"
+    val scapegoatVersion = "1.3.5"
     val enumeratumCirceVersion = "1.5.17"
     val booPickleVersion = "1.2.5"
     val utestVersion = "0.6.4"
 
     val scalatagsVersion = "0.6.7"
 
-    val betterFiles = "com.github.pathikrit" %% "better-files" % "3.4.0"
+    val betterFiles = "com.github.pathikrit" %% "better-files" % "3.5.0"
     val commonsIo = "commons-io" % "commons-io" % "2.6"
     val csv = "com.github.tototoshi" %% "scala-csv" % "1.3.5"
-    val scalaGuice = "net.codingwell" %% "scala-guice" % "4.2.0"
+    val scalaGuice = "net.codingwell" %% "scala-guice" % "4.2.1"
     val scopts = "com.github.scopt" %% "scopt" % "3.7.0"
-    val reftree = "org.stanch" %% "reftree" % "1.1.3"
+    val reftree = "org.stanch" %% "reftree" % "1.2.0"
   }
 
   object Testing {
