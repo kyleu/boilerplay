@@ -30,7 +30,7 @@ object SyncProgressSchema extends SchemaHelper("syncProgress") {
 
   val queryFields = fields(
     unitField(name = "syncProgress", desc = Some("Retrieves a single Sync Progress using its primary key."), t = OptionType(syncProgressType), f = (c, td) => {
-      c.ctx.services.syncServices.syncProgressService.getByPrimaryKey(c.ctx.creds, c.args.arg(syncProgressKeyArg))(td)
+      c.ctx.services.syncServices.syncProgressService.getByPrimaryKey(c.ctx.creds, c.arg(syncProgressKeyArg))(td)
     }, syncProgressKeyArg),
     unitField(name = "syncProgresses", desc = Some("Searches for Sync Progresses using the provided arguments."), t = syncProgressResultType, f = (c, td) => {
       runSearch(c.ctx.services.syncServices.syncProgressService, c, td).map(toResult)
@@ -42,13 +42,13 @@ object SyncProgressSchema extends SchemaHelper("syncProgress") {
     description = "Mutations for Sync Progresses.",
     fields = fields(
       unitField(name = "create", desc = Some("Creates a new Sync Progress using the provided fields."), t = OptionType(syncProgressType), f = (c, td) => {
-        c.ctx.services.syncServices.syncProgressService.create(c.ctx.creds, c.args.arg(DataFieldSchema.dataFieldsArg))(td)
+        c.ctx.services.syncServices.syncProgressService.create(c.ctx.creds, c.arg(DataFieldSchema.dataFieldsArg))(td)
       }, DataFieldSchema.dataFieldsArg),
       unitField(name = "update", desc = Some("Updates the Sync Progress with the provided key."), t = OptionType(syncProgressType), f = (c, td) => {
-        c.ctx.services.syncServices.syncProgressService.update(c.ctx.creds, c.args.arg(syncProgressKeyArg), c.args.arg(DataFieldSchema.dataFieldsArg))(td).map(_._1)
+        c.ctx.services.syncServices.syncProgressService.update(c.ctx.creds, c.arg(syncProgressKeyArg), c.arg(DataFieldSchema.dataFieldsArg))(td).map(_._1)
       }, syncProgressKeyArg, DataFieldSchema.dataFieldsArg),
       unitField(name = "remove", desc = Some("Removes the Sync Progress with the provided id."), t = syncProgressType, f = (c, td) => {
-        c.ctx.services.syncServices.syncProgressService.remove(c.ctx.creds, c.args.arg(syncProgressKeyArg))(td)
+        c.ctx.services.syncServices.syncProgressService.remove(c.ctx.creds, c.arg(syncProgressKeyArg))(td)
       }, syncProgressKeyArg)
     )
   )

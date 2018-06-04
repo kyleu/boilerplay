@@ -74,7 +74,7 @@ object SystemUserSchema extends SchemaHelper("systemUser") {
       Future.successful(UserProfile.fromUser(c.ctx.creds.user))
     }),
     unitField(name = "systemUser", desc = Some("Retrieves a single System User using its primary key."), t = OptionType(systemUserType), f = (c, td) => {
-      c.ctx.services.userServices.systemUserService.getByPrimaryKey(c.ctx.creds, c.args.arg(systemUserIdArg))(td)
+      c.ctx.services.userServices.systemUserService.getByPrimaryKey(c.ctx.creds, c.arg(systemUserIdArg))(td)
     }, systemUserIdArg),
     unitField(name = "systemUsers", desc = Some("Searches for System Users using the provided arguments."), t = systemUserResultType, f = (c, td) => {
       runSearch(c.ctx.services.userServices.systemUserService, c, td).map(toResult)
@@ -92,13 +92,13 @@ object SystemUserSchema extends SchemaHelper("systemUser") {
     description = "Mutations for System Users.",
     fields = fields(
       unitField(name = "create", desc = Some("Creates a new System User using the provided fields."), t = OptionType(systemUserType), f = (c, td) => {
-        c.ctx.services.userServices.systemUserService.create(c.ctx.creds, c.args.arg(DataFieldSchema.dataFieldsArg))(td)
+        c.ctx.services.userServices.systemUserService.create(c.ctx.creds, c.arg(DataFieldSchema.dataFieldsArg))(td)
       }, DataFieldSchema.dataFieldsArg),
       unitField(name = "update", desc = Some("Updates the System User with the provided id."), t = OptionType(systemUserType), f = (c, td) => {
-        c.ctx.services.userServices.systemUserService.update(c.ctx.creds, c.args.arg(systemUserIdArg), c.args.arg(DataFieldSchema.dataFieldsArg))(td).map(_._1)
+        c.ctx.services.userServices.systemUserService.update(c.ctx.creds, c.arg(systemUserIdArg), c.arg(DataFieldSchema.dataFieldsArg))(td).map(_._1)
       }, systemUserIdArg, DataFieldSchema.dataFieldsArg),
       unitField(name = "remove", desc = Some("Removes the System User with the provided id."), t = systemUserType, f = (c, td) => {
-        c.ctx.services.userServices.systemUserService.remove(c.ctx.creds, c.args.arg(systemUserIdArg))(td)
+        c.ctx.services.userServices.systemUserService.remove(c.ctx.creds, c.arg(systemUserIdArg))(td)
       }, systemUserIdArg)
     )
   )

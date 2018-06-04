@@ -51,7 +51,7 @@ object AuditSchema extends SchemaHelper("audit") {
 
   val queryFields = fields(
     unitField(name = "audit", desc = Some("Retrieves a single Audit using its primary key."), t = OptionType(auditType), f = (c, td) => {
-      c.ctx.app.coreServices.audits.getByPrimaryKey(c.ctx.creds, c.args.arg(auditIdArg))(td)
+      c.ctx.app.coreServices.audits.getByPrimaryKey(c.ctx.creds, c.arg(auditIdArg))(td)
     }, auditIdArg),
     unitField(name = "audits", desc = Some("Searches for Audits using the provided arguments."), t = auditResultType, f = (c, td) => {
       runSearch(c.ctx.app.coreServices.audits, c, td).map(toResult)
@@ -63,13 +63,13 @@ object AuditSchema extends SchemaHelper("audit") {
     description = "Mutations for Audits.",
     fields = fields(
       unitField(name = "create", desc = Some("Creates a new Audit using the provided fields."), t = OptionType(auditType), f = (c, td) => {
-        c.ctx.app.coreServices.audits.create(c.ctx.creds, c.args.arg(DataFieldSchema.dataFieldsArg))(td)
+        c.ctx.app.coreServices.audits.create(c.ctx.creds, c.arg(DataFieldSchema.dataFieldsArg))(td)
       }, DataFieldSchema.dataFieldsArg),
       unitField(name = "update", desc = Some("Updates the Audit with the provided id."), t = OptionType(auditType), f = (c, td) => {
-        c.ctx.app.coreServices.audits.update(c.ctx.creds, c.args.arg(auditIdArg), c.args.arg(DataFieldSchema.dataFieldsArg))(td).map(_._1)
+        c.ctx.app.coreServices.audits.update(c.ctx.creds, c.arg(auditIdArg), c.arg(DataFieldSchema.dataFieldsArg))(td).map(_._1)
       }, auditIdArg, DataFieldSchema.dataFieldsArg),
       unitField(name = "remove", desc = Some("Removes the Audit with the provided id."), t = auditType, f = (c, td) => {
-        c.ctx.app.coreServices.audits.remove(c.ctx.creds, c.args.arg(auditIdArg))(td)
+        c.ctx.app.coreServices.audits.remove(c.ctx.creds, c.arg(auditIdArg))(td)
       }, auditIdArg)
     )
   )

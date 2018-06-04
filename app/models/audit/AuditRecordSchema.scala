@@ -52,7 +52,7 @@ object AuditRecordSchema extends SchemaHelper("auditRecord") {
 
   val queryFields = fields(
     unitField(name = "auditRecord", desc = Some("Retrieves a single Audit Record using its primary key."), t = OptionType(auditRecordType), f = (c, td) => {
-      c.ctx.services.auditServices.auditRecordService.getByPrimaryKey(c.ctx.creds, c.args.arg(auditRecordIdArg))(td)
+      c.ctx.services.auditServices.auditRecordService.getByPrimaryKey(c.ctx.creds, c.arg(auditRecordIdArg))(td)
     }, auditRecordIdArg),
     unitField(name = "auditRecords", desc = Some("Searches for Audit Records using the provided arguments."), t = auditRecordResultType, f = (c, td) => {
       runSearch(c.ctx.services.auditServices.auditRecordService, c, td).map(toResult)
@@ -64,13 +64,13 @@ object AuditRecordSchema extends SchemaHelper("auditRecord") {
     description = "Mutations for Audit Records.",
     fields = fields(
       unitField(name = "create", desc = Some("Creates a new Audit Record using the provided fields."), t = OptionType(auditRecordType), f = (c, td) => {
-        c.ctx.services.auditServices.auditRecordService.create(c.ctx.creds, c.args.arg(DataFieldSchema.dataFieldsArg))(td)
+        c.ctx.services.auditServices.auditRecordService.create(c.ctx.creds, c.arg(DataFieldSchema.dataFieldsArg))(td)
       }, DataFieldSchema.dataFieldsArg),
       unitField(name = "update", desc = Some("Updates the Audit Record with the provided id."), t = OptionType(auditRecordType), f = (c, td) => {
-        c.ctx.services.auditServices.auditRecordService.update(c.ctx.creds, c.args.arg(auditRecordIdArg), c.args.arg(DataFieldSchema.dataFieldsArg))(td).map(_._1)
+        c.ctx.services.auditServices.auditRecordService.update(c.ctx.creds, c.arg(auditRecordIdArg), c.arg(DataFieldSchema.dataFieldsArg))(td).map(_._1)
       }, auditRecordIdArg, DataFieldSchema.dataFieldsArg),
       unitField(name = "remove", desc = Some("Removes the Audit Record with the provided id."), t = auditRecordType, f = (c, td) => {
-        c.ctx.services.auditServices.auditRecordService.remove(c.ctx.creds, c.args.arg(auditRecordIdArg))(td)
+        c.ctx.services.auditServices.auditRecordService.remove(c.ctx.creds, c.arg(auditRecordIdArg))(td)
       }, auditRecordIdArg)
     )
   )

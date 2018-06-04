@@ -31,7 +31,7 @@ object ScheduledTaskRunSchema extends SchemaHelper("scheduledTaskRun") {
 
   val queryFields = fields(
     unitField(name = "scheduledTaskRun", desc = Some("Retrieves a single Scheduled Task Run using its primary key."), t = OptionType(scheduledTaskRunType), f = (c, td) => {
-      c.ctx.services.taskServices.scheduledTaskRunService.getByPrimaryKey(c.ctx.creds, c.args.arg(scheduledTaskRunIdArg))(td)
+      c.ctx.services.taskServices.scheduledTaskRunService.getByPrimaryKey(c.ctx.creds, c.arg(scheduledTaskRunIdArg))(td)
     }, scheduledTaskRunIdArg),
     unitField(name = "scheduledTaskRuns", desc = Some("Searches for Scheduled Task Runs using the provided arguments."), t = scheduledTaskRunResultType, f = (c, td) => {
       runSearch(c.ctx.services.taskServices.scheduledTaskRunService, c, td).map(toResult)
@@ -43,13 +43,13 @@ object ScheduledTaskRunSchema extends SchemaHelper("scheduledTaskRun") {
     description = "Mutations for Scheduled Task Runs.",
     fields = fields(
       unitField(name = "create", desc = Some("Creates a new Scheduled Task Run using the provided fields."), t = OptionType(scheduledTaskRunType), f = (c, td) => {
-        c.ctx.services.taskServices.scheduledTaskRunService.create(c.ctx.creds, c.args.arg(DataFieldSchema.dataFieldsArg))(td)
+        c.ctx.services.taskServices.scheduledTaskRunService.create(c.ctx.creds, c.arg(DataFieldSchema.dataFieldsArg))(td)
       }, DataFieldSchema.dataFieldsArg),
       unitField(name = "update", desc = Some("Updates the Scheduled Task Run with the provided id."), t = OptionType(scheduledTaskRunType), f = (c, td) => {
-        c.ctx.services.taskServices.scheduledTaskRunService.update(c.ctx.creds, c.args.arg(scheduledTaskRunIdArg), c.args.arg(DataFieldSchema.dataFieldsArg))(td).map(_._1)
+        c.ctx.services.taskServices.scheduledTaskRunService.update(c.ctx.creds, c.arg(scheduledTaskRunIdArg), c.arg(DataFieldSchema.dataFieldsArg))(td).map(_._1)
       }, scheduledTaskRunIdArg, DataFieldSchema.dataFieldsArg),
       unitField(name = "remove", desc = Some("Removes the Scheduled Task Run with the provided id."), t = scheduledTaskRunType, f = (c, td) => {
-        c.ctx.services.taskServices.scheduledTaskRunService.remove(c.ctx.creds, c.args.arg(scheduledTaskRunIdArg))(td)
+        c.ctx.services.taskServices.scheduledTaskRunService.remove(c.ctx.creds, c.arg(scheduledTaskRunIdArg))(td)
       }, scheduledTaskRunIdArg)
     )
   )
