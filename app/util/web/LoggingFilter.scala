@@ -11,7 +11,7 @@ import util.Logging
 import scala.concurrent.Future
 
 class LoggingFilter @Inject() (override implicit val mat: Materializer) extends Filter with Logging {
-  val metricsName = util.Config.projectId + "_http_requests"
+  val metricsName = util.Config.metricsId + "_http_requests"
   private[this] lazy val requestHistogram = Histogram.build(metricsName, "HTTP request statistics.").register()
 
   def apply(nextFilter: (RequestHeader) => Future[Result])(request: RequestHeader): Future[Result] = {

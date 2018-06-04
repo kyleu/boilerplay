@@ -2,8 +2,6 @@
 @views.html.components.userDropdown(Some(user))
 
 <header>
-  @views.html.layout.themeStyles(user.preferences.theme)
-
   <nav id="topnav" class="theme">
     <a href="@controllers.routes.HomeController.home()" class="brand-logo center">@util.Config.projectName</a>
 

@@ -5,7 +5,7 @@ import org.slf4j.{LoggerFactory, MarkerFactory}
 import play.api.{Logger, MarkerContext}
 
 object Logging {
-  private[this] lazy val gauge = Gauge.build(util.Config.projectId + "_logging", "Logging statistics.").labelNames("level").register()
+  private[this] lazy val gauge = Gauge.build(util.Config.metricsId + "_logging", "Logging statistics.").labelNames("level").register()
 
   final case class CustomLogger(name: String) extends Logger(LoggerFactory.getLogger(name)) {
     implicit val mc: MarkerContext = MarkerContext(MarkerFactory.getMarker(name))

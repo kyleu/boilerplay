@@ -24,7 +24,7 @@ abstract class BaseController(val name: String) extends InjectedController with 
 
   protected def app: Application
 
-  protected[this] lazy val metricsName = util.Config.projectId + "_" + cn(this)
+  protected[this] lazy val metricsName = util.Config.metricsId + "_" + cn(this)
   protected[this] lazy val requestHistogram = Histogram.build(
     metricsName + "_request",
     s"Controller request metrics for [$metricsName]"

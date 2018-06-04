@@ -2,6 +2,7 @@ package util
 
 object Config {
   final val projectId = "boilerplay"
+  final val metricsId = projectId.replaceAllLiterally("-", "_")
   final val projectName = "Boilerplay"
   final val projectUrl = "https://github.com/KyleU/boilerplay"
   final val adminEmail = "admin@boilerplay.com"
