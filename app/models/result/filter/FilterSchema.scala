@@ -9,8 +9,7 @@ import models.result.data.DataFieldSchema
 object FilterSchema {
   implicit val filterOpType: EnumType[FilterOp] = CommonSchema.deriveEnumeratumType[FilterOp](
     name = "FilterOperation",
-    description = "Various operation to apply in filters.",
-    values = FilterOp.values.map(t => t -> t.toString).toList
+    values = FilterOp.values
   )
 
   implicit val filterType: ObjectType[GraphQLContext, Filter] = deriveObjectType[GraphQLContext, Filter](

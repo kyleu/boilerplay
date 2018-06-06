@@ -8,8 +8,7 @@ import scala.concurrent.Future
 object SettingKeySchema extends SchemaHelper("settingKey") {
   implicit val settingKeyEnumType: EnumType[SettingKey] = CommonSchema.deriveStringEnumeratumType(
     name = "SettingKey",
-    description = "An enumeration of SettingKey values.",
-    values = SettingKey.values.map(t => t -> t.value).toList
+    values = SettingKey.values
   )
 
   val queryFields = fields(

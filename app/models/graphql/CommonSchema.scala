@@ -1,7 +1,7 @@
 package models.graphql
 
 import models.tag.Tag
-import sangria.macros.derive._
+import sangria.macros.derive.deriveObjectType
 import sangria.schema._
 
 object CommonSchema extends CommonSchemaValueTypes with CommonSchemaReferenceTypes {
@@ -11,16 +11,16 @@ object CommonSchema extends CommonSchemaValueTypes with CommonSchemaReferenceTyp
   val limitArg = Argument("limit", OptionInputType(IntType), description = "Caps the number of returned results.")
   val offsetArg = Argument("offset", OptionInputType(IntType), description = "Offsets the returned results.")
 
-  def deriveEnumeratumType[T <: enumeratum.EnumEntry](name: String, description: String, values: Seq[(T, String)]) = EnumType(
+  def deriveEnumeratumType[T <: enumeratum.EnumEntry](name: String, values: Seq[T]) = EnumType[T](
     name = name,
-    description = Some(description),
-    values = values.map(t => EnumValue(name = t._1.toString, value = t._1, description = Some(t._2))).toList
+    description = None,
+    values = values.map(t => EnumValue(name = t.toString, value = t)).toList
   )
 
-  def deriveStringEnumeratumType[T <: enumeratum.values.StringEnumEntry](name: String, description: String, values: Seq[(T, String)]) = EnumType(
+  def deriveStringEnumeratumType[T <: enumeratum.values.StringEnumEntry](name: String, values: Seq[T]) = EnumType[T](
     name = name,
-    description = Some(description),
-    values = values.map(t => EnumValue(name = t._1.toString, value = t._1, description = Some(t._2))).toList
+    description = None,
+    values = values.map(t => EnumValue(name = t.toString, value = t)).toList
   )
 
   implicit lazy val tagType: ObjectType[GraphQLContext, Tag] = deriveObjectType()

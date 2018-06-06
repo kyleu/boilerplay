@@ -22,14 +22,12 @@ import scala.concurrent.Future
 object SystemUserSchema extends SchemaHelper("systemUser") {
   implicit val roleEnum: EnumType[Role] = CommonSchema.deriveStringEnumeratumType(
     name = "RoleEnum",
-    description = "The role of the system user.",
-    values = Role.values.map(t => t -> t.value).toList
+    values = Role.values
   )
 
   implicit val themeEnum: EnumType[Theme] = CommonSchema.deriveStringEnumeratumType(
     name = "ThemeEnum",
-    description = "The selected theme color.",
-    values = Theme.values.map(t => t -> t.color).toList
+    values = Theme.values
   )
 
   implicit val profileType: ObjectType[GraphQLContext, UserProfile] = deriveObjectType(ObjectTypeDescription("Information about the current session."))

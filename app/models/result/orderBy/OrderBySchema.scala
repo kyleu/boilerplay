@@ -8,8 +8,7 @@ import sangria.marshalling.circe._
 object OrderBySchema {
   implicit val orderByDirectionType: EnumType[OrderBy.Direction] = CommonSchema.deriveEnumeratumType[OrderBy.Direction](
     name = "OrderDirection",
-    description = "The direction used to sort the results.",
-    values = OrderBy.Direction.values.map(t => t -> t.toString).toList
+    values = OrderBy.Direction.values
   )
 
   implicit val orderByType: ObjectType[GraphQLContext, OrderBy] = deriveObjectType[GraphQLContext, OrderBy](

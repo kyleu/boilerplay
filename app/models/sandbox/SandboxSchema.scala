@@ -9,8 +9,7 @@ import scala.concurrent.Future
 object SandboxSchema extends SchemaHelper("sandbox") {
   implicit val sandboxTaskEnum: EnumType[SandboxTask] = CommonSchema.deriveEnumeratumType(
     name = "SandboxTask",
-    description = "One-off tests that don't deserve a UI of their own.",
-    values = SandboxTask.values.map(t => t -> t.description).toList
+    values = SandboxTask.values
   )
 
   val sandboxTaskArg = Argument("task", sandboxTaskEnum, description = "Filters the results to a provided SandboxTask.")
