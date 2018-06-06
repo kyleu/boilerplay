@@ -16,7 +16,7 @@ object SettingsSchema extends SchemaHelper("settings") {
   val queryFields = fields(
     unitField(
       name = "setting",
-      desc = Some("The system setting values for this application."),
+      desc = None,
       t = ListType(settingType),
       f = (c, td) => Future.successful(c.ctx.app.coreServices.settings.getAll)
     )

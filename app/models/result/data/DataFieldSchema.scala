@@ -11,11 +11,7 @@ object DataFieldSchema {
   case object VarCoercionViolation extends ValueCoercionViolation("String, bool or int value expected.")
 
   val varType = ScalarType[String](
-    "Var",
-    description = Some(
-      "The `Var` scalar type appears in a JSON response as a String; however, it is not intended to be human-readable. " +
-        "When expected as an input type, any string (such as `\"4\"`) or integer (such as `4`) input value will be accepted as an ID."
-    ),
+    name = "Var",
     coerceOutput = valueOutput,
     coerceUserInput = {
       case s: String => Right(s)

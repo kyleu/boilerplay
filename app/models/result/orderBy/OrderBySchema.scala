@@ -11,9 +11,7 @@ object OrderBySchema {
     values = OrderBy.Direction.values
   )
 
-  implicit val orderByType: ObjectType[GraphQLContext, OrderBy] = deriveObjectType[GraphQLContext, OrderBy](
-    ObjectTypeDescription("Options for sorting the results.")
-  )
+  implicit val orderByType: ObjectType[GraphQLContext, OrderBy] = deriveObjectType[GraphQLContext, OrderBy]()
 
   implicit val orderByInputType: InputObjectType[OrderBy] = deriveInputObjectType[OrderBy](
     InputObjectTypeName("OrderByInput")

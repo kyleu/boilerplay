@@ -30,7 +30,7 @@ object SystemUserSchema extends SchemaHelper("systemUser") {
     values = Theme.values
   )
 
-  implicit val profileType: ObjectType[GraphQLContext, UserProfile] = deriveObjectType(ObjectTypeDescription("Information about the current session."))
+  implicit val profileType: ObjectType[GraphQLContext, UserProfile] = deriveObjectType()
 
   implicit val systemUserPrimaryKeyId: HasId[SystemUser, UUID] = HasId[SystemUser, UUID](_.id)
   private[this] def getByPrimaryKeySeq(c: GraphQLContext, idSeq: Seq[UUID]) = c.app.coreServices.users.getByPrimaryKeySeq(c.creds, idSeq)(c.trace)
@@ -41,10 +41,8 @@ object SystemUserSchema extends SchemaHelper("systemUser") {
     getByPrimaryKeySeq, (c, rels) => c.app.coreServices.users.getByRoleSeq(rels(systemUserByRoleRelation))(c.trace)
   )
 
-  implicit val loginInfoType: ObjectType[GraphQLContext, LoginInfo] = deriveObjectType(ObjectTypeDescription("Information about login credentials."))
-  implicit val userPreferenceType: ObjectType[GraphQLContext, UserPreferences] = {
-    deriveObjectType(ObjectTypeDescription("Information about users of the system."))
-  }
+  implicit val loginInfoType: ObjectType[GraphQLContext, LoginInfo] = deriveObjectType()
+  implicit val userPreferenceType: ObjectType[GraphQLContext, UserPreferences] = deriveObjectType()
   implicit lazy val systemUserType: ObjectType[GraphQLContext, SystemUser] = deriveObjectType(
     AddFields(
       Field(
@@ -68,13 +66,13 @@ object SystemUserSchema extends SchemaHelper("systemUser") {
   val roleArg = Argument("role", roleEnum, description = "Filters the results to a provided SandboxTask.")
 
   val queryFields = fields[GraphQLContext, Unit](
-    unitField(name = "profile", desc = Some("Returns information about the currently logged in user."), t = profileType, f = (c, td) => {
+    unitField(name = "profile", desc = None, t = profileType, f = (c, td) => {
       Future.successful(UserProfile.fromUser(c.ctx.creds.user))
     }),
-    unitField(name = "systemUser", desc = Some("Retrieves a single System User using its primary key."), t = OptionType(systemUserType), f = (c, td) => {
+    unitField(name = "systemUser", desc = None, t = OptionType(systemUserType), f = (c, td) => {
       c.ctx.services.userServices.systemUserService.getByPrimaryKey(c.ctx.creds, c.arg(systemUserIdArg))(td)
     }, systemUserIdArg),
-    unitField(name = "systemUsers", desc = Some("Searches for System Users using the provided arguments."), t = systemUserResultType, f = (c, td) => {
+    unitField(name = "systemUsers", desc = None, t = systemUserResultType, f = (c, td) => {
       runSearch(c.ctx.services.userServices.systemUserService, c, td).map(toResult)
     }, queryArg, reportFiltersArg, orderBysArg, limitArg, offsetArg),
     Field(
@@ -87,15 +85,14 @@ object SystemUserSchema extends SchemaHelper("systemUser") {
 
   val userMutationType = ObjectType(
     name = "systemUser",
-    description = "Mutations for System Users.",
     fields = fields(
-      unitField(name = "create", desc = Some("Creates a new System User using the provided fields."), t = OptionType(systemUserType), f = (c, td) => {
+      unitField(name = "create", desc = None, t = OptionType(systemUserType), f = (c, td) => {
         c.ctx.services.userServices.systemUserService.create(c.ctx.creds, c.arg(DataFieldSchema.dataFieldsArg))(td)
       }, DataFieldSchema.dataFieldsArg),
-      unitField(name = "update", desc = Some("Updates the System User with the provided id."), t = OptionType(systemUserType), f = (c, td) => {
+      unitField(name = "update", desc = None, t = OptionType(systemUserType), f = (c, td) => {
         c.ctx.services.userServices.systemUserService.update(c.ctx.creds, c.arg(systemUserIdArg), c.arg(DataFieldSchema.dataFieldsArg))(td).map(_._1)
       }, systemUserIdArg, DataFieldSchema.dataFieldsArg),
-      unitField(name = "remove", desc = Some("Removes the System User with the provided id."), t = systemUserType, f = (c, td) => {
+      unitField(name = "remove", desc = None, t = systemUserType, f = (c, td) => {
         c.ctx.services.userServices.systemUserService.remove(c.ctx.creds, c.arg(systemUserIdArg))(td)
       }, systemUserIdArg)
     )

@@ -24,7 +24,6 @@ object DateTimeSchema {
 
   implicit val localDateTimeType: ScalarType[LocalDateTime] = ScalarType[LocalDateTime](
     name = "DateTime",
-    description = Some("A string representing a date, in format [yyyy-MM-dd HH:mm:ss]."),
     coerceOutput = (dt, caps) => if (caps.contains(DateSupport)) {
       java.util.Date.from(dt.atZone(ZoneId.systemDefault()).toInstant)
     } else {
@@ -49,7 +48,6 @@ object DateTimeSchema {
 
   implicit val localDateType: ScalarType[LocalDate] = ScalarType[LocalDate](
     name = "Date",
-    description = Some("A string representing a date, in format [yyyy-MM-dd]."),
     coerceOutput = (d, caps) => if (caps.contains(DateSupport)) {
       java.util.Date.from(d.atStartOfDay.atZone(ZoneId.systemDefault()).toInstant)
     } else {
@@ -74,7 +72,6 @@ object DateTimeSchema {
 
   implicit val localTimeType: ScalarType[LocalTime] = ScalarType[LocalTime](
     name = "Time",
-    description = Some("A string representing the time, in format [HH:mm:ss]."),
     coerceOutput = (t, _) => fmtLocalTime.format(t),
     coerceUserInput = {
       case s: String => parseLocalTime(s)

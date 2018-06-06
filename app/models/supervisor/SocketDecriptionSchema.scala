@@ -10,8 +10,8 @@ import sangria.schema.{fields, _}
 import util.FutureUtils.graphQlContext
 
 object SocketDecriptionSchema extends SchemaHelper("socket") {
-  val channelArg = Argument("channel", OptionInputType(StringType), description = "Optionally filters returned results to the provided channel name.")
-  val socketIdArg = Argument("socketId", OptionInputType(uuidType), description = "Optionally filters returned results to the exact channel id.")
+  val channelArg = Argument("channel", OptionInputType(StringType))
+  val socketIdArg = Argument("socketId", OptionInputType(uuidType))
 
   implicit lazy val socketDecriptionType: ObjectType[GraphQLContext, SocketDescription] = deriveObjectType()
 

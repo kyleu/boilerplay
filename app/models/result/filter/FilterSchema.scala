@@ -12,9 +12,7 @@ object FilterSchema {
     values = FilterOp.values
   )
 
-  implicit val filterType: ObjectType[GraphQLContext, Filter] = deriveObjectType[GraphQLContext, Filter](
-    ObjectTypeDescription("Options for filtering the results.")
-  )
+  implicit val filterType: ObjectType[GraphQLContext, Filter] = deriveObjectType[GraphQLContext, Filter]()
 
   val filterInputType = InputObjectType[Filter](name = "FilterInput", fields = List(
     InputField("k", StringType),

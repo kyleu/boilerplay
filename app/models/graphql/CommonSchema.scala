@@ -5,11 +5,11 @@ import sangria.macros.derive.deriveObjectType
 import sangria.schema._
 
 object CommonSchema extends CommonSchemaValueTypes with CommonSchemaReferenceTypes {
-  val idArg = Argument("id", OptionInputType(IntType), description = "Returns model matching the provided id.")
-  val keyArg = Argument("key", StringType, description = "Returns the model matching provided key.")
-  val queryArg = Argument("q", OptionInputType(StringType), description = "Limits the returned results to those matching the provided value.")
-  val limitArg = Argument("limit", OptionInputType(IntType), description = "Caps the number of returned results.")
-  val offsetArg = Argument("offset", OptionInputType(IntType), description = "Offsets the returned results.")
+  val idArg = Argument("id", OptionInputType(IntType))
+  val keyArg = Argument("key", StringType)
+  val queryArg = Argument("q", OptionInputType(StringType))
+  val limitArg = Argument("limit", OptionInputType(IntType))
+  val offsetArg = Argument("offset", OptionInputType(IntType))
 
   def deriveEnumeratumType[T <: enumeratum.EnumEntry](name: String, values: Seq[T]) = EnumType[T](
     name = name,

@@ -50,25 +50,24 @@ object AuditSchema extends SchemaHelper("audit") {
   implicit lazy val auditResultType: ObjectType[GraphQLContext, AuditResult] = deriveObjectType()
 
   val queryFields = fields(
-    unitField(name = "audit", desc = Some("Retrieves a single Audit using its primary key."), t = OptionType(auditType), f = (c, td) => {
+    unitField(name = "audit", desc = None, t = OptionType(auditType), f = (c, td) => {
       c.ctx.app.coreServices.audits.getByPrimaryKey(c.ctx.creds, c.arg(auditIdArg))(td)
     }, auditIdArg),
-    unitField(name = "audits", desc = Some("Searches for Audits using the provided arguments."), t = auditResultType, f = (c, td) => {
+    unitField(name = "audits", desc = None, t = auditResultType, f = (c, td) => {
       runSearch(c.ctx.app.coreServices.audits, c, td).map(toResult)
     }, queryArg, reportFiltersArg, orderBysArg, limitArg, offsetArg)
   )
 
   val auditMutationType = ObjectType(
     name = "audit",
-    description = "Mutations for Audits.",
     fields = fields(
-      unitField(name = "create", desc = Some("Creates a new Audit using the provided fields."), t = OptionType(auditType), f = (c, td) => {
+      unitField(name = "create", desc = None, t = OptionType(auditType), f = (c, td) => {
         c.ctx.app.coreServices.audits.create(c.ctx.creds, c.arg(DataFieldSchema.dataFieldsArg))(td)
       }, DataFieldSchema.dataFieldsArg),
-      unitField(name = "update", desc = Some("Updates the Audit with the provided id."), t = OptionType(auditType), f = (c, td) => {
+      unitField(name = "update", desc = None, t = OptionType(auditType), f = (c, td) => {
         c.ctx.app.coreServices.audits.update(c.ctx.creds, c.arg(auditIdArg), c.arg(DataFieldSchema.dataFieldsArg))(td).map(_._1)
       }, auditIdArg, DataFieldSchema.dataFieldsArg),
-      unitField(name = "remove", desc = Some("Removes the Audit with the provided id."), t = auditType, f = (c, td) => {
+      unitField(name = "remove", desc = None, t = auditType, f = (c, td) => {
         c.ctx.app.coreServices.audits.remove(c.ctx.creds, c.arg(auditIdArg))(td)
       }, auditIdArg)
     )
