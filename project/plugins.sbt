@@ -21,7 +21,7 @@ addSbtPlugin("com.typesafe.sbt" % "sbt-gzip" % "1.0.2")
 // Scala.js
 addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject" % "0.4.0")
 
-addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.22")
+addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.23")
 
 addSbtPlugin("com.vmunier" % "sbt-web-scalajs" % "1.0.7" exclude("org.scala-js", "sbt-scalajs"))
 
