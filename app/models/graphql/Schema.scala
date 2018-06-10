@@ -2,6 +2,9 @@ package models.graphql
 
 import sangria.execution.deferred.DeferredResolver
 import sangria.schema._
+import util.Config
+
+import scala.concurrent.Future
 
 object Schema {
   // Fetchers
@@ -24,8 +27,14 @@ object Schema {
 
   val resolver = DeferredResolver.fetchers(baseFetchers ++ modelFetchers: _*)
 
+  private[this] val customQueryFields = fields[GraphQLContext, Unit](
+    Field(name = "status", fieldType = StringType, resolve = _ => Future.successful("OK")),
+    Field(name = "version", fieldType = StringType, resolve = _ => Future.successful(Config.version))
+  )
+
   // Query Types
-  val baseQueryFields = models.supervisor.SocketDecriptionSchema.queryFields ++
+  val baseQueryFields = customQueryFields ++
+    models.supervisor.SocketDecriptionSchema.queryFields ++
     models.settings.SettingsSchema.queryFields ++
     models.sandbox.SandboxSchema.queryFields
 

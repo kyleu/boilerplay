@@ -124,7 +124,7 @@
           response: parameters.response,
           onEditQuery: onEditQuery,
           onEditVariables: onEditVariables,
-          defaultQuery: "query FirstQuery {\n  profile {\n    username\n    email\n  }\n}"
+          defaultQuery: "query FirstQuery {\n  status\n  version\n}"
         };
 
         var gql = React.createElement(GraphiQL, gqlProps, gqlChildren);
