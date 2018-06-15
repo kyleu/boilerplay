@@ -34,7 +34,7 @@ object NoteSchema extends GraphQLSchemaHelper("note") {
   implicit lazy val noteType: ObjectType[GraphQLContext, Note] = deriveObjectType(
     AddFields(
       Field(
-        name = "author",
+        name = "authorUser",
         fieldType = SystemUserSchema.systemUserType,
         resolve = ctx => SystemUserSchema.systemUserByPrimaryKeyFetcher.defer(ctx.value.author)
       ),
