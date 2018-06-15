@@ -12,7 +12,7 @@ import util.FutureUtils.graphQlContext
 
 import scala.concurrent.Future
 
-object SchemaHelper {
+object GraphQLSchemaHelper {
   final case class SearchArgs(start: LocalDateTime, filters: Seq[Filter], orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int])
   final case class SearchResult[T](count: Int, results: Seq[T], args: SearchArgs) {
     val paging = PagingOptions.from(count, args.limit, args.offset)
@@ -20,7 +20,7 @@ object SchemaHelper {
   }
 }
 
-abstract class SchemaHelper(val name: String) {
+abstract class GraphQLSchemaHelper(val name: String) {
   protected def traceF[A](ctx: GraphQLContext, k: String)(f: TraceData => Future[A]) = ctx.app.tracing.trace(name + ".schema." + k)(f)(ctx.trace)
   protected def traceB[A](ctx: GraphQLContext, k: String)(f: TraceData => A) = ctx.app.tracing.traceBlocking(name + ".schema." + k)(f)(ctx.trace)
 
@@ -43,7 +43,7 @@ abstract class SchemaHelper(val name: String) {
     args: Argument[_]*
   ): Field[GraphQLContext, Unit] = typedField(name, desc, t, f, args: _*)
 
-  protected def argsFor(args: Args) = SchemaHelper.SearchArgs(
+  protected def argsFor(args: Args) = GraphQLSchemaHelper.SearchArgs(
     start = util.DateUtils.now,
     filters = args.arg(FilterSchema.reportFiltersArg).getOrElse(Nil),
     orderBys = args.arg(OrderBySchema.orderBysArg).getOrElse(Nil),
@@ -54,10 +54,10 @@ abstract class SchemaHelper(val name: String) {
   protected def runSearch[T](svc: ModelServiceHelper[T], c: Context[GraphQLContext, Unit], td: TraceData) = {
     val args = argsFor(c.args)
     val f = c.arg(CommonSchema.queryArg) match {
-      case Some(q) => svc.searchWithCount(c.ctx.creds, q, args.filters, args.orderBys, args.limit, args.offset)(td)
+      case Some(q) if q.nonEmpty => svc.searchWithCount(c.ctx.creds, Some(q), args.filters, args.orderBys, args.limit, args.offset)(td)
       case _ => svc.getAllWithCount(c.ctx.creds, args.filters, args.orderBys, args.limit, args.offset)(td)
     }
     c.ctx.trace.annotate("Composing search result.")
-    f.map(x => SchemaHelper.SearchResult(x._1, x._2, args))
+    f.map(x => GraphQLSchemaHelper.SearchResult(x._1, x._2, args))
   }
 }

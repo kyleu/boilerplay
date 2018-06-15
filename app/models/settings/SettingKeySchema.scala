@@ -1,11 +1,11 @@
 /* Generated File */
 package models.settings
 
-import models.graphql.{CommonSchema, SchemaHelper}
+import models.graphql.{CommonSchema, GraphQLContext, GraphQLSchemaHelper}
 import sangria.schema.{EnumType, ListType, fields}
 import scala.concurrent.Future
 
-object SettingKeySchema extends SchemaHelper("settingKey") {
+object SettingKeySchema extends GraphQLSchemaHelper("settingKey") {
   implicit val settingKeyEnumType: EnumType[SettingKey] = CommonSchema.deriveStringEnumeratumType(
     name = "SettingKey",
     values = SettingKey.values

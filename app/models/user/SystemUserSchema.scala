@@ -3,7 +3,7 @@ package models.user
 import java.util.UUID
 
 import com.mohiva.play.silhouette.api.LoginInfo
-import models.graphql.{CommonSchema, GraphQLContext, SchemaHelper}
+import models.graphql.{CommonSchema, GraphQLContext, GraphQLSchemaHelper}
 import sangria.macros.derive._
 import sangria.schema._
 import models.graphql.CommonSchema._
@@ -19,7 +19,7 @@ import util.FutureUtils.graphQlContext
 
 import scala.concurrent.Future
 
-object SystemUserSchema extends SchemaHelper("systemUser") {
+object SystemUserSchema extends GraphQLSchemaHelper("systemUser") {
   implicit val roleEnum: EnumType[Role] = CommonSchema.deriveStringEnumeratumType(
     name = "RoleEnum",
     values = Role.values
@@ -100,7 +100,7 @@ object SystemUserSchema extends SchemaHelper("systemUser") {
 
   val mutationFields = fields(unitField(name = "systemUser", desc = None, t = userMutationType, f = (c, td) => Future.successful(())))
 
-  private[this] def toResult(r: SchemaHelper.SearchResult[SystemUser]) = {
+  private[this] def toResult(r: GraphQLSchemaHelper.SearchResult[SystemUser]) = {
     SystemUserResult(paging = r.paging, filters = r.args.filters, orderBys = r.args.orderBys, totalCount = r.count, results = r.results, durationMs = r.dur)
   }
 }

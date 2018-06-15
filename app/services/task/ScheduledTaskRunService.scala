@@ -32,11 +32,11 @@ class ScheduledTaskRunService @javax.inject.Inject() (override val tracing: Trac
   }
 
   // Search
-  override def searchCount(creds: Credentials, q: String, filters: Seq[Filter] = Nil)(implicit trace: TraceData) = {
+  override def searchCount(creds: Credentials, q: Option[String], filters: Seq[Filter] = Nil)(implicit trace: TraceData) = {
     traceF("search.count")(td => ApplicationDatabase.queryF(ScheduledTaskRunQueries.searchCount(q, filters))(td))
   }
   override def search(
-    creds: Credentials, q: String, filters: Seq[Filter] = Nil, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None
+    creds: Credentials, q: Option[String], filters: Seq[Filter] = Nil, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None
   )(implicit trace: TraceData) = {
     traceF("search")(td => ApplicationDatabase.queryF(ScheduledTaskRunQueries.search(q, filters, orderBys, limit, offset))(td))
   }

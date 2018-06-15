@@ -47,10 +47,10 @@ object SystemUserQueries extends BaseQueries[SystemUser]("systemUser", "system_u
     new GetAll(filters, orderBys, limit, offset)
   }
 
-  def search(q: String, filters: Seq[Filter] = Nil, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) = {
+  def search(q: Option[String], filters: Seq[Filter] = Nil, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) = {
     new Search(q, filters, orderBys, limit, offset)
   }
-  def searchCount(q: String, filters: Seq[Filter] = Nil) = new SearchCount(q, filters)
+  def searchCount(q: Option[String], filters: Seq[Filter] = Nil) = new SearchCount(q, filters)
   def searchExact(q: String, orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int]) = new SearchExact(q, orderBys, limit, offset)
 
   def update(id: UUID, fields: Seq[DataField]) = new UpdateFields(Seq(id), fields)

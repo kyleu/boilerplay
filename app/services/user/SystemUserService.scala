@@ -47,11 +47,11 @@ class SystemUserService @javax.inject.Inject() (
     traceF("get.all")(td => ApplicationDatabase.queryF(SystemUserQueries.getAll(filters, orderBys, limit, offset))(td))
   }
 
-  override def searchCount(creds: Credentials, q: String, filters: Seq[Filter])(implicit trace: TraceData) = {
+  override def searchCount(creds: Credentials, q: Option[String], filters: Seq[Filter])(implicit trace: TraceData) = {
     traceF("search.count")(td => ApplicationDatabase.queryF(SystemUserQueries.searchCount(q, filters))(td))
   }
   override def search(
-    creds: Credentials, q: String, filters: Seq[Filter], orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int]
+    creds: Credentials, q: Option[String], filters: Seq[Filter], orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int]
   )(implicit trace: TraceData) = {
     traceF("search")(td => ApplicationDatabase.queryF(SystemUserQueries.search(q, filters, orderBys, limit, offset))(td))
   }

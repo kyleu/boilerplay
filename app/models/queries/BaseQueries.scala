@@ -30,7 +30,7 @@ abstract class BaseQueries[T <: Product](
     Some(s"select $quotedColumns from ${quote(tableName)}"),
     whereClause.map(x => s" where $x"),
     orderBy.map(x => s" order by $x"),
-    limit.map(x => s" limit $x"),
+    limit.filter(_ != 0).map(x => s" limit $x"),
     offset.map(x => s" offset $x")
   ).flatten.mkString(" ")
 

@@ -49,11 +49,11 @@ class AuditRecordService @javax.inject.Inject() (override val tracing: TracingSe
   }
 
   // Search
-  override def searchCount(creds: Credentials, q: String, filters: Seq[Filter])(implicit trace: TraceData) = {
+  override def searchCount(creds: Credentials, q: Option[String], filters: Seq[Filter])(implicit trace: TraceData) = {
     traceF("search.count")(td => ApplicationDatabase.queryF(AuditRecordQueries.searchCount(q, filters))(td))
   }
   override def search(
-    creds: Credentials, q: String, filters: Seq[Filter], orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int] = None
+    creds: Credentials, q: Option[String], filters: Seq[Filter], orderBys: Seq[OrderBy], limit: Option[Int], offset: Option[Int] = None
   )(implicit trace: TraceData) = {
     traceF("search")(td => ApplicationDatabase.queryF(AuditRecordQueries.search(q, filters, orderBys, limit, offset))(td))
   }

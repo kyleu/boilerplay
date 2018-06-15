@@ -11,6 +11,7 @@ import webscalajs.ScalaJSWeb
 object Shared {
   val projectId = "boilerplay"
   val projectName = "Boilerplay"
+  val projectPort = 9000
 
   object Versions {
     val app = "1.0.0"

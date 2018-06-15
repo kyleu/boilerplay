@@ -25,7 +25,7 @@ object Dependencies {
   }
 
   object Authentication {
-    private[this] val version = "5.0.4"
+    private[this] val version = "5.0.5"
     val silhouette = "com.mohiva" %% "play-silhouette" % version
     val hasher = "com.mohiva" %% "play-silhouette-password-bcrypt" % version
     val persistence = "com.mohiva" %% "play-silhouette-persistence" % version
@@ -59,7 +59,7 @@ object Dependencies {
     val fontAwesome = "org.webjars" % "font-awesome" % "4.7.0" intransitive()
     val jquery = "org.webjars" % "jquery" % "2.2.4" intransitive()
     val materialize = "org.webjars" % "materializecss" % "0.100.2" intransitive()
-    val swaggerUi = "org.webjars" % "swagger-ui" % "3.14.2" intransitive()
+    val swaggerUi = "org.webjars" % "swagger-ui" % "3.17.0" intransitive()
   }
 
   object Metrics {

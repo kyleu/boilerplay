@@ -4,12 +4,12 @@ import akka.util.Timeout
 import models.InternalMessage.{GetSystemStatus, SystemStatus}
 import models.graphql.CommonSchema._
 import models.graphql.DateTimeSchema._
-import models.graphql.{GraphQLContext, SchemaHelper}
+import models.graphql.{GraphQLContext, GraphQLSchemaHelper}
 import sangria.macros.derive._
 import sangria.schema.{fields, _}
 import util.FutureUtils.graphQlContext
 
-object SocketDecriptionSchema extends SchemaHelper("socket") {
+object SocketDecriptionSchema extends GraphQLSchemaHelper("socket") {
   val channelArg = Argument("channel", OptionInputType(StringType))
   val socketIdArg = Argument("socketId", OptionInputType(uuidType))
 

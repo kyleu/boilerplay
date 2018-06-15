@@ -32,11 +32,11 @@ class NoteService @javax.inject.Inject() (override val tracing: TracingService) 
   }
 
   // Search
-  override def searchCount(creds: Credentials, q: String, filters: Seq[Filter] = Nil)(implicit trace: TraceData) = {
+  override def searchCount(creds: Credentials, q: Option[String], filters: Seq[Filter] = Nil)(implicit trace: TraceData) = {
     traceF("search.count")(td => ApplicationDatabase.queryF(NoteQueries.searchCount(q, filters))(td))
   }
   override def search(
-    creds: Credentials, q: String, filters: Seq[Filter] = Nil, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None
+    creds: Credentials, q: Option[String], filters: Seq[Filter] = Nil, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None
   )(implicit trace: TraceData) = {
     traceF("search")(td => ApplicationDatabase.queryF(NoteQueries.search(q, filters, orderBys, limit, offset))(td))
   }

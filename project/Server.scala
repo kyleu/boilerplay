@@ -44,19 +44,21 @@ object Server {
   private[this] lazy val serverSettings = Shared.commonSettings ++ Seq(
     name := Shared.projectId,
     maintainer := "Boilerplay User <admin@boilerplay.com>",
-    description := "Boilerplay",
+    description := Shared.projectName,
 
     resolvers += Resolver.jcenterRepo,
     resolvers += Resolver.bintrayRepo("stanch", "maven"),
     resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/",
     libraryDependencies ++= dependencies,
 
+    (sourceGenerators in Compile) += ProjectVersion.writeConfig(Shared.projectId, Shared.projectName, Shared.projectPort).taskValue,
+
     // Play
     RoutesKeys.routesGenerator := InjectedRoutesGenerator,
     RoutesKeys.routesImport ++= Seq("util.web.QueryStringUtils._", "util.web.ModelBindables._"),
     PlayKeys.externalizeResources := false,
     PlayKeys.devSettings := Seq("play.server.akka.requestTimeout" -> "infinite"),
-    PlayKeys.playDefaultPort := 9000,
+    PlayKeys.playDefaultPort := Shared.projectPort,
 
     // Scala.js
     scalaJSProjects := Seq(Client.client),

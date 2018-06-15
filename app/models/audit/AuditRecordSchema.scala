@@ -2,7 +2,7 @@ package models.audit
 
 import java.util.UUID
 
-import models.graphql.{GraphQLContext, SchemaHelper}
+import models.graphql.{GraphQLContext, GraphQLSchemaHelper}
 import models.graphql.CommonSchema._
 import models.graphql.DateTimeSchema._
 import models.note.NoteSchema
@@ -17,7 +17,7 @@ import util.FutureUtils.graphQlContext
 
 import scala.concurrent.Future
 
-object AuditRecordSchema extends SchemaHelper("auditRecord") {
+object AuditRecordSchema extends GraphQLSchemaHelper("auditRecord") {
   implicit val auditRecordPrimaryKeyId: HasId[AuditRecord, UUID] = HasId[AuditRecord, UUID](_.id)
   private[this] def getByPrimaryKeySeq(c: GraphQLContext, idSeq: Seq[UUID]) = {
     c.services.auditServices.auditRecordService.getByPrimaryKeySeq(c.creds, idSeq)(c.trace)
@@ -77,7 +77,7 @@ object AuditRecordSchema extends SchemaHelper("auditRecord") {
 
   val mutationFields = fields(unitField(name = "auditRecord", desc = None, t = auditRecordMutationType, f = (c, td) => Future.successful(())))
 
-  private[this] def toResult(r: SchemaHelper.SearchResult[AuditRecord]) = {
+  private[this] def toResult(r: GraphQLSchemaHelper.SearchResult[AuditRecord]) = {
     AuditRecordResult(paging = r.paging, filters = r.args.filters, orderBys = r.args.orderBys, totalCount = r.count, results = r.results, durationMs = r.dur)
   }
 }
