@@ -9,7 +9,7 @@ object DataField {
   implicit val jsonDecoder: Decoder[DataField] = deriveDecoder
 }
 
-@JSExportTopLevel(util.Config.projectId + ".DataField")
+@JSExportTopLevel("DataField")
 case class DataField(@JSExport k: String, v: Option[String]) {
   @JSExport val value = v.getOrElse(util.NullUtils.inst)
 }
