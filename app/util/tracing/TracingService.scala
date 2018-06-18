@@ -65,13 +65,12 @@ class TracingService @javax.inject.Inject() (actorSystem: ActorSystem, cnf: Metr
     case td: TraceDataZipkin =>
       val childSpan = tracer.newChild(td.span.context()).name(traceName).kind(Span.Kind.SERVER)
       tags.foreach { case (key, value) => childSpan.tag(key, value) }
-      childSpan.start().tag("thread.id", Thread.currentThread.getName)
-    case _ => throw new IllegalStateException()
+      Some(childSpan.start().tag("thread.id", Thread.currentThread.getName))
+    case _ => None
   }
 
   def traceBlocking[A](traceName: String, tags: (String, String)*)(f: TraceData => A)(implicit parentData: TraceData) = parentData match {
-    case _: TraceDataZipkin =>
-      val childSpan = newServerSpan(traceName, tags: _*)
+    case _: TraceDataZipkin => newServerSpan(traceName, tags: _*).map { childSpan =>
       Try(f(TraceDataZipkin(childSpan))) match {
         case Success(result) =>
           childSpan.finish()
@@ -82,17 +81,18 @@ class TracingService @javax.inject.Inject() (actorSystem: ActorSystem, cnf: Metr
           childSpan.finish()
           throw t
       }
+    }.getOrElse(f(parentData))
     case _ => f(parentData)
   }
 
   def trace[A](traceName: String, tags: (String, String)*)(f: TraceData => Future[A])(implicit parentData: TraceData) = {
     val childSpan = newServerSpan(traceName, tags: _*)
-    val result = f(TraceDataZipkin(childSpan))
+    val result = f(childSpan.map(TraceDataZipkin.apply).getOrElse(parentData))
     result.onComplete[Unit] {
       case Failure(t) =>
-        childSpan.tag("error.type", t.getClass.getSimpleName.stripSuffix("$"))
-        childSpan.tag("error.message", t.getMessage)
-      case _ => childSpan.finish()
+        childSpan.foreach(_.tag("error.type", t.getClass.getSimpleName.stripSuffix("$")))
+        childSpan.foreach(_.tag("error.message", t.getMessage))
+      case _ => childSpan.foreach(_.finish())
     }
     result
   }

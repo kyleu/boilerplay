@@ -12,7 +12,11 @@
     </li>
     <li class="collection-item">
       <a class="theme-text" href="@controllers.admin.graphql.routes.GraphQLController.graphql()">GraphQL</a>
-      <div><em>Query the system using GraphQL or <a class="theme-text" href="@controllers.admin.graphql.routes.SchemaController.voyager()">view the schema</a>.</em></div>
+      <div><em>
+        Query the system using GraphQL or view the
+        <a class="theme-text" href="@controllers.admin.graphql.routes.SchemaController.voyager("Query")">query</a> or
+        <a class="theme-text" href="@controllers.admin.graphql.routes.SchemaController.voyager("Mutation")">mutation</a> schema.
+      </em></div>
     </li>
     <li class="collection-item">
       <a class="theme-text" href="@controllers.admin.rest.routes.OpenApiController.ui()">Rest Requests</a>

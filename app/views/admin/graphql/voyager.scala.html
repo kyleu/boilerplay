@@ -1,4 +1,4 @@
-@(user: models.user.SystemUser)(
+@(user: models.user.SystemUser, root: String)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
 )@traceData.logViewClass(getClass)@views.html.layout.basic(Some(user), util.Config.projectName + " Schema", scripts = Seq(
   routes.Assets.versioned("vendor/graphql/react.min.js").url,
@@ -38,6 +38,9 @@
 
     GraphQLVoyager.init(document.getElementById('voyager'), {
       "introspection": introspectionProvider,
+      "displayOptions": {
+        "rootType": "@root"
+      },
       "workerURI": "@routes.Assets.versioned("vendor/graphql/voyager.worker.js").url"
     })
   </script>

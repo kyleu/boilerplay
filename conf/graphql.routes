@@ -3,4 +3,4 @@ GET         /                    controllers.admin.graphql.GraphQLController.gra
 POST        /                    controllers.admin.graphql.GraphQLController.graphqlBody
 
 GET         /schema              controllers.admin.graphql.SchemaController.renderSchema()
-GET         /voyager             controllers.admin.graphql.SchemaController.voyager()
+GET         /voyager/:root       controllers.admin.graphql.SchemaController.voyager(root)

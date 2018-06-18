@@ -61,33 +61,15 @@ object Shared {
     }
   )
 
-  def writeConfig(projectId: String, projectName: String) = Def.task {
-    val content =s"""
-        |package util
-        |
-        |object Version {
-        |  val projectId = "$projectId"
-        |  val projectName = "$projectName"
-        |
-        |  val version = "${version.value}"
-        |}
-        |""".stripMargin.trim
-
-    val file = (sourceManaged in Compile).value / "util" / "Version.scala"
-    val current = if(file.exists) { IO.read(file) } else { "" }
-    if(current != content) { IO.write(file, content) }
-    Seq(file)
-  }
-
   lazy val shared = (crossProject(JSPlatform, JVMPlatform).withoutSuffixFor(JVMPlatform).crossType(CrossType.Pure) in file("shared")).settings(
     commonSettings: _*
   ).settings(
+    (sourceGenerators in Compile) += ProjectVersion.writeConfig(projectId, projectName, projectPort).taskValue,
     libraryDependencies ++= Dependencies.Serialization.circeProjects.map(c => "io.circe" %%% c % Dependencies.Serialization.circeVersion) ++ Seq(
       "com.beachape" %%% "enumeratum-circe" % Dependencies.Utils.enumeratumCirceVersion,
       "me.chrons" %%% "boopickle" % Dependencies.Utils.booPickleVersion,
       "com.lihaoyi" %%% "utest" % Dependencies.Utils.utestVersion % "test"
-    ),
-    (sourceGenerators in Compile) += writeConfig(projectId, projectName).taskValue
+    )
   ).jsSettings(libraryDependencies += "org.scala-js" %%% "scalajs-java-time" % "0.2.2").jvmSettings(libraryDependencies += Dependencies.ScalaJS.jvmStubs)
 
   lazy val sharedJs = shared.js.enablePlugins(ScalaJSWeb)

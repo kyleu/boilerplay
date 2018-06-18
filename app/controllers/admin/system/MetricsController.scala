@@ -8,7 +8,7 @@ class MetricsController @javax.inject.Inject() (override val app: Application) e
   import app.contexts.webContext
 
   def showMetrics = withSession("admin.metrics", admin = true) { implicit request => implicit td =>
-    val url = "http://localhost:2001/metrics?pretty=true"
+    val url = s"http://localhost:${util.Version.projectPort + 1}/metrics?pretty=true"
     val call = app.ws.url("metrics", url).withHttpHeaders("Accept" -> JSON).get()
     call.map { json =>
       render {
