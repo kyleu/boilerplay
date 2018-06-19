@@ -57,7 +57,13 @@ object NoteSchema extends GraphQLSchemaHelper("note") {
     }, noteIdSeqArg),
     unitField(name = "noteSearch", desc = None, t = noteResultType, f = (c, td) => {
       runSearch(c.ctx.services.noteServices.noteService, c, td).map(toResult)
-    }, queryArg, reportFiltersArg, orderBysArg, limitArg, offsetArg)
+    }, queryArg, reportFiltersArg, orderBysArg, limitArg, offsetArg),
+    unitField(name = "noteById", desc = None, t = OptionType(noteType), f = (c, td) => {
+      c.ctx.services.noteServices.noteService.getById(c.ctx.creds, c.arg(noteIdArg))(td).map(_.headOption)
+    }, noteIdArg),
+    unitField(name = "noteByIdSeq", desc = None, t = ListType(noteType), f = (c, td) => {
+      c.ctx.services.noteServices.noteService.getByIdSeq(c.ctx.creds, c.arg(noteIdSeqArg))(td)
+    }, noteIdSeqArg)
   )
 
   val noteMutationType = ObjectType(

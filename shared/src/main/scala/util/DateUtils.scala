@@ -5,6 +5,7 @@ import java.time._
 
 object DateUtils {
   private[this] val isoFmt = format.DateTimeFormatter.ISO_LOCAL_DATE_TIME
+  private[this] val isoZonedFmt = format.DateTimeFormatter.ISO_ZONED_DATE_TIME
   private[this] val dateFmt = format.DateTimeFormatter.ofPattern("yyyy-MM-dd")
   private[this] val niceDateFmt = format.DateTimeFormatter.ofPattern("EEEE, MMM dd, yyyy")
   private[this] val timeFmt = format.DateTimeFormatter.ofPattern("HH:mm:ss")
@@ -22,6 +23,10 @@ object DateUtils {
 
   def toIsoString(ldt: LocalDateTime) = isoFmt.format(ldt)
   def fromIsoString(s: String) = LocalDateTime.from(isoFmt.parse(s))
+
+  def toIsoStringZoned(zdt: ZonedDateTime) = isoZonedFmt.format(zdt)
+  def fromIsoStringZoned(s: String) = ZonedDateTime.from(isoZonedFmt.parse(s))
+
   def fromDateString(s: String) = LocalDate.from(dateFmt.parse(s))
   def fromTimeString(s: String) = LocalTime.from(timeFmt.parse(s))
 

@@ -47,6 +47,12 @@ object ScheduledTaskRunSchema extends GraphQLSchemaHelper("scheduledTaskRun") {
     unitField(name = "scheduledTaskRunSearch", desc = None, t = scheduledTaskRunResultType, f = (c, td) => {
       runSearch(c.ctx.services.taskServices.scheduledTaskRunService, c, td).map(toResult)
     }, queryArg, reportFiltersArg, orderBysArg, limitArg, offsetArg),
+    unitField(name = "scheduledTaskRunById", desc = None, t = OptionType(scheduledTaskRunType), f = (c, td) => {
+      c.ctx.services.taskServices.scheduledTaskRunService.getById(c.ctx.creds, c.arg(scheduledTaskRunIdArg))(td).map(_.headOption)
+    }, scheduledTaskRunIdArg),
+    unitField(name = "scheduledTaskRunByIdSeq", desc = None, t = ListType(scheduledTaskRunType), f = (c, td) => {
+      c.ctx.services.taskServices.scheduledTaskRunService.getByIdSeq(c.ctx.creds, c.arg(scheduledTaskRunIdSeqArg))(td)
+    }, scheduledTaskRunIdSeqArg),
     unitField(name = "scheduledTaskRunsByTask", desc = None, t = ListType(scheduledTaskRunType), f = (c, td) => {
       c.ctx.services.taskServices.scheduledTaskRunService.getByTask(c.ctx.creds, c.arg(scheduledTaskRunTaskArg))(td)
     }, scheduledTaskRunTaskArg),

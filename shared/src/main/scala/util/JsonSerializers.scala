@@ -1,6 +1,6 @@
 package util
 
-import java.time.{LocalDate, LocalDateTime, LocalTime}
+import java.time.{LocalDate, LocalDateTime, LocalTime, ZonedDateTime}
 
 import io.circe.generic.extras.Configuration
 import io.circe.generic.extras.decoding.ConfiguredDecoder
@@ -16,9 +16,12 @@ object JsonSerializers {
 
   type Json = io.circe.Json
 
+  implicit def encodeZonedDateTime: Encoder[ZonedDateTime] = io.circe.java8.time.encodeZonedDateTimeDefault
   implicit def encodeLocalDateTime: Encoder[LocalDateTime] = io.circe.java8.time.encodeLocalDateTimeDefault
   implicit def encodeLocalDate: Encoder[LocalDate] = io.circe.java8.time.encodeLocalDateDefault
   implicit def encodeLocalTime: Encoder[LocalTime] = io.circe.java8.time.encodeLocalTimeDefault
+
+  implicit def decodeZonedDateTime: Decoder[ZonedDateTime] = io.circe.java8.time.decodeZonedDateTimeDefault
   implicit def decodeLocalDateTime: Decoder[LocalDateTime] = io.circe.java8.time.decodeLocalDateTimeDefault
   implicit def decodeLocalDate: Decoder[LocalDate] = io.circe.java8.time.decodeLocalDateDefault
   implicit def decodeLocalTime: Decoder[LocalTime] = io.circe.java8.time.decodeLocalTimeDefault
