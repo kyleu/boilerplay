@@ -1,4 +1,4 @@
-package models.graphql
+package graphql
 
 import models.tag.Tag
 import sangria.macros.derive.deriveObjectType

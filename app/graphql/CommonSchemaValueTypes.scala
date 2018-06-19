@@ -1,4 +1,4 @@
-package models.graphql
+package graphql
 
 import sangria.schema._
 import sangria.validation.{FloatCoercionViolation, ValueCoercionViolation}

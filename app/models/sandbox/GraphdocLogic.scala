@@ -1,9 +1,9 @@
 package models.sandbox
 
 import better.files._
+import graphql.GraphQLService
 import models.Application
 import models.auth.Credentials
-import services.graphql.GraphQLService
 import util.FutureUtils.serviceContext
 import util.tracing.TraceData
 

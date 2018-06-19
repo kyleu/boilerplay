@@ -1,7 +1,7 @@
 /* Generated File */
 package models.settings
 
-import models.graphql.{CommonSchema, GraphQLContext, GraphQLSchemaHelper}
+import graphql.{CommonSchema, GraphQLContext, GraphQLSchemaHelper}
 import sangria.schema.{EnumType, ListType, fields}
 import scala.concurrent.Future
 

@@ -1,4 +1,4 @@
-package models.graphql
+package graphql
 
 import sangria.execution.deferred.DeferredResolver
 import sangria.schema._

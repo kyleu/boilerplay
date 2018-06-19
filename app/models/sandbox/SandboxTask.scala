@@ -1,11 +1,11 @@
 package models.sandbox
 
 import enumeratum.{CirceEnum, Enum, EnumEntry}
+import graphql.GraphQLService
 import models.Application
 import models.auth.Credentials
 import services.ServiceRegistry
 import services.database.BackupRestore
-import services.graphql.GraphQLService
 import util.FutureUtils.defaultContext
 import util.Logging
 import util.tracing.TraceData

@@ -1,6 +1,6 @@
 package models.result.paging
 
-import models.graphql.GraphQLContext
+import graphql.GraphQLContext
 import sangria.macros.derive._
 import sangria.schema.ObjectType
 

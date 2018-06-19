@@ -1,4 +1,4 @@
-package models.graphql
+package graphql
 
 import org.apache.commons.codec.binary.Base64
 import sangria.schema._

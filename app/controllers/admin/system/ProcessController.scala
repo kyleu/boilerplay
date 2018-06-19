@@ -3,9 +3,9 @@ package controllers.admin.system
 import java.util.UUID
 
 import controllers.BaseController
+import graphql.GraphQLService
 import models.Application
 import services.ServiceRegistry
-import services.graphql.GraphQLService
 import services.process.ProcessService
 
 import scala.concurrent.Future

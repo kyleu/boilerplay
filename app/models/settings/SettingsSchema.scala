@@ -1,6 +1,6 @@
 package models.settings
 
-import models.graphql.{GraphQLContext, GraphQLSchemaHelper}
+import graphql.{GraphQLContext, GraphQLSchemaHelper}
 import sangria.execution.deferred.HasId
 import sangria.macros.derive._
 import sangria.schema._

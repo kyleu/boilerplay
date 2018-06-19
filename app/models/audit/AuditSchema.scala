@@ -2,9 +2,9 @@ package models.audit
 
 import java.util.UUID
 
-import models.graphql.{GraphQLContext, GraphQLSchemaHelper}
-import models.graphql.CommonSchema._
-import models.graphql.DateTimeSchema._
+import graphql.{GraphQLContext, GraphQLSchemaHelper}
+import graphql.CommonSchema._
+import graphql.DateTimeSchema._
 import models.audit.AuditRecordSchema._
 import models.note.NoteSchema
 import models.result.data.DataFieldSchema

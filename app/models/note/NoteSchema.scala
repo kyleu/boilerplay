@@ -1,10 +1,10 @@
 /* Generated File */
 package models.note
 
+import graphql.{GraphQLContext, GraphQLSchemaHelper}
+import graphql.CommonSchema._
+import graphql.DateTimeSchema._
 import java.util.UUID
-import models.graphql.{GraphQLContext, GraphQLSchemaHelper}
-import models.graphql.CommonSchema._
-import models.graphql.DateTimeSchema._
 import models.result.data.DataFieldSchema
 import models.result.filter.FilterSchema._
 import models.result.orderBy.OrderBySchema._

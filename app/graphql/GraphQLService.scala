@@ -1,17 +1,16 @@
-package services.graphql
+package graphql
 
 import io.circe.Json
 import models.Application
 import models.auth.Credentials
-import models.graphql.{GraphQLContext, Schema, TracingExtension}
 import sangria.execution.{ExceptionHandler, Executor, HandledException, QueryReducer}
 import sangria.marshalling.circe._
 import sangria.parser.QueryParser
 import sangria.validation.QueryValidator
 import services.ServiceRegistry
 import util.FutureUtils.graphQlContext
-import util.tracing.{TraceData, TracingService}
 import util.Logging
+import util.tracing.{TraceData, TracingService}
 
 import scala.util.{Failure, Success}
 

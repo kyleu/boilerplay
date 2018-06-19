@@ -2,7 +2,7 @@ package controllers.admin.graphql
 
 import controllers.BaseController
 import models.Application
-import models.graphql.Schema
+import graphql.Schema
 import sangria.renderer.SchemaRenderer
 
 import scala.concurrent.Future

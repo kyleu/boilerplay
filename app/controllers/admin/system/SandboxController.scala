@@ -2,14 +2,13 @@ package controllers.admin.system
 
 import akka.util.Timeout
 import controllers.BaseController
+import graphql.GraphQLService
 import models.Application
 import models.sandbox.SandboxTask
 import services.ServiceRegistry
-import services.graphql.GraphQLService
 
 import scala.concurrent.Future
 import scala.concurrent.duration._
-
 import util.JsonSerializers._
 
 @javax.inject.Singleton

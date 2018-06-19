@@ -1,4 +1,4 @@
-package models.graphql
+package graphql
 
 import java.time.Instant
 import java.time.format.DateTimeFormatter
@@ -6,9 +6,9 @@ import java.util.concurrent.ConcurrentLinkedQueue
 
 import sangria.ast._
 import sangria.execution._
-import sangria.schema.Context
 import sangria.marshalling.queryAst._
 import sangria.renderer.SchemaRenderer
+import sangria.schema.Context
 
 import scala.collection.JavaConverters._
 

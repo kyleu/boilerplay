@@ -1,6 +1,7 @@
 package models.sandbox
 
-import models.graphql.{CommonSchema, GraphQLContext}
+import graphql.CommonSchema
+import graphql.GraphQLContext
 import sangria.macros.derive._
 import sangria.schema._
 

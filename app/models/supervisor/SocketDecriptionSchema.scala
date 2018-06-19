@@ -2,9 +2,9 @@ package models.supervisor
 
 import akka.util.Timeout
 import models.InternalMessage.{GetSystemStatus, SystemStatus}
-import models.graphql.CommonSchema._
-import models.graphql.DateTimeSchema._
-import models.graphql.{GraphQLContext, GraphQLSchemaHelper}
+import graphql.CommonSchema._
+import graphql.DateTimeSchema._
+import graphql.{GraphQLContext, GraphQLSchemaHelper}
 import sangria.macros.derive._
 import sangria.schema.{fields, _}
 import util.FutureUtils.graphQlContext

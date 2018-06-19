@@ -1,6 +1,7 @@
 package controllers.admin.graphql
 
 import controllers.BaseController
+import graphql.GraphQLService
 import io.circe.Json
 import models.Application
 import models.auth.Credentials
@@ -8,7 +9,6 @@ import models.user.Role
 import sangria.execution.{ErrorWithResolver, QueryAnalysisError}
 import sangria.marshalling.circe._
 import sangria.parser.SyntaxError
-import services.graphql.GraphQLService
 import util.EncryptionUtils
 import util.tracing.TraceData
 import util.web.ControllerUtils.{jsonBody, jsonObject}

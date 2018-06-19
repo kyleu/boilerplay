@@ -3,11 +3,12 @@ package models.user
 import java.util.UUID
 
 import com.mohiva.play.silhouette.api.LoginInfo
-import models.graphql.{CommonSchema, GraphQLContext, GraphQLSchemaHelper}
+import graphql.CommonSchema
+import graphql.{GraphQLContext, GraphQLSchemaHelper}
 import sangria.macros.derive._
 import sangria.schema._
-import models.graphql.CommonSchema._
-import models.graphql.DateTimeSchema._
+import graphql.CommonSchema._
+import graphql.DateTimeSchema._
 import models.note.NoteSchema
 import models.result.data.DataFieldSchema
 import models.result.filter.FilterSchema._
