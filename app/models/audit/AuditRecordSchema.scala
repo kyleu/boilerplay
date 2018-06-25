@@ -2,18 +2,12 @@ package models.audit
 
 import java.util.UUID
 
+import graphql.GraphQLUtils._
 import graphql.{GraphQLContext, GraphQLSchemaHelper}
-import graphql.CommonSchema._
-import graphql.DateTimeSchema._
 import models.note.NoteSchema
-import models.result.data.DataFieldSchema
-import models.result.filter.FilterSchema._
-import models.result.orderBy.OrderBySchema._
-import models.result.paging.PagingSchema.pagingOptionsType
 import sangria.execution.deferred.{Fetcher, HasId, Relation}
-import sangria.macros.derive._
+import sangria.macros.derive.{AddFields, deriveObjectType}
 import sangria.schema._
-import util.FutureUtils.graphQlContext
 
 import scala.concurrent.Future
 
@@ -64,11 +58,11 @@ object AuditRecordSchema extends GraphQLSchemaHelper("auditRecord") {
     description = "Mutations for Audit Records.",
     fields = fields(
       unitField(name = "create", desc = None, t = OptionType(auditRecordType), f = (c, td) => {
-        c.ctx.services.auditServices.auditRecordService.create(c.ctx.creds, c.arg(DataFieldSchema.dataFieldsArg))(td)
-      }, DataFieldSchema.dataFieldsArg),
+        c.ctx.services.auditServices.auditRecordService.create(c.ctx.creds, c.arg(dataFieldsArg))(td)
+      }, dataFieldsArg),
       unitField(name = "update", desc = None, t = OptionType(auditRecordType), f = (c, td) => {
-        c.ctx.services.auditServices.auditRecordService.update(c.ctx.creds, c.arg(auditRecordIdArg), c.arg(DataFieldSchema.dataFieldsArg))(td).map(_._1)
-      }, auditRecordIdArg, DataFieldSchema.dataFieldsArg),
+        c.ctx.services.auditServices.auditRecordService.update(c.ctx.creds, c.arg(auditRecordIdArg), c.arg(dataFieldsArg))(td).map(_._1)
+      }, auditRecordIdArg, dataFieldsArg),
       unitField(name = "remove", desc = None, t = auditRecordType, f = (c, td) => {
         c.ctx.services.auditServices.auditRecordService.remove(c.ctx.creds, c.arg(auditRecordIdArg))(td)
       }, auditRecordIdArg)

@@ -5,8 +5,8 @@ import models.InternalMessage.{GetSystemStatus, SystemStatus}
 import graphql.CommonSchema._
 import graphql.DateTimeSchema._
 import graphql.{GraphQLContext, GraphQLSchemaHelper}
-import sangria.macros.derive._
-import sangria.schema.{fields, _}
+import sangria.macros.derive.deriveObjectType
+import sangria.schema._
 import util.FutureUtils.graphQlContext
 
 object SocketDecriptionSchema extends GraphQLSchemaHelper("socket") {

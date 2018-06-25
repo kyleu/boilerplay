@@ -5,32 +5,18 @@ import java.util.UUID
 import com.mohiva.play.silhouette.api.LoginInfo
 import graphql.CommonSchema
 import graphql.{GraphQLContext, GraphQLSchemaHelper}
-import sangria.macros.derive._
+import sangria.macros.derive.{AddFields, deriveObjectType}
 import sangria.schema._
-import graphql.CommonSchema._
-import graphql.DateTimeSchema._
+import graphql.GraphQLUtils._
 import models.note.NoteSchema
-import models.result.data.DataFieldSchema
-import models.result.filter.FilterSchema._
-import models.result.orderBy.OrderBySchema._
-import models.result.paging.PagingSchema.pagingOptionsType
 import models.template.Theme
 import sangria.execution.deferred.{Fetcher, HasId, Relation}
-import util.FutureUtils.graphQlContext
 
 import scala.concurrent.Future
 
 object SystemUserSchema extends GraphQLSchemaHelper("systemUser") {
-  implicit val roleEnum: EnumType[Role] = CommonSchema.deriveStringEnumeratumType(
-    name = "RoleEnum",
-    values = Role.values
-  )
-
-  implicit val themeEnum: EnumType[Theme] = CommonSchema.deriveStringEnumeratumType(
-    name = "ThemeEnum",
-    values = Theme.values
-  )
-
+  implicit val roleEnum: EnumType[Role] = CommonSchema.deriveStringEnumeratumType(name = "RoleEnum", values = Role.values)
+  implicit val themeEnum: EnumType[Theme] = CommonSchema.deriveStringEnumeratumType(name = "ThemeEnum", values = Theme.values)
   implicit val profileType: ObjectType[GraphQLContext, UserProfile] = deriveObjectType()
 
   implicit val systemUserPrimaryKeyId: HasId[SystemUser, UUID] = HasId[SystemUser, UUID](_.id)
@@ -88,11 +74,11 @@ object SystemUserSchema extends GraphQLSchemaHelper("systemUser") {
     name = "systemUser",
     fields = fields(
       unitField(name = "create", desc = None, t = OptionType(systemUserType), f = (c, td) => {
-        c.ctx.services.userServices.systemUserService.create(c.ctx.creds, c.arg(DataFieldSchema.dataFieldsArg))(td)
-      }, DataFieldSchema.dataFieldsArg),
+        c.ctx.services.userServices.systemUserService.create(c.ctx.creds, c.arg(dataFieldsArg))(td)
+      }, dataFieldsArg),
       unitField(name = "update", desc = None, t = OptionType(systemUserType), f = (c, td) => {
-        c.ctx.services.userServices.systemUserService.update(c.ctx.creds, c.arg(systemUserIdArg), c.arg(DataFieldSchema.dataFieldsArg))(td).map(_._1)
-      }, systemUserIdArg, DataFieldSchema.dataFieldsArg),
+        c.ctx.services.userServices.systemUserService.update(c.ctx.creds, c.arg(systemUserIdArg), c.arg(dataFieldsArg))(td).map(_._1)
+      }, systemUserIdArg, dataFieldsArg),
       unitField(name = "remove", desc = None, t = systemUserType, f = (c, td) => {
         c.ctx.services.userServices.systemUserService.remove(c.ctx.creds, c.arg(systemUserIdArg))(td)
       }, systemUserIdArg)

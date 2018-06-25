@@ -3,18 +3,12 @@ package models.audit
 import java.util.UUID
 
 import graphql.{GraphQLContext, GraphQLSchemaHelper}
-import graphql.CommonSchema._
-import graphql.DateTimeSchema._
+import graphql.GraphQLUtils._
 import models.audit.AuditRecordSchema._
 import models.note.NoteSchema
-import models.result.data.DataFieldSchema
-import models.result.filter.FilterSchema._
-import models.result.orderBy.OrderBySchema._
-import models.result.paging.PagingSchema.pagingOptionsType
 import sangria.execution.deferred.{Fetcher, HasId, Relation}
-import sangria.macros.derive._
+import sangria.macros.derive.{AddFields, deriveObjectType}
 import sangria.schema._
-import util.FutureUtils.graphQlContext
 
 import scala.concurrent.Future
 
@@ -62,11 +56,11 @@ object AuditSchema extends GraphQLSchemaHelper("audit") {
     name = "audit",
     fields = fields(
       unitField(name = "create", desc = None, t = OptionType(auditType), f = (c, td) => {
-        c.ctx.app.coreServices.audits.create(c.ctx.creds, c.arg(DataFieldSchema.dataFieldsArg))(td)
-      }, DataFieldSchema.dataFieldsArg),
+        c.ctx.app.coreServices.audits.create(c.ctx.creds, c.arg(dataFieldsArg))(td)
+      }, dataFieldsArg),
       unitField(name = "update", desc = None, t = OptionType(auditType), f = (c, td) => {
-        c.ctx.app.coreServices.audits.update(c.ctx.creds, c.arg(auditIdArg), c.arg(DataFieldSchema.dataFieldsArg))(td).map(_._1)
-      }, auditIdArg, DataFieldSchema.dataFieldsArg),
+        c.ctx.app.coreServices.audits.update(c.ctx.creds, c.arg(auditIdArg), c.arg(dataFieldsArg))(td).map(_._1)
+      }, auditIdArg, dataFieldsArg),
       unitField(name = "remove", desc = None, t = auditType, f = (c, td) => {
         c.ctx.app.coreServices.audits.remove(c.ctx.creds, c.arg(auditIdArg))(td)
       }, auditIdArg)

@@ -2,18 +2,10 @@
 package models.sync
 
 import graphql.{GraphQLContext, GraphQLSchemaHelper}
-import graphql.CommonSchema._
-import graphql.DateTimeSchema._
+import graphql.GraphQLUtils._
 import models.note.NoteSchema
-import models.result.data.DataFieldSchema
-import models.result.filter.FilterSchema._
-import models.result.orderBy.OrderBySchema._
-import models.result.paging.PagingSchema.pagingOptionsType
 import sangria.execution.deferred.{Fetcher, HasId}
-import sangria.macros.derive._
 import sangria.schema._
-import scala.concurrent.Future
-import util.FutureUtils.graphQlContext
 
 object SyncProgressSchema extends GraphQLSchemaHelper("syncProgress") {
   implicit val syncProgressPrimaryKeyId: HasId[SyncProgress, String] = HasId[SyncProgress, String](_.key)
@@ -28,9 +20,9 @@ object SyncProgressSchema extends GraphQLSchemaHelper("syncProgress") {
   val syncProgressStatusArg = Argument("status", StringType)
   val syncProgressStatusSeqArg = Argument("statuss", ListInputType(StringType))
 
-  implicit lazy val syncProgressType: ObjectType[GraphQLContext, SyncProgress] = deriveObjectType()
+  implicit lazy val syncProgressType: sangria.schema.ObjectType[GraphQLContext, SyncProgress] = deriveObjectType()
 
-  implicit lazy val syncProgressResultType: ObjectType[GraphQLContext, SyncProgressResult] = deriveObjectType()
+  implicit lazy val syncProgressResultType: sangria.schema.ObjectType[GraphQLContext, SyncProgressResult] = deriveObjectType()
 
   val queryFields = fields(
     unitField(name = "syncProgress", desc = None, t = OptionType(syncProgressType), f = (c, td) => {
@@ -60,18 +52,18 @@ object SyncProgressSchema extends GraphQLSchemaHelper("syncProgress") {
     name = "SyncProgressMutations",
     fields = fields(
       unitField(name = "create", desc = None, t = OptionType(syncProgressType), f = (c, td) => {
-        c.ctx.services.syncServices.syncProgressService.create(c.ctx.creds, c.arg(DataFieldSchema.dataFieldsArg))(td)
-      }, DataFieldSchema.dataFieldsArg),
+        c.ctx.services.syncServices.syncProgressService.create(c.ctx.creds, c.arg(dataFieldsArg))(td)
+      }, dataFieldsArg),
       unitField(name = "update", desc = None, t = OptionType(syncProgressType), f = (c, td) => {
-        c.ctx.services.syncServices.syncProgressService.update(c.ctx.creds, c.arg(syncProgressKeyArg), c.arg(DataFieldSchema.dataFieldsArg))(td).map(_._1)
-      }, syncProgressKeyArg, DataFieldSchema.dataFieldsArg),
+        c.ctx.services.syncServices.syncProgressService.update(c.ctx.creds, c.arg(syncProgressKeyArg), c.arg(dataFieldsArg))(td).map(_._1)
+      }, syncProgressKeyArg, dataFieldsArg),
       unitField(name = "remove", desc = None, t = syncProgressType, f = (c, td) => {
         c.ctx.services.syncServices.syncProgressService.remove(c.ctx.creds, c.arg(syncProgressKeyArg))(td)
       }, syncProgressKeyArg)
     )
   )
 
-  val mutationFields = fields(unitField(name = "syncProgress", desc = None, t = syncProgressMutationType, f = (c, td) => Future.successful(())))
+  val mutationFields = fields(unitField(name = "syncProgress", desc = None, t = syncProgressMutationType, f = (c, td) => scala.concurrent.Future.successful(())))
 
   private[this] def toResult(r: GraphQLSchemaHelper.SearchResult[SyncProgress]) = {
     SyncProgressResult(paging = r.paging, filters = r.args.filters, orderBys = r.args.orderBys, totalCount = r.count, results = r.results, durationMs = r.dur)

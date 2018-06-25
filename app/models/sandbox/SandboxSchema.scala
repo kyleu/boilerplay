@@ -1,12 +1,12 @@
 package models.sandbox
 
-import graphql.CommonSchema
+import graphql.GraphQLUtils._
 import graphql.GraphQLContext
-import sangria.macros.derive._
+import sangria.macros.derive.ObjectTypeName
 import sangria.schema._
 
 object SandboxSchema {
-  implicit val sandboxTaskEnum: EnumType[SandboxTask] = CommonSchema.deriveEnumeratumType(name = "SandboxTask", values = SandboxTask.values)
+  implicit val sandboxTaskEnum: EnumType[SandboxTask] = deriveEnumeratumType(name = "SandboxTask", values = SandboxTask.values)
 
   val sandboxTaskArg = Argument("task", sandboxTaskEnum)
   val sandboxArgumentArg = Argument("arg", OptionInputType(StringType))
