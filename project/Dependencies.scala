@@ -66,11 +66,8 @@ object Dependencies {
   }
 
   object Metrics {
-    val version = "0.4.0"
-    val metrics = "io.prometheus" % "simpleclient" % version
-    val metricsJvm = "io.prometheus" % "simpleclient_hotspot" % version
-    val metricsHttp = "io.prometheus" % "simpleclient_httpserver" % version
-    val metricsPush = "io.prometheus" % "simpleclient_pushgateway" % version
+    val version = "1.0.5"
+    val micrometer = "io.micrometer" % "micrometer-registry-prometheus" % version
   }
 
   object Tracing {

@@ -64,7 +64,7 @@ class Application @javax.inject.Inject() (
     System.setProperty("user.timezone", "UTC")
     util.EncryptionUtils.setKey(config.secretKey)
 
-    if (config.metrics.prometheusEnabled) { Instrumented.start(config.metrics.prometheusPort) }
+    if (config.metrics.micrometerEnabled) { Instrumented.start() }
 
     lifecycle.addStopHook(() => Future.successful(stop()))
 
@@ -86,6 +86,6 @@ class Application @javax.inject.Inject() (
 
     CacheService.close()
     if (config.metrics.tracingEnabled) { tracing.close() }
-    if (config.metrics.prometheusEnabled) { Instrumented.stop() }
+    if (config.metrics.micrometerEnabled) { Instrumented.stop() }
   }
 }

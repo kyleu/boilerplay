@@ -2,24 +2,24 @@ package services.database
 
 import java.sql.Connection
 import java.util.Properties
+import java.util.concurrent.TimeUnit
 
 import com.zaxxer.hikari.{HikariConfig, HikariDataSource}
-import io.prometheus.client.Histogram
 import models.database.jdbc.Queryable
 import models.database.{DatabaseConfig, RawQuery, Statement}
+import util.metrics.Instrumented
 import util.tracing.{TraceData, TracingService}
 
 import scala.util.control.NonFatal
 
 abstract class JdbcDatabase(override val key: String, configPrefix: String) extends Database[Connection] with Queryable {
-  protected[this] lazy val sqlHistogram = Histogram.build(
-    s"${util.Config.projectId}_${key}_database",
-    s"Database metrics for [$key]."
-  ).labelNames("method", "name").register()
+  protected val metricsId = s"${util.Config.projectId}_${key}_database"
 
   private[this] def time[A](method: String, name: String)(f: => A) = {
-    val ctx = sqlHistogram.labels(method, name).startTimer()
-    try { f } finally { ctx.close() }
+    val startNanos = System.nanoTime
+    try { f } finally {
+      Instrumented.regOpt.foreach(_.timer(metricsId, "method", method, "name", name).record(System.nanoTime - startNanos, TimeUnit.NANOSECONDS))
+    }
   }
 
   private[this] var ds: Option[HikariDataSource] = None

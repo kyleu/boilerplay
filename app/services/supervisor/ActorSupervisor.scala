@@ -6,7 +6,6 @@ import akka.actor.SupervisorStrategy.Stop
 import akka.actor.{Actor, ActorRef, OneForOneStrategy, SupervisorStrategy}
 import java.time.LocalDateTime
 
-import io.prometheus.client.{Counter, Gauge, Histogram}
 import models.InternalMessage._
 import models.ResponseMessage.ServerError
 import models.{Application, InternalMessage, ResponseMessage}
@@ -29,9 +28,6 @@ class ActorSupervisor(val app: Application) extends Actor with Logging {
   private[this] def socketById(id: UUID) = sockets.values.find(_.contains(id)).flatMap(_.get(id))
 
   private[this] lazy val metricsName = util.Config.projectId + "_actor_supervisor"
-  private[this] lazy val receiveHistogram = Histogram.build(metricsName + "_receive", s"Message metrics for [$metricsName]").labelNames("msg").register()
-  private[this] lazy val errorCounter = Counter.build(metricsName + "_exception", s"Exception metrics for [$metricsName]").labelNames("msg", "ex").register()
-  private[this] val socketsCount = Gauge.build(metricsName + "_active_connections", "Actor Supervisor active actors.").labelNames("id").register()
 
   override def preStart() = {
     log.debug(s"Actor Supervisor started for [${util.Config.projectId}].")
@@ -41,7 +37,7 @@ class ActorSupervisor(val app: Application) extends Actor with Logging {
     case _ => Stop
   }
 
-  private[this] def time(msg: Any, f: => Unit) = Instrumented.timeReceive(msg, receiveHistogram, errorCounter)(f)
+  private[this] def time(msg: Any, f: => Unit) = Instrumented.timeReceive(msg, metricsName, "class", msg.getClass.getSimpleName)(f)
 
   override def receive = {
     case ss: SocketStarted => time(ss, handleSocketStarted(ss.creds, ss.channel, ss.socketId, ss.conn))
@@ -77,7 +73,7 @@ class ActorSupervisor(val app: Application) extends Actor with Logging {
     sockets.getOrElseUpdate(channel, ActorSupervisor.emptyMap)(socketId) = {
       ActorSupervisor.SocketRecord(socketId, creds.user.id, creds.user.username, channel, socket, DateUtils.now)
     }
-    socketsCount.inc()
+    Instrumented.regOpt.foreach(_.counter(metricsName + "_sockets").increment())
   }
 
   protected[this] def handleSocketStopped(id: UUID) = {
@@ -86,6 +82,5 @@ class ActorSupervisor(val app: Application) extends Actor with Logging {
         log.debug(s"Connection [$id] [${sock.actorRef.path}] removed from channel [${channel._1}].")
       }
     }
-    socketsCount.dec()
   }
 }

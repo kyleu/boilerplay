@@ -2,7 +2,6 @@ package controllers
 
 import com.mohiva.play.silhouette.api.actions.{SecuredRequest, UserAwareRequest}
 import io.circe.{Json, Printer}
-import io.prometheus.client.Histogram
 import models.Application
 import models.auth.{AuthEnv, Credentials}
 import models.result.data.DataField
@@ -25,14 +24,10 @@ abstract class BaseController(val name: String) extends InjectedController with 
   protected def app: Application
 
   protected[this] lazy val metricsName = util.Config.metricsId + "_" + cn(this)
-  protected[this] lazy val requestHistogram = Histogram.build(
-    metricsName + "_request",
-    s"Controller request metrics for [$metricsName]"
-  ).labelNames("method").register()
 
   protected def withoutSession(action: String)(block: UserAwareRequest[AuthEnv, AnyContent] => TraceData => Future[Result])(implicit ec: ExecutionContext) = {
     app.silhouette.UserAwareAction.async { implicit request =>
-      Instrumented.timeFuture(requestHistogram, name + "_" + action) {
+      Instrumented.timeFuture(metricsName + "_request", "action", name + "_" + action) {
         app.tracing.trace(name + ".controller." + action) { td =>
           ControllerUtils.enhanceRequest(request, request.identity, td)
           block(request)(td)
@@ -47,7 +42,7 @@ abstract class BaseController(val name: String) extends InjectedController with 
         case Some(u) => if (admin && u.role != Role.Admin) {
           failRequest(request)
         } else {
-          Instrumented.timeFuture(requestHistogram, name + "_" + action) {
+          Instrumented.timeFuture(metricsName + "_request", "action", name + "_" + action) {
             app.tracing.trace(name + ".controller." + action) { td =>
               ControllerUtils.enhanceRequest(request, Some(u), td)
               val auth = request.authenticator.getOrElse(throw new IllegalStateException("No auth!"))

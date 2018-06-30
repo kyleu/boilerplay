@@ -1,52 +1,65 @@
 package util.metrics
 
-import io.prometheus.client.{CollectorRegistry, Counter, Histogram}
-import io.prometheus.client.exporter.HTTPServer
-import io.prometheus.client.hotspot.DefaultExports
+import java.util.concurrent.TimeUnit
+
+import io.micrometer.core.instrument.binder.jvm.{ClassLoaderMetrics, JvmGcMetrics, JvmMemoryMetrics, JvmThreadMetrics}
+import io.micrometer.core.instrument.binder.system.ProcessorMetrics
+import io.micrometer.prometheus.{PrometheusConfig, PrometheusMeterRegistry}
 import util.Logging
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
 import scala.util.control.NonFatal
 
 object Instrumented extends Logging {
   private[this] def cn(x: Any) = x.getClass.getSimpleName.replaceAllLiterally("$", "")
 
-  private[this] var server: Option[HTTPServer] = None
+  private[this] var registry: Option[PrometheusMeterRegistry] = None
 
-  def start(port: Int) = {
-    log.info(s"Exposing Prometheus metrics on port [$port].")
-    server = Some(new HTTPServer(port))
-    DefaultExports.initialize()
+  def reg = registry.getOrElse(throw new IllegalStateException("Not started"))
+  def regOpt = registry
+
+  def start() = {
+    val r = new PrometheusMeterRegistry(PrometheusConfig.DEFAULT)
+    registry = Some(r)
+    new ClassLoaderMetrics().bindTo(r)
+    new JvmMemoryMetrics().bindTo(r)
+    new JvmGcMetrics().bindTo(r)
+    new ProcessorMetrics().bindTo(r)
+    new JvmThreadMetrics().bindTo(r)
   }
 
   def stop() = {
-    server.foreach(_.stop())
-    CollectorRegistry.defaultRegistry.clear()
+    registry.foreach(_.getPrometheusRegistry.clear())
+    registry.foreach(_.close())
+    registry = None
   }
 
-  def timeReceive[A](msg: Any, receive: Histogram, error: Counter)(f: => A) = {
-    val t = receive.labels(cn(msg)).startTimer()
+  def timeReceive[A](msg: Any, key: String, tags: String*)(f: => A) = registry.map { r =>
+    val startNanos = System.nanoTime
     try {
-      f
+      val ret = f
+      r.timer(key, ("class" :: cn(msg) :: Nil) ++ tags: _*).record(System.nanoTime - startNanos, TimeUnit.NANOSECONDS)
+      ret
     } catch {
       case NonFatal(x) =>
-        error.labels(cn(msg), cn(x)).inc()
+        r.timer(key, ("class" :: cn(msg) :: "error" :: cn(x) :: Nil) ++ tags: _*).record(System.nanoTime - startNanos, TimeUnit.NANOSECONDS)
         throw x
-    } finally {
-      t.close()
     }
-  }
+  }.getOrElse(f)
 
-  def timeFuture[A](metric: Histogram, labels: String*)(future: => Future[A])(implicit context: ExecutionContext): Future[A] = {
-    val ctx = metric.labels(labels: _*).startTimer()
+  def timeFuture[A](key: String, tags: String*)(future: => Future[A])(implicit context: ExecutionContext): Future[A] = registry.map { r =>
+    val startNanos = System.nanoTime
     val f = try {
       future
     } catch {
       case NonFatal(ex) =>
-        ctx.close()
         throw ex
     }
-    f.onComplete(_ => ctx.close())
+    f.onComplete {
+      case Success(s) => r.timer(key, ("class" :: cn(s) :: Nil) ++ tags: _*).record(System.nanoTime - startNanos, TimeUnit.NANOSECONDS)
+      case Failure(x) => r.timer(key, ("error" :: cn(x) :: Nil) ++ tags: _*).record(System.nanoTime - startNanos, TimeUnit.NANOSECONDS)
+    }
     f
-  }
+  }.getOrElse(future)
 }

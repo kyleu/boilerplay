@@ -9,7 +9,7 @@ object BackupRestore {
   private[this] val backupRoot = FileService.getDir("backup")
 
   def backup() = {
-    val filename = s"${util.Config.projectId}-backup-${DateUtils.now.toString}.sql"
+    val filename = s"${util.Config.projectId}-backup-${DateUtils.today.toString}.sql"
     val f = backupRoot / filename
     if (f.exists) {
       throw new IllegalStateException(s"File [$filename] already exists.")

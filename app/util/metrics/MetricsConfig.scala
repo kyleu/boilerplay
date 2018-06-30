@@ -4,8 +4,7 @@ import play.api.Configuration
 
 @javax.inject.Singleton
 class MetricsConfig @javax.inject.Inject() (cnf: Configuration) {
-  val prometheusEnabled = cnf.get[Boolean]("metrics.prometheus.enabled")
-  val prometheusPort = cnf.get[Int]("metrics.prometheus.port")
+  val micrometerEnabled = cnf.get[Boolean]("metrics.micrometer.enabled")
 
   val tracingEnabled = cnf.get[Boolean]("metrics.tracing.enabled")
   val tracingServer = Option(System.getenv("ZIPKIN_SERVICE_HOST")) match {
