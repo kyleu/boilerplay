@@ -13,8 +13,6 @@ GET         /explore               controllers.admin.system.AdminController.expl
 GET         /settings              controllers.admin.system.SettingsController.settings
 POST        /settings              controllers.admin.system.SettingsController.saveSettings
 
-GET         /ddl                   controllers.admin.system.DdlFileController.list
-
 GET         /encrypt               controllers.admin.system.EncryptionController.form
 POST        /encrypt               controllers.admin.system.EncryptionController.post
 

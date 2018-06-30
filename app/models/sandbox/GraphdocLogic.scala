@@ -29,7 +29,7 @@ object GraphdocLogic {
   private[this] val schemaFilename = "schema.json"
 
   private[this] lazy val introspectionQuery = Option(getClass.getClassLoader.getResourceAsStream(queryFilename)) match {
-    case Some(q) => scala.io.Source.fromInputStream(q).getLines().mkString("\n")
+    case Some(q) => scala.io.Source.fromInputStream(q).mkString
     case None => throw new IllegalStateException(s"Cannot read [$queryFilename].")
   }
 

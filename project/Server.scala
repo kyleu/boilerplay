@@ -31,7 +31,7 @@ object Server {
       Metrics.metrics, Metrics.metricsJvm, Metrics.metricsHttp, Metrics.metricsPush,
       Akka.actor, Akka.logging, Akka.visualMailbox,
       Play.filters, Play.guice, Play.ws, Play.json, Play.cache,
-      Database.postgres, Database.hikariCp,
+      Database.postgres, Database.hikariCp, Database.flyway,
       Database.slickCore, Database.slickHikariCp, Database.slickPg, Database.slickPgCirce, Database.slickless,
       GraphQL.sangria, GraphQL.playJson, GraphQL.circe,
       Authentication.silhouette, Authentication.hasher, Authentication.persistence, Authentication.crypto,

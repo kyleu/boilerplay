@@ -23,7 +23,7 @@ abstract class JdbcDatabase(override val key: String, configPrefix: String) exte
   }
 
   private[this] var ds: Option[HikariDataSource] = None
-  private[this] def source = ds.getOrElse(throw new IllegalStateException("Database not initialized."))
+  def source = ds.getOrElse(throw new IllegalStateException("Database not initialized."))
 
   private[this] var slickOpt: Option[SlickQueryService] = None
   def slick = slickOpt.getOrElse(throw new IllegalStateException("Database not initialized."))
@@ -94,7 +94,7 @@ abstract class JdbcDatabase(override val key: String, configPrefix: String) exte
     }
   }
 
-  def withConnection[T](f: (Connection) => T) = {
+  def withConnection[T](f: Connection => T) = {
     val conn = source.getConnection()
     try { f(conn) } finally { conn.close() }
   }
