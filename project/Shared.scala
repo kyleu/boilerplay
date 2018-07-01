@@ -1,11 +1,10 @@
 import com.github.sbt.cpd.CpdKeys.cpdSkipDuplicateFiles
-import org.portablescala.sbtplatformdeps.PlatformDepsPlugin.autoImport._
 import sbt.Keys._
 import sbt._
 import sbtassembly.AssemblyPlugin.autoImport._
-import sbtcrossproject.CrossPlugin.autoImport._
-import sbtcrossproject.{CrossType, crossProject}
-import scalajscrossproject.ScalaJSCrossPlugin.autoImport.{toScalaJSGroupID => _, _}
+import org.portablescala.sbtplatformdeps.PlatformDepsPlugin.autoImport._
+import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType, _}
+import scalajscrossproject.ScalaJSCrossPlugin.autoImport._
 import webscalajs.ScalaJSWeb
 
 object Shared {

@@ -19,24 +19,32 @@ addSbtPlugin("com.typesafe.sbt" % "sbt-digest" % "1.1.4")
 addSbtPlugin("com.typesafe.sbt" % "sbt-gzip" % "1.0.2")
 
 // Scala.js
-addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject" % "0.4.0")
+/*
+addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject" % "0.5.0")
 
 addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.23")
 
-addSbtPlugin("com.vmunier" % "sbt-web-scalajs" % "1.0.7" exclude("org.scala-js", "sbt-scalajs"))
+addSbtPlugin("com.vmunier" % "sbt-web-scalajs" % "1.0.8" exclude("org.scala-js", "sbt-scalajs"))
+*/
+
+addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject" % "0.5.0")
+
+addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.24")
+
+addSbtPlugin("com.vmunier" % "sbt-web-scalajs" % "1.0.8-0.6" exclude("org.scala-js", "sbt-scalajs"))
 
 // Source Control
-addSbtPlugin("com.typesafe.sbt" % "sbt-git" % "0.9.3")
+addSbtPlugin("com.typesafe.sbt" % "sbt-git" % "1.0.0")
 
 // Benchmarking
-addSbtPlugin("pl.project13.scala" % "sbt-jmh" % "0.3.3")
+addSbtPlugin("pl.project13.scala" % "sbt-jmh" % "0.3.4")
 
 addSbtPlugin("io.gatling" % "gatling-sbt" % "2.2.2")
 
 // App Packaging
-addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.3.4")
+addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.3.5")
 
-addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "0.14.6")
+addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "0.14.7")
 
 // Dependency Resolution
 addSbtPlugin("io.get-coursier" % "sbt-coursier" % "1.0.0")
@@ -72,7 +80,7 @@ addSbtPlugin("com.dwijnand" % "sbt-project-graph" % "0.2.2") // projectsGraphDot
 addSbtPlugin("com.github.xuwei-k" % "sbt-class-diagram" % "0.2.1") // classDiagram
 
 // Documentation
-addSbtPlugin("com.lightbend.paradox" % "sbt-paradox" % "0.3.3")
+addSbtPlugin("com.lightbend.paradox" % "sbt-paradox" % "0.3.5")
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-site" % "1.3.2" exclude("com.lightbend.paradox", "sbt-paradox"))
 

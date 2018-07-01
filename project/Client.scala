@@ -4,7 +4,8 @@ import sbt.Keys._
 import sbt._
 
 import org.portablescala.sbtplatformdeps.PlatformDepsPlugin.autoImport._
-import scalajscrossproject.ScalaJSCrossPlugin.autoImport.{toScalaJSGroupID => _, _}
+import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType, _}
+import scalajscrossproject.ScalaJSCrossPlugin.autoImport._
 
 object Client {
   private[this] val clientSettings = Shared.commonSettings ++ Seq(
