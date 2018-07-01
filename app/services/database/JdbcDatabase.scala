@@ -31,6 +31,7 @@ abstract class JdbcDatabase(override val key: String, configPrefix: String) exte
   def open(cfg: play.api.Configuration, svc: TracingService) = {
     ds.foreach(_ => throw new IllegalStateException("Database already initialized."))
 
+    Class.forName("org.postgresql.Driver")
     val config = DatabaseConfig.fromConfig(cfg, configPrefix)
     val properties = new Properties
     val maxPoolSize = 32
