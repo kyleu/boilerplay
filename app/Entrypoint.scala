@@ -5,7 +5,7 @@ object Entrypoint {
   def main(args: Array[String]): Unit = if (args.isEmpty) {
     startServer(new RealServerProcess(args))
   } else {
-    throw new IllegalStateException("TODO: Parse arguments.")
+    throw new IllegalStateException("Unable to parse arguments.")
   }
 
   def startServer(process: RealServerProcess) = {

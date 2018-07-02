@@ -11,7 +11,7 @@ pipeline {
 
     stage('Publish') {
       steps {
-        echo 'TODO: publish'
+        echo 'publish?'
       }
     }
   }
