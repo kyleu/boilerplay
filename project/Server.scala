@@ -27,9 +27,8 @@ object Server {
   private[this] val dependencies = {
     import Dependencies._
     Seq(
-      Tracing.brave, Tracing.http, Tracing.logging, Metrics.micrometer,
-      Akka.actor, Akka.logging, Akka.visualMailbox,
-      Play.filters, Play.guice, Play.ws, Play.json, Play.cache,
+      Tracing.jaeger, Tracing.jaegerMetrics, Metrics.micrometer,
+      Akka.actor, Akka.logging, Akka.visualMailbox, Play.filters, Play.guice, Play.ws, Play.json, Play.cache,
       Database.postgres, Database.hikariCp, Database.flyway,
       Database.slickCore, Database.slickHikariCp, Database.slickPg, Database.slickPgCirce, Database.slickless,
       GraphQL.sangria, GraphQL.playJson, GraphQL.circe,

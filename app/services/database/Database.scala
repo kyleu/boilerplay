@@ -6,8 +6,7 @@ import com.google.common.net.InetAddresses
 import models.database.{DatabaseConfig, RawQuery, Statement}
 import util.FutureUtils.databaseContext
 import util.Logging
-import util.tracing.{TraceData, TraceDataZipkin, TracingService}
-import zipkin.Endpoint
+import util.tracing.{TraceData, TraceDataOpenTracing, TracingService}
 
 import scala.concurrent.Future
 
@@ -23,14 +22,7 @@ trait Database[Conn] extends Logging {
 
   def close(): Boolean
 
-  private[this] lazy val endpoint = {
-    val builder = Endpoint.builder().port(getConfig.port).serviceName("database." + key)
-    InetAddress.getByName(getConfig.host) match {
-      case x if x.getAddress.length == 4 => builder.ipv4(InetAddresses.coerceToInteger(x))
-      case x => builder.ipv6(x.getAddress)
-    }
-    builder.build()
-  }
+  private[this] lazy val endpoint = getConfig.host + ":" + getConfig.port
 
   private[this] var tracingServiceOpt: Option[TracingService] = None
   protected def tracing = tracingServiceOpt.getOrElse {
@@ -48,8 +40,8 @@ trait Database[Conn] extends Logging {
   protected[this] def prependComment(obj: Object, sql: String) = s"/* ${obj.getClass.getSimpleName.replace("$", "")} */ $sql"
 
   protected[this] def trace[A](traceName: String)(f: TraceData => A)(implicit traceData: TraceData) = tracing.traceBlocking(key + "." + traceName) {
-    case td: TraceDataZipkin =>
-      td.span.kind(brave.Span.Kind.CLIENT).remoteEndpoint(endpoint)
+    case td: TraceDataOpenTracing =>
+      td.span.setTag("database.server", endpoint)
       f(td)
     case td => f(td)
   }

@@ -2,7 +2,6 @@ package util.web
 
 import play.api.libs.ws._
 import util.tracing.{TraceData, TracingService}
-import zipkin.TraceKeys
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration.Duration
@@ -30,8 +29,8 @@ private class TracingWSRequest(
   override def execute() = tracer.trace(spanName) { data =>
     annotate(data, "execute")
     request.addHttpHeaders(tracer.toMap(data).toSeq: _*).execute().map { rsp =>
-      data.tag(TraceKeys.HTTP_STATUS_CODE, rsp.status.toString)
-      data.tag(TraceKeys.HTTP_RESPONSE_SIZE, rsp.bodyAsBytes.size.toString)
+      data.tag("http.status.code", rsp.status.toString)
+      data.tag("http.response.size", rsp.bodyAsBytes.size.toString)
       rsp
     }
   }(traceData)
@@ -50,9 +49,9 @@ private class TracingWSRequest(
 
   private[this] def annotate(data: TraceData, callType: String) = {
     data.tag("call", callType)
-    data.tag(TraceKeys.HTTP_URL, request.url)
-    data.tag(TraceKeys.HTTP_METHOD, request.method)
-    request.headers.get(play.api.http.HeaderNames.CONTENT_LENGTH).foreach(x => data.tag(TraceKeys.HTTP_REQUEST_SIZE, x.headOption.getOrElse("0")))
+    data.tag("http.url", request.url)
+    data.tag("http.method", request.method)
+    request.headers.get(play.api.http.HeaderNames.CONTENT_LENGTH).foreach(x => data.tag("http.request.size", x.headOption.getOrElse("0")))
     request.header("Content-Type").foreach(ct => data.tag("contenttype", ct))
     request.requestTimeout.foreach(t => data.tag("timeout", t.toString))
     data

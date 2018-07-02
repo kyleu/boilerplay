@@ -5,8 +5,7 @@ import akka.stream.Materializer
 import play.api.libs.typedmap.TypedKey
 import play.api.mvc.{Filter, RequestHeader, Result}
 import play.api.routing.Router
-import util.tracing.{TraceData, TraceDataZipkin, TracingService}
-import zipkin.TraceKeys
+import util.tracing.{TraceData, TraceDataOpenTracing, TracingService}
 
 import scala.concurrent.Future
 import scala.util.{Failure, Success}
@@ -25,30 +24,30 @@ class TracingFilter @Inject() (tracingService: TracingService)(implicit val mat:
   import tracingService.executionContext
   private val reqHeaderToSpanName: RequestHeader => String = TracingFilter.paramAwareRequestNamer
 
-  def apply(nextFilter: (RequestHeader) => Future[Result])(req: RequestHeader): Future[Result] = if (req.path.startsWith("/assets")) {
+  def apply(nextFilter: RequestHeader => Future[Result])(req: RequestHeader): Future[Result] = if (req.path.startsWith("/assets")) {
     nextFilter(req)
   } else {
     val serverSpan = tracingService.serverReceived(
       spanName = reqHeaderToSpanName(req),
-      span = tracingService.newSpan(req.headers)((headers, key) => headers.get(key))
+      span = tracingService.newSpan("webrequest", req.headers.toSimpleMap).start()
     )
-    serverSpan.tag(TraceKeys.HTTP_PATH, req.path)
-    serverSpan.tag(TraceKeys.HTTP_METHOD, req.method)
-    serverSpan.tag(TraceKeys.HTTP_HOST, req.host)
+    serverSpan.setTag("http.host", req.host)
+    serverSpan.setTag("http.method", req.method)
+    serverSpan.setTag("http.path", req.path)
     if (req.queryString.nonEmpty) {
-      serverSpan.tag("http.query.string", req.rawQueryString)
+      serverSpan.setTag("http.query.string", req.rawQueryString)
     }
     req.queryString.foreach {
-      case (k, v) => serverSpan.tag(s"http.query.$k", v.mkString(", "))
+      case (k, v) => serverSpan.setTag(s"http.query.$k", v.mkString(", "))
     }
 
-    val result = nextFilter(req.addAttr(TracingFilter.traceKey, TraceDataZipkin(serverSpan)))
+    val result = nextFilter(req.addAttr(TracingFilter.traceKey, TraceDataOpenTracing(serverSpan)))
     result.onComplete {
       case Failure(t) => tracingService.serverSend(serverSpan, "failed" -> s"Finished with exception: ${t.getMessage}")
       case Success(x) =>
-        serverSpan.tag(TraceKeys.HTTP_STATUS_CODE, x.header.status.toString)
-        x.header.headers.get("Content-Type").map(c => serverSpan.tag("http.response.contentType", c))
-        x.body.contentLength.map(l => serverSpan.tag(TraceKeys.HTTP_RESPONSE_SIZE, l.toString))
+        serverSpan.setTag("http.status.code", x.header.status.toString)
+        x.header.headers.get("Content-Type").map(c => serverSpan.setTag("http.response.contentType", c))
+        x.body.contentLength.map(l => serverSpan.setTag("http.response.size", l.toString))
         tracingService.serverSend(serverSpan)
     }
     result

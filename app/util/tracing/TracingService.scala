@@ -1,14 +1,15 @@
 package util.tracing
 
 import akka.actor.ActorSystem
-import brave.context.slf4j.MDCCurrentTraceContext
-import brave.sampler.Sampler
-import brave.{Span, Tracer, Tracing}
+import io.jaegertracing.Configuration
+import io.jaegertracing.micrometer.MicrometerMetricsFactory
+import io.opentracing.noop.NoopTracerFactory
+import io.opentracing.propagation.{Format, TextMapExtractAdapter, TextMapInjectAdapter}
+import io.opentracing.{Span, Tracer}
 import util.Logging
 import util.metrics.MetricsConfig
-import zipkin.reporter.AsyncReporter
-import zipkin.reporter.okhttp3.OkHttpSender
 
+import scala.collection.JavaConverters._
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 import scala.util.{Failure, Success, Try}
@@ -21,10 +22,10 @@ class TracingService @javax.inject.Inject() (actorSystem: ActorSystem, cnf: Metr
     f(new TraceData())
   }
   def topLevelTrace[A](name: String)(f: TraceData => Future[A]) = {
-    val span = serverReceived(spanName = name, span = newSpan(Map.empty[String, String])((headers, key) => headers.get(key)))
-    span.tag("top.level", "true")
+    val span = tracer.buildSpan(name).start()
+    span.setTag("top.level", "true")
 
-    val result = f(TraceDataZipkin(span))
+    val result = f(TraceDataOpenTracing(span))
     result.onComplete {
       case Failure(t) => serverSend(span, "failed" -> s"Finished with exception: ${t.getMessage}")
       case Success(_) => serverSend(span)
@@ -32,10 +33,10 @@ class TracingService @javax.inject.Inject() (actorSystem: ActorSystem, cnf: Metr
     result
   }
   def topLevelTraceBlocking[A](name: String)(f: TraceData => A): A = {
-    val span = serverReceived(spanName = name, span = newSpan(Map.empty[String, String])((headers, key) => headers.get(key)))
-    span.tag("top.level", "true")
+    val span = tracer.buildSpan(name).start()
+    span.setTag("top.level", "true")
     try {
-      val result = f(TraceDataZipkin(span))
+      val result = f(TraceDataOpenTracing(span))
       serverSend(span)
       result
     } catch {
@@ -45,39 +46,36 @@ class TracingService @javax.inject.Inject() (actorSystem: ActorSystem, cnf: Metr
     }
   }
 
-  private[this] val sender = OkHttpSender.create(s"http://${cnf.tracingServer}:${cnf.tracingPort}/api/v1/spans")
+  private[this] val tracer: Tracer = if (cnf.tracingEnabled) {
+    val sampler = new Configuration.SamplerConfiguration().withType("const").withParam(1)
+    val sender = new Configuration.SenderConfiguration().withAgentHost(cnf.tracingServer).withAgentPort(cnf.tracingPort)
+    val reporter = new Configuration.ReporterConfiguration().withLogSpans(false).withSender(sender).withFlushInterval(1000).withMaxQueueSize(10000)
+    val metrics = new MicrometerMetricsFactory()
 
-  private[this] val reporter = AsyncReporter.create(sender)
-  private[this] val samp = Sampler.create(cnf.tracingSampleRate)
-  private[this] val ctx = MDCCurrentTraceContext.create()
-  val builder = Tracing.newBuilder().localServiceName(util.Config.projectId).reporter(reporter).currentTraceContext(ctx).traceId128Bit(true).sampler(samp)
-  val tracing = builder.build()
-
-  if (!cnf.tracingEnabled) {
-    tracing.setNoop(true)
-  } else {
     val loc = s"${cnf.tracingServer}:${cnf.tracingPort}@${util.Config.projectId}"
     log.info(s"Tracing enabled, sending results to [$loc] using sample rate [${cnf.tracingSampleRate}].")
+    new Configuration(util.Config.projectId).withSampler(sampler).withReporter(reporter).withMetricsFactory(metrics).getTracer
+  } else {
+    NoopTracerFactory.create()
   }
-  private[this] val tracer: Tracer = tracing.tracer
 
   private[this] def newServerSpan(traceName: String, tags: (String, String)*)(implicit parentData: TraceData) = parentData match {
-    case td: TraceDataZipkin =>
-      val childSpan = tracer.newChild(td.span.context()).name(traceName).kind(Span.Kind.SERVER)
-      tags.foreach { case (key, value) => childSpan.tag(key, value) }
-      Some(childSpan.start().tag("thread.id", Thread.currentThread.getName))
+    case td: TraceDataOpenTracing =>
+      val childSpan = tracer.buildSpan(traceName).asChildOf(td.span).start()
+      tags.foreach { case (key, value) => childSpan.setTag(key, value) }
+      Some(childSpan.setTag("thread.id", Thread.currentThread.getName))
     case _ => None
   }
 
   def traceBlocking[A](traceName: String, tags: (String, String)*)(f: TraceData => A)(implicit parentData: TraceData) = parentData match {
-    case _: TraceDataZipkin => newServerSpan(traceName, tags: _*).map { childSpan =>
-      Try(f(TraceDataZipkin(childSpan))) match {
+    case _: TraceDataOpenTracing => newServerSpan(traceName, tags: _*).map { childSpan =>
+      Try(f(TraceDataOpenTracing(childSpan))) match {
         case Success(result) =>
           childSpan.finish()
           result
         case Failure(t) =>
-          childSpan.tag("error.type", t.getClass.getSimpleName.stripSuffix("$"))
-          childSpan.tag("error.message", t.getMessage)
+          childSpan.setTag("error.type", t.getClass.getSimpleName.stripSuffix("$"))
+          childSpan.setTag("error.message", t.getMessage)
           childSpan.finish()
           throw t
       }
@@ -87,42 +85,38 @@ class TracingService @javax.inject.Inject() (actorSystem: ActorSystem, cnf: Metr
 
   def trace[A](traceName: String, tags: (String, String)*)(f: TraceData => Future[A])(implicit parentData: TraceData) = {
     val childSpan = newServerSpan(traceName, tags: _*)
-    val result = f(childSpan.map(TraceDataZipkin.apply).getOrElse(parentData))
+    val result = f(childSpan.map(TraceDataOpenTracing.apply).getOrElse(parentData))
     result.onComplete[Unit] {
       case Failure(t) =>
-        childSpan.foreach(_.tag("error.type", t.getClass.getSimpleName.stripSuffix("$")))
-        childSpan.foreach(_.tag("error.message", t.getMessage))
+        childSpan.foreach(_.setTag("error.type", t.getClass.getSimpleName.stripSuffix("$")))
+        childSpan.foreach(_.setTag("error.message", t.getMessage))
       case _ => childSpan.foreach(_.finish())
     }
     result
   }
 
-  def serverReceived(spanName: String, span: Span) = span.name(spanName).kind(Span.Kind.SERVER).start()
+  def serverReceived(spanName: String, span: Span) = tracer.buildSpan(spanName).asChildOf(span).start()
   def serverSend(span: Span, tags: (String, String)*) = {
-    tags.foreach { case (key, value) => span.tag(key, value) }
+    tags.foreach { case (key, value) => span.setTag(key, value) }
     span.finish()
     span
   }
 
-  def newSpan[A](headers: A)(getHeader: (A, String) => Option[String]) = {
-    val contextOrFlags = tracing.propagation().extractor(
-      (carrier: A, key: String) => getHeader(carrier, key).orNull
-    ).extract(headers)
-    Option(contextOrFlags.context()).map(tracer.newChild).getOrElse(tracer.newTrace(contextOrFlags.samplingFlags()))
+  def newSpan[A](name: String, headers: Map[String, String]) = {
+    Option(tracer.extract(Format.Builtin.HTTP_HEADERS, new TextMapExtractAdapter(headers.asJava))) match {
+      case Some(extracted) => tracer.buildSpan(name).asChildOf(extracted)
+      case None => tracer.buildSpan(name)
+    }
   }
 
   def toMap(td: TraceData) = td match {
-    case tdz: TraceDataZipkin =>
-      val data = collection.mutable.Map[String, String]()
-      tracing.propagation().injector(
-        (carrier: collection.mutable.Map[String, String], key: String, value: String) => carrier += key -> value
-      ).inject(tdz.span.context(), data)
-      data.toMap
+    case tdz: TraceDataOpenTracing =>
+      val data = new java.util.HashMap[String, String]()
+      tracer.inject(tdz.span.context, Format.Builtin.HTTP_HEADERS, new TextMapInjectAdapter(data))
+      data.asScala
     case _ => Map.empty
   }
 
   def close() = {
-    tracing.close()
-    reporter.close()
   }
 }

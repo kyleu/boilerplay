@@ -71,10 +71,9 @@ object Dependencies {
   }
 
   object Tracing {
-    private[this] val version = "4.6.0"
-    val brave = "io.zipkin.brave" % "brave-core" % version
-    val http = "io.zipkin.reporter" % "zipkin-sender-okhttp3" % "1.1.0"
-    val logging = "io.zipkin.brave" % "brave-context-slf4j" % version
+    val version = "0.29.0"
+    val jaeger = "io.jaegertracing" % "jaeger-thrift" % version
+    val jaegerMetrics = "io.jaegertracing" % "jaeger-micrometer" % version
   }
 
   object ScalaJS {

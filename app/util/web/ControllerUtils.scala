@@ -6,7 +6,6 @@ import play.api.data.FormError
 import play.api.mvc.{AnyContent, Request}
 import util.JsonSerializers.Json
 import util.tracing.TraceData
-import zipkin.TraceKeys
 
 object ControllerUtils {
   def getForm(body: AnyContent, prefix: Option[String] = None) = body.asFormUrlEncoded match {
@@ -58,7 +57,7 @@ object ControllerUtils {
   }
 
   def enhanceRequest(request: Request[AnyContent], user: Option[SystemUser], trace: TraceData) = {
-    trace.tag(TraceKeys.HTTP_REQUEST_SIZE, request.body.asText.map(_.length).orElse(request.body.asRaw.map(_.size.toInt)).getOrElse(0).toString)
+    trace.tag("http.request.size", request.body.asText.map(_.length).orElse(request.body.asRaw.map(_.size.toInt)).getOrElse(0).toString)
     user.foreach { u =>
       trace.tag("user.id", u.id.toString)
       trace.tag("user.username", u.username)
