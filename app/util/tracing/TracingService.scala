@@ -17,6 +17,7 @@ import scala.util.{Failure, Success, Try}
 @javax.inject.Singleton
 class TracingService @javax.inject.Inject() (actorSystem: ActorSystem, cnf: MetricsConfig) extends Logging {
   implicit val executionContext: ExecutionContext = actorSystem.dispatchers.lookup("context.tracing")
+  private[this] var cfg: Option[Configuration] = None
 
   def noopTrace[A](name: String)(f: TraceData => Future[A]) = {
     f(new TraceData())
@@ -54,7 +55,8 @@ class TracingService @javax.inject.Inject() (actorSystem: ActorSystem, cnf: Metr
 
     val loc = s"${cnf.tracingServer}:${cnf.tracingPort}@${util.Config.projectId}"
     log.info(s"Tracing enabled, sending results to [$loc] using sample rate [${cnf.tracingSampleRate}].")
-    new Configuration(util.Config.projectId).withSampler(sampler).withReporter(reporter).withMetricsFactory(metrics).getTracer
+    cfg = Some(new Configuration(util.Config.projectId).withSampler(sampler).withReporter(reporter).withMetricsFactory(metrics))
+    cfg.get.getTracer
   } else {
     NoopTracerFactory.create()
   }
@@ -118,5 +120,7 @@ class TracingService @javax.inject.Inject() (actorSystem: ActorSystem, cnf: Metr
   }
 
   def close() = {
+    cfg.foreach(_.closeTracer())
+    cfg = None
   }
 }

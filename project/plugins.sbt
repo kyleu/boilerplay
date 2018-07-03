@@ -28,11 +28,6 @@ addSbtPlugin("com.vmunier" % "sbt-web-scalajs" % "1.0.8-0.6" exclude("org.scala-
 // Source Control
 addSbtPlugin("com.typesafe.sbt" % "sbt-git" % "1.0.0")
 
-// Benchmarking
-addSbtPlugin("pl.project13.scala" % "sbt-jmh" % "0.3.4")
-
-addSbtPlugin("io.gatling" % "gatling-sbt" % "2.2.2")
-
 // App Packaging
 addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.3.5")
 

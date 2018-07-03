@@ -1,4 +1,5 @@
 package util.web
+
 import javax.inject.Inject
 
 import akka.stream.Materializer

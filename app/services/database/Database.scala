@@ -1,8 +1,5 @@
 package services.database
 
-import java.net.InetAddress
-
-import com.google.common.net.InetAddresses
 import models.database.{DatabaseConfig, RawQuery, Statement}
 import util.FutureUtils.databaseContext
 import util.Logging
