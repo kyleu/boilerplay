@@ -55,6 +55,7 @@ object Server {
     PlayKeys.externalizeResources := false,
     PlayKeys.devSettings := Seq("play.server.akka.requestTimeout" -> "infinite"),
     PlayKeys.playDefaultPort := Shared.projectPort,
+    PlayKeys.playInteractionMode := PlayUtils.NonBlockingInteractionMode,
 
     // Scala.js
     scalaJSProjects := Seq(Client.client),

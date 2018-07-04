@@ -15,18 +15,22 @@ object EncryptionUtils {
 
   def setKey(k: String) = key = Some(k)
 
-  def encrypt(value: String) = {
+  def encrypt(value: String) = encryptBytes(value.getBytes("UTF-8"))
+
+  def encryptBytes(value: Array[Byte]) = {
     val cipher: Cipher = Cipher.getInstance("AES/ECB/PKCS5Padding")
     cipher.init(Cipher.ENCRYPT_MODE, spec)
-    Base64.encodeBase64String(cipher.doFinal(value.getBytes("UTF-8")))
+    Base64.encodeBase64String(cipher.doFinal(value))
   }
 
-  def decrypt(encryptedValue: String, throwOnError: Boolean = false) = try {
+  def decrypt(encryptedValue: String, throwOnError: Boolean = false) = new String(decryptBytes(encryptedValue, throwOnError))
+
+  def decryptBytes(encryptedValue: String, throwOnError: Boolean = false) = try {
     val cipher: Cipher = Cipher.getInstance("AES/ECB/PKCS5PADDING")
     cipher.init(Cipher.DECRYPT_MODE, spec)
-    new String(cipher.doFinal(Base64.decodeBase64(encryptedValue)))
+    cipher.doFinal(Base64.decodeBase64(encryptedValue))
   } catch {
-    case NonFatal(x) => if (throwOnError) { throw x } else { encryptedValue }
+    case NonFatal(x) => if (throwOnError) { throw x } else { Array.empty[Byte] }
   }
 
   private[this] def keyToSpec(key: String) = {
