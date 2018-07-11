@@ -34,6 +34,8 @@ object Shared {
     publishMavenStyle := false,
     testFrameworks += new TestFramework("utest.runner.Framework"),
 
+    evictionWarningOptions in update := EvictionWarningOptions.default.withWarnTransitiveEvictions(false).withWarnDirectEvictions(false),
+
     cpdSkipDuplicateFiles := true,
 
     test in assembly := {},

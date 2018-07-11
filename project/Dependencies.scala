@@ -44,7 +44,7 @@ object Dependencies {
     val slickPgCirce = "com.github.tminglei" %% "slick-pg_circe-json" % "0.16.2"
     val slickless = "io.underscore" %% "slickless" % "0.3.3"
 
-    val flyway = "org.flywaydb" % "flyway-core" % "5.1.3"
+    val flyway = "org.flywaydb" % "flyway-core" % "5.1.4"
   }
 
   object GraphQL {
@@ -71,7 +71,7 @@ object Dependencies {
   }
 
   object Tracing {
-    val version = "0.29.0"
+    val version = "0.30.0"
     val jaeger = "io.jaegertracing" % "jaeger-thrift" % version
     val jaegerMetrics = "io.jaegertracing" % "jaeger-micrometer" % version
   }
@@ -83,7 +83,7 @@ object Dependencies {
   }
 
   object Utils {
-    val scapegoatVersion = "1.3.5"
+    val scapegoatVersion = "1.3.6"
     val enumeratumCirceVersion = "1.5.17"
     val booPickleVersion = "1.2.5"
     val utestVersion = "0.6.4"
