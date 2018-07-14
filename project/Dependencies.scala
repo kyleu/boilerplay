@@ -13,7 +13,7 @@ object Dependencies {
   }
 
   object Akka {
-    private[this] val version = "2.5.13"
+    private[this] val version = "2.5.14"
     val actor = "com.typesafe.akka" %% "akka-actor" % version
     val remote = "com.typesafe.akka" %% "akka-remote" % version
     val logging = "com.typesafe.akka" %% "akka-slf4j" % version
@@ -35,8 +35,8 @@ object Dependencies {
   object Database {
     val version = "3.2.3"
 
-    val postgres = "org.postgresql" % "postgresql" % "9.4.1212"
-    val hikariCp = "com.zaxxer" % "HikariCP" % "2.7.9"
+    val postgres = "org.postgresql" % "postgresql" % "42.2.4"
+    val hikariCp = "com.zaxxer" % "HikariCP" % "3.2.0"
 
     val slickCore = "com.typesafe.slick" %% "slick" % version
     val slickHikariCp = "com.typesafe.slick" %% "slick-hikaricp" % version
@@ -62,7 +62,7 @@ object Dependencies {
     val fontAwesome = "org.webjars" % "font-awesome" % "4.7.0" intransitive()
     val jquery = "org.webjars" % "jquery" % "2.2.4" intransitive()
     val materialize = "org.webjars" % "materializecss" % "0.100.2" intransitive()
-    val swaggerUi = "org.webjars" % "swagger-ui" % "3.17.1" intransitive()
+    val swaggerUi = "org.webjars" % "swagger-ui" % "3.17.3" intransitive()
   }
 
   object Metrics {
@@ -71,7 +71,7 @@ object Dependencies {
   }
 
   object Tracing {
-    val version = "0.30.0"
+    val version = "0.30.2"
     val jaeger = "io.jaegertracing" % "jaeger-thrift" % version
     val jaegerMetrics = "io.jaegertracing" % "jaeger-micrometer" % version
   }
