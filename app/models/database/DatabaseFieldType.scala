@@ -1,5 +1,7 @@
 package models.database
 
+import java.time.{ZoneOffset, ZonedDateTime}
+
 import enumeratum.values.{StringEnum, StringEnumEntry}
 import enumeratum.{CirceEnum, Enum, EnumEntry}
 import org.postgresql.jdbc.PgArray
@@ -49,6 +51,10 @@ object DatabaseFieldType extends Enum[DatabaseFieldType[_]] with CirceEnum[Datab
   case object TimestampType extends DatabaseFieldType[java.time.LocalDateTime]("timestamp") {
     override def apply(row: Row, col: String) = row.as[java.sql.Timestamp](col).toLocalDateTime
     override def opt(row: Row, col: String) = row.asOpt[java.sql.Timestamp](col).map(_.toLocalDateTime)
+  }
+  case object TimestampZonedType extends DatabaseFieldType[java.time.ZonedDateTime]("timestamp") {
+    override def apply(row: Row, col: String) = ZonedDateTime.ofInstant(row.as[java.sql.Timestamp](col).toInstant, ZoneOffset.UTC)
+    override def opt(row: Row, col: String) = row.asOpt[java.sql.Timestamp](col).map(t => ZonedDateTime.ofInstant(t.toInstant, ZoneOffset.UTC))
   }
 
   case object RefType extends DatabaseFieldType[String]("ref")

@@ -62,7 +62,7 @@ object Dependencies {
     val fontAwesome = "org.webjars" % "font-awesome" % "4.7.0" intransitive()
     val jquery = "org.webjars" % "jquery" % "2.2.4" intransitive()
     val materialize = "org.webjars" % "materializecss" % "0.100.2" intransitive()
-    val swaggerUi = "org.webjars" % "swagger-ui" % "3.17.3" intransitive()
+    val swaggerUi = "org.webjars" % "swagger-ui" % "3.17.4" intransitive()
   }
 
   object Metrics {
@@ -83,7 +83,7 @@ object Dependencies {
   }
 
   object Utils {
-    val scapegoatVersion = "1.3.6"
+    val scapegoatVersion = "1.3.7"
     val enumeratumCirceVersion = "1.5.17"
     val booPickleVersion = "1.2.5"
     val utestVersion = "0.6.4"
