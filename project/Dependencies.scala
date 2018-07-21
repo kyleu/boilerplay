@@ -2,7 +2,7 @@ import sbt._
 
 object Dependencies {
   object Play {
-    private[this] val version = "2.6.16"
+    private[this] val version = "2.6.17"
     val lib = "com.typesafe.play" %% "play" % version
     val filters = play.sbt.PlayImport.filters
     val ws = play.sbt.PlayImport.ws
@@ -66,7 +66,7 @@ object Dependencies {
   }
 
   object Metrics {
-    val version = "1.0.5"
+    val version = "1.0.6"
     val micrometer = "io.micrometer" % "micrometer-registry-prometheus" % version
   }
 
