@@ -67,7 +67,7 @@ object AuditSchema extends GraphQLSchemaHelper("audit") {
     )
   )
 
-  val mutationFields = fields(unitField(name = "audit", desc = None, t = auditMutationType, f = (c, td) => Future.successful(())))
+  val mutationFields = fields(unitField(name = "audit", desc = None, t = auditMutationType, f = (_, _) => Future.successful(())))
 
   private[this] def toResult(r: GraphQLSchemaHelper.SearchResult[Audit]) = {
     AuditResult(paging = r.paging, filters = r.args.filters, orderBys = r.args.orderBys, totalCount = r.count, results = r.results, durationMs = r.dur)

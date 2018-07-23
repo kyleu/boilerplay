@@ -21,7 +21,7 @@ object UserForms {
   val profileForm = Form(mapping(
     "username" -> nonEmptyText,
     "theme" -> nonEmptyText.transform(
-      (s) => Theme.withValue(s),
+      s => Theme.withValue(s),
       (t: Theme) => t.toString
     )
   )(ProfileData.apply)(ProfileData.unapply))

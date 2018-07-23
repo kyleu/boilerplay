@@ -25,7 +25,7 @@ class ProcessController @javax.inject.Inject() (
     if (cmdSplit.isEmpty) {
       throw new IllegalStateException("Please provide a command to run by passing the \"cmd\" query string parameter.")
     }
-    val proc = ProcessService.start(request, cmdSplit, o => println(o), (e, d) => println(d + ": " + e))
+    val proc = ProcessService.start(request, cmdSplit, o => println(o), (e, d) => log.info(d + ": " + e))
     Future.successful(render {
       case Accepts.Html() => Ok(views.html.admin.process.procDetail(request.identity, proc))
       //case Accepts.Json() => Ok(proc.asJson)

@@ -14,7 +14,7 @@ class SyncService @javax.inject.Inject() (val progressSvc: SyncProgressService) 
     progressSvc.getByPrimaryKey(creds, key).flatMap {
       case Some(_) => progressSvc.update(creds, key, progress.tail).map(x => Some(x._1))
       case None => progressSvc.create(creds, progress).recover {
-        case NonFatal(x) => None
+        case NonFatal(_) => None
       }
     }
   }

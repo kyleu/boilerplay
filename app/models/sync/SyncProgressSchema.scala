@@ -63,7 +63,7 @@ object SyncProgressSchema extends GraphQLSchemaHelper("syncProgress") {
     )
   )
 
-  val mutationFields = fields(unitField(name = "syncProgress", desc = None, t = syncProgressMutationType, f = (c, td) => scala.concurrent.Future.successful(())))
+  val mutationFields = fields(unitField(name = "syncProgress", desc = None, t = syncProgressMutationType, f = (_, _) => scala.concurrent.Future.successful(())))
 
   private[this] def toResult(r: GraphQLSchemaHelper.SearchResult[SyncProgress]) = {
     SyncProgressResult(paging = r.paging, filters = r.args.filters, orderBys = r.args.orderBys, totalCount = r.count, results = r.results, durationMs = r.dur)

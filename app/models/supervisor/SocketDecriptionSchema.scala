@@ -15,7 +15,7 @@ object SocketDecriptionSchema extends GraphQLSchemaHelper("socket") {
 
   implicit lazy val socketDecriptionType: ObjectType[GraphQLContext, SocketDescription] = deriveObjectType()
 
-  val queryFields = fields(unitField(name = "sockets", desc = None, t = ListType(socketDecriptionType), f = (c, td) => {
+  val queryFields = fields(unitField(name = "sockets", desc = None, t = ListType(socketDecriptionType), f = (c, _) => {
     import akka.pattern.ask
     import scala.concurrent.duration._
     implicit val timeout: Timeout = Timeout(1.second)

@@ -18,8 +18,6 @@ import util.web.{MessageFrameFormatter, WebsocketUtils}
 import scala.concurrent.Future
 
 object HomeController {
-  private lazy val metricsName = util.Config.projectId + "_player_socket_service"
-
   final case class SocketService(id: UUID, supervisor: ActorRef, creds: Credentials, out: ActorRef, sourceAddress: String) extends Actor with Logging {
     override def preStart() = {
       log.info(s"Starting connection for user [${creds.user.id}: ${creds.user.username}].")

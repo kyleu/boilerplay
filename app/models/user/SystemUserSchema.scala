@@ -53,7 +53,7 @@ object SystemUserSchema extends GraphQLSchemaHelper("systemUser") {
   val roleArg = Argument("role", roleEnum, description = "Filters the results to a provided SandboxTask.")
 
   val queryFields = fields[GraphQLContext, Unit](
-    unitField(name = "profile", desc = None, t = profileType, f = (c, td) => {
+    unitField(name = "profile", desc = None, t = profileType, f = (c, _) => {
       Future.successful(UserProfile.fromUser(c.ctx.creds.user))
     }),
     unitField(name = "systemUser", desc = None, t = OptionType(systemUserType), f = (c, td) => {
@@ -85,7 +85,7 @@ object SystemUserSchema extends GraphQLSchemaHelper("systemUser") {
     )
   )
 
-  val mutationFields = fields(unitField(name = "systemUser", desc = None, t = userMutationType, f = (c, td) => Future.successful(())))
+  val mutationFields = fields(unitField(name = "systemUser", desc = None, t = userMutationType, f = (_, _) => Future.successful(())))
 
   private[this] def toResult(r: GraphQLSchemaHelper.SearchResult[SystemUser]) = {
     SystemUserResult(paging = r.paging, filters = r.args.filters, orderBys = r.args.orderBys, totalCount = r.count, results = r.results, durationMs = r.dur)

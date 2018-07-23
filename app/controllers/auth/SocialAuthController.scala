@@ -52,7 +52,7 @@ class SocialAuthController @javax.inject.Inject() (
 
             for {
               user <- userF
-              authInfo <- authInfoRepository.save(profile.loginInfo, authInfo)
+              _ <- authInfoRepository.save(profile.loginInfo, authInfo)
               authenticator <- silhouette.env.authenticatorService.create(profile.loginInfo)
               value <- silhouette.env.authenticatorService.init(authenticator)
               result <- silhouette.env.authenticatorService.embed(value, Redirect(controllers.routes.HomeController.home()))

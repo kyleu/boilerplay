@@ -55,7 +55,7 @@ object Logging {
 
   private[this] def installErrorHandler() = {
     if (showDebug) {
-      dom.window.onerror = (e: Event, source: String, lineno: Int, colno: Int, something: Any) => {
+      dom.window.onerror = (e: Event, source: String, lineno: Int, colno: Int, _: Any) => {
         info(s"Script error [$e] encountered in [$source:$lineno:$colno]")
         error(e.toString)
       }

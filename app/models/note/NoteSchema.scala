@@ -73,7 +73,7 @@ object NoteSchema extends GraphQLSchemaHelper("note") {
     )
   )
 
-  val mutationFields = fields(unitField(name = "note", desc = None, t = noteMutationType, f = (c, td) => scala.concurrent.Future.successful(())))
+  val mutationFields = fields(unitField(name = "note", desc = None, t = noteMutationType, f = (_, _) => scala.concurrent.Future.successful(())))
 
   private[this] def toResult(r: GraphQLSchemaHelper.SearchResult[Note]) = {
     NoteResult(paging = r.paging, filters = r.args.filters, orderBys = r.args.orderBys, totalCount = r.count, results = r.results, durationMs = r.dur)

@@ -11,9 +11,9 @@ object NetworkMessage {
   var receivedMessageCount = 0
   var receivedBytes = 0
 
-  private[this] var sendF: Option[(RequestMessage) => Unit] = None
+  private[this] var sendF: Option[RequestMessage => Unit] = None
 
-  def register(f: (RequestMessage) => Unit) = sendF match {
+  def register(f: RequestMessage => Unit) = sendF match {
     case Some(_) => throw new IllegalStateException("Double registration.")
     case None => sendF = Some(f)
   }

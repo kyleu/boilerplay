@@ -113,7 +113,7 @@ class SyncProgressService @javax.inject.Inject() (override val tracing: TracingS
   def update(creds: Credentials, key: String, fields: Seq[DataField])(implicit trace: TraceData) = {
     traceF("update")(td => getByPrimaryKey(creds, key)(td).flatMap {
       case Some(current) if fields.isEmpty => Future.successful(current -> s"No changes required for Sync Progress [$key].")
-      case Some(current) => ApplicationDatabase.executeF(SyncProgressQueries.update(key, fields))(td).flatMap { _ =>
+      case Some(_) => ApplicationDatabase.executeF(SyncProgressQueries.update(key, fields))(td).flatMap { _ =>
         getByPrimaryKey(creds, key)(td).map {
           case Some(newModel) =>
             newModel -> s"Updated [${fields.size}] fields of Sync Progress [$key]."

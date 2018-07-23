@@ -80,7 +80,7 @@ object ScheduledTaskRunSchema extends GraphQLSchemaHelper("scheduledTaskRun") {
     )
   )
 
-  val mutationFields = fields(unitField(name = "scheduledTaskRun", desc = None, t = scheduledTaskRunMutationType, f = (c, td) => scala.concurrent.Future.successful(())))
+  val mutationFields = fields(unitField(name = "scheduledTaskRun", desc = None, t = scheduledTaskRunMutationType, f = (_, _) => scala.concurrent.Future.successful(())))
 
   private[this] def toResult(r: GraphQLSchemaHelper.SearchResult[ScheduledTaskRun]) = {
     ScheduledTaskRunResult(paging = r.paging, filters = r.args.filters, orderBys = r.args.orderBys, totalCount = r.count, results = r.results, durationMs = r.dur)

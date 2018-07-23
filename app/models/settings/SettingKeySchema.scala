@@ -12,6 +12,6 @@ object SettingKeySchema extends GraphQLSchemaHelper("settingKey") {
   )
 
   val queryFields = fields(
-    unitField(name = "settingKey", desc = None, t = ListType(settingKeyEnumType), f = (c, td) => Future.successful(SettingKey.values))
+    unitField(name = "settingKey", desc = None, t = ListType(settingKeyEnumType), f = (_, _) => Future.successful(SettingKey.values))
   )
 }

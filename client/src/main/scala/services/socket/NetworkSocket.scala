@@ -44,10 +44,10 @@ class NetworkSocket(handler: EventHandler) {
   private[this] def openSocket(url: String) = {
     connecting = true
     val socket = new WebSocket(url)
-    socket.onopen = { (event: Event) => onConnectEvent(event) }
-    socket.onerror = { (event: Event) => onErrorEvent(event) }
-    socket.onmessage = { (event: MessageEvent) => onMessageEvent(event) }
-    socket.onclose = { (event: Event) => onCloseEvent(event) }
+    socket.onopen = { event: Event => onConnectEvent(event) }
+    socket.onerror = { event: Event => onErrorEvent(event) }
+    socket.onmessage = { event: MessageEvent => onMessageEvent(event) }
+    socket.onclose = { event: Event => onCloseEvent(event) }
     ws = Some(socket)
   }
 

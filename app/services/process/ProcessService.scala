@@ -5,8 +5,9 @@ import java.util.UUID
 import models.auth.Credentials
 import models.process.CachedProc
 import models.user.Role
+import util.Logging
 
-object ProcessService {
+object ProcessService extends Logging {
   private[this] val activeProcesses = collection.mutable.HashMap.empty[UUID, CachedProc]
   private[this] val completedProcesses = collection.mutable.HashMap.empty[UUID, CachedProc]
 
@@ -37,8 +38,8 @@ object ProcessService {
     start(
       creds = Credentials.system,
       cmd = cmd,
-      onOutput = o => println(o),
-      onComplete = (e, d) => println(s"[res] ${util.DateUtils.now} - Completed in [${d}ms] with exit code [$e].")
+      onOutput = o => log.info(o.toString),
+      onComplete = (e, d) => log.info(s"[res] ${util.DateUtils.now} - Completed in [${d}ms] with exit code [$e].")
     )
   }
 }

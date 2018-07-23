@@ -55,7 +55,9 @@ object GraphQLUtils {
   implicit val localDateType: ScalarType[LocalDate] = DateTimeSchema.localDateType
   implicit val localTimeType: ScalarType[LocalTime] = DateTimeSchema.localTimeType
 
-  def deriveContextObjectType[Ctx, CtxVal, Val](fn: Ctx ⇒ CtxVal, config: DeriveObjectSetting[Ctx, Val]*): ObjectType[Ctx, Val] = macro DeriveObjectTypeMacro.deriveContextObjectType[Ctx, CtxVal, Val]
+  def deriveContextObjectType[Ctx, CtxVal, Val](
+    fn: Ctx => CtxVal, config: DeriveObjectSetting[Ctx, Val]*
+  ): ObjectType[Ctx, Val] = macro DeriveObjectTypeMacro.deriveContextObjectType[Ctx, CtxVal, Val]
 
   def deriveObjectType[Ctx, Val](config: DeriveObjectSetting[Ctx, Val]*): ObjectType[Ctx, Val] = macro DeriveObjectTypeMacro.deriveNormalObjectType[Ctx, Val]
 

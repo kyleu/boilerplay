@@ -18,7 +18,7 @@ object SettingsSchema extends GraphQLSchemaHelper("settings") {
       name = "setting",
       desc = None,
       t = ListType(settingType),
-      f = (c, td) => Future.successful(c.ctx.app.coreServices.settings.getAll)
+      f = (c, _) => Future.successful(c.ctx.app.coreServices.settings.getAll)
     )
   )
 }

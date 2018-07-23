@@ -16,7 +16,7 @@ class AuditLookup @javax.inject.Inject() (registry: ServiceRegistry) extends Log
   }
 
   private[this] def getModel(
-    creds: Credentials, key: String, arg: (Int) => String
+    creds: Credentials, key: String, arg: Int => String
   )(implicit traceData: TraceData): Future[Option[DataFieldModel]] = key.toLowerCase match {
     /* Start registry lookups */
     case "auditrecord" => registry.auditServices.auditRecordService.getByPrimaryKey(creds, uuidArg(arg(0)))
