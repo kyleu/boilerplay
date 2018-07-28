@@ -40,8 +40,8 @@ object Dependencies {
 
     val slickCore = "com.typesafe.slick" %% "slick" % version
     val slickHikariCp = "com.typesafe.slick" %% "slick-hikaricp" % version
-    val slickPg = "com.github.tminglei" %% "slick-pg" % "0.16.2"
-    val slickPgCirce = "com.github.tminglei" %% "slick-pg_circe-json" % "0.16.2"
+    val slickPg = "com.github.tminglei" %% "slick-pg" % "0.16.3"
+    val slickPgCirce = "com.github.tminglei" %% "slick-pg_circe-json" % "0.16.3"
     val slickless = "io.underscore" %% "slickless" % "0.3.3"
 
     val flyway = "org.flywaydb" % "flyway-core" % "5.1.4"
@@ -71,14 +71,14 @@ object Dependencies {
   }
 
   object Tracing {
-    val version = "0.30.2"
+    val version = "0.30.3"
     val jaeger = "io.jaegertracing" % "jaeger-thrift" % version
     val jaegerMetrics = "io.jaegertracing" % "jaeger-micrometer" % version
   }
 
   object ScalaJS {
     val scalaJSVersion = "0.6.24"
-    val jQueryVersion = "0.9.3"
+    val jQueryVersion = "0.9.4"
     val jvmStubs = "org.scala-js" %% "scalajs-stubs" % scalaJSVersion % "provided"
   }
 
@@ -90,7 +90,7 @@ object Dependencies {
 
     val scalatagsVersion = "0.6.7"
 
-    val betterFiles = "com.github.pathikrit" %% "better-files" % "3.5.0"
+    val betterFiles = "com.github.pathikrit" %% "better-files" % "3.6.0"
     val commonsIo = "commons-io" % "commons-io" % "2.6"
     val csv = "com.github.tototoshi" %% "scala-csv" % "1.3.5"
     val scalaGuice = "net.codingwell" %% "scala-guice" % "4.2.1"

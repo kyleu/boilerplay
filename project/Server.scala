@@ -63,7 +63,7 @@ object Server {
     // Sbt-Web
     JsEngineKeys.engineType := JsEngineKeys.EngineType.Node,
     pipelineStages in Assets := Seq(scalaJSPipeline),
-    pipelineStages := Seq(digest, gzip),
+    pipelineStages ++= Seq(digest, gzip),
     includeFilter in (Assets, LessKeys.less) := "*.less",
     excludeFilter in (Assets, LessKeys.less) := "_*.less",
     LessKeys.compress in Assets := true,
