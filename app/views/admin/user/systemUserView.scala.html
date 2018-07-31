@@ -1,3 +1,4 @@
+@* Generated File *@
 @(user: models.user.SystemUser, model: models.user.SystemUser, notes: Seq[models.note.Note], auditRecords: Seq[models.audit.AuditRecord], debug: Boolean)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
 )@traceData.logViewClass(getClass)@views.html.admin.layout.page(user, "explore", s"User [${model.id}]") {

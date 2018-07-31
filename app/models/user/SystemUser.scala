@@ -54,7 +54,11 @@ final case class SystemUser(
     role: Role = Role.User,
     created: LocalDateTime = DateUtils.now
 ) extends Identity with DataFieldModel {
-  val email = profile.providerID
+
+  def email = profile.providerID
+  def provider = profile.providerID
+  def key = profile.providerKey
+
   val prefs = {
     preferences.asJson.spaces2
   }
