@@ -48,7 +48,7 @@ object Dependencies {
   }
 
   object GraphQL {
-    val sangria = "org.sangria-graphql" %% "sangria" % "1.4.1"
+    val sangria = "org.sangria-graphql" %% "sangria" % "1.4.2"
     val playJson = "org.sangria-graphql" %% "sangria-play-json" % "1.0.4"
     val circe = "org.sangria-graphql" %% "sangria-circe" % "1.2.1"
   }
@@ -62,7 +62,7 @@ object Dependencies {
     val fontAwesome = "org.webjars" % "font-awesome" % "4.7.0" intransitive()
     val jquery = "org.webjars" % "jquery" % "2.2.4" intransitive()
     val materialize = "org.webjars" % "materializecss" % "0.100.2" intransitive()
-    val swaggerUi = "org.webjars" % "swagger-ui" % "3.17.4" intransitive()
+    val swaggerUi = "org.webjars" % "swagger-ui" % "3.17.6" intransitive()
   }
 
   object Metrics {
@@ -71,7 +71,7 @@ object Dependencies {
   }
 
   object Tracing {
-    val version = "0.30.3"
+    val version = "0.30.4"
     val jaeger = "io.jaegertracing" % "jaeger-thrift" % version
     val jaegerMetrics = "io.jaegertracing" % "jaeger-micrometer" % version
   }
