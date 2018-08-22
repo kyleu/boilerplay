@@ -5,12 +5,12 @@ resolvers += Resolver.typesafeRepo("releases")
 resolvers += Resolver.url("jetbrains-bintray", url("http://dl.bintray.com/jetbrains/sbt-plugins/"))(Resolver.ivyStylePatterns)
 
 // The Play plugin
-addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.6.17")
+addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.6.18")
 
 // SBT-Web plugins
 addSbtPlugin("com.typesafe.sbt" % "sbt-web" % "1.4.3")
 
-libraryDependencies += "org.webjars.npm" % "source-map" % "0.5.7"
+libraryDependencies += "org.webjars.npm" % "source-map" % "0.7.3"
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-less" % "1.1.2")
 
@@ -29,7 +29,7 @@ addSbtPlugin("com.vmunier" % "sbt-web-scalajs" % "1.0.8-0.6" exclude("org.scala-
 addSbtPlugin("com.typesafe.sbt" % "sbt-git" % "1.0.0")
 
 // App Packaging
-addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.3.5")
+addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.3.6")
 
 addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "0.14.7")
 
@@ -67,7 +67,7 @@ addSbtPlugin("com.dwijnand" % "sbt-project-graph" % "0.4.0") // projectsGraphDot
 addSbtPlugin("com.github.xuwei-k" % "sbt-class-diagram" % "0.2.1") // classDiagram
 
 // Documentation
-addSbtPlugin("com.lightbend.paradox" % "sbt-paradox" % "0.3.5")
+addSbtPlugin("com.lightbend.paradox" % "sbt-paradox" % "0.3.6")
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-site" % "1.3.2" exclude("com.lightbend.paradox", "sbt-paradox"))
 
