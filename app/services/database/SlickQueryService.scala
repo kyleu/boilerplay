@@ -14,7 +14,8 @@ object SlickQueryService {
 class SlickQueryService(key: String, dataSource: DataSource, maxConnections: Int, tracingService: TracingService) {
   private[this] val db = Database.forDataSource(
     ds = dataSource,
-    maxConnections = Some(maxConnections)
+    maxConnections = Some(maxConnections),
+    executor = AsyncExecutor("slick.pool", maxConnections, 10000)
   )
 
   def run[R](act: SqlAction[R, NoStream, Nothing])(implicit parentTd: TraceData) = tracingService.trace("run") { td =>

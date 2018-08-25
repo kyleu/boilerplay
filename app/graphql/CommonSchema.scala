@@ -1,7 +1,7 @@
 package graphql
 
 import models.tag.Tag
-import sangria.macros.derive.{deriveInputObjectType, deriveObjectType}
+import sangria.macros.derive.{InputObjectTypeName, deriveInputObjectType, deriveObjectType}
 import sangria.schema._
 
 object CommonSchema extends CommonSchemaValueTypes with CommonSchemaReferenceTypes {
@@ -24,5 +24,5 @@ object CommonSchema extends CommonSchemaValueTypes with CommonSchemaReferenceTyp
   )
 
   implicit lazy val tagType: ObjectType[GraphQLContext, Tag] = deriveObjectType()
-  implicit lazy val tagInputType: InputObjectType[Tag] = deriveInputObjectType()
+  implicit lazy val tagInputType: InputObjectType[Tag] = deriveInputObjectType(InputObjectTypeName("TagInput"))
 }
