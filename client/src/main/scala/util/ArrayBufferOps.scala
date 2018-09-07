@@ -12,10 +12,10 @@ object ArrayBufferOps {
   }
 
   def convertBuffer(data: ByteBuffer) = if (data.hasTypedArray()) {
-    data.typedArray().subarray(data.position, data.limit).buffer
+    data.typedArray().subarray(data.position(), data.limit).buffer
   } else {
     val tempBuffer = ByteBuffer.allocateDirect(data.remaining)
-    val origPosition = data.position
+    val origPosition = data.position()
     tempBuffer.put(data)
     data.position(origPosition)
     tempBuffer.typedArray().buffer
