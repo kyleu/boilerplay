@@ -2,9 +2,7 @@ package models.queries
 
 import models.database._
 
-abstract class BaseQueries[T <: Product](
-    val key: String, val tableName: String
-) extends SearchQueries[T] with MutationQueries[T] {
+abstract class BaseQueries[T <: Product](val key: String, val tableName: String) extends SearchQueries[T] with MutationQueries[T] {
   def fields: Seq[DatabaseField]
 
   protected def pkColumns = Seq.empty[String]

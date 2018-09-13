@@ -4,7 +4,10 @@ import java.sql.Connection
 import java.util.Properties
 import java.util.concurrent.TimeUnit
 
+import cats.effect.IO
 import com.zaxxer.hikari.{HikariConfig, HikariDataSource}
+import doobie.Transactor
+import doobie.util.transactor
 import models.database.jdbc.Queryable
 import models.database.{DatabaseConfig, RawQuery, Statement}
 import util.metrics.Instrumented
@@ -26,7 +29,10 @@ abstract class JdbcDatabase(override val key: String, configPrefix: String) exte
   def source = ds.getOrElse(throw new IllegalStateException("Database not initialized."))
 
   private[this] var slickOpt: Option[SlickQueryService] = None
-  def slick = slickOpt.getOrElse(throw new IllegalStateException("Database not initialized."))
+  def slick = slickOpt.getOrElse(throw new IllegalStateException("Slick not initialized."))
+
+  private[this] var doobieOpt: Option[DoobieQueryService] = None
+  def doobie = doobieOpt.getOrElse(throw new IllegalStateException("Doobie not initialized."))
 
   def open(cfg: play.api.Configuration, svc: TracingService) = {
     ds.foreach(_ => throw new IllegalStateException("Database already initialized."))
@@ -52,7 +58,8 @@ abstract class JdbcDatabase(override val key: String, configPrefix: String) exte
 
     start(config, svc)
 
-    slickOpt = Some(new SlickQueryService(key, source, maxPoolSize, svc))
+    if (config.enableSlick) { slickOpt = Some(new SlickQueryService(key, source, maxPoolSize, svc)) }
+    if (config.enableDoobie) { doobieOpt = Some(new DoobieQueryService(key, source, svc)) }
   }
 
   override def transaction[A](f: (TraceData, Connection) => A)(implicit traceData: TraceData) = trace("transaction") { td =>

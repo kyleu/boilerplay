@@ -33,18 +33,36 @@ object Dependencies {
   }
 
   object Database {
-    val version = "3.2.3"
 
     val postgres = "org.postgresql" % "postgresql" % "42.2.5"
     val hikariCp = "com.zaxxer" % "HikariCP" % "3.2.0"
 
-    val slickCore = "com.typesafe.slick" %% "slick" % version
-    val slickHikariCp = "com.typesafe.slick" %% "slick-hikaricp" % version
-    val slickPg = "com.github.tminglei" %% "slick-pg" % "0.16.3"
-    val slickPgCirce = "com.github.tminglei" %% "slick-pg_circe-json" % "0.16.3"
-    val slickless = "io.underscore" %% "slickless" % "0.3.3"
+    object Slick {
+      val version = "3.2.3"
+      val pgVersion = "0.16.3"
+
+      val core = "com.typesafe.slick" %% "slick" % version
+      val hikariCp = "com.typesafe.slick" %% "slick-hikaricp" % version
+      val pg = "com.github.tminglei" %% "slick-pg" % pgVersion
+      val pgCirce = "com.github.tminglei" %% "slick-pg_circe-json" % pgVersion
+      val slickless = "io.underscore" %% "slickless" % "0.3.3"
+    }
+
+    object Doobie {
+      val version = "0.5.3"
+
+      val core = "org.tpolecat" %% "doobie-core" % version
+      val hikariCp = "org.tpolecat" %% "doobie-hikari" % version
+      val postgres = "org.tpolecat" %% "doobie-postgres" % version
+      val testing = "org.tpolecat" %% "doobie-scalatest" % version % "test"
+    }
 
     val flyway = "org.flywaydb" % "flyway-core" % "5.1.4"
+
+    val all = Seq(
+      postgres, hikariCp, flyway, Slick.core, Slick.hikariCp, Slick.pg, Slick.pgCirce, Slick.slickless,
+      Doobie.core, Doobie.hikariCp, Doobie.postgres, Doobie.testing
+    )
   }
 
   object GraphQL {
