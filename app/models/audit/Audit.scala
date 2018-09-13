@@ -19,9 +19,8 @@ final case class Audit(
     client: String = "?",
     server: String = "?",
     userId: UUID = UUID.randomUUID,
-    tags: Seq[Tag] = Nil,
+    tags: List[Tag] = Nil,
     msg: String = "n/a",
-    records: Seq[AuditRecord] = Nil,
     started: LocalDateTime = util.DateUtils.now,
     completed: LocalDateTime = util.DateUtils.now
 ) extends DataFieldModel {

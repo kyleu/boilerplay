@@ -78,7 +78,7 @@ class ScheduledTaskService @javax.inject.Inject() (
           log.debug(s"Running scheduled tasks [${tasksToRun.map(_.key).mkString(", ")}].")
           Future.sequence(tasksToRun.map { task =>
             go(id, creds, args, task, trace).map { o =>
-              ScheduledTaskRun(id = id, task = task.key, arguments = args, status = o.status, output = o.asJson, started = o.start, completed = o.end)
+              ScheduledTaskRun(id = id, task = task.key, arguments = args.toList, status = o.status, output = o.asJson, started = o.start, completed = o.end)
             }
           })
         }

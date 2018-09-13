@@ -11,7 +11,7 @@ object ScheduledTaskRun {
   implicit val jsonEncoder: Encoder[ScheduledTaskRun] = deriveEncoder
   implicit val jsonDecoder: Decoder[ScheduledTaskRun] = deriveDecoder
 
-  def empty(id: UUID = UUID.randomUUID, task: String = "", arguments: Seq[String] = Seq.empty, status: String = "", output: Json = Json.obj(), started: LocalDateTime = util.DateUtils.now, completed: LocalDateTime = util.DateUtils.now) = {
+  def empty(id: UUID = UUID.randomUUID, task: String = "", arguments: List[String] = List.empty, status: String = "", output: Json = Json.obj(), started: LocalDateTime = util.DateUtils.now, completed: LocalDateTime = util.DateUtils.now) = {
     ScheduledTaskRun(id, task, arguments, status, output, started, completed)
   }
 }
@@ -19,7 +19,7 @@ object ScheduledTaskRun {
 final case class ScheduledTaskRun(
     id: UUID,
     task: String,
-    arguments: Seq[String],
+    arguments: List[String],
     status: String,
     output: Json,
     started: LocalDateTime,

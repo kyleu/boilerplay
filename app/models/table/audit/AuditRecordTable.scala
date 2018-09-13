@@ -19,7 +19,7 @@ class AuditRecordTable(tag: Tag) extends Table[models.audit.AuditRecord](tag, "a
   val id = column[UUID]("id")
   val auditId = column[UUID]("audit_id")
   val t = column[String]("t")
-  val pk = column[Seq[String]]("pk")
+  val pk = column[List[String]]("pk")
   val changes = column[Json]("changes")
 
   val modelPrimaryKey = primaryKey("pk_audit_record", id)

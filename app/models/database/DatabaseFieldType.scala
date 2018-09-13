@@ -77,30 +77,30 @@ object DatabaseFieldType extends Enum[DatabaseFieldType[_]] with CirceEnum[Datab
   }
 
   case object CodeType extends DatabaseFieldType[String]("code")
-  case object TagsType extends DatabaseFieldType[Seq[models.tag.Tag]]("tags") {
+  case object TagsType extends DatabaseFieldType[List[models.tag.Tag]]("tags") {
     override def apply(row: Row, col: String) = tagsCoerce(row.as[Any](col))
     override def opt(row: Row, col: String) = row.asOpt[Any](col).map(tagsCoerce)
   }
 
-  case object ByteArrayType extends DatabaseFieldType[Array[Byte]]("byteArray") {
-    override def apply(row: Row, col: String) = row.as[PgArray](col).getArray.asInstanceOf[Array[Byte]]
-    override def opt(row: Row, col: String) = row.asOpt[PgArray](col).map(_.asInstanceOf[Array[Byte]])
+  case object ByteArrayType extends DatabaseFieldType[List[Byte]]("byteArray") {
+    override def apply(row: Row, col: String) = row.as[PgArray](col).getArray.asInstanceOf[Array[Byte]].toList
+    override def opt(row: Row, col: String) = row.asOpt[PgArray](col).map(_.asInstanceOf[Array[Byte]].toList)
   }
-  case object IntArrayType extends DatabaseFieldType[Seq[Int]]("intArray") {
-    override def apply(row: Row, col: String) = row.as[PgArray](col).getArray.asInstanceOf[Array[Any]].map(intCoerce)
-    override def opt(row: Row, col: String) = row.asOpt[PgArray](col).map(_.getArray.asInstanceOf[Array[Any]].map(intCoerce))
+  case object IntArrayType extends DatabaseFieldType[List[Int]]("intArray") {
+    override def apply(row: Row, col: String) = row.as[PgArray](col).getArray.asInstanceOf[Array[Any]].map(intCoerce).toList
+    override def opt(row: Row, col: String) = row.asOpt[PgArray](col).map(_.getArray.asInstanceOf[Array[Any]].toList.map(intCoerce))
   }
-  case object LongArrayType extends DatabaseFieldType[Seq[Long]]("longArray") {
-    override def apply(row: Row, col: String) = row.as[PgArray](col).getArray.asInstanceOf[Array[Long]]
-    override def opt(row: Row, col: String) = row.asOpt[PgArray](col).map(_.asInstanceOf[Array[Long]])
+  case object LongArrayType extends DatabaseFieldType[List[Long]]("longArray") {
+    override def apply(row: Row, col: String) = row.as[PgArray](col).getArray.asInstanceOf[Array[Long]].toList
+    override def opt(row: Row, col: String) = row.asOpt[PgArray](col).map(_.asInstanceOf[Array[Long]].toList)
   }
-  case object StringArrayType extends DatabaseFieldType[Seq[String]]("stringArray") {
-    override def apply(row: Row, col: String) = row.as[PgArray](col).getArray.asInstanceOf[Array[Any]].map(_.toString)
-    override def opt(row: Row, col: String) = row.asOpt[PgArray](col).map(_.getArray.asInstanceOf[Array[Any]].map(_.toString))
+  case object StringArrayType extends DatabaseFieldType[List[String]]("stringArray") {
+    override def apply(row: Row, col: String) = row.as[PgArray](col).getArray.asInstanceOf[Array[Any]].map(_.toString).toList
+    override def opt(row: Row, col: String) = row.asOpt[PgArray](col).map(_.getArray.asInstanceOf[Array[Any]].map(_.toString).toList)
   }
-  case object UuidArrayType extends DatabaseFieldType[Seq[java.util.UUID]]("uuidArray") {
-    override def apply(row: Row, col: String) = row.as[PgArray](col).getArray.asInstanceOf[Array[java.util.UUID]]
-    override def opt(row: Row, col: String) = row.asOpt[PgArray](col).map(_.asInstanceOf[Array[java.util.UUID]])
+  case object UuidArrayType extends DatabaseFieldType[List[java.util.UUID]]("uuidArray") {
+    override def apply(row: Row, col: String) = row.as[PgArray](col).getArray.asInstanceOf[Array[java.util.UUID]].toList
+    override def opt(row: Row, col: String) = row.asOpt[PgArray](col).map(_.asInstanceOf[Array[java.util.UUID]].toList)
   }
 
   case object UnknownType extends DatabaseFieldType[String]("unknown")

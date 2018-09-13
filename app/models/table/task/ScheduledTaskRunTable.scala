@@ -16,7 +16,7 @@ object ScheduledTaskRunTable {
 class ScheduledTaskRunTable(tag: Tag) extends Table[models.task.ScheduledTaskRun](tag, "scheduled_task_run") {
   val id = column[UUID]("id")
   val task = column[String]("task")
-  val arguments = column[Seq[String]]("arguments")
+  val arguments = column[List[String]]("arguments")
   val status = column[String]("status")
   val output = column[Json]("output")
   val started = column[LocalDateTime]("started")

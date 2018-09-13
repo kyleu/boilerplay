@@ -13,7 +13,7 @@ object Tag {
 
   def toString(seq: Seq[Tag]) = seq.map(t => t.k + "=" + t.v).mkString(",")
 
-  def fromMap(m: Map[_, _]) = m.toSeq.map(e => Tag(e._1.toString, e._2.toString))
+  def fromMap(m: Map[_, _]) = m.toList.map(e => Tag(e._1.toString, e._2.toString))
   def toMap(seq: Seq[Tag]) = seq.map(x => x.k -> x.v).toMap
 
   def fromJavaMap(m: java.util.HashMap[_, _]) = {

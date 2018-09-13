@@ -24,14 +24,16 @@ class AuditService @javax.inject.Inject() (
   lazy val supervisor = inject.instanceOf(classOf[Application]).supervisor
   AuditHelper.init(this)
 
-  def callback(a: Audit)(implicit trace: TraceData) = if (a.records.exists(r => r.changes.as[Seq[AuditField]].right.get.nonEmpty)) {
-    AuditNotifications.postToSlack(ws, config.slackConfig, a)
-    AuditNotifications.persist(a)
-    log.info(a.changeLog)
-    a
-  } else {
-    log.info(s"Ignoring audit [${a.id}], as it has no changes.")
-    a
+  def callback(a: Audit, records: Seq[AuditRecord])(implicit trace: TraceData) = {
+    if (records.exists(r => r.changes.as[Seq[AuditField]].right.get.nonEmpty)) {
+      AuditNotifications.postToSlack(ws, config.slackConfig, a)
+      AuditNotifications.persist(a, records)
+      log.info(a.changeLog)
+      a
+    } else {
+      log.info(s"Ignoring audit [${a.id}], as it has no changes.")
+      a
+    }
   }
 
   def getByPrimaryKey(creds: Credentials, id: UUID)(implicit trace: TraceData) = {

@@ -10,7 +10,7 @@ object AuditRecord {
   implicit val jsonEncoder: Encoder[AuditRecord] = deriveEncoder
   implicit val jsonDecoder: Decoder[AuditRecord] = deriveDecoder
 
-  def empty(id: UUID = UUID.randomUUID, auditId: UUID = UUID.randomUUID, t: String = "", pk: Seq[String] = Seq.empty, changes: Json = Json.obj()) = {
+  def empty(id: UUID = UUID.randomUUID, auditId: UUID = UUID.randomUUID, t: String = "", pk: List[String] = List.empty, changes: Json = Json.obj()) = {
     AuditRecord(id, auditId, t, pk, changes)
   }
 }
@@ -19,7 +19,7 @@ final case class AuditRecord(
     id: UUID,
     auditId: UUID,
     t: String,
-    pk: Seq[String],
+    pk: List[String],
     changes: Json
 ) extends DataFieldModel {
   override def toDataFields = Seq(
