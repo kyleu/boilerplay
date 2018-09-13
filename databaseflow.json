@@ -5,7 +5,8 @@
   "flags" : [
     "graphql",
     "openapi",
-    "rest"
+    "rest",
+    "doobie"
   ],
   "enums" : [
     {
