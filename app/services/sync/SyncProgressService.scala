@@ -19,6 +19,9 @@ class SyncProgressService @javax.inject.Inject() (override val tracing: TracingS
   def getByPrimaryKey(creds: Credentials, key: String)(implicit trace: TraceData) = {
     traceF("get.by.primary.key")(td => ApplicationDatabase.queryF(SyncProgressQueries.getByPrimaryKey(key))(td))
   }
+  def getByPrimaryKeyRequired(creds: Credentials, key: String)(implicit trace: TraceData) = getByPrimaryKey(creds, key).map { opt =>
+    opt.getOrElse(throw new IllegalStateException(s"Cannot load syncProgress with key [$key]."))
+  }
   def getByPrimaryKeySeq(creds: Credentials, keySeq: Seq[String])(implicit trace: TraceData) = {
     traceF("get.by.primary.key.seq")(td => ApplicationDatabase.queryF(SyncProgressQueries.getByPrimaryKeySeq(keySeq))(td))
   }

@@ -22,7 +22,7 @@ class ScheduledTaskRunController @javax.inject.Inject() (
     val cancel = controllers.admin.task.routes.ScheduledTaskRunController.list()
     val call = controllers.admin.task.routes.ScheduledTaskRunController.create()
     Future.successful(Ok(views.html.admin.task.scheduledTaskRunForm(
-      request.identity, models.task.ScheduledTaskRun(), "New Scheduled Task Run", cancel, call, isNew = true, debug = app.config.debug
+      request.identity, models.task.ScheduledTaskRun.empty(), "New Scheduled Task Run", cancel, call, isNew = true, debug = app.config.debug
     )))
   }
 

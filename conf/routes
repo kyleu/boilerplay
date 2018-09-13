@@ -11,6 +11,7 @@ GET         /robots.txt                              controllers.HomeController.
 # Start model route files
 ->          /admin/settings                          settings.Routes
 ->          /admin/audit                             audit.Routes
+->          /admin/ddl                               ddl.Routes
 ->          /admin/note                              note.Routes
 ->          /admin/sync                              sync.Routes
 ->          /admin/task                              task.Routes

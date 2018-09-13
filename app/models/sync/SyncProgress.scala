@@ -8,13 +8,17 @@ import util.JsonSerializers._
 object SyncProgress {
   implicit val jsonEncoder: Encoder[SyncProgress] = deriveEncoder
   implicit val jsonDecoder: Decoder[SyncProgress] = deriveDecoder
+
+  def empty(key: String = "", status: String = "", message: String = "", lastTime: LocalDateTime = util.DateUtils.now) = {
+    SyncProgress(key, status, message, lastTime)
+  }
 }
 
 final case class SyncProgress(
-    key: String = "",
-    status: String = "",
-    message: String = "",
-    lastTime: LocalDateTime = util.DateUtils.now
+    key: String,
+    status: String,
+    message: String,
+    lastTime: LocalDateTime
 ) extends DataFieldModel {
   override def toDataFields = Seq(
     DataField("key", Some(key)),

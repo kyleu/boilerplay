@@ -22,7 +22,7 @@ class SyncProgressController @javax.inject.Inject() (
     val cancel = controllers.admin.sync.routes.SyncProgressController.list()
     val call = controllers.admin.sync.routes.SyncProgressController.create()
     Future.successful(Ok(views.html.admin.sync.syncProgressForm(
-      request.identity, models.sync.SyncProgress(), "New Sync Progress", cancel, call, isNew = true, debug = app.config.debug
+      request.identity, models.sync.SyncProgress.empty(), "New Sync Progress", cancel, call, isNew = true, debug = app.config.debug
     )))
   }
 

@@ -22,7 +22,7 @@ class AuditRecordController @javax.inject.Inject() (
     val cancel = controllers.admin.audit.routes.AuditRecordController.list()
     val call = controllers.admin.audit.routes.AuditRecordController.create()
     Future.successful(Ok(views.html.admin.audit.auditRecordForm(
-      request.identity, models.audit.AuditRecord(), "New Audit Record", cancel, call, isNew = true, debug = app.config.debug
+      request.identity, models.audit.AuditRecord.empty(), "New Audit Record", cancel, call, isNew = true, debug = app.config.debug
     )))
   }
 

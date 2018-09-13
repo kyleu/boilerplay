@@ -1,0 +1,33 @@
+@* Generated File *@
+@(user: models.user.SystemUser, totalCount: Option[Int], modelSeq: Seq[models.ddl.FlywaySchemaHistory], q: Option[String], orderBy: Option[String], orderAsc: Boolean, limit: Int, offset: Int)(
+    implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
+)@traceData.logViewClass(getClass)
+@views.html.admin.explore.list(
+  user = user,
+  model = "Flyway Schema History",
+  modelPlural = "Flyway Schema Histories",
+  icon = models.template.Icons.flywaySchemaHistory,
+  cols = Seq(
+    "installedRank" -> "Installed Rank",
+    "version" -> "Version",
+    "typ" -> "Type",
+    "script" -> "Script",
+    "installedOn" -> "Installed On",
+    "executionTime" -> "Execution Time",
+    "success" -> "Success"
+  ),
+  totalCount = totalCount,
+  rows = modelSeq.map(model => views.html.admin.ddl.flywaySchemaHistoryDataRow(model)),
+  orderBy = orderBy,
+  orderAsc = orderAsc,
+  calls = models.result.web.ListCalls(
+    newCall = Some(controllers.admin.ddl.routes.FlywaySchemaHistoryController.createForm()),
+    orderBy = Some(controllers.admin.ddl.routes.FlywaySchemaHistoryController.list(q, _, _, Some(limit), Some(0))),
+    search = Some(controllers.admin.ddl.routes.FlywaySchemaHistoryController.list(None, orderBy, orderAsc, Some(limit), None)),
+    next = controllers.admin.ddl.routes.FlywaySchemaHistoryController.list(q, orderBy, orderAsc, Some(limit), Some(offset + limit)),
+    prev = controllers.admin.ddl.routes.FlywaySchemaHistoryController.list(q, orderBy, orderAsc, Some(limit), Some(offset - limit))
+  ),
+  limit = limit,
+  offset = offset,
+  q = q
+)

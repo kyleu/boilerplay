@@ -20,6 +20,9 @@ class ScheduledTaskRunService @javax.inject.Inject() (override val tracing: Trac
   def getByPrimaryKey(creds: Credentials, id: UUID)(implicit trace: TraceData) = {
     traceF("get.by.primary.key")(td => ApplicationDatabase.queryF(ScheduledTaskRunQueries.getByPrimaryKey(id))(td))
   }
+  def getByPrimaryKeyRequired(creds: Credentials, id: UUID)(implicit trace: TraceData) = getByPrimaryKey(creds, id).map { opt =>
+    opt.getOrElse(throw new IllegalStateException(s"Cannot load scheduledTaskRun with id [$id]."))
+  }
   def getByPrimaryKeySeq(creds: Credentials, idSeq: Seq[UUID])(implicit trace: TraceData) = {
     traceF("get.by.primary.key.seq")(td => ApplicationDatabase.queryF(ScheduledTaskRunQueries.getByPrimaryKeySeq(idSeq))(td))
   }

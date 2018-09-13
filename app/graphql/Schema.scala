@@ -16,6 +16,7 @@ object Schema {
       models.audit.AuditRecordSchema.auditRecordByAuditIdFetcher,
       models.audit.AuditRecordSchema.auditRecordByPrimaryKeyFetcher,
       models.audit.AuditSchema.auditByPrimaryKeyFetcher,
+      models.ddl.FlywaySchemaHistorySchema.flywaySchemaHistoryByPrimaryKeyFetcher,
       models.note.NoteSchema.noteByAuthorFetcher,
       models.note.NoteSchema.noteByPrimaryKeyFetcher,
       models.sync.SyncProgressSchema.syncProgressByPrimaryKeyFetcher,
@@ -42,6 +43,7 @@ object Schema {
     // Start model query fields
     models.audit.AuditRecordSchema.queryFields ++
       models.audit.AuditSchema.queryFields ++
+      models.ddl.FlywaySchemaHistorySchema.queryFields ++
       models.note.NoteSchema.queryFields ++
       models.sync.SyncProgressSchema.queryFields ++
       models.task.ScheduledTaskRunSchema.queryFields ++
@@ -68,6 +70,7 @@ object Schema {
     // Start model mutation fields
     models.audit.AuditRecordSchema.mutationFields ++
       models.audit.AuditSchema.mutationFields ++
+      models.ddl.FlywaySchemaHistorySchema.mutationFields ++
       models.note.NoteSchema.mutationFields ++
       models.sync.SyncProgressSchema.mutationFields ++
       models.task.ScheduledTaskRunSchema.mutationFields ++

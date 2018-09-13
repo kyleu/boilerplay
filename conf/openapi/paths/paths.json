@@ -8,6 +8,7 @@
   // Start schema paths
   "#include:audit/audit.json": "*",
   "#include:audit/auditRecord.json": "*",
+  "#include:ddl/flywaySchemaHistory.json": "*",
   "#include:note/note.json": "*",
   "#include:sync/syncProgress.json": "*",
   "#include:task/scheduledTaskRun.json": "*",

@@ -26,7 +26,7 @@ object NoteSchema extends GraphQLSchemaHelper("note") {
   implicit lazy val noteType: sangria.schema.ObjectType[GraphQLContext, Note] = deriveObjectType(
     sangria.macros.derive.AddFields(
       Field(
-        name = "authorUser",
+        name = "authorRel",
         fieldType = SystemUserSchema.systemUserType,
         resolve = ctx => SystemUserSchema.systemUserByPrimaryKeyFetcher.defer(ctx.value.author)
       ),
