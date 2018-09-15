@@ -8,13 +8,13 @@ import models.note.Note
 import services.database.DoobieQueryService.Imports._
 
 object NoteDoobie extends DoobieQueries[Note]("note") {
-  override protected val countFragment = fr"""select count(*) from "note""""
-  override protected val selectFragment = fr"""select "id", "rel_type", "rel_pk", "text", "author", "created" from "note""""
+  override val countFragment = fr"""select count(*) from "note""""
+  override val selectFragment = fr"""select "id", "rel_type", "rel_pk", "text", "author", "created" from "note""""
 
-  override protected val columns = Seq("id", "rel_type", "rel_pk", "text", "author", "created")
-  override protected val searchColumns = Seq("id", "rel_type", "rel_pk", "text", "author", "created")
+  override val columns = Seq("id", "rel_type", "rel_pk", "text", "author", "created")
+  override val searchColumns = Seq("id", "rel_type", "rel_pk", "text", "author", "created")
 
-  override protected def searchFragment(q: String) = {
+  override def searchFragment(q: String) = {
     fr""""id"::text = $q or "rel_type"::text = $q or "rel_pk"::text = $q or "text"::text = $q or "author"::text = $q or "created"::text = $q"""
   }
 

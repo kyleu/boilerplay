@@ -8,13 +8,13 @@ import models.user.SystemUser
 import services.database.DoobieQueryService.Imports._
 
 object SystemUserDoobie extends DoobieQueries[SystemUser]("system_users") {
-  override protected val countFragment = fr"""select count(*) from "system_users""""
-  override protected val selectFragment = fr"""select "id", "username", "provider", "key", "prefs", "role", "created" from "system_users""""
+  override val countFragment = fr"""select count(*) from "system_users""""
+  override val selectFragment = fr"""select "id", "username", "provider", "key", "prefs", "role", "created" from "system_users""""
 
-  override protected val columns = Seq("id", "username", "provider", "key", "prefs", "role", "created")
-  override protected val searchColumns = Seq("id", "username", "provider", "key")
+  override val columns = Seq("id", "username", "provider", "key", "prefs", "role", "created")
+  override val searchColumns = Seq("id", "username", "provider", "key")
 
-  override protected def searchFragment(q: String) = {
+  override def searchFragment(q: String) = {
     fr""""id"::text = $q or "username"::text = $q or "provider"::text = $q or "key"::text = $q or "prefs"::text = $q or "role"::text = $q or "created"::text = $q"""
   }
 

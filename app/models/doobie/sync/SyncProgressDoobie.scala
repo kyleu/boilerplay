@@ -7,13 +7,13 @@ import models.sync.SyncProgress
 import services.database.DoobieQueryService.Imports._
 
 object SyncProgressDoobie extends DoobieQueries[SyncProgress]("sync_progress") {
-  override protected val countFragment = fr"""select count(*) from "sync_progress""""
-  override protected val selectFragment = fr"""select "key", "status", "message", "last_time" from "sync_progress""""
+  override val countFragment = fr"""select count(*) from "sync_progress""""
+  override val selectFragment = fr"""select "key", "status", "message", "last_time" from "sync_progress""""
 
-  override protected val columns = Seq("key", "status", "message", "last_time")
-  override protected val searchColumns = Seq("key", "status", "message", "last_time")
+  override val columns = Seq("key", "status", "message", "last_time")
+  override val searchColumns = Seq("key", "status", "message", "last_time")
 
-  override protected def searchFragment(q: String) = {
+  override def searchFragment(q: String) = {
     fr""""key"::text = $q or "status"::text = $q or "message"::text = $q or "last_time"::text = $q"""
   }
 

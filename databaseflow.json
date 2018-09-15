@@ -3,11 +3,11 @@
   "projectId" : "boilerplay",
   "projectTitle" : "Boilerplay",
   "flags" : [
-    "slick",
     "doobie",
-    "rest",
+    "graphql",
     "openapi",
-    "graphql"
+    "slick",
+    "test"
   ],
   "enums" : [
     {

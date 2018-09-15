@@ -8,13 +8,13 @@ import models.doobie.DoobieQueries
 import services.database.DoobieQueryService.Imports._
 
 object AuditRecordDoobie extends DoobieQueries[AuditRecord]("audit_record") {
-  override protected val countFragment = fr"""select count(*) from "audit_record""""
-  override protected val selectFragment = fr"""select "id", "audit_id", "t", "pk", "changes" from "audit_record""""
+  override val countFragment = fr"""select count(*) from "audit_record""""
+  override val selectFragment = fr"""select "id", "audit_id", "t", "pk", "changes" from "audit_record""""
 
-  override protected val columns = Seq("id", "audit_id", "t", "pk", "changes")
-  override protected val searchColumns = Seq("id", "t", "pk")
+  override val columns = Seq("id", "audit_id", "t", "pk", "changes")
+  override val searchColumns = Seq("id", "t", "pk")
 
-  override protected def searchFragment(q: String) = {
+  override def searchFragment(q: String) = {
     fr""""id"::text = $q or "audit_id"::text = $q or "t"::text = $q or "pk"::text = $q or "changes"::text = $q"""
   }
 
