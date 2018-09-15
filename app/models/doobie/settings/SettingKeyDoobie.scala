@@ -5,5 +5,5 @@ import models.settings.SettingKey
 import services.database.DoobieQueryService.Imports._
 
 object SettingKeyDoobie {
-  implicit val settingKey: String = "???"
+  implicit val settingKeyMeta: Meta[SettingKey] = pgEnumStringOpt("SettingKey", SettingKey.withValueOpt, _.value)
 }

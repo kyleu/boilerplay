@@ -33,7 +33,6 @@ object Dependencies {
   }
 
   object Database {
-
     val postgres = "org.postgresql" % "postgresql" % "42.2.5"
     val hikariCp = "com.zaxxer" % "HikariCP" % "3.2.0"
 

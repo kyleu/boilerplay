@@ -20,9 +20,9 @@ trait PostgresProfileEx extends ExPostgresProfile
     with ArrayImplicits with DateTimeImplicits with JsonImplicits with NetImplicits
     with LTreeImplicits /* with RangeImplicits */ with HStoreImplicits with SearchImplicits with SearchAssistants {
 
-    implicit val tagSeqTypeMapper: DriverJdbcType[Seq[models.tag.Tag]] = new GenericJdbcType[Seq[models.tag.Tag]](
+    implicit val tagListTypeMapper: DriverJdbcType[List[models.tag.Tag]] = new GenericJdbcType[List[models.tag.Tag]](
       sqlTypeName = "hstore",
-      fnFromString = v => HStoreConverter.fromString(v).asScala.toSeq.map(x => Tag(x._1, x._2)),
+      fnFromString = v => HStoreConverter.fromString(v).asScala.toList.map(x => Tag(x._1, x._2)),
       fnToString = v => HStoreConverter.toString(v.map(t => t.k -> t.v).toMap.asJava),
       hasLiteralForm = false
     )
