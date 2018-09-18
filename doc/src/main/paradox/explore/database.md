@@ -5,4 +5,6 @@ To get started, check out the connection configuration in `application.conf`, th
 
 Slick table definitions are also provided, see `ApplicationDatabase.slick.run()`.
 
+Doobie query definitions are also provided, see `ApplicationDatabase.doobie.run()`.
+
 Postgres 9.5+ is the preferred database, but earlier versions are [supported](../troubleshooting.md).

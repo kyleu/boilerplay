@@ -40,6 +40,7 @@ object Icons {
   val audit = "fa-dot-circle-o"
   val auditRecord = "fa-dot-circle-o"
   val ddl = "fa-database"
+  val flywaySchemaHistory = "fa-hashtag"
   val note = "fa-sticky-note-o"
   val passwordInfo = "fa-lock"
   val sandbox = "fa-folder-o"
@@ -49,7 +50,6 @@ object Icons {
   val systemUser = "fa-user"
 
   // Start model icons
-  val flywaySchemaHistory = "fa-hashtag"
   val oAuth2Info = "fa-lemon-o"
   val settingValues = "fa-hand-spock-o"
   // End model icons

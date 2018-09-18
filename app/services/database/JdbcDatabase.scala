@@ -15,7 +15,7 @@ import util.tracing.{TraceData, TracingService}
 
 import scala.util.control.NonFatal
 
-abstract class JdbcDatabase(override val key: String, configPrefix: String) extends Database[Connection] with Queryable {
+abstract class JdbcDatabase(override val key: String, configPrefix: String) extends Database[Connection] with Queryable with DatabaseMigration {
   protected val metricsId = s"${util.Config.projectId}_${key}_database"
 
   private[this] def time[A](method: String, name: String)(f: => A) = {

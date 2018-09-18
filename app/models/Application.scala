@@ -71,10 +71,7 @@ class Application @javax.inject.Inject() (
     FileService.setRootDir(config.dataDir)
 
     ApplicationDatabase.open(config.cnf, tracing)
-
-    val flyway = new org.flywaydb.core.Flyway()
-    flyway.setDataSource(ApplicationDatabase.source)
-    flyway.migrate()
+    ApplicationDatabase.migrate()
 
     coreServices.settings.load().map { _ =>
       true
