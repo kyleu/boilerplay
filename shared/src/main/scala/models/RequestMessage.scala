@@ -1,7 +1,5 @@
 package models
 
-import java.time.LocalDateTime
-
 import util.JsonSerializers._
 
 sealed trait RequestMessage
@@ -12,5 +10,5 @@ object RequestMessage {
 
   case class MalformedRequest(reason: String, content: String) extends RequestMessage
   case class GetVersion(v: String) extends RequestMessage
-  case class Ping(ts: LocalDateTime) extends RequestMessage
+  case class Ping(ts: Long) extends RequestMessage
 }

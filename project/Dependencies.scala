@@ -25,7 +25,7 @@ object Dependencies {
   }
 
   object Authentication {
-    private[this] val version = "5.0.5"
+    private[this] val version = "5.0.6"
     val silhouette = "com.mohiva" %% "play-silhouette" % version
     val hasher = "com.mohiva" %% "play-silhouette-password-bcrypt" % version
     val persistence = "com.mohiva" %% "play-silhouette-persistence" % version
@@ -71,7 +71,7 @@ object Dependencies {
   }
 
   object Serialization {
-    val circeVersion = "0.9.3"
+    val circeVersion = "0.10.0"
     val circeProjects = Seq("circe-core", "circe-generic", "circe-generic-extras", "circe-parser", "circe-java8")
   }
 
@@ -79,7 +79,7 @@ object Dependencies {
     val fontAwesome = "org.webjars" % "font-awesome" % "4.7.0" intransitive()
     val jquery = "org.webjars" % "jquery" % "2.2.4" intransitive()
     val materialize = "org.webjars" % "materializecss" % "0.100.2" intransitive() // TODO 1.0.0
-    val swaggerUi = "org.webjars" % "swagger-ui" % "3.18.2" intransitive()
+    val swaggerUi = "org.webjars" % "swagger-ui" % "3.19.0" intransitive()
   }
 
   object Metrics {
@@ -104,12 +104,13 @@ object Dependencies {
     val enumeratumCirceVersion = "1.5.17"
     val booPickleVersion = "1.2.5"
     val utestVersion = "0.6.5"
+    val javaTimeVersion = "2.0.0-M13"
 
     val scalatagsVersion = "0.6.7"
 
     val betterFiles = "com.github.pathikrit" %% "better-files" % "3.6.0"
     val commonsIo = "commons-io" % "commons-io" % "2.6"
-    val commonsLang = "org.apache.commons" % "commons-lang3" % "3.8"
+    val commonsLang = "org.apache.commons" % "commons-lang3" % "3.8.1"
     val csv = "com.github.tototoshi" %% "scala-csv" % "1.3.5"
     val scalaGuice = "net.codingwell" %% "scala-guice" % "4.2.1"
     val scopts = "com.github.scopt" %% "scopt" % "3.7.0"

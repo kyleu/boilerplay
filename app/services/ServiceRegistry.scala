@@ -3,6 +3,7 @@ package services
 @javax.inject.Singleton
 class ServiceRegistry @javax.inject.Inject() (
     /* Start model service files */
+
     /* End model service files */
 
     val auditServices: services.audit.AuditServiceRegistry,

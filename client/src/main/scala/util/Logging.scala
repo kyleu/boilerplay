@@ -1,12 +1,16 @@
 package util
 
+import java.util.TimeZone
+
 import org.scalajs.dom
 import org.scalajs.dom.raw.{Element, Event}
-
 import scalatags.Text.all._
+
 import scala.scalajs.js.Dynamic.global
 
 object Logging {
+  TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
+
   private[this] val showDebug = false
   private[this] var initialized = false
   private[this] var container: Option[Element] = None

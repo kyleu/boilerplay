@@ -10,7 +10,7 @@ class TestSocketConnection(binary: Boolean = true) extends SocketConnection("tes
 
   @JSExport
   def flood(): Unit = {
-    val ts = util.DateUtils.now
+    val ts = util.DateUtils.nowMillis
     import scala.scalajs.js.timers.setTimeout
     (0 until 10).foreach(_ => NetworkMessage.sendMessage(models.RequestMessage.Ping(ts)))
     setTimeout(100)(flood())

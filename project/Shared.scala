@@ -69,9 +69,10 @@ object Shared {
     libraryDependencies ++= Dependencies.Serialization.circeProjects.map(c => "io.circe" %%% c % Dependencies.Serialization.circeVersion) ++ Seq(
       "com.beachape" %%% "enumeratum-circe" % Dependencies.Utils.enumeratumCirceVersion,
       "me.chrons" %%% "boopickle" % Dependencies.Utils.booPickleVersion,
+      "io.github.cquiroz" %%% "scala-java-time" % Dependencies.Utils.javaTimeVersion,
       "com.lihaoyi" %%% "utest" % Dependencies.Utils.utestVersion % "test"
     )
-  ).jsSettings(libraryDependencies += "org.scala-js" %%% "scalajs-java-time" % "0.2.2").jvmSettings(libraryDependencies += Dependencies.ScalaJS.jvmStubs)
+  ).jvmSettings(libraryDependencies += Dependencies.ScalaJS.jvmStubs)
 
   lazy val sharedJs = shared.js.enablePlugins(ScalaJSWeb)
 

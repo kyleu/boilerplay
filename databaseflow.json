@@ -1773,6 +1773,8 @@
       "readOnly" : false
     }
   ],
+  "views" : [
+  ],
   "source" : "boilerplay",
   "projectLocation" : "/Users/kyle/Projects/Personal/boilerplay",
   "providedPackage" : null,

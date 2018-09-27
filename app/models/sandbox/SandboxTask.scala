@@ -42,8 +42,7 @@ object SandboxTask extends Enum[SandboxTask] with CirceEnum[SandboxTask] {
 
   case object Testbed extends SandboxTask("testbed", "Testbed", "A simple sandbox for messing around.") {
     override def call(cfg: Config)(implicit trace: TraceData) = {
-      // Future.successful("OK")
-      DoobieLogic.test()
+      Future.successful("OK")
     }
   }
 
