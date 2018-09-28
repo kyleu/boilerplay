@@ -2,6 +2,7 @@ package services.relations
 
 import models.entrypoint.Entrypoint
 import models.result.RelationCount
+import org.scalajs.dom
 
 import scala.scalajs.js.annotation.JSExportTopLevel
 import org.scalajs.jquery.{JQuery, JQueryEventObject, jQuery => $}
@@ -9,8 +10,7 @@ import util.Logging
 
 @JSExportTopLevel("RelationService")
 class RelationService(url: String) extends Entrypoint("relation") {
-
-  Logging.info(s"Relation service running, using [$url].")
+  Logging.debug(s"Relation service running, using [$url].")
 
   private[this] def onComplete(body: JQuery, data: String): Unit = {
     body.html(data)
@@ -26,14 +26,14 @@ class RelationService(url: String) extends Entrypoint("relation") {
     $.get(url = url, data = scalajs.js.Dynamic.literal(), success = (data: String) => onComplete(body, data))
   }
 
-  private[this] def onOpen(el: JQuery) = {
+  private[this] def onOpen(el: dom.Element) = {
     val body = $(".collapsible-body", el)
     if ($("table", body).length == 0) {
-      val url = el.data("url").toString
+      val url = $(el).data("url").toString
       call(body, url)
-      Logging.info("Initialized.")
+      Logging.debug("Initialized new relation")
     } else {
-      Logging.info("Cached.")
+      Logging.debug("Using cached relation")
     }
   }
 
@@ -60,6 +60,6 @@ class RelationService(url: String) extends Entrypoint("relation") {
     }
   }, dataType = "text")
 
-  val arg = scalajs.js.Dynamic.literal("onOpen" -> onOpen _)
+  val arg = scalajs.js.Dynamic.literal("onOpenStart" -> onOpen _)
   scalajs.js.Dynamic.global.$("#model-relations").collapsible(arg)
 }

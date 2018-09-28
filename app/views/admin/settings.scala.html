@@ -13,8 +13,10 @@
 
 @roleRadio(name: String, r: models.user.Role, selected: models.user.Role, title: String) = {
   <div>
-    <input type="radio" id="role-@name-@r" name="@name" value="@r" @if(selected == r) { checked="checked" } />
-    <label for="role-@name-@r">@title</label>
+    <label for="role-@name-@r">
+      <input type="radio" id="role-@name-@r" name="@name" value="@r" @if(selected == r) { checked="checked" } />
+      <span>@title</span>
+    </label>
   </div>
 }
 
@@ -31,18 +33,22 @@
       @settingPanel(SettingKey.AllowRegistration) {
         @defining(settingService.allowRegistration) { allowRegistration =>
           <div>
-            <input type="radio" id="AllowRegistration-true" name="@SettingKey.AllowRegistration" value="true" @if(allowRegistration) { checked="checked" } />
-            <label for="AllowRegistration-true">Yes</label>
+            <label for="AllowRegistration-true">
+              <input type="radio" id="AllowRegistration-true" name="@SettingKey.AllowRegistration" value="true" @if(allowRegistration) { checked="checked" } />
+              <span>Yes</span>
+            </label>
           </div>
           <div>
-            <input type="radio" id="AllowRegistration-false" name="@SettingKey.AllowRegistration" value="false" @if(!allowRegistration) { checked="checked" } />
-            <label for="AllowRegistration-false">No</label>
+            <label for="AllowRegistration-false">
+              <input type="radio" id="AllowRegistration-false" name="@SettingKey.AllowRegistration" value="false" @if(!allowRegistration) { checked="checked" } />
+              <span>No</span>
+            </label>
           </div>
         }
       }
 
       @settingPanel(SettingKey.DefaultNewUserRole) {
-        <div class="collection-item">
+        <div>
           @defining(models.user.Role.withValue(settingService(SettingKey.DefaultNewUserRole))) { newUserRole =>
             @roleRadio(SettingKey.DefaultNewUserRole.toString, models.user.Role.User, newUserRole, "Registered Users")
             @roleRadio(SettingKey.DefaultNewUserRole.toString, models.user.Role.Admin, newUserRole, "Administrators")

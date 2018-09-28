@@ -14,7 +14,7 @@
 
   ul#main-menu li.search .search-wrapper input#search:focus { border-bottom: 2px solid @theme.color !important; }
 
-  [type="radio"]:checked+label:after {
+  [type="radio"]:checked+label:after, [type="radio"]:checked + span::after {
     border-color: @theme.color;
     background-color: @theme.color;
   }

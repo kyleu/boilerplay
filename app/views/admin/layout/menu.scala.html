@@ -7,9 +7,9 @@
 
     <ul class="left hide-on-small-only">
       @if(activeSection == "explore") {
-        <li class="active"><a class="dropdown-button" href="@controllers.admin.system.routes.AdminController.explore()" data-activates="dropdown-explore">Explore</a></li>
+        <li class="active"><a class="dropdown-trigger" href="@controllers.admin.system.routes.AdminController.explore()" data-target="dropdown-explore">Explore</a></li>
       } else {
-        <li><a class="dropdown-button" href="@controllers.admin.system.routes.AdminController.explore()" data-activates="dropdown-explore">Explore</a></li>
+        <li><a class="dropdown-trigger" href="@controllers.admin.system.routes.AdminController.explore()" data-target="dropdown-explore">Explore</a></li>
       }
       @if(activeSection == "graphql") {
         <li class="active"><a href="@controllers.admin.graphql.routes.GraphQLController.graphql()">GraphQL</a></li>
@@ -56,3 +56,9 @@
   <li><a href="@controllers.admin.user.routes.SystemUserController.list()"><i class="fa @models.template.Icons.systemUser"></i> System User</a></li>
   <!-- End model list routes -->
 </ul>
+
+<script>
+  $(function() {
+    $(".dropdown-trigger").dropdown();
+  });
+</script>

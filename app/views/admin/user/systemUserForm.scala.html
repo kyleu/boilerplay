@@ -40,19 +40,15 @@
               </td>
               <td>
                 <p>
-                  @if(model.role == models.user.Role.Admin) {
-                    <input type="radio" name="role" value="admin" id="admin-radio" checked="checked" />
-                  } else {
-                    <input type="radio" name="role" value="admin" id="admin-radio" />
-                  }
-                  <label for="admin-radio">Administrator</label>
+                  <label for="admin-radio">
+                    <input type="radio" id="admin-radio" name="role" value="admin" @if(model.role == models.user.Role.Admin) { checked="checked" } />
+                    <span>Administrator</span>
+                  </label>
 
-                  @if(model.role == models.user.Role.User) {
-                    <input type="radio" name="role" id="user-radio" value="user" checked="checked" />
-                  } else {
-                    <input type="radio" name="role" id="user-radio" value="user" />
-                  }
-                  <label for="user-radio">Normal User</label>
+                  <label for="admin-radio">
+                    <input type="radio" id="user-radio" name="role" value="user" @if(model.role == models.user.Role.User) { checked="checked" } />
+                    <span>Normal User</span>
+                  </label>
                 </p>
               </td>
             </tr>

@@ -1,12 +1,20 @@
 @(
     selected: Boolean, key: String, title: String, value: Option[Boolean], nullable: Boolean, dataType: String = "string"
 )@views.html.components.form.fieldWrapper(selected = selected, key = key, title = title, nullable = nullable, dataType = dataType) {
-  <input id="input-@key-true" type="radio" name="@key" value="true" @if(value.contains(true)) { checked="checked" } />
-  <label class="bool-radio-label" for="input-@key-true">True</label>
-  <input id="input-@key-false" type="radio" name="@key" value="false" @if(value.contains(false)) { checked="checked" } />
-  <label class="bool-radio-label" for="input-@key-false">False</label>
+  <label for="input-@key-true">
+    <input type="radio" id="input-@key-true" name="@key" value="true" @if(value.contains(true)) { checked="checked" } />
+    <span>True</span>
+  </label>
+
+  <label for="input-@key-false">
+    <input type="radio" id="input-@key-false" name="@key" value="false" @if(value.contains(false)) { checked="checked" } />
+    <span>False</span>
+  </label>
+
   @if(nullable) {
-  <input id="input-@key-null" type="radio" name="@key" value="null" @if(value.isEmpty) { checked="checked" } />
-  <label class="bool-radio-label" for="input-@key-null">Null</label>
+  <label for="input-@key-null">
+    <input type="radio" id="input-@key-null" name="@key" value="null" @if(value.contains(false)) { checked="checked" } />
+    <span>Null</span>
+  </label>
   }
 }

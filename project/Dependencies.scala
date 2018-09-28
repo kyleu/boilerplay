@@ -78,7 +78,7 @@ object Dependencies {
   object WebJars {
     val fontAwesome = "org.webjars" % "font-awesome" % "4.7.0" intransitive()
     val jquery = "org.webjars" % "jquery" % "2.2.4" intransitive()
-    val materialize = "org.webjars" % "materializecss" % "0.100.2" intransitive() // TODO 1.0.0
+    val materialize = "org.webjars" % "materializecss" % "1.0.0" intransitive()
     val swaggerUi = "org.webjars" % "swagger-ui" % "3.19.0" intransitive()
   }
 
