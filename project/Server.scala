@@ -28,7 +28,8 @@ object Server {
     import Dependencies._
     Seq(
       Tracing.jaeger, Tracing.jaegerMetrics, Metrics.micrometer,
-      Akka.actor, Akka.logging, Akka.visualMailbox, Play.filters, Play.guice, Play.ws, Play.json, Play.cache
+      Akka.actor, Akka.logging, Akka.protobuf, Akka.stream, Akka.visualMailbox, 
+      Play.filters, Play.guice, Play.ws, Play.json, Play.cache
     ) ++ Database.all ++ Seq(
       GraphQL.sangria, GraphQL.playJson, GraphQL.circe,
       Authentication.silhouette, Authentication.hasher, Authentication.persistence, Authentication.crypto,

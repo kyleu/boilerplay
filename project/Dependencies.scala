@@ -13,13 +13,15 @@ object Dependencies {
   }
 
   object Akka {
-    private[this] val version = "2.5.16"
+    private[this] val version = "2.5.17"
     val actor = "com.typesafe.akka" %% "akka-actor" % version
     val remote = "com.typesafe.akka" %% "akka-remote" % version
     val logging = "com.typesafe.akka" %% "akka-slf4j" % version
     val cluster = "com.typesafe.akka" %% "akka-cluster" % version
     val clusterMetrics = "com.typesafe.akka" %% "akka-cluster-metrics" % version
     val clusterTools = "com.typesafe.akka" %% "akka-cluster-tools" % version
+    val protobuf = "com.typesafe.akka" %% "akka-protobuf" % version
+    val stream = "com.typesafe.akka" %% "akka-stream" % version
     val visualMailbox = "de.aktey.akka.visualmailbox" %% "collector" % "1.1.0"
     val testkit = "com.typesafe.akka" %% "akka-testkit" % version % "test"
   }
@@ -103,7 +105,6 @@ object Dependencies {
     val scapegoatVersion = "1.3.8"
     val enumeratumCirceVersion = "1.5.17"
     val booPickleVersion = "1.2.5"
-    val utestVersion = "0.6.5"
     val javaTimeVersion = "2.0.0-M13"
 
     val scalatagsVersion = "0.6.7"

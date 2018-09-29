@@ -32,7 +32,6 @@ object Shared {
     scalacOptions in (Compile, doc) := Seq("-encoding", "UTF-8"),
 
     publishMavenStyle := false,
-    testFrameworks += new TestFramework("utest.runner.Framework"),
 
     evictionWarningOptions in update := EvictionWarningOptions.default.withWarnTransitiveEvictions(false).withWarnDirectEvictions(false),
 
@@ -69,8 +68,7 @@ object Shared {
     libraryDependencies ++= Dependencies.Serialization.circeProjects.map(c => "io.circe" %%% c % Dependencies.Serialization.circeVersion) ++ Seq(
       "com.beachape" %%% "enumeratum-circe" % Dependencies.Utils.enumeratumCirceVersion,
       "me.chrons" %%% "boopickle" % Dependencies.Utils.booPickleVersion,
-      "io.github.cquiroz" %%% "scala-java-time" % Dependencies.Utils.javaTimeVersion,
-      "com.lihaoyi" %%% "utest" % Dependencies.Utils.utestVersion % "test"
+      "io.github.cquiroz" %%% "scala-java-time" % Dependencies.Utils.javaTimeVersion
     )
   ).jvmSettings(libraryDependencies += Dependencies.ScalaJS.jvmStubs)
 
