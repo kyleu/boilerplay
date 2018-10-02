@@ -21,7 +21,7 @@ class FormService(id: String) extends Entrypoint("form") {
 
   val dates = $(".datepicker")
   if (dates.length > 0) {
-    dates.asInstanceOf[js.Dynamic].pickadate(js.Dynamic.literal(
+    dates.asInstanceOf[js.Dynamic].datepicker(js.Dynamic.literal(
       selectMonths = true,
       selectYears = 100,
       today = "Today",
@@ -33,7 +33,7 @@ class FormService(id: String) extends Entrypoint("form") {
   }
   val times = $(".timepicker")
   if (times.length > 0) {
-    times.asInstanceOf[js.Dynamic].pickatime(js.Dynamic.literal(
+    times.asInstanceOf[js.Dynamic].timepicker(js.Dynamic.literal(
       default = "now",
       format = "HH:i",
       twelvehour = true,
@@ -45,7 +45,7 @@ class FormService(id: String) extends Entrypoint("form") {
     ))
   }
 
-  scalajs.js.Dynamic.global.$("select").material_select()
+  scalajs.js.Dynamic.global.$("select").formSelect()
 
   Logging.info(s"Form service started. [${fields.length}] fields.")
 

@@ -40,7 +40,7 @@ object FieldDefault {
 
       val dyn = js.Dynamic.global.$(s"#input-$name", formEl)
 
-      dyn.materialize_autocomplete(js.Dynamic.literal(
+      dyn.autocomplete(js.Dynamic.literal(
         limit = 5,
         multiple = js.Dynamic.literal(enable = false),
         dropdown = js.Dynamic.literal(
