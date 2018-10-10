@@ -22,10 +22,10 @@
   .input-field label {
     color: #000;
   }
-  .input-field input[type=text]:focus + label, .input-field input[type=password]:focus + label, .input-field input[type=email]:focus + label {
+  .input-field input[type=text]:not(.browser-default):focus + label, .input-field input[type=password]:not(.browser-default):focus + label, .input-field input[type=email]:not(.browser-default):focus + label {
     color: @theme.color;
   }
-  .input-field input[type=text]:focus, .input-field input[type=password]:focus, .input-field input[type=email]:focus {
+  .input-field input[type=text]:not(.browser-default):focus, .input-field input[type=password]:not(.browser-default):focus, .input-field input[type=email]:not(.browser-default):focus {
     border-bottom: 1px solid @theme.color;
     box-shadow: 0 1px 0 0 @theme.color;
   }
