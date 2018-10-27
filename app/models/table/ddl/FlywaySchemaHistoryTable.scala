@@ -2,7 +2,7 @@
 package models.table.ddl
 
 import java.time.LocalDateTime
-import services.database.SlickQueryService.imports._
+import services.database.slick.SlickQueryService.imports._
 
 object FlywaySchemaHistoryTable {
   val query = TableQuery[FlywaySchemaHistoryTable]

@@ -1,14 +1,13 @@
-package models.doobie
+package services.database.doobie
 
-import models.queries.EngineHelper
-import services.database.DoobieQueryService.Imports._
+import services.database.doobie.DoobieQueryService.Imports._
 
-abstract class DoobieQueries[T: Composite](tableName: String) {
+abstract class DoobieQueries[T: Read: Write](tableName: String) {
   def countFragment: Fragment
   def selectFragment: Fragment
   def searchFragment(q: String): Fragment
 
-  protected def quote(n: String) = EngineHelper.quote(n)
+  protected def quote(n: String) = "\"" + n + "\""
 
   def columns: Seq[String]
   def columnsString = columns.map(quote).mkString(", ")

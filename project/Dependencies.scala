@@ -50,7 +50,7 @@ object Dependencies {
     }
 
     object Doobie {
-      val version = "0.5.3"
+      val version = "0.6.0"
 
       val core = "org.tpolecat" %% "doobie-core" % version
       val hikariCp = "org.tpolecat" %% "doobie-hikari" % version
@@ -58,7 +58,7 @@ object Dependencies {
       val testing = "org.tpolecat" %% "doobie-scalatest" % version % "test"
     }
 
-    val flyway = "org.flywaydb" % "flyway-core" % "5.1.4"
+    val flyway = "org.flywaydb" % "flyway-core" % "5.2.1"
 
     val all = Seq(
       postgres, hikariCp, flyway, Slick.core, Slick.hikariCp, Slick.pg, Slick.pgCirce, Slick.slickless,
@@ -68,7 +68,7 @@ object Dependencies {
 
   object GraphQL {
     val sangria = "org.sangria-graphql" %% "sangria" % "1.4.2"
-    val playJson = "org.sangria-graphql" %% "sangria-play-json" % "1.0.4"
+    val playJson = "org.sangria-graphql" %% "sangria-play-json" % "1.0.5"
     val circe = "org.sangria-graphql" %% "sangria-circe" % "1.2.1"
   }
 
@@ -81,16 +81,16 @@ object Dependencies {
     val fontAwesome = "org.webjars" % "font-awesome" % "4.7.0" intransitive()
     val jquery = "org.webjars" % "jquery" % "2.2.4" intransitive()
     val materialize = "org.webjars" % "materializecss" % "1.0.0" intransitive()
-    val swaggerUi = "org.webjars" % "swagger-ui" % "3.19.0" intransitive()
+    val swaggerUi = "org.webjars" % "swagger-ui" % "3.19.4" intransitive()
   }
 
   object Metrics {
-    val version = "1.0.6"
+    val version = "1.0.7"
     val micrometer = "io.micrometer" % "micrometer-registry-prometheus" % version
   }
 
   object Tracing {
-    val version = "0.31.0"
+    val version = "0.32.0"
     val jaeger = "io.jaegertracing" % "jaeger-thrift" % version
     val jaegerMetrics = "io.jaegertracing" % "jaeger-micrometer" % version
   }

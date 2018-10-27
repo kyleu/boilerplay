@@ -1,7 +1,7 @@
 package models.table.settings
 
 import models.settings.{Setting, SettingKey}
-import services.database.SlickQueryService.imports._
+import services.database.slick.SlickQueryService.imports._
 import slick.jdbc.JdbcType
 
 object SettingTable {

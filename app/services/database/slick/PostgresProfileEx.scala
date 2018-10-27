@@ -1,10 +1,11 @@
-package models.table
+package services.database.slick
 
 import java.util.UUID
 
 import com.github.tminglei.slickpg._
 import models.tag.Tag
 import org.postgresql.util.HStoreConverter
+
 import scala.collection.JavaConverters._
 
 trait PostgresProfileEx extends ExPostgresProfile

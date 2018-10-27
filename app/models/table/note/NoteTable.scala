@@ -4,7 +4,7 @@ import java.time.LocalDateTime
 import java.util.UUID
 
 import models.note.Note
-import services.database.SlickQueryService.imports._
+import services.database.slick.SlickQueryService.imports._
 
 object NoteTable {
   val query = TableQuery[NoteTable]

@@ -3,9 +3,10 @@ package models.doobie.note
 
 import cats.data.NonEmptyList
 import java.util.UUID
-import models.doobie.DoobieQueries
+
 import models.note.Note
-import services.database.DoobieQueryService.Imports._
+import services.database.doobie.DoobieQueryService.Imports._
+import services.database.doobie.DoobieQueries
 
 object NoteDoobie extends DoobieQueries[Note]("note") {
   override val countFragment = fr"""select count(*) from "note""""

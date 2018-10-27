@@ -2,7 +2,7 @@
 package models.table.sync
 
 import java.time.LocalDateTime
-import services.database.SlickQueryService.imports._
+import services.database.slick.SlickQueryService.imports._
 
 object SyncProgressTable {
   val query = TableQuery[SyncProgressTable]

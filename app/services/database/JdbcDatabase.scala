@@ -4,12 +4,11 @@ import java.sql.Connection
 import java.util.Properties
 import java.util.concurrent.TimeUnit
 
-import cats.effect.IO
 import com.zaxxer.hikari.{HikariConfig, HikariDataSource}
-import doobie.Transactor
-import doobie.util.transactor
+import services.database.doobie.DoobieQueryService
 import models.database.jdbc.Queryable
 import models.database.{DatabaseConfig, RawQuery, Statement}
+import services.database.slick.SlickQueryService
 import util.metrics.Instrumented
 import util.tracing.{TraceData, TracingService}
 
@@ -59,7 +58,7 @@ abstract class JdbcDatabase(override val key: String, configPrefix: String) exte
     start(config, svc)
 
     if (config.enableSlick) { slickOpt = Some(new SlickQueryService(key, source, maxPoolSize, svc)) }
-    if (config.enableDoobie) { doobieOpt = Some(new DoobieQueryService(key, source, svc)) }
+    if (config.enableDoobie) { doobieOpt = Some(new DoobieQueryService(key, source)) }
   }
 
   override def transaction[A](f: (TraceData, Connection) => A)(implicit traceData: TraceData) = trace("transaction") { td =>

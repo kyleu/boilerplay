@@ -3,7 +3,7 @@ package models.table.audit
 import java.util.UUID
 
 import io.circe.Json
-import services.database.SlickQueryService.imports._
+import services.database.slick.SlickQueryService.imports._
 
 object AuditRecordTable {
   val query = TableQuery[AuditRecordTable]

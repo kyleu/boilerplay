@@ -15,6 +15,7 @@ object DateUtils {
 
   def today = LocalDate.now()
   def now = LocalDateTime.now()
+  def nowZoned = ZonedDateTime.now()
   def nowMillis = System.currentTimeMillis
   def currentTime = LocalTime.now()
 

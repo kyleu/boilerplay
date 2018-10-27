@@ -6,7 +6,7 @@ import java.util.UUID
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
 import models.user.{Role, SystemUser, UserPreferences}
-import services.database.SlickQueryService.imports._
+import services.database.slick.SlickQueryService.imports._
 import slick.jdbc.JdbcType
 import util.JsonSerializers._
 

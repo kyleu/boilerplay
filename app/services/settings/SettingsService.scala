@@ -5,7 +5,7 @@ import models.table.settings.SettingTable
 import services.database.ApplicationDatabase
 import util.Logging
 import util.tracing.{TraceData, TracingService}
-import services.database.SlickQueryService.imports._
+import services.database.slick.SlickQueryService.imports._
 import util.FutureUtils.serviceContext
 
 import scala.concurrent.Future

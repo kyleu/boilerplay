@@ -4,7 +4,7 @@ package models.table.task
 import io.circe.Json
 import java.time.LocalDateTime
 import java.util.UUID
-import services.database.SlickQueryService.imports._
+import services.database.slick.SlickQueryService.imports._
 
 object ScheduledTaskRunTable {
   val query = TableQuery[ScheduledTaskRunTable]
