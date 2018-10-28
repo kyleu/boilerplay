@@ -3,7 +3,7 @@ package models.doobie.ddl
 
 import models.ddl.FlywaySchemaHistory
 import org.scalatest._
-import services.database.DoobieQueryService.Imports._
+import services.database.doobie.DoobieQueryService.Imports._
 
 class FlywaySchemaHistoryDoobieTests extends FlatSpec with Matchers {
   import models.doobie.DoobieTestHelper.yolo._

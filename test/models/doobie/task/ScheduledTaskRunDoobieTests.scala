@@ -3,7 +3,7 @@ package models.doobie.task
 
 import models.task.ScheduledTaskRun
 import org.scalatest._
-import services.database.DoobieQueryService.Imports._
+import services.database.doobie.DoobieQueryService.Imports._
 
 class ScheduledTaskRunDoobieTests extends FlatSpec with Matchers {
   import models.doobie.DoobieTestHelper.yolo._

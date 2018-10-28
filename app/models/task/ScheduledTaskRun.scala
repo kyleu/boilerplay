@@ -28,7 +28,7 @@ final case class ScheduledTaskRun(
   override def toDataFields = Seq(
     DataField("id", Some(id.toString)),
     DataField("task", Some(task)),
-    DataField("arguments", Some(arguments.toString)),
+    DataField("arguments", Some("{ " + arguments.mkString(", ") + " }")),
     DataField("status", Some(status)),
     DataField("output", Some(output.toString)),
     DataField("started", Some(started.toString)),

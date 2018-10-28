@@ -3,7 +3,7 @@ package models.doobie.user
 
 import models.user.SystemUser
 import org.scalatest._
-import services.database.DoobieQueryService.Imports._
+import services.database.doobie.DoobieQueryService.Imports._
 
 class SystemUserDoobieTests extends FlatSpec with Matchers {
   import models.doobie.DoobieTestHelper.yolo._

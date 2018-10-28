@@ -3,7 +3,7 @@ package models.doobie.audit
 
 import models.audit.AuditRecord
 import org.scalatest._
-import services.database.DoobieQueryService.Imports._
+import services.database.doobie.DoobieQueryService.Imports._
 
 class AuditRecordDoobieTests extends FlatSpec with Matchers {
   import models.doobie.DoobieTestHelper.yolo._

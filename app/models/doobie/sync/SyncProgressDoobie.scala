@@ -3,8 +3,8 @@ package models.doobie.sync
 
 import cats.data.NonEmptyList
 import models.sync.SyncProgress
-import services.database.doobie.DoobieQueryService.Imports._
 import services.database.doobie.DoobieQueries
+import services.database.doobie.DoobieQueryService.Imports._
 
 object SyncProgressDoobie extends DoobieQueries[SyncProgress]("sync_progress") {
   override val countFragment = fr"""select count(*) from "sync_progress""""

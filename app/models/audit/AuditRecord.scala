@@ -26,7 +26,7 @@ final case class AuditRecord(
     DataField("id", Some(id.toString)),
     DataField("auditId", Some(auditId.toString)),
     DataField("t", Some(t)),
-    DataField("pk", Some(pk.toString)),
+    DataField("pk", Some("{ " + pk.mkString(", ") + " }")),
     DataField("changes", Some(changes.toString))
   )
 

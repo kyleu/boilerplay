@@ -3,10 +3,9 @@ package models.doobie.user
 
 import cats.data.NonEmptyList
 import java.util.UUID
-
 import models.user.SystemUser
-import services.database.doobie.DoobieQueryService.Imports._
 import services.database.doobie.DoobieQueries
+import services.database.doobie.DoobieQueryService.Imports._
 
 object SystemUserDoobie extends DoobieQueries[SystemUser]("system_users") {
   override val countFragment = fr"""select count(*) from "system_users""""
