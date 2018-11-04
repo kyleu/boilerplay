@@ -1,4 +1,4 @@
-package models.doobie
+package services.database.doobie
 
 import akka.actor.ActorSystem
 import com.typesafe.config.ConfigFactory
