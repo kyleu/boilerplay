@@ -21,4 +21,3 @@ object SystemUserDoobie extends DoobieQueries[SystemUser]("system_users") {
   def getByPrimaryKey(id: UUID) = (selectFragment ++ whereAnd(fr"id = $id")).query[Option[SystemUser]].unique
   def getByPrimaryKeySeq(idSeq: NonEmptyList[UUID]) = (selectFragment ++ in(fr"id", idSeq)).query[SystemUser].to[Seq]
 }
-

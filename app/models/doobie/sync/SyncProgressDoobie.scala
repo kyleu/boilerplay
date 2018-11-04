@@ -20,4 +20,3 @@ object SyncProgressDoobie extends DoobieQueries[SyncProgress]("sync_progress") {
   def getByPrimaryKey(key: String) = (selectFragment ++ whereAnd(fr"key = $key")).query[Option[SyncProgress]].unique
   def getByPrimaryKeySeq(keySeq: NonEmptyList[String]) = (selectFragment ++ in(fr"key", keySeq)).query[SyncProgress].to[Seq]
 }
-

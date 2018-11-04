@@ -49,16 +49,6 @@ class FlywaySchemaHistoryService @javax.inject.Inject() (override val tracing: T
     traceF("search.exact")(td => ApplicationDatabase.queryF(FlywaySchemaHistoryQueries.searchExact(q, orderBys, limit, offset))(td))
   }
 
-  def countByExecutionTime(creds: Credentials, executionTime: Long)(implicit trace: TraceData) = traceF("count.by.executionTime") { td =>
-    ApplicationDatabase.queryF(FlywaySchemaHistoryQueries.CountByExecutionTime(executionTime))(td)
-  }
-  def getByExecutionTime(creds: Credentials, executionTime: Long, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData) = traceF("get.by.executionTime") { td =>
-    ApplicationDatabase.queryF(FlywaySchemaHistoryQueries.GetByExecutionTime(executionTime, orderBys, limit, offset))(td)
-  }
-  def getByExecutionTimeSeq(creds: Credentials, executionTimeSeq: Seq[Long])(implicit trace: TraceData) = traceF("get.by.executionTime.seq") { td =>
-    ApplicationDatabase.queryF(FlywaySchemaHistoryQueries.GetByExecutionTimeSeq(executionTimeSeq))(td)
-  }
-
   def countByInstalledOn(creds: Credentials, installedOn: LocalDateTime)(implicit trace: TraceData) = traceF("count.by.installedOn") { td =>
     ApplicationDatabase.queryF(FlywaySchemaHistoryQueries.CountByInstalledOn(installedOn))(td)
   }
@@ -77,16 +67,6 @@ class FlywaySchemaHistoryService @javax.inject.Inject() (override val tracing: T
   }
   def getByInstalledRankSeq(creds: Credentials, installedRankSeq: Seq[Long])(implicit trace: TraceData) = traceF("get.by.installedRank.seq") { td =>
     ApplicationDatabase.queryF(FlywaySchemaHistoryQueries.GetByInstalledRankSeq(installedRankSeq))(td)
-  }
-
-  def countByScript(creds: Credentials, script: String)(implicit trace: TraceData) = traceF("count.by.script") { td =>
-    ApplicationDatabase.queryF(FlywaySchemaHistoryQueries.CountByScript(script))(td)
-  }
-  def getByScript(creds: Credentials, script: String, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData) = traceF("get.by.script") { td =>
-    ApplicationDatabase.queryF(FlywaySchemaHistoryQueries.GetByScript(script, orderBys, limit, offset))(td)
-  }
-  def getByScriptSeq(creds: Credentials, scriptSeq: Seq[String])(implicit trace: TraceData) = traceF("get.by.script.seq") { td =>
-    ApplicationDatabase.queryF(FlywaySchemaHistoryQueries.GetByScriptSeq(scriptSeq))(td)
   }
 
   def countBySuccess(creds: Credentials, success: Boolean)(implicit trace: TraceData) = traceF("count.by.success") { td =>

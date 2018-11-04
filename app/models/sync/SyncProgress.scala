@@ -3,13 +3,14 @@ package models.sync
 
 import java.time.LocalDateTime
 import models.result.data.{DataField, DataFieldModel, DataSummary}
+import util.DateUtils
 import util.JsonSerializers._
 
 object SyncProgress {
   implicit val jsonEncoder: Encoder[SyncProgress] = deriveEncoder
   implicit val jsonDecoder: Decoder[SyncProgress] = deriveDecoder
 
-  def empty(key: String = "", status: String = "", message: String = "", lastTime: LocalDateTime = util.DateUtils.now) = {
+  def empty(key: String = "", status: String = "", message: String = "", lastTime: LocalDateTime = DateUtils.now) = {
     SyncProgress(key, status, message, lastTime)
   }
 }

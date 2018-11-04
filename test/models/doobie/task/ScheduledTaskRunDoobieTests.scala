@@ -4,9 +4,9 @@ package models.doobie.task
 import models.task.ScheduledTaskRun
 import org.scalatest._
 import services.database.doobie.DoobieQueryService.Imports._
+import services.database.doobie.DoobieTestHelper.yolo._
 
 class ScheduledTaskRunDoobieTests extends FlatSpec with Matchers {
-  import models.doobie.DoobieTestHelper.yolo._
 
   "Doobie queries for [ScheduledTaskRun]" should "typecheck" in {
     ScheduledTaskRunDoobie.countFragment.query[Long].check.unsafeRunSync

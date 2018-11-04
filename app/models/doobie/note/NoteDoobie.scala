@@ -25,4 +25,3 @@ object NoteDoobie extends DoobieQueries[Note]("note") {
   def getByAuthor(author: UUID) = (selectFragment ++ whereAnd(fr"author = $author")).query[Note].to[Seq]
   def getByAuthorSeq(authorSeq: NonEmptyList[UUID]) = (selectFragment ++ whereAnd(in(fr"author", authorSeq))).query[Note].to[Seq]
 }
-

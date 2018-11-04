@@ -9,7 +9,7 @@ import models.settings.SettingKeySchema.settingKeyEnumType
 import scala.concurrent.Future
 
 object SettingsSchema extends GraphQLSchemaHelper("settings") {
-  val settingPrimaryKeyId = HasId[Setting, SettingKey](_.key)
+  val settingPrimaryKeyId = HasId[Setting, SettingKey](_.k)
 
   implicit lazy val settingType: ObjectType[GraphQLContext, Setting] = deriveObjectType()
 

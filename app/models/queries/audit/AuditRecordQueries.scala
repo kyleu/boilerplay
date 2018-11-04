@@ -6,8 +6,7 @@ import java.util.UUID
 import models.audit.AuditRecord
 import models.database.{DatabaseField, Row}
 import models.database.DatabaseFieldType._
-import models.queries.BaseQueries
-import models.result.ResultFieldHelper
+import models.queries.{BaseQueries, ResultFieldHelper}
 import models.result.data.DataField
 import models.result.filter.Filter
 import models.result.orderBy.OrderBy

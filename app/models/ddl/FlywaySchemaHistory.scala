@@ -3,13 +3,14 @@ package models.ddl
 
 import java.time.LocalDateTime
 import models.result.data.{DataField, DataFieldModel, DataSummary}
+import util.DateUtils
 import util.JsonSerializers._
 
 object FlywaySchemaHistory {
   implicit val jsonEncoder: Encoder[FlywaySchemaHistory] = deriveEncoder
   implicit val jsonDecoder: Decoder[FlywaySchemaHistory] = deriveDecoder
 
-  def empty(installedRank: Long = 0L, version: Option[String] = None, description: String = "", typ: String = "", script: String = "", checksum: Option[Long] = None, installedBy: String = "", installedOn: LocalDateTime = util.DateUtils.now, executionTime: Long = 0L, success: Boolean = false) = {
+  def empty(installedRank: Long = 0L, version: Option[String] = None, description: String = "", typ: String = "", script: String = "", checksum: Option[Long] = None, installedBy: String = "", installedOn: LocalDateTime = DateUtils.now, executionTime: Long = 0L, success: Boolean = false) = {
     FlywaySchemaHistory(installedRank, version, description, typ, script, checksum, installedBy, installedOn, executionTime, success)
   }
 }
@@ -39,5 +40,5 @@ final case class FlywaySchemaHistory(
     DataField("success", Some(success.toString))
   )
 
-  def toSummary = DataSummary(model = "flywaySchemaHistory", pk = Seq(installedRank.toString), title = s"$version / $typ / $script / $installedOn / $executionTime / $success ($installedRank)")
+  def toSummary = DataSummary(model = "flywaySchemaHistory", pk = Seq(installedRank.toString), title = s"$version / $description / $typ / $installedOn / $success ($installedRank)")
 }

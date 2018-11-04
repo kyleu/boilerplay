@@ -3,7 +3,7 @@ package models.queries
 import models.database._
 import models.result.filter.Filter
 import models.result.orderBy.OrderBy
-import models.result.ResultFieldHelper._
+import ResultFieldHelper._
 
 trait SearchQueries[T <: Product] { this: BaseQueries[T] =>
   private[this] def searchCol(c: String) = s"${quote(c)}::text like ?"

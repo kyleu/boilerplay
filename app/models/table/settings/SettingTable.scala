@@ -15,7 +15,7 @@ object SettingTable {
   def getByPrimaryKey(key: SettingKey) = query.filter(_.key === key).result.headOption
 
   def insert(s: Setting) = query += s
-  def update(s: Setting) = query.filter(_.key === s.key).map(_.value).update(s.value)
+  def update(s: Setting) = query.filter(_.key === s.k).map(_.value).update(s.v)
   def delete(key: SettingKey) = query.filter(_.key === key).delete
 }
 

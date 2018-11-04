@@ -4,9 +4,9 @@ package models.doobie.user
 import models.user.SystemUser
 import org.scalatest._
 import services.database.doobie.DoobieQueryService.Imports._
+import services.database.doobie.DoobieTestHelper.yolo._
 
 class SystemUserDoobieTests extends FlatSpec with Matchers {
-  import models.doobie.DoobieTestHelper.yolo._
 
   "Doobie queries for [SystemUser]" should "typecheck" in {
     SystemUserDoobie.countFragment.query[Long].check.unsafeRunSync

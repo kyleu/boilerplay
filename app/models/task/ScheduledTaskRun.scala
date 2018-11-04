@@ -5,13 +5,14 @@ import io.circe.Json
 import java.time.LocalDateTime
 import java.util.UUID
 import models.result.data.{DataField, DataFieldModel, DataSummary}
+import util.DateUtils
 import util.JsonSerializers._
 
 object ScheduledTaskRun {
   implicit val jsonEncoder: Encoder[ScheduledTaskRun] = deriveEncoder
   implicit val jsonDecoder: Decoder[ScheduledTaskRun] = deriveDecoder
 
-  def empty(id: UUID = UUID.randomUUID, task: String = "", arguments: List[String] = List.empty, status: String = "", output: Json = Json.obj(), started: LocalDateTime = util.DateUtils.now, completed: LocalDateTime = util.DateUtils.now) = {
+  def empty(id: UUID = UUID.randomUUID, task: String = "", arguments: List[String] = List.empty, status: String = "", output: Json = Json.obj(), started: LocalDateTime = DateUtils.now, completed: LocalDateTime = DateUtils.now) = {
     ScheduledTaskRun(id, task, arguments, status, output, started, completed)
   }
 }

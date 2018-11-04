@@ -4,9 +4,9 @@ package models.doobie.sync
 import models.sync.SyncProgress
 import org.scalatest._
 import services.database.doobie.DoobieQueryService.Imports._
+import services.database.doobie.DoobieTestHelper.yolo._
 
 class SyncProgressDoobieTests extends FlatSpec with Matchers {
-  import models.doobie.DoobieTestHelper.yolo._
 
   "Doobie queries for [SyncProgress]" should "typecheck" in {
     SyncProgressDoobie.countFragment.query[Long].check.unsafeRunSync

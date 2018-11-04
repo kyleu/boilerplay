@@ -26,7 +26,7 @@ class SettingsService @javax.inject.Inject() (tracing: TracingService) extends L
 
   def load()(implicit trace: TraceData) = tracing.trace("settings.service.load") { _ =>
     ApplicationDatabase.slick.run(SettingTable.query.result).map { set =>
-      settingsMap = set.map(s => s.key -> s.value).toMap
+      settingsMap = set.map(s => s.k -> s.v).toMap
       settings = SettingKey.values.map(k => Setting(k, settingsMap.getOrElse(k, k.default)))
       log.info(s"Loaded [${set.size}] system settings.")
     }
@@ -35,7 +35,7 @@ class SettingsService @javax.inject.Inject() (tracing: TracingService) extends L
   def isOverride(key: SettingKey) = settingsMap.isDefinedAt(key)
 
   def getAll = settings
-  def getOverrides = settings.filter(s => isOverride(s.key))
+  def getOverrides = settings.filter(s => isOverride(s.k))
 
   def set(key: SettingKey, value: String)(implicit trace: TraceData) = tracing.trace("settings.service.set") { _ =>
     val s = Setting(key, value)

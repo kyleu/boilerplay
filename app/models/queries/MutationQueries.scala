@@ -1,7 +1,6 @@
 package models.queries
 
 import models.database.Statement
-import models.result.ResultFieldHelper
 import models.result.data.DataField
 
 trait MutationQueries[T <: Product] { this: BaseQueries[T] =>

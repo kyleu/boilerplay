@@ -1,8 +1,7 @@
-package models.result
+package models.queries
 
 import models.database.DatabaseField
 import models.database.DatabaseFieldType.{EncryptedStringType, TimestampType}
-import models.queries.EngineHelper
 import models.result.filter._
 import models.result.orderBy.OrderBy
 

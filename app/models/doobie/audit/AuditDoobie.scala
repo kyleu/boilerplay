@@ -21,4 +21,3 @@ object AuditDoobie extends DoobieQueries[Audit]("audit") {
   def getByPrimaryKey(id: UUID) = (selectFragment ++ whereAnd(fr"id = $id")).query[Option[Audit]].unique
   def getByPrimaryKeySeq(idSeq: NonEmptyList[UUID]) = (selectFragment ++ in(fr"id", idSeq)).query[Audit].to[Seq]
 }
-

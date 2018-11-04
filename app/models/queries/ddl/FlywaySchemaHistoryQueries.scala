@@ -5,8 +5,7 @@ import java.time.LocalDateTime
 import models.database.{DatabaseField, Row}
 import models.database.DatabaseFieldType._
 import models.ddl.FlywaySchemaHistory
-import models.queries.BaseQueries
-import models.result.ResultFieldHelper
+import models.queries.{BaseQueries, ResultFieldHelper}
 import models.result.data.DataField
 import models.result.filter.Filter
 import models.result.orderBy.OrderBy
@@ -25,7 +24,7 @@ object FlywaySchemaHistoryQueries extends BaseQueries[FlywaySchemaHistory]("flyw
     DatabaseField(title = "Success", prop = "success", col = "success", typ = BooleanType)
   )
   override protected val pkColumns = Seq("installed_rank")
-  override protected val searchColumns = Seq("installed_rank", "version", "type", "script", "installed_on", "execution_time", "success")
+  override protected val searchColumns = Seq("installed_rank", "version", "description", "type", "installed_on", "success")
 
   def countAll(filters: Seq[Filter] = Nil) = onCountAll(filters)
   def getAll(filters: Seq[Filter] = Nil, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) = {
@@ -41,12 +40,12 @@ object FlywaySchemaHistoryQueries extends BaseQueries[FlywaySchemaHistory]("flyw
   def getByPrimaryKey(installedRank: Long) = new GetByPrimaryKey(Seq(installedRank))
   def getByPrimaryKeySeq(installedRankSeq: Seq[Long]) = new ColSeqQuery(column = "installed_rank", values = installedRankSeq)
 
-  final case class CountByExecutionTime(executionTime: Long) extends ColCount(column = "execution_time", values = Seq(executionTime))
-  final case class GetByExecutionTime(executionTime: Long, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) extends SeqQuery(
-    whereClause = Some(quote("execution_time") + "  = ?"), orderBy = ResultFieldHelper.orderClause(fields, orderBys: _*),
-    limit = limit, offset = offset, values = Seq(executionTime)
+  final case class CountByDescription(description: String) extends ColCount(column = "description", values = Seq(description))
+  final case class GetByDescription(description: String, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) extends SeqQuery(
+    whereClause = Some(quote("description") + "  = ?"), orderBy = ResultFieldHelper.orderClause(fields, orderBys: _*),
+    limit = limit, offset = offset, values = Seq(description)
   )
-  final case class GetByExecutionTimeSeq(executionTimeSeq: Seq[Long]) extends ColSeqQuery(column = "execution_time", values = executionTimeSeq)
+  final case class GetByDescriptionSeq(descriptionSeq: Seq[String]) extends ColSeqQuery(column = "description", values = descriptionSeq)
 
   final case class CountByInstalledOn(installedOn: LocalDateTime) extends ColCount(column = "installed_on", values = Seq(installedOn))
   final case class GetByInstalledOn(installedOn: LocalDateTime, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) extends SeqQuery(
@@ -61,13 +60,6 @@ object FlywaySchemaHistoryQueries extends BaseQueries[FlywaySchemaHistory]("flyw
     limit = limit, offset = offset, values = Seq(installedRank)
   )
   final case class GetByInstalledRankSeq(installedRankSeq: Seq[Long]) extends ColSeqQuery(column = "installed_rank", values = installedRankSeq)
-
-  final case class CountByScript(script: String) extends ColCount(column = "script", values = Seq(script))
-  final case class GetByScript(script: String, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) extends SeqQuery(
-    whereClause = Some(quote("script") + "  = ?"), orderBy = ResultFieldHelper.orderClause(fields, orderBys: _*),
-    limit = limit, offset = offset, values = Seq(script)
-  )
-  final case class GetByScriptSeq(scriptSeq: Seq[String]) extends ColSeqQuery(column = "script", values = scriptSeq)
 
   final case class CountBySuccess(success: Boolean) extends ColCount(column = "success", values = Seq(success))
   final case class GetBySuccess(success: Boolean, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) extends SeqQuery(

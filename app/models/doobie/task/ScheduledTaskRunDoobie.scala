@@ -21,4 +21,3 @@ object ScheduledTaskRunDoobie extends DoobieQueries[ScheduledTaskRun]("scheduled
   def getByPrimaryKey(id: UUID) = (selectFragment ++ whereAnd(fr"id = $id")).query[Option[ScheduledTaskRun]].unique
   def getByPrimaryKeySeq(idSeq: NonEmptyList[UUID]) = (selectFragment ++ in(fr"id", idSeq)).query[ScheduledTaskRun].to[Seq]
 }
-

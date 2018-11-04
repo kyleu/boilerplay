@@ -25,4 +25,3 @@ object AuditRecordDoobie extends DoobieQueries[AuditRecord]("audit_record") {
   def getByAuditId(auditId: UUID) = (selectFragment ++ whereAnd(fr"auditId = $auditId")).query[AuditRecord].to[Seq]
   def getByAuditIdSeq(auditIdSeq: NonEmptyList[UUID]) = (selectFragment ++ whereAnd(in(fr"auditId", auditIdSeq))).query[AuditRecord].to[Seq]
 }
-

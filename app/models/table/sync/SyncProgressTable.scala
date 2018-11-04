@@ -2,6 +2,7 @@
 package models.table.sync
 
 import java.time.LocalDateTime
+import models.sync.SyncProgress
 import services.database.slick.SlickQueryService.imports._
 
 object SyncProgressTable {
@@ -11,7 +12,7 @@ object SyncProgressTable {
   def getByPrimaryKeySeq(keySeq: Seq[String]) = query.filter(_.key.inSet(keySeq)).result
 }
 
-class SyncProgressTable(tag: Tag) extends Table[models.sync.SyncProgress](tag, "sync_progress") {
+class SyncProgressTable(tag: slick.lifted.Tag) extends Table[SyncProgress](tag, "sync_progress") {
   val key = column[String]("key")
   val status = column[String]("status")
   val message = column[String]("message")
@@ -20,8 +21,8 @@ class SyncProgressTable(tag: Tag) extends Table[models.sync.SyncProgress](tag, "
   val modelPrimaryKey = primaryKey("pk_sync_progress", key)
 
   override val * = (key, status, message, lastTime) <> (
-    (models.sync.SyncProgress.apply _).tupled,
-    models.sync.SyncProgress.unapply
+    (SyncProgress.apply _).tupled,
+    SyncProgress.unapply
   )
 }
 

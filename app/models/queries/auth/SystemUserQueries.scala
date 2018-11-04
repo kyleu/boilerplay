@@ -5,8 +5,7 @@ import java.util.UUID
 import com.mohiva.play.silhouette.api.LoginInfo
 import models.database.DatabaseFieldType._
 import models.database._
-import models.queries.BaseQueries
-import models.result.ResultFieldHelper
+import models.queries.{BaseQueries, ResultFieldHelper}
 import models.result.data.DataField
 import models.result.filter.Filter
 import models.result.orderBy.OrderBy

@@ -6,6 +6,7 @@ import models.result.BaseResult
 import models.result.filter.Filter
 import models.result.orderBy.OrderBy
 import models.result.paging.PagingOptions
+import util.DateUtils
 import util.JsonSerializers._
 
 final case class FlywaySchemaHistoryResult(
@@ -15,7 +16,7 @@ final case class FlywaySchemaHistoryResult(
     override val paging: PagingOptions = PagingOptions(),
     override val results: Seq[FlywaySchemaHistory] = Nil,
     override val durationMs: Int = 0,
-    override val occurred: LocalDateTime = util.DateUtils.now
+    override val occurred: LocalDateTime = DateUtils.now
 ) extends BaseResult[FlywaySchemaHistory]
 
 object FlywaySchemaHistoryResult {
@@ -27,7 +28,7 @@ object FlywaySchemaHistoryResult {
     startMs: Long, totalCount: Int, results: Seq[FlywaySchemaHistory]
   ) = {
     val paging = PagingOptions.from(totalCount, limit, offset)
-    val durationMs = (util.DateUtils.nowMillis - startMs).toInt
+    val durationMs = (DateUtils.nowMillis - startMs).toInt
     FlywaySchemaHistoryResult(paging = paging, filters = filters, orderBys = orderBys, totalCount = totalCount, results = results, durationMs = durationMs)
   }
 }
