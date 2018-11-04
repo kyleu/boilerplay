@@ -1,0 +1,27 @@
+{
+  "template" : "boilerplay",
+  "key" : "boilerplay",
+  "title" : "Boilerplay",
+  "description" : "...",
+  "features" : [
+    "doobie",
+    "audit",
+    "datamodel",
+    "wiki",
+    "graphql",
+    "openapi",
+    "service",
+    "slick",
+    "scalajs",
+    "core"
+  ],
+  "paths" : {
+    
+  },
+  "packages" : {
+    
+  },
+  "status" : null,
+  "created" : "2018-10-27T13:57:01.672048",
+  "updated" : "2018-10-27T13:57:01.672053"
+}

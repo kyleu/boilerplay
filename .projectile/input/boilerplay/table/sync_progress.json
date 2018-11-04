@@ -1,0 +1,112 @@
+{
+  "name" : "sync_progress",
+  "catalog" : null,
+  "schema" : "public",
+  "description" : null,
+  "definition" : null,
+  "storageEngine" : null,
+  "rowCountEstimate" : 0,
+  "averageRowLength" : null,
+  "dataLength" : null,
+  "columns" : [
+    {
+      "name" : "key",
+      "description" : null,
+      "definition" : null,
+      "primaryKey" : false,
+      "notNull" : true,
+      "autoIncrement" : false,
+      "columnType" : "string",
+      "sqlTypeCode" : 12,
+      "sqlTypeName" : "varchar",
+      "size" : "128",
+      "sizeAsInt" : 128,
+      "scale" : 0,
+      "defaultValue" : null
+    },
+    {
+      "name" : "status",
+      "description" : null,
+      "definition" : null,
+      "primaryKey" : false,
+      "notNull" : true,
+      "autoIncrement" : false,
+      "columnType" : "string",
+      "sqlTypeCode" : 12,
+      "sqlTypeName" : "varchar",
+      "size" : "128",
+      "sizeAsInt" : 128,
+      "scale" : 0,
+      "defaultValue" : null
+    },
+    {
+      "name" : "message",
+      "description" : null,
+      "definition" : null,
+      "primaryKey" : false,
+      "notNull" : true,
+      "autoIncrement" : false,
+      "columnType" : "string",
+      "sqlTypeCode" : 12,
+      "sqlTypeName" : "text",
+      "size" : "2147483647",
+      "sizeAsInt" : 2147483647,
+      "scale" : 0,
+      "defaultValue" : null
+    },
+    {
+      "name" : "last_time",
+      "description" : null,
+      "definition" : null,
+      "primaryKey" : false,
+      "notNull" : true,
+      "autoIncrement" : false,
+      "columnType" : "timestamp",
+      "sqlTypeCode" : 93,
+      "sqlTypeName" : "timestamp",
+      "size" : "29",
+      "sizeAsInt" : 29,
+      "scale" : 0,
+      "defaultValue" : null
+    }
+  ],
+  "rowIdentifier" : [
+    "key"
+  ],
+  "primaryKey" : {
+    "name" : "sync_progress_pkey",
+    "columns" : [
+      "key"
+    ]
+  },
+  "foreignKeys" : [
+  ],
+  "indexes" : [
+    {
+      "name" : "sync_progress_pkey",
+      "unique" : true,
+      "indexType" : "other",
+      "cardinality" : 0,
+      "columns" : [
+        {
+          "name" : "key",
+          "ascending" : true
+        }
+      ]
+    },
+    {
+      "name" : "sync_progress_status",
+      "unique" : false,
+      "indexType" : "other",
+      "cardinality" : 0,
+      "columns" : [
+        {
+          "name" : "status",
+          "ascending" : true
+        }
+      ]
+    }
+  ],
+  "createTime" : null,
+  "loadedAt" : 1541358383112
+}

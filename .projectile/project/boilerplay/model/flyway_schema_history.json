@@ -1,0 +1,26 @@
+{
+  "input" : "boilerplay",
+  "inputType" : "postgres-table",
+  "key" : "flyway_schema_history",
+  "pkg" : [
+    "ddl"
+  ],
+  "features" : [
+    "doobie",
+    "datamodel",
+    "wiki",
+    "graphql",
+    "openapi",
+    "service",
+    "slick",
+    "core"
+  ],
+  "ignored" : [
+  ],
+  "overrides" : [
+    {
+      "k" : "plural",
+      "v" : "Flyway Schema Histories"
+    }
+  ]
+}

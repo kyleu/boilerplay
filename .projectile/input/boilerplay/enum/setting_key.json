@@ -1,0 +1,7 @@
+{
+  "key" : "setting_key",
+  "values" : [
+    "AllowRegistration",
+    "DefaultNewUserRole"
+  ]
+}

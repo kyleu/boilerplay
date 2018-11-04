@@ -1,0 +1,22 @@
+{
+  "input" : "boilerplay",
+  "inputType" : "postgres-table",
+  "key" : "sync_progress",
+  "pkg" : [
+    "sync"
+  ],
+  "features" : [
+    "doobie",
+    "datamodel",
+    "wiki",
+    "graphql",
+    "openapi",
+    "service",
+    "slick",
+    "core"
+  ],
+  "ignored" : [
+  ],
+  "overrides" : [
+  ]
+}

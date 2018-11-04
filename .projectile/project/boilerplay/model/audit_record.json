@@ -1,0 +1,22 @@
+{
+  "input" : "boilerplay",
+  "inputType" : "postgres-table",
+  "key" : "audit_record",
+  "pkg" : [
+    "audit"
+  ],
+  "features" : [
+    "doobie",
+    "datamodel",
+    "wiki",
+    "graphql",
+    "openapi",
+    "service",
+    "slick",
+    "core"
+  ],
+  "ignored" : [
+  ],
+  "overrides" : [
+  ]
+}

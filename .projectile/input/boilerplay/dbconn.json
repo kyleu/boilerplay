@@ -1,0 +1,8 @@
+{
+  "url" : "jdbc:postgresql://localhost/boilerplay",
+  "username" : "boilerplay",
+  "password" : "boilerplay",
+  "ssl" : false,
+  "db" : "boilerplay",
+  "catalog" : null
+}

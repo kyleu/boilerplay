@@ -1,0 +1,202 @@
+{
+  "name" : "flyway_schema_history",
+  "catalog" : null,
+  "schema" : "public",
+  "description" : null,
+  "definition" : null,
+  "storageEngine" : null,
+  "rowCountEstimate" : 0,
+  "averageRowLength" : null,
+  "dataLength" : null,
+  "columns" : [
+    {
+      "name" : "installed_rank",
+      "description" : null,
+      "definition" : null,
+      "primaryKey" : false,
+      "notNull" : true,
+      "autoIncrement" : false,
+      "columnType" : "long",
+      "sqlTypeCode" : 4,
+      "sqlTypeName" : "int4",
+      "size" : "10",
+      "sizeAsInt" : 10,
+      "scale" : 0,
+      "defaultValue" : null
+    },
+    {
+      "name" : "version",
+      "description" : null,
+      "definition" : null,
+      "primaryKey" : false,
+      "notNull" : false,
+      "autoIncrement" : false,
+      "columnType" : "string",
+      "sqlTypeCode" : 12,
+      "sqlTypeName" : "varchar",
+      "size" : "50",
+      "sizeAsInt" : 50,
+      "scale" : 0,
+      "defaultValue" : null
+    },
+    {
+      "name" : "description",
+      "description" : null,
+      "definition" : null,
+      "primaryKey" : false,
+      "notNull" : true,
+      "autoIncrement" : false,
+      "columnType" : "string",
+      "sqlTypeCode" : 12,
+      "sqlTypeName" : "varchar",
+      "size" : "200",
+      "sizeAsInt" : 200,
+      "scale" : 0,
+      "defaultValue" : null
+    },
+    {
+      "name" : "type",
+      "description" : null,
+      "definition" : null,
+      "primaryKey" : false,
+      "notNull" : true,
+      "autoIncrement" : false,
+      "columnType" : "string",
+      "sqlTypeCode" : 12,
+      "sqlTypeName" : "varchar",
+      "size" : "20",
+      "sizeAsInt" : 20,
+      "scale" : 0,
+      "defaultValue" : null
+    },
+    {
+      "name" : "script",
+      "description" : null,
+      "definition" : null,
+      "primaryKey" : false,
+      "notNull" : true,
+      "autoIncrement" : false,
+      "columnType" : "string",
+      "sqlTypeCode" : 12,
+      "sqlTypeName" : "varchar",
+      "size" : "1000",
+      "sizeAsInt" : 1000,
+      "scale" : 0,
+      "defaultValue" : null
+    },
+    {
+      "name" : "checksum",
+      "description" : null,
+      "definition" : null,
+      "primaryKey" : false,
+      "notNull" : false,
+      "autoIncrement" : false,
+      "columnType" : "long",
+      "sqlTypeCode" : 4,
+      "sqlTypeName" : "int4",
+      "size" : "10",
+      "sizeAsInt" : 10,
+      "scale" : 0,
+      "defaultValue" : null
+    },
+    {
+      "name" : "installed_by",
+      "description" : null,
+      "definition" : null,
+      "primaryKey" : false,
+      "notNull" : true,
+      "autoIncrement" : false,
+      "columnType" : "string",
+      "sqlTypeCode" : 12,
+      "sqlTypeName" : "varchar",
+      "size" : "100",
+      "sizeAsInt" : 100,
+      "scale" : 0,
+      "defaultValue" : null
+    },
+    {
+      "name" : "installed_on",
+      "description" : null,
+      "definition" : "now()",
+      "primaryKey" : false,
+      "notNull" : true,
+      "autoIncrement" : false,
+      "columnType" : "timestamp",
+      "sqlTypeCode" : 93,
+      "sqlTypeName" : "timestamp",
+      "size" : "29",
+      "sizeAsInt" : 29,
+      "scale" : 0,
+      "defaultValue" : "now()"
+    },
+    {
+      "name" : "execution_time",
+      "description" : null,
+      "definition" : null,
+      "primaryKey" : false,
+      "notNull" : true,
+      "autoIncrement" : false,
+      "columnType" : "long",
+      "sqlTypeCode" : 4,
+      "sqlTypeName" : "int4",
+      "size" : "10",
+      "sizeAsInt" : 10,
+      "scale" : 0,
+      "defaultValue" : null
+    },
+    {
+      "name" : "success",
+      "description" : null,
+      "definition" : null,
+      "primaryKey" : false,
+      "notNull" : true,
+      "autoIncrement" : false,
+      "columnType" : "boolean",
+      "sqlTypeCode" : -7,
+      "sqlTypeName" : "bool",
+      "size" : "1",
+      "sizeAsInt" : 1,
+      "scale" : 0,
+      "defaultValue" : null
+    }
+  ],
+  "rowIdentifier" : [
+    "installed_rank"
+  ],
+  "primaryKey" : {
+    "name" : "flyway_schema_history_pk",
+    "columns" : [
+      "installed_rank"
+    ]
+  },
+  "foreignKeys" : [
+  ],
+  "indexes" : [
+    {
+      "name" : "flyway_schema_history_pk",
+      "unique" : true,
+      "indexType" : "other",
+      "cardinality" : 0,
+      "columns" : [
+        {
+          "name" : "installed_rank",
+          "ascending" : true
+        }
+      ]
+    },
+    {
+      "name" : "flyway_schema_history_s_idx",
+      "unique" : false,
+      "indexType" : "other",
+      "cardinality" : 0,
+      "columns" : [
+        {
+          "name" : "success",
+          "ascending" : true
+        }
+      ]
+    }
+  ],
+  "createTime" : null,
+  "loadedAt" : 1541358383112
+}

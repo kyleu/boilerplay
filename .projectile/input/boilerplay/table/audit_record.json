@@ -1,0 +1,161 @@
+{
+  "name" : "audit_record",
+  "catalog" : null,
+  "schema" : "public",
+  "description" : null,
+  "definition" : null,
+  "storageEngine" : null,
+  "rowCountEstimate" : 0,
+  "averageRowLength" : null,
+  "dataLength" : null,
+  "columns" : [
+    {
+      "name" : "id",
+      "description" : null,
+      "definition" : null,
+      "primaryKey" : false,
+      "notNull" : true,
+      "autoIncrement" : false,
+      "columnType" : "uuid",
+      "sqlTypeCode" : 1111,
+      "sqlTypeName" : "uuid",
+      "size" : "2147483647",
+      "sizeAsInt" : 2147483647,
+      "scale" : 0,
+      "defaultValue" : null
+    },
+    {
+      "name" : "audit_id",
+      "description" : null,
+      "definition" : null,
+      "primaryKey" : false,
+      "notNull" : true,
+      "autoIncrement" : false,
+      "columnType" : "uuid",
+      "sqlTypeCode" : 1111,
+      "sqlTypeName" : "uuid",
+      "size" : "2147483647",
+      "sizeAsInt" : 2147483647,
+      "scale" : 0,
+      "defaultValue" : null
+    },
+    {
+      "name" : "t",
+      "description" : null,
+      "definition" : null,
+      "primaryKey" : false,
+      "notNull" : true,
+      "autoIncrement" : false,
+      "columnType" : "string",
+      "sqlTypeCode" : 12,
+      "sqlTypeName" : "varchar",
+      "size" : "128",
+      "sizeAsInt" : 128,
+      "scale" : 0,
+      "defaultValue" : null
+    },
+    {
+      "name" : "pk",
+      "description" : null,
+      "definition" : null,
+      "primaryKey" : false,
+      "notNull" : true,
+      "autoIncrement" : false,
+      "columnType" : "array",
+      "sqlTypeCode" : 2003,
+      "sqlTypeName" : "_varchar",
+      "size" : "128",
+      "sizeAsInt" : 128,
+      "scale" : 0,
+      "defaultValue" : null
+    },
+    {
+      "name" : "changes",
+      "description" : null,
+      "definition" : null,
+      "primaryKey" : false,
+      "notNull" : true,
+      "autoIncrement" : false,
+      "columnType" : "json",
+      "sqlTypeCode" : 1111,
+      "sqlTypeName" : "jsonb",
+      "size" : "2147483647",
+      "sizeAsInt" : 2147483647,
+      "scale" : 0,
+      "defaultValue" : null
+    }
+  ],
+  "rowIdentifier" : [
+    "id"
+  ],
+  "primaryKey" : {
+    "name" : "audit_record_pkey",
+    "columns" : [
+      "id"
+    ]
+  },
+  "foreignKeys" : [
+    {
+      "name" : "audit_record_audit_id_fkey",
+      "targetTable" : "audit",
+      "references" : [
+        {
+          "source" : "audit_id",
+          "target" : "id"
+        }
+      ]
+    }
+  ],
+  "indexes" : [
+    {
+      "name" : "audit_record_changes",
+      "unique" : false,
+      "indexType" : "other",
+      "cardinality" : 0,
+      "columns" : [
+        {
+          "name" : "changes",
+          "ascending" : true
+        }
+      ]
+    },
+    {
+      "name" : "audit_record_pk",
+      "unique" : false,
+      "indexType" : "other",
+      "cardinality" : 0,
+      "columns" : [
+        {
+          "name" : "pk",
+          "ascending" : true
+        }
+      ]
+    },
+    {
+      "name" : "audit_record_pkey",
+      "unique" : true,
+      "indexType" : "other",
+      "cardinality" : 0,
+      "columns" : [
+        {
+          "name" : "id",
+          "ascending" : true
+        }
+      ]
+    },
+    {
+      "name" : "audit_record_t",
+      "unique" : false,
+      "indexType" : "other",
+      "cardinality" : 0,
+      "columns" : [
+        {
+          "name" : "t",
+          "ascending" : true
+        }
+      ]
+    }
+  ],
+  "createTime" : null,
+  "loadedAt" : 1541358383112
+}

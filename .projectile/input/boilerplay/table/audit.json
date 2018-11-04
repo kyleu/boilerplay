@@ -1,0 +1,262 @@
+{
+  "name" : "audit",
+  "catalog" : null,
+  "schema" : "public",
+  "description" : null,
+  "definition" : null,
+  "storageEngine" : null,
+  "rowCountEstimate" : 0,
+  "averageRowLength" : null,
+  "dataLength" : null,
+  "columns" : [
+    {
+      "name" : "id",
+      "description" : null,
+      "definition" : null,
+      "primaryKey" : false,
+      "notNull" : true,
+      "autoIncrement" : false,
+      "columnType" : "uuid",
+      "sqlTypeCode" : 1111,
+      "sqlTypeName" : "uuid",
+      "size" : "2147483647",
+      "sizeAsInt" : 2147483647,
+      "scale" : 0,
+      "defaultValue" : null
+    },
+    {
+      "name" : "act",
+      "description" : null,
+      "definition" : null,
+      "primaryKey" : false,
+      "notNull" : true,
+      "autoIncrement" : false,
+      "columnType" : "string",
+      "sqlTypeCode" : 12,
+      "sqlTypeName" : "varchar",
+      "size" : "32",
+      "sizeAsInt" : 32,
+      "scale" : 0,
+      "defaultValue" : null
+    },
+    {
+      "name" : "app",
+      "description" : null,
+      "definition" : null,
+      "primaryKey" : false,
+      "notNull" : true,
+      "autoIncrement" : false,
+      "columnType" : "string",
+      "sqlTypeCode" : 12,
+      "sqlTypeName" : "varchar",
+      "size" : "64",
+      "sizeAsInt" : 64,
+      "scale" : 0,
+      "defaultValue" : null
+    },
+    {
+      "name" : "client",
+      "description" : null,
+      "definition" : null,
+      "primaryKey" : false,
+      "notNull" : true,
+      "autoIncrement" : false,
+      "columnType" : "string",
+      "sqlTypeCode" : 12,
+      "sqlTypeName" : "varchar",
+      "size" : "32",
+      "sizeAsInt" : 32,
+      "scale" : 0,
+      "defaultValue" : null
+    },
+    {
+      "name" : "server",
+      "description" : null,
+      "definition" : null,
+      "primaryKey" : false,
+      "notNull" : true,
+      "autoIncrement" : false,
+      "columnType" : "string",
+      "sqlTypeCode" : 12,
+      "sqlTypeName" : "varchar",
+      "size" : "32",
+      "sizeAsInt" : 32,
+      "scale" : 0,
+      "defaultValue" : null
+    },
+    {
+      "name" : "user_id",
+      "description" : null,
+      "definition" : null,
+      "primaryKey" : false,
+      "notNull" : true,
+      "autoIncrement" : false,
+      "columnType" : "uuid",
+      "sqlTypeCode" : 1111,
+      "sqlTypeName" : "uuid",
+      "size" : "2147483647",
+      "sizeAsInt" : 2147483647,
+      "scale" : 0,
+      "defaultValue" : null
+    },
+    {
+      "name" : "tags",
+      "description" : null,
+      "definition" : null,
+      "primaryKey" : false,
+      "notNull" : true,
+      "autoIncrement" : false,
+      "columnType" : "hstore",
+      "sqlTypeCode" : 1111,
+      "sqlTypeName" : "hstore",
+      "size" : "2147483647",
+      "sizeAsInt" : 2147483647,
+      "scale" : 0,
+      "defaultValue" : null
+    },
+    {
+      "name" : "msg",
+      "description" : null,
+      "definition" : null,
+      "primaryKey" : false,
+      "notNull" : true,
+      "autoIncrement" : false,
+      "columnType" : "string",
+      "sqlTypeCode" : 12,
+      "sqlTypeName" : "text",
+      "size" : "2147483647",
+      "sizeAsInt" : 2147483647,
+      "scale" : 0,
+      "defaultValue" : null
+    },
+    {
+      "name" : "started",
+      "description" : null,
+      "definition" : null,
+      "primaryKey" : false,
+      "notNull" : true,
+      "autoIncrement" : false,
+      "columnType" : "timestamp",
+      "sqlTypeCode" : 93,
+      "sqlTypeName" : "timestamp",
+      "size" : "29",
+      "sizeAsInt" : 29,
+      "scale" : 0,
+      "defaultValue" : null
+    },
+    {
+      "name" : "completed",
+      "description" : null,
+      "definition" : null,
+      "primaryKey" : false,
+      "notNull" : true,
+      "autoIncrement" : false,
+      "columnType" : "timestamp",
+      "sqlTypeCode" : 93,
+      "sqlTypeName" : "timestamp",
+      "size" : "29",
+      "sizeAsInt" : 29,
+      "scale" : 0,
+      "defaultValue" : null
+    }
+  ],
+  "rowIdentifier" : [
+    "id"
+  ],
+  "primaryKey" : {
+    "name" : "audit_pkey",
+    "columns" : [
+      "id"
+    ]
+  },
+  "foreignKeys" : [
+  ],
+  "indexes" : [
+    {
+      "name" : "audit_act",
+      "unique" : false,
+      "indexType" : "other",
+      "cardinality" : 0,
+      "columns" : [
+        {
+          "name" : "act",
+          "ascending" : true
+        }
+      ]
+    },
+    {
+      "name" : "audit_app",
+      "unique" : false,
+      "indexType" : "other",
+      "cardinality" : 0,
+      "columns" : [
+        {
+          "name" : "app",
+          "ascending" : true
+        }
+      ]
+    },
+    {
+      "name" : "audit_client",
+      "unique" : false,
+      "indexType" : "other",
+      "cardinality" : 0,
+      "columns" : [
+        {
+          "name" : "client",
+          "ascending" : true
+        }
+      ]
+    },
+    {
+      "name" : "audit_pkey",
+      "unique" : true,
+      "indexType" : "other",
+      "cardinality" : 0,
+      "columns" : [
+        {
+          "name" : "id",
+          "ascending" : true
+        }
+      ]
+    },
+    {
+      "name" : "audit_server",
+      "unique" : false,
+      "indexType" : "other",
+      "cardinality" : 0,
+      "columns" : [
+        {
+          "name" : "server",
+          "ascending" : true
+        }
+      ]
+    },
+    {
+      "name" : "audit_tags",
+      "unique" : false,
+      "indexType" : "other",
+      "cardinality" : 0,
+      "columns" : [
+        {
+          "name" : "tags",
+          "ascending" : true
+        }
+      ]
+    },
+    {
+      "name" : "audit_user_id",
+      "unique" : false,
+      "indexType" : "other",
+      "cardinality" : 0,
+      "columns" : [
+        {
+          "name" : "user_id",
+          "ascending" : true
+        }
+      ]
+    }
+  ],
+  "createTime" : null,
+  "loadedAt" : 1541358383112
+}

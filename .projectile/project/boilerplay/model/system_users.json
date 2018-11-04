@@ -1,0 +1,38 @@
+{
+  "input" : "boilerplay",
+  "inputType" : "postgres-table",
+  "key" : "system_users",
+  "pkg" : [
+    "user"
+  ],
+  "features" : [
+    "doobie",
+    "datamodel",
+    "wiki",
+    "graphql",
+    "openapi",
+    "service",
+    "slick",
+    "core"
+  ],
+  "ignored" : [
+  ],
+  "overrides" : [
+    {
+      "k" : "propertyName",
+      "v" : "systemUser"
+    },
+    {
+      "k" : "className",
+      "v" : "SystemUser"
+    },
+    {
+      "k" : "title",
+      "v" : "System User"
+    },
+    {
+      "k" : "plural",
+      "v" : "System Users"
+    }
+  ]
+}

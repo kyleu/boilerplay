@@ -1,0 +1,6 @@
+{
+  "template" : "postgres",
+  "key" : "boilerplay",
+  "title" : "Boilerplay Database",
+  "description" : "The Boilerplay project's PostgreSQL database!"
+}

@@ -1,0 +1,181 @@
+{
+  "name" : "scheduled_task_run",
+  "catalog" : null,
+  "schema" : "public",
+  "description" : null,
+  "definition" : null,
+  "storageEngine" : null,
+  "rowCountEstimate" : 0,
+  "averageRowLength" : null,
+  "dataLength" : null,
+  "columns" : [
+    {
+      "name" : "id",
+      "description" : null,
+      "definition" : null,
+      "primaryKey" : false,
+      "notNull" : true,
+      "autoIncrement" : false,
+      "columnType" : "uuid",
+      "sqlTypeCode" : 1111,
+      "sqlTypeName" : "uuid",
+      "size" : "2147483647",
+      "sizeAsInt" : 2147483647,
+      "scale" : 0,
+      "defaultValue" : null
+    },
+    {
+      "name" : "task",
+      "description" : null,
+      "definition" : null,
+      "primaryKey" : false,
+      "notNull" : true,
+      "autoIncrement" : false,
+      "columnType" : "string",
+      "sqlTypeCode" : 12,
+      "sqlTypeName" : "varchar",
+      "size" : "64",
+      "sizeAsInt" : 64,
+      "scale" : 0,
+      "defaultValue" : null
+    },
+    {
+      "name" : "arguments",
+      "description" : null,
+      "definition" : null,
+      "primaryKey" : false,
+      "notNull" : true,
+      "autoIncrement" : false,
+      "columnType" : "array",
+      "sqlTypeCode" : 2003,
+      "sqlTypeName" : "_varchar",
+      "size" : "64",
+      "sizeAsInt" : 64,
+      "scale" : 0,
+      "defaultValue" : null
+    },
+    {
+      "name" : "status",
+      "description" : null,
+      "definition" : null,
+      "primaryKey" : false,
+      "notNull" : true,
+      "autoIncrement" : false,
+      "columnType" : "string",
+      "sqlTypeCode" : 12,
+      "sqlTypeName" : "varchar",
+      "size" : "64",
+      "sizeAsInt" : 64,
+      "scale" : 0,
+      "defaultValue" : null
+    },
+    {
+      "name" : "output",
+      "description" : null,
+      "definition" : null,
+      "primaryKey" : false,
+      "notNull" : true,
+      "autoIncrement" : false,
+      "columnType" : "json",
+      "sqlTypeCode" : 1111,
+      "sqlTypeName" : "json",
+      "size" : "2147483647",
+      "sizeAsInt" : 2147483647,
+      "scale" : 0,
+      "defaultValue" : null
+    },
+    {
+      "name" : "started",
+      "description" : null,
+      "definition" : null,
+      "primaryKey" : false,
+      "notNull" : true,
+      "autoIncrement" : false,
+      "columnType" : "timestamp",
+      "sqlTypeCode" : 93,
+      "sqlTypeName" : "timestamp",
+      "size" : "29",
+      "sizeAsInt" : 29,
+      "scale" : 0,
+      "defaultValue" : null
+    },
+    {
+      "name" : "completed",
+      "description" : null,
+      "definition" : null,
+      "primaryKey" : false,
+      "notNull" : true,
+      "autoIncrement" : false,
+      "columnType" : "timestamp",
+      "sqlTypeCode" : 93,
+      "sqlTypeName" : "timestamp",
+      "size" : "29",
+      "sizeAsInt" : 29,
+      "scale" : 0,
+      "defaultValue" : null
+    }
+  ],
+  "rowIdentifier" : [
+    "id"
+  ],
+  "primaryKey" : {
+    "name" : "scheduled_task_run_pkey",
+    "columns" : [
+      "id"
+    ]
+  },
+  "foreignKeys" : [
+  ],
+  "indexes" : [
+    {
+      "name" : "scheduled_task_run_pkey",
+      "unique" : true,
+      "indexType" : "other",
+      "cardinality" : 0,
+      "columns" : [
+        {
+          "name" : "id",
+          "ascending" : true
+        }
+      ]
+    },
+    {
+      "name" : "scheduled_task_run_started",
+      "unique" : false,
+      "indexType" : "other",
+      "cardinality" : 0,
+      "columns" : [
+        {
+          "name" : "started",
+          "ascending" : true
+        }
+      ]
+    },
+    {
+      "name" : "scheduled_task_run_status",
+      "unique" : false,
+      "indexType" : "other",
+      "cardinality" : 0,
+      "columns" : [
+        {
+          "name" : "status",
+          "ascending" : true
+        }
+      ]
+    },
+    {
+      "name" : "scheduled_task_run_task",
+      "unique" : false,
+      "indexType" : "other",
+      "cardinality" : 0,
+      "columns" : [
+        {
+          "name" : "task",
+          "ascending" : true
+        }
+      ]
+    }
+  ],
+  "createTime" : null,
+  "loadedAt" : 1541358383112
+}

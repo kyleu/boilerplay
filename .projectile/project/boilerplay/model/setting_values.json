@@ -1,0 +1,38 @@
+{
+  "input" : "boilerplay",
+  "inputType" : "postgres-table",
+  "key" : "setting_values",
+  "pkg" : [
+    "settings"
+  ],
+  "features" : [
+    "doobie",
+    "datamodel",
+    "wiki",
+    "graphql",
+    "openapi",
+    "service",
+    "slick",
+    "core"
+  ],
+  "ignored" : [
+  ],
+  "overrides" : [
+    {
+      "k" : "propertyName",
+      "v" : "setting"
+    },
+    {
+      "k" : "className",
+      "v" : "Setting"
+    },
+    {
+      "k" : "title",
+      "v" : "Setting"
+    },
+    {
+      "k" : "plural",
+      "v" : "Settings"
+    }
+  ]
+}

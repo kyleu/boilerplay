@@ -1,0 +1,22 @@
+{
+  "input" : "boilerplay",
+  "inputType" : "postgres-enum",
+  "key" : "setting_key",
+  "pkg" : [
+    "settings"
+  ],
+  "features" : [
+    "doobie",
+    "datamodel",
+    "wiki",
+    "graphql",
+    "openapi",
+    "service",
+    "slick",
+    "core"
+  ],
+  "ignored" : [
+  ],
+  "overrides" : [
+  ]
+}

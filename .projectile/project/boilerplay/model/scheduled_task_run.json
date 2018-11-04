@@ -1,0 +1,22 @@
+{
+  "input" : "boilerplay",
+  "inputType" : "postgres-table",
+  "key" : "scheduled_task_run",
+  "pkg" : [
+    "task"
+  ],
+  "features" : [
+    "doobie",
+    "datamodel",
+    "wiki",
+    "graphql",
+    "openapi",
+    "service",
+    "slick",
+    "core"
+  ],
+  "ignored" : [
+  ],
+  "overrides" : [
+  ]
+}
