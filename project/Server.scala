@@ -47,6 +47,7 @@ object Server {
     resolvers += Resolver.jcenterRepo,
     resolvers += Resolver.bintrayRepo("stanch", "maven"),
     resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/",
+    resolvers += "Atlassian Releases" at "https://maven.atlassian.com/content/repositories/atlassian-public/",
     libraryDependencies ++= dependencies,
 
     // Play
