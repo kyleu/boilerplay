@@ -34,7 +34,7 @@ object Server {
       GraphQL.sangria, GraphQL.playJson, GraphQL.circe,
       Authentication.silhouette, Authentication.hasher, Authentication.persistence, Authentication.crypto,
       WebJars.jquery, WebJars.fontAwesome, WebJars.materialize, WebJars.swaggerUi,
-      Utils.csv, Utils.scalaGuice, Utils.commonsIo, Utils.commonsLang, Utils.betterFiles, Utils.scopts, Utils.reftree,
+      Utils.csv, Utils.scalaGuice, Utils.commonsIo, Utils.commonsLang, Utils.betterFiles, Utils.reftree,
       Akka.testkit, Play.test, Testing.scalaTest
     )
   }
@@ -44,9 +44,12 @@ object Server {
     maintainer := "Boilerplay User <admin@boilerplay.com>",
     description := Shared.projectName,
 
-    resolvers += Resolver.jcenterRepo,
-    resolvers += Resolver.bintrayRepo("stanch", "maven"),
-    resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/",
+    resolvers ++= Seq(
+      Resolver.jcenterRepo,
+      Resolver.bintrayRepo("stanch", "maven"),
+      "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/"
+    ),
+
     libraryDependencies ++= dependencies,
 
     // Play

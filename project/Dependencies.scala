@@ -28,10 +28,10 @@ object Dependencies {
 
   object Authentication {
     private[this] val version = "5.0.6"
-    val silhouette = "com.mohiva" %% "play-silhouette" % version
-    val hasher = "com.mohiva" %% "play-silhouette-password-bcrypt" % version
-    val persistence = "com.mohiva" %% "play-silhouette-persistence" % version
-    val crypto = "com.mohiva" %% "play-silhouette-crypto-jca" % version
+    val silhouette = "com.mohiva" %% "play-silhouette" % version excludeAll ExclusionRule(organization = "com.atlassian.jwt")
+    val hasher = "com.mohiva" %% "play-silhouette-password-bcrypt" % version excludeAll ExclusionRule(organization = "com.atlassian.jwt")
+    val persistence = "com.mohiva" %% "play-silhouette-persistence" % version excludeAll ExclusionRule(organization = "com.atlassian.jwt")
+    val crypto = "com.mohiva" %% "play-silhouette-crypto-jca" % version excludeAll ExclusionRule(organization = "com.atlassian.jwt")
   }
 
   object Database {
@@ -73,7 +73,7 @@ object Dependencies {
   }
 
   object Serialization {
-    val circeVersion = "0.10.0"
+    val circeVersion = "0.10.1"
     val circeProjects = Seq("circe-core", "circe-generic", "circe-generic-extras", "circe-parser", "circe-java8")
   }
 
@@ -85,7 +85,7 @@ object Dependencies {
   }
 
   object Metrics {
-    val version = "1.0.7"
+    val version = "1.1.0"
     val micrometer = "io.micrometer" % "micrometer-registry-prometheus" % version
   }
 
@@ -114,7 +114,6 @@ object Dependencies {
     val commonsLang = "org.apache.commons" % "commons-lang3" % "3.8.1"
     val csv = "com.github.tototoshi" %% "scala-csv" % "1.3.5"
     val scalaGuice = "net.codingwell" %% "scala-guice" % "4.2.1"
-    val scopts = "com.github.scopt" %% "scopt" % "3.7.0"
     val reftree = "org.stanch" %% "reftree" % "1.2.0"
   }
 

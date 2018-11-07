@@ -29,9 +29,9 @@ addSbtPlugin("com.vmunier" % "sbt-web-scalajs" % "1.0.8-0.6" exclude("org.scala-
 addSbtPlugin("com.typesafe.sbt" % "sbt-git" % "1.0.0")
 
 // App Packaging
-addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.3.9")
+addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.3.12")
 
-addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "0.14.7")
+addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "0.14.9")
 
 // Dependency Resolution
 addSbtPlugin("io.get-coursier" % "sbt-coursier" % "1.0.0")
@@ -67,7 +67,7 @@ addSbtPlugin("com.dwijnand" % "sbt-project-graph" % "0.4.0") // projectsGraphDot
 addSbtPlugin("com.github.xuwei-k" % "sbt-class-diagram" % "0.2.1") // classDiagram
 
 // Documentation
-addSbtPlugin("com.lightbend.paradox" % "sbt-paradox" % "0.4.1")
+addSbtPlugin("com.lightbend.paradox" % "sbt-paradox" % "0.4.2")
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-site" % "1.3.2" exclude("com.lightbend.paradox", "sbt-paradox"))
 
