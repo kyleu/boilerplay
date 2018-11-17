@@ -3,14 +3,14 @@
 
 ## [Tables](DatabaseTables)
 
- - [flyway_schema_history](DatabaseTableFlywaySchemaHistory)
  - [audit](DatabaseTableAudit)
- - [scheduled_task_run](DatabaseTableScheduledTaskRun)
  - [audit_record](DatabaseTableAuditRecord)
- - [system_users](DatabaseTableSystemUser)
- - [setting_values](DatabaseTableSetting)
+ - [flyway_schema_history](DatabaseTableFlywaySchemaHistory)
  - [note](DatabaseTableNote)
+ - [scheduled_task_run](DatabaseTableScheduledTaskRun)
+ - [setting_values](DatabaseTableSetting)
  - [sync_progress](DatabaseTableSyncProgress)
+ - [system_users](DatabaseTableSystemUser)
 
 ## [Enums](DatabaseEnums)
 
