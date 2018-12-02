@@ -51,16 +51,22 @@ object Schema {
     // End model query fields
   }
 
-  val enumQueryFields = {
+  val enumQueryFields: Seq[Field[GraphQLContext, Unit]] = {
     // Start enum query fields
     models.settings.SettingKeySchema.queryFields
     // End enum query fields
   }
 
+  val serviceQueryFields: Seq[Field[GraphQLContext, Unit]] = {
+    // Start service methods
+    Nil
+    // End service methods
+  }
+
   val queryType = ObjectType(
     name = "Query",
     description = "The main query interface.",
-    fields = (baseQueryFields ++ modelQueryFields ++ enumQueryFields).sortBy(_.name)
+    fields = (baseQueryFields ++ modelQueryFields ++ enumQueryFields ++ serviceQueryFields).sortBy(_.name)
   )
 
   // Mutation Types
