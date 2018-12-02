@@ -1,0 +1,13 @@
+# Generated File
+# Updates a single AuditRecord entity using the provided fields.
+mutation AuditRecordUpdate {
+  auditRecord {
+    update(id: "00000000-0000-0000-0000-000000000000", fields: [{k: "", v: ""}]) {
+      id
+      auditId
+      t
+      pk
+      changes
+    }
+  }
+}

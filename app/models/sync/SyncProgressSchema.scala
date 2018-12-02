@@ -37,7 +37,7 @@ object SyncProgressSchema extends GraphQLSchemaHelper("syncProgress") {
     unitField(name = "syncProgressByKey", desc = None, t = OptionType(syncProgressType), f = (c, td) => {
       c.ctx.services.syncServices.syncProgressService.getByKey(c.ctx.creds, c.arg(syncProgressKeyArg))(td).map(_.headOption)
     }, syncProgressKeyArg),
-    unitField(name = "syncProgressByKeySeq", desc = None, t = ListType(syncProgressType), f = (c, td) => {
+    unitField(name = "syncProgressesByKeySeq", desc = None, t = ListType(syncProgressType), f = (c, td) => {
       c.ctx.services.syncServices.syncProgressService.getByKeySeq(c.ctx.creds, c.arg(syncProgressKeySeqArg))(td)
     }, syncProgressKeySeqArg),
     unitField(name = "syncProgressesByStatus", desc = None, t = ListType(syncProgressType), f = (c, td) => {

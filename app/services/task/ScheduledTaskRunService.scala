@@ -12,6 +12,7 @@ import models.task.ScheduledTaskRun
 import scala.concurrent.Future
 import services.ModelServiceHelper
 import services.database.ApplicationDatabase
+import util.CsvUtils
 import util.FutureUtils.serviceContext
 import util.tracing.{TraceData, TracingService}
 
@@ -50,13 +51,13 @@ class ScheduledTaskRunService @javax.inject.Inject() (override val tracing: Trac
     traceF("search.exact")(td => ApplicationDatabase.queryF(ScheduledTaskRunQueries.searchExact(q, orderBys, limit, offset))(td))
   }
 
-  def countByArguments(creds: Credentials, arguments: Array[Any])(implicit trace: TraceData) = traceF("count.by.arguments") { td =>
+  def countByArguments(creds: Credentials, arguments: List[String])(implicit trace: TraceData) = traceF("count.by.arguments") { td =>
     ApplicationDatabase.queryF(ScheduledTaskRunQueries.CountByArguments(arguments))(td)
   }
-  def getByArguments(creds: Credentials, arguments: Array[Any], orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData) = traceF("get.by.arguments") { td =>
+  def getByArguments(creds: Credentials, arguments: List[String], orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData) = traceF("get.by.arguments") { td =>
     ApplicationDatabase.queryF(ScheduledTaskRunQueries.GetByArguments(arguments, orderBys, limit, offset))(td)
   }
-  def getByArgumentsSeq(creds: Credentials, argumentsSeq: Seq[Array[Any]])(implicit trace: TraceData) = traceF("get.by.arguments.seq") { td =>
+  def getByArgumentsSeq(creds: Credentials, argumentsSeq: Seq[List[String]])(implicit trace: TraceData) = traceF("get.by.arguments.seq") { td =>
     ApplicationDatabase.queryF(ScheduledTaskRunQueries.GetByArgumentsSeq(argumentsSeq))(td)
   }
 
@@ -139,6 +140,6 @@ class ScheduledTaskRunService @javax.inject.Inject() (override val tracing: Trac
   }
 
   def csvFor(totalCount: Int, rows: Seq[ScheduledTaskRun])(implicit trace: TraceData) = {
-    traceB("export.csv")(td => util.CsvUtils.csvFor(Some(key), totalCount, rows, ScheduledTaskRunQueries.fields)(td))
+    traceB("export.csv")(td => CsvUtils.csvFor(Some(key), totalCount, rows, ScheduledTaskRunQueries.fields)(td))
   }
 }

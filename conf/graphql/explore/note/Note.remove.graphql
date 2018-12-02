@@ -1,0 +1,14 @@
+# Generated File
+# Remove a single Note entity from the system.
+mutation NoteRemove {
+  note {
+    remove(id: "00000000-0000-0000-0000-000000000000") {
+      id
+      relType
+      relPk
+      text
+      author
+      created
+    }
+  }
+}

@@ -4,10 +4,6 @@
   "schema" : "public",
   "description" : null,
   "definition" : null,
-  "storageEngine" : null,
-  "rowCountEstimate" : 0,
-  "averageRowLength" : null,
-  "dataLength" : null,
   "columns" : [
     {
       "name" : "id",
@@ -16,7 +12,9 @@
       "primaryKey" : false,
       "notNull" : true,
       "autoIncrement" : false,
-      "columnType" : "uuid",
+      "columnType" : {
+        "t" : "uuid"
+      },
       "sqlTypeCode" : 1111,
       "sqlTypeName" : "uuid",
       "size" : "2147483647",
@@ -31,7 +29,9 @@
       "primaryKey" : false,
       "notNull" : true,
       "autoIncrement" : false,
-      "columnType" : "string",
+      "columnType" : {
+        "t" : "string"
+      },
       "sqlTypeCode" : 12,
       "sqlTypeName" : "varchar",
       "size" : "32",
@@ -46,7 +46,9 @@
       "primaryKey" : false,
       "notNull" : true,
       "autoIncrement" : false,
-      "columnType" : "string",
+      "columnType" : {
+        "t" : "string"
+      },
       "sqlTypeCode" : 12,
       "sqlTypeName" : "varchar",
       "size" : "64",
@@ -61,7 +63,9 @@
       "primaryKey" : false,
       "notNull" : true,
       "autoIncrement" : false,
-      "columnType" : "string",
+      "columnType" : {
+        "t" : "string"
+      },
       "sqlTypeCode" : 12,
       "sqlTypeName" : "varchar",
       "size" : "32",
@@ -76,7 +80,9 @@
       "primaryKey" : false,
       "notNull" : true,
       "autoIncrement" : false,
-      "columnType" : "string",
+      "columnType" : {
+        "t" : "string"
+      },
       "sqlTypeCode" : 12,
       "sqlTypeName" : "varchar",
       "size" : "32",
@@ -91,7 +97,9 @@
       "primaryKey" : false,
       "notNull" : true,
       "autoIncrement" : false,
-      "columnType" : "uuid",
+      "columnType" : {
+        "t" : "uuid"
+      },
       "sqlTypeCode" : 1111,
       "sqlTypeName" : "uuid",
       "size" : "2147483647",
@@ -106,7 +114,9 @@
       "primaryKey" : false,
       "notNull" : true,
       "autoIncrement" : false,
-      "columnType" : "hstore",
+      "columnType" : {
+        "t" : "hstore"
+      },
       "sqlTypeCode" : 1111,
       "sqlTypeName" : "hstore",
       "size" : "2147483647",
@@ -121,7 +131,9 @@
       "primaryKey" : false,
       "notNull" : true,
       "autoIncrement" : false,
-      "columnType" : "string",
+      "columnType" : {
+        "t" : "string"
+      },
       "sqlTypeCode" : 12,
       "sqlTypeName" : "text",
       "size" : "2147483647",
@@ -136,7 +148,9 @@
       "primaryKey" : false,
       "notNull" : true,
       "autoIncrement" : false,
-      "columnType" : "timestamp",
+      "columnType" : {
+        "t" : "timestamp"
+      },
       "sqlTypeCode" : 93,
       "sqlTypeName" : "timestamp",
       "size" : "29",
@@ -151,7 +165,9 @@
       "primaryKey" : false,
       "notNull" : true,
       "autoIncrement" : false,
-      "columnType" : "timestamp",
+      "columnType" : {
+        "t" : "timestamp"
+      },
       "sqlTypeCode" : 93,
       "sqlTypeName" : "timestamp",
       "size" : "29",
@@ -176,7 +192,6 @@
       "name" : "audit_act",
       "unique" : false,
       "indexType" : "other",
-      "cardinality" : 0,
       "columns" : [
         {
           "name" : "act",
@@ -188,7 +203,6 @@
       "name" : "audit_app",
       "unique" : false,
       "indexType" : "other",
-      "cardinality" : 0,
       "columns" : [
         {
           "name" : "app",
@@ -200,7 +214,6 @@
       "name" : "audit_client",
       "unique" : false,
       "indexType" : "other",
-      "cardinality" : 0,
       "columns" : [
         {
           "name" : "client",
@@ -212,7 +225,6 @@
       "name" : "audit_pkey",
       "unique" : true,
       "indexType" : "other",
-      "cardinality" : 0,
       "columns" : [
         {
           "name" : "id",
@@ -224,7 +236,6 @@
       "name" : "audit_server",
       "unique" : false,
       "indexType" : "other",
-      "cardinality" : 0,
       "columns" : [
         {
           "name" : "server",
@@ -236,7 +247,6 @@
       "name" : "audit_tags",
       "unique" : false,
       "indexType" : "other",
-      "cardinality" : 0,
       "columns" : [
         {
           "name" : "tags",
@@ -248,7 +258,6 @@
       "name" : "audit_user_id",
       "unique" : false,
       "indexType" : "other",
-      "cardinality" : 0,
       "columns" : [
         {
           "name" : "user_id",
@@ -256,7 +265,5 @@
         }
       ]
     }
-  ],
-  "createTime" : null,
-  "loadedAt" : 1541358383112
+  ]
 }

@@ -11,6 +11,7 @@ import models.result.orderBy.OrderBy
 import scala.concurrent.Future
 import services.ModelServiceHelper
 import services.database.ApplicationDatabase
+import util.CsvUtils
 import util.FutureUtils.serviceContext
 import util.tracing.{TraceData, TracingService}
 
@@ -47,6 +48,16 @@ class FlywaySchemaHistoryService @javax.inject.Inject() (override val tracing: T
     creds: Credentials, q: String, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None
   )(implicit trace: TraceData) = {
     traceF("search.exact")(td => ApplicationDatabase.queryF(FlywaySchemaHistoryQueries.searchExact(q, orderBys, limit, offset))(td))
+  }
+
+  def countByDescription(creds: Credentials, description: String)(implicit trace: TraceData) = traceF("count.by.description") { td =>
+    ApplicationDatabase.queryF(FlywaySchemaHistoryQueries.CountByDescription(description))(td)
+  }
+  def getByDescription(creds: Credentials, description: String, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData) = traceF("get.by.description") { td =>
+    ApplicationDatabase.queryF(FlywaySchemaHistoryQueries.GetByDescription(description, orderBys, limit, offset))(td)
+  }
+  def getByDescriptionSeq(creds: Credentials, descriptionSeq: Seq[String])(implicit trace: TraceData) = traceF("get.by.description.seq") { td =>
+    ApplicationDatabase.queryF(FlywaySchemaHistoryQueries.GetByDescriptionSeq(descriptionSeq))(td)
   }
 
   def countByInstalledOn(creds: Credentials, installedOn: LocalDateTime)(implicit trace: TraceData) = traceF("count.by.installedOn") { td =>
@@ -138,6 +149,6 @@ class FlywaySchemaHistoryService @javax.inject.Inject() (override val tracing: T
   }
 
   def csvFor(totalCount: Int, rows: Seq[FlywaySchemaHistory])(implicit trace: TraceData) = {
-    traceB("export.csv")(td => util.CsvUtils.csvFor(Some(key), totalCount, rows, FlywaySchemaHistoryQueries.fields)(td))
+    traceB("export.csv")(td => CsvUtils.csvFor(Some(key), totalCount, rows, FlywaySchemaHistoryQueries.fields)(td))
   }
 }

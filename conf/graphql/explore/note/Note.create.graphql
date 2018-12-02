@@ -1,0 +1,14 @@
+# Generated File
+# Creates a new Note entity.
+mutation NoteCreate {
+  note {
+    create(fields: [{k: "", v: ""}]) {
+      id
+      relType
+      relPk
+      text
+      author
+      created
+    }
+  }
+}

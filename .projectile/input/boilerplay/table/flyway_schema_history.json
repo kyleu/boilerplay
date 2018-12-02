@@ -4,10 +4,6 @@
   "schema" : "public",
   "description" : null,
   "definition" : null,
-  "storageEngine" : null,
-  "rowCountEstimate" : 0,
-  "averageRowLength" : null,
-  "dataLength" : null,
   "columns" : [
     {
       "name" : "installed_rank",
@@ -16,7 +12,9 @@
       "primaryKey" : false,
       "notNull" : true,
       "autoIncrement" : false,
-      "columnType" : "long",
+      "columnType" : {
+        "t" : "long"
+      },
       "sqlTypeCode" : 4,
       "sqlTypeName" : "int4",
       "size" : "10",
@@ -31,7 +29,9 @@
       "primaryKey" : false,
       "notNull" : false,
       "autoIncrement" : false,
-      "columnType" : "string",
+      "columnType" : {
+        "t" : "string"
+      },
       "sqlTypeCode" : 12,
       "sqlTypeName" : "varchar",
       "size" : "50",
@@ -46,7 +46,9 @@
       "primaryKey" : false,
       "notNull" : true,
       "autoIncrement" : false,
-      "columnType" : "string",
+      "columnType" : {
+        "t" : "string"
+      },
       "sqlTypeCode" : 12,
       "sqlTypeName" : "varchar",
       "size" : "200",
@@ -61,7 +63,9 @@
       "primaryKey" : false,
       "notNull" : true,
       "autoIncrement" : false,
-      "columnType" : "string",
+      "columnType" : {
+        "t" : "string"
+      },
       "sqlTypeCode" : 12,
       "sqlTypeName" : "varchar",
       "size" : "20",
@@ -76,7 +80,9 @@
       "primaryKey" : false,
       "notNull" : true,
       "autoIncrement" : false,
-      "columnType" : "string",
+      "columnType" : {
+        "t" : "string"
+      },
       "sqlTypeCode" : 12,
       "sqlTypeName" : "varchar",
       "size" : "1000",
@@ -91,7 +97,9 @@
       "primaryKey" : false,
       "notNull" : false,
       "autoIncrement" : false,
-      "columnType" : "long",
+      "columnType" : {
+        "t" : "long"
+      },
       "sqlTypeCode" : 4,
       "sqlTypeName" : "int4",
       "size" : "10",
@@ -106,7 +114,9 @@
       "primaryKey" : false,
       "notNull" : true,
       "autoIncrement" : false,
-      "columnType" : "string",
+      "columnType" : {
+        "t" : "string"
+      },
       "sqlTypeCode" : 12,
       "sqlTypeName" : "varchar",
       "size" : "100",
@@ -121,7 +131,9 @@
       "primaryKey" : false,
       "notNull" : true,
       "autoIncrement" : false,
-      "columnType" : "timestamp",
+      "columnType" : {
+        "t" : "timestamp"
+      },
       "sqlTypeCode" : 93,
       "sqlTypeName" : "timestamp",
       "size" : "29",
@@ -136,7 +148,9 @@
       "primaryKey" : false,
       "notNull" : true,
       "autoIncrement" : false,
-      "columnType" : "long",
+      "columnType" : {
+        "t" : "long"
+      },
       "sqlTypeCode" : 4,
       "sqlTypeName" : "int4",
       "size" : "10",
@@ -151,7 +165,9 @@
       "primaryKey" : false,
       "notNull" : true,
       "autoIncrement" : false,
-      "columnType" : "boolean",
+      "columnType" : {
+        "t" : "boolean"
+      },
       "sqlTypeCode" : -7,
       "sqlTypeName" : "bool",
       "size" : "1",
@@ -176,7 +192,6 @@
       "name" : "flyway_schema_history_pk",
       "unique" : true,
       "indexType" : "other",
-      "cardinality" : 0,
       "columns" : [
         {
           "name" : "installed_rank",
@@ -188,7 +203,6 @@
       "name" : "flyway_schema_history_s_idx",
       "unique" : false,
       "indexType" : "other",
-      "cardinality" : 0,
       "columns" : [
         {
           "name" : "success",
@@ -196,7 +210,5 @@
         }
       ]
     }
-  ],
-  "createTime" : null,
-  "loadedAt" : 1541358383112
+  ]
 }

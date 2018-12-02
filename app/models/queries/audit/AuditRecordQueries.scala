@@ -50,12 +50,12 @@ object AuditRecordQueries extends BaseQueries[AuditRecord]("auditRecord", "audit
   )
   final case class GetByIdSeq(idSeq: Seq[UUID]) extends ColSeqQuery(column = "id", values = idSeq)
 
-  final case class CountByPk(pk: Array[Any]) extends ColCount(column = "pk", values = Seq(pk))
-  final case class GetByPk(pk: Array[Any], orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) extends SeqQuery(
+  final case class CountByPk(pk: List[String]) extends ColCount(column = "pk", values = Seq(pk))
+  final case class GetByPk(pk: List[String], orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) extends SeqQuery(
     whereClause = Some(quote("pk") + "  = ?"), orderBy = ResultFieldHelper.orderClause(fields, orderBys: _*),
     limit = limit, offset = offset, values = Seq(pk)
   )
-  final case class GetByPkSeq(pkSeq: Seq[Array[Any]]) extends ColSeqQuery(column = "pk", values = pkSeq)
+  final case class GetByPkSeq(pkSeq: Seq[List[String]]) extends ColSeqQuery(column = "pk", values = pkSeq)
 
   final case class CountByT(t: String) extends ColCount(column = "t", values = Seq(t))
   final case class GetByT(t: String, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) extends SeqQuery(

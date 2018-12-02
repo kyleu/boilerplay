@@ -1,0 +1,21 @@
+# Generated File
+# Creates a new Audit entity.
+mutation AuditCreate {
+  audit {
+    create(fields: [{k: "", v: ""}]) {
+      id
+      act
+      app
+      client
+      server
+      userId
+      tags {
+        k
+        v
+      }
+      msg
+      started
+      completed
+    }
+  }
+}

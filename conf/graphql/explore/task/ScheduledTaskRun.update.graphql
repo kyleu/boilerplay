@@ -1,0 +1,15 @@
+# Generated File
+# Updates a single ScheduledTaskRun entity using the provided fields.
+mutation ScheduledTaskRunUpdate {
+  scheduledTaskRun {
+    update(id: "00000000-0000-0000-0000-000000000000", fields: [{k: "", v: ""}]) {
+      id
+      task
+      arguments
+      status
+      output
+      started
+      completed
+    }
+  }
+}

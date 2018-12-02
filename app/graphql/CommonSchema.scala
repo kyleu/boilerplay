@@ -23,6 +23,12 @@ object CommonSchema extends CommonSchemaValueTypes with CommonSchemaReferenceTyp
     values = values.map(t => EnumValue(name = t.toString, value = t)).toList
   )
 
+  def deriveIntEnumeratumType[T <: enumeratum.values.IntEnumEntry](name: String, values: Seq[T]) = EnumType(
+    name = name,
+    description = None,
+    values = values.map(t => EnumValue(name = t.toString, value = t)).toList
+  )
+
   implicit lazy val tagType: ObjectType[GraphQLContext, Tag] = deriveObjectType()
   implicit lazy val tagInputType: InputObjectType[Tag] = deriveInputObjectType(InputObjectTypeName("TagInput"))
 }

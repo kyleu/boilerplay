@@ -6,7 +6,7 @@ import models.result.orderBy.OrderBy
 import ResultFieldHelper._
 
 trait SearchQueries[T <: Product] { this: BaseQueries[T] =>
-  private[this] def searchCol(c: String) = s"${quote(c)}::text like ?"
+  private[this] def searchCol(c: String) = s"lower(${quote(c)}::text) like lower(?)"
 
   private[this] def searchClause(q: Option[String]) = q.map(_ => searchColumns.map(searchCol).mkString(" or "))
   private[this] def whereClause(filters: Seq[Filter], add: Option[String] = None) = (filterClause(filters, fields), add) match {

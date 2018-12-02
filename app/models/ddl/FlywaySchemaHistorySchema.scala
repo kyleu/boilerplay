@@ -37,7 +37,7 @@ object FlywaySchemaHistorySchema extends GraphQLSchemaHelper("flywaySchemaHistor
     unitField(name = "flywaySchemaHistoryByInstalledRank", desc = None, t = OptionType(flywaySchemaHistoryType), f = (c, td) => {
       c.ctx.services.ddlServices.flywaySchemaHistoryService.getByInstalledRank(c.ctx.creds, c.arg(flywaySchemaHistoryInstalledRankArg))(td).map(_.headOption)
     }, flywaySchemaHistoryInstalledRankArg),
-    unitField(name = "flywaySchemaHistoryByInstalledRankSeq", desc = None, t = ListType(flywaySchemaHistoryType), f = (c, td) => {
+    unitField(name = "flywaySchemaHistoriesByInstalledRankSeq", desc = None, t = ListType(flywaySchemaHistoryType), f = (c, td) => {
       c.ctx.services.ddlServices.flywaySchemaHistoryService.getByInstalledRankSeq(c.ctx.creds, c.arg(flywaySchemaHistoryInstalledRankSeqArg))(td)
     }, flywaySchemaHistoryInstalledRankSeqArg),
     unitField(name = "flywaySchemaHistoriesBySuccess", desc = None, t = ListType(flywaySchemaHistoryType), f = (c, td) => {

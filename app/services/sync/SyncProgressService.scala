@@ -11,6 +11,7 @@ import models.sync.SyncProgress
 import scala.concurrent.Future
 import services.ModelServiceHelper
 import services.database.ApplicationDatabase
+import util.CsvUtils
 import util.FutureUtils.serviceContext
 import util.tracing.{TraceData, TracingService}
 
@@ -128,6 +129,6 @@ class SyncProgressService @javax.inject.Inject() (override val tracing: TracingS
   }
 
   def csvFor(totalCount: Int, rows: Seq[SyncProgress])(implicit trace: TraceData) = {
-    traceB("export.csv")(td => util.CsvUtils.csvFor(Some(key), totalCount, rows, SyncProgressQueries.fields)(td))
+    traceB("export.csv")(td => CsvUtils.csvFor(Some(key), totalCount, rows, SyncProgressQueries.fields)(td))
   }
 }

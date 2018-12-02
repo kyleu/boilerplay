@@ -1,0 +1,15 @@
+# Generated File
+# Creates a new ScheduledTaskRun entity.
+mutation ScheduledTaskRunCreate {
+  scheduledTaskRun {
+    create(fields: [{k: "", v: ""}]) {
+      id
+      task
+      arguments
+      status
+      output
+      started
+      completed
+    }
+  }
+}

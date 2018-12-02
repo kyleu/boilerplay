@@ -12,6 +12,7 @@ import models.result.orderBy.OrderBy
 import scala.concurrent.Future
 import services.ModelServiceHelper
 import services.database.ApplicationDatabase
+import util.CsvUtils
 import util.FutureUtils.serviceContext
 import util.tracing.{TraceData, TracingService}
 
@@ -149,6 +150,6 @@ class NoteService @javax.inject.Inject() (override val tracing: TracingService) 
   }
 
   def csvFor(totalCount: Int, rows: Seq[Note])(implicit trace: TraceData) = {
-    traceB("export.csv")(td => util.CsvUtils.csvFor(Some(key), totalCount, rows, NoteQueries.fields)(td))
+    traceB("export.csv")(td => CsvUtils.csvFor(Some(key), totalCount, rows, NoteQueries.fields)(td))
   }
 }

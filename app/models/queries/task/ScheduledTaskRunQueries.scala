@@ -39,12 +39,12 @@ object ScheduledTaskRunQueries extends BaseQueries[ScheduledTaskRun]("scheduledT
   def getByPrimaryKey(id: UUID) = new GetByPrimaryKey(Seq(id))
   def getByPrimaryKeySeq(idSeq: Seq[UUID]) = new ColSeqQuery(column = "id", values = idSeq)
 
-  final case class CountByArguments(arguments: Array[Any]) extends ColCount(column = "arguments", values = Seq(arguments))
-  final case class GetByArguments(arguments: Array[Any], orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) extends SeqQuery(
+  final case class CountByArguments(arguments: List[String]) extends ColCount(column = "arguments", values = Seq(arguments))
+  final case class GetByArguments(arguments: List[String], orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) extends SeqQuery(
     whereClause = Some(quote("arguments") + "  = ?"), orderBy = ResultFieldHelper.orderClause(fields, orderBys: _*),
     limit = limit, offset = offset, values = Seq(arguments)
   )
-  final case class GetByArgumentsSeq(argumentsSeq: Seq[Array[Any]]) extends ColSeqQuery(column = "arguments", values = argumentsSeq)
+  final case class GetByArgumentsSeq(argumentsSeq: Seq[List[String]]) extends ColSeqQuery(column = "arguments", values = argumentsSeq)
 
   final case class CountById(id: UUID) extends ColCount(column = "id", values = Seq(id))
   final case class GetById(id: UUID, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) extends SeqQuery(

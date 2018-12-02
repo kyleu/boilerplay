@@ -4,10 +4,6 @@
   "schema" : "public",
   "description" : null,
   "definition" : null,
-  "storageEngine" : null,
-  "rowCountEstimate" : 0,
-  "averageRowLength" : null,
-  "dataLength" : null,
   "columns" : [
     {
       "name" : "k",
@@ -16,7 +12,10 @@
       "primaryKey" : false,
       "notNull" : true,
       "autoIncrement" : false,
-      "columnType" : "enum",
+      "columnType" : {
+        "key" : "setting_key",
+        "t" : "enum"
+      },
       "sqlTypeCode" : 12,
       "sqlTypeName" : "setting_key",
       "size" : "2147483647",
@@ -31,7 +30,9 @@
       "primaryKey" : false,
       "notNull" : true,
       "autoIncrement" : false,
-      "columnType" : "string",
+      "columnType" : {
+        "t" : "string"
+      },
       "sqlTypeCode" : 12,
       "sqlTypeName" : "varchar",
       "size" : "4096",
@@ -56,7 +57,6 @@
       "name" : "setting_values_pkey",
       "unique" : true,
       "indexType" : "other",
-      "cardinality" : 0,
       "columns" : [
         {
           "name" : "k",
@@ -64,7 +64,5 @@
         }
       ]
     }
-  ],
-  "createTime" : null,
-  "loadedAt" : 1541358383112
+  ]
 }

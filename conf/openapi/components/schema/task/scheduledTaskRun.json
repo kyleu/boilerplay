@@ -21,7 +21,7 @@
       "arguments": {
         "type": "array",
         "items": {
-          "type": "_varchar"
+          "type": "string"
         }
       },
       "status": {

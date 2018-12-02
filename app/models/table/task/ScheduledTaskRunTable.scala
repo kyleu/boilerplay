@@ -15,7 +15,7 @@ object ScheduledTaskRunTable {
 }
 
 class ScheduledTaskRunTable(tag: slick.lifted.Tag) extends Table[ScheduledTaskRun](tag, "scheduled_task_run") {
-  val id = column[UUID]("id")
+  val id = column[UUID]("id", O.PrimaryKey)
   val task = column[String]("task")
   val arguments = column[List[String]]("arguments")
   val status = column[String]("status")

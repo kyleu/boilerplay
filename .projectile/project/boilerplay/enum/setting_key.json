@@ -6,14 +6,10 @@
     "settings"
   ],
   "features" : [
-    "doobie",
-    "datamodel",
-    "wiki",
+    "core",
     "graphql",
-    "openapi",
-    "service",
     "slick",
-    "core"
+    "doobie"
   ],
   "ignored" : [
   ],

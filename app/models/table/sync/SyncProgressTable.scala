@@ -13,7 +13,7 @@ object SyncProgressTable {
 }
 
 class SyncProgressTable(tag: slick.lifted.Tag) extends Table[SyncProgress](tag, "sync_progress") {
-  val key = column[String]("key")
+  val key = column[String]("key", O.PrimaryKey)
   val status = column[String]("status")
   val message = column[String]("message")
   val lastTime = column[LocalDateTime]("last_time")

@@ -4,10 +4,6 @@
   "schema" : "public",
   "description" : null,
   "definition" : null,
-  "storageEngine" : null,
-  "rowCountEstimate" : 0,
-  "averageRowLength" : null,
-  "dataLength" : null,
   "columns" : [
     {
       "name" : "id",
@@ -16,7 +12,9 @@
       "primaryKey" : false,
       "notNull" : true,
       "autoIncrement" : false,
-      "columnType" : "uuid",
+      "columnType" : {
+        "t" : "uuid"
+      },
       "sqlTypeCode" : 1111,
       "sqlTypeName" : "uuid",
       "size" : "2147483647",
@@ -31,7 +29,9 @@
       "primaryKey" : false,
       "notNull" : true,
       "autoIncrement" : false,
-      "columnType" : "uuid",
+      "columnType" : {
+        "t" : "uuid"
+      },
       "sqlTypeCode" : 1111,
       "sqlTypeName" : "uuid",
       "size" : "2147483647",
@@ -46,7 +46,9 @@
       "primaryKey" : false,
       "notNull" : true,
       "autoIncrement" : false,
-      "columnType" : "string",
+      "columnType" : {
+        "t" : "string"
+      },
       "sqlTypeCode" : 12,
       "sqlTypeName" : "varchar",
       "size" : "128",
@@ -61,7 +63,12 @@
       "primaryKey" : false,
       "notNull" : true,
       "autoIncrement" : false,
-      "columnType" : "array",
+      "columnType" : {
+        "typ" : {
+          "t" : "string"
+        },
+        "t" : "list"
+      },
       "sqlTypeCode" : 2003,
       "sqlTypeName" : "_varchar",
       "size" : "128",
@@ -76,7 +83,9 @@
       "primaryKey" : false,
       "notNull" : true,
       "autoIncrement" : false,
-      "columnType" : "json",
+      "columnType" : {
+        "t" : "json"
+      },
       "sqlTypeCode" : 1111,
       "sqlTypeName" : "jsonb",
       "size" : "2147483647",
@@ -97,6 +106,7 @@
   "foreignKeys" : [
     {
       "name" : "audit_record_audit_id_fkey",
+      "propertyName" : "auditRecordAuditIdFkeyRel",
       "targetTable" : "audit",
       "references" : [
         {
@@ -111,7 +121,6 @@
       "name" : "audit_record_changes",
       "unique" : false,
       "indexType" : "other",
-      "cardinality" : 0,
       "columns" : [
         {
           "name" : "changes",
@@ -123,7 +132,6 @@
       "name" : "audit_record_pk",
       "unique" : false,
       "indexType" : "other",
-      "cardinality" : 0,
       "columns" : [
         {
           "name" : "pk",
@@ -135,7 +143,6 @@
       "name" : "audit_record_pkey",
       "unique" : true,
       "indexType" : "other",
-      "cardinality" : 0,
       "columns" : [
         {
           "name" : "id",
@@ -147,7 +154,6 @@
       "name" : "audit_record_t",
       "unique" : false,
       "indexType" : "other",
-      "cardinality" : 0,
       "columns" : [
         {
           "name" : "t",
@@ -155,7 +161,5 @@
         }
       ]
     }
-  ],
-  "createTime" : null,
-  "loadedAt" : 1541358383112
+  ]
 }

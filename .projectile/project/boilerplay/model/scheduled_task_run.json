@@ -8,11 +8,11 @@
   "features" : [
     "doobie",
     "datamodel",
-    "wiki",
     "graphql",
-    "openapi",
     "service",
     "slick",
+    "controller",
+    "json",
     "core"
   ],
   "ignored" : [

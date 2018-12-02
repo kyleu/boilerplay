@@ -1,0 +1,12 @@
+# Generated File
+# Remove a single SyncProgress entity from the system.
+mutation SyncProgressRemove {
+  syncProgress {
+    remove(key: "") {
+      key
+      status
+      message
+      lastTime
+    }
+  }
+}

@@ -1,0 +1,10 @@
+# Generated File
+# Remove a single Setting entity from the system.
+mutation SettingRemove {
+  setting {
+    remove(k: "") {
+      k
+      v
+    }
+  }
+}

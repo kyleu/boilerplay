@@ -1,0 +1,21 @@
+# Generated File
+# Updates a single Audit entity using the provided fields.
+mutation AuditUpdate {
+  audit {
+    update(id: "00000000-0000-0000-0000-000000000000", fields: [{k: "", v: ""}]) {
+      id
+      act
+      app
+      client
+      server
+      userId
+      tags {
+        k
+        v
+      }
+      msg
+      started
+      completed
+    }
+  }
+}

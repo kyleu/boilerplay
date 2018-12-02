@@ -53,7 +53,7 @@ object NoteSchema extends GraphQLSchemaHelper("note") {
     unitField(name = "noteById", desc = None, t = OptionType(noteType), f = (c, td) => {
       c.ctx.services.noteServices.noteService.getById(c.ctx.creds, c.arg(noteIdArg))(td).map(_.headOption)
     }, noteIdArg),
-    unitField(name = "noteByIdSeq", desc = None, t = ListType(noteType), f = (c, td) => {
+    unitField(name = "notesByIdSeq", desc = None, t = ListType(noteType), f = (c, td) => {
       c.ctx.services.noteServices.noteService.getByIdSeq(c.ctx.creds, c.arg(noteIdSeqArg))(td)
     }, noteIdSeqArg)
   )

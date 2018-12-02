@@ -8,15 +8,19 @@
   "features" : [
     "doobie",
     "datamodel",
-    "wiki",
     "graphql",
-    "openapi",
     "service",
     "slick",
+    "controller",
+    "json",
     "core"
   ],
   "ignored" : [
   ],
   "overrides" : [
+    {
+      "k" : "fk.note_author_fkey.propertyName",
+      "v" : "authorRel"
+    }
   ]
 }

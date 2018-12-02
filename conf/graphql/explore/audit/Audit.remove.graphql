@@ -1,0 +1,21 @@
+# Generated File
+# Remove a single Audit entity from the system.
+mutation AuditRemove {
+  audit {
+    remove(id: "00000000-0000-0000-0000-000000000000") {
+      id
+      act
+      app
+      client
+      server
+      userId
+      tags {
+        k
+        v
+      }
+      msg
+      started
+      completed
+    }
+  }
+}

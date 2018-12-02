@@ -13,7 +13,7 @@ object FlywaySchemaHistoryTable {
 }
 
 class FlywaySchemaHistoryTable(tag: slick.lifted.Tag) extends Table[FlywaySchemaHistory](tag, "flyway_schema_history") {
-  val installedRank = column[Long]("installed_rank")
+  val installedRank = column[Long]("installed_rank", O.PrimaryKey)
   val version = column[Option[String]]("version")
   val description = column[String]("description")
   val typ = column[String]("type")

@@ -1,0 +1,15 @@
+# Generated File
+# Remove a single SystemUser entity from the system.
+mutation SystemUserRemove {
+  systemUser {
+    remove(id: "00000000-0000-0000-0000-000000000000") {
+      id
+      username
+      provider
+      key
+      prefs
+      role
+      created
+    }
+  }
+}
