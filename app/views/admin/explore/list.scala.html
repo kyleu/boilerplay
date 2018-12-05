@@ -16,7 +16,7 @@
     fullUI: Boolean = true
 )(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
-)@traceData.logViewClass(getClass)@if(fullUI) {
+)@traceData.logClass(getClass)@if(fullUI) {
   @views.html.admin.layout.page(user, section, s"$model Management") {
     <div class="collection with-header">
       <div class="collection-header">

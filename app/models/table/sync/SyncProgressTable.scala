@@ -18,8 +18,6 @@ class SyncProgressTable(tag: slick.lifted.Tag) extends Table[SyncProgress](tag, 
   val message = column[String]("message")
   val lastTime = column[LocalDateTime]("last_time")
 
-  val modelPrimaryKey = primaryKey("pk_sync_progress", key)
-
   override val * = (key, status, message, lastTime) <> (
     (SyncProgress.apply _).tupled,
     SyncProgress.unapply

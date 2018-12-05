@@ -1,7 +1,7 @@
 @* Generated File *@
 @(user: models.user.SystemUser, model: models.ddl.FlywaySchemaHistory, notes: Seq[models.note.Note], debug: Boolean)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
-)@traceData.logViewClass(getClass)@views.html.admin.layout.page(user, "explore", s"Flyway Schema History [${model.installedRank}]") {
+)@traceData.logClass(getClass)@views.html.admin.layout.page(user, "explore", s"Flyway Schema History [${model.installedRank}]") {
   <div class="collection with-header">
     <div class="collection-header">
       <div class="right"><a class="theme-text" href="@controllers.admin.ddl.routes.FlywaySchemaHistoryController.editForm(model.installedRank)">Edit</a></div>

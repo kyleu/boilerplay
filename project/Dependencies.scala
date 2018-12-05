@@ -8,12 +8,12 @@ object Dependencies {
     val ws = play.sbt.PlayImport.ws
     val guice = play.sbt.PlayImport.guice
     val cache = play.sbt.PlayImport.ehcache
-    val json = "com.typesafe.play" %% "play-json" % "2.6.10"
+    val json = "com.typesafe.play" %% "play-json" % "2.6.11"
     val test = "com.typesafe.play" %% "play-test" % version % "test"
   }
 
   object Akka {
-    private[this] val version = "2.5.17"
+    private[this] val version = "2.5.18"
     val actor = "com.typesafe.akka" %% "akka-actor" % version
     val remote = "com.typesafe.akka" %% "akka-remote" % version
     val logging = "com.typesafe.akka" %% "akka-slf4j" % version
@@ -58,7 +58,7 @@ object Dependencies {
       val testing = "org.tpolecat" %% "doobie-scalatest" % version % "test"
     }
 
-    val flyway = "org.flywaydb" % "flyway-core" % "5.2.1"
+    val flyway = "org.flywaydb" % "flyway-core" % "5.2.3"
 
     val all = Seq(
       postgres, hikariCp, flyway, Slick.core, Slick.hikariCp, Slick.pg, Slick.pgCirce, Slick.slickless,
@@ -81,11 +81,11 @@ object Dependencies {
     val fontAwesome = "org.webjars" % "font-awesome" % "4.7.0" intransitive()
     val jquery = "org.webjars" % "jquery" % "2.2.4" intransitive()
     val materialize = "org.webjars" % "materializecss" % "1.0.0" intransitive()
-    val swaggerUi = "org.webjars" % "swagger-ui" % "3.19.4" intransitive()
+    val swaggerUi = "org.webjars" % "swagger-ui" % "3.20.1" intransitive()
   }
 
   object Metrics {
-    val version = "1.1.0"
+    val version = "1.1.1"
     val micrometer = "io.micrometer" % "micrometer-registry-prometheus" % version
   }
 
@@ -96,14 +96,14 @@ object Dependencies {
   }
 
   object ScalaJS {
-    val scalaJSVersion = "0.6.25"
+    val scalaJSVersion = "0.6.26"
     val jQueryVersion = "0.9.4"
     val jvmStubs = "org.scala-js" %% "scalajs-stubs" % scalaJSVersion % "provided"
   }
 
   object Utils {
     val scapegoatVersion = "1.3.8"
-    val enumeratumCirceVersion = "1.5.17"
+    val enumeratumCirceVersion = "1.5.18"
     val booPickleVersion = "1.2.5"
     val javaTimeVersion = "2.0.0-M13"
 

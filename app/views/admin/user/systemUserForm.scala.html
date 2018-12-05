@@ -1,6 +1,6 @@
 @(self: models.user.SystemUser, model: models.user.SystemUser, title: String, act: Call, isNew: Boolean = false)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
-)@traceData.logViewClass(getClass)@views.html.admin.layout.page(self, "explore", title) {
+)@traceData.logClass(getClass)@views.html.admin.layout.page(self, "explore", title) {
   <form action="@act" method="post">
     <div class="collection with-header">
       <div class="collection-header">

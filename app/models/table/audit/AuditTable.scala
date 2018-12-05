@@ -26,8 +26,6 @@ class AuditTable(tag: slick.lifted.Tag) extends Table[Audit](tag, "audit") {
   val started = column[LocalDateTime]("started")
   val completed = column[LocalDateTime]("completed")
 
-  val modelPrimaryKey = primaryKey("pk_audit", id)
-
   override val * = (id, act, app, client, server, userId, tags, msg, started, completed) <> (
     (Audit.apply _).tupled,
     Audit.unapply

@@ -1,7 +1,7 @@
 package util
 
 import java.nio.file.Files
-import java.time.{LocalDate, LocalDateTime, LocalTime}
+import java.time.{LocalDate, LocalDateTime, LocalTime, ZonedDateTime}
 import java.util.UUID
 
 import io.circe.Json
@@ -11,12 +11,14 @@ import reftree.render.{Renderer, RenderingOptions}
 
 object ReftreeUtils extends Logging {
   implicit def stringRefTree: ToRefTree[String] = reftree.contrib.SimplifiedInstances.string
-  implicit def uuidRefTree: ToRefTree[UUID] = ToRefTree[UUID](uuid => RefTree.Ref(uuid, Nil).rename(uuid.toString))
-  implicit def ldtRefTree: ToRefTree[LocalDateTime] = ToRefTree[LocalDateTime](ldt => RefTree.Ref(ldt, Nil).rename(util.DateUtils.niceDateTime(ldt)))
-  implicit def ldRefTree: ToRefTree[LocalDate] = ToRefTree[LocalDate](ld => RefTree.Ref(ld, Nil).rename(util.DateUtils.niceDate(ld)))
-  implicit def ltRefTree: ToRefTree[LocalTime] = ToRefTree[LocalTime](lt => RefTree.Ref(lt, Nil).rename(util.DateUtils.niceTime(lt)))
   implicit def bdRefTree: ToRefTree[BigDecimal] = ToRefTree[BigDecimal](bd => RefTree.Ref(bd, Nil).rename(bd.toString))
+  implicit def uuidRefTree: ToRefTree[UUID] = ToRefTree[UUID](uuid => RefTree.Ref(uuid, Nil).rename(uuid.toString))
   implicit def jsonRefTree: ToRefTree[Json] = ToRefTree[Json](json => RefTree.Ref(json, Nil).rename(json.spaces2))
+
+  implicit def ldRefTree: ToRefTree[LocalDate] = ToRefTree[LocalDate](ld => RefTree.Ref(ld, Nil).rename(DateUtils.niceDate(ld)))
+  implicit def ltRefTree: ToRefTree[LocalTime] = ToRefTree[LocalTime](lt => RefTree.Ref(lt, Nil).rename(DateUtils.niceTime(lt)))
+  implicit def ldtRefTree: ToRefTree[LocalDateTime] = ToRefTree[LocalDateTime](ldt => RefTree.Ref(ldt, Nil).rename(DateUtils.niceDateTime(ldt)))
+  implicit def zdtRefTree: ToRefTree[ZonedDateTime] = ToRefTree[ZonedDateTime](zdt => RefTree.Ref(zdt, Nil).rename(DateUtils.niceDateTimeZoned(zdt)))
 
   implicit def optionRefTree[A: ToRefTree]: ToRefTree[Option[A]] = reftree.contrib.SimplifiedInstances.option[A]
   implicit def listRefTree[A: ToRefTree]: ToRefTree[List[A]] = reftree.contrib.SimplifiedInstances.list[A]

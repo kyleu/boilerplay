@@ -39,7 +39,7 @@ object Schema {
     models.settings.SettingsSchema.queryFields ++
     models.sandbox.SandboxSchema.queryFields
 
-  val modelQueryFields = {
+  val modelQueryFields: Seq[Field[GraphQLContext, Unit]] = {
     // Start model query fields
     models.audit.AuditRecordSchema.queryFields ++
       models.audit.AuditSchema.queryFields ++
@@ -72,7 +72,7 @@ object Schema {
   // Mutation Types
   val baseMutationFields = models.sandbox.SandboxSchema.mutationFields
 
-  val modelMutationFields = {
+  val modelMutationFields: Seq[Field[GraphQLContext, Unit]] = {
     // Start model mutation fields
     models.audit.AuditRecordSchema.mutationFields ++
       models.audit.AuditSchema.mutationFields ++

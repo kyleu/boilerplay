@@ -1,6 +1,6 @@
 @(user: models.user.SystemUser)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
-)@traceData.logViewClass(getClass)@views.html.admin.layout.page(user, "status", util.Config.projectName + " Status") {
+)@traceData.logClass(getClass)@views.html.admin.layout.page(user, "status", util.Config.projectName + " Status") {
   <ul class="collection with-header">
     <li class="collection-header">
       <h5><i class="fa @models.template.Icons.sandbox"></i> Sandbox Tasks</h5>

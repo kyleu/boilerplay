@@ -1,6 +1,6 @@
 @(user: models.user.SystemUser, unenc: String = "", enc: String = "")(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
-)@traceData.logViewClass(getClass)@views.html.admin.layout.page(user, "", util.Config.projectName + " Administration") {
+)@traceData.logClass(getClass)@views.html.admin.layout.page(user, "", util.Config.projectName + " Administration") {
   <form method="post" action="@controllers.admin.system.routes.EncryptionController.post">
   <ul class="collection with-header">
     <li class="collection-header">

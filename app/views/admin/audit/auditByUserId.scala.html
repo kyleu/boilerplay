@@ -1,6 +1,6 @@
 @(user: models.user.SystemUser, userId: java.util.UUID, modelSeq: Seq[models.audit.Audit], orderBy: Option[String], orderAsc: Boolean, limit: Int, offset: Int)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
-)@traceData.logViewClass(getClass)
+)@traceData.logClass(getClass)
 @views.html.admin.explore.list(
   user = user,
   model = "Audit",

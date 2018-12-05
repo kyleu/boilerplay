@@ -24,8 +24,6 @@ class FlywaySchemaHistoryTable(tag: slick.lifted.Tag) extends Table[FlywaySchema
   val executionTime = column[Long]("execution_time")
   val success = column[Boolean]("success")
 
-  val modelPrimaryKey = primaryKey("pk_flyway_schema_history", installedRank)
-
   override val * = (installedRank, version, description, typ, script, checksum, installedBy, installedOn, executionTime, success) <> (
     (FlywaySchemaHistory.apply _).tupled,
     FlywaySchemaHistory.unapply

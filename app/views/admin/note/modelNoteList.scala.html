@@ -1,6 +1,6 @@
 @(user: models.user.SystemUser, notes: Seq[models.note.Note], model: String, pk: String)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
-)@traceData.logViewClass(getClass)
+)@traceData.logClass(getClass)
 @views.html.admin.layout.page(user, "explore", s"Notes for [$model $pk]") {
   <h5>Notes for [@model @pk]</h5>
 }

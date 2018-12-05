@@ -1,9 +1,10 @@
 package models.queries
 
 import models.database.DatabaseField
-import models.database.DatabaseFieldType.{EncryptedStringType, TimestampType}
+import models.database.DatabaseFieldType.{DateType, EncryptedStringType, TimeType, TimestampType, TimestampZonedType}
 import models.result.filter._
 import models.result.orderBy.OrderBy
+import util.DateUtils
 
 object ResultFieldHelper {
   def sqlForField(t: String, field: String, fields: Seq[DatabaseField]) = fields.find(_.prop == field) match {
@@ -12,11 +13,16 @@ object ResultFieldHelper {
   }
 
   def valueForField(t: String, field: String, value: Option[String], fields: Seq[DatabaseField]): Option[Any] = fields.find(_.prop == field) match {
-    case Some(f) => f.typ match {
-      case EncryptedStringType => value.map(util.EncryptionUtils.encrypt)
-      case TimestampType => value.map(util.DateUtils.sqlDateTimeFromString)
-      case _ => value
-    }
+    case Some(f) =>
+      def v = value.map(_.trim).filter(_.nonEmpty)
+      f.typ match {
+        case EncryptedStringType => v.map(util.EncryptionUtils.encrypt)
+        case DateType => v.map(DateUtils.fromDateString)
+        case TimeType => v.map(DateUtils.fromTimeString)
+        case TimestampType => v.map(DateUtils.sqlDateTimeFromString)
+        case TimestampZonedType => v.map(DateUtils.sqlDateTimeFromString)
+        case _ => value
+      }
     case None => throw new IllegalStateException(s"Invalid $t field [$field]. Allowed fields are [${fields.map(_.prop).mkString(", ")}].")
   }
 

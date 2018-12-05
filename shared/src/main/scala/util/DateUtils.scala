@@ -34,6 +34,7 @@ object DateUtils {
   def niceDate(d: LocalDate) = niceDateFmt.format(d)
   def niceTime(t: LocalTime) = timeFmt.format(t)
   def niceDateTime(dt: LocalDateTime) = s"${niceDate(dt.toLocalDate)} ${niceTime(dt.toLocalTime)} UTC"
+  def niceDateTimeZoned(dt: ZonedDateTime) = s"${niceDate(dt.toLocalDate)} ${niceTime(dt.toLocalTime)} ${dt.getZone.getId}"
 
   private[this] val dFmt = new SimpleDateFormat("yyyy-MM-dd")
   def sqlDateFromString(s: String) = new java.sql.Date(dFmt.parse(s).getTime)

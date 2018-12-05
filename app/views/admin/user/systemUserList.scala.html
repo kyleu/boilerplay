@@ -2,7 +2,7 @@
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
 )
 
-@traceData.logViewClass(getClass)
+@traceData.logClass(getClass)
 
 @views.html.admin.explore.list(
   user = user,

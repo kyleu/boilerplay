@@ -1,7 +1,7 @@
 @* Generated File *@
 @(user: models.user.SystemUser, model: models.task.ScheduledTaskRun, notes: Seq[models.note.Note], debug: Boolean)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
-)@traceData.logViewClass(getClass)@views.html.admin.layout.page(user, "explore", s"Scheduled Task Run [${model.id}]") {
+)@traceData.logClass(getClass)@views.html.admin.layout.page(user, "explore", s"Scheduled Task Run [${model.id}]") {
   <div class="collection with-header">
     <div class="collection-header">
       <div class="right"><a class="theme-text" href="@controllers.admin.task.routes.ScheduledTaskRunController.editForm(model.id)">Edit</a></div>

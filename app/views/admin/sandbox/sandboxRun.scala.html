@@ -1,6 +1,6 @@
 @(user: models.user.SystemUser, result: models.sandbox.SandboxTask.Result)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
-)@traceData.logViewClass(getClass)@views.html.admin.layout.page(user = user, activeSection = "status", title = s"${result.task.name} Result") {
+)@traceData.logClass(getClass)@views.html.admin.layout.page(user = user, activeSection = "status", title = s"${result.task.name} Result") {
   <div class="row">
     <div class="col s12">
       <div class="collection with-header">

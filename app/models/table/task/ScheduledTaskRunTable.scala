@@ -23,8 +23,6 @@ class ScheduledTaskRunTable(tag: slick.lifted.Tag) extends Table[ScheduledTaskRu
   val started = column[LocalDateTime]("started")
   val completed = column[LocalDateTime]("completed")
 
-  val modelPrimaryKey = primaryKey("pk_scheduled_task_run", id)
-
   override val * = (id, task, arguments, status, output, started, completed) <> (
     (ScheduledTaskRun.apply _).tupled,
     ScheduledTaskRun.unapply

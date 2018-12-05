@@ -1,6 +1,6 @@
 @(path: String, ex: Option[Throwable])(
     implicit session: Session, flash: Flash, traceData: util.tracing.TraceData
-)@traceData.logViewClass(getClass)@layout.materialize(None, "Server Error") {
+)@traceData.logClass(getClass)@layout.materialize(None, "Server Error") {
   <div class="text-centered">
     <h1>@path</h1>
     <div class="text-large"><em>Exception Encountered</em></div>
