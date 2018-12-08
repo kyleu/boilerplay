@@ -4,143 +4,124 @@
   "schema" : "public",
   "description" : null,
   "definition" : null,
-  "columns" : [
-    {
-      "name" : "id",
-      "description" : null,
-      "definition" : null,
-      "primaryKey" : false,
-      "notNull" : true,
-      "autoIncrement" : false,
-      "columnType" : {
-        "t" : "uuid"
-      },
-      "sqlTypeCode" : 1111,
-      "sqlTypeName" : "uuid",
-      "size" : "2147483647",
-      "sizeAsInt" : 2147483647,
-      "scale" : 0,
-      "defaultValue" : null
+  "columns" : [ {
+    "name" : "id",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "uuid"
     },
-    {
-      "name" : "rel_type",
-      "description" : null,
-      "definition" : null,
-      "primaryKey" : false,
-      "notNull" : false,
-      "autoIncrement" : false,
-      "columnType" : {
-        "t" : "string"
-      },
-      "sqlTypeCode" : 12,
-      "sqlTypeName" : "varchar",
-      "size" : "128",
-      "sizeAsInt" : 128,
-      "scale" : 0,
-      "defaultValue" : null
+    "sqlTypeCode" : 1111,
+    "sqlTypeName" : "uuid",
+    "size" : "2147483647",
+    "sizeAsInt" : 2147483647,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "rel_type",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : false,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "string"
     },
-    {
-      "name" : "rel_pk",
-      "description" : null,
-      "definition" : null,
-      "primaryKey" : false,
-      "notNull" : false,
-      "autoIncrement" : false,
-      "columnType" : {
-        "t" : "string"
-      },
-      "sqlTypeCode" : 12,
-      "sqlTypeName" : "varchar",
-      "size" : "256",
-      "sizeAsInt" : 256,
-      "scale" : 0,
-      "defaultValue" : null
+    "sqlTypeCode" : 12,
+    "sqlTypeName" : "varchar",
+    "size" : "128",
+    "sizeAsInt" : 128,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "rel_pk",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : false,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "string"
     },
-    {
-      "name" : "text",
-      "description" : null,
-      "definition" : null,
-      "primaryKey" : false,
-      "notNull" : true,
-      "autoIncrement" : false,
-      "columnType" : {
-        "t" : "string"
-      },
-      "sqlTypeCode" : 12,
-      "sqlTypeName" : "text",
-      "size" : "2147483647",
-      "sizeAsInt" : 2147483647,
-      "scale" : 0,
-      "defaultValue" : null
+    "sqlTypeCode" : 12,
+    "sqlTypeName" : "varchar",
+    "size" : "256",
+    "sizeAsInt" : 256,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "text",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "string"
     },
-    {
-      "name" : "author",
-      "description" : null,
-      "definition" : null,
-      "primaryKey" : false,
-      "notNull" : true,
-      "autoIncrement" : false,
-      "columnType" : {
-        "t" : "uuid"
-      },
-      "sqlTypeCode" : 1111,
-      "sqlTypeName" : "uuid",
-      "size" : "2147483647",
-      "sizeAsInt" : 2147483647,
-      "scale" : 0,
-      "defaultValue" : null
+    "sqlTypeCode" : 12,
+    "sqlTypeName" : "text",
+    "size" : "2147483647",
+    "sizeAsInt" : 2147483647,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "author",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "uuid"
     },
-    {
-      "name" : "created",
-      "description" : null,
-      "definition" : null,
-      "primaryKey" : false,
-      "notNull" : true,
-      "autoIncrement" : false,
-      "columnType" : {
-        "t" : "timestamp"
-      },
-      "sqlTypeCode" : 93,
-      "sqlTypeName" : "timestamp",
-      "size" : "29",
-      "sizeAsInt" : 29,
-      "scale" : 0,
-      "defaultValue" : null
-    }
-  ],
-  "rowIdentifier" : [
-    "id"
-  ],
+    "sqlTypeCode" : 1111,
+    "sqlTypeName" : "uuid",
+    "size" : "2147483647",
+    "sizeAsInt" : 2147483647,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "created",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "timestamp"
+    },
+    "sqlTypeCode" : 93,
+    "sqlTypeName" : "timestamp",
+    "size" : "29",
+    "sizeAsInt" : 29,
+    "scale" : 0,
+    "defaultValue" : null
+  } ],
+  "rowIdentifier" : [ "id" ],
   "primaryKey" : {
     "name" : "note_pkey",
-    "columns" : [
-      "id"
-    ]
+    "columns" : [ "id" ]
   },
-  "foreignKeys" : [
-    {
-      "name" : "note_author_fkey",
-      "propertyName" : "noteAuthorFkeyRel",
-      "targetTable" : "system_users",
-      "references" : [
-        {
-          "source" : "author",
-          "target" : "id"
-        }
-      ]
-    }
-  ],
-  "indexes" : [
-    {
-      "name" : "note_pkey",
-      "unique" : true,
-      "indexType" : "other",
-      "columns" : [
-        {
-          "name" : "id",
-          "ascending" : true
-        }
-      ]
-    }
-  ]
+  "foreignKeys" : [ {
+    "name" : "note_author_fkey",
+    "propertyName" : "noteAuthorFkeyRel",
+    "targetTable" : "system_users",
+    "references" : [ {
+      "source" : "author",
+      "target" : "id"
+    } ]
+  } ],
+  "indexes" : [ {
+    "name" : "note_pkey",
+    "unique" : true,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "id",
+      "ascending" : true
+    } ]
+  } ]
 }

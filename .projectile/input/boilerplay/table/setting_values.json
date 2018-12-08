@@ -4,65 +4,53 @@
   "schema" : "public",
   "description" : null,
   "definition" : null,
-  "columns" : [
-    {
-      "name" : "k",
-      "description" : null,
-      "definition" : null,
-      "primaryKey" : false,
-      "notNull" : true,
-      "autoIncrement" : false,
-      "columnType" : {
-        "key" : "setting_key",
-        "t" : "enum"
-      },
-      "sqlTypeCode" : 12,
-      "sqlTypeName" : "setting_key",
-      "size" : "2147483647",
-      "sizeAsInt" : 2147483647,
-      "scale" : 0,
-      "defaultValue" : null
+  "columns" : [ {
+    "name" : "k",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "key" : "setting_key",
+      "t" : "enum"
     },
-    {
-      "name" : "v",
-      "description" : null,
-      "definition" : null,
-      "primaryKey" : false,
-      "notNull" : true,
-      "autoIncrement" : false,
-      "columnType" : {
-        "t" : "string"
-      },
-      "sqlTypeCode" : 12,
-      "sqlTypeName" : "varchar",
-      "size" : "4096",
-      "sizeAsInt" : 4096,
-      "scale" : 0,
-      "defaultValue" : null
-    }
-  ],
-  "rowIdentifier" : [
-    "k"
-  ],
+    "sqlTypeCode" : 12,
+    "sqlTypeName" : "setting_key",
+    "size" : "2147483647",
+    "sizeAsInt" : 2147483647,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "v",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "string"
+    },
+    "sqlTypeCode" : 12,
+    "sqlTypeName" : "varchar",
+    "size" : "4096",
+    "sizeAsInt" : 4096,
+    "scale" : 0,
+    "defaultValue" : null
+  } ],
+  "rowIdentifier" : [ "k" ],
   "primaryKey" : {
     "name" : "setting_values_pkey",
-    "columns" : [
-      "k"
-    ]
+    "columns" : [ "k" ]
   },
-  "foreignKeys" : [
-  ],
-  "indexes" : [
-    {
-      "name" : "setting_values_pkey",
-      "unique" : true,
-      "indexType" : "other",
-      "columns" : [
-        {
-          "name" : "k",
-          "ascending" : true
-        }
-      ]
-    }
-  ]
+  "foreignKeys" : [ ],
+  "indexes" : [ {
+    "name" : "setting_values_pkey",
+    "unique" : true,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "k",
+      "ascending" : true
+    } ]
+  } ]
 }

@@ -4,208 +4,175 @@
   "schema" : "public",
   "description" : null,
   "definition" : null,
-  "columns" : [
-    {
-      "name" : "id",
-      "description" : null,
-      "definition" : null,
-      "primaryKey" : false,
-      "notNull" : true,
-      "autoIncrement" : false,
-      "columnType" : {
-        "t" : "uuid"
-      },
-      "sqlTypeCode" : 1111,
-      "sqlTypeName" : "uuid",
-      "size" : "2147483647",
-      "sizeAsInt" : 2147483647,
-      "scale" : 0,
-      "defaultValue" : null
+  "columns" : [ {
+    "name" : "id",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "uuid"
     },
-    {
-      "name" : "username",
-      "description" : null,
-      "definition" : null,
-      "primaryKey" : false,
-      "notNull" : false,
-      "autoIncrement" : false,
-      "columnType" : {
-        "t" : "string"
-      },
-      "sqlTypeCode" : 12,
-      "sqlTypeName" : "varchar",
-      "size" : "256",
-      "sizeAsInt" : 256,
-      "scale" : 0,
-      "defaultValue" : null
+    "sqlTypeCode" : 1111,
+    "sqlTypeName" : "uuid",
+    "size" : "2147483647",
+    "sizeAsInt" : 2147483647,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "username",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : false,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "string"
     },
-    {
-      "name" : "provider",
-      "description" : null,
-      "definition" : null,
-      "primaryKey" : false,
-      "notNull" : true,
-      "autoIncrement" : false,
-      "columnType" : {
-        "t" : "string"
-      },
-      "sqlTypeCode" : 12,
-      "sqlTypeName" : "varchar",
-      "size" : "64",
-      "sizeAsInt" : 64,
-      "scale" : 0,
-      "defaultValue" : null
+    "sqlTypeCode" : 12,
+    "sqlTypeName" : "varchar",
+    "size" : "256",
+    "sizeAsInt" : 256,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "provider",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "string"
     },
-    {
-      "name" : "key",
-      "description" : null,
-      "definition" : null,
-      "primaryKey" : false,
-      "notNull" : true,
-      "autoIncrement" : false,
-      "columnType" : {
-        "t" : "string"
-      },
-      "sqlTypeCode" : 12,
-      "sqlTypeName" : "varchar",
-      "size" : "2048",
-      "sizeAsInt" : 2048,
-      "scale" : 0,
-      "defaultValue" : null
+    "sqlTypeCode" : 12,
+    "sqlTypeName" : "varchar",
+    "size" : "64",
+    "sizeAsInt" : 64,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "key",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "string"
     },
-    {
-      "name" : "prefs",
-      "description" : null,
-      "definition" : null,
-      "primaryKey" : false,
-      "notNull" : true,
-      "autoIncrement" : false,
-      "columnType" : {
-        "t" : "string"
-      },
-      "sqlTypeCode" : 12,
-      "sqlTypeName" : "varchar",
-      "size" : "4096",
-      "sizeAsInt" : 4096,
-      "scale" : 0,
-      "defaultValue" : null
+    "sqlTypeCode" : 12,
+    "sqlTypeName" : "varchar",
+    "size" : "2048",
+    "sizeAsInt" : 2048,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "prefs",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "string"
     },
-    {
-      "name" : "role",
-      "description" : null,
-      "definition" : null,
-      "primaryKey" : false,
-      "notNull" : true,
-      "autoIncrement" : false,
-      "columnType" : {
-        "t" : "string"
-      },
-      "sqlTypeCode" : 12,
-      "sqlTypeName" : "varchar",
-      "size" : "64",
-      "sizeAsInt" : 64,
-      "scale" : 0,
-      "defaultValue" : null
+    "sqlTypeCode" : 12,
+    "sqlTypeName" : "varchar",
+    "size" : "4096",
+    "sizeAsInt" : 4096,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "role",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "string"
     },
-    {
-      "name" : "created",
-      "description" : null,
-      "definition" : null,
-      "primaryKey" : false,
-      "notNull" : true,
-      "autoIncrement" : false,
-      "columnType" : {
-        "t" : "timestamp"
-      },
-      "sqlTypeCode" : 93,
-      "sqlTypeName" : "timestamp",
-      "size" : "29",
-      "sizeAsInt" : 29,
-      "scale" : 0,
-      "defaultValue" : null
-    }
-  ],
-  "rowIdentifier" : [
-    "id"
-  ],
+    "sqlTypeCode" : 12,
+    "sqlTypeName" : "varchar",
+    "size" : "64",
+    "sizeAsInt" : 64,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "created",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "timestamp"
+    },
+    "sqlTypeCode" : 93,
+    "sqlTypeName" : "timestamp",
+    "size" : "29",
+    "sizeAsInt" : 29,
+    "scale" : 0,
+    "defaultValue" : null
+  } ],
+  "rowIdentifier" : [ "id" ],
   "primaryKey" : {
     "name" : "system_users_pkey",
-    "columns" : [
-      "id"
-    ]
+    "columns" : [ "id" ]
   },
-  "foreignKeys" : [
-  ],
-  "indexes" : [
-    {
-      "name" : "system_users_key",
-      "unique" : false,
-      "indexType" : "other",
-      "columns" : [
-        {
-          "name" : "key",
-          "ascending" : true
-        }
-      ]
-    },
-    {
-      "name" : "system_users_pkey",
-      "unique" : true,
-      "indexType" : "other",
-      "columns" : [
-        {
-          "name" : "id",
-          "ascending" : true
-        }
-      ]
-    },
-    {
-      "name" : "system_users_provider",
-      "unique" : false,
-      "indexType" : "other",
-      "columns" : [
-        {
-          "name" : "provider",
-          "ascending" : true
-        }
-      ]
-    },
-    {
-      "name" : "system_users_provider_key",
-      "unique" : true,
-      "indexType" : "other",
-      "columns" : [
-        {
-          "name" : "provider",
-          "ascending" : true
-        },
-        {
-          "name" : "key",
-          "ascending" : true
-        }
-      ]
-    },
-    {
-      "name" : "system_users_username",
-      "unique" : false,
-      "indexType" : "other",
-      "columns" : [
-        {
-          "name" : "username",
-          "ascending" : true
-        }
-      ]
-    },
-    {
-      "name" : "system_users_username_key",
-      "unique" : true,
-      "indexType" : "other",
-      "columns" : [
-        {
-          "name" : "username",
-          "ascending" : true
-        }
-      ]
-    }
-  ]
+  "foreignKeys" : [ ],
+  "indexes" : [ {
+    "name" : "system_users_key",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "key",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "system_users_pkey",
+    "unique" : true,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "id",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "system_users_provider",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "provider",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "system_users_provider_key",
+    "unique" : true,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "provider",
+      "ascending" : true
+    }, {
+      "name" : "key",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "system_users_username",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "username",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "system_users_username_key",
+    "unique" : true,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "username",
+      "ascending" : true
+    } ]
+  } ]
 }

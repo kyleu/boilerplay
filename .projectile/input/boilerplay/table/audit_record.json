@@ -4,162 +4,135 @@
   "schema" : "public",
   "description" : null,
   "definition" : null,
-  "columns" : [
-    {
-      "name" : "id",
-      "description" : null,
-      "definition" : null,
-      "primaryKey" : false,
-      "notNull" : true,
-      "autoIncrement" : false,
-      "columnType" : {
-        "t" : "uuid"
-      },
-      "sqlTypeCode" : 1111,
-      "sqlTypeName" : "uuid",
-      "size" : "2147483647",
-      "sizeAsInt" : 2147483647,
-      "scale" : 0,
-      "defaultValue" : null
+  "columns" : [ {
+    "name" : "id",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "uuid"
     },
-    {
-      "name" : "audit_id",
-      "description" : null,
-      "definition" : null,
-      "primaryKey" : false,
-      "notNull" : true,
-      "autoIncrement" : false,
-      "columnType" : {
-        "t" : "uuid"
-      },
-      "sqlTypeCode" : 1111,
-      "sqlTypeName" : "uuid",
-      "size" : "2147483647",
-      "sizeAsInt" : 2147483647,
-      "scale" : 0,
-      "defaultValue" : null
+    "sqlTypeCode" : 1111,
+    "sqlTypeName" : "uuid",
+    "size" : "2147483647",
+    "sizeAsInt" : 2147483647,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "audit_id",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "uuid"
     },
-    {
-      "name" : "t",
-      "description" : null,
-      "definition" : null,
-      "primaryKey" : false,
-      "notNull" : true,
-      "autoIncrement" : false,
-      "columnType" : {
+    "sqlTypeCode" : 1111,
+    "sqlTypeName" : "uuid",
+    "size" : "2147483647",
+    "sizeAsInt" : 2147483647,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "t",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "string"
+    },
+    "sqlTypeCode" : 12,
+    "sqlTypeName" : "varchar",
+    "size" : "128",
+    "sizeAsInt" : 128,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "pk",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "typ" : {
         "t" : "string"
       },
-      "sqlTypeCode" : 12,
-      "sqlTypeName" : "varchar",
-      "size" : "128",
-      "sizeAsInt" : 128,
-      "scale" : 0,
-      "defaultValue" : null
+      "t" : "list"
     },
-    {
-      "name" : "pk",
-      "description" : null,
-      "definition" : null,
-      "primaryKey" : false,
-      "notNull" : true,
-      "autoIncrement" : false,
-      "columnType" : {
-        "typ" : {
-          "t" : "string"
-        },
-        "t" : "list"
-      },
-      "sqlTypeCode" : 2003,
-      "sqlTypeName" : "_varchar",
-      "size" : "128",
-      "sizeAsInt" : 128,
-      "scale" : 0,
-      "defaultValue" : null
+    "sqlTypeCode" : 2003,
+    "sqlTypeName" : "_varchar",
+    "size" : "128",
+    "sizeAsInt" : 128,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "changes",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "json"
     },
-    {
-      "name" : "changes",
-      "description" : null,
-      "definition" : null,
-      "primaryKey" : false,
-      "notNull" : true,
-      "autoIncrement" : false,
-      "columnType" : {
-        "t" : "json"
-      },
-      "sqlTypeCode" : 1111,
-      "sqlTypeName" : "jsonb",
-      "size" : "2147483647",
-      "sizeAsInt" : 2147483647,
-      "scale" : 0,
-      "defaultValue" : null
-    }
-  ],
-  "rowIdentifier" : [
-    "id"
-  ],
+    "sqlTypeCode" : 1111,
+    "sqlTypeName" : "jsonb",
+    "size" : "2147483647",
+    "sizeAsInt" : 2147483647,
+    "scale" : 0,
+    "defaultValue" : null
+  } ],
+  "rowIdentifier" : [ "id" ],
   "primaryKey" : {
     "name" : "audit_record_pkey",
-    "columns" : [
-      "id"
-    ]
+    "columns" : [ "id" ]
   },
-  "foreignKeys" : [
-    {
-      "name" : "audit_record_audit_id_fkey",
-      "propertyName" : "auditRecordAuditIdFkeyRel",
-      "targetTable" : "audit",
-      "references" : [
-        {
-          "source" : "audit_id",
-          "target" : "id"
-        }
-      ]
-    }
-  ],
-  "indexes" : [
-    {
-      "name" : "audit_record_changes",
-      "unique" : false,
-      "indexType" : "other",
-      "columns" : [
-        {
-          "name" : "changes",
-          "ascending" : true
-        }
-      ]
-    },
-    {
-      "name" : "audit_record_pk",
-      "unique" : false,
-      "indexType" : "other",
-      "columns" : [
-        {
-          "name" : "pk",
-          "ascending" : true
-        }
-      ]
-    },
-    {
-      "name" : "audit_record_pkey",
-      "unique" : true,
-      "indexType" : "other",
-      "columns" : [
-        {
-          "name" : "id",
-          "ascending" : true
-        }
-      ]
-    },
-    {
-      "name" : "audit_record_t",
-      "unique" : false,
-      "indexType" : "other",
-      "columns" : [
-        {
-          "name" : "t",
-          "ascending" : true
-        }
-      ]
-    }
-  ]
+  "foreignKeys" : [ {
+    "name" : "audit_record_audit_id_fkey",
+    "propertyName" : "auditRecordAuditIdFkeyRel",
+    "targetTable" : "audit",
+    "references" : [ {
+      "source" : "audit_id",
+      "target" : "id"
+    } ]
+  } ],
+  "indexes" : [ {
+    "name" : "audit_record_changes",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "changes",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "audit_record_pk",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "pk",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "audit_record_pkey",
+    "unique" : true,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "id",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "audit_record_t",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "t",
+      "ascending" : true
+    } ]
+  } ]
 }

@@ -4,183 +4,159 @@
   "schema" : "public",
   "description" : null,
   "definition" : null,
-  "columns" : [
-    {
-      "name" : "provider",
-      "description" : null,
-      "definition" : null,
-      "primaryKey" : false,
-      "notNull" : true,
-      "autoIncrement" : false,
-      "columnType" : {
-        "t" : "string"
-      },
-      "sqlTypeCode" : 12,
-      "sqlTypeName" : "varchar",
-      "size" : "64",
-      "sizeAsInt" : 64,
-      "scale" : 0,
-      "defaultValue" : null
+  "columns" : [ {
+    "name" : "provider",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "string"
     },
-    {
-      "name" : "key",
-      "description" : null,
-      "definition" : null,
-      "primaryKey" : false,
-      "notNull" : true,
-      "autoIncrement" : false,
-      "columnType" : {
-        "t" : "string"
-      },
-      "sqlTypeCode" : 12,
-      "sqlTypeName" : "varchar",
-      "size" : "2048",
-      "sizeAsInt" : 2048,
-      "scale" : 0,
-      "defaultValue" : null
+    "sqlTypeCode" : 12,
+    "sqlTypeName" : "varchar",
+    "size" : "64",
+    "sizeAsInt" : 64,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "key",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "string"
     },
-    {
-      "name" : "access_token",
-      "description" : null,
-      "definition" : null,
-      "primaryKey" : false,
-      "notNull" : true,
-      "autoIncrement" : false,
-      "columnType" : {
-        "t" : "string"
-      },
-      "sqlTypeCode" : 12,
-      "sqlTypeName" : "varchar",
-      "size" : "2048",
-      "sizeAsInt" : 2048,
-      "scale" : 0,
-      "defaultValue" : null
+    "sqlTypeCode" : 12,
+    "sqlTypeName" : "varchar",
+    "size" : "2048",
+    "sizeAsInt" : 2048,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "access_token",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "string"
     },
-    {
-      "name" : "token_type",
-      "description" : null,
-      "definition" : null,
-      "primaryKey" : false,
-      "notNull" : false,
-      "autoIncrement" : false,
-      "columnType" : {
-        "t" : "string"
-      },
-      "sqlTypeCode" : 12,
-      "sqlTypeName" : "varchar",
-      "size" : "128",
-      "sizeAsInt" : 128,
-      "scale" : 0,
-      "defaultValue" : null
+    "sqlTypeCode" : 12,
+    "sqlTypeName" : "varchar",
+    "size" : "2048",
+    "sizeAsInt" : 2048,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "token_type",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : false,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "string"
     },
-    {
-      "name" : "expires_in",
-      "description" : null,
-      "definition" : null,
-      "primaryKey" : false,
-      "notNull" : false,
-      "autoIncrement" : false,
-      "columnType" : {
-        "t" : "long"
-      },
-      "sqlTypeCode" : 4,
-      "sqlTypeName" : "int4",
-      "size" : "10",
-      "sizeAsInt" : 10,
-      "scale" : 0,
-      "defaultValue" : null
+    "sqlTypeCode" : 12,
+    "sqlTypeName" : "varchar",
+    "size" : "128",
+    "sizeAsInt" : 128,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "expires_in",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : false,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "long"
     },
-    {
-      "name" : "refresh_token",
-      "description" : null,
-      "definition" : null,
-      "primaryKey" : false,
-      "notNull" : false,
-      "autoIncrement" : false,
-      "columnType" : {
-        "t" : "string"
-      },
-      "sqlTypeCode" : 12,
-      "sqlTypeName" : "varchar",
-      "size" : "1024",
-      "sizeAsInt" : 1024,
-      "scale" : 0,
-      "defaultValue" : null
+    "sqlTypeCode" : 4,
+    "sqlTypeName" : "int4",
+    "size" : "10",
+    "sizeAsInt" : 10,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "refresh_token",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : false,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "string"
     },
-    {
-      "name" : "params",
-      "description" : null,
-      "definition" : null,
-      "primaryKey" : false,
-      "notNull" : false,
-      "autoIncrement" : false,
-      "columnType" : {
-        "t" : "hstore"
-      },
-      "sqlTypeCode" : 1111,
-      "sqlTypeName" : "hstore",
-      "size" : "2147483647",
-      "sizeAsInt" : 2147483647,
-      "scale" : 0,
-      "defaultValue" : null
+    "sqlTypeCode" : 12,
+    "sqlTypeName" : "varchar",
+    "size" : "1024",
+    "sizeAsInt" : 1024,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "params",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : false,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "hstore"
     },
-    {
-      "name" : "created",
-      "description" : null,
-      "definition" : null,
-      "primaryKey" : false,
-      "notNull" : true,
-      "autoIncrement" : false,
-      "columnType" : {
-        "t" : "timestamp"
-      },
-      "sqlTypeCode" : 93,
-      "sqlTypeName" : "timestamp",
-      "size" : "29",
-      "sizeAsInt" : 29,
-      "scale" : 0,
-      "defaultValue" : null
-    }
-  ],
-  "rowIdentifier" : [
-    "provider",
-    "key"
-  ],
+    "sqlTypeCode" : 1111,
+    "sqlTypeName" : "hstore",
+    "size" : "2147483647",
+    "sizeAsInt" : 2147483647,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "created",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "timestamp"
+    },
+    "sqlTypeCode" : 93,
+    "sqlTypeName" : "timestamp",
+    "size" : "29",
+    "sizeAsInt" : 29,
+    "scale" : 0,
+    "defaultValue" : null
+  } ],
+  "rowIdentifier" : [ "provider", "key" ],
   "primaryKey" : {
     "name" : "oauth2_info_pkey",
-    "columns" : [
-      "provider",
-      "key"
-    ]
+    "columns" : [ "provider", "key" ]
   },
-  "foreignKeys" : [
-  ],
-  "indexes" : [
-    {
-      "name" : "oauth2_info_key",
-      "unique" : false,
-      "indexType" : "other",
-      "columns" : [
-        {
-          "name" : "key",
-          "ascending" : true
-        }
-      ]
-    },
-    {
-      "name" : "oauth2_info_pkey",
-      "unique" : true,
-      "indexType" : "other",
-      "columns" : [
-        {
-          "name" : "provider",
-          "ascending" : true
-        },
-        {
-          "name" : "key",
-          "ascending" : true
-        }
-      ]
-    }
-  ]
+  "foreignKeys" : [ ],
+  "indexes" : [ {
+    "name" : "oauth2_info_key",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "key",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "oauth2_info_pkey",
+    "unique" : true,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "provider",
+      "ascending" : true
+    }, {
+      "name" : "key",
+      "ascending" : true
+    } ]
+  } ]
 }

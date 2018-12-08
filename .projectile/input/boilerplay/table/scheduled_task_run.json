@@ -4,185 +4,159 @@
   "schema" : "public",
   "description" : null,
   "definition" : null,
-  "columns" : [
-    {
-      "name" : "id",
-      "description" : null,
-      "definition" : null,
-      "primaryKey" : false,
-      "notNull" : true,
-      "autoIncrement" : false,
-      "columnType" : {
-        "t" : "uuid"
-      },
-      "sqlTypeCode" : 1111,
-      "sqlTypeName" : "uuid",
-      "size" : "2147483647",
-      "sizeAsInt" : 2147483647,
-      "scale" : 0,
-      "defaultValue" : null
+  "columns" : [ {
+    "name" : "id",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "uuid"
     },
-    {
-      "name" : "task",
-      "description" : null,
-      "definition" : null,
-      "primaryKey" : false,
-      "notNull" : true,
-      "autoIncrement" : false,
-      "columnType" : {
+    "sqlTypeCode" : 1111,
+    "sqlTypeName" : "uuid",
+    "size" : "2147483647",
+    "sizeAsInt" : 2147483647,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "task",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "string"
+    },
+    "sqlTypeCode" : 12,
+    "sqlTypeName" : "varchar",
+    "size" : "64",
+    "sizeAsInt" : 64,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "arguments",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "typ" : {
         "t" : "string"
       },
-      "sqlTypeCode" : 12,
-      "sqlTypeName" : "varchar",
-      "size" : "64",
-      "sizeAsInt" : 64,
-      "scale" : 0,
-      "defaultValue" : null
+      "t" : "list"
     },
-    {
-      "name" : "arguments",
-      "description" : null,
-      "definition" : null,
-      "primaryKey" : false,
-      "notNull" : true,
-      "autoIncrement" : false,
-      "columnType" : {
-        "typ" : {
-          "t" : "string"
-        },
-        "t" : "list"
-      },
-      "sqlTypeCode" : 2003,
-      "sqlTypeName" : "_varchar",
-      "size" : "64",
-      "sizeAsInt" : 64,
-      "scale" : 0,
-      "defaultValue" : null
+    "sqlTypeCode" : 2003,
+    "sqlTypeName" : "_varchar",
+    "size" : "64",
+    "sizeAsInt" : 64,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "status",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "string"
     },
-    {
-      "name" : "status",
-      "description" : null,
-      "definition" : null,
-      "primaryKey" : false,
-      "notNull" : true,
-      "autoIncrement" : false,
-      "columnType" : {
-        "t" : "string"
-      },
-      "sqlTypeCode" : 12,
-      "sqlTypeName" : "varchar",
-      "size" : "64",
-      "sizeAsInt" : 64,
-      "scale" : 0,
-      "defaultValue" : null
+    "sqlTypeCode" : 12,
+    "sqlTypeName" : "varchar",
+    "size" : "64",
+    "sizeAsInt" : 64,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "output",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "json"
     },
-    {
-      "name" : "output",
-      "description" : null,
-      "definition" : null,
-      "primaryKey" : false,
-      "notNull" : true,
-      "autoIncrement" : false,
-      "columnType" : {
-        "t" : "json"
-      },
-      "sqlTypeCode" : 1111,
-      "sqlTypeName" : "json",
-      "size" : "2147483647",
-      "sizeAsInt" : 2147483647,
-      "scale" : 0,
-      "defaultValue" : null
+    "sqlTypeCode" : 1111,
+    "sqlTypeName" : "json",
+    "size" : "2147483647",
+    "sizeAsInt" : 2147483647,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "started",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "timestamp"
     },
-    {
-      "name" : "started",
-      "description" : null,
-      "definition" : null,
-      "primaryKey" : false,
-      "notNull" : true,
-      "autoIncrement" : false,
-      "columnType" : {
-        "t" : "timestamp"
-      },
-      "sqlTypeCode" : 93,
-      "sqlTypeName" : "timestamp",
-      "size" : "29",
-      "sizeAsInt" : 29,
-      "scale" : 0,
-      "defaultValue" : null
+    "sqlTypeCode" : 93,
+    "sqlTypeName" : "timestamp",
+    "size" : "29",
+    "sizeAsInt" : 29,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "completed",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "timestamp"
     },
-    {
-      "name" : "completed",
-      "description" : null,
-      "definition" : null,
-      "primaryKey" : false,
-      "notNull" : true,
-      "autoIncrement" : false,
-      "columnType" : {
-        "t" : "timestamp"
-      },
-      "sqlTypeCode" : 93,
-      "sqlTypeName" : "timestamp",
-      "size" : "29",
-      "sizeAsInt" : 29,
-      "scale" : 0,
-      "defaultValue" : null
-    }
-  ],
-  "rowIdentifier" : [
-    "id"
-  ],
+    "sqlTypeCode" : 93,
+    "sqlTypeName" : "timestamp",
+    "size" : "29",
+    "sizeAsInt" : 29,
+    "scale" : 0,
+    "defaultValue" : null
+  } ],
+  "rowIdentifier" : [ "id" ],
   "primaryKey" : {
     "name" : "scheduled_task_run_pkey",
-    "columns" : [
-      "id"
-    ]
+    "columns" : [ "id" ]
   },
-  "foreignKeys" : [
-  ],
-  "indexes" : [
-    {
-      "name" : "scheduled_task_run_pkey",
-      "unique" : true,
-      "indexType" : "other",
-      "columns" : [
-        {
-          "name" : "id",
-          "ascending" : true
-        }
-      ]
-    },
-    {
-      "name" : "scheduled_task_run_started",
-      "unique" : false,
-      "indexType" : "other",
-      "columns" : [
-        {
-          "name" : "started",
-          "ascending" : true
-        }
-      ]
-    },
-    {
-      "name" : "scheduled_task_run_status",
-      "unique" : false,
-      "indexType" : "other",
-      "columns" : [
-        {
-          "name" : "status",
-          "ascending" : true
-        }
-      ]
-    },
-    {
-      "name" : "scheduled_task_run_task",
-      "unique" : false,
-      "indexType" : "other",
-      "columns" : [
-        {
-          "name" : "task",
-          "ascending" : true
-        }
-      ]
-    }
-  ]
+  "foreignKeys" : [ ],
+  "indexes" : [ {
+    "name" : "scheduled_task_run_pkey",
+    "unique" : true,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "id",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "scheduled_task_run_started",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "started",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "scheduled_task_run_status",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "status",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "scheduled_task_run_task",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "task",
+      "ascending" : true
+    } ]
+  } ]
 }
