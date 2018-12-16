@@ -1,26 +1,10 @@
 {
-  "input" : "boilerplay",
-  "inputType" : "postgres-table",
   "key" : "sync_progress",
-  "pkg" : [
-    "sync"
-  ],
-  "features" : [
-    "doobie",
-    "datamodel",
-    "graphql",
-    "service",
-    "slick",
-    "controller",
-    "json",
-    "core"
-  ],
-  "ignored" : [
-  ],
-  "overrides" : [
-    {
-      "k" : "plural",
-      "v" : "Sync Progresses"
-    }
-  ]
+  "pkg" : [ "sync" ],
+  "features" : [ "doobie", "datamodel", "graphql", "service", "slick", "controller", "json", "core" ],
+  "ignored" : [ ],
+  "overrides" : [ {
+    "k" : "plural",
+    "v" : "Sync Progresses"
+  } ]
 }

@@ -1,0 +1,7 @@
+{
+  "key" : "oauth2_info",
+  "pkg" : [ "auth" ],
+  "features" : [ ],
+  "ignored" : [ ],
+  "overrides" : [ ]
+}

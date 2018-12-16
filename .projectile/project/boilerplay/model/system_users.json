@@ -1,38 +1,19 @@
 {
-  "input" : "boilerplay",
-  "inputType" : "postgres-table",
   "key" : "system_users",
-  "pkg" : [
-    "user"
-  ],
-  "features" : [
-    "doobie",
-    "datamodel",
-    "graphql",
-    "service",
-    "slick",
-    "controller",
-    "json",
-    "core"
-  ],
-  "ignored" : [
-  ],
-  "overrides" : [
-    {
-      "k" : "propertyName",
-      "v" : "systemUser"
-    },
-    {
-      "k" : "className",
-      "v" : "SystemUser"
-    },
-    {
-      "k" : "title",
-      "v" : "System User"
-    },
-    {
-      "k" : "plural",
-      "v" : "System Users"
-    }
-  ]
+  "pkg" : [ "user" ],
+  "features" : [ "doobie", "datamodel", "graphql", "service", "slick", "controller", "json", "core" ],
+  "ignored" : [ ],
+  "overrides" : [ {
+    "k" : "propertyName",
+    "v" : "systemUser"
+  }, {
+    "k" : "className",
+    "v" : "SystemUser"
+  }, {
+    "k" : "title",
+    "v" : "System User"
+  }, {
+    "k" : "plural",
+    "v" : "System Users"
+  } ]
 }

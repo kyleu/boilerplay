@@ -1,26 +1,10 @@
 {
-  "input" : "boilerplay",
-  "inputType" : "postgres-table",
   "key" : "flyway_schema_history",
-  "pkg" : [
-    "ddl"
-  ],
-  "features" : [
-    "doobie",
-    "datamodel",
-    "graphql",
-    "service",
-    "slick",
-    "controller",
-    "json",
-    "core"
-  ],
-  "ignored" : [
-  ],
-  "overrides" : [
-    {
-      "k" : "plural",
-      "v" : "Flyway Schema Histories"
-    }
-  ]
+  "pkg" : [ "ddl" ],
+  "features" : [ "doobie", "datamodel", "graphql", "service", "slick", "controller", "json", "core" ],
+  "ignored" : [ ],
+  "overrides" : [ {
+    "k" : "plural",
+    "v" : "Flyway Schema Histories"
+  } ]
 }

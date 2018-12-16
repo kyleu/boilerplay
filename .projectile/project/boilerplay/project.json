@@ -1,6 +1,7 @@
 {
   "template" : "boilerplay",
   "key" : "boilerplay",
+  "input" : "boilerplay",
   "title" : "Boilerplay",
   "description" : "...",
   "features" : [
@@ -16,10 +17,10 @@
     "core"
   ],
   "paths" : {
-    
+
   },
   "packages" : {
-    
+
   },
   "status" : null,
   "created" : "2018-10-27T13:57:01.672048",

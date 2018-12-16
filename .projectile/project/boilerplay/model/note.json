@@ -1,26 +1,10 @@
 {
-  "input" : "boilerplay",
-  "inputType" : "postgres-table",
   "key" : "note",
-  "pkg" : [
-    "note"
-  ],
-  "features" : [
-    "doobie",
-    "datamodel",
-    "graphql",
-    "service",
-    "slick",
-    "controller",
-    "json",
-    "core"
-  ],
-  "ignored" : [
-  ],
-  "overrides" : [
-    {
-      "k" : "fk.note_author_fkey.propertyName",
-      "v" : "authorRel"
-    }
-  ]
+  "pkg" : [ "note" ],
+  "features" : [ "doobie", "datamodel", "graphql", "service", "slick", "controller", "json", "core" ],
+  "ignored" : [ ],
+  "overrides" : [ {
+    "k" : "fk.note_author_fkey.propertyName",
+    "v" : "authorRel"
+  } ]
 }
