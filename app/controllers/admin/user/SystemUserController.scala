@@ -1,4 +1,3 @@
-/* Generated File */
 package controllers.admin.user
 
 import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository

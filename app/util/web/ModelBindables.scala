@@ -31,7 +31,7 @@ object ModelBindables {
     override def unbind(key: String, x: Theme): String = x.value
   }
 
-  /* Begin model bindables */
+  /* Start model bindables */
   import models.settings.SettingKey
   private[this] def settingKeyExtractor(v: Either[String, String]) = v match {
     case Right(s) => Right(SettingKey.withValue(s))
@@ -45,6 +45,5 @@ object ModelBindables {
     override def bind(key: String, params: Map[String, Seq[String]]) = stringBinder.bind(key, params).map(settingKeyExtractor)
     override def unbind(key: String, x: SettingKey) = x.value
   }
-
   /* End model bindables */
 }

@@ -1,18 +1,7 @@
 {
-  "input" : "boilerplay",
-  "inputType" : "postgres-enum",
   "key" : "setting_key",
-  "pkg" : [
-    "settings"
-  ],
-  "features" : [
-    "core",
-    "graphql",
-    "slick",
-    "doobie"
-  ],
-  "ignored" : [
-  ],
-  "overrides" : [
-  ]
+  "pkg" : [ "settings" ],
+  "features" : [ "doobie", "graphql", "slick", "controller", "core" ],
+  "ignored" : [ ],
+  "overrides" : [ ]
 }

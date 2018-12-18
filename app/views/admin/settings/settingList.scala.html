@@ -1,0 +1,27 @@
+@* Generated File *@
+@(user: models.user.SystemUser, totalCount: Option[Int], modelSeq: Seq[models.settings.Setting], q: Option[String], orderBy: Option[String], orderAsc: Boolean, limit: Int, offset: Int)(
+    implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
+)@traceData.logClass(getClass)
+@views.html.admin.explore.list(
+  user = user,
+  model = "Setting",
+  modelPlural = "Settings",
+  icon = models.template.Icons.setting,
+  cols = Seq(
+    "k" -> "K"
+  ),
+  totalCount = totalCount,
+  rows = modelSeq.map(model => views.html.admin.settings.settingDataRow(model)),
+  orderBy = orderBy,
+  orderAsc = orderAsc,
+  calls = models.result.web.ListCalls(
+    newCall = Some(controllers.admin.settings.routes.SettingController.createForm()),
+    orderBy = Some(controllers.admin.settings.routes.SettingController.list(q, _, _, Some(limit), Some(0))),
+    search = Some(controllers.admin.settings.routes.SettingController.list(None, orderBy, orderAsc, Some(limit), None)),
+    next = controllers.admin.settings.routes.SettingController.list(q, orderBy, orderAsc, Some(limit), Some(offset + limit)),
+    prev = controllers.admin.settings.routes.SettingController.list(q, orderBy, orderAsc, Some(limit), Some(offset - limit))
+  ),
+  limit = limit,
+  offset = offset,
+  q = q
+)

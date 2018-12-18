@@ -4,11 +4,12 @@ package controllers.admin.sync
 import controllers.admin.ServiceController
 import models.Application
 import models.result.orderBy.OrderBy
-import models.sync.SyncProgressResult
+import models.sync.{SyncProgress, SyncProgressResult}
 import play.api.http.MimeTypes
 import scala.concurrent.Future
 import services.audit.AuditRecordService
 import services.sync.SyncProgressService
+import util.DateUtils
 import util.JsonSerializers._
 import util.ReftreeUtils._
 
@@ -22,7 +23,7 @@ class SyncProgressController @javax.inject.Inject() (
     val cancel = controllers.admin.sync.routes.SyncProgressController.list()
     val call = controllers.admin.sync.routes.SyncProgressController.create()
     Future.successful(Ok(views.html.admin.sync.syncProgressForm(
-      request.identity, models.sync.SyncProgress.empty(), "New Sync Progress", cancel, call, isNew = true, debug = app.config.debug
+      request.identity, SyncProgress.empty(), "New Sync Progress", cancel, call, isNew = true, debug = app.config.debug
     )))
   }
 
@@ -35,7 +36,7 @@ class SyncProgressController @javax.inject.Inject() (
 
   def list(q: Option[String], orderBy: Option[String], orderAsc: Boolean, limit: Option[Int], offset: Option[Int], t: Option[String] = None) = {
     withSession("list", admin = true) { implicit request => implicit td =>
-      val startMs = util.DateUtils.nowMillis
+      val startMs = DateUtils.nowMillis
       val orderBys = OrderBy.forVals(orderBy, orderAsc).toSeq
       searchWithCount(q, orderBys, limit, offset).map(r => renderChoice(t) {
         case MimeTypes.HTML => Ok(views.html.admin.sync.syncProgressList(

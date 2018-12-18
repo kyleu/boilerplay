@@ -23,6 +23,7 @@ class AuditLookup @javax.inject.Inject() (registry: ServiceRegistry) extends Log
     case "flywayschemahistory" => registry.ddlServices.flywaySchemaHistoryService.getByPrimaryKey(creds, longArg(arg(0)))
     case "note" => registry.noteServices.noteService.getByPrimaryKey(creds, uuidArg(arg(0)))
     case "scheduledtaskrun" => registry.taskServices.scheduledTaskRunService.getByPrimaryKey(creds, uuidArg(arg(0)))
+    case "setting" => registry.settingsServices.settingService.getByPrimaryKey(creds, enumArg(models.settings.SettingKey)(arg(0)))
     case "syncprogress" => registry.syncServices.syncProgressService.getByPrimaryKey(creds, stringArg(arg(0)))
     case "systemuser" => registry.userServices.systemUserService.getByPrimaryKey(creds, uuidArg(arg(0)))
     /* End registry lookups */

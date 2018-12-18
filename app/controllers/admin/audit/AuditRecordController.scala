@@ -4,11 +4,12 @@ package controllers.admin.audit
 import controllers.admin.ServiceController
 import java.util.UUID
 import models.Application
-import models.audit.AuditRecordResult
+import models.audit.{AuditRecord, AuditRecordResult}
 import models.result.orderBy.OrderBy
 import play.api.http.MimeTypes
 import scala.concurrent.Future
 import services.audit.AuditRecordService
+import util.DateUtils
 import util.JsonSerializers._
 import util.ReftreeUtils._
 
@@ -22,7 +23,7 @@ class AuditRecordController @javax.inject.Inject() (
     val cancel = controllers.admin.audit.routes.AuditRecordController.list()
     val call = controllers.admin.audit.routes.AuditRecordController.create()
     Future.successful(Ok(views.html.admin.audit.auditRecordForm(
-      request.identity, models.audit.AuditRecord.empty(), "New Audit Record", cancel, call, isNew = true, debug = app.config.debug
+      request.identity, AuditRecord.empty(), "New Audit Record", cancel, call, isNew = true, debug = app.config.debug
     )))
   }
 
@@ -35,7 +36,7 @@ class AuditRecordController @javax.inject.Inject() (
 
   def list(q: Option[String], orderBy: Option[String], orderAsc: Boolean, limit: Option[Int], offset: Option[Int], t: Option[String] = None) = {
     withSession("list", admin = true) { implicit request => implicit td =>
-      val startMs = util.DateUtils.nowMillis
+      val startMs = DateUtils.nowMillis
       val orderBys = OrderBy.forVals(orderBy, orderAsc).toSeq
       searchWithCount(q, orderBys, limit, offset).map(r => renderChoice(t) {
         case MimeTypes.HTML => Ok(views.html.admin.audit.auditRecordList(
@@ -71,7 +72,7 @@ class AuditRecordController @javax.inject.Inject() (
     }
   }
 
-  def view(id: java.util.UUID, t: Option[String] = None) = withSession("view", admin = true) { implicit request => implicit td =>
+  def view(id: UUID, t: Option[String] = None) = withSession("view", admin = true) { implicit request => implicit td =>
     val modelF = svc.getByPrimaryKey(request, id)
     val notesF = app.coreServices.notes.getFor(request, "auditRecord", id)
 
@@ -86,7 +87,7 @@ class AuditRecordController @javax.inject.Inject() (
     })
   }
 
-  def editForm(id: java.util.UUID) = withSession("edit.form", admin = true) { implicit request => implicit td =>
+  def editForm(id: UUID) = withSession("edit.form", admin = true) { implicit request => implicit td =>
     val cancel = controllers.admin.audit.routes.AuditRecordController.view(id)
     val call = controllers.admin.audit.routes.AuditRecordController.edit(id)
     svc.getByPrimaryKey(request, id).map {
@@ -97,14 +98,14 @@ class AuditRecordController @javax.inject.Inject() (
     }
   }
 
-  def edit(id: java.util.UUID) = withSession("edit", admin = true) { implicit request => implicit td =>
+  def edit(id: UUID) = withSession("edit", admin = true) { implicit request => implicit td =>
     svc.update(request, id = id, fields = modelForm(request.body)).map(res => render {
       case Accepts.Html() => Redirect(controllers.admin.audit.routes.AuditRecordController.view(res._1.id)).flashing("success" -> res._2)
       case Accepts.Json() => Ok(res.asJson)
     })
   }
 
-  def remove(id: java.util.UUID) = withSession("remove", admin = true) { implicit request => implicit td =>
+  def remove(id: UUID) = withSession("remove", admin = true) { implicit request => implicit td =>
     svc.remove(request, id = id).map(_ => render {
       case Accepts.Html() => Redirect(controllers.admin.audit.routes.AuditRecordController.list())
       case Accepts.Json() => Ok(io.circe.Json.obj("status" -> io.circe.Json.fromString("removed")))

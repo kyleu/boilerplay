@@ -3,12 +3,13 @@ package controllers.admin.ddl
 
 import controllers.admin.ServiceController
 import models.Application
-import models.ddl.FlywaySchemaHistoryResult
+import models.ddl.{FlywaySchemaHistory, FlywaySchemaHistoryResult}
 import models.result.orderBy.OrderBy
 import play.api.http.MimeTypes
 import scala.concurrent.Future
 import services.audit.AuditRecordService
 import services.ddl.FlywaySchemaHistoryService
+import util.DateUtils
 import util.JsonSerializers._
 import util.ReftreeUtils._
 
@@ -22,7 +23,7 @@ class FlywaySchemaHistoryController @javax.inject.Inject() (
     val cancel = controllers.admin.ddl.routes.FlywaySchemaHistoryController.list()
     val call = controllers.admin.ddl.routes.FlywaySchemaHistoryController.create()
     Future.successful(Ok(views.html.admin.ddl.flywaySchemaHistoryForm(
-      request.identity, models.ddl.FlywaySchemaHistory.empty(), "New Flyway Schema History", cancel, call, isNew = true, debug = app.config.debug
+      request.identity, FlywaySchemaHistory.empty(), "New Flyway Schema History", cancel, call, isNew = true, debug = app.config.debug
     )))
   }
 
@@ -35,7 +36,7 @@ class FlywaySchemaHistoryController @javax.inject.Inject() (
 
   def list(q: Option[String], orderBy: Option[String], orderAsc: Boolean, limit: Option[Int], offset: Option[Int], t: Option[String] = None) = {
     withSession("list", admin = true) { implicit request => implicit td =>
-      val startMs = util.DateUtils.nowMillis
+      val startMs = DateUtils.nowMillis
       val orderBys = OrderBy.forVals(orderBy, orderAsc).toSeq
       searchWithCount(q, orderBys, limit, offset).map(r => renderChoice(t) {
         case MimeTypes.HTML => Ok(views.html.admin.ddl.flywaySchemaHistoryList(

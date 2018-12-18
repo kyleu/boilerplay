@@ -1,3 +1,13 @@
 # Generated File
+# Setting Routes
+GET         /setting                                                  controllers.admin.settings.SettingController.list(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None)
+GET         /setting/autocomplete                                     controllers.admin.settings.SettingController.autocomplete(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None)
+GET         /setting/form                                             controllers.admin.settings.SettingController.createForm
+POST        /setting                                                  controllers.admin.settings.SettingController.create
+GET         /setting/:k                                               controllers.admin.settings.SettingController.view(k: models.settings.SettingKey, t: Option[String] ?= None)
+GET         /setting/:k/form                                          controllers.admin.settings.SettingController.editForm(k: models.settings.SettingKey)
+POST        /setting/:k                                               controllers.admin.settings.SettingController.edit(k: models.settings.SettingKey)
+GET         /setting/:k/remove                                        controllers.admin.settings.SettingController.remove(k: models.settings.SettingKey)
+
 GET         /settingKey                                               controllers.admin.settings.SettingKeyController.list()
 

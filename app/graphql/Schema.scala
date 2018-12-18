@@ -11,7 +11,7 @@ object Schema {
   val baseFetchers = Seq(models.user.SystemUserSchema.systemUserByRoleFetcher, models.audit.AuditSchema.auditByUserIdFetcher)
 
   val modelFetchers = {
-    // Start model fetchers
+    /* Start model fetchers */
     Seq(
       models.audit.AuditRecordSchema.auditRecordByAuditIdFetcher,
       models.audit.AuditRecordSchema.auditRecordByPrimaryKeyFetcher,
@@ -19,11 +19,12 @@ object Schema {
       models.ddl.FlywaySchemaHistorySchema.flywaySchemaHistoryByPrimaryKeyFetcher,
       models.note.NoteSchema.noteByAuthorFetcher,
       models.note.NoteSchema.noteByPrimaryKeyFetcher,
+      models.settings.SettingSchema.settingByPrimaryKeyFetcher,
       models.sync.SyncProgressSchema.syncProgressByPrimaryKeyFetcher,
       models.task.ScheduledTaskRunSchema.scheduledTaskRunByPrimaryKeyFetcher,
       models.user.SystemUserSchema.systemUserByPrimaryKeyFetcher
     )
-    // End model fetchers
+    /* End model fetchers */
   }
 
   val resolver = DeferredResolver.fetchers(baseFetchers ++ modelFetchers: _*)
@@ -40,27 +41,28 @@ object Schema {
     models.sandbox.SandboxSchema.queryFields
 
   val modelQueryFields: Seq[Field[GraphQLContext, Unit]] = {
-    // Start model query fields
-    models.audit.AuditRecordSchema.queryFields ++
-      models.audit.AuditSchema.queryFields ++
+    /* Start model query fields */
+    models.audit.AuditSchema.queryFields ++
+      models.audit.AuditRecordSchema.queryFields ++
       models.ddl.FlywaySchemaHistorySchema.queryFields ++
       models.note.NoteSchema.queryFields ++
+      models.settings.SettingSchema.queryFields ++
       models.sync.SyncProgressSchema.queryFields ++
       models.task.ScheduledTaskRunSchema.queryFields ++
       models.user.SystemUserSchema.queryFields
-    // End model query fields
+    /* End model query fields */
   }
 
   val enumQueryFields: Seq[Field[GraphQLContext, Unit]] = {
-    // Start enum query fields
+    /* Start enum query fields */
     models.settings.SettingKeySchema.queryFields
-    // End enum query fields
+    /* End enum query fields */
   }
 
   val serviceQueryFields: Seq[Field[GraphQLContext, Unit]] = {
-    // Start service methods
+    /* Start service methods */
     Nil
-    // End service methods
+    /* End service methods */
   }
 
   val queryType = ObjectType(
@@ -73,15 +75,16 @@ object Schema {
   val baseMutationFields = models.sandbox.SandboxSchema.mutationFields
 
   val modelMutationFields: Seq[Field[GraphQLContext, Unit]] = {
-    // Start model mutation fields
-    models.audit.AuditRecordSchema.mutationFields ++
-      models.audit.AuditSchema.mutationFields ++
+    /* Start model mutation fields */
+    models.audit.AuditSchema.mutationFields ++
+      models.audit.AuditRecordSchema.mutationFields ++
       models.ddl.FlywaySchemaHistorySchema.mutationFields ++
       models.note.NoteSchema.mutationFields ++
+      models.settings.SettingSchema.mutationFields ++
       models.sync.SyncProgressSchema.mutationFields ++
       models.task.ScheduledTaskRunSchema.mutationFields ++
       models.user.SystemUserSchema.mutationFields
-    // End model mutation fields
+    /* End model mutation fields */
   }
 
   val mutationType = ObjectType(

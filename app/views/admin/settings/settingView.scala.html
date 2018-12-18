@@ -1,0 +1,30 @@
+@* Generated File *@
+@(user: models.user.SystemUser, model: models.settings.Setting, notes: Seq[models.note.Note], debug: Boolean)(
+    implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
+)@traceData.logClass(getClass)@views.html.admin.layout.page(user, "explore", s"Setting [${model.k}]") {
+  <div class="collection with-header">
+    <div class="collection-header">
+      <div class="right"><a class="theme-text" href="@controllers.admin.settings.routes.SettingController.editForm(model.k)">Edit</a></div>
+      <div class="right"><a class="theme-text remove-link" onclick="return confirm('Are you sure you want to remove this Setting?')" href="@controllers.admin.settings.routes.SettingController.remove(model.k)">Remove</a></div>
+      <h5>
+        <a class="theme-text" href="@controllers.admin.settings.routes.SettingController.list()"><i class="fa @models.template.Icons.setting"></i></a>
+        Setting [@model.k]
+      </h5>
+    </div>
+    <div class="collection-item">
+      <table class="highlight">
+        <tbody>
+          <tr>
+            <th>K</th>
+            <td>@model.k</td>
+          </tr>
+          <tr>
+            <th>V</th>
+            <td>@model.v</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    @views.html.admin.note.notes(notes, "setting", "Setting", model.k)
+  </div>
+}

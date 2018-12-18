@@ -1,5 +1,6 @@
 package services.audit
 
+import models.settings.SettingKey
 import play.api.mvc.Call
 import services.audit.AuditArgs._
 import util.Logging
@@ -14,6 +15,7 @@ object AuditRoutes extends Logging {
     case "flywayschemahistory" => controllers.admin.ddl.routes.FlywaySchemaHistoryController.view(longArg(arg(0)))
     case "note" => controllers.admin.note.routes.NoteController.view(uuidArg(arg(0)))
     case "scheduledtaskrun" => controllers.admin.task.routes.ScheduledTaskRunController.view(uuidArg(arg(0)))
+    case "setting" => controllers.admin.settings.routes.SettingController.view(enumArg(SettingKey)(arg(0)))
     case "syncprogress" => controllers.admin.sync.routes.SyncProgressController.view(stringArg(arg(0)))
     case "systemuser" => controllers.admin.user.routes.SystemUserController.view(uuidArg(arg(0)))
     /* End audit calls */

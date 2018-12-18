@@ -36,21 +36,18 @@ object Icons {
   val dropdownToggle = "fa-angle-down"
 
   val process = "fa-shield"
-
-  val audit = "fa-dot-circle-o"
-  val auditRecord = "fa-dot-circle-o"
-  val ddl = "fa-database"
-  val flywaySchemaHistory = "fa-hashtag"
-  val note = "fa-sticky-note-o"
-  val passwordInfo = "fa-lock"
   val sandbox = "fa-folder-o"
-  val scheduledTaskRun = "fa-clock-o"
-  val settingValue = "fa-cog"
-  val syncProgress = "fa-refresh"
-  val systemUser = "fa-user"
 
-  // Start model icons
+  /* Start model icons */
+  val audit = "fa-glass"
+  val auditRecord = "fa-hand-paper-o"
+  val flywaySchemaHistory = "fa-hashtag"
+  val note = "fa-paw"
   val oAuth2Info = "fa-lemon-o"
-  val settingValues = "fa-hand-spock-o"
-  // End model icons
+  val passwordInfo = "fa-info-circle"
+  val scheduledTaskRun = "fa-asterisk"
+  val setting = "fa-gamepad"
+  val syncProgress = "fa-plane"
+  val systemUser = "fa-envelope-o"
+  /* End model icons */
 }

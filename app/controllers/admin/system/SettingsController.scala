@@ -12,7 +12,7 @@ class SettingsController @javax.inject.Inject() (override val app: Application) 
   import app.contexts.webContext
 
   def settings = withSession("settings.list", admin = true) { implicit request => implicit td =>
-    Future.successful(Ok(views.html.admin.settings(request.identity, app.coreServices.settings)))
+    Future.successful(Ok(views.html.admin.settingValues(request.identity, app.coreServices.settings)))
   }
 
   def saveSettings = withSession("settings.save", admin = true) { implicit request => implicit td =>
