@@ -32,15 +32,16 @@ class SearchController @javax.inject.Inject() (override val app: Application, se
   }
 
   private[this] def searchInt(creds: Credentials, q: String, id: Int)(implicit timing: TraceData) = {
-    // Start int searches
-    val intSearches = Seq.empty[Future[Seq[Html]]]
-    // End int searches
+    /* Start int searches */
+
+    val intSearches = Seq[Future[Seq[Html]]]()
+    /* End int searches */
 
     Future.sequence(intSearches).map(_.flatten)
   }
 
   private[this] def searchUuid(creds: Credentials, q: String, id: UUID)(implicit timing: TraceData) = {
-    // Start uuid searches
+    /* Start uuid searches */
     val auditRecord = services.auditServices.auditRecordService.getByPrimaryKey(creds, id).map(_.map { model =>
       views.html.admin.audit.auditRecordSearchResult(model, s"Audit Record [${model.id}] matched [$q].")
     }.toSeq)
@@ -55,7 +56,7 @@ class SearchController @javax.inject.Inject() (override val app: Application, se
     }.toSeq)
 
     val uuidSearches = Seq[Future[Seq[Html]]](auditRecord, note, scheduledTaskRun, systemUser)
-    // End uuid searches
+    /* End uuid searches */
 
     val auditR = app.coreServices.audits.getByPrimaryKey(creds, id).map(_.map { model =>
       views.html.admin.audit.auditSearchResult(model, s"Audit [${model.id}] matched [$q].")
@@ -65,7 +66,7 @@ class SearchController @javax.inject.Inject() (override val app: Application, se
   }
 
   private[this] def searchString(creds: Credentials, q: String)(implicit timing: TraceData) = {
-    // Start string searches
+    /* Start string searches */
     val auditRecord = services.auditServices.auditRecordService.searchExact(creds, q = q, limit = Some(5)).map(_.map { model =>
       views.html.admin.audit.auditRecordSearchResult(model, s"Audit Record [${model.id}] matched [$q].")
     })
@@ -78,6 +79,9 @@ class SearchController @javax.inject.Inject() (override val app: Application, se
     val scheduledTaskRun = services.taskServices.scheduledTaskRunService.searchExact(creds, q = q, limit = Some(5)).map(_.map { model =>
       views.html.admin.task.scheduledTaskRunSearchResult(model, s"Scheduled Task Run [${model.id}] matched [$q].")
     })
+    val setting = services.settingsServices.settingService.searchExact(creds, q = q, limit = Some(5)).map(_.map { model =>
+      views.html.admin.settings.settingSearchResult(model, s"Setting [${model.k}] matched [$q].")
+    })
     val syncProgress = services.syncServices.syncProgressService.searchExact(creds, q = q, limit = Some(5)).map(_.map { model =>
       views.html.admin.sync.syncProgressSearchResult(model, s"Sync Progress [${model.key}] matched [$q].")
     })
@@ -85,8 +89,8 @@ class SearchController @javax.inject.Inject() (override val app: Application, se
       views.html.admin.user.systemUserSearchResult(model, s"System User [${model.id}] matched [$q].")
     })
 
-    val stringSearches = Seq[Future[Seq[Html]]](auditRecord, flywaySchemaHistory, note, scheduledTaskRun, syncProgress, systemUser)
-    // End string searches
+    val stringSearches = Seq[Future[Seq[Html]]](auditRecord, flywaySchemaHistory, note, scheduledTaskRun, setting, syncProgress, systemUser)
+    /* End string searches */
 
     val auditR = app.coreServices.audits.searchExact(creds = creds, q = q, limit = Some(5)).map(_.map { model =>
       views.html.admin.audit.auditSearchResult(model, s"Audit [${model.id}] matched [$q].")
