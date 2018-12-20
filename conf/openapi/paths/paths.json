@@ -2,10 +2,12 @@
   "#include:common.json": "*",
 
   // Start enum paths
+  // Projectile export section [boilerplay]
   "#include:settings/settingKey.json": "*",
   // End enum paths
 
   // Start schema paths
+  // Projectile export section [boilerplay]
   "#include:audit/audit.json": "*",
   "#include:audit/auditRecord.json": "*",
   "#include:ddl/flywaySchemaHistory.json": "*",

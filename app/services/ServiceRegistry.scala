@@ -3,6 +3,7 @@ package services
 @javax.inject.Singleton
 class ServiceRegistry @javax.inject.Inject() (
     /* Start model service files */
+    /* Projectile export section [boilerplay] */
     val auditServices: services.audit.AuditServiceRegistry,
     val ddlServices: services.ddl.DdlServiceRegistry,
     val noteServices: services.note.NoteServiceRegistry,

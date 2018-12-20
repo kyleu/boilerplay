@@ -32,6 +32,7 @@ object ModelBindables {
   }
 
   /* Start model bindables */
+  /* Projectile export section [boilerplay] */
   import models.settings.SettingKey
   private[this] def settingKeyExtractor(v: Either[String, String]) = v match {
     case Right(s) => Right(SettingKey.withValue(s))

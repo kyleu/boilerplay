@@ -1,7 +1,7 @@
 {
   "key" : "setting_values",
   "pkg" : [ "settings" ],
-  "features" : [ "doobie", "datamodel", "graphql", "service", "slick", "controller", "json", "core" ],
+  "features" : [ "doobie", "datamodel", "thrift", "graphql", "service", "slick", "controller", "json", "core" ],
   "ignored" : [ ],
   "overrides" : [ {
     "k" : "propertyName",

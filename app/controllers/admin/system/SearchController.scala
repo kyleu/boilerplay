@@ -33,6 +33,7 @@ class SearchController @javax.inject.Inject() (override val app: Application, se
 
   private[this] def searchInt(creds: Credentials, q: String, id: Int)(implicit timing: TraceData) = {
     /* Start int searches */
+    /* Projectile export section [boilerplay] */
 
     val intSearches = Seq[Future[Seq[Html]]]()
     /* End int searches */
@@ -42,6 +43,7 @@ class SearchController @javax.inject.Inject() (override val app: Application, se
 
   private[this] def searchUuid(creds: Credentials, q: String, id: UUID)(implicit timing: TraceData) = {
     /* Start uuid searches */
+    /* Projectile export section [boilerplay] */
     val auditRecord = services.auditServices.auditRecordService.getByPrimaryKey(creds, id).map(_.map { model =>
       views.html.admin.audit.auditRecordSearchResult(model, s"Audit Record [${model.id}] matched [$q].")
     }.toSeq)
@@ -67,6 +69,7 @@ class SearchController @javax.inject.Inject() (override val app: Application, se
 
   private[this] def searchString(creds: Credentials, q: String)(implicit timing: TraceData) = {
     /* Start string searches */
+    /* Projectile export section [boilerplay] */
     val auditRecord = services.auditServices.auditRecordService.searchExact(creds, q = q, limit = Some(5)).map(_.map { model =>
       views.html.admin.audit.auditRecordSearchResult(model, s"Audit Record [${model.id}] matched [$q].")
     })

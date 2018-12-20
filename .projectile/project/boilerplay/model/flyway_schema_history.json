@@ -1,7 +1,7 @@
 {
   "key" : "flyway_schema_history",
   "pkg" : [ "ddl" ],
-  "features" : [ "doobie", "datamodel", "graphql", "service", "slick", "controller", "json", "core" ],
+  "features" : [ "doobie", "datamodel", "thrift", "graphql", "service", "slick", "controller", "json", "core" ],
   "ignored" : [ ],
   "overrides" : [ {
     "k" : "plural",

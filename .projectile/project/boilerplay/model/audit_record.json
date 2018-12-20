@@ -1,7 +1,7 @@
 {
   "key" : "audit_record",
   "pkg" : [ "audit" ],
-  "features" : [ "doobie", "datamodel", "graphql", "service", "slick", "controller", "json", "core" ],
+  "features" : [ "doobie", "datamodel", "thrift", "graphql", "service", "slick", "controller", "json", "core" ],
   "ignored" : [ ],
   "overrides" : [ ]
 }

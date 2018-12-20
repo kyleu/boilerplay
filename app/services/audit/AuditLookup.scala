@@ -19,6 +19,7 @@ class AuditLookup @javax.inject.Inject() (registry: ServiceRegistry) extends Log
     creds: Credentials, key: String, arg: Int => String
   )(implicit traceData: TraceData): Future[Option[DataFieldModel]] = key.toLowerCase match {
     /* Start registry lookups */
+    /* Projectile export section [boilerplay] */
     case "auditrecord" => registry.auditServices.auditRecordService.getByPrimaryKey(creds, uuidArg(arg(0)))
     case "flywayschemahistory" => registry.ddlServices.flywaySchemaHistoryService.getByPrimaryKey(creds, longArg(arg(0)))
     case "note" => registry.noteServices.noteService.getByPrimaryKey(creds, uuidArg(arg(0)))

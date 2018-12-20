@@ -3,13 +3,14 @@ package controllers.admin.settings
 
 import controllers.BaseController
 import controllers.admin.ServiceController
+import models.Application
 import models.settings.SettingKey
 import play.twirl.api.Html
 import scala.concurrent.Future
 import util.JsonSerializers._
 
 @javax.inject.Singleton
-class SettingKeyController @javax.inject.Inject() (override val app: models.Application) extends BaseController("settingKey") {
+class SettingKeyController @javax.inject.Inject() (override val app: Application) extends BaseController("settingKey") {
   import app.contexts.webContext
 
   def list = withSession("list", admin = true) { implicit request => implicit td =>

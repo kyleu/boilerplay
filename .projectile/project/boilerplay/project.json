@@ -4,7 +4,7 @@
   "input" : "boilerplay",
   "title" : "Boilerplay",
   "description" : "...",
-  "features" : [ "doobie", "audit", "datamodel", "wiki", "graphql", "openapi", "service", "slick", "controller", "scalajs", "core" ],
+  "features" : [ "doobie", "audit", "datamodel", "wiki", "thrift", "graphql", "openapi", "service", "slick", "controller", "scalajs", "core" ],
   "paths" : { },
   "packages" : { },
   "classOverrides" : { },

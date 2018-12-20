@@ -1,5 +1,0 @@
-# Generated File
-# Retrieves the list of possible SettingKey values.
-query SettingKey {
-  settingKey
-}

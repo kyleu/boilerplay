@@ -12,6 +12,7 @@ object Schema {
 
   val modelFetchers = {
     /* Start model fetchers */
+    /* Projectile export section [boilerplay] */
     Seq(
       models.audit.AuditRecordSchema.auditRecordByAuditIdFetcher,
       models.audit.AuditRecordSchema.auditRecordByPrimaryKeyFetcher,
@@ -42,6 +43,7 @@ object Schema {
 
   val modelQueryFields: Seq[Field[GraphQLContext, Unit]] = {
     /* Start model query fields */
+    /* Projectile export section [boilerplay] */
     models.audit.AuditSchema.queryFields ++
       models.audit.AuditRecordSchema.queryFields ++
       models.ddl.FlywaySchemaHistorySchema.queryFields ++
@@ -55,12 +57,14 @@ object Schema {
 
   val enumQueryFields: Seq[Field[GraphQLContext, Unit]] = {
     /* Start enum query fields */
+    /* Projectile export section [boilerplay] */
     models.settings.SettingKeySchema.queryFields
     /* End enum query fields */
   }
 
   val serviceQueryFields: Seq[Field[GraphQLContext, Unit]] = {
     /* Start service methods */
+    /* Projectile export section [boilerplay] */
     Nil
     /* End service methods */
   }
@@ -76,6 +80,7 @@ object Schema {
 
   val modelMutationFields: Seq[Field[GraphQLContext, Unit]] = {
     /* Start model mutation fields */
+    /* Projectile export section [boilerplay] */
     models.audit.AuditSchema.mutationFields ++
       models.audit.AuditRecordSchema.mutationFields ++
       models.ddl.FlywaySchemaHistorySchema.mutationFields ++

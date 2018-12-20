@@ -39,12 +39,11 @@ object Icons {
   val sandbox = "fa-folder-o"
 
   /* Start model icons */
+  /* Projectile export section [boilerplay] */
   val audit = "fa-glass"
   val auditRecord = "fa-hand-paper-o"
   val flywaySchemaHistory = "fa-hashtag"
   val note = "fa-paw"
-  val oAuth2Info = "fa-lemon-o"
-  val passwordInfo = "fa-info-circle"
   val scheduledTaskRun = "fa-asterisk"
   val setting = "fa-gamepad"
   val syncProgress = "fa-plane"
