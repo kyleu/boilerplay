@@ -8,7 +8,7 @@ import com.mohiva.play.silhouette.impl.providers.{CommonSocialProfileBuilder, So
 import controllers.BaseController
 import models.Application
 import models.auth.{AuthEnv, Credentials}
-import models.settings.SettingKey
+import models.settings.SettingKeyType
 import models.user.{Role, SystemUser, UserPreferences}
 import services.user.{SystemUserSearchService, SystemUserService}
 import com.mohiva.play.silhouette.api.exceptions.ProviderException
@@ -44,7 +44,7 @@ class SocialAuthController @javax.inject.Inject() (
                     username = if (existing.isDefined) { username + "-" + scala.util.Random.alphanumeric.take(4).mkString } else { username },
                     preferences = UserPreferences.empty,
                     profile = profile.loginInfo,
-                    role = Role.withValue(app.coreServices.settings(SettingKey.DefaultNewUserRole))
+                    role = Role.withValue(app.coreServices.settings(SettingKeyType.DefaultNewUserRole))
                   )
                   userService.insert(Credentials(newUser, request.remoteAddress), newUser)
                 }

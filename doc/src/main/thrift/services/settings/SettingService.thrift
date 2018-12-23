@@ -8,11 +8,11 @@ include "../../models/settings/Setting.thrift"
 service SettingService {
   Setting.Setting getByPrimaryKey(
     1: common.Credentials creds,
-    2: required SettingKey k
+    2: required SettingKeyType k
   )
   Setting.Setting getByPrimaryKeySeq(
     1: common.Credentials creds,
-    2: required list<SettingKey> k
+    2: required list<SettingKeyType> k
   )
 
   common.int countAll(
@@ -59,16 +59,16 @@ service SettingService {
   )
   Setting.Setting create(
     1: common.Credentials creds,
-    2: required  SettingKey k,
+    2: required  SettingKeyType k,
     3: list<common.DataField> fields
   )
   Setting.Setting remove(
     1: common.Credentials creds,
-    2: required  SettingKey k
+    2: required  SettingKeyType k
   )
   Setting.Setting update(
     1: common.Credentials creds,
-    2: required  SettingKey k,
+    2: required  SettingKeyType k,
     3: list<common.DataField> fields
   )
 }

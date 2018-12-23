@@ -5,13 +5,13 @@ import services.database.slick.SlickQueryService.imports._
 
 object AllTables {
   val schema = Seq(
-    models.table.audit.AuditRecordTable.query.schema,
-    models.table.audit.AuditTable.query.schema,
-    models.table.ddl.FlywaySchemaHistoryTable.query.schema,
-    models.table.note.NoteTable.query.schema,
+    models.table.audit.AuditRecordRowTable.query.schema,
+    models.table.audit.AuditRowTable.query.schema,
+    models.table.ddl.FlywaySchemaHistoryRowTable.query.schema,
+    models.table.note.NoteRowTable.query.schema,
     models.table.settings.SettingTable.query.schema,
-    models.table.sync.SyncProgressTable.query.schema,
-    models.table.task.ScheduledTaskRunTable.query.schema,
+    models.table.sync.SyncProgressRowTable.query.schema,
+    models.table.task.ScheduledTaskRunRowTable.query.schema,
     models.table.user.SystemUserTable.query.schema
   )
 }

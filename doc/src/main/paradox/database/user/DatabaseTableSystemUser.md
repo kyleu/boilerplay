@@ -17,4 +17,4 @@
 
 | Name                         | Target             | Table                                  | Column
 |------------------------------|--------------------|----------------------------------------|--------------------
-| noteAuthorFkey               | id                 | [note](DatabaseTableNote)              | author
+| noteAuthorFkey               | id                 | [note](DatabaseTableNoteRow)           | author

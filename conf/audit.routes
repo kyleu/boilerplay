@@ -1,22 +1,23 @@
-# Audit Record Routes
-GET         /auditRecord                           controllers.admin.audit.AuditRecordController.list(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None)
-GET         /auditRecord/autocomplete              controllers.admin.audit.AuditRecordController.autocomplete(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None)
-GET         /auditRecord/form                      controllers.admin.audit.AuditRecordController.createForm
-POST        /auditRecord                           controllers.admin.audit.AuditRecordController.create
-GET         /auditRecord/byAuditId/:auditId        controllers.admin.audit.AuditRecordController.byAuditId(auditId: java.util.UUID, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None)
-GET         /auditRecord/:id                       controllers.admin.audit.AuditRecordController.view(id: java.util.UUID, t: Option[String] ?= None)
-GET         /auditRecord/:id/form                  controllers.admin.audit.AuditRecordController.editForm(id: java.util.UUID)
-POST        /auditRecord/:id                       controllers.admin.audit.AuditRecordController.edit(id: java.util.UUID)
-GET         /auditRecord/:id/remove                controllers.admin.audit.AuditRecordController.remove(id: java.util.UUID)
-
+# Generated File
 # Audit Routes
-GET         /audit                                 controllers.admin.audit.AuditController.list(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None)
-GET         /audit/autocomplete                    controllers.admin.audit.AuditController.autocomplete(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None)
-GET         /audit/form                            controllers.admin.audit.AuditController.createForm
-POST        /audit                                 controllers.admin.audit.AuditController.create
-GET         /audit/:id/counts                      controllers.admin.audit.AuditController.relationCounts(id: java.util.UUID)
-GET         /audit/byUserId/:userId                controllers.admin.audit.AuditController.byUserId(userId: java.util.UUID, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None)
-GET         /audit/:id/form                        controllers.admin.audit.AuditController.editForm(id: java.util.UUID)
-GET         /audit/:id                             controllers.admin.audit.AuditController.view(id: java.util.UUID, t: Option[String] ?= None)
-POST        /audit/:id                             controllers.admin.audit.AuditController.edit(id: java.util.UUID)
-GET         /audit/:id/remove                      controllers.admin.audit.AuditController.remove(id: java.util.UUID)
+GET         /auditRow                                                 controllers.admin.audit.AuditRowController.list(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None)
+GET         /auditRow/autocomplete                                    controllers.admin.audit.AuditRowController.autocomplete(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None)
+GET         /auditRow/form                                            controllers.admin.audit.AuditRowController.createForm
+POST        /auditRow                                                 controllers.admin.audit.AuditRowController.create
+GET         /auditRow/:id                                             controllers.admin.audit.AuditRowController.view(id: java.util.UUID, t: Option[String] ?= None)
+GET         /auditRow/:id/counts                                      controllers.admin.audit.AuditRowController.relationCounts(id: java.util.UUID)
+GET         /auditRow/:id/form                                        controllers.admin.audit.AuditRowController.editForm(id: java.util.UUID)
+POST        /auditRow/:id                                             controllers.admin.audit.AuditRowController.edit(id: java.util.UUID)
+GET         /auditRow/:id/remove                                      controllers.admin.audit.AuditRowController.remove(id: java.util.UUID)
+
+# Audit Record Routes
+GET         /auditRecordRow                                           controllers.admin.audit.AuditRecordRowController.list(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None)
+GET         /auditRecordRow/autocomplete                              controllers.admin.audit.AuditRecordRowController.autocomplete(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None)
+GET         /auditRecordRow/form                                      controllers.admin.audit.AuditRecordRowController.createForm
+POST        /auditRecordRow                                           controllers.admin.audit.AuditRecordRowController.create
+GET         /auditRecordRow/byAuditId/:auditId                        controllers.admin.audit.AuditRecordRowController.byAuditId(auditId: java.util.UUID, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None)
+GET         /auditRecordRow/:id                                       controllers.admin.audit.AuditRecordRowController.view(id: java.util.UUID, t: Option[String] ?= None)
+GET         /auditRecordRow/:id/form                                  controllers.admin.audit.AuditRecordRowController.editForm(id: java.util.UUID)
+POST        /auditRecordRow/:id                                       controllers.admin.audit.AuditRecordRowController.edit(id: java.util.UUID)
+GET         /auditRecordRow/:id/remove                                controllers.admin.audit.AuditRecordRowController.remove(id: java.util.UUID)
+

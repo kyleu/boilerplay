@@ -1,0 +1,9 @@
+@* Generated File *@
+@(model: models.note.NoteRow, hit: String)<div class="search-result">
+  <div class="right">Note</div>
+  <div>
+    <i class="fa @models.template.Icons.noteRow"></i>
+    <a class="theme-text" href="@controllers.admin.note.routes.NoteRowController.view(model.id)">@model.id</a>
+  </div>
+  <em>@hit</em>
+</div>

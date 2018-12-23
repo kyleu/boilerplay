@@ -1,7 +1,7 @@
 @(user: models.user.SystemUser, settingService: services.settings.SettingsService)(implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData)
-@import models.settings.SettingKey
+@import models.settings.SettingKeyType
 
-@settingPanel(key: models.settings.SettingKey, colWidth: Int = 12)(content: Html) = {
+@settingPanel(key: models.settings.SettingKeyType, colWidth: Int = 12)(content: Html) = {
   <div class="collection-item">
     <div class="setting-panel">
       <strong>@key.title</strong>
@@ -30,28 +30,28 @@
         <h4><i class="fa @models.template.Icons.settings"></i> System Preferences</h4>
       </div>
 
-      @settingPanel(SettingKey.AllowRegistration) {
+      @settingPanel(SettingKeyType.AllowRegistration) {
         @defining(settingService.allowRegistration) { allowRegistration =>
           <div>
             <label for="AllowRegistration-true">
-              <input type="radio" id="AllowRegistration-true" name="@SettingKey.AllowRegistration" value="true" @if(allowRegistration) { checked="checked" } />
+              <input type="radio" id="AllowRegistration-true" name="@SettingKeyType.AllowRegistration" value="true" @if(allowRegistration) { checked="checked" } />
               <span>Yes</span>
             </label>
           </div>
           <div>
             <label for="AllowRegistration-false">
-              <input type="radio" id="AllowRegistration-false" name="@SettingKey.AllowRegistration" value="false" @if(!allowRegistration) { checked="checked" } />
+              <input type="radio" id="AllowRegistration-false" name="@SettingKeyType.AllowRegistration" value="false" @if(!allowRegistration) { checked="checked" } />
               <span>No</span>
             </label>
           </div>
         }
       }
 
-      @settingPanel(SettingKey.DefaultNewUserRole) {
+      @settingPanel(SettingKeyType.DefaultNewUserRole) {
         <div>
-          @defining(models.user.Role.withValue(settingService(SettingKey.DefaultNewUserRole))) { newUserRole =>
-            @roleRadio(SettingKey.DefaultNewUserRole.toString, models.user.Role.User, newUserRole, "Registered Users")
-            @roleRadio(SettingKey.DefaultNewUserRole.toString, models.user.Role.Admin, newUserRole, "Administrators")
+          @defining(models.user.Role.withValue(settingService(SettingKeyType.DefaultNewUserRole))) { newUserRole =>
+            @roleRadio(SettingKeyType.DefaultNewUserRole.toString, models.user.Role.User, newUserRole, "Registered Users")
+            @roleRadio(SettingKeyType.DefaultNewUserRole.toString, models.user.Role.Admin, newUserRole, "Administrators")
           }
         </div>
       }

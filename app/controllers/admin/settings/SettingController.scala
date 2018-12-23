@@ -4,10 +4,10 @@ package controllers.admin.settings
 import controllers.admin.ServiceController
 import models.Application
 import models.result.orderBy.OrderBy
-import models.settings.{Setting, SettingKey, SettingResult}
+import models.settings.{Setting, SettingKeyType, SettingResult}
 import play.api.http.MimeTypes
 import scala.concurrent.Future
-import services.audit.AuditRecordService
+import services.audit.AuditRecordRowService
 import services.settings.SettingService
 import util.DateUtils
 import util.JsonSerializers._
@@ -15,7 +15,7 @@ import util.ReftreeUtils._
 
 @javax.inject.Singleton
 class SettingController @javax.inject.Inject() (
-    override val app: Application, svc: SettingService, auditRecordSvc: AuditRecordService
+    override val app: Application, svc: SettingService, auditRecordSvc: AuditRecordRowService
 ) extends ServiceController(svc) {
   import app.contexts.webContext
 
@@ -57,7 +57,7 @@ class SettingController @javax.inject.Inject() (
     }
   }
 
-  def view(k: SettingKey, t: Option[String] = None) = withSession("view", admin = true) { implicit request => implicit td =>
+  def view(k: SettingKeyType, t: Option[String] = None) = withSession("view", admin = true) { implicit request => implicit td =>
     val modelF = svc.getByPrimaryKey(request, k)
     val notesF = app.coreServices.notes.getFor(request, "setting", k)
 
@@ -72,7 +72,7 @@ class SettingController @javax.inject.Inject() (
     })
   }
 
-  def editForm(k: SettingKey) = withSession("edit.form", admin = true) { implicit request => implicit td =>
+  def editForm(k: SettingKeyType) = withSession("edit.form", admin = true) { implicit request => implicit td =>
     val cancel = controllers.admin.settings.routes.SettingController.view(k)
     val call = controllers.admin.settings.routes.SettingController.edit(k)
     svc.getByPrimaryKey(request, k).map {
@@ -83,14 +83,14 @@ class SettingController @javax.inject.Inject() (
     }
   }
 
-  def edit(k: SettingKey) = withSession("edit", admin = true) { implicit request => implicit td =>
+  def edit(k: SettingKeyType) = withSession("edit", admin = true) { implicit request => implicit td =>
     svc.update(request, k = k, fields = modelForm(request.body)).map(res => render {
       case Accepts.Html() => Redirect(controllers.admin.settings.routes.SettingController.view(res._1.k)).flashing("success" -> res._2)
       case Accepts.Json() => Ok(res.asJson)
     })
   }
 
-  def remove(k: SettingKey) = withSession("remove", admin = true) { implicit request => implicit td =>
+  def remove(k: SettingKeyType) = withSession("remove", admin = true) { implicit request => implicit td =>
     svc.remove(request, k = k).map(_ => render {
       case Accepts.Html() => Redirect(controllers.admin.settings.routes.SettingController.list())
       case Accepts.Json() => Ok(io.circe.Json.obj("status" -> io.circe.Json.fromString("removed")))

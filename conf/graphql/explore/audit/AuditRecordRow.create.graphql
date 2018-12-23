@@ -1,0 +1,13 @@
+# Generated File
+# Creates a new AuditRecordRow entity.
+mutation AuditRecordRowCreate {
+  auditRecordRow {
+    create(fields: [{k: "", v: ""}]) {
+      id
+      auditId
+      t
+      pk
+      changes
+    }
+  }
+}

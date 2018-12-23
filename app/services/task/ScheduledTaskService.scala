@@ -5,7 +5,7 @@ import java.util.UUID
 import akka.actor.ActorSystem
 import models.Configuration
 import models.auth.Credentials
-import models.task.ScheduledTaskRun
+import models.task.ScheduledTaskRunRow
 import models.task.scheduled.{ScheduledTask, ScheduledTaskOutput}
 import services.sync.SyncService
 import services.task.scheduled.ScheduledTasks
@@ -20,7 +20,7 @@ import scala.util.control.NonFatal
 @javax.inject.Singleton
 class ScheduledTaskService @javax.inject.Inject() (
     config: Configuration,
-    runService: ScheduledTaskRunService,
+    runService: ScheduledTaskRunRowService,
     scheduledTasks: ScheduledTasks,
     tracingService: TracingService,
     syncService: SyncService
@@ -78,7 +78,7 @@ class ScheduledTaskService @javax.inject.Inject() (
           log.debug(s"Running scheduled tasks [${tasksToRun.map(_.key).mkString(", ")}].")
           Future.sequence(tasksToRun.map { task =>
             go(id, creds, args, task, trace).map { o =>
-              ScheduledTaskRun(id = id, task = task.key, arguments = args.toList, status = o.status, output = o.asJson, started = o.start, completed = o.end)
+              ScheduledTaskRunRow(id = id, task = task.key, arguments = args.toList, status = o.status, output = o.asJson, started = o.start, completed = o.end)
             }
           })
         }

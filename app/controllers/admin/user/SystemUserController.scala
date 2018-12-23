@@ -6,8 +6,8 @@ import controllers.admin.ServiceController
 import models.Application
 import models.result.RelationCount
 import play.api.http.MimeTypes
-import services.audit.AuditRecordService
-import services.note.NoteService
+import services.audit.AuditRecordRowService
+import services.note.NoteRowService
 import services.user.SystemUserService
 import util.FutureUtils.defaultContext
 import util.JsonSerializers._
@@ -15,8 +15,8 @@ import util.ReftreeUtils._
 
 @javax.inject.Singleton
 class SystemUserController @javax.inject.Inject() (
-    override val app: Application, svc: SystemUserService, auditRecordSvc: AuditRecordService, val authInfoRepository: AuthInfoRepository, val hasher: PasswordHasher,
-    noteS: NoteService
+    override val app: Application, svc: SystemUserService, auditRecordSvc: AuditRecordRowService, val authInfoRepository: AuthInfoRepository, val hasher: PasswordHasher,
+    noteS: NoteRowService
 ) extends ServiceController(svc) with UserEditHelper with UserSearchHelper {
   def view(id: java.util.UUID, t: Option[String] = None) = withSession("view", admin = true) { implicit request => implicit td =>
     val modelF = svc.getByPrimaryKey(request, id)

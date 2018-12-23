@@ -3,5 +3,5 @@ package services.ddl
 
 @javax.inject.Singleton
 class DdlServiceRegistry @javax.inject.Inject() (
-    val flywaySchemaHistoryService: services.ddl.FlywaySchemaHistoryService
+    val flywaySchemaHistoryRowService: services.ddl.FlywaySchemaHistoryRowService
 )

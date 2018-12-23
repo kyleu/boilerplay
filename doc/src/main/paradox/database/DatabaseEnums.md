@@ -1,4 +1,4 @@
 <!-- Generated File -->
 # Database Enums
 
- - [setting_key](DatabaseEnumSettingKey)
+ - [setting_key](DatabaseEnumSettingKeyType)

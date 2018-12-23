@@ -109,7 +109,7 @@
           "name": "k",
           "in": "path",
           "schema": {
-            "type": "SettingKey"
+            "type": "SettingKeyType"
           }
         }
       ],
@@ -152,7 +152,7 @@
           "name": "k",
           "in": "path",
           "schema": {
-            "type": "SettingKey"
+            "type": "SettingKeyType"
           }
         }
       ],
@@ -209,7 +209,7 @@
           "name": "k",
           "in": "path",
           "schema": {
-            "type": "SettingKey"
+            "type": "SettingKeyType"
           }
         }
       ],

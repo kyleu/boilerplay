@@ -20,12 +20,13 @@ class AuditLookup @javax.inject.Inject() (registry: ServiceRegistry) extends Log
   )(implicit traceData: TraceData): Future[Option[DataFieldModel]] = key.toLowerCase match {
     /* Start registry lookups */
     /* Projectile export section [boilerplay] */
-    case "auditrecord" => registry.auditServices.auditRecordService.getByPrimaryKey(creds, uuidArg(arg(0)))
-    case "flywayschemahistory" => registry.ddlServices.flywaySchemaHistoryService.getByPrimaryKey(creds, longArg(arg(0)))
-    case "note" => registry.noteServices.noteService.getByPrimaryKey(creds, uuidArg(arg(0)))
-    case "scheduledtaskrun" => registry.taskServices.scheduledTaskRunService.getByPrimaryKey(creds, uuidArg(arg(0)))
-    case "setting" => registry.settingsServices.settingService.getByPrimaryKey(creds, enumArg(models.settings.SettingKey)(arg(0)))
-    case "syncprogress" => registry.syncServices.syncProgressService.getByPrimaryKey(creds, stringArg(arg(0)))
+    case "auditrecordrow" => registry.auditServices.auditRecordRowService.getByPrimaryKey(creds, uuidArg(arg(0)))
+    case "auditrow" => registry.auditServices.auditRowService.getByPrimaryKey(creds, uuidArg(arg(0)))
+    case "flywayschemahistoryrow" => registry.ddlServices.flywaySchemaHistoryRowService.getByPrimaryKey(creds, longArg(arg(0)))
+    case "noterow" => registry.noteServices.noteRowService.getByPrimaryKey(creds, uuidArg(arg(0)))
+    case "scheduledtaskrunrow" => registry.taskServices.scheduledTaskRunRowService.getByPrimaryKey(creds, uuidArg(arg(0)))
+    case "setting" => registry.settingsServices.settingService.getByPrimaryKey(creds, enumArg(models.settings.SettingKeyType)(arg(0)))
+    case "syncprogressrow" => registry.syncServices.syncProgressRowService.getByPrimaryKey(creds, stringArg(arg(0)))
     case "systemuser" => registry.userServices.systemUserService.getByPrimaryKey(creds, uuidArg(arg(0)))
     /* End registry lookups */
     case _ =>

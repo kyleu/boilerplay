@@ -8,7 +8,7 @@ import graphql.{GraphQLContext, GraphQLSchemaHelper}
 import sangria.macros.derive.{AddFields, deriveObjectType}
 import sangria.schema._
 import graphql.GraphQLUtils._
-import models.note.NoteSchema
+import models.note.NoteRowSchema
 import models.template.Theme
 import sangria.execution.deferred.{Fetcher, HasId, Relation}
 
@@ -34,14 +34,14 @@ object SystemUserSchema extends GraphQLSchemaHelper("systemUser") {
     AddFields(
       Field(
         name = "authoredNotes",
-        fieldType = ListType(NoteSchema.noteType),
-        resolve = c => NoteSchema.noteByAuthorFetcher.deferRelSeq(
-          NoteSchema.noteByAuthorRelation, c.value.id
+        fieldType = ListType(NoteRowSchema.noteRowType),
+        resolve = c => NoteRowSchema.noteRowByAuthorFetcher.deferRelSeq(
+          NoteRowSchema.noteRowByAuthorRelation, c.value.id
         )
       ),
       Field(
         name = "relatedNotes",
-        fieldType = ListType(NoteSchema.noteType),
+        fieldType = ListType(NoteRowSchema.noteRowType),
         resolve = c => c.ctx.app.coreServices.notes.getFor(c.ctx.creds, "systemUser", c.value.id)(c.ctx.trace)
       )
     )

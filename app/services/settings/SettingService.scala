@@ -6,7 +6,7 @@ import models.queries.settings.SettingQueries
 import models.result.data.DataField
 import models.result.filter.Filter
 import models.result.orderBy.OrderBy
-import models.settings.{Setting, SettingKey}
+import models.settings.{Setting, SettingKeyType}
 import scala.concurrent.Future
 import services.ModelServiceHelper
 import services.database.ApplicationDatabase
@@ -16,13 +16,13 @@ import util.tracing.{TraceData, TracingService}
 
 @javax.inject.Singleton
 class SettingService @javax.inject.Inject() (override val tracing: TracingService) extends ModelServiceHelper[Setting]("setting") {
-  def getByPrimaryKey(creds: Credentials, k: SettingKey)(implicit trace: TraceData) = {
+  def getByPrimaryKey(creds: Credentials, k: SettingKeyType)(implicit trace: TraceData) = {
     traceF("get.by.primary.key")(td => ApplicationDatabase.queryF(SettingQueries.getByPrimaryKey(k))(td))
   }
-  def getByPrimaryKeyRequired(creds: Credentials, k: SettingKey)(implicit trace: TraceData) = getByPrimaryKey(creds, k).map { opt =>
+  def getByPrimaryKeyRequired(creds: Credentials, k: SettingKeyType)(implicit trace: TraceData) = getByPrimaryKey(creds, k).map { opt =>
     opt.getOrElse(throw new IllegalStateException(s"Cannot load setting with k [$k]."))
   }
-  def getByPrimaryKeySeq(creds: Credentials, kSeq: Seq[SettingKey])(implicit trace: TraceData) = {
+  def getByPrimaryKeySeq(creds: Credentials, kSeq: Seq[SettingKeyType])(implicit trace: TraceData) = {
     traceF("get.by.primary.key.seq")(td => ApplicationDatabase.queryF(SettingQueries.getByPrimaryKeySeq(kSeq))(td))
   }
 
@@ -49,13 +49,13 @@ class SettingService @javax.inject.Inject() (override val tracing: TracingServic
     traceF("search.exact")(td => ApplicationDatabase.queryF(SettingQueries.searchExact(q, orderBys, limit, offset))(td))
   }
 
-  def countByK(creds: Credentials, k: SettingKey)(implicit trace: TraceData) = traceF("count.by.k") { td =>
+  def countByK(creds: Credentials, k: SettingKeyType)(implicit trace: TraceData) = traceF("count.by.k") { td =>
     ApplicationDatabase.queryF(SettingQueries.CountByK(k))(td)
   }
-  def getByK(creds: Credentials, k: SettingKey, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData) = traceF("get.by.k") { td =>
+  def getByK(creds: Credentials, k: SettingKeyType, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData) = traceF("get.by.k") { td =>
     ApplicationDatabase.queryF(SettingQueries.GetByK(k, orderBys, limit, offset))(td)
   }
-  def getByKSeq(creds: Credentials, kSeq: Seq[SettingKey])(implicit trace: TraceData) = traceF("get.by.k.seq") { td =>
+  def getByKSeq(creds: Credentials, kSeq: Seq[SettingKeyType])(implicit trace: TraceData) = traceF("get.by.k.seq") { td =>
     ApplicationDatabase.queryF(SettingQueries.GetByKSeq(kSeq))(td)
   }
 
@@ -71,11 +71,11 @@ class SettingService @javax.inject.Inject() (override val tracing: TracingServic
   }
   def create(creds: Credentials, fields: Seq[DataField])(implicit trace: TraceData) = traceF("create") { td =>
     ApplicationDatabase.executeF(SettingQueries.create(fields))(td).flatMap { _ =>
-      getByPrimaryKey(creds, SettingKey.withValue(fieldVal(fields, "k")))
+      getByPrimaryKey(creds, SettingKeyType.withValue(fieldVal(fields, "k")))
     }
   }
 
-  def remove(creds: Credentials, k: SettingKey)(implicit trace: TraceData) = {
+  def remove(creds: Credentials, k: SettingKeyType)(implicit trace: TraceData) = {
     traceF("remove")(td => getByPrimaryKey(creds, k)(td).flatMap {
       case Some(current) =>
         ApplicationDatabase.executeF(SettingQueries.removeByPrimaryKey(k))(td).map(_ => current)
@@ -83,7 +83,7 @@ class SettingService @javax.inject.Inject() (override val tracing: TracingServic
     })
   }
 
-  def update(creds: Credentials, k: SettingKey, fields: Seq[DataField])(implicit trace: TraceData) = {
+  def update(creds: Credentials, k: SettingKeyType, fields: Seq[DataField])(implicit trace: TraceData) = {
     traceF("update")(td => getByPrimaryKey(creds, k)(td).flatMap {
       case Some(current) if fields.isEmpty => Future.successful(current -> s"No changes required for Setting [$k].")
       case Some(_) => ApplicationDatabase.executeF(SettingQueries.update(k, fields))(td).flatMap { _ =>

@@ -7,7 +7,7 @@
     ],
     "properties": {
       "k": {
-        "type": "SettingKey"
+        "type": "SettingKeyType"
       },
       "v": {
         "type": "string"

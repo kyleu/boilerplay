@@ -8,21 +8,21 @@ import scala.concurrent.Future
 
 object Schema {
   // Fetchers
-  val baseFetchers = Seq(models.user.SystemUserSchema.systemUserByRoleFetcher, models.audit.AuditSchema.auditByUserIdFetcher)
+  val baseFetchers = Seq(models.user.SystemUserSchema.systemUserByRoleFetcher)
 
   val modelFetchers = {
     /* Start model fetchers */
     /* Projectile export section [boilerplay] */
     Seq(
-      models.audit.AuditRecordSchema.auditRecordByAuditIdFetcher,
-      models.audit.AuditRecordSchema.auditRecordByPrimaryKeyFetcher,
-      models.audit.AuditSchema.auditByPrimaryKeyFetcher,
-      models.ddl.FlywaySchemaHistorySchema.flywaySchemaHistoryByPrimaryKeyFetcher,
-      models.note.NoteSchema.noteByAuthorFetcher,
-      models.note.NoteSchema.noteByPrimaryKeyFetcher,
+      models.audit.AuditRecordRowSchema.auditRecordRowByAuditIdFetcher,
+      models.audit.AuditRecordRowSchema.auditRecordRowByPrimaryKeyFetcher,
+      models.audit.AuditRowSchema.auditRowByPrimaryKeyFetcher,
+      models.ddl.FlywaySchemaHistoryRowSchema.flywaySchemaHistoryRowByPrimaryKeyFetcher,
+      models.note.NoteRowSchema.noteRowByAuthorFetcher,
+      models.note.NoteRowSchema.noteRowByPrimaryKeyFetcher,
       models.settings.SettingSchema.settingByPrimaryKeyFetcher,
-      models.sync.SyncProgressSchema.syncProgressByPrimaryKeyFetcher,
-      models.task.ScheduledTaskRunSchema.scheduledTaskRunByPrimaryKeyFetcher,
+      models.sync.SyncProgressRowSchema.syncProgressRowByPrimaryKeyFetcher,
+      models.task.ScheduledTaskRunRowSchema.scheduledTaskRunRowByPrimaryKeyFetcher,
       models.user.SystemUserSchema.systemUserByPrimaryKeyFetcher
     )
     /* End model fetchers */
@@ -38,19 +38,18 @@ object Schema {
   // Query Types
   val baseQueryFields = customQueryFields ++
     models.supervisor.SocketDecriptionSchema.queryFields ++
-    models.settings.SettingsSchema.queryFields ++
     models.sandbox.SandboxSchema.queryFields
 
   val modelQueryFields: Seq[Field[GraphQLContext, Unit]] = {
     /* Start model query fields */
     /* Projectile export section [boilerplay] */
-    models.audit.AuditSchema.queryFields ++
-      models.audit.AuditRecordSchema.queryFields ++
-      models.ddl.FlywaySchemaHistorySchema.queryFields ++
-      models.note.NoteSchema.queryFields ++
+    models.audit.AuditRecordRowSchema.queryFields ++
+      models.audit.AuditRowSchema.queryFields ++
+      models.ddl.FlywaySchemaHistoryRowSchema.queryFields ++
+      models.note.NoteRowSchema.queryFields ++
       models.settings.SettingSchema.queryFields ++
-      models.sync.SyncProgressSchema.queryFields ++
-      models.task.ScheduledTaskRunSchema.queryFields ++
+      models.sync.SyncProgressRowSchema.queryFields ++
+      models.task.ScheduledTaskRunRowSchema.queryFields ++
       models.user.SystemUserSchema.queryFields
     /* End model query fields */
   }
@@ -58,7 +57,7 @@ object Schema {
   val enumQueryFields: Seq[Field[GraphQLContext, Unit]] = {
     /* Start enum query fields */
     /* Projectile export section [boilerplay] */
-    models.settings.SettingKeySchema.queryFields
+    models.settings.SettingKeyTypeSchema.queryFields
     /* End enum query fields */
   }
 
@@ -81,13 +80,13 @@ object Schema {
   val modelMutationFields: Seq[Field[GraphQLContext, Unit]] = {
     /* Start model mutation fields */
     /* Projectile export section [boilerplay] */
-    models.audit.AuditSchema.mutationFields ++
-      models.audit.AuditRecordSchema.mutationFields ++
-      models.ddl.FlywaySchemaHistorySchema.mutationFields ++
-      models.note.NoteSchema.mutationFields ++
+    models.audit.AuditRecordRowSchema.mutationFields ++
+      models.audit.AuditRowSchema.mutationFields ++
+      models.ddl.FlywaySchemaHistoryRowSchema.mutationFields ++
+      models.note.NoteRowSchema.mutationFields ++
       models.settings.SettingSchema.mutationFields ++
-      models.sync.SyncProgressSchema.mutationFields ++
-      models.task.ScheduledTaskRunSchema.mutationFields ++
+      models.sync.SyncProgressRowSchema.mutationFields ++
+      models.task.ScheduledTaskRunRowSchema.mutationFields ++
       models.user.SystemUserSchema.mutationFields
     /* End model mutation fields */
   }

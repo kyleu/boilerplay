@@ -33,18 +33,18 @@ object ModelBindables {
 
   /* Start model bindables */
   /* Projectile export section [boilerplay] */
-  import models.settings.SettingKey
-  private[this] def settingKeyExtractor(v: Either[String, String]) = v match {
-    case Right(s) => Right(SettingKey.withValue(s))
+  import models.settings.SettingKeyType
+  private[this] def settingKeyTypeExtractor(v: Either[String, String]) = v match {
+    case Right(s) => Right(SettingKeyType.withValue(s))
     case Left(x) => throw new IllegalStateException(x)
   }
-  implicit def settingKeyPathBindable(implicit stringBinder: PathBindable[String]): PathBindable[SettingKey] = new PathBindable[SettingKey] {
-    override def bind(key: String, value: String) = settingKeyExtractor(stringBinder.bind(key, value))
-    override def unbind(key: String, x: SettingKey) = x.value
+  implicit def settingKeyTypePathBindable(implicit stringBinder: PathBindable[String]): PathBindable[SettingKeyType] = new PathBindable[SettingKeyType] {
+    override def bind(key: String, value: String) = settingKeyTypeExtractor(stringBinder.bind(key, value))
+    override def unbind(key: String, x: SettingKeyType) = x.value
   }
-  implicit def settingKeyQueryStringBindable(implicit stringBinder: QueryStringBindable[String]): QueryStringBindable[SettingKey] = new QueryStringBindable[SettingKey] {
-    override def bind(key: String, params: Map[String, Seq[String]]) = stringBinder.bind(key, params).map(settingKeyExtractor)
-    override def unbind(key: String, x: SettingKey) = x.value
+  implicit def settingKeyTypeQueryStringBindable(implicit stringBinder: QueryStringBindable[String]): QueryStringBindable[SettingKeyType] = new QueryStringBindable[SettingKeyType] {
+    override def bind(key: String, params: Map[String, Seq[String]]) = stringBinder.bind(key, params).map(settingKeyTypeExtractor)
+    override def unbind(key: String, x: SettingKeyType) = x.value
   }
   /* End model bindables */
 }

@@ -40,13 +40,13 @@ object Icons {
 
   /* Start model icons */
   /* Projectile export section [boilerplay] */
-  val audit = "fa-glass"
-  val auditRecord = "fa-hand-paper-o"
-  val flywaySchemaHistory = "fa-hashtag"
-  val note = "fa-paw"
-  val scheduledTaskRun = "fa-asterisk"
+  val auditRecordRow = "fa-moon-o"
+  val auditRow = "fa-map-pin"
+  val flywaySchemaHistoryRow = "fa-hand-rock-o"
+  val noteRow = "fa-code"
+  val scheduledTaskRunRow = "fa-folder-o"
   val setting = "fa-gamepad"
-  val syncProgress = "fa-plane"
+  val syncProgressRow = "fa-meh-o"
   val systemUser = "fa-envelope-o"
   /* End model icons */
 }

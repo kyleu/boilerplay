@@ -3,20 +3,20 @@ package models.settings
 
 import graphql.{GraphQLContext, GraphQLSchemaHelper}
 import graphql.GraphQLUtils._
-import models.note.NoteSchema
-import models.settings.SettingKeySchema.settingKeyEnumType
+import models.note.NoteRowSchema
+import models.settings.SettingKeyTypeSchema.settingKeyTypeEnumType
 import sangria.execution.deferred.{Fetcher, HasId}
 import sangria.schema._
 
 object SettingSchema extends GraphQLSchemaHelper("setting") {
-  implicit val settingPrimaryKeyId: HasId[Setting, SettingKey] = HasId[Setting, SettingKey](_.k)
-  private[this] def getByPrimaryKeySeq(c: GraphQLContext, idSeq: Seq[SettingKey]) = {
+  implicit val settingPrimaryKeyId: HasId[Setting, SettingKeyType] = HasId[Setting, SettingKeyType](_.k)
+  private[this] def getByPrimaryKeySeq(c: GraphQLContext, idSeq: Seq[SettingKeyType]) = {
     c.services.settingsServices.settingService.getByPrimaryKeySeq(c.creds, idSeq)(c.trace)
   }
   val settingByPrimaryKeyFetcher = Fetcher(getByPrimaryKeySeq)
 
-  val settingKArg = Argument("k", settingKeyEnumType)
-  val settingKSeqArg = Argument("ks", ListInputType(settingKeyEnumType))
+  val settingKArg = Argument("k", settingKeyTypeEnumType)
+  val settingKSeqArg = Argument("ks", ListInputType(settingKeyTypeEnumType))
 
   implicit lazy val settingType: sangria.schema.ObjectType[GraphQLContext, Setting] = deriveObjectType()
 

@@ -1,4 +1,4 @@
-@(user: models.user.SystemUser, tasks: Seq[models.task.scheduled.ScheduledTask], syncs: Seq[models.sync.SyncProgress])(
+@(user: models.user.SystemUser, tasks: Seq[models.task.scheduled.ScheduledTask], syncs: Seq[models.sync.SyncProgressRow])(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
 )@traceData.logClass(getClass)@views.html.admin.layout.page(user, "status", "Scheduled Tasks") {
   <ul class="collection with-header">

@@ -9,7 +9,7 @@ import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
 import controllers.BaseController
 import models.Application
 import models.auth.Credentials
-import models.settings.SettingKey
+import models.settings.SettingKeyType
 import models.user._
 import services.user.SystemUserSearchService
 
@@ -53,7 +53,7 @@ class RegistrationController @javax.inject.Inject() (
           )
           case None =>
             val authInfo = hasher.hash(data.password)
-            val role = Role.withValue(app.coreServices.settings(SettingKey.DefaultNewUserRole))
+            val role = Role.withValue(app.coreServices.settings(SettingKeyType.DefaultNewUserRole))
             val user = SystemUser(
               id = UUID.randomUUID,
               username = data.username,

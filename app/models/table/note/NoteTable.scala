@@ -3,7 +3,7 @@ package models.table.note
 import java.time.LocalDateTime
 import java.util.UUID
 
-import models.note.Note
+import models.note.NoteRow
 import services.database.slick.SlickQueryService.imports._
 
 object NoteTable {
@@ -14,11 +14,11 @@ object NoteTable {
 
   def removeByPrimaryKey(id: UUID) = query.filter(_.id === id).delete
 
-  def insert(model: Note) = query += model
-  def insertBatch(seq: Seq[Note]) = query ++= seq
+  def insert(model: NoteRow) = query += model
+  def insertBatch(seq: Seq[NoteRow]) = query ++= seq
 }
 
-class NoteTable(tag: Tag) extends Table[Note](tag, "note") {
+class NoteTable(tag: Tag) extends Table[NoteRow](tag, "note") {
   def id = column[UUID]("id", O.PrimaryKey)
   def relType = column[Option[String]]("rel_type")
   def relPk = column[Option[String]]("rel_pk")
@@ -26,5 +26,5 @@ class NoteTable(tag: Tag) extends Table[Note](tag, "note") {
   def author = column[UUID]("author")
   def created = column[LocalDateTime]("created")
 
-  override val * = (id, relType, relPk, text, author, created) <> ((Note.apply _).tupled, Note.unapply)
+  override val * = (id, relType, relPk, text, author, created) <> ((NoteRow.apply _).tupled, NoteRow.unapply)
 }

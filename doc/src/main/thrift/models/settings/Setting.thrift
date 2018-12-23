@@ -5,7 +5,7 @@ include "../../common.thrift"
 include "../../result.thrift"
 
 struct Setting {
-  1: required SettingKey k;
+  1: required SettingKeyType k;
   2: required string v;
 }
 

@@ -2,7 +2,7 @@ package controllers.admin.system
 
 import controllers.BaseController
 import models.Application
-import models.settings.SettingKey
+import models.settings.SettingKeyType
 import util.web.ControllerUtils
 
 import scala.concurrent.Future
@@ -18,7 +18,7 @@ class SettingsController @javax.inject.Inject() (override val app: Application) 
   def saveSettings = withSession("settings.save", admin = true) { implicit request => implicit td =>
     val form = ControllerUtils.getForm(request.body)
     form.foreach { x =>
-      SettingKey.withValueOpt(x._1) match {
+      SettingKeyType.withValueOpt(x._1) match {
         case Some(settingKey) => app.coreServices.settings.set(settingKey, x._2)
         case None => log.warn(s"Attempt to save invalid setting [${x._1}].")
       }

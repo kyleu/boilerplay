@@ -1,6 +1,6 @@
 package services.audit
 
-import models.settings.SettingKey
+import models.settings.SettingKeyType
 import play.api.mvc.Call
 import services.audit.AuditArgs._
 import util.Logging
@@ -11,13 +11,13 @@ object AuditRoutes extends Logging {
   private[this] def routeFor(key: String, arg: Int => String): Call = key.toLowerCase match {
     /* Start audit calls */
     /* Projectile export section [boilerplay] */
-    case "audit" => controllers.admin.audit.routes.AuditController.view(uuidArg(arg(0)))
-    case "auditrecord" => controllers.admin.audit.routes.AuditRecordController.view(uuidArg(arg(0)))
-    case "flywayschemahistory" => controllers.admin.ddl.routes.FlywaySchemaHistoryController.view(longArg(arg(0)))
-    case "note" => controllers.admin.note.routes.NoteController.view(uuidArg(arg(0)))
-    case "scheduledtaskrun" => controllers.admin.task.routes.ScheduledTaskRunController.view(uuidArg(arg(0)))
-    case "setting" => controllers.admin.settings.routes.SettingController.view(enumArg(SettingKey)(arg(0)))
-    case "syncprogress" => controllers.admin.sync.routes.SyncProgressController.view(stringArg(arg(0)))
+    case "auditrecordrow" => controllers.admin.audit.routes.AuditRecordRowController.view(uuidArg(arg(0)))
+    case "auditrow" => controllers.admin.audit.routes.AuditRowController.view(uuidArg(arg(0)))
+    case "flywayschemahistoryrow" => controllers.admin.ddl.routes.FlywaySchemaHistoryRowController.view(longArg(arg(0)))
+    case "noterow" => controllers.admin.note.routes.NoteRowController.view(uuidArg(arg(0)))
+    case "scheduledtaskrunrow" => controllers.admin.task.routes.ScheduledTaskRunRowController.view(uuidArg(arg(0)))
+    case "setting" => controllers.admin.settings.routes.SettingController.view(enumArg(SettingKeyType)(arg(0)))
+    case "syncprogressrow" => controllers.admin.sync.routes.SyncProgressRowController.view(stringArg(arg(0)))
     case "systemuser" => controllers.admin.user.routes.SystemUserController.view(uuidArg(arg(0)))
     /* End audit calls */
 

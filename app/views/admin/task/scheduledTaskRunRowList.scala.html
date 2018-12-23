@@ -1,0 +1,31 @@
+@* Generated File *@
+@(user: models.user.SystemUser, totalCount: Option[Int], modelSeq: Seq[models.task.ScheduledTaskRunRow], q: Option[String], orderBy: Option[String], orderAsc: Boolean, limit: Int, offset: Int)(
+    implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
+)@traceData.logClass(getClass)
+@views.html.admin.explore.list(
+  user = user,
+  model = "Scheduled Task Run",
+  modelPlural = "Scheduled Task Runs",
+  icon = models.template.Icons.scheduledTaskRunRow,
+  cols = Seq(
+    "id" -> "Id",
+    "task" -> "Task",
+    "arguments" -> "Arguments",
+    "status" -> "Status",
+    "started" -> "Started"
+  ),
+  totalCount = totalCount,
+  rows = modelSeq.map(model => views.html.admin.task.scheduledTaskRunRowDataRow(model)),
+  orderBy = orderBy,
+  orderAsc = orderAsc,
+  calls = models.result.web.ListCalls(
+    newCall = Some(controllers.admin.task.routes.ScheduledTaskRunRowController.createForm()),
+    orderBy = Some(controllers.admin.task.routes.ScheduledTaskRunRowController.list(q, _, _, Some(limit), Some(0))),
+    search = Some(controllers.admin.task.routes.ScheduledTaskRunRowController.list(None, orderBy, orderAsc, Some(limit), None)),
+    next = controllers.admin.task.routes.ScheduledTaskRunRowController.list(q, orderBy, orderAsc, Some(limit), Some(offset + limit)),
+    prev = controllers.admin.task.routes.ScheduledTaskRunRowController.list(q, orderBy, orderAsc, Some(limit), Some(offset - limit))
+  ),
+  limit = limit,
+  offset = offset,
+  q = q
+)

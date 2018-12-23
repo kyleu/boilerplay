@@ -7,10 +7,10 @@ object Setting {
   implicit val jsonEncoder: Encoder[Setting] = deriveEncoder
   implicit val jsonDecoder: Decoder[Setting] = deriveDecoder
 
-  def empty(k: SettingKey = SettingKey.DefaultNewUserRole, v: String = "") = Setting(k, v)
+  def empty(k: SettingKeyType = SettingKeyType.DefaultNewUserRole, v: String = "") = Setting(k, v)
 }
 
-final case class Setting(k: SettingKey, v: String) extends DataFieldModel {
+final case class Setting(k: SettingKeyType, v: String) extends DataFieldModel {
   override def toDataFields = Seq(
     DataField("k", Some(k.toString)),
     DataField("v", Some(v))

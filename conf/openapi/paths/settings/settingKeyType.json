@@ -1,0 +1,24 @@
+// Generated File
+{
+  "/admin/settings/settingKeyType": {
+    "get": {
+      "summary": "Lists the possible SettingKeyType values.",
+      "operationId": "models.settings.SettingKeyType.list",
+      "tags": ["settings"],
+      "responses": {
+        "200": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

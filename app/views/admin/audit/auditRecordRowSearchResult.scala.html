@@ -1,0 +1,9 @@
+@* Generated File *@
+@(model: models.audit.AuditRecordRow, hit: String)<div class="search-result">
+  <div class="right">Audit Record</div>
+  <div>
+    <i class="fa @models.template.Icons.auditRecordRow"></i>
+    <a class="theme-text" href="@controllers.admin.audit.routes.AuditRecordRowController.view(model.id)">@model.id</a>
+  </div>
+  <em>@hit</em>
+</div>

@@ -1,5 +1,5 @@
 @* Generated File *@
-@(user: models.user.SystemUser, model: models.user.SystemUser, notes: Seq[models.note.Note], auditRecords: Seq[models.audit.AuditRecord], debug: Boolean)(
+@(user: models.user.SystemUser, model: models.user.SystemUser, notes: Seq[models.note.NoteRow], auditRecords: Seq[models.audit.AuditRecordRow], debug: Boolean)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
 )@traceData.logClass(getClass)@views.html.admin.layout.page(user, "explore", s"System User [${model.id}]") {
   <div class="collection with-header">
@@ -50,9 +50,9 @@
   </div>
 
   <ul id="model-relations" class="collapsible" data-collapsible="expandable">
-    <li id="relation-note-author" data-table="note" data-field="author" data-singular="Note" data-plural="Notes" data-url="@controllers.admin.note.routes.NoteController.byAuthor(model.id, limit = Some(5))">
+    <li id="relation-noteRow-author" data-table="noteRow" data-field="author" data-singular="Note" data-plural="Notes" data-url="@controllers.admin.note.routes.NoteRowController.byAuthor(model.id, limit = Some(5))">
       <div class="collapsible-header">
-        <i class="fa @models.template.Icons.note"></i>
+        <i class="fa @models.template.Icons.noteRow"></i>
         <span class="title">Notes</span>&nbsp;by Author
       </div>
       <div class="collapsible-body"><span>Loading...</span></div>

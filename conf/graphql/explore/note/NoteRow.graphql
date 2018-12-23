@@ -1,0 +1,28 @@
+# Generated File
+# Queries the system for Notes.
+query NoteRow {
+  noteRow(
+    q: null, # Or string literal
+    filters: null, # Or filters of type `{ k: "", o: Equal, v: "" }`
+    orderBy: null, # Or orderBy of type `{ col: "", dir: Ascending }`
+    limit: null, # Or number
+    offset: null # Or number
+  ) {
+    totalCount
+    paging {
+      current
+      next
+      itemsPerPage
+    }
+    results {
+      id
+      relType
+      relPk
+      text
+      author
+      created
+    }
+    durationMs
+    occurred
+  }
+}

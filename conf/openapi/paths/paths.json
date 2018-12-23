@@ -3,18 +3,18 @@
 
   // Start enum paths
   // Projectile export section [boilerplay]
-  "#include:settings/settingKey.json": "*",
+  "#include:settings/settingKeyType.json": "*",
   // End enum paths
 
   // Start schema paths
   // Projectile export section [boilerplay]
-  "#include:audit/audit.json": "*",
-  "#include:audit/auditRecord.json": "*",
-  "#include:ddl/flywaySchemaHistory.json": "*",
-  "#include:note/note.json": "*",
+  "#include:audit/auditRecordRow.json": "*",
+  "#include:audit/auditRow.json": "*",
+  "#include:ddl/flywaySchemaHistoryRow.json": "*",
+  "#include:note/noteRow.json": "*",
   "#include:settings/setting.json": "*",
-  "#include:sync/syncProgress.json": "*",
-  "#include:task/scheduledTaskRun.json": "*",
-  "#include:user/systemUser.json": "*"
+  "#include:sync/syncProgressRow.json": "*",
+  "#include:task/scheduledTaskRunRow.json": "*",
+  "#include:user/systemUser.json": "*",
   // End schema paths
 }

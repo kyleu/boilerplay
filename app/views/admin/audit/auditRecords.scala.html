@@ -1,4 +1,4 @@
-@(records: Seq[models.audit.AuditRecord], model: String, title: String, pk: Any*)
+@(records: Seq[models.audit.AuditRecordRow], model: String, title: String, pk: Any*)
 <div class="collection-item">
   @if(records.isEmpty) {
     <i>
@@ -19,8 +19,8 @@
       <tbody>
         @records.map { record =>
           <tr>
-            <td><a href="@controllers.admin.audit.routes.AuditRecordController.view(record.id)" class="theme-text">@record.id</a></td>
-            <td><a href="@controllers.admin.audit.routes.AuditController.view(record.auditId)" class="theme-text">@record.auditId</a></td>
+            <td><a href="@controllers.admin.audit.routes.AuditRecordRowController.view(record.id)" class="theme-text">@record.id</a></td>
+            <td><a href="@controllers.admin.audit.routes.AuditRowController.view(record.auditId)" class="theme-text">@record.auditId</a></td>
             <td>@record.t</td>
             <td>@record.pk.mkString(", ")</td>
             <td>

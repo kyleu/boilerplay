@@ -20,12 +20,12 @@ object AuditHelper extends Logging {
     inst = Some(service)
   }
 
-  def onAudit(audit: Audit, records: Seq[AuditRecord])(implicit trace: TraceData) = getInst.callback(audit, records)
+  def onAudit(audit: Audit, records: Seq[AuditRecordRow])(implicit trace: TraceData) = getInst.callback(audit, records)
 
   def onInsert(t: String, pk: Seq[String], fields: Seq[DataField], creds: Credentials)(implicit trace: TraceData) = {
     val msg = s"Inserted new [$t] with [${fields.size}] fields:"
     val auditId = UUID.randomUUID
-    val records = Seq(AuditRecord.empty(auditId = auditId, t = t, pk = pk.toList, changes = fields.map(f => AuditField(f.k, None, f.v)).asJson))
+    val records = Seq(AuditRecordRow.empty(auditId = auditId, t = t, pk = pk.toList, changes = fields.map(f => AuditField(f.k, None, f.v)).asJson))
     onAudit(Audit(id = auditId, act = "insert", server = server, client = creds.remoteAddress, userId = creds.user.id, msg = msg), records.toList)
   }
 
@@ -39,14 +39,14 @@ object AuditHelper extends Logging {
     val changes = newFields.flatMap(changeFor)
     val msg = s"Updated [${changes.size}] fields of $t[${pk.map(id => id.k + ": " + id.v.getOrElse(NullUtils.str)).mkString(", ")}]:\n"
     val auditId = UUID.randomUUID
-    val records = Seq(AuditRecord.empty(auditId = auditId, t = t, changes = changes.asJson))
+    val records = Seq(AuditRecordRow.empty(auditId = auditId, t = t, changes = changes.asJson))
     onAudit(Audit(id = auditId, act = "update", server = server, client = creds.remoteAddress, userId = creds.user.id, msg = msg), records = records.toList)
   }
 
   def onRemove(t: String, pk: Seq[String], fields: Seq[DataField], creds: Credentials)(implicit trace: TraceData) = {
     val msg = s"Removed [$t] with [${fields.size}] fields:"
     val auditId = UUID.randomUUID
-    val records = Seq(AuditRecord.empty(auditId = auditId, t = t, pk = pk.toList, changes = fields.map(f => AuditField(f.k, None, f.v)).asJson))
+    val records = Seq(AuditRecordRow.empty(auditId = auditId, t = t, pk = pk.toList, changes = fields.map(f => AuditField(f.k, None, f.v)).asJson))
     onAudit(Audit(id = auditId, act = "remove", server = server, client = creds.remoteAddress, userId = creds.user.id, msg = msg), records = records.toList)
   }
 }

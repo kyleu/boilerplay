@@ -1,0 +1,83 @@
+// Generated File
+{
+  "ddl.FlywaySchemaHistoryRow": {
+    "required": [
+      "installedRank",
+      "description",
+      "typ",
+      "script",
+      "installedBy",
+      "installedOn",
+      "executionTime",
+      "success"
+    ],
+    "properties": {
+      "installedRank": {
+        "type": "integer"
+      },
+      "version": {
+        "type": "string"
+      },
+      "description": {
+        "type": "string"
+      },
+      "typ": {
+        "type": "string"
+      },
+      "script": {
+        "type": "string"
+      },
+      "checksum": {
+        "type": "integer"
+      },
+      "installedBy": {
+        "type": "string"
+      },
+      "installedOn": {
+        "type": "string",
+        "example": "2018-01-01 00:00:00"
+      },
+      "executionTime": {
+        "type": "integer"
+      },
+      "success": {
+        "type": "boolean"
+      }
+    }
+  },
+  "ddl.FlywaySchemaHistoryRowResult": {
+    "properties": {
+      "filters": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/common.Filter"
+        }
+      },
+      "orderBys": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/common.OrderBy"
+        }
+      },
+      "totalCount": {
+        "type": "integer"
+      },
+      "paging": {
+        "$ref": "#/components/schemas/common.PagingOptions"
+      },
+      "results": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/ddl.FlywaySchemaHistoryRow"
+        }
+      },
+      "durationMs": {
+        "type": "integer"
+      },
+      "occurred": {
+        "type": "string",
+        "example": "2018-01-01 00:00:00"
+      }
+    }
+  }
+}

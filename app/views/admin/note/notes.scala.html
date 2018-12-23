@@ -1,4 +1,4 @@
-@(notes: Seq[models.note.Note], model: String, title: String, pk: Any*)
+@(notes: Seq[models.note.NoteRow], model: String, title: String, pk: Any*)
 <div class="collection-item">
   <div class="right"><a href="@controllers.admin.note.routes.ModelNoteController.addForm(model, pk.mkString("/"))" class="theme-text">Add Note</a></div>
   @if(notes.isEmpty) {
@@ -8,7 +8,7 @@
     @notes.map { note =>
       <div class="model-note">
         <div class="right">@util.DateUtils.niceDateTime(note.created)</div>
-        <a href="@controllers.admin.note.routes.NoteController.view(note.id)" class="theme-text">@note.id</a>
+        <a href="@controllers.admin.note.routes.NoteRowController.view(note.id)" class="theme-text">@note.id</a>
         <pre>@note.text</pre>
       </div>
     }

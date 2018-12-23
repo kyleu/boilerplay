@@ -1,11 +1,11 @@
 /* Start generated Thrift service includes */
 /* Projectile export section [boilerplay] */
-include "services/audit/AuditRecordService.thrift"
-include "services/audit/AuditService.thrift"
-include "services/ddl/FlywaySchemaHistoryService.thrift"
-include "services/note/NoteService.thrift"
+include "services/audit/AuditRecordRowService.thrift"
+include "services/audit/AuditRowService.thrift"
+include "services/ddl/FlywaySchemaHistoryRowService.thrift"
+include "services/note/NoteRowService.thrift"
 include "services/settings/SettingService.thrift"
-include "services/sync/SyncProgressService.thrift"
-include "services/task/ScheduledTaskRunService.thrift"
+include "services/sync/SyncProgressRowService.thrift"
+include "services/task/ScheduledTaskRunRowService.thrift"
 include "services/user/SystemUserService.thrift"
 /* End generated Thrift service includes */

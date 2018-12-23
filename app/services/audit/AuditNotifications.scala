@@ -1,7 +1,7 @@
 package services.audit
 
-import models.audit.{Audit, AuditRecord}
-import models.queries.audit.{AuditQueries, AuditRecordQueries}
+import models.audit.{Audit, AuditRecordRow}
+import models.queries.audit.{AuditQueries, AuditRecordRowQueries}
 import services.database.ApplicationDatabase
 import util.FutureUtils.defaultContext
 import util.{FutureUtils, Logging}
@@ -11,10 +11,10 @@ import util.web.TracingWSClient
 import scala.concurrent.Future
 
 object AuditNotifications extends Logging {
-  def persist(a: Audit, records: Seq[AuditRecord])(implicit trace: TraceData) = {
+  def persist(a: Audit, records: Seq[AuditRecordRow])(implicit trace: TraceData) = {
     log.debug(s"Persisting audit [${a.id}]...")
     val ret = ApplicationDatabase.executeF(AuditQueries.insert(a)).map { _ =>
-      FutureUtils.acc(records, (r: AuditRecord) => ApplicationDatabase.executeF(AuditRecordQueries.insert(r)).map { _ =>
+      FutureUtils.acc(records, (r: AuditRecordRow) => ApplicationDatabase.executeF(AuditRecordRowQueries.insert(r)).map { _ =>
         log.debug(s"Persisted audit record [${r.id}] for audit [${a.id}].")
       })(FutureUtils.serviceContext).map { _ =>
         log.debug(s"Persisted audit [${a.id}] with [${records.size}] records.")
