@@ -2,7 +2,6 @@
 package services.audit
 
 import java.util.UUID
-
 import models.audit.AuditRow
 import models.auth.Credentials
 import models.queries.audit.AuditRowQueries
@@ -10,7 +9,6 @@ import models.result.data.DataField
 import models.result.filter.Filter
 import models.result.orderBy.OrderBy
 import models.tag.Tag
-
 import scala.concurrent.Future
 import services.ModelServiceHelper
 import services.database.ApplicationDatabase

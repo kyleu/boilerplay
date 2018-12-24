@@ -1,3 +1,4 @@
+# Generated File
 # Note Routes
 GET         /                                                         controllers.admin.note.NoteRowController.list(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None)
 GET         /autocomplete                                            controllers.admin.note.NoteRowController.autocomplete(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None)
@@ -9,5 +10,3 @@ GET         /:id/form                                                 controller
 POST        /:id                                                      controllers.admin.note.NoteRowController.edit(id: java.util.UUID)
 GET         /:id/remove                                               controllers.admin.note.NoteRowController.remove(id: java.util.UUID)
 
-GET         /view/:model/*pk                                          controllers.admin.note.ModelNoteController.view(model, pk)
-GET         /add/:model/*pk                                           controllers.admin.note.ModelNoteController.addForm(model, pk)

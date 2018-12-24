@@ -1,5 +1,7 @@
 package services.settings
 
+import models.auth.Credentials
+import models.result.data.DataField
 import models.settings.{Setting, SettingKeyType}
 import models.table.settings.SettingTable
 import services.database.ApplicationDatabase
@@ -11,7 +13,7 @@ import util.FutureUtils.serviceContext
 import scala.concurrent.Future
 
 @javax.inject.Singleton
-class SettingsService @javax.inject.Inject() (tracing: TracingService) extends Logging {
+class SettingsService @javax.inject.Inject() (tracing: TracingService, svc: SettingService) extends Logging {
   private[this] var settings = Seq.empty[Setting]
   private[this] var settingsMap = Map.empty[SettingKeyType, String]
 
@@ -39,13 +41,14 @@ class SettingsService @javax.inject.Inject() (tracing: TracingService) extends L
 
   def set(key: SettingKeyType, value: String)(implicit trace: TraceData) = tracing.trace("settings.service.set") { _ =>
     val s = Setting(key, value)
+    val creds = Credentials.system
     val ret = if (s.isDefault) {
       settingsMap = settingsMap - key
-      ApplicationDatabase.slick.run(SettingTable.delete(key))
+      svc.remove(creds, key)
     } else {
-      ApplicationDatabase.slick.run(SettingTable.getByPrimaryKey(key)).flatMap {
-        case Some(_) => ApplicationDatabase.slick.run(SettingTable.update(s))
-        case None => ApplicationDatabase.slick.run(SettingTable.insert(s))
+      svc.getByPrimaryKey(creds, key).flatMap {
+        case Some(_) => svc.update(creds, key, Seq(DataField("v", Some(s.v))))
+        case None => svc.insert(creds, s)
       }.map { _ =>
         settingsMap = settingsMap + (key -> value)
       }

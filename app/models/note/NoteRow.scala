@@ -1,32 +1,28 @@
+/* Generated File */
 package models.note
 
 import java.time.LocalDateTime
 import java.util.UUID
-
 import models.result.data.{DataField, DataFieldModel, DataSummary}
+import util.DateUtils
 import util.JsonSerializers._
 
 object NoteRow {
   implicit val jsonEncoder: Encoder[NoteRow] = deriveEncoder
   implicit val jsonDecoder: Decoder[NoteRow] = deriveDecoder
 
-  def empty(author: Option[UUID] = None) = NoteRow(
-    id = UUID.randomUUID,
-    relType = Some(""),
-    relPk = Some(""),
-    text = "",
-    author = author.getOrElse(UUID.randomUUID),
-    created = util.DateUtils.now
-  )
+  def empty(id: UUID = UUID.randomUUID, relType: Option[String] = None, relPk: Option[String] = None, text: String = "", author: UUID = UUID.randomUUID, created: LocalDateTime = DateUtils.now) = {
+    NoteRow(id, relType, relPk, text, author, created)
+  }
 }
 
 final case class NoteRow(
-    id: UUID = UUID.randomUUID(),
-    relType: Option[String] = None,
-    relPk: Option[String] = None,
-    text: String = "???",
-    author: UUID = UUID.randomUUID,
-    created: LocalDateTime = util.DateUtils.now
+    id: UUID,
+    relType: Option[String],
+    relPk: Option[String],
+    text: String,
+    author: UUID,
+    created: LocalDateTime
 ) extends DataFieldModel {
   override def toDataFields = Seq(
     DataField("id", Some(id.toString)),
@@ -37,5 +33,5 @@ final case class NoteRow(
     DataField("created", Some(created.toString))
   )
 
-  def toSummary = DataSummary(model = "note", pk = Seq(id.toString), title = s"$relType / $relPk / $text ($id)")
+  def toSummary = DataSummary(model = "noteRow", pk = Seq(id.toString), title = s"$relType / $relPk / $text / $author / $created ($id)")
 }

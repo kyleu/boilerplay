@@ -4,16 +4,16 @@
   "features" : [ "doobie", "datamodel", "thrift", "graphql", "service", "slick", "controller", "json", "core" ],
   "ignored" : [ ],
   "overrides" : [ {
-    "k" : "propertyName",
-    "v" : "setting"
-  }, {
-    "k" : "className",
-    "v" : "Setting"
-  }, {
     "k" : "title",
     "v" : "Setting"
   }, {
     "k" : "plural",
     "v" : "Settings"
+  }, {
+    "k" : "propertyName",
+    "v" : "setting"
+  }, {
+    "k" : "className",
+    "v" : "Setting"
   } ]
 }

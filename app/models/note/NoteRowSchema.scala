@@ -18,6 +18,17 @@ object NoteRowSchema extends GraphQLSchemaHelper("noteRow") {
   val noteRowIdArg = Argument("id", uuidType)
   val noteRowIdSeqArg = Argument("ids", ListInputType(uuidType))
 
+  val noteRowRelTypeArg = Argument("relType", StringType)
+  val noteRowRelTypeSeqArg = Argument("relTypes", ListInputType(StringType))
+  val noteRowRelPkArg = Argument("relPk", StringType)
+  val noteRowRelPkSeqArg = Argument("relPks", ListInputType(StringType))
+  val noteRowTextArg = Argument("text", StringType)
+  val noteRowTextSeqArg = Argument("texts", ListInputType(StringType))
+  val noteRowAuthorArg = Argument("author", uuidType)
+  val noteRowAuthorSeqArg = Argument("authors", ListInputType(uuidType))
+  val noteRowCreatedArg = Argument("created", localDateTimeType)
+  val noteRowCreatedSeqArg = Argument("createds", ListInputType(localDateTimeType))
+
   val noteRowByAuthorRelation = Relation[NoteRow, UUID]("byAuthor", x => Seq(x.author))
   val noteRowByAuthorFetcher = Fetcher.rel[GraphQLContext, NoteRow, NoteRow, UUID](
     getByPrimaryKeySeq, (c, rels) => c.services.noteServices.noteRowService.getByAuthorSeq(c.creds, rels(noteRowByAuthorRelation))(c.trace)
@@ -50,12 +61,36 @@ object NoteRowSchema extends GraphQLSchemaHelper("noteRow") {
     unitField(name = "noteRowSearch", desc = None, t = noteRowResultType, f = (c, td) => {
       runSearch(c.ctx.services.noteServices.noteRowService, c, td).map(toResult)
     }, queryArg, reportFiltersArg, orderBysArg, limitArg, offsetArg),
-    unitField(name = "noteRowById", desc = None, t = OptionType(noteRowType), f = (c, td) => {
-      c.ctx.services.noteServices.noteRowService.getById(c.ctx.creds, c.arg(noteRowIdArg))(td).map(_.headOption)
-    }, noteRowIdArg),
-    unitField(name = "notesByIdSeq", desc = None, t = ListType(noteRowType), f = (c, td) => {
-      c.ctx.services.noteServices.noteRowService.getByIdSeq(c.ctx.creds, c.arg(noteRowIdSeqArg))(td)
-    }, noteRowIdSeqArg)
+    unitField(name = "notesByRelType", desc = None, t = ListType(noteRowType), f = (c, td) => {
+      c.ctx.services.noteServices.noteRowService.getByRelType(c.ctx.creds, c.arg(noteRowRelTypeArg))(td)
+    }, noteRowRelTypeArg),
+    unitField(name = "notesByRelTypeSeq", desc = None, t = ListType(noteRowType), f = (c, td) => {
+      c.ctx.services.noteServices.noteRowService.getByRelTypeSeq(c.ctx.creds, c.arg(noteRowRelTypeSeqArg))(td)
+    }, noteRowRelTypeSeqArg),
+    unitField(name = "notesByRelPk", desc = None, t = ListType(noteRowType), f = (c, td) => {
+      c.ctx.services.noteServices.noteRowService.getByRelPk(c.ctx.creds, c.arg(noteRowRelPkArg))(td)
+    }, noteRowRelPkArg),
+    unitField(name = "notesByRelPkSeq", desc = None, t = ListType(noteRowType), f = (c, td) => {
+      c.ctx.services.noteServices.noteRowService.getByRelPkSeq(c.ctx.creds, c.arg(noteRowRelPkSeqArg))(td)
+    }, noteRowRelPkSeqArg),
+    unitField(name = "notesByText", desc = None, t = ListType(noteRowType), f = (c, td) => {
+      c.ctx.services.noteServices.noteRowService.getByText(c.ctx.creds, c.arg(noteRowTextArg))(td)
+    }, noteRowTextArg),
+    unitField(name = "notesByTextSeq", desc = None, t = ListType(noteRowType), f = (c, td) => {
+      c.ctx.services.noteServices.noteRowService.getByTextSeq(c.ctx.creds, c.arg(noteRowTextSeqArg))(td)
+    }, noteRowTextSeqArg),
+    unitField(name = "notesByAuthor", desc = None, t = ListType(noteRowType), f = (c, td) => {
+      c.ctx.services.noteServices.noteRowService.getByAuthor(c.ctx.creds, c.arg(noteRowAuthorArg))(td)
+    }, noteRowAuthorArg),
+    unitField(name = "notesByAuthorSeq", desc = None, t = ListType(noteRowType), f = (c, td) => {
+      c.ctx.services.noteServices.noteRowService.getByAuthorSeq(c.ctx.creds, c.arg(noteRowAuthorSeqArg))(td)
+    }, noteRowAuthorSeqArg),
+    unitField(name = "notesByCreated", desc = None, t = ListType(noteRowType), f = (c, td) => {
+      c.ctx.services.noteServices.noteRowService.getByCreated(c.ctx.creds, c.arg(noteRowCreatedArg))(td)
+    }, noteRowCreatedArg),
+    unitField(name = "notesByCreatedSeq", desc = None, t = ListType(noteRowType), f = (c, td) => {
+      c.ctx.services.noteServices.noteRowService.getByCreatedSeq(c.ctx.creds, c.arg(noteRowCreatedSeqArg))(td)
+    }, noteRowCreatedSeqArg)
   )
 
   val noteRowMutationType = ObjectType(

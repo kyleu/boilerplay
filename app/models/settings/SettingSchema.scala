@@ -31,13 +31,7 @@ object SettingSchema extends GraphQLSchemaHelper("setting") {
     }, settingKSeqArg),
     unitField(name = "settingSearch", desc = None, t = settingResultType, f = (c, td) => {
       runSearch(c.ctx.services.settingsServices.settingService, c, td).map(toResult)
-    }, queryArg, reportFiltersArg, orderBysArg, limitArg, offsetArg),
-    unitField(name = "settingByK", desc = None, t = OptionType(settingType), f = (c, td) => {
-      c.ctx.services.settingsServices.settingService.getByK(c.ctx.creds, c.arg(settingKArg))(td).map(_.headOption)
-    }, settingKArg),
-    unitField(name = "settingsByKSeq", desc = None, t = ListType(settingType), f = (c, td) => {
-      c.ctx.services.settingsServices.settingService.getByKSeq(c.ctx.creds, c.arg(settingKSeqArg))(td)
-    }, settingKSeqArg)
+    }, queryArg, reportFiltersArg, orderBysArg, limitArg, offsetArg)
   )
 
   val settingMutationType = ObjectType(

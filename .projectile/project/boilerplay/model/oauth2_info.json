@@ -4,16 +4,16 @@
   "features" : [ ],
   "ignored" : [ ],
   "overrides" : [ {
-    "k" : "propertyName",
-    "v" : "oAuth2Info"
-  }, {
-    "k" : "className",
-    "v" : "OAuth2Info"
-  }, {
     "k" : "title",
     "v" : "OAuth2 Info"
   }, {
     "k" : "plural",
     "v" : "OAuth2 Info"
+  }, {
+    "k" : "propertyName",
+    "v" : "oAuth2Info"
+  }, {
+    "k" : "className",
+    "v" : "OAuth2Info"
   } ]
 }

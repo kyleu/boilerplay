@@ -58,12 +58,6 @@ object AuditRowSchema extends GraphQLSchemaHelper("auditRow") {
     unitField(name = "auditRowSearch", desc = None, t = auditRowResultType, f = (c, td) => {
       runSearch(c.ctx.services.auditServices.auditRowService, c, td).map(toResult)
     }, queryArg, reportFiltersArg, orderBysArg, limitArg, offsetArg),
-    unitField(name = "auditRowById", desc = None, t = OptionType(auditRowType), f = (c, td) => {
-      c.ctx.services.auditServices.auditRowService.getById(c.ctx.creds, c.arg(auditRowIdArg))(td).map(_.headOption)
-    }, auditRowIdArg),
-    unitField(name = "auditsByIdSeq", desc = None, t = ListType(auditRowType), f = (c, td) => {
-      c.ctx.services.auditServices.auditRowService.getByIdSeq(c.ctx.creds, c.arg(auditRowIdSeqArg))(td)
-    }, auditRowIdSeqArg),
     unitField(name = "auditsByAct", desc = None, t = ListType(auditRowType), f = (c, td) => {
       c.ctx.services.auditServices.auditRowService.getByAct(c.ctx.creds, c.arg(auditRowActArg))(td)
     }, auditRowActArg),

@@ -1,5 +1,5 @@
 @* Generated File *@
-@(user: models.user.SystemUser, model: models.user.SystemUser, notes: Seq[models.note.NoteRow], auditRecords: Seq[models.audit.AuditRecordRow], debug: Boolean)(
+@(user: models.user.SystemUser, model: models.user.SystemUser, notes: Seq[models.note.NoteRow], debug: Boolean)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
 )@traceData.logClass(getClass)@views.html.admin.layout.page(user, "explore", s"System User [${model.id}]") {
   <div class="collection with-header">
@@ -46,7 +46,6 @@
       </table>
     </div>
     @views.html.admin.note.notes(notes, "systemUser", "System User", model.id)
-    @views.html.admin.audit.auditRecords(auditRecords, "systemUser", "System User", model.id)
   </div>
 
   <ul id="model-relations" class="collapsible" data-collapsible="expandable">

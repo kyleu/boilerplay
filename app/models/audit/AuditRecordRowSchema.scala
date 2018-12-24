@@ -22,8 +22,6 @@ object AuditRecordRowSchema extends GraphQLSchemaHelper("auditRecordRow") {
   val auditRecordRowTSeqArg = Argument("ts", ListInputType(StringType))
   val auditRecordRowPkArg = Argument("pk", ListInputType(StringType))
   val auditRecordRowPkSeqArg = Argument("pks", ListInputType(ListInputType(StringType)))
-  val auditRecordRowChangesArg = Argument("changes", StringType)
-  val auditRecordRowChangesSeqArg = Argument("changess", ListInputType(StringType))
 
   val auditRecordRowByAuditIdRelation = Relation[AuditRecordRow, UUID]("byAuditId", x => Seq(x.auditId))
   val auditRecordRowByAuditIdFetcher = Fetcher.rel[GraphQLContext, AuditRecordRow, AuditRecordRow, UUID](
@@ -57,18 +55,18 @@ object AuditRecordRowSchema extends GraphQLSchemaHelper("auditRecordRow") {
     unitField(name = "auditRecordRowSearch", desc = None, t = auditRecordRowResultType, f = (c, td) => {
       runSearch(c.ctx.services.auditServices.auditRecordRowService, c, td).map(toResult)
     }, queryArg, reportFiltersArg, orderBysArg, limitArg, offsetArg),
-    unitField(name = "auditRecordRowById", desc = None, t = OptionType(auditRecordRowType), f = (c, td) => {
-      c.ctx.services.auditServices.auditRecordRowService.getById(c.ctx.creds, c.arg(auditRecordRowIdArg))(td).map(_.headOption)
-    }, auditRecordRowIdArg),
-    unitField(name = "auditRecordsByIdSeq", desc = None, t = ListType(auditRecordRowType), f = (c, td) => {
-      c.ctx.services.auditServices.auditRecordRowService.getByIdSeq(c.ctx.creds, c.arg(auditRecordRowIdSeqArg))(td)
-    }, auditRecordRowIdSeqArg),
     unitField(name = "auditRecordsByT", desc = None, t = ListType(auditRecordRowType), f = (c, td) => {
       c.ctx.services.auditServices.auditRecordRowService.getByT(c.ctx.creds, c.arg(auditRecordRowTArg))(td)
     }, auditRecordRowTArg),
     unitField(name = "auditRecordsByTSeq", desc = None, t = ListType(auditRecordRowType), f = (c, td) => {
       c.ctx.services.auditServices.auditRecordRowService.getByTSeq(c.ctx.creds, c.arg(auditRecordRowTSeqArg))(td)
-    }, auditRecordRowTSeqArg)
+    }, auditRecordRowTSeqArg),
+    unitField(name = "auditRecordsByPk", desc = None, t = ListType(auditRecordRowType), f = (c, td) => {
+      c.ctx.services.auditServices.auditRecordRowService.getByPk(c.ctx.creds, c.arg(auditRecordRowPkArg).toList)(td)
+    }, auditRecordRowPkArg),
+    unitField(name = "auditRecordsByPkSeq", desc = None, t = ListType(auditRecordRowType), f = (c, td) => {
+      c.ctx.services.auditServices.auditRecordRowService.getByPkSeq(c.ctx.creds, c.arg(auditRecordRowPkSeqArg).map(_.toList))(td)
+    }, auditRecordRowPkSeqArg)
   )
 
   val auditRecordRowMutationType = ObjectType(

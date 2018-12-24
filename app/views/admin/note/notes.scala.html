@@ -1,6 +1,6 @@
 @(notes: Seq[models.note.NoteRow], model: String, title: String, pk: Any*)
 <div class="collection-item">
-  <div class="right"><a href="@controllers.admin.note.routes.ModelNoteController.addForm(model, pk.mkString("/"))" class="theme-text">Add Note</a></div>
+  <div class="right"><a href="@controllers.admin.projectile.routes.ModelNoteController.addForm(model, pk.mkString("/"))" class="theme-text">Add Note</a></div>
   @if(notes.isEmpty) {
     <i>No notes available for this @{title}.</i>
   } else {

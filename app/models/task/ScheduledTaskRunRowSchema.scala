@@ -20,6 +20,8 @@ object ScheduledTaskRunRowSchema extends GraphQLSchemaHelper("scheduledTaskRunRo
 
   val scheduledTaskRunRowTaskArg = Argument("task", StringType)
   val scheduledTaskRunRowTaskSeqArg = Argument("tasks", ListInputType(StringType))
+  val scheduledTaskRunRowArgumentsArg = Argument("arguments", ListInputType(StringType))
+  val scheduledTaskRunRowArgumentsSeqArg = Argument("argumentss", ListInputType(ListInputType(StringType)))
   val scheduledTaskRunRowStatusArg = Argument("status", StringType)
   val scheduledTaskRunRowStatusSeqArg = Argument("statuss", ListInputType(StringType))
   val scheduledTaskRunRowStartedArg = Argument("started", localDateTimeType)
@@ -39,18 +41,18 @@ object ScheduledTaskRunRowSchema extends GraphQLSchemaHelper("scheduledTaskRunRo
     unitField(name = "scheduledTaskRunRowSearch", desc = None, t = scheduledTaskRunRowResultType, f = (c, td) => {
       runSearch(c.ctx.services.taskServices.scheduledTaskRunRowService, c, td).map(toResult)
     }, queryArg, reportFiltersArg, orderBysArg, limitArg, offsetArg),
-    unitField(name = "scheduledTaskRunRowById", desc = None, t = OptionType(scheduledTaskRunRowType), f = (c, td) => {
-      c.ctx.services.taskServices.scheduledTaskRunRowService.getById(c.ctx.creds, c.arg(scheduledTaskRunRowIdArg))(td).map(_.headOption)
-    }, scheduledTaskRunRowIdArg),
-    unitField(name = "scheduledTaskRunsByIdSeq", desc = None, t = ListType(scheduledTaskRunRowType), f = (c, td) => {
-      c.ctx.services.taskServices.scheduledTaskRunRowService.getByIdSeq(c.ctx.creds, c.arg(scheduledTaskRunRowIdSeqArg))(td)
-    }, scheduledTaskRunRowIdSeqArg),
     unitField(name = "scheduledTaskRunsByTask", desc = None, t = ListType(scheduledTaskRunRowType), f = (c, td) => {
       c.ctx.services.taskServices.scheduledTaskRunRowService.getByTask(c.ctx.creds, c.arg(scheduledTaskRunRowTaskArg))(td)
     }, scheduledTaskRunRowTaskArg),
     unitField(name = "scheduledTaskRunsByTaskSeq", desc = None, t = ListType(scheduledTaskRunRowType), f = (c, td) => {
       c.ctx.services.taskServices.scheduledTaskRunRowService.getByTaskSeq(c.ctx.creds, c.arg(scheduledTaskRunRowTaskSeqArg))(td)
     }, scheduledTaskRunRowTaskSeqArg),
+    unitField(name = "scheduledTaskRunsByArguments", desc = None, t = ListType(scheduledTaskRunRowType), f = (c, td) => {
+      c.ctx.services.taskServices.scheduledTaskRunRowService.getByArguments(c.ctx.creds, c.arg(scheduledTaskRunRowArgumentsArg).toList)(td)
+    }, scheduledTaskRunRowArgumentsArg),
+    unitField(name = "scheduledTaskRunsByArgumentsSeq", desc = None, t = ListType(scheduledTaskRunRowType), f = (c, td) => {
+      c.ctx.services.taskServices.scheduledTaskRunRowService.getByArgumentsSeq(c.ctx.creds, c.arg(scheduledTaskRunRowArgumentsSeqArg).map(_.toList))(td)
+    }, scheduledTaskRunRowArgumentsSeqArg),
     unitField(name = "scheduledTaskRunsByStatus", desc = None, t = ListType(scheduledTaskRunRowType), f = (c, td) => {
       c.ctx.services.taskServices.scheduledTaskRunRowService.getByStatus(c.ctx.creds, c.arg(scheduledTaskRunRowStatusArg))(td)
     }, scheduledTaskRunRowStatusArg),

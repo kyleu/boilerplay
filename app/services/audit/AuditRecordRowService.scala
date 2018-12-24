@@ -2,31 +2,18 @@
 package services.audit
 
 import java.util.UUID
-
 import models.audit.AuditRecordRow
 import models.auth.Credentials
-import models.database.{Query, Row}
 import models.queries.audit.AuditRecordRowQueries
 import models.result.data.DataField
 import models.result.filter.Filter
 import models.result.orderBy.OrderBy
-
 import scala.concurrent.Future
 import services.ModelServiceHelper
 import services.database.ApplicationDatabase
 import util.CsvUtils
 import util.FutureUtils.serviceContext
 import util.tracing.{TraceData, TracingService}
-import models.queries.audit.AuditRecordRowQueries.{fromRow, tableName}
-
-object AuditRecordRowService {
-  final case class GetByModel(model: String, pk: Seq[Any]) extends Query[Seq[AuditRecordRow]] {
-    override val name = "get.audit.records.by.model"
-    override val sql = s"""select * from "$tableName" where "t" = ? and "pk" = ?::character varying[]"""
-    override val values: Seq[Any] = Seq(model, pk)
-    override def reduce(rows: Iterator[Row]) = rows.map(fromRow).toList
-  }
-}
 
 @javax.inject.Singleton
 class AuditRecordRowService @javax.inject.Inject() (override val tracing: TracingService) extends ModelServiceHelper[AuditRecordRow]("auditRecordRow") {
@@ -38,10 +25,6 @@ class AuditRecordRowService @javax.inject.Inject() (override val tracing: Tracin
   }
   def getByPrimaryKeySeq(creds: Credentials, idSeq: Seq[UUID])(implicit trace: TraceData) = {
     traceF("get.by.primary.key.seq")(td => ApplicationDatabase.queryF(AuditRecordRowQueries.getByPrimaryKeySeq(idSeq))(td))
-  }
-
-  def getByModel(creds: Credentials, model: String, pk: Any*)(implicit trace: TraceData) = {
-    ApplicationDatabase.queryF(AuditRecordRowService.GetByModel(model, pk))
   }
 
   override def countAll(creds: Credentials, filters: Seq[Filter] = Nil)(implicit trace: TraceData) = {

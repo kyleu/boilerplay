@@ -19,6 +19,10 @@ object SyncProgressRowSchema extends GraphQLSchemaHelper("syncProgressRow") {
 
   val syncProgressRowStatusArg = Argument("status", StringType)
   val syncProgressRowStatusSeqArg = Argument("statuss", ListInputType(StringType))
+  val syncProgressRowMessageArg = Argument("message", StringType)
+  val syncProgressRowMessageSeqArg = Argument("messages", ListInputType(StringType))
+  val syncProgressRowLastTimeArg = Argument("lastTime", localDateTimeType)
+  val syncProgressRowLastTimeSeqArg = Argument("lastTimes", ListInputType(localDateTimeType))
 
   implicit lazy val syncProgressRowType: sangria.schema.ObjectType[GraphQLContext, SyncProgressRow] = deriveObjectType()
 
@@ -34,18 +38,24 @@ object SyncProgressRowSchema extends GraphQLSchemaHelper("syncProgressRow") {
     unitField(name = "syncProgressRowSearch", desc = None, t = syncProgressRowResultType, f = (c, td) => {
       runSearch(c.ctx.services.syncServices.syncProgressRowService, c, td).map(toResult)
     }, queryArg, reportFiltersArg, orderBysArg, limitArg, offsetArg),
-    unitField(name = "syncProgressRowByKey", desc = None, t = OptionType(syncProgressRowType), f = (c, td) => {
-      c.ctx.services.syncServices.syncProgressRowService.getByKey(c.ctx.creds, c.arg(syncProgressRowKeyArg))(td).map(_.headOption)
-    }, syncProgressRowKeyArg),
-    unitField(name = "syncProgressesByKeySeq", desc = None, t = ListType(syncProgressRowType), f = (c, td) => {
-      c.ctx.services.syncServices.syncProgressRowService.getByKeySeq(c.ctx.creds, c.arg(syncProgressRowKeySeqArg))(td)
-    }, syncProgressRowKeySeqArg),
     unitField(name = "syncProgressesByStatus", desc = None, t = ListType(syncProgressRowType), f = (c, td) => {
       c.ctx.services.syncServices.syncProgressRowService.getByStatus(c.ctx.creds, c.arg(syncProgressRowStatusArg))(td)
     }, syncProgressRowStatusArg),
     unitField(name = "syncProgressesByStatusSeq", desc = None, t = ListType(syncProgressRowType), f = (c, td) => {
       c.ctx.services.syncServices.syncProgressRowService.getByStatusSeq(c.ctx.creds, c.arg(syncProgressRowStatusSeqArg))(td)
-    }, syncProgressRowStatusSeqArg)
+    }, syncProgressRowStatusSeqArg),
+    unitField(name = "syncProgressesByMessage", desc = None, t = ListType(syncProgressRowType), f = (c, td) => {
+      c.ctx.services.syncServices.syncProgressRowService.getByMessage(c.ctx.creds, c.arg(syncProgressRowMessageArg))(td)
+    }, syncProgressRowMessageArg),
+    unitField(name = "syncProgressesByMessageSeq", desc = None, t = ListType(syncProgressRowType), f = (c, td) => {
+      c.ctx.services.syncServices.syncProgressRowService.getByMessageSeq(c.ctx.creds, c.arg(syncProgressRowMessageSeqArg))(td)
+    }, syncProgressRowMessageSeqArg),
+    unitField(name = "syncProgressesByLastTime", desc = None, t = ListType(syncProgressRowType), f = (c, td) => {
+      c.ctx.services.syncServices.syncProgressRowService.getByLastTime(c.ctx.creds, c.arg(syncProgressRowLastTimeArg))(td)
+    }, syncProgressRowLastTimeArg),
+    unitField(name = "syncProgressesByLastTimeSeq", desc = None, t = ListType(syncProgressRowType), f = (c, td) => {
+      c.ctx.services.syncServices.syncProgressRowService.getByLastTimeSeq(c.ctx.creds, c.arg(syncProgressRowLastTimeSeqArg))(td)
+    }, syncProgressRowLastTimeSeqArg)
   )
 
   val syncProgressRowMutationType = ObjectType(

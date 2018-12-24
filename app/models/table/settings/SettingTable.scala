@@ -1,29 +1,24 @@
+/* Generated File */
 package models.table.settings
 
 import models.settings.{Setting, SettingKeyType}
+import models.table.settings.SettingKeyTypeColumnType.settingKeyTypeColumnType
 import services.database.slick.SlickQueryService.imports._
-import slick.jdbc.JdbcType
 
 object SettingTable {
-  implicit val settingKeyColumnType: JdbcType[SettingKeyType] = MappedColumnType.base[SettingKeyType, String](
-    tmap = b => b.toString,
-    tcomap = i => SettingKeyType.withValue(i)
-  )
-
   val query = TableQuery[SettingTable]
 
-  def getByPrimaryKey(key: SettingKeyType) = query.filter(_.key === key).result.headOption
-
-  def insert(s: Setting) = query += s
-  def update(s: Setting) = query.filter(_.key === s.k).map(_.value).update(s.v)
-  def delete(key: SettingKeyType) = query.filter(_.key === key).delete
+  def getByPrimaryKey(k: SettingKeyType) = query.filter(_.k === k).result.headOption
+  def getByPrimaryKeySeq(kSeq: Seq[SettingKeyType]) = query.filter(_.k.inSet(kSeq)).result
 }
 
-class SettingTable(tag: Tag) extends Table[Setting](tag, "setting_values") {
-  import models.table.settings.SettingTable.settingKeyColumnType
+class SettingTable(tag: slick.lifted.Tag) extends Table[Setting](tag, "setting_values") {
+  val k = column[SettingKeyType]("k", O.PrimaryKey)
+  val v = column[String]("v")
 
-  def key = column[SettingKeyType]("k", O.PrimaryKey)
-  def value = column[String]("v")
-
-  override val * = (key, value) <> ((Setting.apply _).tupled, Setting.unapply)
+  override val * = (k, v) <> (
+    (Setting.apply _).tupled,
+    Setting.unapply
+  )
 }
+

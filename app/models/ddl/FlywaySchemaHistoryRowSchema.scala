@@ -17,6 +17,14 @@ object FlywaySchemaHistoryRowSchema extends GraphQLSchemaHelper("flywaySchemaHis
   val flywaySchemaHistoryRowInstalledRankArg = Argument("installedRank", LongType)
   val flywaySchemaHistoryRowInstalledRankSeqArg = Argument("installedRanks", ListInputType(LongType))
 
+  val flywaySchemaHistoryRowVersionArg = Argument("version", StringType)
+  val flywaySchemaHistoryRowVersionSeqArg = Argument("versions", ListInputType(StringType))
+  val flywaySchemaHistoryRowDescriptionArg = Argument("description", StringType)
+  val flywaySchemaHistoryRowDescriptionSeqArg = Argument("descriptions", ListInputType(StringType))
+  val flywaySchemaHistoryRowTypArg = Argument("typ", StringType)
+  val flywaySchemaHistoryRowTypSeqArg = Argument("typs", ListInputType(StringType))
+  val flywaySchemaHistoryRowInstalledOnArg = Argument("installedOn", localDateTimeType)
+  val flywaySchemaHistoryRowInstalledOnSeqArg = Argument("installedOns", ListInputType(localDateTimeType))
   val flywaySchemaHistoryRowSuccessArg = Argument("success", BooleanType)
   val flywaySchemaHistoryRowSuccessSeqArg = Argument("successs", ListInputType(BooleanType))
 
@@ -34,12 +42,30 @@ object FlywaySchemaHistoryRowSchema extends GraphQLSchemaHelper("flywaySchemaHis
     unitField(name = "flywaySchemaHistoryRowSearch", desc = None, t = flywaySchemaHistoryRowResultType, f = (c, td) => {
       runSearch(c.ctx.services.ddlServices.flywaySchemaHistoryRowService, c, td).map(toResult)
     }, queryArg, reportFiltersArg, orderBysArg, limitArg, offsetArg),
-    unitField(name = "flywaySchemaHistoryRowByInstalledRank", desc = None, t = OptionType(flywaySchemaHistoryRowType), f = (c, td) => {
-      c.ctx.services.ddlServices.flywaySchemaHistoryRowService.getByInstalledRank(c.ctx.creds, c.arg(flywaySchemaHistoryRowInstalledRankArg))(td).map(_.headOption)
-    }, flywaySchemaHistoryRowInstalledRankArg),
-    unitField(name = "flywaySchemaHistoriesByInstalledRankSeq", desc = None, t = ListType(flywaySchemaHistoryRowType), f = (c, td) => {
-      c.ctx.services.ddlServices.flywaySchemaHistoryRowService.getByInstalledRankSeq(c.ctx.creds, c.arg(flywaySchemaHistoryRowInstalledRankSeqArg))(td)
-    }, flywaySchemaHistoryRowInstalledRankSeqArg),
+    unitField(name = "flywaySchemaHistoriesByVersion", desc = None, t = ListType(flywaySchemaHistoryRowType), f = (c, td) => {
+      c.ctx.services.ddlServices.flywaySchemaHistoryRowService.getByVersion(c.ctx.creds, c.arg(flywaySchemaHistoryRowVersionArg))(td)
+    }, flywaySchemaHistoryRowVersionArg),
+    unitField(name = "flywaySchemaHistoriesByVersionSeq", desc = None, t = ListType(flywaySchemaHistoryRowType), f = (c, td) => {
+      c.ctx.services.ddlServices.flywaySchemaHistoryRowService.getByVersionSeq(c.ctx.creds, c.arg(flywaySchemaHistoryRowVersionSeqArg))(td)
+    }, flywaySchemaHistoryRowVersionSeqArg),
+    unitField(name = "flywaySchemaHistoriesByDescription", desc = None, t = ListType(flywaySchemaHistoryRowType), f = (c, td) => {
+      c.ctx.services.ddlServices.flywaySchemaHistoryRowService.getByDescription(c.ctx.creds, c.arg(flywaySchemaHistoryRowDescriptionArg))(td)
+    }, flywaySchemaHistoryRowDescriptionArg),
+    unitField(name = "flywaySchemaHistoriesByDescriptionSeq", desc = None, t = ListType(flywaySchemaHistoryRowType), f = (c, td) => {
+      c.ctx.services.ddlServices.flywaySchemaHistoryRowService.getByDescriptionSeq(c.ctx.creds, c.arg(flywaySchemaHistoryRowDescriptionSeqArg))(td)
+    }, flywaySchemaHistoryRowDescriptionSeqArg),
+    unitField(name = "flywaySchemaHistoriesByTyp", desc = None, t = ListType(flywaySchemaHistoryRowType), f = (c, td) => {
+      c.ctx.services.ddlServices.flywaySchemaHistoryRowService.getByTyp(c.ctx.creds, c.arg(flywaySchemaHistoryRowTypArg))(td)
+    }, flywaySchemaHistoryRowTypArg),
+    unitField(name = "flywaySchemaHistoriesByTypSeq", desc = None, t = ListType(flywaySchemaHistoryRowType), f = (c, td) => {
+      c.ctx.services.ddlServices.flywaySchemaHistoryRowService.getByTypSeq(c.ctx.creds, c.arg(flywaySchemaHistoryRowTypSeqArg))(td)
+    }, flywaySchemaHistoryRowTypSeqArg),
+    unitField(name = "flywaySchemaHistoriesByInstalledOn", desc = None, t = ListType(flywaySchemaHistoryRowType), f = (c, td) => {
+      c.ctx.services.ddlServices.flywaySchemaHistoryRowService.getByInstalledOn(c.ctx.creds, c.arg(flywaySchemaHistoryRowInstalledOnArg))(td)
+    }, flywaySchemaHistoryRowInstalledOnArg),
+    unitField(name = "flywaySchemaHistoriesByInstalledOnSeq", desc = None, t = ListType(flywaySchemaHistoryRowType), f = (c, td) => {
+      c.ctx.services.ddlServices.flywaySchemaHistoryRowService.getByInstalledOnSeq(c.ctx.creds, c.arg(flywaySchemaHistoryRowInstalledOnSeqArg))(td)
+    }, flywaySchemaHistoryRowInstalledOnSeqArg),
     unitField(name = "flywaySchemaHistoriesBySuccess", desc = None, t = ListType(flywaySchemaHistoryRowType), f = (c, td) => {
       c.ctx.services.ddlServices.flywaySchemaHistoryRowService.getBySuccess(c.ctx.creds, c.arg(flywaySchemaHistoryRowSuccessArg))(td)
     }, flywaySchemaHistoryRowSuccessArg),
