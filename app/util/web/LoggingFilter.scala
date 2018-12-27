@@ -2,9 +2,9 @@ package util.web
 
 import java.util.concurrent.TimeUnit
 
-import javax.inject.Inject
 import akka.stream.Materializer
-import util.FutureUtils.defaultContext
+import javax.inject.Inject
+import models.ProjectileContext.webContext
 import play.api.mvc._
 import util.Logging
 import util.metrics.Instrumented

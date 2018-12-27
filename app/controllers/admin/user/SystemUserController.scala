@@ -4,12 +4,12 @@ import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.api.util.PasswordHasher
 import controllers.admin.ServiceController
 import models.Application
+import models.ProjectileContext.webContext
 import models.result.RelationCount
 import play.api.http.MimeTypes
 import services.audit.AuditRecordRowService
 import services.note.NoteRowService
 import services.user.SystemUserService
-import util.FutureUtils.defaultContext
 import util.JsonSerializers._
 import util.ReftreeUtils._
 

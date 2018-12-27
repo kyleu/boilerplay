@@ -2,6 +2,7 @@
 package services.ddl
 
 import java.time.LocalDateTime
+import models.ProjectileContext.serviceContext
 import models.auth.Credentials
 import models.ddl.FlywaySchemaHistoryRow
 import models.queries.ddl.FlywaySchemaHistoryRowQueries
@@ -12,7 +13,6 @@ import scala.concurrent.Future
 import services.ModelServiceHelper
 import services.database.ApplicationDatabase
 import util.CsvUtils
-import util.FutureUtils.serviceContext
 import util.tracing.{TraceData, TracingService}
 
 @javax.inject.Singleton

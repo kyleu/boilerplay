@@ -8,6 +8,7 @@ import com.mohiva.play.silhouette.api.{LoginEvent, LoginInfo, SignUpEvent}
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
 import controllers.BaseController
 import models.Application
+import models.ProjectileContext.webContext
 import models.auth.Credentials
 import models.settings.SettingKeyType
 import models.user._
@@ -22,8 +23,6 @@ class RegistrationController @javax.inject.Inject() (
     authInfoRepository: AuthInfoRepository,
     hasher: PasswordHasher
 ) extends BaseController("registration") {
-  import app.contexts.webContext
-
   def registrationForm(email: Option[String] = None) = withoutSession("form") { implicit request => implicit td =>
     if (app.coreServices.settings.allowRegistration) {
       val form = UserForms.registrationForm.fill(RegistrationData(

@@ -4,16 +4,16 @@ import java.util.UUID
 
 import controllers.admin.ServiceController
 import models.Application
+import models.ProjectileContext.webContext
 import models.note.NoteRowResult
 import models.result.orderBy.OrderBy
 import play.api.http.MimeTypes
 import services.audit.{AuditRecordRowService, AuditRoutes}
-
-import scala.concurrent.Future
 import services.note.NoteRowService
-import util.FutureUtils.defaultContext
 import util.JsonSerializers._
 import util.ReftreeUtils._
+
+import scala.concurrent.Future
 
 @javax.inject.Singleton
 class NoteController @javax.inject.Inject() (override val app: Application, svc: NoteRowService, auditRecordS: AuditRecordRowService) extends ServiceController(svc) {

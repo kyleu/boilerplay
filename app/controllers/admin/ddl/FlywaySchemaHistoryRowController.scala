@@ -3,6 +3,7 @@ package controllers.admin.ddl
 
 import controllers.admin.ServiceController
 import models.Application
+import models.ProjectileContext.webContext
 import models.ddl.{FlywaySchemaHistoryRow, FlywaySchemaHistoryRowResult}
 import models.result.orderBy.OrderBy
 import play.api.http.MimeTypes
@@ -17,7 +18,6 @@ import util.ReftreeUtils._
 class FlywaySchemaHistoryRowController @javax.inject.Inject() (
     override val app: Application, svc: FlywaySchemaHistoryRowService, auditRecordSvc: AuditRecordRowService
 ) extends ServiceController(svc) {
-  import app.contexts.webContext
 
   def createForm = withSession("create.form", admin = true) { implicit request => implicit td =>
     val cancel = controllers.admin.ddl.routes.FlywaySchemaHistoryRowController.list()

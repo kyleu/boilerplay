@@ -5,6 +5,7 @@ import java.util.UUID
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.util.PasswordHasher
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
+import models.ProjectileContext.serviceContext
 import models.auth.Credentials
 import models.queries.auth._
 import models.result.data.DataField
@@ -12,9 +13,8 @@ import models.result.filter.Filter
 import models.result.orderBy.OrderBy
 import models.user.{Role, SystemUser}
 import services.ModelServiceHelper
-import services.database.ApplicationDatabase
 import services.cache.UserCache
-import util.FutureUtils.serviceContext
+import services.database.ApplicationDatabase
 import util.tracing.{TraceData, TracingService}
 
 import scala.concurrent.Future

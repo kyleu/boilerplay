@@ -4,6 +4,7 @@ package controllers.admin.note
 import controllers.admin.ServiceController
 import java.util.UUID
 import models.Application
+import models.ProjectileContext.webContext
 import models.note.{NoteRow, NoteRowResult}
 import models.result.orderBy.OrderBy
 import play.api.http.MimeTypes
@@ -18,7 +19,6 @@ import util.ReftreeUtils._
 class NoteRowController @javax.inject.Inject() (
     override val app: Application, svc: NoteRowService, auditRecordSvc: AuditRecordRowService
 ) extends ServiceController(svc) {
-  import app.contexts.webContext
 
   def createForm = withSession("create.form", admin = true) { implicit request => implicit td =>
     val cancel = controllers.admin.note.routes.NoteRowController.list()

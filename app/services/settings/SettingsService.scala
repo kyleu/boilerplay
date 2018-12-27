@@ -1,14 +1,14 @@
 package services.settings
 
+import models.ProjectileContext.serviceContext
 import models.auth.Credentials
 import models.result.data.DataField
 import models.settings.{Setting, SettingKeyType}
 import models.table.settings.SettingTable
 import services.database.ApplicationDatabase
+import services.database.slick.SlickQueryService.imports._
 import util.Logging
 import util.tracing.{TraceData, TracingService}
-import services.database.slick.SlickQueryService.imports._
-import util.FutureUtils.serviceContext
 
 import scala.concurrent.Future
 

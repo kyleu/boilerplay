@@ -2,6 +2,7 @@
 package services.audit
 
 import java.util.UUID
+import models.ProjectileContext.serviceContext
 import models.audit.AuditRecordRow
 import models.auth.Credentials
 import models.queries.audit.AuditRecordRowQueries
@@ -12,7 +13,6 @@ import scala.concurrent.Future
 import services.ModelServiceHelper
 import services.database.ApplicationDatabase
 import util.CsvUtils
-import util.FutureUtils.serviceContext
 import util.tracing.{TraceData, TracingService}
 
 @javax.inject.Singleton

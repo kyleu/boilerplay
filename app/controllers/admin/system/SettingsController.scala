@@ -2,6 +2,7 @@ package controllers.admin.system
 
 import controllers.BaseController
 import models.Application
+import models.ProjectileContext.webContext
 import models.settings.SettingKeyType
 import util.web.ControllerUtils
 
@@ -9,8 +10,6 @@ import scala.concurrent.Future
 
 @javax.inject.Singleton
 class SettingsController @javax.inject.Inject() (override val app: Application) extends BaseController("settings") {
-  import app.contexts.webContext
-
   def settings = withSession("settings.list", admin = true) { implicit request => implicit td =>
     Future.successful(Ok(views.html.admin.settingValues(request.identity, app.coreServices.settings)))
   }

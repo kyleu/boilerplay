@@ -3,11 +3,11 @@ package graphql
 import java.time.{LocalDate, LocalDateTime, LocalTime, ZonedDateTime}
 import java.util.UUID
 
+import io.circe.{Decoder, Encoder, Json}
 import models.result.filter.Filter
 import models.result.orderBy.OrderBy
 import models.result.paging.PagingOptions
 import models.tag.Tag
-import io.circe.{Decoder, Encoder, Json}
 import sangria.macros.derive._
 import sangria.marshalling.{FromInput, ToInput}
 import sangria.schema.{EnumType, InputObjectType, ObjectType, ScalarType}
@@ -21,7 +21,7 @@ object GraphQLUtils {
 
   type GraphQLField = sangria.macros.derive.GraphQLField
 
-  implicit val ctx: ExecutionContext = util.FutureUtils.graphQlContext
+  implicit val ctx: ExecutionContext = models.ProjectileContext.graphQlContext
 
   implicit def circeDecoderFromInput[T: Decoder]: FromInput[T] = sangria.marshalling.circe.circeDecoderFromInput
   implicit def circeEncoderToInput[T: Encoder]: ToInput[T, Json] = sangria.marshalling.circe.circeEncoderToInput

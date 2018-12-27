@@ -24,8 +24,9 @@ object Schema {
       models.sync.SyncProgressRowSchema.syncProgressRowByPrimaryKeyFetcher,
       models.task.ScheduledTaskRunRowSchema.scheduledTaskRunRowByPrimaryKeyFetcher,
       models.user.SystemUserSchema.systemUserByPrimaryKeyFetcher
-    )
-    /* End model fetchers */
+    ) ++
+      /* End model fetchers */
+      Nil
   }
 
   val resolver = DeferredResolver.fetchers(baseFetchers ++ modelFetchers: _*)
@@ -37,7 +38,7 @@ object Schema {
 
   // Query Types
   val baseQueryFields = customQueryFields ++
-    models.supervisor.SocketDecriptionSchema.queryFields ++
+    models.supervisor.SocketDescriptionSchema.queryFields ++
     models.sandbox.SandboxSchema.queryFields
 
   val modelQueryFields: Seq[Field[GraphQLContext, Unit]] = {
@@ -50,15 +51,17 @@ object Schema {
       models.settings.SettingSchema.queryFields ++
       models.sync.SyncProgressRowSchema.queryFields ++
       models.task.ScheduledTaskRunRowSchema.queryFields ++
-      models.user.SystemUserSchema.queryFields
-    /* End model query fields */
+      models.user.SystemUserSchema.queryFields ++
+      /* End model query fields */
+      Nil
   }
 
   val enumQueryFields: Seq[Field[GraphQLContext, Unit]] = {
     /* Start enum query fields */
     /* Projectile export section [boilerplay] */
-    models.settings.SettingKeyTypeSchema.queryFields
-    /* End enum query fields */
+    models.settings.SettingKeyTypeSchema.queryFields ++
+      /* End enum query fields */
+      Nil
   }
 
   val serviceQueryFields: Seq[Field[GraphQLContext, Unit]] = {
@@ -87,8 +90,9 @@ object Schema {
       models.settings.SettingSchema.mutationFields ++
       models.sync.SyncProgressRowSchema.mutationFields ++
       models.task.ScheduledTaskRunRowSchema.mutationFields ++
-      models.user.SystemUserSchema.mutationFields
-    /* End model mutation fields */
+      models.user.SystemUserSchema.mutationFields ++
+      /* End model mutation fields */
+      Nil
   }
 
   val mutationType = ObjectType(

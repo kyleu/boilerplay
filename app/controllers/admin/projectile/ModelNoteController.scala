@@ -3,9 +3,9 @@ package controllers.admin.projectile
 import controllers.BaseController
 import controllers.admin.ServiceController
 import models.Application
+import models.ProjectileContext.webContext
 import models.note.NoteRow
 import services.note.ModelNoteService
-import util.FutureUtils.defaultContext
 import util.JsonSerializers._
 
 import scala.concurrent.Future

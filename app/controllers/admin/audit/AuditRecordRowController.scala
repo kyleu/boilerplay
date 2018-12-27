@@ -4,6 +4,7 @@ package controllers.admin.audit
 import controllers.admin.ServiceController
 import java.util.UUID
 import models.Application
+import models.ProjectileContext.webContext
 import models.audit.{AuditRecordRow, AuditRecordRowResult}
 import models.result.orderBy.OrderBy
 import play.api.http.MimeTypes
@@ -17,7 +18,6 @@ import util.ReftreeUtils._
 class AuditRecordRowController @javax.inject.Inject() (
     override val app: Application, svc: AuditRecordRowService, auditRecordSvc: AuditRecordRowService
 ) extends ServiceController(svc) {
-  import app.contexts.webContext
 
   def createForm = withSession("create.form", admin = true) { implicit request => implicit td =>
     val cancel = controllers.admin.audit.routes.AuditRecordRowController.list()

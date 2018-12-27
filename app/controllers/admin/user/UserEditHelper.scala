@@ -4,13 +4,13 @@ import java.util.UUID
 
 import com.mohiva.play.silhouette.api.{LoginInfo, SignUpEvent}
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
+import models.ProjectileContext.webContext
 import models.user.{Role, SystemUser, UserPreferences}
 import util.web.ControllerUtils
 
 import scala.concurrent.Future
 
 trait UserEditHelper { this: SystemUserController =>
-  import app.contexts.webContext
   def createForm = withSession("user.createForm", admin = true) { implicit request => implicit td =>
     val call = controllers.admin.user.routes.SystemUserController.create()
     Future.successful(Ok(views.html.admin.user.systemUserForm(request.identity, models.user.SystemUser.empty(), "New User", call, isNew = true)))

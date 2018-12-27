@@ -1,9 +1,9 @@
 package models.sandbox
 
 import models.Application
+import models.ProjectileContext.serviceContext
 import models.database.{Query, Row, Statement}
 import services.database.ApplicationDatabase
-import util.FutureUtils.serviceContext
 import util.tracing.TraceData
 
 object TableLogic {

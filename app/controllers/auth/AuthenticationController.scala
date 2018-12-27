@@ -6,6 +6,7 @@ import com.mohiva.play.silhouette.impl.exceptions.IdentityNotFoundException
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
 import controllers.BaseController
 import models.Application
+import models.ProjectileContext.webContext
 import models.user.UserForms
 import play.api.mvc.Result
 import services.user.SystemUserSearchService
@@ -18,8 +19,6 @@ class AuthenticationController @javax.inject.Inject() (
     userSearchService: SystemUserSearchService,
     credentialsProvider: CredentialsProvider
 ) extends BaseController("authentication") {
-  import app.contexts.webContext
-
   val providers = if (app.config.authGoogleSettings.clientSecret.nonEmpty) { Seq("google") } else { Nil }
 
   def signInForm = withoutSession("form") { implicit request => implicit td =>

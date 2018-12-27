@@ -1,7 +1,7 @@
 @* Generated File *@
 @(user: models.user.SystemUser, model: models.note.NoteRow, notes: Seq[models.note.NoteRow], debug: Boolean)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
-)@traceData.logClass(getClass)@views.html.admin.layout.page(user, "explore", s"Note [${model.id}]") {
+)@views.html.admin.layout.page(user, "explore", s"Note [${model.id}]") {
   <div class="collection with-header">
     <div class="collection-header">
       <div class="right"><a class="theme-text" href="@controllers.admin.note.routes.NoteRowController.editForm(model.id)">Edit</a></div>

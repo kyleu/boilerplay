@@ -1,7 +1,7 @@
 @* Generated File *@
 @(user: models.user.SystemUser, model: models.settings.Setting, title: String, cancel: Call, act: Call, isNew: Boolean = false, debug: Boolean = false)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
-)@traceData.logClass(getClass)@views.html.admin.layout.page(user, "explore", title) {
+)@views.html.admin.layout.page(user, "explore", title) {
   <form id="form-edit-setting" action="@act" method="post">
     <div class="collection with-header">
       <div class="collection-header">

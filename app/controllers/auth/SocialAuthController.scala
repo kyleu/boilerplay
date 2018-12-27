@@ -2,16 +2,17 @@ package controllers.auth
 
 import java.util.UUID
 
-import com.mohiva.play.silhouette.api.{LoginEvent, LoginInfo, Silhouette}
+import com.mohiva.play.silhouette.api.exceptions.ProviderException
 import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
+import com.mohiva.play.silhouette.api.{LoginEvent, LoginInfo, Silhouette}
 import com.mohiva.play.silhouette.impl.providers.{CommonSocialProfileBuilder, SocialProvider, SocialProviderRegistry}
 import controllers.BaseController
 import models.Application
+import models.ProjectileContext.webContext
 import models.auth.{AuthEnv, Credentials}
 import models.settings.SettingKeyType
 import models.user.{Role, SystemUser, UserPreferences}
 import services.user.{SystemUserSearchService, SystemUserService}
-import com.mohiva.play.silhouette.api.exceptions.ProviderException
 
 import scala.concurrent.Future
 
@@ -24,8 +25,6 @@ class SocialAuthController @javax.inject.Inject() (
     authInfoRepository: AuthInfoRepository,
     socialProviderRegistry: SocialProviderRegistry
 ) extends BaseController("socialAuth") {
-  import app.contexts.webContext
-
   def authenticate(provider: String) = withoutSession("form") { implicit request => implicit td =>
     socialProviderRegistry.get[SocialProvider](provider) match {
       case Some(p: SocialProvider with CommonSocialProfileBuilder) =>

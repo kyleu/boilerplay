@@ -16,8 +16,8 @@ import com.mohiva.play.silhouette.impl.util.{DefaultFingerprintGenerator, Secure
 import com.mohiva.play.silhouette.password.BCryptPasswordHasher
 import com.mohiva.play.silhouette.persistence.repositories.DelegableAuthInfoRepository
 import models.Configuration
+import models.ProjectileContext.serviceContext
 import net.codingwell.scalaguice.ScalaModule
-import util.FutureUtils.defaultContext
 import play.api.libs.ws.WSClient
 import play.api.mvc.DefaultCookieHeaderEncoding
 import services.user.{OAuth2InfoService, PasswordInfoService, SystemUserSearchService}

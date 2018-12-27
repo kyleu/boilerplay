@@ -5,9 +5,10 @@ import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.api.util.{Credentials, PasswordHasher}
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
 import models.Application
+import models.ProjectileContext.webContext
 import models.user.{UserForms, UserProfile}
-import util.web.ControllerUtils
 import util.JsonSerializers._
+import util.web.ControllerUtils
 
 import scala.concurrent.Future
 
@@ -18,8 +19,6 @@ class ProfileController @javax.inject.Inject() (
     credentialsProvider: CredentialsProvider,
     hasher: PasswordHasher
 ) extends BaseController("profile") {
-  import app.contexts.webContext
-
   def view = withSession("view") { implicit request => implicit td =>
     Future.successful(render {
       case Accepts.Html() => Ok(views.html.profile.view(request.identity))

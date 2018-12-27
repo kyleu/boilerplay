@@ -4,6 +4,7 @@ package controllers.admin.audit
 import controllers.admin.ServiceController
 import java.util.UUID
 import models.Application
+import models.ProjectileContext.webContext
 import models.audit.{AuditRow, AuditRowResult}
 import models.auth.Credentials
 import models.result.RelationCount
@@ -20,7 +21,6 @@ class AuditRowController @javax.inject.Inject() (
     override val app: Application, svc: AuditRowService, auditRecordSvc: AuditRecordRowService,
     auditRecordRowS: AuditRecordRowService
 ) extends ServiceController(svc) {
-  import app.contexts.webContext
 
   def createForm = withSession("create.form", admin = true) { implicit request => implicit td =>
     val cancel = controllers.admin.audit.routes.AuditRowController.list()

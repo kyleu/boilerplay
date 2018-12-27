@@ -1,10 +1,10 @@
 package services
 
+import models.ProjectileContext.serviceContext
 import models.auth.Credentials
 import models.result.data.DataField
 import models.result.filter.Filter
 import models.result.orderBy.OrderBy
-import util.FutureUtils.serviceContext
 import util.tracing.{TraceData, TracingService}
 import util.{Logging, NullUtils}
 

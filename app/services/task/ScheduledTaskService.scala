@@ -4,15 +4,15 @@ import java.util.UUID
 
 import akka.actor.ActorSystem
 import models.Configuration
+import models.ProjectileContext.serviceContext
 import models.auth.Credentials
 import models.task.ScheduledTaskRunRow
 import models.task.scheduled.{ScheduledTask, ScheduledTaskOutput}
 import services.sync.SyncService
 import services.task.scheduled.ScheduledTasks
-import util.FutureUtils.serviceContext
+import util.JsonSerializers._
 import util.Logging
 import util.tracing.{TraceData, TracingService}
-import util.JsonSerializers._
 
 import scala.concurrent.Future
 import scala.util.control.NonFatal

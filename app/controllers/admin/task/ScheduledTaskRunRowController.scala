@@ -4,6 +4,7 @@ package controllers.admin.task
 import controllers.admin.ServiceController
 import java.util.UUID
 import models.Application
+import models.ProjectileContext.webContext
 import models.result.orderBy.OrderBy
 import models.task.{ScheduledTaskRunRow, ScheduledTaskRunRowResult}
 import play.api.http.MimeTypes
@@ -18,7 +19,6 @@ import util.ReftreeUtils._
 class ScheduledTaskRunRowController @javax.inject.Inject() (
     override val app: Application, svc: ScheduledTaskRunRowService, auditRecordSvc: AuditRecordRowService
 ) extends ServiceController(svc) {
-  import app.contexts.webContext
 
   def createForm = withSession("create.form", admin = true) { implicit request => implicit td =>
     val cancel = controllers.admin.task.routes.ScheduledTaskRunRowController.list()

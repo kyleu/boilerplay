@@ -5,6 +5,7 @@ import java.util.UUID
 import controllers.BaseController
 import graphql.GraphQLService
 import models.Application
+import models.ProjectileContext.webContext
 import services.ServiceRegistry
 import services.process.ProcessService
 
@@ -14,8 +15,6 @@ import scala.concurrent.Future
 class ProcessController @javax.inject.Inject() (
     override val app: Application, services: ServiceRegistry, graphQLService: GraphQLService
 ) extends BaseController("process") {
-  import app.contexts.webContext
-
   def list = withSession("sandbox.list", admin = true) { implicit request => implicit td =>
     Future.successful(Ok(views.html.admin.process.procList(request.identity, ProcessService.getActive)))
   }

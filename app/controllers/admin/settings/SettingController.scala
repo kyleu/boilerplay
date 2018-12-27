@@ -3,6 +3,7 @@ package controllers.admin.settings
 
 import controllers.admin.ServiceController
 import models.Application
+import models.ProjectileContext.webContext
 import models.result.orderBy.OrderBy
 import models.settings.{Setting, SettingKeyType, SettingResult}
 import play.api.http.MimeTypes
@@ -17,7 +18,6 @@ import util.ReftreeUtils._
 class SettingController @javax.inject.Inject() (
     override val app: Application, svc: SettingService, auditRecordSvc: AuditRecordRowService
 ) extends ServiceController(svc) {
-  import app.contexts.webContext
 
   def createForm = withSession("create.form", admin = true) { implicit request => implicit td =>
     val cancel = controllers.admin.settings.routes.SettingController.list()

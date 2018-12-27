@@ -2,8 +2,8 @@ package controllers.admin.system
 
 import controllers.BaseController
 import models.Application
+import models.ProjectileContext.webContext
 import util.EncryptionUtils
-import util.FutureUtils.defaultContext
 import util.web.ControllerUtils
 
 import scala.concurrent.Future

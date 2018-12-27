@@ -38,13 +38,13 @@ object ModelBindables {
     case Right(s) => Right(SettingKeyType.withValue(s))
     case Left(x) => throw new IllegalStateException(x)
   }
-  implicit def settingKeyTypePathBindable(implicit stringBinder: PathBindable[String]): PathBindable[SettingKeyType] = new PathBindable[SettingKeyType] {
-    override def bind(key: String, value: String) = settingKeyTypeExtractor(stringBinder.bind(key, value))
-    override def unbind(key: String, x: SettingKeyType) = x.value
+  implicit def settingKeyTypePathBindable(implicit binder: PathBindable[String]): PathBindable[SettingKeyType] = new PathBindable[SettingKeyType] {
+    override def bind(key: String, value: String) = settingKeyTypeExtractor(binder.bind(key, value))
+    override def unbind(key: String, e: SettingKeyType) = e.value
   }
-  implicit def settingKeyTypeQueryStringBindable(implicit stringBinder: QueryStringBindable[String]): QueryStringBindable[SettingKeyType] = new QueryStringBindable[SettingKeyType] {
-    override def bind(key: String, params: Map[String, Seq[String]]) = stringBinder.bind(key, params).map(settingKeyTypeExtractor)
-    override def unbind(key: String, x: SettingKeyType) = x.value
+  implicit def settingKeyTypeQueryStringBindable(implicit binder: QueryStringBindable[String]): QueryStringBindable[SettingKeyType] = new QueryStringBindable[SettingKeyType] {
+    override def bind(key: String, params: Map[String, Seq[String]]) = binder.bind(key, params).map(settingKeyTypeExtractor)
+    override def unbind(key: String, e: SettingKeyType) = e.value
   }
   /* End model bindables */
 }

@@ -1,7 +1,7 @@
 package services.database
 
+import models.ProjectileContext.databaseContext
 import models.database.{DatabaseConfig, RawQuery, Statement}
-import util.FutureUtils.databaseContext
 import util.Logging
 import util.tracing.{TraceData, TraceDataOpenTracing, TracingService}
 

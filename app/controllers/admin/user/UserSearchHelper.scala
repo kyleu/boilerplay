@@ -1,15 +1,14 @@
 package controllers.admin.user
 
 import controllers.admin.ServiceController
+import models.ProjectileContext.webContext
 import models.result.orderBy.OrderBy
 import models.user.SystemUserResult
 import play.api.http.MimeTypes
-import util.ReftreeUtils._
 import util.JsonSerializers._
+import util.ReftreeUtils._
 
 trait UserSearchHelper { this: SystemUserController =>
-  import app.contexts.webContext
-
   def list(q: Option[String], orderBy: Option[String], orderAsc: Boolean, limit: Option[Int], offset: Option[Int], t: Option[String] = None) = {
     withSession("user.list", admin = true) { implicit request => implicit td =>
       val startMs = util.DateUtils.nowMillis

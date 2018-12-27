@@ -1,8 +1,8 @@
 package services.sync
 
+import models.ProjectileContext.serviceContext
 import models.auth.Credentials
 import models.sync.SyncProgressRow
-import util.FutureUtils.serviceContext
 import util.tracing.TraceData
 
 import scala.util.control.NonFatal

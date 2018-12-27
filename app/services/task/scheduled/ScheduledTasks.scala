@@ -1,9 +1,9 @@
 package services.task.scheduled
 
+import models.ProjectileContext.serviceContext
 import models.auth.Credentials
 import models.task.scheduled.ScheduledTask
 import services.sync.SyncService
-import util.FutureUtils.defaultContext
 import util.tracing.TraceData
 
 import scala.concurrent.Future

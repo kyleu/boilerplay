@@ -2,13 +2,13 @@ package graphql
 
 import java.time.LocalDateTime
 
+import models.ProjectileContext.graphQlContext
 import models.result.filter.{Filter, FilterSchema}
 import models.result.orderBy.{OrderBy, OrderBySchema}
 import models.result.paging.PagingOptions
-import sangria.schema.{Args, Argument, Context, Field, OutputType, fields}
+import sangria.schema.{Args, Argument, Context, Field, OutputType}
 import services.ModelServiceHelper
 import util.tracing.TraceData
-import util.FutureUtils.graphQlContext
 
 import scala.concurrent.Future
 

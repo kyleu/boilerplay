@@ -4,6 +4,7 @@ import controllers.BaseController
 import graphql.GraphQLService
 import io.circe.Json
 import models.Application
+import models.ProjectileContext.webContext
 import models.auth.Credentials
 import models.user.Role
 import sangria.execution.{ErrorWithResolver, QueryAnalysisError}
@@ -17,7 +18,6 @@ import scala.concurrent.Future
 
 @javax.inject.Singleton
 class GraphQLController @javax.inject.Inject() (override val app: Application, graphQLService: GraphQLService) extends BaseController("graphql") {
-  import app.contexts.webContext
   private[this] val secretKey = "GraphTastesBad"
 
   def graphql(query: Option[String], variables: Option[String]) = withSession("graphql.ui", admin = true) { implicit request => implicit td =>

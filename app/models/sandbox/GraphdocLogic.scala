@@ -3,8 +3,8 @@ package models.sandbox
 import better.files._
 import graphql.GraphQLService
 import models.Application
+import models.ProjectileContext.serviceContext
 import models.auth.Credentials
-import util.FutureUtils.serviceContext
 import util.tracing.TraceData
 
 import scala.sys.process._

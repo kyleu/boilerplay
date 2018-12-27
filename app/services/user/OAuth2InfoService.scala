@@ -3,9 +3,9 @@ package services.user
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.impl.providers.OAuth2Info
 import com.mohiva.play.silhouette.persistence.daos.DelegableAuthInfoDAO
+import models.ProjectileContext.serviceContext
 import models.queries.auth.OAuth2InfoQueries
 import services.database.ApplicationDatabase
-import util.FutureUtils.serviceContext
 import util.tracing.TracingService
 
 import scala.concurrent.Future

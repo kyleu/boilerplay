@@ -2,13 +2,13 @@ package graphql
 
 import io.circe.Json
 import models.Application
+import models.ProjectileContext.graphQlContext
 import models.auth.Credentials
 import sangria.execution.{ExceptionHandler, Executor, HandledException, QueryReducer}
 import sangria.marshalling.circe._
 import sangria.parser.QueryParser
 import sangria.validation.QueryValidator
 import services.ServiceRegistry
-import util.FutureUtils.graphQlContext
 import util.Logging
 import util.tracing.{TraceData, TracingService}
 

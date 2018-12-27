@@ -7,10 +7,11 @@ import akka.stream.Materializer
 import com.mohiva.play.silhouette.api.HandlerResult
 import io.circe.Json
 import models.InternalMessage.{SocketStarted, SocketStopped}
+import models.ProjectileContext.webContext
 import models.RequestMessage.Ping
-import models.{Application, RequestMessage, ResponseMessage}
 import models.ResponseMessage.{Pong, UserSettings}
 import models.auth.Credentials
+import models.{Application, RequestMessage, ResponseMessage}
 import play.api.mvc.{AnyContent, AnyContentAsEmpty, Request, WebSocket}
 import util.Logging
 import util.web.{MessageFrameFormatter, WebsocketUtils}
@@ -45,8 +46,6 @@ object HomeController {
 class HomeController @javax.inject.Inject() (
     override val app: Application, implicit val system: ActorSystem, implicit val materializer: Materializer
 ) extends BaseController("home") {
-
-  import app.contexts.webContext
 
   private[this] val formatter = new MessageFrameFormatter()
 
