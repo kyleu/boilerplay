@@ -15,7 +15,7 @@ class SettingKeyTypeController @javax.inject.Inject() (override val app: Applica
 
   def list = withSession("list", admin = true) { implicit request => implicit td =>
     Future.successful(render {
-      case Accepts.Html() => Ok(views.html.admin.layout.listPage(request.identity, "SettingKeyType", "explore", SettingKeyType.values.map(x => Html(x.toString))))
+      case Accepts.Html() => Ok(views.html.admin.layout.listPage(request.identity, "SettingKeyType", "explore", SettingKeyType.values.map(v => Html(v.toString))))
       case Accepts.Json() => Ok(SettingKeyType.values.asJson)
       case ServiceController.acceptsCsv() => Ok(SettingKeyType.values.mkString(", ")).as("text/csv")
     })

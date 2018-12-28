@@ -11,22 +11,23 @@ object Schema {
   val baseFetchers = Seq(models.user.SystemUserSchema.systemUserByRoleFetcher)
 
   val modelFetchers = {
-    /* Start model fetchers */
-    /* Projectile export section [boilerplay] */
-    Seq(
-      models.audit.AuditRecordRowSchema.auditRecordRowByAuditIdFetcher,
-      models.audit.AuditRecordRowSchema.auditRecordRowByPrimaryKeyFetcher,
-      models.audit.AuditRowSchema.auditRowByPrimaryKeyFetcher,
-      models.ddl.FlywaySchemaHistoryRowSchema.flywaySchemaHistoryRowByPrimaryKeyFetcher,
-      models.note.NoteRowSchema.noteRowByAuthorFetcher,
-      models.note.NoteRowSchema.noteRowByPrimaryKeyFetcher,
-      models.settings.SettingSchema.settingByPrimaryKeyFetcher,
-      models.sync.SyncProgressRowSchema.syncProgressRowByPrimaryKeyFetcher,
-      models.task.ScheduledTaskRunRowSchema.scheduledTaskRunRowByPrimaryKeyFetcher,
-      models.user.SystemUserSchema.systemUserByPrimaryKeyFetcher
-    ) ++
-      /* End model fetchers */
-      Nil
+    Nil ++
+      /* Start model fetchers */
+      /* Projectile export section [boilerplay] */
+      Seq(
+        models.audit.AuditRecordRowSchema.auditRecordRowByAuditIdFetcher,
+        models.audit.AuditRecordRowSchema.auditRecordRowByPrimaryKeyFetcher,
+        models.audit.AuditRowSchema.auditRowByPrimaryKeyFetcher,
+        models.ddl.FlywaySchemaHistoryRowSchema.flywaySchemaHistoryRowByPrimaryKeyFetcher,
+        models.note.NoteRowSchema.noteRowByAuthorFetcher,
+        models.note.NoteRowSchema.noteRowByPrimaryKeyFetcher,
+        models.settings.SettingSchema.settingByPrimaryKeyFetcher,
+        models.sync.SyncProgressRowSchema.syncProgressRowByPrimaryKeyFetcher,
+        models.task.ScheduledTaskRunRowSchema.scheduledTaskRunRowByPrimaryKeyFetcher,
+        models.user.SystemUserSchema.systemUserByPrimaryKeyFetcher
+      ) ++
+        /* End model fetchers */
+        Nil
   }
 
   val resolver = DeferredResolver.fetchers(baseFetchers ++ modelFetchers: _*)
@@ -42,9 +43,10 @@ object Schema {
     models.sandbox.SandboxSchema.queryFields
 
   val modelQueryFields: Seq[Field[GraphQLContext, Unit]] = {
-    /* Start model query fields */
-    /* Projectile export section [boilerplay] */
-    models.audit.AuditRecordRowSchema.queryFields ++
+    Nil ++
+      /* Start model query fields */
+      /* Projectile export section [boilerplay] */
+      models.audit.AuditRecordRowSchema.queryFields ++
       models.audit.AuditRowSchema.queryFields ++
       models.ddl.FlywaySchemaHistoryRowSchema.queryFields ++
       models.note.NoteRowSchema.queryFields ++
@@ -57,18 +59,19 @@ object Schema {
   }
 
   val enumQueryFields: Seq[Field[GraphQLContext, Unit]] = {
-    /* Start enum query fields */
-    /* Projectile export section [boilerplay] */
-    models.settings.SettingKeyTypeSchema.queryFields ++
+    Nil ++
+      /* Start enum query fields */
+      /* Projectile export section [boilerplay] */
+      models.settings.SettingKeyTypeSchema.queryFields ++
       /* End enum query fields */
       Nil
   }
 
   val serviceQueryFields: Seq[Field[GraphQLContext, Unit]] = {
-    /* Start service methods */
-    /* Projectile export section [boilerplay] */
-    Nil
-    /* End service methods */
+    Nil ++
+      /* Start service methods */
+      /* End service methods */
+      Nil
   }
 
   val queryType = ObjectType(
@@ -81,9 +84,10 @@ object Schema {
   val baseMutationFields = models.sandbox.SandboxSchema.mutationFields
 
   val modelMutationFields: Seq[Field[GraphQLContext, Unit]] = {
-    /* Start model mutation fields */
-    /* Projectile export section [boilerplay] */
-    models.audit.AuditRecordRowSchema.mutationFields ++
+    Nil ++
+      /* Start model mutation fields */
+      /* Projectile export section [boilerplay] */
+      models.audit.AuditRecordRowSchema.mutationFields ++
       models.audit.AuditRowSchema.mutationFields ++
       models.ddl.FlywaySchemaHistoryRowSchema.mutationFields ++
       models.note.NoteRowSchema.mutationFields ++
