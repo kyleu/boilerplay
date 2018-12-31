@@ -2,18 +2,18 @@ package controllers.admin.system
 
 import java.util.UUID
 
+import com.google.inject.Injector
 import controllers.BaseController
 import graphql.GraphQLService
 import models.Application
-import models.ProjectileContext.webContext
-import services.ServiceRegistry
+import scala.concurrent.ExecutionContext.Implicits.global
 import services.process.ProcessService
 
 import scala.concurrent.Future
 
 @javax.inject.Singleton
 class ProcessController @javax.inject.Inject() (
-    override val app: Application, services: ServiceRegistry, graphQLService: GraphQLService
+    override val app: Application, injector: Injector, graphQLService: GraphQLService
 ) extends BaseController("process") {
   def list = withSession("sandbox.list", admin = true) { implicit request => implicit td =>
     Future.successful(Ok(views.html.admin.process.procList(request.identity, ProcessService.getActive)))

@@ -1,5 +1,7 @@
 package services.file
 
+import com.kyleu.projectile.util.JsonSerializers
+
 object FileRepository {
   def list(key: String, path: Option[String] = None) = {
     val d = path.map(FileService.getDir(key) / _).getOrElse(FileService.getDir(key))
@@ -18,7 +20,7 @@ object FileRepository {
   }
 
   def readJson(key: String, path: String) = {
-    util.JsonSerializers.parseJson(readFile(key, path)) match {
+    JsonSerializers.parseJson(readFile(key, path)) match {
       case Right(json) => json
       case Left(x) => throw x
     }

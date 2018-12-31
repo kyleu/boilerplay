@@ -2,7 +2,7 @@ package controllers.admin.system
 
 import controllers.BaseController
 import models.Application
-import models.ProjectileContext.webContext
+import scala.concurrent.ExecutionContext.Implicits.global
 import services.sync.SyncService
 import services.task.ScheduledTaskService
 import services.task.scheduled.ScheduledTasks

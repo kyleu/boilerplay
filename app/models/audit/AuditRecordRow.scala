@@ -1,10 +1,10 @@
 /* Generated File */
 package models.audit
 
+import com.kyleu.projectile.models.result.data.{DataField, DataFieldModel, DataSummary}
+import com.kyleu.projectile.util.JsonSerializers._
 import io.circe.Json
 import java.util.UUID
-import models.result.data.{DataField, DataFieldModel, DataSummary}
-import util.JsonSerializers._
 
 object AuditRecordRow {
   implicit val jsonEncoder: Encoder[AuditRecordRow] = deriveEncoder

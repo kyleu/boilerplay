@@ -1,15 +1,14 @@
 /* Generated File */
 package models.queries.task
 
-import io.circe.Json
+import com.kyleu.projectile.models.database.{DatabaseField, Row}
+import com.kyleu.projectile.models.database.DatabaseFieldType._
+import com.kyleu.projectile.models.queries.{BaseQueries, ResultFieldHelper}
+import com.kyleu.projectile.models.result.data.DataField
+import com.kyleu.projectile.models.result.filter.Filter
+import com.kyleu.projectile.models.result.orderBy.OrderBy
 import java.time.LocalDateTime
 import java.util.UUID
-import models.database.{DatabaseField, Row}
-import models.database.DatabaseFieldType._
-import models.queries.{BaseQueries, ResultFieldHelper}
-import models.result.data.DataField
-import models.result.filter.Filter
-import models.result.orderBy.OrderBy
 import models.task.ScheduledTaskRunRow
 
 object ScheduledTaskRunRowQueries extends BaseQueries[ScheduledTaskRunRow]("scheduledTaskRunRow", "scheduled_task_run") {

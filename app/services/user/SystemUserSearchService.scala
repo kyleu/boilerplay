@@ -4,15 +4,16 @@ import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.services.IdentityService
 import models.queries.auth.SystemUserQueries
 import models.user.SystemUser
-import services.database.ApplicationDatabase
-import util.Logging
+import com.kyleu.projectile.services.database.ApplicationDatabase
+import com.kyleu.projectile.util.Logging
 import services.cache.UserCache
-import util.tracing.{TraceData, TracingService}
+import com.kyleu.projectile.util.tracing.TraceData
+import com.kyleu.projectile.util.tracing.OpenTracingService
 
 import scala.concurrent.Future
 
 @javax.inject.Singleton
-class SystemUserSearchService @javax.inject.Inject() (tracingService: TracingService) extends IdentityService[SystemUser] with Logging {
+class SystemUserSearchService @javax.inject.Inject() (tracingService: OpenTracingService) extends IdentityService[SystemUser] with Logging {
   override def retrieve(loginInfo: LoginInfo) = tracingService.noopTrace("user.retreive") { implicit td =>
     UserCache.getUserByLoginInfo(loginInfo) match {
       case Some(u) => Future.successful(Some(u))

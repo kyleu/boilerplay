@@ -1,12 +1,12 @@
 package services.audit
 
+import com.kyleu.projectile.services.database.ApplicationDatabase
 import models.audit.{Audit, AuditRecordRow}
-import models.ProjectileContext.serviceContext
+import scala.concurrent.ExecutionContext.Implicits.global
 import models.queries.audit.{AuditQueries, AuditRecordRowQueries}
-import services.database.ApplicationDatabase
-import util.Logging
-import util.tracing.TraceData
-import util.web.TracingWSClient
+import com.kyleu.projectile.util.Logging
+import com.kyleu.projectile.util.tracing.TraceData
+import com.kyleu.projectile.util.web.TracingWSClient
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -20,7 +20,7 @@ object AuditNotifications extends Logging {
     val ret = ApplicationDatabase.executeF(AuditQueries.insert(a)).map { _ =>
       acc(records, (r: AuditRecordRow) => ApplicationDatabase.executeF(AuditRecordRowQueries.insert(r)).map { _ =>
         log.debug(s"Persisted audit record [${r.id}] for audit [${a.id}].")
-      })(serviceContext).map { _ =>
+      })(global).map { _ =>
         log.debug(s"Persisted audit [${a.id}] with [${records.size}] records.")
       }
     }
@@ -28,7 +28,7 @@ object AuditNotifications extends Logging {
     ret
   }
   def postToSlack(ws: TracingWSClient, config: SlackConfig, a: Audit)(implicit trace: TraceData) = if (config.enabled) {
-    import util.JsonSerializers._
+    import com.kyleu.projectile.util.JsonSerializers._
 
     val body = Map(
       "channel" -> config.channel,

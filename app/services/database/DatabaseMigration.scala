@@ -1,9 +1,10 @@
 package services.database
 
-import models.database.{Row, SingleRowQuery}
+import com.kyleu.projectile.models.database.{Row, SingleRowQuery}
+import com.kyleu.projectile.services.database.{ApplicationDatabase, JdbcDatabase}
 import org.flywaydb.core.Flyway
-import util.Logging
-import util.tracing.TraceData
+import com.kyleu.projectile.util.Logging
+import com.kyleu.projectile.util.tracing.TraceData
 
 trait DatabaseMigration extends Logging { this: JdbcDatabase =>
   def migrate() = {
@@ -11,7 +12,7 @@ trait DatabaseMigration extends Logging { this: JdbcDatabase =>
       override def name = "DoesFlywayTableExist"
       override def sql = "select count(*) x from information_schema.tables where table_name = 'flyway_schema_history'"
       override def map(row: Row) = row.as[Long]("x") > 0
-    })(new TraceData)
+    })(TraceData.noop)
 
     val flyway = if (!flywayExists) {
       val f = Flyway.configure().dataSource(ApplicationDatabase.source).baselineVersion("0").load()

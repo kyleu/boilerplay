@@ -1,12 +1,12 @@
 package services.relations
 
 import models.entrypoint.Entrypoint
-import models.result.RelationCount
+import com.kyleu.projectile.models.result.RelationCount
 import org.scalajs.dom
 
 import scala.scalajs.js.annotation.JSExportTopLevel
 import org.scalajs.jquery.{JQuery, JQueryEventObject, jQuery => $}
-import util.Logging
+import com.kyleu.projectile.util.{Logging, NumberUtils}
 
 @JSExportTopLevel("RelationService")
 class RelationService(url: String) extends Entrypoint("relation") {
@@ -45,15 +45,15 @@ class RelationService(url: String) extends Entrypoint("relation") {
     }
     if (count == 1) {
       val singular = jq.data("singular").toString
-      title.text(util.NumberUtils.withCommas(count) + " " + singular)
+      title.text(NumberUtils.withCommas(count) + " " + singular)
     } else {
       val plural = jq.data("plural").toString
-      title.text(util.NumberUtils.withCommas(count) + " " + plural)
+      title.text(NumberUtils.withCommas(count) + " " + plural)
     }
   }
 
   $.get(url = url, data = scalajs.js.Dynamic.literal(), success = (data: String) => {
-    import util.JsonSerializers._
+    import com.kyleu.projectile.util.JsonSerializers._
     decodeJson[Seq[RelationCount]](data) match {
       case Right(seq) => seq.foreach(rc => processCount(rc.model, rc.field, rc.count))
       case Left(x) => throw x

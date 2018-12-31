@@ -1,21 +1,19 @@
 package models.sandbox
 
+import com.google.inject.Injector
 import enumeratum.{CirceEnum, Enum, EnumEntry}
-import graphql.GraphQLService
-import models.Application
-import models.ProjectileContext.serviceContext
-import models.auth.Credentials
-import services.ServiceRegistry
+import scala.concurrent.ExecutionContext.Implicits.global
+import models.auth.UserCredentials
 import services.database.BackupRestore
-import util.JsonSerializers._
-import util.Logging
-import util.tracing.TraceData
+import com.kyleu.projectile.util.JsonSerializers._
+import com.kyleu.projectile.util.Logging
+import com.kyleu.projectile.util.tracing.{TraceData, TracingService}
 
 import scala.concurrent.Future
 
 sealed abstract class SandboxTask(val id: String, val name: String, val description: String) extends EnumEntry with Logging {
   def run(cfg: SandboxTask.Config)(implicit trace: TraceData): Future[SandboxTask.Result] = {
-    cfg.app.tracing.trace(id + ".sandbox") { sandboxTrace =>
+    cfg.tracingService.trace(id + ".sandbox") { sandboxTrace =>
       log.info(s"Running sandbox task [$id]...")
       val startMs = System.currentTimeMillis
       val result = call(cfg)(sandboxTrace).map { r =>
@@ -31,7 +29,7 @@ sealed abstract class SandboxTask(val id: String, val name: String, val descript
 }
 
 object SandboxTask extends Enum[SandboxTask] with CirceEnum[SandboxTask] {
-  final case class Config(app: Application, services: ServiceRegistry, graphQLService: GraphQLService, argument: Option[String])
+  final case class Config(tracingService: TracingService, injector: Injector, argument: Option[String])
 
   final case class Result(task: SandboxTask, arg: Option[String], status: String = "OK", result: String, elapsed: Int)
 
@@ -46,28 +44,15 @@ object SandboxTask extends Enum[SandboxTask] with CirceEnum[SandboxTask] {
     }
   }
 
-  case object TracingTest extends SandboxTask("tracing", "Tracing Test", "A tracing test.") {
-    override def call(cfg: Config)(implicit trace: TraceData) = TracingLogic.go(cfg.app, cfg.argument)
-  }
-
-  case object WebCall extends SandboxTask("webCall", "Web Call", "Calls the provided url and returns stats.") {
-    override def call(cfg: Config)(implicit trace: TraceData) = cfg.argument match {
-      case Some(url) => cfg.app.ws.url("sandbox.request", url).get().map { rsp =>
-        s"${rsp.status} $url (${util.NumberUtils.withCommas(rsp.bodyAsBytes.size)} bytes)"
-      }
-      case None => Future.successful("No url provided...")
-    }
-  }
-
   case object CopyTable extends SandboxTask("copyTable", "Copy Table", "Copy a database table, in preparation for new DDL.") {
     override def call(cfg: Config)(implicit trace: TraceData) = {
-      cfg.argument.map(a => TableLogic.copyTable(cfg.app, a)).getOrElse(Future.successful("Argument required."))
+      cfg.argument.map(a => TableLogic.copyTable(a)).getOrElse(Future.successful("Argument required."))
     }
   }
 
   case object RestoreTable extends SandboxTask("restoreTable", "Restore Table", "Restores a database table.") {
     override def call(cfg: Config)(implicit trace: TraceData) = {
-      cfg.argument.map(a => TableLogic.restoreTable(cfg.app, a)).getOrElse(Future.successful("Argument required."))
+      cfg.argument.map(a => TableLogic.restoreTable(a)).getOrElse(Future.successful("Argument required."))
     }
   }
 
@@ -85,7 +70,7 @@ object SandboxTask extends Enum[SandboxTask] with CirceEnum[SandboxTask] {
 
   case object Graphdoc extends SandboxTask("graphdoc", "Graphdoc", "Runs graphdoc against this project's schema.") {
     override def call(cfg: Config)(implicit trace: TraceData) = {
-      GraphdocLogic.generate(Credentials.system, cfg.app, cfg.graphQLService, cfg.argument)
+      GraphdocLogic.generate(UserCredentials.system, cfg.injector, cfg.argument)
     }
   }
 

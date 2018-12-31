@@ -5,7 +5,7 @@ import com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorSetting
 import com.mohiva.play.silhouette.impl.providers.OAuth2Settings
 import play.api.{Environment, Mode}
 import services.audit.SlackConfig
-import util.metrics.MetricsConfig
+import com.kyleu.projectile.util.metrics.MetricsConfig
 
 @javax.inject.Singleton
 class Configuration @javax.inject.Inject() (val cnf: play.api.Configuration, val metrics: MetricsConfig, env: Environment) {

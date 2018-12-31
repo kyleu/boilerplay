@@ -1,11 +1,11 @@
 /* Generated File */
 package models.table.task
 
+import com.kyleu.projectile.services.database.slick.SlickQueryService.imports._
 import io.circe.Json
 import java.time.LocalDateTime
 import java.util.UUID
 import models.task.ScheduledTaskRunRow
-import services.database.slick.SlickQueryService.imports._
 
 object ScheduledTaskRunRowTable {
   val query = TableQuery[ScheduledTaskRunRowTable]

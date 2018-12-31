@@ -1,6 +1,5 @@
 GET         /                      controllers.admin.system.AdminController.index
 GET         /status                controllers.admin.system.AdminController.status
-GET         /sockets               controllers.admin.system.AdminController.dumpSockets
 GET         /metrics               controllers.admin.system.MetricsController.showMetrics
 
 GET         /search                controllers.admin.system.SearchController.search(q ?= "")

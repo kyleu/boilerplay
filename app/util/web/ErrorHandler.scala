@@ -6,13 +6,13 @@ import play.api.http.{DefaultHttpErrorHandler, MimeTypes}
 import play.api._
 import play.api.mvc._
 import play.api.routing.Router
-import util.Logging
-import util.tracing.TracingService
+import com.kyleu.projectile.util.Logging
+import com.kyleu.projectile.util.tracing.OpenTracingService
 
 import scala.concurrent._
 
 class ErrorHandler @Inject() (
-    env: Environment, config: Configuration, sourceMapper: OptionalSourceMapper, router: Provider[Router], tracing: TracingService
+    env: Environment, config: Configuration, sourceMapper: OptionalSourceMapper, router: Provider[Router], tracing: OpenTracingService
 ) extends DefaultHttpErrorHandler(env, config, sourceMapper, router) with Rendering with AcceptExtractors with Logging {
 
   override protected def onDevServerError(request: RequestHeader, ex: UsefulException) = tracing.topLevelTrace("error.dev") { td =>

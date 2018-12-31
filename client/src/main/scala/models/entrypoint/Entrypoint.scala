@@ -1,6 +1,6 @@
 package models.entrypoint
 
-import util.Logging
+import com.kyleu.projectile.util.Logging
 
 object Entrypoint {
   private[this] var initialized = false
@@ -13,5 +13,5 @@ object Entrypoint {
 
 abstract class Entrypoint(val key: String) {
   Entrypoint.initIfNeeded()
-  Logging.info(s"${util.Config.projectName} started with entrypoint [$key].")
+  Logging.info(s"Started with entrypoint [$key].")
 }

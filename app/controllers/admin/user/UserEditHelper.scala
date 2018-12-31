@@ -4,9 +4,9 @@ import java.util.UUID
 
 import com.mohiva.play.silhouette.api.{LoginInfo, SignUpEvent}
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
-import models.ProjectileContext.webContext
+import scala.concurrent.ExecutionContext.Implicits.global
 import models.user.{Role, SystemUser, UserPreferences}
-import util.web.ControllerUtils
+import com.kyleu.projectile.util.web.ControllerUtils
 
 import scala.concurrent.Future
 

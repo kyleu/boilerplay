@@ -4,14 +4,15 @@ import java.util.UUID
 
 import controllers.admin.ServiceController
 import models.Application
-import models.ProjectileContext.webContext
+import scala.concurrent.ExecutionContext.Implicits.global
 import models.note.NoteRowResult
-import models.result.orderBy.OrderBy
+import com.kyleu.projectile.models.result.orderBy.OrderBy
+import com.kyleu.projectile.util.DateUtils
 import play.api.http.MimeTypes
 import services.audit.{AuditRecordRowService, AuditRoutes}
 import services.note.NoteRowService
-import util.JsonSerializers._
-import util.ReftreeUtils._
+import com.kyleu.projectile.util.JsonSerializers._
+import com.kyleu.projectile.util.ReftreeUtils._
 
 import scala.concurrent.Future
 
@@ -37,7 +38,7 @@ class NoteController @javax.inject.Inject() (override val app: Application, svc:
 
   def list(q: Option[String], orderBy: Option[String], orderAsc: Boolean, limit: Option[Int], offset: Option[Int], t: Option[String] = None) = {
     withSession("list", admin = true) { implicit request => implicit td =>
-      val startMs = util.DateUtils.nowMillis
+      val startMs = DateUtils.nowMillis
       val orderBys = OrderBy.forVals(orderBy, orderAsc).toSeq
       searchWithCount(q, orderBys, limit, offset).map(r => renderChoice(t) {
         case ServiceController.MimeTypes.csv => csvResponse("Note", svc.csvFor(r._1, r._2)).as("text/csv")

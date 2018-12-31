@@ -4,9 +4,9 @@ import java.time.LocalDateTime
 import java.util.UUID
 
 import com.mohiva.play.silhouette.api.{Identity, LoginInfo}
-import models.result.data.{DataField, DataFieldModel}
-import util.DateUtils
-import util.JsonSerializers._
+import com.kyleu.projectile.models.result.data.{DataField, DataFieldModel, DataSummary}
+import com.kyleu.projectile.util.DateUtils
+import com.kyleu.projectile.util.JsonSerializers._
 
 object SystemUser {
   private[this] implicit val jsonLoginInfoEncoder: Encoder[LoginInfo] = deriveEncoder
@@ -77,6 +77,6 @@ final case class SystemUser(
 
   def toSummary = {
     val title = username + " (" + id + ")"
-    models.result.data.DataSummary(model = "systemUser", pk = Seq(id.toString), title = title)
+    DataSummary(model = "systemUser", pk = Seq(id.toString), title = title)
   }
 }

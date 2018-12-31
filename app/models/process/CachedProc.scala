@@ -3,6 +3,8 @@ package models.process
 import java.time.LocalDateTime
 import java.util.UUID
 
+import com.kyleu.projectile.util.DateUtils
+
 object CachedProc {
   case class Output(level: String, line: String, occurred: LocalDateTime) {
     override def toString = s"[$level] $occurred - $line"
@@ -20,7 +22,7 @@ case class CachedProc(cmd: Seq[String], onOutput: CachedProc.Output => Unit, onC
   def getOutput = output.toIndexedSeq
 
   private[this] def callback(level: String, line: String) = {
-    val o = CachedProc.Output(level, line, util.DateUtils.now)
+    val o = CachedProc.Output(level, line, DateUtils.now)
     output += o
     onOutput(o)
   }
@@ -32,7 +34,7 @@ case class CachedProc(cmd: Seq[String], onOutput: CachedProc.Output => Unit, onC
     log = callback("log", _)
   )
 
-  def started = startMs.map(util.DateUtils.fromMillis)
+  def started = startMs.map(DateUtils.fromMillis)
 
   def run() = {
     startMs = Some(System.currentTimeMillis)

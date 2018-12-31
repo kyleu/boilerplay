@@ -1,8 +1,8 @@
 /* Generated File */
 package models.table.settings
 
+import com.kyleu.projectile.services.database.slick.SlickQueryService.imports._
 import models.settings.SettingKeyType
-import services.database.slick.SlickQueryService.imports._
 import slick.jdbc.JdbcType
 
 object SettingKeyTypeColumnType {

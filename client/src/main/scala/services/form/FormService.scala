@@ -4,7 +4,7 @@ import models.entrypoint.Entrypoint
 import models.form.{FieldDefault, FieldHelper}
 import org.scalajs.dom
 import org.scalajs.jquery.{JQuery, jQuery => $}
-import util.Logging
+import com.kyleu.projectile.util.Logging
 
 import scala.scalajs.js
 import scala.scalajs.js.annotation.JSExportTopLevel

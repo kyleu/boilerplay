@@ -6,7 +6,7 @@ import com.mohiva.play.silhouette.impl.exceptions.IdentityNotFoundException
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
 import controllers.BaseController
 import models.Application
-import models.ProjectileContext.webContext
+import scala.concurrent.ExecutionContext.Implicits.global
 import models.user.UserForms
 import play.api.mvc.Result
 import services.user.SystemUserSearchService

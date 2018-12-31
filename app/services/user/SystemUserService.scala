@@ -5,17 +5,18 @@ import java.util.UUID
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.util.PasswordHasher
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
-import models.ProjectileContext.serviceContext
-import models.auth.Credentials
+import scala.concurrent.ExecutionContext.Implicits.global
 import models.queries.auth._
-import models.result.data.DataField
-import models.result.filter.Filter
-import models.result.orderBy.OrderBy
+import com.kyleu.projectile.models.result.data.DataField
+import com.kyleu.projectile.models.result.filter.Filter
+import com.kyleu.projectile.models.result.orderBy.OrderBy
 import models.user.{Role, SystemUser}
-import services.ModelServiceHelper
+import com.kyleu.projectile.services.{Credentials, ModelServiceHelper}
 import services.cache.UserCache
-import services.database.ApplicationDatabase
-import util.tracing.{TraceData, TracingService}
+import com.kyleu.projectile.services.database.ApplicationDatabase
+import com.kyleu.projectile.util.CsvUtils
+import com.kyleu.projectile.util.tracing.{TraceData, TracingService}
+import models.auth.UserCredentials
 
 import scala.concurrent.Future
 
@@ -30,11 +31,11 @@ class SystemUserService @javax.inject.Inject() (
     ApplicationDatabase.queryF(SystemUserQueries.getByPrimaryKeySeq(idSeq))(td)
   }
 
-  def getByRoleSeq(roleSeq: Seq[Role])(implicit trace: TraceData) = traceF("get.by.role.sequence") { td =>
+  def getByRoleSeq(creds: Credentials, roleSeq: Seq[Role])(implicit trace: TraceData) = traceF("get.by.role.sequence") { td =>
     ApplicationDatabase.queryF(SystemUserQueries.GetByRoleSeq(roleSeq))(td)
   }
 
-  def getByUsername(username: String)(implicit trace: TraceData) = traceF("get.by.username") { td =>
+  def getByUsername(creds: Credentials, username: String)(implicit trace: TraceData) = traceF("get.by.username") { td =>
     ApplicationDatabase.queryF(SystemUserQueries.FindUserByUsername(username))(td)
   }
 
@@ -61,7 +62,7 @@ class SystemUserService @javax.inject.Inject() (
     traceF("search.exact")(td => ApplicationDatabase.queryF(SystemUserQueries.searchExact(q, orderBys, limit, offset))(td))
   }
 
-  def isUsernameInUse(name: String)(implicit trace: TraceData) = traceF("username.in.use") { td =>
+  def isUsernameInUse(creds: Credentials, name: String)(implicit trace: TraceData) = traceF("username.in.use") { td =>
     ApplicationDatabase.queryF(UserSearchQueries.IsUsernameInUse(name))(td)
   }
 
@@ -75,7 +76,7 @@ class SystemUserService @javax.inject.Inject() (
 
   def create(creds: Credentials, fields: Seq[DataField])(implicit trace: TraceData) = traceF("create") { td =>
     ApplicationDatabase.executeF(SystemUserQueries.create(fields))(td).flatMap { _ =>
-      services.audit.AuditHelper.onInsert("SystemUser", Seq(fieldVal(fields, "id")), fields, creds)
+      services.audit.AuditHelper.onInsert("SystemUser", Seq(fieldVal(fields, "id")), fields, creds.asInstanceOf[UserCredentials])
       getByPrimaryKey(creds, UUID.fromString(fieldVal(fields, "id")))
     }
   }
@@ -86,7 +87,7 @@ class SystemUserService @javax.inject.Inject() (
       case Some(current) => ApplicationDatabase.executeF(SystemUserQueries.update(id, fields))(td).flatMap { _ =>
         getByPrimaryKey(creds, id)(td).map {
           case Some(newModel) =>
-            services.audit.AuditHelper.onUpdate("SystemUser", Seq(DataField("id", Some(id.toString))), current.toDataFields, fields, creds)
+            services.audit.AuditHelper.onUpdate("SystemUser", Seq(DataField("id", Some(id.toString))), current.toDataFields, fields, creds.asInstanceOf[UserCredentials])
             newModel -> s"Updated [${fields.size}] fields of Identity [$id]."
           case None => throw new IllegalStateException(s"Cannot find Identity matching [$id].")
         }
@@ -108,7 +109,7 @@ class SystemUserService @javax.inject.Inject() (
     getByPrimaryKey(creds, id)(txTd).flatMap {
       case Some(model) =>
         UserCache.getUser(id).foreach { user =>
-          services.audit.AuditHelper.onRemove("SystemUser", Seq(id.toString), user.toDataFields, creds)
+          services.audit.AuditHelper.onRemove("SystemUser", Seq(id.toString), user.toDataFields, creds.asInstanceOf[UserCredentials])
         }
         ApplicationDatabase.executeF(SystemUserQueries.removeByPrimaryKey(id))(txTd).flatMap { _ =>
           ApplicationDatabase.executeF(PasswordInfoQueries.removeByPrimaryKey(model.profile.providerID, model.profile.providerKey), Some(conn)).map { _ =>
@@ -143,7 +144,7 @@ class SystemUserService @javax.inject.Inject() (
             val authInfo = hasher.hash(p)
             ApplicationDatabase.executeF(PasswordInfoQueries.UpdatePasswordInfo(loginInfo, authInfo)).map { _ =>
               UserCache.removeUser(id)
-              services.audit.AuditHelper.onInsert("SystemUser", Seq(id.toString), fields, creds)
+              services.audit.AuditHelper.onInsert("SystemUser", Seq(id.toString), fields, creds.asInstanceOf[UserCredentials])
               id
             }
           case _ => Future.successful(id)
@@ -153,6 +154,6 @@ class SystemUserService @javax.inject.Inject() (
   }
 
   def csvFor(operation: String, totalCount: Int, rows: Seq[SystemUser])(implicit trace: TraceData) = {
-    traceB("export.csv")(td => util.CsvUtils.csvFor(Some(key), totalCount, rows, SystemUserQueries.fields)(td))
+    traceB("export.csv")(td => CsvUtils.csvFor(Some(key), totalCount, rows, SystemUserQueries.fields)(td))
   }
 }

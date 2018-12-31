@@ -1,10 +1,12 @@
 package services.task.scheduled
 
-import models.ProjectileContext.serviceContext
-import models.auth.Credentials
+import com.kyleu.projectile.util.DateUtils
+
+import scala.concurrent.ExecutionContext.Implicits.global
+import models.auth.UserCredentials
 import models.task.scheduled.ScheduledTask
 import services.sync.SyncService
-import util.tracing.TraceData
+import com.kyleu.projectile.util.tracing.TraceData
 
 import scala.concurrent.Future
 import scala.util.control.NonFatal
@@ -19,16 +21,16 @@ class ScheduledTasks @javax.inject.Inject() (
 
   def byKey(key: String) = all.find(_.key == key).getOrElse(throw new IllegalStateException(s"No task with key [$key]."))
 
-  def runAll(creds: Credentials, tasks: Seq[ScheduledTask], log: String => Unit)(implicit td: TraceData) = {
+  def runAll(creds: UserCredentials, tasks: Seq[ScheduledTask], log: String => Unit)(implicit td: TraceData) = {
     Future.sequence(tasks.map(t => run(creds, t, log).map(t -> _))).map(_.toMap)
   }
 
-  def run(creds: Credentials, task: ScheduledTask, log: String => Unit)(implicit td: TraceData) = {
-    val start = util.DateUtils.nowMillis
+  def run(creds: UserCredentials, task: ScheduledTask, log: String => Unit)(implicit td: TraceData) = {
+    val start = DateUtils.nowMillis
     syncService.set(creds, task.key, "Running", "Started processing").flatMap { _ =>
       Try(task.run(creds, log)) match {
         case Success(r) => r.flatMap { ret =>
-          val msg = s"Completed task [${task.key}] in [${util.DateUtils.nowMillis - start}ms]."
+          val msg = s"Completed task [${task.key}] in [${DateUtils.nowMillis - start}ms]."
           log(msg)
           syncService.set(creds, task.key, "OK", msg).map(_ => ret)
         }.recoverWith {

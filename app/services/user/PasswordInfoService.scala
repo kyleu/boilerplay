@@ -1,17 +1,18 @@
 package services.user
 
+import com.kyleu.projectile.services.database.ApplicationDatabase
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.util.PasswordInfo
 import com.mohiva.play.silhouette.persistence.daos.DelegableAuthInfoDAO
-import models.ProjectileContext.serviceContext
+
+import scala.concurrent.ExecutionContext.Implicits.global
 import models.queries.auth.PasswordInfoQueries
-import services.database.ApplicationDatabase
-import util.tracing.TracingService
+import com.kyleu.projectile.util.tracing.OpenTracingService
 
 import scala.concurrent.Future
 
 @javax.inject.Singleton
-class PasswordInfoService @javax.inject.Inject() (tracingService: TracingService) extends DelegableAuthInfoDAO[PasswordInfo] {
+class PasswordInfoService @javax.inject.Inject() (tracingService: OpenTracingService) extends DelegableAuthInfoDAO[PasswordInfo] {
 
   override def find(loginInfo: LoginInfo) = tracingService.noopTrace("password.find") { implicit td =>
     Future.successful(ApplicationDatabase.query(PasswordInfoQueries.getByPrimaryKey(loginInfo.providerID, loginInfo.providerKey)))

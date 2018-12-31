@@ -2,8 +2,8 @@ package controllers.admin.system
 
 import controllers.BaseController
 import models.Application
-import models.ProjectileContext.webContext
-import util.metrics.Instrumented
+import scala.concurrent.ExecutionContext.Implicits.global
+import com.kyleu.projectile.util.metrics.Instrumented
 
 import scala.concurrent.Future
 

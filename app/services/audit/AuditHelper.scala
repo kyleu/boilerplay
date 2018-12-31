@@ -4,11 +4,11 @@ import java.net.InetAddress
 import java.util.UUID
 
 import models.audit._
-import models.auth.Credentials
-import models.result.data.DataField
-import util.tracing.TraceData
-import util.{Logging, NullUtils}
-import util.JsonSerializers._
+import models.auth.UserCredentials
+import com.kyleu.projectile.models.result.data.DataField
+import com.kyleu.projectile.util.tracing.TraceData
+import com.kyleu.projectile.util.{Logging, NullUtils}
+import com.kyleu.projectile.util.JsonSerializers._
 
 object AuditHelper extends Logging {
   private[this] val server = InetAddress.getLocalHost.getHostName
@@ -22,7 +22,7 @@ object AuditHelper extends Logging {
 
   def onAudit(audit: Audit, records: Seq[AuditRecordRow])(implicit trace: TraceData) = getInst.callback(audit, records)
 
-  def onInsert(t: String, pk: Seq[String], fields: Seq[DataField], creds: Credentials)(implicit trace: TraceData) = {
+  def onInsert(t: String, pk: Seq[String], fields: Seq[DataField], creds: UserCredentials)(implicit trace: TraceData) = {
     val msg = s"Inserted new [$t] with [${fields.size}] fields:"
     val auditId = UUID.randomUUID
     val records = Seq(AuditRecordRow.empty(auditId = auditId, t = t, pk = pk.toList, changes = fields.map(f => AuditField(f.k, None, f.v)).asJson))
@@ -30,7 +30,7 @@ object AuditHelper extends Logging {
   }
 
   def onUpdate(
-    t: String, pk: Seq[DataField], originalFields: Seq[DataField], newFields: Seq[DataField], creds: Credentials
+    t: String, pk: Seq[DataField], originalFields: Seq[DataField], newFields: Seq[DataField], creds: UserCredentials
   )(implicit trace: TraceData) = {
     def changeFor(f: DataField) = originalFields.find(_.k == f.k).flatMap {
       case o if f.v != o.v => Some(AuditField(f.k, o.v, f.v))
@@ -43,7 +43,7 @@ object AuditHelper extends Logging {
     onAudit(Audit(id = auditId, act = "update", server = server, client = creds.remoteAddress, userId = creds.user.id, msg = msg), records = records.toList)
   }
 
-  def onRemove(t: String, pk: Seq[String], fields: Seq[DataField], creds: Credentials)(implicit trace: TraceData) = {
+  def onRemove(t: String, pk: Seq[String], fields: Seq[DataField], creds: UserCredentials)(implicit trace: TraceData) = {
     val msg = s"Removed [$t] with [${fields.size}] fields:"
     val auditId = UUID.randomUUID
     val records = Seq(AuditRecordRow.empty(auditId = auditId, t = t, pk = pk.toList, changes = fields.map(f => AuditField(f.k, None, f.v)).asJson))

@@ -3,7 +3,7 @@ package services.ui
 import java.util.UUID
 
 import enumeratum.{Enum, EnumEntry, CirceEnum}
-import util.Logging
+import com.kyleu.projectile.util.Logging
 
 sealed abstract class KeyboardShortcut(val pattern: String, val key: String, val call: Option[UUID] => Unit, val isGlobal: Boolean = true) extends EnumEntry
 

@@ -8,8 +8,8 @@ import com.mohiva.play.silhouette.api.{LoginEvent, LoginInfo, Silhouette}
 import com.mohiva.play.silhouette.impl.providers.{CommonSocialProfileBuilder, SocialProvider, SocialProviderRegistry}
 import controllers.BaseController
 import models.Application
-import models.ProjectileContext.webContext
-import models.auth.{AuthEnv, Credentials}
+import scala.concurrent.ExecutionContext.Implicits.global
+import models.auth.{AuthEnv, UserCredentials}
 import models.settings.SettingKeyType
 import models.user.{Role, SystemUser, UserPreferences}
 import services.user.{SystemUserSearchService, SystemUserService}
@@ -34,10 +34,10 @@ class SocialAuthController @javax.inject.Inject() (
             val li = LoginInfo(profile.loginInfo.providerID, profile.loginInfo.providerKey)
 
             val userF = userSearchService.getByLoginInfo(li).flatMap {
-              case Some(u) => userService.updateUser(Credentials(u, request.remoteAddress), u)
+              case Some(u) => userService.updateUser(UserCredentials(u, request.remoteAddress), u)
               case None =>
                 val username = profile.fullName.orElse(profile.firstName).orElse(profile.email).getOrElse(profile.loginInfo.providerKey)
-                userService.getByUsername(username).flatMap { existing =>
+                userService.getByUsername(UserCredentials.system, username).flatMap { existing =>
                   val newUser = SystemUser(
                     id = UUID.randomUUID,
                     username = if (existing.isDefined) { username + "-" + scala.util.Random.alphanumeric.take(4).mkString } else { username },
@@ -45,7 +45,7 @@ class SocialAuthController @javax.inject.Inject() (
                     profile = profile.loginInfo,
                     role = Role.withValue(app.coreServices.settings(SettingKeyType.DefaultNewUserRole))
                   )
-                  userService.insert(Credentials(newUser, request.remoteAddress), newUser)
+                  userService.insert(UserCredentials(newUser, request.remoteAddress), newUser)
                 }
             }
 

@@ -2,24 +2,24 @@ package models
 
 import java.util.TimeZone
 
-import akka.actor.{ActorSystem, Props}
+import akka.actor.ActorSystem
+import com.kyleu.projectile.services.database._
+import com.kyleu.projectile.util.Logging
+import com.kyleu.projectile.util.tracing.TracingService
 import com.mohiva.play.silhouette.api.Silhouette
-import models.ProjectileContext.serviceContext
+import scala.concurrent.ExecutionContext.Implicits.global
 import models.auth.AuthEnv
 import play.api.Environment
 import play.api.inject.ApplicationLifecycle
 import services.audit.AuditService
 import services.cache.CacheService
-import services.database._
 import services.file.FileService
 import services.note.ModelNoteService
 import services.settings.SettingsService
-import services.supervisor.ActorSupervisor
 import services.user.SystemUserService
-import util.metrics.Instrumented
-import util.tracing.TracingService
-import util.web.TracingWSClient
-import util.{Config, Logging}
+import util.Config
+import com.kyleu.projectile.util.metrics.Instrumented
+import com.kyleu.projectile.util.web.TracingWSClient
 
 import scala.concurrent.{Await, Future}
 
@@ -53,8 +53,6 @@ class Application @javax.inject.Inject() (
     Await.result(start(), 20.seconds)
   }
 
-  val supervisor = actorSystem.actorOf(Props(classOf[ActorSupervisor], this), "supervisor")
-
   private[this] def start() = tracing.topLevelTrace("application.start") { implicit tn =>
     log.info(s"${Config.projectName} is starting.")
     Application.initialized = true
@@ -69,8 +67,7 @@ class Application @javax.inject.Inject() (
 
     FileService.setRootDir(config.dataDir)
 
-    ApplicationDatabase.open(config.cnf, tracing)
-    ApplicationDatabase.migrate()
+    ApplicationDatabase.open(config.cnf.underlying, tracing)
 
     coreServices.settings.load().map { _ =>
       true

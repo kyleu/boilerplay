@@ -1,21 +1,23 @@
 package graphql
 
+import com.google.inject.Injector
+import com.kyleu.projectile.graphql.GraphQLContext
+import com.kyleu.projectile.models.note.Note
 import io.circe.Json
-import models.Application
-import models.ProjectileContext.graphQlContext
-import models.auth.Credentials
+import scala.concurrent.ExecutionContext.Implicits.global
+import models.auth.UserCredentials
 import sangria.execution.{ExceptionHandler, Executor, HandledException, QueryReducer}
 import sangria.marshalling.circe._
 import sangria.parser.QueryParser
 import sangria.validation.QueryValidator
-import services.ServiceRegistry
-import util.Logging
-import util.tracing.{TraceData, TracingService}
+import com.kyleu.projectile.util.{JsonSerializers, Logging}
+import com.kyleu.projectile.util.tracing.{TraceData, TracingService}
 
+import scala.concurrent.Future
 import scala.util.{Failure, Success}
 
 @javax.inject.Singleton
-class GraphQLService @javax.inject.Inject() (tracing: TracingService, registry: ServiceRegistry) extends Logging {
+class GraphQLService @javax.inject.Inject() (tracing: TracingService, injector: Injector) extends Logging {
   protected val exceptionHandler = ExceptionHandler {
     case (_, e: IllegalStateException) =>
       log.warn("Error encountered while running GraphQL query.", e)
@@ -25,7 +27,7 @@ class GraphQLService @javax.inject.Inject() (tracing: TracingService, registry: 
   private[this] val rejectComplexQueries = QueryReducer.rejectComplexQueries[Any](1000, (_, _) => new IllegalArgumentException("Query is too complex."))
 
   def executeQuery(
-    app: Application, query: String, variables: Option[Json], operation: Option[String], creds: Credentials, debug: Boolean
+    query: String, variables: Option[Json], operation: Option[String], creds: UserCredentials, debug: Boolean
   )(implicit t: TraceData) = {
     tracing.trace(s"graphql.service.execute.${operation.getOrElse("adhoc")}") { td =>
       if (!td.isNoop) {
@@ -41,7 +43,7 @@ class GraphQLService @javax.inject.Inject() (tracing: TracingService, registry: 
           val ret = Executor.execute(
             schema = Schema.schema,
             queryAst = ast,
-            userContext = GraphQLContext(app, this, registry, creds, td),
+            userContext = GraphQLContext(creds, tracing, td, injector, (_, _, _) => y => Future.successful(Seq.empty[Note])),
             operationName = operation,
             variables = variables.getOrElse(Json.obj()),
             deferredResolver = Schema.resolver,
@@ -62,7 +64,7 @@ class GraphQLService @javax.inject.Inject() (tracing: TracingService, registry: 
   def parseVariables(variables: String) = if (variables.trim == "" || variables.trim == "null") {
     Json.obj()
   } else {
-    util.JsonSerializers.parseJson(variables) match {
+    JsonSerializers.parseJson(variables) match {
       case Right(x) => x
       case Left(_) => Json.obj()
     }

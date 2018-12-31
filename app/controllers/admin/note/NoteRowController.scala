@@ -1,19 +1,19 @@
 /* Generated File */
 package controllers.admin.note
 
+import com.kyleu.projectile.models.result.orderBy.OrderBy
+import com.kyleu.projectile.util.DateUtils
+import com.kyleu.projectile.util.JsonSerializers._
+import com.kyleu.projectile.util.ReftreeUtils._
 import controllers.admin.ServiceController
 import java.util.UUID
 import models.Application
-import models.ProjectileContext.webContext
 import models.note.{NoteRow, NoteRowResult}
-import models.result.orderBy.OrderBy
 import play.api.http.MimeTypes
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits._
 import services.audit.AuditRecordRowService
 import services.note.NoteRowService
-import util.DateUtils
-import util.JsonSerializers._
-import util.ReftreeUtils._
 
 @javax.inject.Singleton
 class NoteRowController @javax.inject.Inject() (

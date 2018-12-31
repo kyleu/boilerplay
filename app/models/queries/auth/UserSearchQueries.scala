@@ -2,8 +2,8 @@ package models.queries.auth
 
 import java.util.UUID
 
-import models.database._
-import models.queries.EngineHelper.quote
+import com.kyleu.projectile.models.database._
+import com.kyleu.projectile.models.queries.EngineHelper.quote
 
 object UserSearchQueries {
   private[this] val tableName = SystemUserQueries.tableName

@@ -1,10 +1,8 @@
 package controllers.admin.system
 
-import akka.util.Timeout
 import controllers.BaseController
 import models.Application
-import models.InternalMessage.{GetSystemStatus, SystemStatus}
-import models.ProjectileContext.webContext
+import scala.concurrent.ExecutionContext.Implicits.global
 
 import scala.concurrent.Future
 
@@ -20,15 +18,5 @@ class AdminController @javax.inject.Inject() (override val app: Application) ext
 
   def status = withSession("admin.status", admin = true) { implicit request => implicit td =>
     Future.successful(Ok(views.html.admin.status(request.identity)))
-  }
-
-  def dumpSockets = withSession("admin.sockets", admin = true) { implicit request => implicit td =>
-    import akka.pattern.ask
-
-    import scala.concurrent.duration._
-    implicit val timeout: Timeout = Timeout(1.second)
-    ask(app.supervisor, GetSystemStatus).mapTo[SystemStatus].map { x =>
-      Ok(views.html.admin.sockets(request.identity, x.channels))
-    }
   }
 }

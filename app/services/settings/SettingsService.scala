@@ -1,19 +1,19 @@
 package services.settings
 
-import models.ProjectileContext.serviceContext
-import models.auth.Credentials
-import models.result.data.DataField
+import scala.concurrent.ExecutionContext.Implicits.global
+import models.auth.UserCredentials
+import com.kyleu.projectile.models.result.data.DataField
 import models.settings.{Setting, SettingKeyType}
-import models.table.settings.SettingTable
-import services.database.ApplicationDatabase
-import services.database.slick.SlickQueryService.imports._
-import util.Logging
-import util.tracing.{TraceData, TracingService}
+import com.kyleu.projectile.services.database.ApplicationDatabase
+import com.kyleu.projectile.util.Logging
+import com.kyleu.projectile.util.tracing.TraceData
+import models.queries.settings.SettingQueries
+import com.kyleu.projectile.util.tracing.OpenTracingService
 
 import scala.concurrent.Future
 
 @javax.inject.Singleton
-class SettingsService @javax.inject.Inject() (tracing: TracingService, svc: SettingService) extends Logging {
+class SettingsService @javax.inject.Inject() (tracing: OpenTracingService, svc: SettingService) extends Logging {
   private[this] var settings = Seq.empty[Setting]
   private[this] var settingsMap = Map.empty[SettingKeyType, String]
 
@@ -27,7 +27,7 @@ class SettingsService @javax.inject.Inject() (tracing: TracingService, svc: Sett
   }
 
   def load()(implicit trace: TraceData) = tracing.trace("settings.service.load") { _ =>
-    ApplicationDatabase.slick.run(SettingTable.query.result).map { set =>
+    ApplicationDatabase.queryF(SettingQueries.getAll()).map { set =>
       settingsMap = set.map(s => s.k -> s.v).toMap
       settings = SettingKeyType.values.map(k => Setting(k, settingsMap.getOrElse(k, k.default)))
       log.info(s"Loaded [${set.size}] system settings.")
@@ -41,7 +41,7 @@ class SettingsService @javax.inject.Inject() (tracing: TracingService, svc: Sett
 
   def set(key: SettingKeyType, value: String)(implicit trace: TraceData) = tracing.trace("settings.service.set") { _ =>
     val s = Setting(key, value)
-    val creds = Credentials.system
+    val creds = UserCredentials.system
     val ret = if (s.isDefault) {
       settingsMap = settingsMap - key
       svc.remove(creds, key)

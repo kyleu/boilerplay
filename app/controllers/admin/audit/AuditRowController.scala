@@ -1,20 +1,22 @@
 /* Generated File */
 package controllers.admin.audit
 
+import com.kyleu.projectile.models.result.RelationCount
+import com.kyleu.projectile.models.result.orderBy.OrderBy
+import com.kyleu.projectile.util.DateUtils
+import com.kyleu.projectile.util.JsonSerializers._
+import com.kyleu.projectile.util.ReftreeUtils._
 import controllers.admin.ServiceController
 import java.util.UUID
+
 import models.Application
-import models.ProjectileContext.webContext
 import models.audit.{AuditRow, AuditRowResult}
-import models.auth.Credentials
-import models.result.RelationCount
-import models.result.orderBy.OrderBy
+import models.auth.UserCredentials
 import play.api.http.MimeTypes
+
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits._
 import services.audit.{AuditRecordRowService, AuditRowService}
-import util.DateUtils
-import util.JsonSerializers._
-import util.ReftreeUtils._
 
 @javax.inject.Singleton
 class AuditRowController @javax.inject.Inject() (
@@ -101,7 +103,7 @@ class AuditRowController @javax.inject.Inject() (
   }
 
   def relationCounts(id: UUID) = withSession("relation.counts", admin = true) { implicit request => implicit td =>
-    val creds = Credentials.fromRequest(request)
+    val creds = UserCredentials.fromRequest(request)
     val auditRecordRowByAuditIdF = auditRecordRowS.countByAuditId(creds, id)
     for (auditRecordRowC <- auditRecordRowByAuditIdF) yield {
       Ok(Seq(

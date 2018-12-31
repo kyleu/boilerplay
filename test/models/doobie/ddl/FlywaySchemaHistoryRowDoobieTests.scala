@@ -1,10 +1,10 @@
 /* Generated File */
 package models.doobie.ddl
 
+import com.kyleu.projectile.services.database.doobie.DoobieQueryService.Imports._
+import com.kyleu.projectile.services.database.doobie.DoobieTestHelper.yolo._
 import models.ddl.FlywaySchemaHistoryRow
 import org.scalatest._
-import services.database.doobie.DoobieQueryService.Imports._
-import services.database.doobie.DoobieTestHelper.yolo._
 
 class FlywaySchemaHistoryRowDoobieTests extends FlatSpec with Matchers {
 

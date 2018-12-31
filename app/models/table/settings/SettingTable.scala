@@ -1,9 +1,9 @@
 /* Generated File */
 package models.table.settings
 
+import com.kyleu.projectile.services.database.slick.SlickQueryService.imports._
 import models.settings.{Setting, SettingKeyType}
 import models.table.settings.SettingKeyTypeColumnType.settingKeyTypeColumnType
-import services.database.slick.SlickQueryService.imports._
 
 object SettingTable {
   val query = TableQuery[SettingTable]

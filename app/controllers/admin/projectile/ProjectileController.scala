@@ -3,7 +3,7 @@ package controllers.admin.projectile
 import controllers.BaseController
 import io.circe.Json
 import models.Application
-import models.ProjectileContext.webContext
+import scala.concurrent.ExecutionContext.Implicits.global
 
 import scala.concurrent.Future
 

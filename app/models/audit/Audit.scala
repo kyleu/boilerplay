@@ -3,9 +3,10 @@ package models.audit
 import java.time.LocalDateTime
 import java.util.UUID
 
-import models.result.data.{DataField, DataFieldModel, DataSummary}
-import models.tag.Tag
-import util.JsonSerializers._
+import com.kyleu.projectile.models.result.data.{DataField, DataFieldModel, DataSummary}
+import com.kyleu.projectile.models.tag.Tag
+import com.kyleu.projectile.util.DateUtils
+import com.kyleu.projectile.util.JsonSerializers._
 
 object Audit {
   implicit val jsonEncoder: Encoder[Audit] = deriveEncoder
@@ -21,8 +22,8 @@ final case class Audit(
     userId: UUID = UUID.randomUUID,
     tags: List[Tag] = Nil,
     msg: String = "n/a",
-    started: LocalDateTime = util.DateUtils.now,
-    completed: LocalDateTime = util.DateUtils.now
+    started: LocalDateTime = DateUtils.now,
+    completed: LocalDateTime = DateUtils.now
 ) extends DataFieldModel {
   override def toDataFields = Seq(
     DataField("id", Some(id.toString)),
@@ -38,7 +39,7 @@ final case class Audit(
   )
 
   lazy val changeLog = s"Audit [$id] ($act/$app): $msg"
-  lazy val duration = (util.DateUtils.toMillis(completed) - util.DateUtils.toMillis(started)).toInt
+  lazy val duration = (DateUtils.toMillis(completed) - DateUtils.toMillis(started)).toInt
 
   def toSummary = DataSummary(model = "audit", pk = Seq(id.toString), title = s"$act / $app ($id)")
 }

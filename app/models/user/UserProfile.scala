@@ -5,7 +5,7 @@ import java.util.UUID
 import models.template.Theme
 import java.time.LocalDateTime
 
-import util.JsonSerializers._
+import com.kyleu.projectile.util.JsonSerializers._
 
 object UserProfile {
   implicit val jsonEncoder: Encoder[UserProfile] = deriveEncoder

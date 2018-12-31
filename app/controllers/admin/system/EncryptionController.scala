@@ -2,9 +2,9 @@ package controllers.admin.system
 
 import controllers.BaseController
 import models.Application
-import models.ProjectileContext.webContext
+import scala.concurrent.ExecutionContext.Implicits.global
 import util.EncryptionUtils
-import util.web.ControllerUtils
+import com.kyleu.projectile.util.web.ControllerUtils
 
 import scala.concurrent.Future
 

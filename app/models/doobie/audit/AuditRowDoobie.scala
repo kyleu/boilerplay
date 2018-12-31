@@ -2,10 +2,10 @@
 package models.doobie.audit
 
 import cats.data.NonEmptyList
+import com.kyleu.projectile.services.database.doobie.DoobieQueries
+import com.kyleu.projectile.services.database.doobie.DoobieQueryService.Imports._
 import java.util.UUID
 import models.audit.AuditRow
-import services.database.doobie.DoobieQueries
-import services.database.doobie.DoobieQueryService.Imports._
 
 object AuditRowDoobie extends DoobieQueries[AuditRow]("audit") {
   override val countFragment = fr"""select count(*) from "audit""""

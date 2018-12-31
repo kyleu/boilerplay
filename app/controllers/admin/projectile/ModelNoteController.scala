@@ -3,10 +3,10 @@ package controllers.admin.projectile
 import controllers.BaseController
 import controllers.admin.ServiceController
 import models.Application
-import models.ProjectileContext.webContext
+import scala.concurrent.ExecutionContext.Implicits.global
 import models.note.NoteRow
 import services.note.ModelNoteService
-import util.JsonSerializers._
+import com.kyleu.projectile.util.JsonSerializers._
 
 import scala.concurrent.Future
 

@@ -1,9 +1,9 @@
 /* Generated File */
 package models.table.sync
 
+import com.kyleu.projectile.services.database.slick.SlickQueryService.imports._
 import java.time.LocalDateTime
 import models.sync.SyncProgressRow
-import services.database.slick.SlickQueryService.imports._
 
 object SyncProgressRowTable {
   val query = TableQuery[SyncProgressRowTable]

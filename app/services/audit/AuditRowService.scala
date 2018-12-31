@@ -1,20 +1,19 @@
 /* Generated File */
 package services.audit
 
+import com.kyleu.projectile.models.result.data.DataField
+import com.kyleu.projectile.models.result.filter.Filter
+import com.kyleu.projectile.models.result.orderBy.OrderBy
+import com.kyleu.projectile.models.tag.Tag
+import com.kyleu.projectile.services.{Credentials, ModelServiceHelper}
+import com.kyleu.projectile.services.database.ApplicationDatabase
+import com.kyleu.projectile.util.CsvUtils
+import com.kyleu.projectile.util.tracing.{TraceData, TracingService}
 import java.util.UUID
-import models.ProjectileContext.serviceContext
 import models.audit.AuditRow
-import models.auth.Credentials
 import models.queries.audit.AuditRowQueries
-import models.result.data.DataField
-import models.result.filter.Filter
-import models.result.orderBy.OrderBy
-import models.tag.Tag
 import scala.concurrent.Future
-import services.ModelServiceHelper
-import services.database.ApplicationDatabase
-import util.CsvUtils
-import util.tracing.{TraceData, TracingService}
+import scala.concurrent.ExecutionContext.Implicits._
 
 @javax.inject.Singleton
 class AuditRowService @javax.inject.Inject() (override val tracing: TracingService) extends ModelServiceHelper[AuditRow]("auditRow") {

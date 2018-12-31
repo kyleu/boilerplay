@@ -1,12 +1,12 @@
 /* Generated File */
 package models.task
 
+import com.kyleu.projectile.models.result.data.{DataField, DataFieldModel, DataSummary}
+import com.kyleu.projectile.util.DateUtils
+import com.kyleu.projectile.util.JsonSerializers._
 import io.circe.Json
 import java.time.LocalDateTime
 import java.util.UUID
-import models.result.data.{DataField, DataFieldModel, DataSummary}
-import util.DateUtils
-import util.JsonSerializers._
 
 object ScheduledTaskRunRow {
   implicit val jsonEncoder: Encoder[ScheduledTaskRunRow] = deriveEncoder

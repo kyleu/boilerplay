@@ -3,13 +3,13 @@ package models.queries.audit
 import java.util.UUID
 
 import models.audit.Audit
-import models.database.{DatabaseField, Row}
-import models.database.DatabaseFieldType._
-import models.queries.{BaseQueries, ResultFieldHelper}
-import models.result.data.DataField
-import models.result.filter.Filter
-import models.result.orderBy.OrderBy
-import models.tag.Tag
+import com.kyleu.projectile.models.database.{DatabaseField, Row}
+import com.kyleu.projectile.models.database.DatabaseFieldType._
+import com.kyleu.projectile.models.queries.{BaseQueries, ResultFieldHelper}
+import com.kyleu.projectile.models.result.data.DataField
+import com.kyleu.projectile.models.result.filter.Filter
+import com.kyleu.projectile.models.result.orderBy.OrderBy
+import com.kyleu.projectile.models.tag.Tag
 
 object AuditQueries extends BaseQueries[Audit]("audit", "audit") {
   override val fields = Seq(
@@ -70,6 +70,6 @@ object AuditQueries extends BaseQueries[Audit]("audit", "audit") {
   )
 
   override protected def toDataSeq(t: Audit) = {
-    Seq[Any](t.id, t.act, t.app, t.client, t.server, t.userId, models.tag.Tag.toJavaMap(t.tags), t.msg, t.started, t.completed)
+    Seq[Any](t.id, t.act, t.app, t.client, t.server, t.userId, Tag.toJavaMap(t.tags), t.msg, t.started, t.completed)
   }
 }

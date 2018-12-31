@@ -1,7 +1,7 @@
 package models.form
 
 import org.scalajs.jquery.{JQuery, JQueryEventObject, jQuery => $}
-import util.Logging
+import com.kyleu.projectile.util.Logging
 
 import scala.scalajs.js
 
@@ -28,7 +28,7 @@ object FieldDefault {
             input.value(v)
           case None =>
             lastVal = Some(input.value().toString)
-            input.value(util.NullUtils.str)
+            input.value("∅")
         }
       }
     }

@@ -1,5 +1,5 @@
 @(user: Option[models.user.SystemUser], form: Form[com.mohiva.play.silhouette.api.util.Credentials], providers: Seq[String], allowRegistration: Boolean)(
-    implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
+    implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: com.kyleu.projectile.util.tracing.TraceData
 )@traceData.logClass(getClass)@layout.simple(user = user, title = "Sign in to " + util.Config.projectName) {
   <form method="post" action="@controllers.auth.routes.AuthenticationController.authenticateCredentials()">
     <div class="row">

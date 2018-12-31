@@ -1,4 +1,4 @@
-import com.sksamuel.scapegoat.sbt.ScapegoatSbtPlugin.autoImport.{scapegoatIgnoredFiles, scapegoatDisabledInspections}
+import com.sksamuel.scapegoat.sbt.ScapegoatSbtPlugin.autoImport.{scapegoatDisabledInspections, scapegoatIgnoredFiles}
 import com.typesafe.sbt.GitPlugin.autoImport.git
 import com.typesafe.sbt.gzip.Import._
 import com.typesafe.sbt.jse.JsEngineImport.JsEngineKeys
@@ -27,9 +27,9 @@ object Server {
     import Dependencies._
     Seq(
       Tracing.jaeger, Tracing.jaegerMetrics, Metrics.micrometer,
-      Akka.actor, Akka.logging, Akka.protobuf, Akka.stream, Akka.visualMailbox,
+      Akka.actor, Akka.logging, Akka.protobuf, Akka.stream,
       Play.filters, Play.guice, Play.ws, Play.json, Play.cache
-    ) ++ Database.all ++ Seq(
+    ) ++ Serialization.circeProjects.map(c => "io.circe" %% c % Serialization.circeVersion) ++ Database.all ++ Projectile.all ++ Seq(
       GraphQL.sangria, GraphQL.playJson, GraphQL.circe,
       Authentication.silhouette, Authentication.hasher, Authentication.persistence, Authentication.crypto,
       WebJars.jquery, WebJars.fontAwesome, WebJars.materialize, WebJars.swaggerUi,
@@ -53,7 +53,7 @@ object Server {
 
     // Play
     RoutesKeys.routesGenerator := InjectedRoutesGenerator,
-    RoutesKeys.routesImport ++= Seq("util.web.QueryStringUtils._", "util.web.ModelBindables._"),
+    RoutesKeys.routesImport ++= Seq("com.kyleu.projectile.util.web.QueryStringUtils._", "util.web.ModelBindables._"),
     PlayKeys.externalizeResources := false,
     PlayKeys.devSettings := Seq("play.server.akka.requestTimeout" -> "infinite"),
     PlayKeys.playDefaultPort := Shared.projectPort,
@@ -84,11 +84,13 @@ object Server {
     mainClass in assembly := Some("Entrypoint"),
 
     scapegoatIgnoredFiles := Seq(".*/Routes.scala", ".*/RoutesPrefix.scala", ".*/*ReverseRoutes.scala", ".*/*.template.scala"),
-    scapegoatDisabledInspections := Seq("UnusedMethodParameter")
+    scapegoatDisabledInspections := Seq("UnusedMethodParameter"),
+
+    (sourceGenerators in Compile) += ProjectVersion.writeConfig(Shared.projectId, Shared.projectName, Shared.projectPort).taskValue
   )
 
   lazy val server = Project(id = Shared.projectId, base = file(".")).enablePlugins(
     SbtWeb, play.sbt.PlayScala, JavaAppPackaging, diagram.ClassDiagramPlugin,
     UniversalPlugin, LinuxPlugin, DebianPlugin, RpmPlugin, DockerPlugin, WindowsPlugin, JDKPackagerPlugin
-  ).settings(serverSettings: _*).settings(Packaging.settings: _*).dependsOn(Shared.sharedJvm)
+  ).settings(serverSettings: _*).settings(Packaging.settings: _*)
 }

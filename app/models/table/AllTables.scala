@@ -1,7 +1,7 @@
 /* Generated File */
 package models.table
 
-import services.database.slick.SlickQueryService.imports._
+import com.kyleu.projectile.services.database.slick.SlickQueryService.imports._
 
 object AllTables {
   val schema = Seq(

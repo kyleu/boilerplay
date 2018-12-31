@@ -1,10 +1,10 @@
 /* Generated File */
 package models.sync
 
+import com.kyleu.projectile.models.result.data.{DataField, DataFieldModel, DataSummary}
+import com.kyleu.projectile.util.DateUtils
+import com.kyleu.projectile.util.JsonSerializers._
 import java.time.LocalDateTime
-import models.result.data.{DataField, DataFieldModel, DataSummary}
-import util.DateUtils
-import util.JsonSerializers._
 
 object SyncProgressRow {
   implicit val jsonEncoder: Encoder[SyncProgressRow] = deriveEncoder

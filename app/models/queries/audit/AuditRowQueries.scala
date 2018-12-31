@@ -1,16 +1,15 @@
 /* Generated File */
 package models.queries.audit
 
-import java.time.LocalDateTime
+import com.kyleu.projectile.models.database.{DatabaseField, Row}
+import com.kyleu.projectile.models.database.DatabaseFieldType._
+import com.kyleu.projectile.models.queries.{BaseQueries, ResultFieldHelper}
+import com.kyleu.projectile.models.result.data.DataField
+import com.kyleu.projectile.models.result.filter.Filter
+import com.kyleu.projectile.models.result.orderBy.OrderBy
+import com.kyleu.projectile.models.tag.Tag
 import java.util.UUID
 import models.audit.AuditRow
-import models.database.{DatabaseField, Row}
-import models.database.DatabaseFieldType._
-import models.queries.{BaseQueries, ResultFieldHelper}
-import models.result.data.DataField
-import models.result.filter.Filter
-import models.result.orderBy.OrderBy
-import models.tag.Tag
 
 object AuditRowQueries extends BaseQueries[AuditRow]("auditRow", "audit") {
   override val fields = Seq(

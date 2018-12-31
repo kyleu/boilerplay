@@ -1,6 +1,6 @@
 package models.queries.note
 
-import models.database.{Query, Row}
+import com.kyleu.projectile.models.database.{Query, Row}
 import models.note.NoteRow
 
 object ModelNoteQueries {

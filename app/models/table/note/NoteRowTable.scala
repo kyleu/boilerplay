@@ -1,10 +1,10 @@
 /* Generated File */
 package models.table.note
 
+import com.kyleu.projectile.services.database.slick.SlickQueryService.imports._
 import java.time.LocalDateTime
 import java.util.UUID
 import models.note.NoteRow
-import services.database.slick.SlickQueryService.imports._
 
 object NoteRowTable {
   val query = TableQuery[NoteRowTable]

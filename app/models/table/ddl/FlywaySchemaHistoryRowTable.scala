@@ -1,9 +1,9 @@
 /* Generated File */
 package models.table.ddl
 
+import com.kyleu.projectile.services.database.slick.SlickQueryService.imports._
 import java.time.LocalDateTime
 import models.ddl.FlywaySchemaHistoryRow
-import services.database.slick.SlickQueryService.imports._
 
 object FlywaySchemaHistoryRowTable {
   val query = TableQuery[FlywaySchemaHistoryRowTable]

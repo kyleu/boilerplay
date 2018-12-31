@@ -2,16 +2,12 @@ import com.github.sbt.cpd.CpdKeys.cpdSkipDuplicateFiles
 import sbt.Keys._
 import sbt._
 import sbtassembly.AssemblyPlugin.autoImport._
-import org.portablescala.sbtplatformdeps.PlatformDepsPlugin.autoImport._
-import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType, _}
-import scalajscrossproject.ScalaJSCrossPlugin.autoImport._
-import webscalajs.ScalaJSWeb
 
 object Shared {
   val projectId = "boilerplay"
   val projectName = "Boilerplay"
   val projectPort = 9000
-  
+
   object Versions {
     val app = "1.0.0"
     val scala = "2.12.7"
@@ -68,19 +64,4 @@ object Shared {
   } else {
     Nil
   })
-
-  lazy val shared = (crossProject(JSPlatform, JVMPlatform).withoutSuffixFor(JVMPlatform).crossType(CrossType.Pure) in file("shared")).settings(
-    commonSettings: _*
-  ).settings(
-    (sourceGenerators in Compile) += ProjectVersion.writeConfig(projectId, projectName, projectPort).taskValue,
-    libraryDependencies ++= Dependencies.Serialization.circeProjects.map(c => "io.circe" %%% c % Dependencies.Serialization.circeVersion) ++ Seq(
-      "com.beachape" %%% "enumeratum-circe" % Dependencies.Utils.enumeratumCirceVersion,
-      "me.chrons" %%% "boopickle" % Dependencies.Utils.booPickleVersion,
-      "io.github.cquiroz" %%% "scala-java-time" % Dependencies.Utils.javaTimeVersion
-    )
-  ).jvmSettings(libraryDependencies += Dependencies.ScalaJS.jvmStubs)
-
-  lazy val sharedJs = shared.js.enablePlugins(ScalaJSWeb)
-
-  lazy val sharedJvm = shared.jvm
 }

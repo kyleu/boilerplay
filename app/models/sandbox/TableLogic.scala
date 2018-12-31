@@ -1,10 +1,10 @@
 package models.sandbox
 
-import models.Application
-import models.ProjectileContext.serviceContext
-import models.database.{Query, Row, Statement}
-import services.database.ApplicationDatabase
-import util.tracing.TraceData
+import scala.concurrent.ExecutionContext.Implicits.global
+import com.kyleu.projectile.models.database.{Query, Row, Statement}
+import com.kyleu.projectile.services.database.ApplicationDatabase
+import com.kyleu.projectile.util.NumberUtils
+import com.kyleu.projectile.util.tracing.TraceData
 
 object TableLogic {
   final private[this] case class CountRows(table: String) extends Query[Long] {
@@ -23,7 +23,7 @@ object TableLogic {
     override def sql = s"insert into $dest ($cols) (select $cols from $src)"
   }
 
-  def copyTable(app: Application, arg: String)(implicit trace: TraceData) = {
+  def copyTable(arg: String)(implicit trace: TraceData) = {
     val (src, dest) = arg.split('/').toList match {
       case s :: Nil => s -> (s + "COPY")
       case s :: d :: Nil => s -> d
@@ -31,12 +31,12 @@ object TableLogic {
     }
     ApplicationDatabase.queryF(CountRows(src)).flatMap { count =>
       ApplicationDatabase.executeF(CopyRows(src, dest)).map { _ =>
-        s"Copied table [$src] with [${util.NumberUtils.withCommas(count)}] rows to table [$dest]."
+        s"Copied table [$src] with [${NumberUtils.withCommas(count)}] rows to table [$dest]."
       }
     }
   }
 
-  def restoreTable(app: Application, arg: String)(implicit trace: TraceData) = {
+  def restoreTable(arg: String)(implicit trace: TraceData) = {
     val (src, dest, cols) = arg.split('/').toList match {
       case s :: d :: c :: Nil => (s, d, c)
       case _ => throw new IllegalStateException(s"Arg [$arg] should be of form [src/dest/cols].")
@@ -46,7 +46,7 @@ object TableLogic {
         throw new IllegalStateException(s"Attempted to restore to table [$dest] with [$count] rows.")
       }
       ApplicationDatabase.executeF(MoveRows(src, dest, cols)).map { _ =>
-        s"Copied table [$src] with [${util.NumberUtils.withCommas(count)}] rows to table [$dest]."
+        s"Copied table [$src] with [${NumberUtils.withCommas(count)}] rows to table [$dest]."
       }
     }
   }

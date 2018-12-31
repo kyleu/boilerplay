@@ -1,5 +1,8 @@
 package graphql
 
+import com.kyleu.projectile.graphql.GraphQLContext
+import models.graphql.sandbox
+import models.graphql.sandbox.SandboxSchema
 import sangria.execution.deferred.DeferredResolver
 import sangria.schema._
 import util.Config
@@ -8,23 +11,23 @@ import scala.concurrent.Future
 
 object Schema {
   // Fetchers
-  val baseFetchers = Seq(models.user.SystemUserSchema.systemUserByRoleFetcher)
+  val baseFetchers = Seq(models.graphql.user.SystemUserSchema.systemUserByRoleFetcher)
 
   val modelFetchers = {
     Nil ++
       /* Start model fetchers */
       /* Projectile export section [boilerplay] */
       Seq(
-        models.audit.AuditRecordRowSchema.auditRecordRowByAuditIdFetcher,
-        models.audit.AuditRecordRowSchema.auditRecordRowByPrimaryKeyFetcher,
-        models.audit.AuditRowSchema.auditRowByPrimaryKeyFetcher,
-        models.ddl.FlywaySchemaHistoryRowSchema.flywaySchemaHistoryRowByPrimaryKeyFetcher,
-        models.note.NoteRowSchema.noteRowByAuthorFetcher,
-        models.note.NoteRowSchema.noteRowByPrimaryKeyFetcher,
-        models.settings.SettingSchema.settingByPrimaryKeyFetcher,
-        models.sync.SyncProgressRowSchema.syncProgressRowByPrimaryKeyFetcher,
-        models.task.ScheduledTaskRunRowSchema.scheduledTaskRunRowByPrimaryKeyFetcher,
-        models.user.SystemUserSchema.systemUserByPrimaryKeyFetcher
+        models.graphql.audit.AuditRecordRowSchema.auditRecordRowByAuditIdFetcher,
+        models.graphql.audit.AuditRecordRowSchema.auditRecordRowByPrimaryKeyFetcher,
+        models.graphql.audit.AuditRowSchema.auditRowByPrimaryKeyFetcher,
+        models.graphql.ddl.FlywaySchemaHistoryRowSchema.flywaySchemaHistoryRowByPrimaryKeyFetcher,
+        models.graphql.note.NoteRowSchema.noteRowByAuthorFetcher,
+        models.graphql.note.NoteRowSchema.noteRowByPrimaryKeyFetcher,
+        models.graphql.settings.SettingSchema.settingByPrimaryKeyFetcher,
+        models.graphql.sync.SyncProgressRowSchema.syncProgressRowByPrimaryKeyFetcher,
+        models.graphql.task.ScheduledTaskRunRowSchema.scheduledTaskRunRowByPrimaryKeyFetcher,
+        models.graphql.user.SystemUserSchema.systemUserByPrimaryKeyFetcher
       ) ++
         /* End model fetchers */
         Nil
@@ -38,22 +41,20 @@ object Schema {
   )
 
   // Query Types
-  val baseQueryFields = customQueryFields ++
-    models.supervisor.SocketDescriptionSchema.queryFields ++
-    models.sandbox.SandboxSchema.queryFields
+  val baseQueryFields = customQueryFields ++ SandboxSchema.queryFields
 
   val modelQueryFields: Seq[Field[GraphQLContext, Unit]] = {
     Nil ++
       /* Start model query fields */
       /* Projectile export section [boilerplay] */
-      models.audit.AuditRecordRowSchema.queryFields ++
-      models.audit.AuditRowSchema.queryFields ++
-      models.ddl.FlywaySchemaHistoryRowSchema.queryFields ++
-      models.note.NoteRowSchema.queryFields ++
-      models.settings.SettingSchema.queryFields ++
-      models.sync.SyncProgressRowSchema.queryFields ++
-      models.task.ScheduledTaskRunRowSchema.queryFields ++
-      models.user.SystemUserSchema.queryFields ++
+      models.graphql.audit.AuditRecordRowSchema.queryFields ++
+      models.graphql.audit.AuditRowSchema.queryFields ++
+      models.graphql.ddl.FlywaySchemaHistoryRowSchema.queryFields ++
+      models.graphql.note.NoteRowSchema.queryFields ++
+      models.graphql.settings.SettingSchema.queryFields ++
+      models.graphql.sync.SyncProgressRowSchema.queryFields ++
+      models.graphql.task.ScheduledTaskRunRowSchema.queryFields ++
+      models.graphql.user.SystemUserSchema.queryFields ++
       /* End model query fields */
       Nil
   }
@@ -62,7 +63,7 @@ object Schema {
     Nil ++
       /* Start enum query fields */
       /* Projectile export section [boilerplay] */
-      models.settings.SettingKeyTypeSchema.queryFields ++
+      models.graphql.settings.SettingKeyTypeSchema.queryFields ++
       /* End enum query fields */
       Nil
   }
@@ -81,20 +82,20 @@ object Schema {
   )
 
   // Mutation Types
-  val baseMutationFields = models.sandbox.SandboxSchema.mutationFields
+  val baseMutationFields = sandbox.SandboxSchema.mutationFields
 
   val modelMutationFields: Seq[Field[GraphQLContext, Unit]] = {
     Nil ++
       /* Start model mutation fields */
       /* Projectile export section [boilerplay] */
-      models.audit.AuditRecordRowSchema.mutationFields ++
-      models.audit.AuditRowSchema.mutationFields ++
-      models.ddl.FlywaySchemaHistoryRowSchema.mutationFields ++
-      models.note.NoteRowSchema.mutationFields ++
-      models.settings.SettingSchema.mutationFields ++
-      models.sync.SyncProgressRowSchema.mutationFields ++
-      models.task.ScheduledTaskRunRowSchema.mutationFields ++
-      models.user.SystemUserSchema.mutationFields ++
+      models.graphql.audit.AuditRecordRowSchema.mutationFields ++
+      models.graphql.audit.AuditRowSchema.mutationFields ++
+      models.graphql.ddl.FlywaySchemaHistoryRowSchema.mutationFields ++
+      models.graphql.note.NoteRowSchema.mutationFields ++
+      models.graphql.settings.SettingSchema.mutationFields ++
+      models.graphql.sync.SyncProgressRowSchema.mutationFields ++
+      models.graphql.task.ScheduledTaskRunRowSchema.mutationFields ++
+      models.graphql.user.SystemUserSchema.mutationFields ++
       /* End model mutation fields */
       Nil
   }

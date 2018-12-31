@@ -3,14 +3,14 @@ package models.queries.auth
 import java.util.UUID
 
 import com.mohiva.play.silhouette.api.LoginInfo
-import models.database.DatabaseFieldType._
-import models.database._
-import models.queries.{BaseQueries, ResultFieldHelper}
-import models.result.data.DataField
-import models.result.filter.Filter
-import models.result.orderBy.OrderBy
+import com.kyleu.projectile.models.database.DatabaseFieldType._
+import com.kyleu.projectile.models.database._
+import com.kyleu.projectile.models.queries.{BaseQueries, ResultFieldHelper}
+import com.kyleu.projectile.models.result.data.DataField
+import com.kyleu.projectile.models.result.filter.Filter
+import com.kyleu.projectile.models.result.orderBy.OrderBy
 import models.user.{Role, SystemUser, UserPreferences}
-import util.JsonSerializers._
+import com.kyleu.projectile.util.JsonSerializers._
 
 object SystemUserQueries extends BaseQueries[SystemUser]("systemUser", "system_users") {
   override val fields = Seq(

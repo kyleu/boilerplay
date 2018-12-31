@@ -3,15 +3,15 @@ package controllers
 import com.mohiva.play.silhouette.api.actions.{SecuredRequest, UserAwareRequest}
 import io.circe.{Json, Printer}
 import models.Application
-import models.auth.{AuthEnv, Credentials}
-import models.result.data.DataField
-import models.user.Role
+import models.auth.{AuthEnv, UserCredentials}
+import com.kyleu.projectile.models.result.data.DataField
+import models.user.{Role, SystemUser}
 import play.api.http.{ContentTypeOf, Writeable}
 import play.api.mvc._
-import util.Logging
-import util.metrics.Instrumented
-import util.tracing.TraceData
-import util.web.{ControllerUtils, TracingFilter}
+import com.kyleu.projectile.util.Logging
+import com.kyleu.projectile.util.metrics.Instrumented
+import com.kyleu.projectile.util.tracing.TraceData
+import com.kyleu.projectile.util.web.{ControllerUtils, TracingFilter}
 
 import scala.language.implicitConversions
 import scala.concurrent.{ExecutionContext, Future}
@@ -29,7 +29,7 @@ abstract class BaseController(val name: String) extends InjectedController with 
     app.silhouette.UserAwareAction.async { implicit request =>
       Instrumented.timeFuture(metricsName + "_request", "action", name + "_" + action) {
         app.tracing.trace(name + ".controller." + action) { td =>
-          ControllerUtils.enhanceRequest(request, request.identity, td)
+          enhanceRequest(request, request.identity, td)
           block(request)(td)
         }(getTraceData)
       }
@@ -44,7 +44,7 @@ abstract class BaseController(val name: String) extends InjectedController with 
         } else {
           Instrumented.timeFuture(metricsName + "_request", "action", name + "_" + action) {
             app.tracing.trace(name + ".controller." + action) { td =>
-              ControllerUtils.enhanceRequest(request, Some(u), td)
+              enhanceRequest(request, Some(u), td)
               val auth = request.authenticator.getOrElse(throw new IllegalStateException("No auth!"))
               block(SecuredRequest(u, auth, request))(td)
             }(getTraceData)
@@ -57,7 +57,7 @@ abstract class BaseController(val name: String) extends InjectedController with 
 
   protected def getTraceData(implicit requestHeader: RequestHeader) = requestHeader.attrs(TracingFilter.traceKey)
 
-  protected implicit def toCredentials(request: SecuredRequest[AuthEnv, _]): Credentials = Credentials.fromRequest(request)
+  protected implicit def toCredentials(request: SecuredRequest[AuthEnv, _]): UserCredentials = UserCredentials.fromRequest(request)
 
   private[this] val defaultPrinter = Printer.spaces2
   protected implicit val contentTypeOfJson: ContentTypeOf[Json] = ContentTypeOf(Some("application/json"))
@@ -77,5 +77,15 @@ abstract class BaseController(val name: String) extends InjectedController with 
     }
     val res = Redirect(controllers.auth.routes.AuthenticationController.signInForm())
     Future.successful(res.flashing("error" -> msg).withSession(request.session + ("returnUrl" -> request.uri)))
+  }
+
+  def enhanceRequest(request: Request[AnyContent], user: Option[SystemUser], trace: TraceData) = {
+    trace.tag("http.request.size", request.body.asText.map(_.length).orElse(request.body.asRaw.map(_.size.toInt)).getOrElse(0).toString)
+    user.foreach { u =>
+      trace.tag("user.id", u.id.toString)
+      trace.tag("user.username", u.username)
+      trace.tag("user.email", u.profile.providerKey)
+      trace.tag("user.role", u.role.toString)
+    }
   }
 }

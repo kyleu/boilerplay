@@ -3,6 +3,7 @@ package models.task.scheduled
 import java.time.LocalDateTime
 import java.util.UUID
 
+import com.kyleu.projectile.util.DateUtils
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.java8.time._
 import io.circe.{Decoder, Encoder}
@@ -27,5 +28,5 @@ final case class ScheduledTaskOutput(
     start: LocalDateTime,
     end: LocalDateTime
 ) {
-  val durationMs = (util.DateUtils.toMillis(end) - util.DateUtils.toMillis(start)).toInt
+  val durationMs = (DateUtils.toMillis(end) - DateUtils.toMillis(start)).toInt
 }

@@ -22,8 +22,12 @@ object Dependencies {
     val clusterTools = "com.typesafe.akka" %% "akka-cluster-tools" % version
     val protobuf = "com.typesafe.akka" %% "akka-protobuf" % version
     val stream = "com.typesafe.akka" %% "akka-stream" % version
-    val visualMailbox = "de.aktey.akka.visualmailbox" %% "collector" % "1.1.0"
     val testkit = "com.typesafe.akka" %% "akka-testkit" % version % "test"
+  }
+
+  object Projectile {
+    private[this] val version = "0.6.4"
+    val all = Seq("doobie", "slick", "graphql", "play").map(s => "com.kyleu" %% s"projectile-lib-$s" % version)
   }
 
   object Authentication {

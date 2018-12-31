@@ -8,8 +8,8 @@ import com.mohiva.play.silhouette.api.{LoginEvent, LoginInfo, SignUpEvent}
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
 import controllers.BaseController
 import models.Application
-import models.ProjectileContext.webContext
-import models.auth.Credentials
+import scala.concurrent.ExecutionContext.Implicits.global
+import models.auth.UserCredentials
 import models.settings.SettingKeyType
 import models.user._
 import services.user.SystemUserSearchService
@@ -60,7 +60,7 @@ class RegistrationController @javax.inject.Inject() (
               profile = loginInfo,
               role = role
             )
-            val creds = Credentials(user, request.remoteAddress)
+            val creds = UserCredentials(user, request.remoteAddress)
             app.coreServices.users.insert(creds, user).flatMap { userSaved =>
               val result = request.session.get("returnUrl") match {
                 case Some(url) => Redirect(url).withSession(request.session - "returnUrl")

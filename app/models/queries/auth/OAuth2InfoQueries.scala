@@ -2,9 +2,10 @@ package models.queries.auth
 
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.impl.providers.OAuth2Info
-import models.database.DatabaseFieldType._
-import models.database.{DatabaseField, Row, Statement}
-import models.queries.BaseQueries
+import com.kyleu.projectile.models.database.DatabaseFieldType._
+import com.kyleu.projectile.models.database.{DatabaseField, Row, Statement}
+import com.kyleu.projectile.models.queries.BaseQueries
+import com.kyleu.projectile.util.DateUtils
 
 object OAuth2InfoQueries extends BaseQueries[OAuth2Info]("oauth2.info", "oauth2_info") {
   override val fields = Seq(
@@ -48,6 +49,6 @@ object OAuth2InfoQueries extends BaseQueries[OAuth2Info]("oauth2.info", "oauth2_
   )
 
   override protected def toDataSeq(i: OAuth2Info) = {
-    Seq[Any](i.accessToken, i.tokenType, i.expiresIn, i.refreshToken, i.params, util.DateUtils.now)
+    Seq[Any](i.accessToken, i.tokenType, i.expiresIn, i.refreshToken, i.params, DateUtils.now)
   }
 }

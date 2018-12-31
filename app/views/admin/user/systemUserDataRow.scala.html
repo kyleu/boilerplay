@@ -4,7 +4,7 @@
   <td>@model.profile.providerKey</td>
   <td><div class="theme-swatch" style="background-color: @model.preferences.theme.color;"></div></td>
   <td>@model.role</td>
-  <td>@util.DateUtils.niceDate(model.created.toLocalDate)</td>
+  <td>@com.kyleu.projectile.util.DateUtils.niceDate(model.created.toLocalDate)</td>
   <td>@defining(s"return confirm('Are you certain you want to delete this user (${model.username})?');") { onClick =>
     <a class="theme-text" onclick="@onClick" href="@controllers.admin.user.routes.SystemUserController.remove(model.id)"><i class="fa fa-close"></i></a>
   }</td>

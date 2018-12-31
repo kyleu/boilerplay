@@ -4,15 +4,15 @@ import java.util.UUID
 
 import akka.actor.ActorSystem
 import models.Configuration
-import models.ProjectileContext.serviceContext
-import models.auth.Credentials
+import scala.concurrent.ExecutionContext.Implicits.global
+import models.auth.UserCredentials
 import models.task.ScheduledTaskRunRow
 import models.task.scheduled.{ScheduledTask, ScheduledTaskOutput}
 import services.sync.SyncService
 import services.task.scheduled.ScheduledTasks
-import util.JsonSerializers._
-import util.Logging
-import util.tracing.{TraceData, TracingService}
+import com.kyleu.projectile.util.JsonSerializers._
+import com.kyleu.projectile.util.{DateUtils, Logging}
+import com.kyleu.projectile.util.tracing.{TraceData, TracingService}
 
 import scala.concurrent.Future
 import scala.util.control.NonFatal
@@ -25,7 +25,7 @@ class ScheduledTaskService @javax.inject.Inject() (
     tracingService: TracingService,
     syncService: SyncService
 ) extends Logging {
-  def initSchedule(system: ActorSystem, creds: Credentials, args: Seq[String], delaySecs: Int = 5, intervalSecs: Int = 15)(implicit td: TraceData): Unit = {
+  def initSchedule(system: ActorSystem, creds: UserCredentials, args: Seq[String], delaySecs: Int = 5, intervalSecs: Int = 15)(implicit td: TraceData): Unit = {
     if (config.scheduledTaskEnabled) {
       import scala.concurrent.duration._
       log.info(s"Scheduling task to run every [$intervalSecs] seconds, after an initial [$delaySecs] second delay.")
@@ -35,28 +35,28 @@ class ScheduledTaskService @javax.inject.Inject() (
     }
   }
 
-  def runAll(creds: Credentials = Credentials.system, args: Seq[String] = Nil)(implicit td: TraceData) = {
+  def runAll(creds: UserCredentials = UserCredentials.system, args: Seq[String] = Nil)(implicit td: TraceData) = {
     start(creds, scheduledTasks.all, args)
   }
 
-  def runSingle(creds: Credentials = Credentials.system, task: ScheduledTask, args: Seq[String] = Nil)(implicit td: TraceData) = {
+  def runSingle(creds: UserCredentials = UserCredentials.system, task: ScheduledTask, args: Seq[String] = Nil)(implicit td: TraceData) = {
     start(creds, Seq(task), args)
   }
 
-  private[this] def start(creds: Credentials = Credentials.system, tasks: Seq[ScheduledTask], args: Seq[String] = Nil)(implicit td: TraceData) = {
+  private[this] def start(creds: UserCredentials = UserCredentials.system, tasks: Seq[ScheduledTask], args: Seq[String] = Nil)(implicit td: TraceData) = {
     tracingService.trace("scheduledTaskService.run") { trace =>
       val id = UUID.randomUUID
-      val f = syncService.progressSvc.getByKeySeq(creds, tasks.map(_.key)).flatMap { syncs =>
+      val f = syncService.progressSvc.getByKeySeq(creds.asInstanceOf[UserCredentials], tasks.map(_.key)).flatMap { syncs =>
         val tasksToRun = if (args.contains("force")) {
           tasks
         } else {
-          val now = util.DateUtils.now
+          val now = DateUtils.now
           tasks.filter(t => syncs.find(_.key == t.key) match {
             case Some(_) if args.contains("merge") => false
             case Some(_) if args.contains("concurrent") => true
             case Some(sync) if sync.status == "Running" =>
-              val last = util.DateUtils.toMillis(sync.lastTime)
-              val diffMinutes = (util.DateUtils.nowMillis - last) / 1000 / 60
+              val last = DateUtils.toMillis(sync.lastTime)
+              val diffMinutes = (DateUtils.nowMillis - last) / 1000 / 60
               if (diffMinutes > 60) {
                 log.warn(s"Reseting running scheduled task [${t.key}] as it has been running for over an hour.")
                 syncService.set(creds, t.key, "Reset", "Timed out running task.")
@@ -98,12 +98,12 @@ class ScheduledTaskService @javax.inject.Inject() (
     }
   }
 
-  private[this] def go(id: UUID, creds: Credentials, args: Seq[String], task: ScheduledTask, td: TraceData) = {
-    val start = util.DateUtils.now
-    val startMs = util.DateUtils.toMillis(start)
+  private[this] def go(id: UUID, creds: UserCredentials, args: Seq[String], task: ScheduledTask, td: TraceData) = {
+    val start = DateUtils.now
+    val startMs = DateUtils.toMillis(start)
 
     val logs = collection.mutable.ArrayBuffer.empty[ScheduledTaskOutput.Log]
-    def addLog(msg: String) = logs += ScheduledTaskOutput.Log(msg, (util.DateUtils.nowMillis - startMs).toInt)
+    def addLog(msg: String) = logs += ScheduledTaskOutput.Log(msg, (DateUtils.nowMillis - startMs).toInt)
 
     addLog(s"Starting scheduled task run [$id:${task.key}] at [$start]...")
 
@@ -111,7 +111,7 @@ class ScheduledTaskService @javax.inject.Inject() (
       val ret = ScheduledTaskOutput(
         userId = creds.user.id, username = creds.user.username,
         status = status, logs = logs,
-        start = start, end = util.DateUtils.now
+        start = start, end = DateUtils.now
       )
       log.debug(s"Completed scheduled task [${task.key}] with args [${args.mkString(", ")}] in [${ret.durationMs}ms].")
       ret

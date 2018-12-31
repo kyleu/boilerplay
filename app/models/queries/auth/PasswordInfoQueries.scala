@@ -3,9 +3,10 @@ package models.queries.auth
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.util.PasswordInfo
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
-import models.database.DatabaseFieldType._
-import models.queries.BaseQueries
-import models.database.{DatabaseField, Row, Statement}
+import com.kyleu.projectile.models.database.DatabaseFieldType._
+import com.kyleu.projectile.models.queries.BaseQueries
+import com.kyleu.projectile.models.database.{DatabaseField, Row, Statement}
+import com.kyleu.projectile.util.DateUtils
 
 object PasswordInfoQueries extends BaseQueries[PasswordInfo]("password.info", "password_info") {
   override val fields = Seq(
@@ -43,7 +44,7 @@ object PasswordInfoQueries extends BaseQueries[PasswordInfo]("password.info", "p
     salt = row.asOpt[String]("salt")
   )
 
-  override protected def toDataSeq(p: PasswordInfo) = Seq[Any](p.hasher, p.password, p.salt, util.DateUtils.now)
+  override protected def toDataSeq(p: PasswordInfo) = Seq[Any](p.hasher, p.password, p.salt, DateUtils.now)
 
   final case class UpdateEmail(originalEmail: String, email: String) extends Statement {
     override val name = s"$key.update.email"

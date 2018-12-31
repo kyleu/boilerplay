@@ -1,11 +1,11 @@
 package controllers.admin
 
 import controllers.BaseController
-import models.result.orderBy.OrderBy
+import com.kyleu.projectile.models.result.orderBy.OrderBy
 import play.api.http.MimeTypes
 import play.api.mvc.{Accepting, RequestHeader, Result}
-import services.ModelServiceHelper
-import util.tracing.TraceData
+import com.kyleu.projectile.services.ModelServiceHelper
+import com.kyleu.projectile.util.tracing.TraceData
 
 object ServiceController {
   object MimeTypes {

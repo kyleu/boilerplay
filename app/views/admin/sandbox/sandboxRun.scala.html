@@ -1,5 +1,5 @@
 @(user: models.user.SystemUser, result: models.sandbox.SandboxTask.Result)(
-    implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
+    implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: com.kyleu.projectile.util.tracing.TraceData
 )@traceData.logClass(getClass)@views.html.admin.layout.page(user = user, activeSection = "status", title = s"${result.task.name} Result") {
   <div class="row">
     <div class="col s12">

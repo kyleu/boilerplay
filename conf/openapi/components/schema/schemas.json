@@ -1,6 +1,5 @@
 {
   "#include:common.json": "*",
-  "#include:system.json": "*",
 
   // Start model schemas
   // Projectile export section [boilerplay]
@@ -13,4 +12,6 @@
   "#include:task/scheduledTaskRunRow.json": "*",
   "#include:user/systemUser.json": "*",
   // End model schemas
+
+  "#include:system.json": "*"
 }

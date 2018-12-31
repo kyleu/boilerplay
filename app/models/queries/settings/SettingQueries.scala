@@ -1,12 +1,12 @@
 /* Generated File */
 package models.queries.settings
 
-import models.database.{DatabaseField, Row}
-import models.database.DatabaseFieldType._
-import models.queries.{BaseQueries, ResultFieldHelper}
-import models.result.data.DataField
-import models.result.filter.Filter
-import models.result.orderBy.OrderBy
+import com.kyleu.projectile.models.database.{DatabaseField, Row}
+import com.kyleu.projectile.models.database.DatabaseFieldType._
+import com.kyleu.projectile.models.queries.{BaseQueries, ResultFieldHelper}
+import com.kyleu.projectile.models.result.data.DataField
+import com.kyleu.projectile.models.result.filter.Filter
+import com.kyleu.projectile.models.result.orderBy.OrderBy
 import models.settings.{Setting, SettingKeyType}
 
 object SettingQueries extends BaseQueries[Setting]("setting", "setting_values") {

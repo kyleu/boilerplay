@@ -1,17 +1,17 @@
 package services.audit
 
+import com.kyleu.projectile.util.Logging
+import com.kyleu.projectile.util.tracing.TraceData
+import models.Configuration
 import models.audit._
-import models.{Application, Configuration}
 import play.api.inject.Injector
-import util.Logging
-import util.tracing.{TraceData, TracingService}
-import util.web.TracingWSClient
+import com.kyleu.projectile.util.tracing.OpenTracingService
+import com.kyleu.projectile.util.web.TracingWSClient
 
 @javax.inject.Singleton
 class AuditService @javax.inject.Inject() (
-    tracing: TracingService, inject: Injector, config: Configuration, ws: TracingWSClient, lookup: AuditLookup, val svc: AuditRowService
+    tracing: OpenTracingService, inject: Injector, config: Configuration, ws: TracingWSClient, lookup: AuditLookup, val svc: AuditRowService
 ) extends Logging {
-  lazy val supervisor = inject.instanceOf(classOf[Application]).supervisor
   AuditHelper.init(this)
 
   def callback(a: Audit, records: Seq[AuditRecordRow])(implicit trace: TraceData) = {

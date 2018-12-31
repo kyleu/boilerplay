@@ -2,6 +2,7 @@ package services.audit
 
 import java.util.UUID
 
+import com.kyleu.projectile.util.DateUtils
 import enumeratum.values.{StringEnum, StringEnumEntry}
 
 object AuditArgs {
@@ -17,8 +18,8 @@ object AuditArgs {
   def floatArg(s: String) = s.toFloat
   def uuidArg(s: String) = UUID.fromString(s)
   def byteArg(s: String) = s.toInt.toByte
-  def dateArg(s: String) = util.DateUtils.fromDateString(s)
-  def timeArg(s: String) = util.DateUtils.fromTimeString(s)
-  def timestampArg(s: String) = util.DateUtils.fromIsoString(s)
+  def dateArg(s: String) = DateUtils.fromDateString(s)
+  def timeArg(s: String) = DateUtils.fromTimeString(s)
+  def timestampArg(s: String) = DateUtils.fromIsoString(s)
   def enumArg[T <: StringEnumEntry](t: StringEnum[T])(s: String) = t.withValue(s)
 }

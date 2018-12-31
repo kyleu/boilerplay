@@ -2,10 +2,10 @@
 package models.doobie.settings
 
 import cats.data.NonEmptyList
+import com.kyleu.projectile.services.database.doobie.DoobieQueries
+import com.kyleu.projectile.services.database.doobie.DoobieQueryService.Imports._
 import models.doobie.settings.SettingKeyTypeDoobie.settingKeyTypeMeta
 import models.settings.{Setting, SettingKeyType}
-import services.database.doobie.DoobieQueries
-import services.database.doobie.DoobieQueryService.Imports._
 
 object SettingDoobie extends DoobieQueries[Setting]("setting_values") {
   override val countFragment = fr"""select count(*) from "setting_values""""

@@ -3,7 +3,7 @@ package controllers.admin.graphql
 import controllers.BaseController
 import graphql.Schema
 import models.Application
-import models.ProjectileContext.webContext
+import scala.concurrent.ExecutionContext.Implicits.global
 import sangria.renderer.SchemaRenderer
 
 import scala.concurrent.Future

@@ -1,11 +1,11 @@
 /* Generated File */
 package models.table.audit
 
+import com.kyleu.projectile.models.tag.Tag
+import com.kyleu.projectile.services.database.slick.SlickQueryService.imports._
 import java.time.LocalDateTime
 import java.util.UUID
 import models.audit.AuditRow
-import models.tag.Tag
-import services.database.slick.SlickQueryService.imports._
 
 object AuditRowTable {
   val query = TableQuery[AuditRowTable]

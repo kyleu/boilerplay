@@ -2,9 +2,9 @@
 package models.doobie.ddl
 
 import cats.data.NonEmptyList
+import com.kyleu.projectile.services.database.doobie.DoobieQueries
+import com.kyleu.projectile.services.database.doobie.DoobieQueryService.Imports._
 import models.ddl.FlywaySchemaHistoryRow
-import services.database.doobie.DoobieQueries
-import services.database.doobie.DoobieQueryService.Imports._
 
 object FlywaySchemaHistoryRowDoobie extends DoobieQueries[FlywaySchemaHistoryRow]("flyway_schema_history") {
   override val countFragment = fr"""select count(*) from "flyway_schema_history""""

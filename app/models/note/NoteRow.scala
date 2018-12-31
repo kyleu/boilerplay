@@ -1,11 +1,11 @@
 /* Generated File */
 package models.note
 
+import com.kyleu.projectile.models.result.data.{DataField, DataFieldModel, DataSummary}
+import com.kyleu.projectile.util.DateUtils
+import com.kyleu.projectile.util.JsonSerializers._
 import java.time.LocalDateTime
 import java.util.UUID
-import models.result.data.{DataField, DataFieldModel, DataSummary}
-import util.DateUtils
-import util.JsonSerializers._
 
 object NoteRow {
   implicit val jsonEncoder: Encoder[NoteRow] = deriveEncoder

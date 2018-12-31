@@ -4,13 +4,13 @@ import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.api.util.PasswordHasher
 import controllers.admin.ServiceController
 import models.Application
-import models.ProjectileContext.webContext
-import models.result.RelationCount
+import scala.concurrent.ExecutionContext.Implicits.global
+import com.kyleu.projectile.models.result.RelationCount
 import play.api.http.MimeTypes
 import services.audit.AuditRecordRowService
 import services.note.NoteRowService
 import services.user.SystemUserService
-import util.JsonSerializers._
+import com.kyleu.projectile.util.JsonSerializers._
 import util.ReftreeUtils._
 
 @javax.inject.Singleton
@@ -34,7 +34,7 @@ class SystemUserController @javax.inject.Inject() (
   }
 
   def relationCounts(id: java.util.UUID) = withSession("relation.counts", admin = true) { implicit request => implicit td =>
-    val creds = models.auth.Credentials.fromRequest(request)
+    val creds = models.auth.UserCredentials.fromRequest(request)
     val noteByAuthorF = noteS.countByAuthor(creds, id)
     for (noteC <- noteByAuthorF) yield {
       Ok(Seq(

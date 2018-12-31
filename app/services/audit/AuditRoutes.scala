@@ -3,7 +3,7 @@ package services.audit
 import models.settings.SettingKeyType
 import play.api.mvc.Call
 import services.audit.AuditArgs._
-import util.Logging
+import com.kyleu.projectile.util.Logging
 
 object AuditRoutes extends Logging {
   def getViewRoute(key: String, id: IndexedSeq[String]) = routeFor(key, getArg(id, _))

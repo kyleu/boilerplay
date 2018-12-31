@@ -2,8 +2,8 @@ package controllers.admin.rest
 
 import controllers.BaseController
 import models.Application
-import models.ProjectileContext.webContext
-import util.JsonIncludeParser
+import scala.concurrent.ExecutionContext.Implicits.global
+import com.kyleu.projectile.util.{JsonIncludeParser, JsonSerializers}
 
 import scala.concurrent.Future
 import scala.io.Source
@@ -14,7 +14,7 @@ class OpenApiController @javax.inject.Inject() (override val app: Application) e
   private[this] def loadJson(key: String) = {
     val resource = Option(getClass.getClassLoader.getResourceAsStream(key)).getOrElse(throw new IllegalStateException(s"Cannot load [$key] from classpath."))
     val content = Source.fromInputStream(resource).getLines.filterNot(_.trim.startsWith("//")).mkString("\n")
-    util.JsonSerializers.parseJson(content) match {
+    JsonSerializers.parseJson(content) match {
       case Left(x) => throw new IllegalStateException(s"Cannot parse json from [$key].", x)
       case Right(json) => json
     }

@@ -1,21 +1,18 @@
 package controllers.admin.system
 
 import akka.util.Timeout
+import com.google.inject.Injector
 import controllers.BaseController
-import graphql.GraphQLService
 import models.Application
-import models.ProjectileContext.webContext
+import scala.concurrent.ExecutionContext.Implicits.global
 import models.sandbox.SandboxTask
-import services.ServiceRegistry
-import util.JsonSerializers._
+import com.kyleu.projectile.util.JsonSerializers._
 
 import scala.concurrent.Future
 import scala.concurrent.duration._
 
 @javax.inject.Singleton
-class SandboxController @javax.inject.Inject() (
-    override val app: Application, services: ServiceRegistry, graphQLService: GraphQLService
-) extends BaseController("sandbox") {
+class SandboxController @javax.inject.Inject() (override val app: Application, injector: Injector) extends BaseController("sandbox") {
   implicit val timeout: Timeout = Timeout(10.seconds)
 
   def list = withSession("sandbox.list", admin = true) { implicit request => implicit td =>
@@ -24,7 +21,7 @@ class SandboxController @javax.inject.Inject() (
 
   def run(key: String, arg: Option[String]) = withSession("sandbox." + key, admin = true) { implicit request => implicit td =>
     val sandbox = SandboxTask.withNameInsensitive(key)
-    sandbox.run(SandboxTask.Config(app, services, graphQLService, arg)).map { result =>
+    sandbox.run(SandboxTask.Config(app.tracing, injector, arg)).map { result =>
       render {
         case Accepts.Html() => Ok(views.html.admin.sandbox.sandboxRun(request.identity, result))
         case Accepts.Json() => Ok(result.asJson)

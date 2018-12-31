@@ -1,17 +1,18 @@
 package controllers.admin.user
 
 import controllers.admin.ServiceController
-import models.ProjectileContext.webContext
-import models.result.orderBy.OrderBy
+import scala.concurrent.ExecutionContext.Implicits.global
+import com.kyleu.projectile.models.result.orderBy.OrderBy
+import com.kyleu.projectile.util.DateUtils
 import models.user.SystemUserResult
 import play.api.http.MimeTypes
-import util.JsonSerializers._
+import com.kyleu.projectile.util.JsonSerializers._
 import util.ReftreeUtils._
 
 trait UserSearchHelper { this: SystemUserController =>
   def list(q: Option[String], orderBy: Option[String], orderAsc: Boolean, limit: Option[Int], offset: Option[Int], t: Option[String] = None) = {
     withSession("user.list", admin = true) { implicit request => implicit td =>
-      val startMs = util.DateUtils.nowMillis
+      val startMs = DateUtils.nowMillis
       val orderBys = OrderBy.forVals(col = orderBy, asc = orderAsc).toSeq
       searchWithCount(q, orderBys, limit, offset).map(r => renderChoice(t) {
         case MimeTypes.HTML => Ok(views.html.admin.user.systemUserList(

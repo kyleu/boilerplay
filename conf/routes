@@ -1,6 +1,5 @@
 GET         /                                        controllers.HomeController.home
 GET         /ping                                    controllers.HomeController.ping(timestamp: Long)
-GET         /connect                                 controllers.HomeController.connect(binary: Boolean ?= false)
 GET         /robots.txt                              controllers.HomeController.robots
 
 # Admin

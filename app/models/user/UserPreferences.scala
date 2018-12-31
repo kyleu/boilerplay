@@ -1,7 +1,7 @@
 package models.user
 
 import models.template.Theme
-import util.JsonSerializers._
+import com.kyleu.projectile.util.JsonSerializers._
 
 object UserPreferences {
   implicit val jsonEncoder: Encoder[UserPreferences] = deriveEncoder

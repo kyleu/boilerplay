@@ -1,13 +1,13 @@
 /* Generated File */
 package models.user
 
+import com.kyleu.projectile.models.result.BaseResult
+import com.kyleu.projectile.models.result.filter.Filter
+import com.kyleu.projectile.models.result.orderBy.OrderBy
+import com.kyleu.projectile.models.result.paging.PagingOptions
+import com.kyleu.projectile.util.DateUtils
+import com.kyleu.projectile.util.JsonSerializers._
 import java.time.LocalDateTime
-import models.result.BaseResult
-import models.result.filter.Filter
-import models.result.orderBy.OrderBy
-import models.result.paging.PagingOptions
-import util.DateUtils
-import util.JsonSerializers._
 
 final case class SystemUserResult(
     override val filters: Seq[Filter] = Nil,

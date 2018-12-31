@@ -2,10 +2,10 @@
 package models.doobie.task
 
 import cats.data.NonEmptyList
+import com.kyleu.projectile.services.database.doobie.DoobieQueries
+import com.kyleu.projectile.services.database.doobie.DoobieQueryService.Imports._
 import java.util.UUID
 import models.task.ScheduledTaskRunRow
-import services.database.doobie.DoobieQueries
-import services.database.doobie.DoobieQueryService.Imports._
 
 object ScheduledTaskRunRowDoobie extends DoobieQueries[ScheduledTaskRunRow]("scheduled_task_run") {
   override val countFragment = fr"""select count(*) from "scheduled_task_run""""

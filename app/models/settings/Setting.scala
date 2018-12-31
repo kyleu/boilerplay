@@ -1,7 +1,7 @@
 package models.settings
 
-import models.result.data.{DataField, DataFieldModel, DataSummary}
-import util.JsonSerializers._
+import com.kyleu.projectile.models.result.data.{DataField, DataFieldModel, DataSummary}
+import com.kyleu.projectile.util.JsonSerializers._
 
 object Setting {
   implicit val jsonEncoder: Encoder[Setting] = deriveEncoder

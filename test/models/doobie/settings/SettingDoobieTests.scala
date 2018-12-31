@@ -1,10 +1,11 @@
 /* Generated File */
 package models.doobie.settings
 
+import com.kyleu.projectile.services.database.doobie.DoobieQueryService.Imports._
+import com.kyleu.projectile.services.database.doobie.DoobieTestHelper.yolo._
+import models.doobie.settings.SettingKeyTypeDoobie.settingKeyTypeMeta
 import models.settings.Setting
 import org.scalatest._
-import services.database.doobie.DoobieQueryService.Imports._
-import services.database.doobie.DoobieTestHelper.yolo._
 
 class SettingDoobieTests extends FlatSpec with Matchers {
 

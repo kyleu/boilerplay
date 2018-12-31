@@ -1,6 +1,4 @@
 {
-  "#include:common.json": "*",
-
   // Start enum paths
   // Projectile export section [boilerplay]
   "#include:settings/settingKeyType.json": "*",
@@ -17,4 +15,6 @@
   "#include:task/scheduledTaskRunRow.json": "*",
   "#include:user/systemUser.json": "*",
   // End schema paths
+
+  "#include:common.json": "*"
 }

@@ -1,10 +1,10 @@
 /* Generated File */
 package models.doobie.audit
 
+import com.kyleu.projectile.services.database.doobie.DoobieQueryService.Imports._
+import com.kyleu.projectile.services.database.doobie.DoobieTestHelper.yolo._
 import models.audit.AuditRow
 import org.scalatest._
-import services.database.doobie.DoobieQueryService.Imports._
-import services.database.doobie.DoobieTestHelper.yolo._
 
 class AuditRowDoobieTests extends FlatSpec with Matchers {
 

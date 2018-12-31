@@ -1,7 +1,7 @@
 package services.file
 
 import better.files.File
-import util.Logging
+import com.kyleu.projectile.util.{JsonSerializers, Logging}
 
 object FileService extends Logging {
   private[this] var dataDir: Option[File] = None
@@ -25,7 +25,7 @@ object FileService extends Logging {
 
   def getContent(f: File) = f.contentAsString
 
-  def getJsonContent(f: File) = util.JsonSerializers.parseJson(getContent(f)) match {
+  def getJsonContent(f: File) = JsonSerializers.parseJson(getContent(f)) match {
     case Right(json) => json
     case Left(x) => throw new IllegalStateException(s"Invalid json for file [${f.pathAsString}]: ${getContent(f)}]", x)
   }

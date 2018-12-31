@@ -7,7 +7,7 @@
     @notes.size @if(notes.lengthCompare(1) == 0) { note } else { notes } available for this @model.
     @notes.map { note =>
       <div class="model-note">
-        <div class="right">@util.DateUtils.niceDateTime(note.created)</div>
+        <div class="right">@com.kyleu.projectile.util.DateUtils.niceDateTime(note.created)</div>
         <a href="@controllers.admin.note.routes.NoteRowController.view(note.id)" class="theme-text">@note.id</a>
         <pre>@note.text</pre>
       </div>

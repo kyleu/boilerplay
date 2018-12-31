@@ -1,6 +1,7 @@
 package models.audit
 
-import util.JsonSerializers._
+import com.kyleu.projectile.util.JsonSerializers._
+import com.kyleu.projectile.util.NullUtils
 
 object AuditField {
   implicit val jsonEncoder: Encoder[AuditField] = deriveEncoder
@@ -8,5 +9,5 @@ object AuditField {
 }
 
 final case class AuditField(k: String, o: Option[String], n: Option[String]) {
-  override def toString = s"$k: ${o.getOrElse(util.NullUtils.str)} -> ${n.getOrElse(util.NullUtils.str)}"
+  override def toString = s"$k: ${o.getOrElse(NullUtils.str)} -> ${n.getOrElse(NullUtils.str)}"
 }

@@ -4,10 +4,10 @@ import java.util.concurrent.TimeUnit
 
 import akka.stream.Materializer
 import javax.inject.Inject
-import models.ProjectileContext.webContext
+import scala.concurrent.ExecutionContext.Implicits.global
 import play.api.mvc._
-import util.Logging
-import util.metrics.Instrumented
+import com.kyleu.projectile.util.Logging
+import com.kyleu.projectile.util.metrics.Instrumented
 
 import scala.concurrent.Future
 

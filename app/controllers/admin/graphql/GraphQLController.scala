@@ -4,15 +4,15 @@ import controllers.BaseController
 import graphql.GraphQLService
 import io.circe.Json
 import models.Application
-import models.ProjectileContext.webContext
-import models.auth.Credentials
+import scala.concurrent.ExecutionContext.Implicits.global
+import models.auth.UserCredentials
 import models.user.Role
 import sangria.execution.{ErrorWithResolver, QueryAnalysisError}
 import sangria.marshalling.circe._
 import sangria.parser.SyntaxError
 import util.EncryptionUtils
-import util.tracing.TraceData
-import util.web.ControllerUtils.{jsonBody, jsonObject}
+import com.kyleu.projectile.util.tracing.TraceData
+import com.kyleu.projectile.util.web.ControllerUtils.{jsonBody, jsonObject}
 
 import scala.concurrent.Future
 
@@ -41,17 +41,17 @@ class GraphQLController @javax.inject.Inject() (override val app: Application, g
       val variables = body.get("variables").map(x => graphQLService.parseVariables(x.toString))
       val operation = body.get("operationName").flatMap(_.asString)
 
-      executeQuery(query, variables, operation, Credentials.fromInsecureRequest(request), app.config.debug)
+      executeQuery(query, variables, operation, UserCredentials.fromInsecureRequest(request), app.config.debug)
     } else {
       failRequest(request)
     }
   }
 
   private[this] def executeQuery(
-    query: String, variables: Option[Json], operation: Option[String], creds: Credentials, debug: Boolean
+    query: String, variables: Option[Json], operation: Option[String], creds: UserCredentials, debug: Boolean
   )(implicit data: TraceData) = {
     try {
-      val f = graphQLService.executeQuery(app, query, variables, operation, creds, debug)
+      val f = graphQLService.executeQuery(query, variables, operation, creds, debug)
       f.map(x => Ok(x)).recover {
         case error: QueryAnalysisError => BadRequest(error.resolveError)
         case error: ErrorWithResolver => InternalServerError(error.resolveError)

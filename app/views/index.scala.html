@@ -1,5 +1,5 @@
 @(user: models.user.SystemUser, devmode: Boolean)(
-    implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: util.tracing.TraceData
+    implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: com.kyleu.projectile.util.tracing.TraceData
 )@traceData.logClass(getClass)@layout.simple(Some(user), util.Config.projectName) {
   <div class="row">
     <div class="col s12">
@@ -10,7 +10,6 @@
             <h5>You're an administrator, so head on over to the <a class="theme-text" href="@controllers.admin.system.routes.AdminController.index()">admin section</a>.</h5>
           }
         </li>
-        @views.html.components.socketForm()
       </ul>
     </div>
   </div>

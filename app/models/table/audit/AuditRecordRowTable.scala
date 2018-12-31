@@ -1,10 +1,10 @@
 /* Generated File */
 package models.table.audit
 
+import com.kyleu.projectile.services.database.slick.SlickQueryService.imports._
 import io.circe.Json
 import java.util.UUID
 import models.audit.AuditRecordRow
-import services.database.slick.SlickQueryService.imports._
 
 object AuditRecordRowTable {
   val query = TableQuery[AuditRecordRowTable]

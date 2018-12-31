@@ -2,10 +2,10 @@
 package models.doobie.note
 
 import cats.data.NonEmptyList
+import com.kyleu.projectile.services.database.doobie.DoobieQueries
+import com.kyleu.projectile.services.database.doobie.DoobieQueryService.Imports._
 import java.util.UUID
 import models.note.NoteRow
-import services.database.doobie.DoobieQueries
-import services.database.doobie.DoobieQueryService.Imports._
 
 object NoteRowDoobie extends DoobieQueries[NoteRow]("note") {
   override val countFragment = fr"""select count(*) from "note""""
