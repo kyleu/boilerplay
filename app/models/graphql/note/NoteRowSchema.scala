@@ -3,9 +3,8 @@ package models.graphql.note
 
 import com.kyleu.projectile.graphql.{GraphQLContext, GraphQLSchemaHelper}
 import com.kyleu.projectile.graphql.GraphQLUtils._
-import java.util.UUID
-
 import com.kyleu.projectile.models.graphql.note.NoteSchema
+import java.util.UUID
 import models.graphql.user.SystemUserSchema
 import models.note.{NoteRow, NoteRowResult}
 import sangria.execution.deferred.{Fetcher, HasId, Relation}

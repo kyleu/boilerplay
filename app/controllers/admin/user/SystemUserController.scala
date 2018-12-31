@@ -11,7 +11,7 @@ import services.audit.AuditRecordRowService
 import services.note.NoteRowService
 import services.user.SystemUserService
 import com.kyleu.projectile.util.JsonSerializers._
-import util.ReftreeUtils._
+import com.kyleu.projectile.util.ReftreeUtils._
 
 @javax.inject.Singleton
 class SystemUserController @javax.inject.Inject() (

@@ -7,7 +7,7 @@ import com.kyleu.projectile.util.DateUtils
 import models.user.SystemUserResult
 import play.api.http.MimeTypes
 import com.kyleu.projectile.util.JsonSerializers._
-import util.ReftreeUtils._
+import com.kyleu.projectile.util.ReftreeUtils._
 
 trait UserSearchHelper { this: SystemUserController =>
   def list(q: Option[String], orderBy: Option[String], orderAsc: Boolean, limit: Option[Int], offset: Option[Int], t: Option[String] = None) = {
