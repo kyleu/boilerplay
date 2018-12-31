@@ -3,7 +3,7 @@ package models.sandbox
 import com.google.inject.Injector
 import enumeratum.{CirceEnum, Enum, EnumEntry}
 import scala.concurrent.ExecutionContext.Implicits.global
-import models.auth.UserCredentials
+import com.kyleu.projectile.models.auth.UserCredentials
 import services.database.BackupRestore
 import com.kyleu.projectile.util.JsonSerializers._
 import com.kyleu.projectile.util.Logging

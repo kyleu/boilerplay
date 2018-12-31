@@ -1,7 +1,7 @@
 package services.settings
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import models.auth.UserCredentials
+import com.kyleu.projectile.models.auth.UserCredentials
 import com.kyleu.projectile.models.result.data.DataField
 import models.settings.{Setting, SettingKeyType}
 import com.kyleu.projectile.services.database.ApplicationDatabase

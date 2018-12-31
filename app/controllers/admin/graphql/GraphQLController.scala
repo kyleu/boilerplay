@@ -7,7 +7,7 @@ import io.circe.Json
 import models.Application
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import models.auth.UserCredentials
+import com.kyleu.projectile.models.auth.UserCredentials
 import sangria.execution.{ErrorWithResolver, QueryAnalysisError}
 import sangria.marshalling.circe._
 import sangria.parser.SyntaxError

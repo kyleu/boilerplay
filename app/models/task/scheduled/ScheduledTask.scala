@@ -1,6 +1,6 @@
 package models.task.scheduled
 
-import models.auth.UserCredentials
+import com.kyleu.projectile.models.auth.UserCredentials
 import com.kyleu.projectile.util.tracing.TraceData
 
 import scala.concurrent.Future

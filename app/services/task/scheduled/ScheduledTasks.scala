@@ -3,7 +3,7 @@ package services.task.scheduled
 import com.kyleu.projectile.util.DateUtils
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import models.auth.UserCredentials
+import com.kyleu.projectile.models.auth.UserCredentials
 import models.task.scheduled.ScheduledTask
 import services.sync.SyncService
 import com.kyleu.projectile.util.tracing.TraceData

@@ -4,7 +4,7 @@ import java.net.InetAddress
 import java.util.UUID
 
 import models.audit._
-import models.auth.UserCredentials
+import com.kyleu.projectile.models.auth.UserCredentials
 import com.kyleu.projectile.models.result.data.DataField
 import com.kyleu.projectile.util.tracing.TraceData
 import com.kyleu.projectile.util.{Logging, NullUtils}

@@ -2,7 +2,7 @@ package services.note
 
 import com.kyleu.projectile.services.database.ApplicationDatabase
 import com.kyleu.projectile.util.CsvUtils
-import models.auth.UserCredentials
+import com.kyleu.projectile.models.auth.UserCredentials
 import models.note.NoteRow
 import models.queries.note.{ModelNoteQueries, NoteRowQueries}
 import com.kyleu.projectile.util.tracing.{TraceData, TracingService}

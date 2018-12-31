@@ -1,7 +1,7 @@
 package services.audit
 
 import com.google.inject.Injector
-import models.auth.UserCredentials
+import com.kyleu.projectile.models.auth.UserCredentials
 import com.kyleu.projectile.models.result.data.DataFieldModel
 import services.audit.AuditArgs._
 import com.kyleu.projectile.util.Logging

@@ -17,7 +17,7 @@ import services.cache.UserCache
 import com.kyleu.projectile.services.database.ApplicationDatabase
 import com.kyleu.projectile.util.CsvUtils
 import com.kyleu.projectile.util.tracing.{TraceData, TracingService}
-import models.auth.UserCredentials
+import com.kyleu.projectile.models.auth.UserCredentials
 
 import scala.concurrent.Future
 

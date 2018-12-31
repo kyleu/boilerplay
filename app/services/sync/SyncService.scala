@@ -3,7 +3,7 @@ package services.sync
 import com.kyleu.projectile.util.DateUtils
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import models.auth.UserCredentials
+import com.kyleu.projectile.models.auth.UserCredentials
 import models.sync.SyncProgressRow
 import com.kyleu.projectile.util.tracing.TraceData
 

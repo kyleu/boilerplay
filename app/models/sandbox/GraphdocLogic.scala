@@ -4,7 +4,7 @@ import better.files._
 import com.google.inject.Injector
 import com.kyleu.projectile.util.tracing.TraceData
 import graphql.GraphQLService
-import models.auth.UserCredentials
+import com.kyleu.projectile.models.auth.UserCredentials
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.sys.process._

@@ -5,7 +5,7 @@ import java.util.UUID
 import akka.actor.ActorSystem
 import models.Configuration
 import scala.concurrent.ExecutionContext.Implicits.global
-import models.auth.UserCredentials
+import com.kyleu.projectile.models.auth.UserCredentials
 import models.task.ScheduledTaskRunRow
 import models.task.scheduled.{ScheduledTask, ScheduledTaskOutput}
 import services.sync.SyncService

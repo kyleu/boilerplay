@@ -11,7 +11,7 @@ import controllers.BaseController
 import models.Application
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import models.auth.{AuthEnv, UserCredentials}
+import com.kyleu.projectile.models.auth.{AuthEnv, UserCredentials}
 import models.settings.SettingKeyType
 import services.user.{SystemUserSearchService, SystemUserService}
 

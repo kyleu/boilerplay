@@ -5,7 +5,7 @@ import com.kyleu.projectile.graphql.GraphQLContext
 import com.kyleu.projectile.models.note.Note
 import io.circe.Json
 import scala.concurrent.ExecutionContext.Implicits.global
-import models.auth.UserCredentials
+import com.kyleu.projectile.models.auth.UserCredentials
 import sangria.execution.{ExceptionHandler, Executor, HandledException, QueryReducer}
 import sangria.marshalling.circe._
 import sangria.parser.QueryParser

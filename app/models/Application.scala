@@ -8,7 +8,7 @@ import com.kyleu.projectile.util.Logging
 import com.kyleu.projectile.util.tracing.TracingService
 import com.mohiva.play.silhouette.api.Silhouette
 import scala.concurrent.ExecutionContext.Implicits.global
-import models.auth.AuthEnv
+import com.kyleu.projectile.models.auth.AuthEnv
 import play.api.Environment
 import play.api.inject.ApplicationLifecycle
 import services.audit.AuditService

@@ -3,7 +3,7 @@ package services.process
 import java.util.UUID
 
 import com.kyleu.projectile.models.user.Role
-import models.auth.UserCredentials
+import com.kyleu.projectile.models.auth.UserCredentials
 import models.process.CachedProc
 import com.kyleu.projectile.util.{DateUtils, Logging}
 

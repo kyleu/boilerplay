@@ -3,7 +3,7 @@ package controllers
 import com.mohiva.play.silhouette.api.actions.{SecuredRequest, UserAwareRequest}
 import io.circe.{Json, Printer}
 import models.Application
-import models.auth.{AuthEnv, UserCredentials}
+import com.kyleu.projectile.models.auth.{AuthEnv, UserCredentials}
 import com.kyleu.projectile.models.result.data.DataField
 import com.kyleu.projectile.models.user.{Role, SystemUser}
 import play.api.http.{ContentTypeOf, Writeable}

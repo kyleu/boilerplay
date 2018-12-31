@@ -6,7 +6,7 @@ import com.google.inject.Injector
 import controllers.BaseController
 import models.Application
 import scala.concurrent.ExecutionContext.Implicits.global
-import models.auth.UserCredentials
+import com.kyleu.projectile.models.auth.UserCredentials
 import play.twirl.api.Html
 import com.kyleu.projectile.util.tracing.TraceData
 import services.audit.{AuditRecordRowService, AuditRowService}

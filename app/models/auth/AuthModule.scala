@@ -16,6 +16,7 @@ import com.mohiva.play.silhouette.impl.util.{DefaultFingerprintGenerator, Secure
 import com.mohiva.play.silhouette.password.BCryptPasswordHasher
 import com.mohiva.play.silhouette.persistence.repositories.DelegableAuthInfoRepository
 import models.Configuration
+import com.kyleu.projectile.models.auth.AuthEnv
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import net.codingwell.scalaguice.ScalaModule
