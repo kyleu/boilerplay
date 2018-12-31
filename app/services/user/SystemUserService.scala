@@ -5,12 +5,13 @@ import java.util.UUID
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.util.PasswordHasher
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import models.queries.auth._
 import com.kyleu.projectile.models.result.data.DataField
 import com.kyleu.projectile.models.result.filter.Filter
 import com.kyleu.projectile.models.result.orderBy.OrderBy
-import models.user.{Role, SystemUser}
+import com.kyleu.projectile.models.user.{Role, SystemUser}
 import com.kyleu.projectile.services.{Credentials, ModelServiceHelper}
 import services.cache.UserCache
 import com.kyleu.projectile.services.database.ApplicationDatabase

@@ -12,6 +12,6 @@ object AllTables {
     models.table.settings.SettingTable.query.schema,
     models.table.sync.SyncProgressRowTable.query.schema,
     models.table.task.ScheduledTaskRunRowTable.query.schema,
-    models.table.user.SystemUserTable.query.schema
+    models.table.user.SystemUserRowTable.query.schema
   )
 }

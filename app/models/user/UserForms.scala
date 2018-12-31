@@ -1,7 +1,6 @@
 package models.user
 
 import com.mohiva.play.silhouette.api.util.Credentials
-import models.template.Theme
 import play.api.data.Forms._
 import play.api.data._
 
@@ -19,12 +18,8 @@ object UserForms {
   )(RegistrationData.apply)(RegistrationData.unapply))
 
   val profileForm = Form(mapping(
-    "username" -> nonEmptyText,
-    "theme" -> nonEmptyText.transform(
-      s => Theme.withValue(s),
-      (t: Theme) => t.toString
-    )
-  )(ProfileData.apply)(ProfileData.unapply))
+    "username" -> nonEmptyText
+  )(s => s)(s => Some(s)))
 
   final case class PasswordChange(oldPassword: String, newPassword: String, confirm: String)
 

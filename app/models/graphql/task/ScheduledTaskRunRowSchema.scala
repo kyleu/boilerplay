@@ -8,12 +8,11 @@ import java.util.UUID
 import models.task.{ScheduledTaskRunRow, ScheduledTaskRunRowResult}
 import sangria.execution.deferred.{Fetcher, HasId}
 import sangria.schema._
-import services.task.ScheduledTaskRunRowService
 
 object ScheduledTaskRunRowSchema extends GraphQLSchemaHelper("scheduledTaskRunRow") {
   implicit val scheduledTaskRunRowPrimaryKeyId: HasId[ScheduledTaskRunRow, UUID] = HasId[ScheduledTaskRunRow, UUID](_.id)
   private[this] def getByPrimaryKeySeq(c: GraphQLContext, idSeq: Seq[UUID]) = {
-    c.injector.getInstance(classOf[ScheduledTaskRunRowService]).getByPrimaryKeySeq(c.creds, idSeq)(c.trace)
+    c.injector.getInstance(classOf[services.task.ScheduledTaskRunRowService]).getByPrimaryKeySeq(c.creds, idSeq)(c.trace)
   }
   val scheduledTaskRunRowByPrimaryKeyFetcher = Fetcher(getByPrimaryKeySeq)
 
@@ -35,37 +34,37 @@ object ScheduledTaskRunRowSchema extends GraphQLSchemaHelper("scheduledTaskRunRo
 
   val queryFields = fields(
     unitField(name = "scheduledTaskRunRow", desc = None, t = OptionType(scheduledTaskRunRowType), f = (c, td) => {
-      c.ctx.injector.getInstance(classOf[ScheduledTaskRunRowService]).getByPrimaryKey(c.ctx.creds, c.arg(scheduledTaskRunRowIdArg))(td)
+      c.ctx.injector.getInstance(classOf[services.task.ScheduledTaskRunRowService]).getByPrimaryKey(c.ctx.creds, c.arg(scheduledTaskRunRowIdArg))(td)
     }, scheduledTaskRunRowIdArg),
     unitField(name = "scheduledTaskRunRowSeq", desc = None, t = ListType(scheduledTaskRunRowType), f = (c, td) => {
-      c.ctx.injector.getInstance(classOf[ScheduledTaskRunRowService]).getByPrimaryKeySeq(c.ctx.creds, c.arg(scheduledTaskRunRowIdSeqArg))(td)
+      c.ctx.injector.getInstance(classOf[services.task.ScheduledTaskRunRowService]).getByPrimaryKeySeq(c.ctx.creds, c.arg(scheduledTaskRunRowIdSeqArg))(td)
     }, scheduledTaskRunRowIdSeqArg),
     unitField(name = "scheduledTaskRunRowSearch", desc = None, t = scheduledTaskRunRowResultType, f = (c, td) => {
-      runSearch(c.ctx.injector.getInstance(classOf[ScheduledTaskRunRowService]), c, td).map(toResult)
+      runSearch(c.ctx.injector.getInstance(classOf[services.task.ScheduledTaskRunRowService]), c, td).map(toResult)
     }, queryArg, reportFiltersArg, orderBysArg, limitArg, offsetArg),
     unitField(name = "scheduledTaskRunsByTask", desc = None, t = ListType(scheduledTaskRunRowType), f = (c, td) => {
-      c.ctx.injector.getInstance(classOf[ScheduledTaskRunRowService]).getByTask(c.ctx.creds, c.arg(scheduledTaskRunRowTaskArg))(td)
+      c.ctx.injector.getInstance(classOf[services.task.ScheduledTaskRunRowService]).getByTask(c.ctx.creds, c.arg(scheduledTaskRunRowTaskArg))(td)
     }, scheduledTaskRunRowTaskArg),
     unitField(name = "scheduledTaskRunsByTaskSeq", desc = None, t = ListType(scheduledTaskRunRowType), f = (c, td) => {
-      c.ctx.injector.getInstance(classOf[ScheduledTaskRunRowService]).getByTaskSeq(c.ctx.creds, c.arg(scheduledTaskRunRowTaskSeqArg))(td)
+      c.ctx.injector.getInstance(classOf[services.task.ScheduledTaskRunRowService]).getByTaskSeq(c.ctx.creds, c.arg(scheduledTaskRunRowTaskSeqArg))(td)
     }, scheduledTaskRunRowTaskSeqArg),
     unitField(name = "scheduledTaskRunsByArguments", desc = None, t = ListType(scheduledTaskRunRowType), f = (c, td) => {
-      c.ctx.injector.getInstance(classOf[ScheduledTaskRunRowService]).getByArguments(c.ctx.creds, c.arg(scheduledTaskRunRowArgumentsArg).toList)(td)
+      c.ctx.injector.getInstance(classOf[services.task.ScheduledTaskRunRowService]).getByArguments(c.ctx.creds, c.arg(scheduledTaskRunRowArgumentsArg).toList)(td)
     }, scheduledTaskRunRowArgumentsArg),
     unitField(name = "scheduledTaskRunsByArgumentsSeq", desc = None, t = ListType(scheduledTaskRunRowType), f = (c, td) => {
-      c.ctx.injector.getInstance(classOf[ScheduledTaskRunRowService]).getByArgumentsSeq(c.ctx.creds, c.arg(scheduledTaskRunRowArgumentsSeqArg).map(_.toList))(td)
+      c.ctx.injector.getInstance(classOf[services.task.ScheduledTaskRunRowService]).getByArgumentsSeq(c.ctx.creds, c.arg(scheduledTaskRunRowArgumentsSeqArg).map(_.toList))(td)
     }, scheduledTaskRunRowArgumentsSeqArg),
     unitField(name = "scheduledTaskRunsByStatus", desc = None, t = ListType(scheduledTaskRunRowType), f = (c, td) => {
-      c.ctx.injector.getInstance(classOf[ScheduledTaskRunRowService]).getByStatus(c.ctx.creds, c.arg(scheduledTaskRunRowStatusArg))(td)
+      c.ctx.injector.getInstance(classOf[services.task.ScheduledTaskRunRowService]).getByStatus(c.ctx.creds, c.arg(scheduledTaskRunRowStatusArg))(td)
     }, scheduledTaskRunRowStatusArg),
     unitField(name = "scheduledTaskRunsByStatusSeq", desc = None, t = ListType(scheduledTaskRunRowType), f = (c, td) => {
-      c.ctx.injector.getInstance(classOf[ScheduledTaskRunRowService]).getByStatusSeq(c.ctx.creds, c.arg(scheduledTaskRunRowStatusSeqArg))(td)
+      c.ctx.injector.getInstance(classOf[services.task.ScheduledTaskRunRowService]).getByStatusSeq(c.ctx.creds, c.arg(scheduledTaskRunRowStatusSeqArg))(td)
     }, scheduledTaskRunRowStatusSeqArg),
     unitField(name = "scheduledTaskRunsByStarted", desc = None, t = ListType(scheduledTaskRunRowType), f = (c, td) => {
-      c.ctx.injector.getInstance(classOf[ScheduledTaskRunRowService]).getByStarted(c.ctx.creds, c.arg(scheduledTaskRunRowStartedArg))(td)
+      c.ctx.injector.getInstance(classOf[services.task.ScheduledTaskRunRowService]).getByStarted(c.ctx.creds, c.arg(scheduledTaskRunRowStartedArg))(td)
     }, scheduledTaskRunRowStartedArg),
     unitField(name = "scheduledTaskRunsByStartedSeq", desc = None, t = ListType(scheduledTaskRunRowType), f = (c, td) => {
-      c.ctx.injector.getInstance(classOf[ScheduledTaskRunRowService]).getByStartedSeq(c.ctx.creds, c.arg(scheduledTaskRunRowStartedSeqArg))(td)
+      c.ctx.injector.getInstance(classOf[services.task.ScheduledTaskRunRowService]).getByStartedSeq(c.ctx.creds, c.arg(scheduledTaskRunRowStartedSeqArg))(td)
     }, scheduledTaskRunRowStartedSeqArg)
   )
 
@@ -73,13 +72,13 @@ object ScheduledTaskRunRowSchema extends GraphQLSchemaHelper("scheduledTaskRunRo
     name = "ScheduledTaskRunRowMutations",
     fields = fields(
       unitField(name = "create", desc = None, t = OptionType(scheduledTaskRunRowType), f = (c, td) => {
-        c.ctx.injector.getInstance(classOf[ScheduledTaskRunRowService]).create(c.ctx.creds, c.arg(dataFieldsArg))(td)
+        c.ctx.injector.getInstance(classOf[services.task.ScheduledTaskRunRowService]).create(c.ctx.creds, c.arg(dataFieldsArg))(td)
       }, dataFieldsArg),
       unitField(name = "update", desc = None, t = OptionType(scheduledTaskRunRowType), f = (c, td) => {
-        c.ctx.injector.getInstance(classOf[ScheduledTaskRunRowService]).update(c.ctx.creds, c.arg(scheduledTaskRunRowIdArg), c.arg(dataFieldsArg))(td).map(_._1)
+        c.ctx.injector.getInstance(classOf[services.task.ScheduledTaskRunRowService]).update(c.ctx.creds, c.arg(scheduledTaskRunRowIdArg), c.arg(dataFieldsArg))(td).map(_._1)
       }, scheduledTaskRunRowIdArg, dataFieldsArg),
       unitField(name = "remove", desc = None, t = scheduledTaskRunRowType, f = (c, td) => {
-        c.ctx.injector.getInstance(classOf[ScheduledTaskRunRowService]).remove(c.ctx.creds, c.arg(scheduledTaskRunRowIdArg))(td)
+        c.ctx.injector.getInstance(classOf[services.task.ScheduledTaskRunRowService]).remove(c.ctx.creds, c.arg(scheduledTaskRunRowIdArg))(td)
       }, scheduledTaskRunRowIdArg)
     )
   )

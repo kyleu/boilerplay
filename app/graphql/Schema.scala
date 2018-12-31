@@ -11,8 +11,6 @@ import scala.concurrent.Future
 
 object Schema {
   // Fetchers
-  val baseFetchers = Seq(models.graphql.user.SystemUserSchema.systemUserByRoleFetcher)
-
   val modelFetchers = {
     Nil ++
       /* Start model fetchers */
@@ -27,13 +25,13 @@ object Schema {
         models.graphql.settings.SettingSchema.settingByPrimaryKeyFetcher,
         models.graphql.sync.SyncProgressRowSchema.syncProgressRowByPrimaryKeyFetcher,
         models.graphql.task.ScheduledTaskRunRowSchema.scheduledTaskRunRowByPrimaryKeyFetcher,
-        models.graphql.user.SystemUserSchema.systemUserByPrimaryKeyFetcher
+        models.graphql.user.SystemUserRowSchema.systemUserRowByPrimaryKeyFetcher
       ) ++
         /* End model fetchers */
         Nil
   }
 
-  val resolver = DeferredResolver.fetchers(baseFetchers ++ modelFetchers: _*)
+  val resolver = DeferredResolver.fetchers(modelFetchers: _*)
 
   private[this] val customQueryFields = fields[GraphQLContext, Unit](
     Field(name = "status", fieldType = StringType, resolve = _ => Future.successful("OK")),
@@ -54,7 +52,7 @@ object Schema {
       models.graphql.settings.SettingSchema.queryFields ++
       models.graphql.sync.SyncProgressRowSchema.queryFields ++
       models.graphql.task.ScheduledTaskRunRowSchema.queryFields ++
-      models.graphql.user.SystemUserSchema.queryFields ++
+      models.graphql.user.SystemUserRowSchema.queryFields ++
       /* End model query fields */
       Nil
   }
@@ -95,7 +93,7 @@ object Schema {
       models.graphql.settings.SettingSchema.mutationFields ++
       models.graphql.sync.SyncProgressRowSchema.mutationFields ++
       models.graphql.task.ScheduledTaskRunRowSchema.mutationFields ++
-      models.graphql.user.SystemUserSchema.mutationFields ++
+      models.graphql.user.SystemUserRowSchema.mutationFields ++
       /* End model mutation fields */
       Nil
   }

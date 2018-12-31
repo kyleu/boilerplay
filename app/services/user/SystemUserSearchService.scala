@@ -1,9 +1,9 @@
 package services.user
 
+import com.kyleu.projectile.models.user.SystemUser
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.services.IdentityService
 import models.queries.auth.SystemUserQueries
-import models.user.SystemUser
 import com.kyleu.projectile.services.database.ApplicationDatabase
 import com.kyleu.projectile.util.Logging
 import services.cache.UserCache

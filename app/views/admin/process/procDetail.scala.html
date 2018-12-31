@@ -1,4 +1,5 @@
-@(user: models.user.SystemUser, proc: models.process.CachedProc)(
+@import com.kyleu.projectile.models.user.SystemUser
+@(user: SystemUser, proc: models.process.CachedProc)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: com.kyleu.projectile.util.tracing.TraceData
 )@traceData.logClass(getClass)@views.html.admin.layout.page(user = user, activeSection = "status", title = s"[${proc.cmd.mkString(" ")}] Process") {
   <div class="row">

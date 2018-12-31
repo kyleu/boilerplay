@@ -1,8 +1,8 @@
 package models.auth
 
+import com.kyleu.projectile.models.user.SystemUser
 import com.kyleu.projectile.services.Credentials
 import com.mohiva.play.silhouette.api.actions.{SecuredRequest, UserAwareRequest}
-import models.user.SystemUser
 import com.kyleu.projectile.util.JsonSerializers._
 import com.kyleu.projectile.util.NullUtils
 

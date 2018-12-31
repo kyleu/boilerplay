@@ -1,4 +1,6 @@
-@(user: models.user.SystemUser, settingService: services.settings.SettingsService)(implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: com.kyleu.projectile.util.tracing.TraceData)
+@import com.kyleu.projectile.models.user.Role
+@import com.kyleu.projectile.models.user.SystemUser
+@(user: SystemUser, settingService: services.settings.SettingsService)(implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: com.kyleu.projectile.util.tracing.TraceData)
 @import models.settings.SettingKeyType
 
 @settingPanel(key: models.settings.SettingKeyType, colWidth: Int = 12)(content: Html) = {
@@ -11,7 +13,7 @@
   </div>
 }
 
-@roleRadio(name: String, r: models.user.Role, selected: models.user.Role, title: String) = {
+@roleRadio(name: String, r: Role, selected: Role, title: String) = {
   <div>
     <label for="role-@name-@r">
       <input type="radio" id="role-@name-@r" name="@name" value="@r" @if(selected == r) { checked="checked" } />
@@ -49,9 +51,9 @@
 
       @settingPanel(SettingKeyType.DefaultNewUserRole) {
         <div>
-          @defining(models.user.Role.withValue(settingService(SettingKeyType.DefaultNewUserRole))) { newUserRole =>
-            @roleRadio(SettingKeyType.DefaultNewUserRole.toString, models.user.Role.User, newUserRole, "Registered Users")
-            @roleRadio(SettingKeyType.DefaultNewUserRole.toString, models.user.Role.Admin, newUserRole, "Administrators")
+          @defining(com.kyleu.projectile.models.user.Role.withValue(settingService(SettingKeyType.DefaultNewUserRole))) { newUserRole =>
+            @roleRadio(SettingKeyType.DefaultNewUserRole.toString, com.kyleu.projectile.models.user.Role.User, newUserRole, "Registered Users")
+            @roleRadio(SettingKeyType.DefaultNewUserRole.toString, com.kyleu.projectile.models.user.Role.Admin, newUserRole, "Administrators")
           }
         </div>
       }

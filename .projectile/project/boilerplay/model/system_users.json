@@ -4,16 +4,16 @@
   "features" : [ "doobie", "datamodel", "thrift", "graphql", "service", "slick", "controller", "json", "core" ],
   "ignored" : [ ],
   "overrides" : [ {
+    "k" : "propertyName",
+    "v" : "systemUserRow"
+  }, {
+    "k" : "className",
+    "v" : "SystemUserRow"
+  }, {
     "k" : "title",
     "v" : "System User"
   }, {
     "k" : "plural",
     "v" : "System Users"
-  }, {
-    "k" : "propertyName",
-    "v" : "systemUser"
-  }, {
-    "k" : "className",
-    "v" : "SystemUser"
   } ]
 }

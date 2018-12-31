@@ -9,14 +9,12 @@ import com.kyleu.projectile.models.queries.{BaseQueries, ResultFieldHelper}
 import com.kyleu.projectile.models.result.data.DataField
 import com.kyleu.projectile.models.result.filter.Filter
 import com.kyleu.projectile.models.result.orderBy.OrderBy
-import models.user.{Role, SystemUser, UserPreferences}
-import com.kyleu.projectile.util.JsonSerializers._
+import com.kyleu.projectile.models.user.{Role, SystemUser}
 
 object SystemUserQueries extends BaseQueries[SystemUser]("systemUser", "system_users") {
   override val fields = Seq(
     DatabaseField(title = "Id", prop = "id", col = "id", typ = UuidType),
     DatabaseField(title = "Username", prop = "username", col = "username", typ = StringType),
-    DatabaseField(title = "Preferences", prop = "prefs", col = "prefs", typ = StringType),
     DatabaseField(title = "Provider", prop = "provider", col = "provider", typ = StringType),
     DatabaseField(title = "Key", prop = "key", col = "key", typ = StringType),
     DatabaseField(title = "Role", prop = "role", col = "role", typ = EnumType(Role)),
@@ -56,14 +54,8 @@ object SystemUserQueries extends BaseQueries[SystemUser]("systemUser", "system_u
 
   final case class UpdateUser(u: SystemUser) extends Statement {
     override val name = s"$key.update.user"
-    override val sql = updateSql(Seq("username", "prefs", "provider", "key", "role"))
-    override val values = Seq[Any](u.username, u.preferences.asJson.spaces2, u.profile.providerID, u.profile.providerKey, u.role.toString, u.id)
-  }
-
-  final case class SetPreferences(userId: UUID, prefs: UserPreferences) extends Statement {
-    override val name = s"$key.set.preferences"
-    override val sql = updateSql(Seq("prefs"))
-    override val values = Seq[Any](prefs.asJson.spaces2, userId)
+    override val sql = updateSql(Seq("username", "provider", "key", "role"))
+    override val values = Seq[Any](u.username, u.profile.providerID, u.profile.providerKey, u.role.toString, u.id)
   }
 
   final case class SetRole(id: UUID, role: Role) extends Statement {
@@ -89,15 +81,13 @@ object SystemUserQueries extends BaseQueries[SystemUser]("systemUser", "system_u
   override protected def fromRow(row: Row) = {
     val id = UuidType(row, "id")
     val username = StringType(row, "username")
-    val prefsString = StringType(row, "prefs")
-    val preferences = UserPreferences.readFrom(prefsString)
     val profile = LoginInfo(StringType(row, "provider"), StringType(row, "key"))
     val role = Role.withValue(StringType(row, "role").trim)
     val created = TimestampType(row, "created")
-    SystemUser(id, username, preferences, profile, role, created)
+    SystemUser(id, username, profile, role, created)
   }
 
   override protected def toDataSeq(u: SystemUser) = Seq[Any](
-    u.id.toString, u.username, u.preferences.asJson.spaces2, u.profile.providerID, u.profile.providerKey, u.role.toString, u.created
+    u.id.toString, u.username, u.profile.providerID, u.profile.providerKey, u.role.toString, u.created
   )
 }

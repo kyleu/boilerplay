@@ -8,12 +8,11 @@ import java.util.UUID
 import models.audit.{AuditRecordRow, AuditRecordRowResult}
 import sangria.execution.deferred.{Fetcher, HasId, Relation}
 import sangria.schema._
-import services.audit.AuditRecordRowService
 
 object AuditRecordRowSchema extends GraphQLSchemaHelper("auditRecordRow") {
   implicit val auditRecordRowPrimaryKeyId: HasId[AuditRecordRow, UUID] = HasId[AuditRecordRow, UUID](_.id)
   private[this] def getByPrimaryKeySeq(c: GraphQLContext, idSeq: Seq[UUID]) = {
-    c.injector.getInstance(classOf[AuditRecordRowService]).getByPrimaryKeySeq(c.creds, idSeq)(c.trace)
+    c.injector.getInstance(classOf[services.audit.AuditRecordRowService]).getByPrimaryKeySeq(c.creds, idSeq)(c.trace)
   }
   val auditRecordRowByPrimaryKeyFetcher = Fetcher(getByPrimaryKeySeq)
 
@@ -27,7 +26,7 @@ object AuditRecordRowSchema extends GraphQLSchemaHelper("auditRecordRow") {
 
   val auditRecordRowByAuditIdRelation = Relation[AuditRecordRow, UUID]("byAuditId", x => Seq(x.auditId))
   val auditRecordRowByAuditIdFetcher = Fetcher.rel[GraphQLContext, AuditRecordRow, AuditRecordRow, UUID](
-    getByPrimaryKeySeq, (c, rels) => c.injector.getInstance(classOf[AuditRecordRowService]).getByAuditIdSeq(c.creds, rels(auditRecordRowByAuditIdRelation))(c.trace)
+    getByPrimaryKeySeq, (c, rels) => c.injector.getInstance(classOf[services.audit.AuditRecordRowService]).getByAuditIdSeq(c.creds, rels(auditRecordRowByAuditIdRelation))(c.trace)
   )
 
   implicit lazy val auditRecordRowType: sangria.schema.ObjectType[GraphQLContext, AuditRecordRow] = deriveObjectType(
@@ -49,25 +48,25 @@ object AuditRecordRowSchema extends GraphQLSchemaHelper("auditRecordRow") {
 
   val queryFields = fields(
     unitField(name = "auditRecordRow", desc = None, t = OptionType(auditRecordRowType), f = (c, td) => {
-      c.ctx.injector.getInstance(classOf[AuditRecordRowService]).getByPrimaryKey(c.ctx.creds, c.arg(auditRecordRowIdArg))(td)
+      c.ctx.injector.getInstance(classOf[services.audit.AuditRecordRowService]).getByPrimaryKey(c.ctx.creds, c.arg(auditRecordRowIdArg))(td)
     }, auditRecordRowIdArg),
     unitField(name = "auditRecordRowSeq", desc = None, t = ListType(auditRecordRowType), f = (c, td) => {
-      c.ctx.injector.getInstance(classOf[AuditRecordRowService]).getByPrimaryKeySeq(c.ctx.creds, c.arg(auditRecordRowIdSeqArg))(td)
+      c.ctx.injector.getInstance(classOf[services.audit.AuditRecordRowService]).getByPrimaryKeySeq(c.ctx.creds, c.arg(auditRecordRowIdSeqArg))(td)
     }, auditRecordRowIdSeqArg),
     unitField(name = "auditRecordRowSearch", desc = None, t = auditRecordRowResultType, f = (c, td) => {
-      runSearch(c.ctx.injector.getInstance(classOf[AuditRecordRowService]), c, td).map(toResult)
+      runSearch(c.ctx.injector.getInstance(classOf[services.audit.AuditRecordRowService]), c, td).map(toResult)
     }, queryArg, reportFiltersArg, orderBysArg, limitArg, offsetArg),
     unitField(name = "auditRecordsByT", desc = None, t = ListType(auditRecordRowType), f = (c, td) => {
-      c.ctx.injector.getInstance(classOf[AuditRecordRowService]).getByT(c.ctx.creds, c.arg(auditRecordRowTArg))(td)
+      c.ctx.injector.getInstance(classOf[services.audit.AuditRecordRowService]).getByT(c.ctx.creds, c.arg(auditRecordRowTArg))(td)
     }, auditRecordRowTArg),
     unitField(name = "auditRecordsByTSeq", desc = None, t = ListType(auditRecordRowType), f = (c, td) => {
-      c.ctx.injector.getInstance(classOf[AuditRecordRowService]).getByTSeq(c.ctx.creds, c.arg(auditRecordRowTSeqArg))(td)
+      c.ctx.injector.getInstance(classOf[services.audit.AuditRecordRowService]).getByTSeq(c.ctx.creds, c.arg(auditRecordRowTSeqArg))(td)
     }, auditRecordRowTSeqArg),
     unitField(name = "auditRecordsByPk", desc = None, t = ListType(auditRecordRowType), f = (c, td) => {
-      c.ctx.injector.getInstance(classOf[AuditRecordRowService]).getByPk(c.ctx.creds, c.arg(auditRecordRowPkArg).toList)(td)
+      c.ctx.injector.getInstance(classOf[services.audit.AuditRecordRowService]).getByPk(c.ctx.creds, c.arg(auditRecordRowPkArg).toList)(td)
     }, auditRecordRowPkArg),
     unitField(name = "auditRecordsByPkSeq", desc = None, t = ListType(auditRecordRowType), f = (c, td) => {
-      c.ctx.injector.getInstance(classOf[AuditRecordRowService]).getByPkSeq(c.ctx.creds, c.arg(auditRecordRowPkSeqArg).map(_.toList))(td)
+      c.ctx.injector.getInstance(classOf[services.audit.AuditRecordRowService]).getByPkSeq(c.ctx.creds, c.arg(auditRecordRowPkSeqArg).map(_.toList))(td)
     }, auditRecordRowPkSeqArg)
   )
 
@@ -75,13 +74,13 @@ object AuditRecordRowSchema extends GraphQLSchemaHelper("auditRecordRow") {
     name = "AuditRecordRowMutations",
     fields = fields(
       unitField(name = "create", desc = None, t = OptionType(auditRecordRowType), f = (c, td) => {
-        c.ctx.injector.getInstance(classOf[AuditRecordRowService]).create(c.ctx.creds, c.arg(dataFieldsArg))(td)
+        c.ctx.injector.getInstance(classOf[services.audit.AuditRecordRowService]).create(c.ctx.creds, c.arg(dataFieldsArg))(td)
       }, dataFieldsArg),
       unitField(name = "update", desc = None, t = OptionType(auditRecordRowType), f = (c, td) => {
-        c.ctx.injector.getInstance(classOf[AuditRecordRowService]).update(c.ctx.creds, c.arg(auditRecordRowIdArg), c.arg(dataFieldsArg))(td).map(_._1)
+        c.ctx.injector.getInstance(classOf[services.audit.AuditRecordRowService]).update(c.ctx.creds, c.arg(auditRecordRowIdArg), c.arg(dataFieldsArg))(td).map(_._1)
       }, auditRecordRowIdArg, dataFieldsArg),
       unitField(name = "remove", desc = None, t = auditRecordRowType, f = (c, td) => {
-        c.ctx.injector.getInstance(classOf[AuditRecordRowService]).remove(c.ctx.creds, c.arg(auditRecordRowIdArg))(td)
+        c.ctx.injector.getInstance(classOf[services.audit.AuditRecordRowService]).remove(c.ctx.creds, c.arg(auditRecordRowIdArg))(td)
       }, auditRecordRowIdArg)
     )
   )

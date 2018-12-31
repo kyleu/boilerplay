@@ -19,7 +19,6 @@ query SystemUser {
       username
       provider
       key
-      prefs
       role
       created
     }

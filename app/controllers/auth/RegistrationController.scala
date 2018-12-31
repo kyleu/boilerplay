@@ -2,12 +2,14 @@ package controllers.auth
 
 import java.util.UUID
 
+import com.kyleu.projectile.models.user.{Role, SystemUser}
 import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.api.util.PasswordHasher
 import com.mohiva.play.silhouette.api.{LoginEvent, LoginInfo, SignUpEvent}
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
 import controllers.BaseController
 import models.Application
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import models.auth.UserCredentials
 import models.settings.SettingKeyType
@@ -56,7 +58,6 @@ class RegistrationController @javax.inject.Inject() (
             val user = SystemUser(
               id = UUID.randomUUID,
               username = data.username,
-              preferences = UserPreferences.empty,
               profile = loginInfo,
               role = role
             )

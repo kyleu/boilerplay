@@ -13,7 +13,7 @@
   "#include:settings/setting.json": "*",
   "#include:sync/syncProgressRow.json": "*",
   "#include:task/scheduledTaskRunRow.json": "*",
-  "#include:user/systemUser.json": "*",
+  "#include:user/systemUserRow.json": "*",
   // End schema paths
 
   "#include:common.json": "*"

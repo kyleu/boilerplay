@@ -26,8 +26,8 @@ object Dependencies {
   }
 
   object Projectile {
-    private[this] val version = "0.6.4"
-    val all = Seq("doobie", "slick", "graphql", "play").map(s => "com.kyleu" %% s"projectile-lib-$s" % version)
+    private[this] val version = "0.6.5"
+    val all = Seq("doobie", "slick", "auth").map(s => "com.kyleu" %% s"projectile-lib-$s" % version)
   }
 
   object Authentication {

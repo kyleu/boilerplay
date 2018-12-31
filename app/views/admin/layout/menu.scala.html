@@ -1,4 +1,5 @@
-@(user: models.user.SystemUser, activeSection: String)
+@import com.kyleu.projectile.models.user.SystemUser
+@(user: SystemUser, activeSection: String)
 @views.html.components.userDropdown(Some(user))
 
 <header>
@@ -55,7 +56,7 @@
   <li><a href="@controllers.admin.task.routes.ScheduledTaskRunRowController.list()"><i class="fa @models.template.Icons.scheduledTaskRunRow"></i> Scheduled Task Run</a></li>
   <li><a href="@controllers.admin.settings.routes.SettingController.list()"><i class="fa @models.template.Icons.setting"></i> Setting</a></li>
   <li><a href="@controllers.admin.sync.routes.SyncProgressRowController.list()"><i class="fa @models.template.Icons.syncProgressRow"></i> Sync Progress</a></li>
-  <li><a href="@controllers.admin.user.routes.SystemUserController.list()"><i class="fa @models.template.Icons.systemUser"></i> System User</a></li>
+  <li><a href="@controllers.admin.user.routes.SystemUserRowController.list()"><i class="fa @models.template.Icons.systemUserRow"></i> System User</a></li>
   <!-- End model list routes -->
 </ul>
 

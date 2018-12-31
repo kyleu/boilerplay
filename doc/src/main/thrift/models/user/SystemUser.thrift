@@ -9,9 +9,8 @@ struct SystemUser {
   2: optional string username;
   3: required string provider;
   4: required string key;
-  5: required string prefs;
-  6: required string role;
-  7: required common.LocalDateTime created;
+  5: required string role;
+  6: required common.LocalDateTime created;
 }
 
 struct SystemUserResult {

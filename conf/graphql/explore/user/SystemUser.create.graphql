@@ -7,7 +7,6 @@ mutation SystemUserCreate {
       username
       provider
       key
-      prefs
       role
       created
     }

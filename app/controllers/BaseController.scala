@@ -5,7 +5,7 @@ import io.circe.{Json, Printer}
 import models.Application
 import models.auth.{AuthEnv, UserCredentials}
 import com.kyleu.projectile.models.result.data.DataField
-import models.user.{Role, SystemUser}
+import com.kyleu.projectile.models.user.{Role, SystemUser}
 import play.api.http.{ContentTypeOf, Writeable}
 import play.api.mvc._
 import com.kyleu.projectile.util.Logging
@@ -79,7 +79,7 @@ abstract class BaseController(val name: String) extends InjectedController with 
     Future.successful(res.flashing("error" -> msg).withSession(request.session + ("returnUrl" -> request.uri)))
   }
 
-  def enhanceRequest(request: Request[AnyContent], user: Option[SystemUser], trace: TraceData) = {
+  protected def enhanceRequest(request: Request[AnyContent], user: Option[SystemUser], trace: TraceData) = {
     trace.tag("http.request.size", request.body.asText.map(_.length).orElse(request.body.asRaw.map(_.size.toInt)).getOrElse(0).toString)
     user.foreach { u =>
       trace.tag("user.id", u.id.toString)

@@ -5,7 +5,6 @@ create table if not exists "system_users" (
   "username" character varying(256) unique,
   "provider" character varying(64) not null,
   "key" varchar(2048) not null,
-  "prefs" character varying(4096) not null,
   "role" character varying(64) not null,
   "created" timestamp without time zone not null
 );

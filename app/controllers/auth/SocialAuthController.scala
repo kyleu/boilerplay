@@ -2,16 +2,17 @@ package controllers.auth
 
 import java.util.UUID
 
+import com.kyleu.projectile.models.user.{Role, SystemUser}
 import com.mohiva.play.silhouette.api.exceptions.ProviderException
 import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.api.{LoginEvent, LoginInfo, Silhouette}
 import com.mohiva.play.silhouette.impl.providers.{CommonSocialProfileBuilder, SocialProvider, SocialProviderRegistry}
 import controllers.BaseController
 import models.Application
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import models.auth.{AuthEnv, UserCredentials}
 import models.settings.SettingKeyType
-import models.user.{Role, SystemUser, UserPreferences}
 import services.user.{SystemUserSearchService, SystemUserService}
 
 import scala.concurrent.Future
@@ -41,7 +42,6 @@ class SocialAuthController @javax.inject.Inject() (
                   val newUser = SystemUser(
                     id = UUID.randomUUID,
                     username = if (existing.isDefined) { username + "-" + scala.util.Random.alphanumeric.take(4).mkString } else { username },
-                    preferences = UserPreferences.empty,
                     profile = profile.loginInfo,
                     role = Role.withValue(app.coreServices.settings(SettingKeyType.DefaultNewUserRole))
                   )

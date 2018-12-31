@@ -7,12 +7,11 @@ import com.kyleu.projectile.models.graphql.note.NoteSchema
 import models.ddl.{FlywaySchemaHistoryRow, FlywaySchemaHistoryRowResult}
 import sangria.execution.deferred.{Fetcher, HasId}
 import sangria.schema._
-import services.ddl.FlywaySchemaHistoryRowService
 
 object FlywaySchemaHistoryRowSchema extends GraphQLSchemaHelper("flywaySchemaHistoryRow") {
   implicit val flywaySchemaHistoryRowPrimaryKeyId: HasId[FlywaySchemaHistoryRow, Long] = HasId[FlywaySchemaHistoryRow, Long](_.installedRank)
   private[this] def getByPrimaryKeySeq(c: GraphQLContext, idSeq: Seq[Long]) = {
-    c.injector.getInstance(classOf[FlywaySchemaHistoryRowService]).getByPrimaryKeySeq(c.creds, idSeq)(c.trace)
+    c.injector.getInstance(classOf[services.ddl.FlywaySchemaHistoryRowService]).getByPrimaryKeySeq(c.creds, idSeq)(c.trace)
   }
   val flywaySchemaHistoryRowByPrimaryKeyFetcher = Fetcher(getByPrimaryKeySeq)
 
@@ -36,43 +35,43 @@ object FlywaySchemaHistoryRowSchema extends GraphQLSchemaHelper("flywaySchemaHis
 
   val queryFields = fields(
     unitField(name = "flywaySchemaHistoryRow", desc = None, t = OptionType(flywaySchemaHistoryRowType), f = (c, td) => {
-      c.ctx.injector.getInstance(classOf[FlywaySchemaHistoryRowService]).getByPrimaryKey(c.ctx.creds, c.arg(flywaySchemaHistoryRowInstalledRankArg))(td)
+      c.ctx.injector.getInstance(classOf[services.ddl.FlywaySchemaHistoryRowService]).getByPrimaryKey(c.ctx.creds, c.arg(flywaySchemaHistoryRowInstalledRankArg))(td)
     }, flywaySchemaHistoryRowInstalledRankArg),
     unitField(name = "flywaySchemaHistoryRowSeq", desc = None, t = ListType(flywaySchemaHistoryRowType), f = (c, td) => {
-      c.ctx.injector.getInstance(classOf[FlywaySchemaHistoryRowService]).getByPrimaryKeySeq(c.ctx.creds, c.arg(flywaySchemaHistoryRowInstalledRankSeqArg))(td)
+      c.ctx.injector.getInstance(classOf[services.ddl.FlywaySchemaHistoryRowService]).getByPrimaryKeySeq(c.ctx.creds, c.arg(flywaySchemaHistoryRowInstalledRankSeqArg))(td)
     }, flywaySchemaHistoryRowInstalledRankSeqArg),
     unitField(name = "flywaySchemaHistoryRowSearch", desc = None, t = flywaySchemaHistoryRowResultType, f = (c, td) => {
-      runSearch(c.ctx.injector.getInstance(classOf[FlywaySchemaHistoryRowService]), c, td).map(toResult)
+      runSearch(c.ctx.injector.getInstance(classOf[services.ddl.FlywaySchemaHistoryRowService]), c, td).map(toResult)
     }, queryArg, reportFiltersArg, orderBysArg, limitArg, offsetArg),
     unitField(name = "flywaySchemaHistoriesByVersion", desc = None, t = ListType(flywaySchemaHistoryRowType), f = (c, td) => {
-      c.ctx.injector.getInstance(classOf[FlywaySchemaHistoryRowService]).getByVersion(c.ctx.creds, c.arg(flywaySchemaHistoryRowVersionArg))(td)
+      c.ctx.injector.getInstance(classOf[services.ddl.FlywaySchemaHistoryRowService]).getByVersion(c.ctx.creds, c.arg(flywaySchemaHistoryRowVersionArg))(td)
     }, flywaySchemaHistoryRowVersionArg),
     unitField(name = "flywaySchemaHistoriesByVersionSeq", desc = None, t = ListType(flywaySchemaHistoryRowType), f = (c, td) => {
-      c.ctx.injector.getInstance(classOf[FlywaySchemaHistoryRowService]).getByVersionSeq(c.ctx.creds, c.arg(flywaySchemaHistoryRowVersionSeqArg))(td)
+      c.ctx.injector.getInstance(classOf[services.ddl.FlywaySchemaHistoryRowService]).getByVersionSeq(c.ctx.creds, c.arg(flywaySchemaHistoryRowVersionSeqArg))(td)
     }, flywaySchemaHistoryRowVersionSeqArg),
     unitField(name = "flywaySchemaHistoriesByDescription", desc = None, t = ListType(flywaySchemaHistoryRowType), f = (c, td) => {
-      c.ctx.injector.getInstance(classOf[FlywaySchemaHistoryRowService]).getByDescription(c.ctx.creds, c.arg(flywaySchemaHistoryRowDescriptionArg))(td)
+      c.ctx.injector.getInstance(classOf[services.ddl.FlywaySchemaHistoryRowService]).getByDescription(c.ctx.creds, c.arg(flywaySchemaHistoryRowDescriptionArg))(td)
     }, flywaySchemaHistoryRowDescriptionArg),
     unitField(name = "flywaySchemaHistoriesByDescriptionSeq", desc = None, t = ListType(flywaySchemaHistoryRowType), f = (c, td) => {
-      c.ctx.injector.getInstance(classOf[FlywaySchemaHistoryRowService]).getByDescriptionSeq(c.ctx.creds, c.arg(flywaySchemaHistoryRowDescriptionSeqArg))(td)
+      c.ctx.injector.getInstance(classOf[services.ddl.FlywaySchemaHistoryRowService]).getByDescriptionSeq(c.ctx.creds, c.arg(flywaySchemaHistoryRowDescriptionSeqArg))(td)
     }, flywaySchemaHistoryRowDescriptionSeqArg),
     unitField(name = "flywaySchemaHistoriesByTyp", desc = None, t = ListType(flywaySchemaHistoryRowType), f = (c, td) => {
-      c.ctx.injector.getInstance(classOf[FlywaySchemaHistoryRowService]).getByTyp(c.ctx.creds, c.arg(flywaySchemaHistoryRowTypArg))(td)
+      c.ctx.injector.getInstance(classOf[services.ddl.FlywaySchemaHistoryRowService]).getByTyp(c.ctx.creds, c.arg(flywaySchemaHistoryRowTypArg))(td)
     }, flywaySchemaHistoryRowTypArg),
     unitField(name = "flywaySchemaHistoriesByTypSeq", desc = None, t = ListType(flywaySchemaHistoryRowType), f = (c, td) => {
-      c.ctx.injector.getInstance(classOf[FlywaySchemaHistoryRowService]).getByTypSeq(c.ctx.creds, c.arg(flywaySchemaHistoryRowTypSeqArg))(td)
+      c.ctx.injector.getInstance(classOf[services.ddl.FlywaySchemaHistoryRowService]).getByTypSeq(c.ctx.creds, c.arg(flywaySchemaHistoryRowTypSeqArg))(td)
     }, flywaySchemaHistoryRowTypSeqArg),
     unitField(name = "flywaySchemaHistoriesByInstalledOn", desc = None, t = ListType(flywaySchemaHistoryRowType), f = (c, td) => {
-      c.ctx.injector.getInstance(classOf[FlywaySchemaHistoryRowService]).getByInstalledOn(c.ctx.creds, c.arg(flywaySchemaHistoryRowInstalledOnArg))(td)
+      c.ctx.injector.getInstance(classOf[services.ddl.FlywaySchemaHistoryRowService]).getByInstalledOn(c.ctx.creds, c.arg(flywaySchemaHistoryRowInstalledOnArg))(td)
     }, flywaySchemaHistoryRowInstalledOnArg),
     unitField(name = "flywaySchemaHistoriesByInstalledOnSeq", desc = None, t = ListType(flywaySchemaHistoryRowType), f = (c, td) => {
-      c.ctx.injector.getInstance(classOf[FlywaySchemaHistoryRowService]).getByInstalledOnSeq(c.ctx.creds, c.arg(flywaySchemaHistoryRowInstalledOnSeqArg))(td)
+      c.ctx.injector.getInstance(classOf[services.ddl.FlywaySchemaHistoryRowService]).getByInstalledOnSeq(c.ctx.creds, c.arg(flywaySchemaHistoryRowInstalledOnSeqArg))(td)
     }, flywaySchemaHistoryRowInstalledOnSeqArg),
     unitField(name = "flywaySchemaHistoriesBySuccess", desc = None, t = ListType(flywaySchemaHistoryRowType), f = (c, td) => {
-      c.ctx.injector.getInstance(classOf[FlywaySchemaHistoryRowService]).getBySuccess(c.ctx.creds, c.arg(flywaySchemaHistoryRowSuccessArg))(td)
+      c.ctx.injector.getInstance(classOf[services.ddl.FlywaySchemaHistoryRowService]).getBySuccess(c.ctx.creds, c.arg(flywaySchemaHistoryRowSuccessArg))(td)
     }, flywaySchemaHistoryRowSuccessArg),
     unitField(name = "flywaySchemaHistoriesBySuccessSeq", desc = None, t = ListType(flywaySchemaHistoryRowType), f = (c, td) => {
-      c.ctx.injector.getInstance(classOf[FlywaySchemaHistoryRowService]).getBySuccessSeq(c.ctx.creds, c.arg(flywaySchemaHistoryRowSuccessSeqArg))(td)
+      c.ctx.injector.getInstance(classOf[services.ddl.FlywaySchemaHistoryRowService]).getBySuccessSeq(c.ctx.creds, c.arg(flywaySchemaHistoryRowSuccessSeqArg))(td)
     }, flywaySchemaHistoryRowSuccessSeqArg)
   )
 
@@ -80,13 +79,13 @@ object FlywaySchemaHistoryRowSchema extends GraphQLSchemaHelper("flywaySchemaHis
     name = "FlywaySchemaHistoryRowMutations",
     fields = fields(
       unitField(name = "create", desc = None, t = OptionType(flywaySchemaHistoryRowType), f = (c, td) => {
-        c.ctx.injector.getInstance(classOf[FlywaySchemaHistoryRowService]).create(c.ctx.creds, c.arg(dataFieldsArg))(td)
+        c.ctx.injector.getInstance(classOf[services.ddl.FlywaySchemaHistoryRowService]).create(c.ctx.creds, c.arg(dataFieldsArg))(td)
       }, dataFieldsArg),
       unitField(name = "update", desc = None, t = OptionType(flywaySchemaHistoryRowType), f = (c, td) => {
-        c.ctx.injector.getInstance(classOf[FlywaySchemaHistoryRowService]).update(c.ctx.creds, c.arg(flywaySchemaHistoryRowInstalledRankArg), c.arg(dataFieldsArg))(td).map(_._1)
+        c.ctx.injector.getInstance(classOf[services.ddl.FlywaySchemaHistoryRowService]).update(c.ctx.creds, c.arg(flywaySchemaHistoryRowInstalledRankArg), c.arg(dataFieldsArg))(td).map(_._1)
       }, flywaySchemaHistoryRowInstalledRankArg, dataFieldsArg),
       unitField(name = "remove", desc = None, t = flywaySchemaHistoryRowType, f = (c, td) => {
-        c.ctx.injector.getInstance(classOf[FlywaySchemaHistoryRowService]).remove(c.ctx.creds, c.arg(flywaySchemaHistoryRowInstalledRankArg))(td)
+        c.ctx.injector.getInstance(classOf[services.ddl.FlywaySchemaHistoryRowService]).remove(c.ctx.creds, c.arg(flywaySchemaHistoryRowInstalledRankArg))(td)
       }, flywaySchemaHistoryRowInstalledRankArg)
     )
   )

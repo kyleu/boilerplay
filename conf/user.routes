@@ -1,12 +1,12 @@
 # Generated File
 # System User Routes
-GET         /                                                         controllers.admin.user.SystemUserController.list(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None)
-GET         /autocomplete                                            controllers.admin.user.SystemUserController.autocomplete(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None)
-GET         /form                                                    controllers.admin.user.SystemUserController.createForm
-POST        /                                                         controllers.admin.user.SystemUserController.create
-GET         /:id                                                      controllers.admin.user.SystemUserController.view(id: java.util.UUID, t: Option[String] ?= None)
-GET         /:id/counts                                               controllers.admin.user.SystemUserController.relationCounts(id: java.util.UUID)
-GET         /:id/form                                                 controllers.admin.user.SystemUserController.editForm(id: java.util.UUID)
-POST        /:id                                                      controllers.admin.user.SystemUserController.edit(id: java.util.UUID)
-GET         /:id/remove                                               controllers.admin.user.SystemUserController.remove(id: java.util.UUID)
+GET         /                                                         controllers.admin.user.SystemUserRowController.list(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None)
+GET         /autocomplete                                            controllers.admin.user.SystemUserRowController.autocomplete(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None)
+GET         /form                                                    controllers.admin.user.SystemUserRowController.createForm
+POST        /                                                         controllers.admin.user.SystemUserRowController.create
+GET         /:id                                                      controllers.admin.user.SystemUserRowController.view(id: java.util.UUID, t: Option[String] ?= None)
+GET         /:id/counts                                               controllers.admin.user.SystemUserRowController.relationCounts(id: java.util.UUID)
+GET         /:id/form                                                 controllers.admin.user.SystemUserRowController.editForm(id: java.util.UUID)
+POST        /:id                                                      controllers.admin.user.SystemUserRowController.edit(id: java.util.UUID)
+GET         /:id/remove                                               controllers.admin.user.SystemUserRowController.remove(id: java.util.UUID)
 

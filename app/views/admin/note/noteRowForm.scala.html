@@ -1,5 +1,5 @@
 @* Generated File *@
-@(user: models.user.SystemUser, model: models.note.NoteRow, title: String, cancel: Call, act: Call, isNew: Boolean = false, debug: Boolean = false)(
+@(user: com.kyleu.projectile.models.user.SystemUser, model: models.note.NoteRow, title: String, cancel: Call, act: Call, isNew: Boolean = false, debug: Boolean = false)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: com.kyleu.projectile.util.tracing.TraceData
 )@views.html.admin.layout.page(user, "explore", title) {
   <form id="form-edit-noteRow" action="@act" method="post">
@@ -18,7 +18,7 @@
             @views.html.components.form.textField(selected = isNew, key = "text", title = "Text", value = Some(model.text.toString), nullable = false)
             @views.html.components.form.autocompleteField(
               selected = isNew, key = "author", title = "Author", value = Some(model.author.toString), nullable = false, dataType = "uuid",
-              call = controllers.admin.user.routes.SystemUserController.autocomplete(), acType = ("systemUser", "System User"), icon = models.template.Icons.systemUser
+              call = controllers.admin.user.routes.SystemUserRowController.autocomplete(), acType = ("systemUserRow", "System User"), icon = models.template.Icons.systemUserRow
             )
             @views.html.components.form.localDateTimeField(selected = isNew, key = "created", title = "Created", value = Some(model.created), nullable = false)
           </tbody>

@@ -47,6 +47,6 @@ object Icons {
   val scheduledTaskRunRow = "fa-folder-o"
   val setting = "fa-gamepad"
   val syncProgressRow = "fa-meh-o"
-  val systemUser = "fa-envelope-o"
+  val systemUserRow = "fa-bell-o"
   /* End model icons */
 }

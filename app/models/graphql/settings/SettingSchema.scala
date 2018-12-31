@@ -8,12 +8,11 @@ import models.graphql.settings.SettingKeyTypeSchema.settingKeyTypeEnumType
 import models.settings.{Setting, SettingKeyType, SettingResult}
 import sangria.execution.deferred.{Fetcher, HasId}
 import sangria.schema._
-import services.settings.SettingService
 
 object SettingSchema extends GraphQLSchemaHelper("setting") {
   implicit val settingPrimaryKeyId: HasId[Setting, SettingKeyType] = HasId[Setting, SettingKeyType](_.k)
   private[this] def getByPrimaryKeySeq(c: GraphQLContext, idSeq: Seq[SettingKeyType]) = {
-    c.injector.getInstance(classOf[SettingService]).getByPrimaryKeySeq(c.creds, idSeq)(c.trace)
+    c.injector.getInstance(classOf[services.settings.SettingService]).getByPrimaryKeySeq(c.creds, idSeq)(c.trace)
   }
   val settingByPrimaryKeyFetcher = Fetcher(getByPrimaryKeySeq)
 
@@ -26,13 +25,13 @@ object SettingSchema extends GraphQLSchemaHelper("setting") {
 
   val queryFields = fields(
     unitField(name = "setting", desc = None, t = OptionType(settingType), f = (c, td) => {
-      c.ctx.injector.getInstance(classOf[SettingService]).getByPrimaryKey(c.ctx.creds, c.arg(settingKArg))(td)
+      c.ctx.injector.getInstance(classOf[services.settings.SettingService]).getByPrimaryKey(c.ctx.creds, c.arg(settingKArg))(td)
     }, settingKArg),
     unitField(name = "settingSeq", desc = None, t = ListType(settingType), f = (c, td) => {
-      c.ctx.injector.getInstance(classOf[SettingService]).getByPrimaryKeySeq(c.ctx.creds, c.arg(settingKSeqArg))(td)
+      c.ctx.injector.getInstance(classOf[services.settings.SettingService]).getByPrimaryKeySeq(c.ctx.creds, c.arg(settingKSeqArg))(td)
     }, settingKSeqArg),
     unitField(name = "settingSearch", desc = None, t = settingResultType, f = (c, td) => {
-      runSearch(c.ctx.injector.getInstance(classOf[SettingService]), c, td).map(toResult)
+      runSearch(c.ctx.injector.getInstance(classOf[services.settings.SettingService]), c, td).map(toResult)
     }, queryArg, reportFiltersArg, orderBysArg, limitArg, offsetArg)
   )
 
@@ -40,13 +39,13 @@ object SettingSchema extends GraphQLSchemaHelper("setting") {
     name = "SettingMutations",
     fields = fields(
       unitField(name = "create", desc = None, t = OptionType(settingType), f = (c, td) => {
-        c.ctx.injector.getInstance(classOf[SettingService]).create(c.ctx.creds, c.arg(dataFieldsArg))(td)
+        c.ctx.injector.getInstance(classOf[services.settings.SettingService]).create(c.ctx.creds, c.arg(dataFieldsArg))(td)
       }, dataFieldsArg),
       unitField(name = "update", desc = None, t = OptionType(settingType), f = (c, td) => {
-        c.ctx.injector.getInstance(classOf[SettingService]).update(c.ctx.creds, c.arg(settingKArg), c.arg(dataFieldsArg))(td).map(_._1)
+        c.ctx.injector.getInstance(classOf[services.settings.SettingService]).update(c.ctx.creds, c.arg(settingKArg), c.arg(dataFieldsArg))(td).map(_._1)
       }, settingKArg, dataFieldsArg),
       unitField(name = "remove", desc = None, t = settingType, f = (c, td) => {
-        c.ctx.injector.getInstance(classOf[SettingService]).remove(c.ctx.creds, c.arg(settingKArg))(td)
+        c.ctx.injector.getInstance(classOf[services.settings.SettingService]).remove(c.ctx.creds, c.arg(settingKArg))(td)
       }, settingKArg)
     )
   )

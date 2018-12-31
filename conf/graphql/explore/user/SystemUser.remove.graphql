@@ -7,7 +7,6 @@ mutation SystemUserRemove {
       username
       provider
       key
-      prefs
       role
       created
     }

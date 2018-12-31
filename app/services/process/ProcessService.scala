@@ -2,9 +2,9 @@ package services.process
 
 import java.util.UUID
 
+import com.kyleu.projectile.models.user.Role
 import models.auth.UserCredentials
 import models.process.CachedProc
-import models.user.Role
 import com.kyleu.projectile.util.{DateUtils, Logging}
 
 object ProcessService extends Logging {

@@ -7,5 +7,5 @@ include "models/note/NoteRow.thrift"
 include "models/settings/Setting.thrift"
 include "models/sync/SyncProgressRow.thrift"
 include "models/task/ScheduledTaskRunRow.thrift"
-include "models/user/SystemUser.thrift"
+include "models/user/SystemUserRow.thrift"
 /* End generated Thrift model includes */

@@ -9,26 +9,26 @@ import com.kyleu.projectile.util.DateUtils
 import com.kyleu.projectile.util.JsonSerializers._
 import java.time.LocalDateTime
 
-final case class SystemUserResult(
+final case class SystemUserRowResult(
     override val filters: Seq[Filter] = Nil,
     override val orderBys: Seq[OrderBy] = Nil,
     override val totalCount: Int = 0,
     override val paging: PagingOptions = PagingOptions(),
-    override val results: Seq[SystemUser] = Nil,
+    override val results: Seq[SystemUserRow] = Nil,
     override val durationMs: Int = 0,
     override val occurred: LocalDateTime = DateUtils.now
-) extends BaseResult[SystemUser]
+) extends BaseResult[SystemUserRow]
 
-object SystemUserResult {
-  implicit val jsonEncoder: Encoder[SystemUserResult] = deriveEncoder
-  implicit val jsonDecoder: Decoder[SystemUserResult] = deriveDecoder
+object SystemUserRowResult {
+  implicit val jsonEncoder: Encoder[SystemUserRowResult] = deriveEncoder
+  implicit val jsonDecoder: Decoder[SystemUserRowResult] = deriveDecoder
 
   def fromRecords(
     q: Option[String], filters: Seq[Filter] = Nil, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None,
-    startMs: Long, totalCount: Int, results: Seq[SystemUser]
+    startMs: Long, totalCount: Int, results: Seq[SystemUserRow]
   ) = {
     val paging = PagingOptions.from(totalCount, limit, offset)
     val durationMs = (DateUtils.nowMillis - startMs).toInt
-    SystemUserResult(paging = paging, filters = filters, orderBys = orderBys, totalCount = totalCount, results = results, durationMs = durationMs)
+    SystemUserRowResult(paging = paging, filters = filters, orderBys = orderBys, totalCount = totalCount, results = results, durationMs = durationMs)
   }
 }

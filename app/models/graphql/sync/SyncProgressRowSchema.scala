@@ -7,12 +7,11 @@ import com.kyleu.projectile.models.graphql.note.NoteSchema
 import models.sync.{SyncProgressRow, SyncProgressRowResult}
 import sangria.execution.deferred.{Fetcher, HasId}
 import sangria.schema._
-import services.sync.SyncProgressRowService
 
 object SyncProgressRowSchema extends GraphQLSchemaHelper("syncProgressRow") {
   implicit val syncProgressRowPrimaryKeyId: HasId[SyncProgressRow, String] = HasId[SyncProgressRow, String](_.key)
   private[this] def getByPrimaryKeySeq(c: GraphQLContext, idSeq: Seq[String]) = {
-    c.injector.getInstance(classOf[SyncProgressRowService]).getByPrimaryKeySeq(c.creds, idSeq)(c.trace)
+    c.injector.getInstance(classOf[services.sync.SyncProgressRowService]).getByPrimaryKeySeq(c.creds, idSeq)(c.trace)
   }
   val syncProgressRowByPrimaryKeyFetcher = Fetcher(getByPrimaryKeySeq)
 
@@ -32,31 +31,31 @@ object SyncProgressRowSchema extends GraphQLSchemaHelper("syncProgressRow") {
 
   val queryFields = fields(
     unitField(name = "syncProgressRow", desc = None, t = OptionType(syncProgressRowType), f = (c, td) => {
-      c.ctx.injector.getInstance(classOf[SyncProgressRowService]).getByPrimaryKey(c.ctx.creds, c.arg(syncProgressRowKeyArg))(td)
+      c.ctx.injector.getInstance(classOf[services.sync.SyncProgressRowService]).getByPrimaryKey(c.ctx.creds, c.arg(syncProgressRowKeyArg))(td)
     }, syncProgressRowKeyArg),
     unitField(name = "syncProgressRowSeq", desc = None, t = ListType(syncProgressRowType), f = (c, td) => {
-      c.ctx.injector.getInstance(classOf[SyncProgressRowService]).getByPrimaryKeySeq(c.ctx.creds, c.arg(syncProgressRowKeySeqArg))(td)
+      c.ctx.injector.getInstance(classOf[services.sync.SyncProgressRowService]).getByPrimaryKeySeq(c.ctx.creds, c.arg(syncProgressRowKeySeqArg))(td)
     }, syncProgressRowKeySeqArg),
     unitField(name = "syncProgressRowSearch", desc = None, t = syncProgressRowResultType, f = (c, td) => {
-      runSearch(c.ctx.injector.getInstance(classOf[SyncProgressRowService]), c, td).map(toResult)
+      runSearch(c.ctx.injector.getInstance(classOf[services.sync.SyncProgressRowService]), c, td).map(toResult)
     }, queryArg, reportFiltersArg, orderBysArg, limitArg, offsetArg),
     unitField(name = "syncProgressesByStatus", desc = None, t = ListType(syncProgressRowType), f = (c, td) => {
-      c.ctx.injector.getInstance(classOf[SyncProgressRowService]).getByStatus(c.ctx.creds, c.arg(syncProgressRowStatusArg))(td)
+      c.ctx.injector.getInstance(classOf[services.sync.SyncProgressRowService]).getByStatus(c.ctx.creds, c.arg(syncProgressRowStatusArg))(td)
     }, syncProgressRowStatusArg),
     unitField(name = "syncProgressesByStatusSeq", desc = None, t = ListType(syncProgressRowType), f = (c, td) => {
-      c.ctx.injector.getInstance(classOf[SyncProgressRowService]).getByStatusSeq(c.ctx.creds, c.arg(syncProgressRowStatusSeqArg))(td)
+      c.ctx.injector.getInstance(classOf[services.sync.SyncProgressRowService]).getByStatusSeq(c.ctx.creds, c.arg(syncProgressRowStatusSeqArg))(td)
     }, syncProgressRowStatusSeqArg),
     unitField(name = "syncProgressesByMessage", desc = None, t = ListType(syncProgressRowType), f = (c, td) => {
-      c.ctx.injector.getInstance(classOf[SyncProgressRowService]).getByMessage(c.ctx.creds, c.arg(syncProgressRowMessageArg))(td)
+      c.ctx.injector.getInstance(classOf[services.sync.SyncProgressRowService]).getByMessage(c.ctx.creds, c.arg(syncProgressRowMessageArg))(td)
     }, syncProgressRowMessageArg),
     unitField(name = "syncProgressesByMessageSeq", desc = None, t = ListType(syncProgressRowType), f = (c, td) => {
-      c.ctx.injector.getInstance(classOf[SyncProgressRowService]).getByMessageSeq(c.ctx.creds, c.arg(syncProgressRowMessageSeqArg))(td)
+      c.ctx.injector.getInstance(classOf[services.sync.SyncProgressRowService]).getByMessageSeq(c.ctx.creds, c.arg(syncProgressRowMessageSeqArg))(td)
     }, syncProgressRowMessageSeqArg),
     unitField(name = "syncProgressesByLastTime", desc = None, t = ListType(syncProgressRowType), f = (c, td) => {
-      c.ctx.injector.getInstance(classOf[SyncProgressRowService]).getByLastTime(c.ctx.creds, c.arg(syncProgressRowLastTimeArg))(td)
+      c.ctx.injector.getInstance(classOf[services.sync.SyncProgressRowService]).getByLastTime(c.ctx.creds, c.arg(syncProgressRowLastTimeArg))(td)
     }, syncProgressRowLastTimeArg),
     unitField(name = "syncProgressesByLastTimeSeq", desc = None, t = ListType(syncProgressRowType), f = (c, td) => {
-      c.ctx.injector.getInstance(classOf[SyncProgressRowService]).getByLastTimeSeq(c.ctx.creds, c.arg(syncProgressRowLastTimeSeqArg))(td)
+      c.ctx.injector.getInstance(classOf[services.sync.SyncProgressRowService]).getByLastTimeSeq(c.ctx.creds, c.arg(syncProgressRowLastTimeSeqArg))(td)
     }, syncProgressRowLastTimeSeqArg)
   )
 
@@ -64,13 +63,13 @@ object SyncProgressRowSchema extends GraphQLSchemaHelper("syncProgressRow") {
     name = "SyncProgressRowMutations",
     fields = fields(
       unitField(name = "create", desc = None, t = OptionType(syncProgressRowType), f = (c, td) => {
-        c.ctx.injector.getInstance(classOf[SyncProgressRowService]).create(c.ctx.creds, c.arg(dataFieldsArg))(td)
+        c.ctx.injector.getInstance(classOf[services.sync.SyncProgressRowService]).create(c.ctx.creds, c.arg(dataFieldsArg))(td)
       }, dataFieldsArg),
       unitField(name = "update", desc = None, t = OptionType(syncProgressRowType), f = (c, td) => {
-        c.ctx.injector.getInstance(classOf[SyncProgressRowService]).update(c.ctx.creds, c.arg(syncProgressRowKeyArg), c.arg(dataFieldsArg))(td).map(_._1)
+        c.ctx.injector.getInstance(classOf[services.sync.SyncProgressRowService]).update(c.ctx.creds, c.arg(syncProgressRowKeyArg), c.arg(dataFieldsArg))(td).map(_._1)
       }, syncProgressRowKeyArg, dataFieldsArg),
       unitField(name = "remove", desc = None, t = syncProgressRowType, f = (c, td) => {
-        c.ctx.injector.getInstance(classOf[SyncProgressRowService]).remove(c.ctx.creds, c.arg(syncProgressRowKeyArg))(td)
+        c.ctx.injector.getInstance(classOf[services.sync.SyncProgressRowService]).remove(c.ctx.creds, c.arg(syncProgressRowKeyArg))(td)
       }, syncProgressRowKeyArg)
     )
   )

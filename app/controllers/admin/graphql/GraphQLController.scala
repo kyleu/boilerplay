@@ -1,12 +1,13 @@
 package controllers.admin.graphql
 
+import com.kyleu.projectile.models.user.Role
 import controllers.BaseController
 import graphql.GraphQLService
 import io.circe.Json
 import models.Application
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import models.auth.UserCredentials
-import models.user.Role
 import sangria.execution.{ErrorWithResolver, QueryAnalysisError}
 import sangria.marshalling.circe._
 import sangria.parser.SyntaxError

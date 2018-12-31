@@ -2,9 +2,9 @@ package services.cache
 
 import java.util.UUID
 
+import com.kyleu.projectile.models.user.SystemUser
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticator
-import models.user.SystemUser
 
 object UserCache {
   def getUser(id: UUID) = {
