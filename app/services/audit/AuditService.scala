@@ -6,7 +6,7 @@ import models.Configuration
 import models.audit._
 import play.api.inject.Injector
 import com.kyleu.projectile.util.tracing.OpenTracingService
-import com.kyleu.projectile.util.web.TracingWSClient
+import com.kyleu.projectile.web.util.TracingWSClient
 
 @javax.inject.Singleton
 class AuditService @javax.inject.Inject() (

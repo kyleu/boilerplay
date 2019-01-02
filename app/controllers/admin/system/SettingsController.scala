@@ -4,7 +4,7 @@ import controllers.BaseController
 import models.Application
 import scala.concurrent.ExecutionContext.Implicits.global
 import models.settings.SettingKeyType
-import com.kyleu.projectile.util.web.ControllerUtils
+import com.kyleu.projectile.web.util.ControllerUtils
 
 import scala.concurrent.Future
 

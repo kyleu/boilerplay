@@ -47,7 +47,7 @@ object Server {
 
     // Play
     RoutesKeys.routesGenerator := InjectedRoutesGenerator,
-    RoutesKeys.routesImport ++= Seq("com.kyleu.projectile.util.web.QueryStringUtils._", "util.web.ModelBindables._"),
+    RoutesKeys.routesImport ++= Seq("com.kyleu.projectile.web.util.QueryStringUtils._", "util.web.ModelBindables._"),
     PlayKeys.externalizeResources := false,
     PlayKeys.devSettings := Seq("play.server.akka.requestTimeout" -> "infinite"),
     PlayKeys.playDefaultPort := Shared.projectPort,

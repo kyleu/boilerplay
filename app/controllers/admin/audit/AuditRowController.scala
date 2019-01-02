@@ -5,7 +5,7 @@ import com.kyleu.projectile.models.result.RelationCount
 import com.kyleu.projectile.models.result.orderBy.OrderBy
 import com.kyleu.projectile.util.DateUtils
 import com.kyleu.projectile.util.JsonSerializers._
-import com.kyleu.projectile.util.ReftreeUtils._
+import com.kyleu.projectile.web.util.ReftreeUtils._
 import controllers.admin.ServiceController
 import java.util.UUID
 import models.Application

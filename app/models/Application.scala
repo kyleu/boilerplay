@@ -19,7 +19,7 @@ import services.note.ModelNoteService
 import services.settings.SettingsService
 import util.Config
 import com.kyleu.projectile.util.metrics.Instrumented
-import com.kyleu.projectile.util.web.TracingWSClient
+import com.kyleu.projectile.web.util.TracingWSClient
 
 import scala.concurrent.{Await, Future}
 

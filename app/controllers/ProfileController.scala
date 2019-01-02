@@ -9,7 +9,7 @@ import models.Application
 import scala.concurrent.ExecutionContext.Implicits.global
 import models.user.{UserForms, UserProfile}
 import com.kyleu.projectile.util.JsonSerializers._
-import com.kyleu.projectile.util.web.ControllerUtils
+import com.kyleu.projectile.web.util.ControllerUtils
 import services.user.SystemUserService
 
 import scala.concurrent.Future

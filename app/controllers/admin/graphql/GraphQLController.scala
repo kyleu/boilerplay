@@ -13,7 +13,7 @@ import sangria.marshalling.circe._
 import sangria.parser.SyntaxError
 import util.EncryptionUtils
 import com.kyleu.projectile.util.tracing.TraceData
-import com.kyleu.projectile.util.web.ControllerUtils.{jsonBody, jsonObject}
+import com.kyleu.projectile.web.util.ControllerUtils.{jsonBody, jsonObject}
 
 import scala.concurrent.Future
 

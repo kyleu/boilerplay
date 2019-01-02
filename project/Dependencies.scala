@@ -10,7 +10,7 @@ object Dependencies {
   }
 
   object Projectile {
-    val version = "0.7.1"
+    val version = "0.8.0-SNAPSHOT"
     val all = Seq("doobie", "slick", "auth").map(s => "com.kyleu" %% s"projectile-lib-$s" % version)
   }
 

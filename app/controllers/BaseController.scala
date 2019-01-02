@@ -11,7 +11,7 @@ import play.api.mvc._
 import com.kyleu.projectile.util.Logging
 import com.kyleu.projectile.util.metrics.Instrumented
 import com.kyleu.projectile.util.tracing.TraceData
-import com.kyleu.projectile.util.web.{ControllerUtils, TracingFilter}
+import com.kyleu.projectile.web.util.{ControllerUtils, TracingFilter}
 
 import scala.language.implicitConversions
 import scala.concurrent.{ExecutionContext, Future}

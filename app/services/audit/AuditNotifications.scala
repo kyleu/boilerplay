@@ -6,7 +6,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import models.queries.audit.{AuditQueries, AuditRecordRowQueries}
 import com.kyleu.projectile.util.Logging
 import com.kyleu.projectile.util.tracing.TraceData
-import com.kyleu.projectile.util.web.TracingWSClient
+import com.kyleu.projectile.web.util.TracingWSClient
 
 import scala.concurrent.{ExecutionContext, Future}
 
