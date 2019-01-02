@@ -10,7 +10,7 @@ object Shared {
 
   object Versions {
     val app = "1.0.0"
-    val scala = "2.12.7"
+    val scala = "2.12.8"
   }
 
   private[this] val profilingEnabled = false

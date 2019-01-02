@@ -4,6 +4,7 @@ import models.settings.SettingKeyType
 import play.api.mvc.Call
 import services.audit.AuditArgs._
 import com.kyleu.projectile.util.Logging
+import com.kyleu.projectile.util.tracing.TraceData
 
 object AuditRoutes extends Logging {
   def getViewRoute(key: String, id: IndexedSeq[String]) = routeFor(key, getArg(id, _))
@@ -22,7 +23,7 @@ object AuditRoutes extends Logging {
     /* End audit calls */
 
     case _ =>
-      log.warn(s"Invalid model key [$key].")
+      log.warn(s"Invalid model key [$key].")(TraceData.noop)
       controllers.admin.system.routes.AdminController.explore()
   }
 }

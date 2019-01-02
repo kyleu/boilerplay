@@ -14,7 +14,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import com.kyleu.projectile.models.auth.UserCredentials
 import models.settings.SettingKeyType
 import models.user._
-import services.user.SystemUserSearchService
+import services.user.{SystemUserSearchService, SystemUserService}
 
 import scala.concurrent.Future
 
@@ -23,7 +23,8 @@ class RegistrationController @javax.inject.Inject() (
     override val app: Application,
     userSearchService: SystemUserSearchService,
     authInfoRepository: AuthInfoRepository,
-    hasher: PasswordHasher
+    hasher: PasswordHasher,
+    userService: SystemUserService
 ) extends BaseController("registration") {
   def registrationForm(email: Option[String] = None) = withoutSession("form") { implicit request => implicit td =>
     if (app.coreServices.settings.allowRegistration) {
@@ -62,7 +63,7 @@ class RegistrationController @javax.inject.Inject() (
               role = role
             )
             val creds = UserCredentials(user, request.remoteAddress)
-            app.coreServices.users.insert(creds, user).flatMap { userSaved =>
+            userService.insert(creds, user).flatMap { userSaved =>
               val result = request.session.get("returnUrl") match {
                 case Some(url) => Redirect(url).withSession(request.session - "returnUrl")
                 case None => Redirect(controllers.routes.HomeController.home())

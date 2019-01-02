@@ -5,8 +5,9 @@ import java.util.TimeZone
 import akka.actor.ActorSystem
 import com.kyleu.projectile.services.database._
 import com.kyleu.projectile.util.Logging
-import com.kyleu.projectile.util.tracing.TracingService
+import com.kyleu.projectile.util.tracing.{TraceData, TracingService}
 import com.mohiva.play.silhouette.api.Silhouette
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import com.kyleu.projectile.models.auth.AuthEnv
 import play.api.Environment
@@ -16,7 +17,6 @@ import services.cache.CacheService
 import services.file.FileService
 import services.note.ModelNoteService
 import services.settings.SettingsService
-import services.user.SystemUserService
 import util.Config
 import com.kyleu.projectile.util.metrics.Instrumented
 import com.kyleu.projectile.util.web.TracingWSClient
@@ -28,9 +28,7 @@ object Application {
 
   @javax.inject.Singleton
   class CoreServices @javax.inject.Inject() (
-      val users: SystemUserService,
       val settings: SettingsService,
-      val audits: AuditService,
       val notes: ModelNoteService
   )
 }
@@ -47,7 +45,7 @@ class Application @javax.inject.Inject() (
     val tracing: TracingService
 ) extends Logging {
   if (Application.initialized) {
-    log.info("Skipping initialization after failure.")
+    log.info("Skipping initialization after failure.")(TraceData.noop)
   } else {
     import scala.concurrent.duration._
     Await.result(start(), 20.seconds)
@@ -61,7 +59,7 @@ class Application @javax.inject.Inject() (
     System.setProperty("user.timezone", "UTC")
     util.EncryptionUtils.setKey(config.secretKey)
 
-    if (config.metrics.micrometerEnabled) { Instrumented.start() }
+    if (config.metrics.micrometerEnabled) { Instrumented.start(config.metrics.micrometerEngine, Config.projectName, config.metrics.micrometerHost) }
 
     lifecycle.addStopHook(() => Future.successful(stop()))
 

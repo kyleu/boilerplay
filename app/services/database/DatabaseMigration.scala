@@ -16,7 +16,7 @@ trait DatabaseMigration extends Logging { this: JdbcDatabase =>
 
     val flyway = if (!flywayExists) {
       val f = Flyway.configure().dataSource(ApplicationDatabase.source).baselineVersion("0").load()
-      log.info("Initializing Flyway database migrations")
+      log.info("Initializing Flyway database migrations")(TraceData.noop)
       f.baseline()
       f
     } else {
@@ -24,7 +24,7 @@ trait DatabaseMigration extends Logging { this: JdbcDatabase =>
     }
     val numApplied = flyway.migrate()
     if (numApplied > 0) {
-      log.info(s"Applied [$numApplied] new database migrations")
+      log.info(s"Applied [$numApplied] new database migrations")(TraceData.noop)
     }
   }
 }

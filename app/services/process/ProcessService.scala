@@ -4,6 +4,7 @@ import java.util.UUID
 
 import com.kyleu.projectile.models.user.Role
 import com.kyleu.projectile.models.auth.UserCredentials
+import com.kyleu.projectile.util.tracing.TraceData
 import models.process.CachedProc
 import com.kyleu.projectile.util.{DateUtils, Logging}
 
@@ -38,8 +39,8 @@ object ProcessService extends Logging {
     start(
       creds = UserCredentials.system,
       cmd = cmd,
-      onOutput = o => log.info(o.toString),
-      onComplete = (e, d) => log.info(s"[res] ${DateUtils.now} - Completed in [${d}ms] with exit code [$e].")
+      onOutput = o => log.info(o.toString)(TraceData.noop),
+      onComplete = (e, d) => log.info(s"[res] ${DateUtils.now} - Completed in [${d}ms] with exit code [$e].")(TraceData.noop)
     )
   }
 }

@@ -11,6 +11,8 @@
   <logger name="play" level="INFO" />
   <logger name="application" level="INFO" />
   <logger name="boilerplay" level="INFO" />
+  <logger name="models" level="INFO" />
+  <logger name="services" level="INFO" />
 
   <logger name="com.mohiva" level="INFO" />
 

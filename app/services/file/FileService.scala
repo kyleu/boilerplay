@@ -1,6 +1,7 @@
 package services.file
 
 import better.files.File
+import com.kyleu.projectile.util.tracing.TraceData
 import com.kyleu.projectile.util.{JsonSerializers, Logging}
 
 object FileService extends Logging {
@@ -10,8 +11,8 @@ object FileService extends Logging {
     dataDir = Some(d)
 
     if ((!d.exists) || (!d.isDirectory)) {
-      log.warn(s"Cannot load data directory [${d.pathAsString}].")
-      log.warn("To set an alternate file cache directory, set [data.directory] in your configuration.")
+      log.warn(s"Cannot load data directory [${d.pathAsString}].")(TraceData.noop)
+      log.warn("To set an alternate file cache directory, set [data.directory] in your configuration.")(TraceData.noop)
     }
   }
 

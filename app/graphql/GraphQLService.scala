@@ -2,8 +2,8 @@ package graphql
 
 import com.google.inject.Injector
 import com.kyleu.projectile.graphql.GraphQLContext
-import com.kyleu.projectile.models.note.Note
 import io.circe.Json
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import com.kyleu.projectile.models.auth.UserCredentials
 import sangria.execution.{ExceptionHandler, Executor, HandledException, QueryReducer}
@@ -12,15 +12,15 @@ import sangria.parser.QueryParser
 import sangria.validation.QueryValidator
 import com.kyleu.projectile.util.{JsonSerializers, Logging}
 import com.kyleu.projectile.util.tracing.{TraceData, TracingService}
+import services.note.ModelNoteService
 
-import scala.concurrent.Future
 import scala.util.{Failure, Success}
 
 @javax.inject.Singleton
-class GraphQLService @javax.inject.Inject() (tracing: TracingService, injector: Injector) extends Logging {
+class GraphQLService @javax.inject.Inject() (tracing: TracingService, noteService: ModelNoteService, injector: Injector) extends Logging {
   protected val exceptionHandler = ExceptionHandler {
     case (_, e: IllegalStateException) =>
-      log.warn("Error encountered while running GraphQL query.", e)
+      log.warn("Error encountered while running GraphQL query.", e)(TraceData.noop)
       HandledException(message = e.getMessage, additionalFields = Map.empty)
   }
 
@@ -43,7 +43,7 @@ class GraphQLService @javax.inject.Inject() (tracing: TracingService, injector: 
           val ret = Executor.execute(
             schema = Schema.schema,
             queryAst = ast,
-            userContext = GraphQLContext(creds, tracing, td, injector, (_, _, _) => y => Future.successful(Seq.empty[Note])),
+            userContext = GraphQLContext(creds, tracing, td, injector, (creds, t, pk) => implicit td => noteService.getFor(creds, t, pk)(td)),
             operationName = operation,
             variables = variables.getOrElse(Json.obj()),
             deferredResolver = Schema.resolver,

@@ -1,5 +1,5 @@
 @* Generated File *@
-@(user: com.kyleu.projectile.models.user.SystemUser, model: models.ddl.FlywaySchemaHistoryRow, notes: Seq[models.note.NoteRow], debug: Boolean)(
+@(user: com.kyleu.projectile.models.user.SystemUser, model: models.ddl.FlywaySchemaHistoryRow, notes: Seq[com.kyleu.projectile.models.note.Note], debug: Boolean)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: com.kyleu.projectile.util.tracing.TraceData
 )@views.html.admin.layout.page(user, "explore", s"Flyway Schema History [${model.installedRank}]") {
   <div class="collection with-header">

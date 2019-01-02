@@ -25,16 +25,10 @@ import sbtassembly.AssemblyPlugin.autoImport._
 object Server {
   private[this] val dependencies = {
     import Dependencies._
-    Seq(
-      Tracing.jaeger, Tracing.jaegerMetrics, Metrics.micrometer,
-      Akka.actor, Akka.logging, Akka.protobuf, Akka.stream,
-      Play.filters, Play.guice, Play.ws, Play.json, Play.cache
-    ) ++ Serialization.circeProjects.map(c => "io.circe" %% c % Serialization.circeVersion) ++ Database.all ++ Projectile.all ++ Seq(
-      GraphQL.sangria, GraphQL.playJson, GraphQL.circe,
-      Authentication.silhouette, Authentication.hasher, Authentication.persistence, Authentication.crypto,
+    Projectile.all ++ Seq(
+      Play.filters, Play.guice, Play.ws, Play.json, Play.cache,
       WebJars.jquery, WebJars.fontAwesome, WebJars.materialize, WebJars.swaggerUi,
-      Utils.csv, Utils.scalaGuice, Utils.commonsIo, Utils.commonsLang, Utils.betterFiles, Utils.reftree,
-      Akka.testkit, Play.test, Testing.scalaTest
+      Utils.betterFiles, Utils.commonsIo, Utils.commonsLang, Utils.flyway, Testing.scalaTest
     )
   }
 

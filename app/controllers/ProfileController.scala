@@ -5,10 +5,12 @@ import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.api.util.{Credentials, PasswordHasher}
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
 import models.Application
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import models.user.{UserForms, UserProfile}
 import com.kyleu.projectile.util.JsonSerializers._
 import com.kyleu.projectile.util.web.ControllerUtils
+import services.user.SystemUserService
 
 import scala.concurrent.Future
 
@@ -17,7 +19,8 @@ class ProfileController @javax.inject.Inject() (
     override val app: Application,
     authInfoRepository: AuthInfoRepository,
     credentialsProvider: CredentialsProvider,
-    hasher: PasswordHasher
+    hasher: PasswordHasher,
+    userService: SystemUserService
 ) extends BaseController("profile") {
   def view = withSession("view") { implicit request => implicit td =>
     Future.successful(render {
@@ -31,7 +34,7 @@ class ProfileController @javax.inject.Inject() (
       _ => Future.successful(BadRequest(views.html.profile.view(request.identity))),
       profileData => {
         val newUser = request.identity.copy(username = profileData)
-        app.coreServices.users.updateUser(request, newUser).map { _ =>
+        userService.updateUser(request, newUser).map { _ =>
           Redirect(controllers.routes.HomeController.home())
         }
       }

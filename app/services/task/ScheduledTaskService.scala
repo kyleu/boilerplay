@@ -113,7 +113,7 @@ class ScheduledTaskService @javax.inject.Inject() (
         status = status, logs = logs,
         start = start, end = DateUtils.now
       )
-      log.debug(s"Completed scheduled task [${task.key}] with args [${args.mkString(", ")}] in [${ret.durationMs}ms].")
+      log.debug(s"Completed scheduled task [${task.key}] with args [${args.mkString(", ")}] in [${ret.durationMs}ms].")(td)
       ret
     }
 

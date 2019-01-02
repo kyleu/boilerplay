@@ -1,7 +1,9 @@
 package controllers.admin.rest
 
+import com.kyleu.projectile.util.tracing.TraceData
 import controllers.BaseController
 import models.Application
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import com.kyleu.projectile.util.{JsonIncludeParser, JsonSerializers}
 
@@ -27,7 +29,7 @@ class OpenApiController @javax.inject.Inject() (override val app: Application) e
     Future.successful(Ok(json))
   } catch {
     case NonFatal(x) =>
-      log.error(s"Unable to parse json includes from [$rootFilename].", x)
+      log.error(s"Unable to parse json includes from [$rootFilename].", x)(TraceData.noop)
       Future.successful(InternalServerError(x.getMessage))
   }
 
