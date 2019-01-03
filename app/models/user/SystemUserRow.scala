@@ -33,5 +33,5 @@ final case class SystemUserRow(
     DataField("created", Some(created.toString))
   )
 
-  def toSummary = DataSummary(model = "systemUserRow", pk = Seq(id.toString), title = s"$username / $provider / $key ($id)")
+  def toSummary = DataSummary(model = "systemUserRow", pk = id.toString, title = s"username: ${username.map(_.toString).getOrElse("-empty-")}, provider: $provider, key: $key")
 }

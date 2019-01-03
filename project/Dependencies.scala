@@ -17,13 +17,7 @@ object Dependencies {
   }
 
   object WebJars {
-    val autocomplete = "org.webjars.bower" % "EasyAutocomplete" % "1.3.3" intransitive()
-    val fontAwesome = "org.webjars" % "font-awesome" % "4.7.0" intransitive()
-    val jquery = "org.webjars" % "jquery" % "2.2.4" intransitive()
-    val materialize = "org.webjars" % "materializecss" % "1.0.0" intransitive()
     val swaggerUi = "org.webjars" % "swagger-ui" % "3.20.3" intransitive()
-
-    val all = Seq(autocomplete, fontAwesome, jquery, materialize, swaggerUi)
   }
 
   object Utils {

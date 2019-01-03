@@ -19,5 +19,5 @@ final case class Setting(k: SettingKeyType, v: String) extends DataFieldModel {
   override def toString = s"$k=$v"
   lazy val asBool = v == "true"
 
-  def toSummary = DataSummary(model = "flywaySchemaHistory", pk = Seq(k.toString), title = s"$k / $v")
+  def toSummary = DataSummary(model = "flywaySchemaHistory", pk = k.toString, title = s"$k / $v")
 }

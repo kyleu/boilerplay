@@ -41,5 +41,5 @@ final case class Audit(
   lazy val changeLog = s"Audit [$id] ($act/$app): $msg"
   lazy val duration = (DateUtils.toMillis(completed) - DateUtils.toMillis(started)).toInt
 
-  def toSummary = DataSummary(model = "audit", pk = Seq(id.toString), title = s"$act / $app ($id)")
+  def toSummary = DataSummary(model = "audit", pk = id.toString, title = s"$act / $app ($id)")
 }

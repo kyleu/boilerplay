@@ -28,5 +28,5 @@ final case class SyncProgressRow(
     DataField("lastTime", Some(lastTime.toString))
   )
 
-  def toSummary = DataSummary(model = "syncProgressRow", pk = Seq(key.toString), title = s"$status / $message / $lastTime ($key)")
+  def toSummary = DataSummary(model = "syncProgressRow", pk = key.toString, title = s"status: $status, message: $message, lastTime: $lastTime")
 }

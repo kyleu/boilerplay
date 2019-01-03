@@ -42,5 +42,5 @@ final case class AuditRow(
     DataField("completed", Some(completed.toString))
   )
 
-  def toSummary = DataSummary(model = "auditRow", pk = Seq(id.toString), title = s"$act / $app / $client / $server / $userId / $tags ($id)")
+  def toSummary = DataSummary(model = "auditRow", pk = id.toString, title = s"act: $act, app: $app, client: $client, server: $server, userId: $userId, tags: $tags")
 }

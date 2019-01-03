@@ -25,7 +25,7 @@ import sbt._
 import sbtassembly.AssemblyPlugin.autoImport._
 
 object Server {
-  private[this] val dependencies = Projectile.all ++ Play.all ++ Utils.all ++ WebJars.all ++ Testing.all
+  private[this] val dependencies = Projectile.all ++ Play.all ++ Utils.all ++ Testing.all :+ WebJars.swaggerUi
 
   private[this] lazy val serverSettings = Shared.commonSettings ++ Seq(
     name := Shared.projectId,

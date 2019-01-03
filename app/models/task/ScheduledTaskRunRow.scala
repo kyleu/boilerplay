@@ -36,5 +36,5 @@ final case class ScheduledTaskRunRow(
     DataField("completed", Some(completed.toString))
   )
 
-  def toSummary = DataSummary(model = "scheduledTaskRunRow", pk = Seq(id.toString), title = s"$task / $arguments / $status / $started ($id)")
+  def toSummary = DataSummary(model = "scheduledTaskRunRow", pk = id.toString, title = s"task: $task, arguments: $arguments, status: $status, started: $started")
 }

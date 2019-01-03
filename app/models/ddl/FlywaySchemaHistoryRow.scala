@@ -40,5 +40,5 @@ final case class FlywaySchemaHistoryRow(
     DataField("success", Some(success.toString))
   )
 
-  def toSummary = DataSummary(model = "flywaySchemaHistoryRow", pk = Seq(installedRank.toString), title = s"$version / $description / $typ / $installedOn / $success ($installedRank)")
+  def toSummary = DataSummary(model = "flywaySchemaHistoryRow", pk = installedRank.toString, title = s"version: ${version.map(_.toString).getOrElse("-empty-")}, description: $description, typ: $typ, installedOn: $installedOn, success: $success")
 }
