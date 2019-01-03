@@ -1,0 +1,10 @@
+@(debug: Boolean)
+<script src="@routes.Assets.versioned("lib/EasyAutocomplete/dist/jquery.easy-autocomplete" + (if(debug) { ".js" } else { ".min.js" })).url"></script>
+<link rel="stylesheet" media="screen" href="@routes.Assets.versioned("lib/EasyAutocomplete/dist/easy-autocomplete.css").url" />
+<script>
+  var options = {
+    data: ["blue", "green", "pink", "red", "yellow"]
+  };
+
+  $("input.lookup").easyAutocomplete(options);
+</script>

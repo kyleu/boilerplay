@@ -15,6 +15,7 @@ import com.typesafe.sbt.packager.universal.UniversalPlugin
 import com.typesafe.sbt.packager.windows.WindowsPlugin
 import com.typesafe.sbt.web.Import._
 import com.typesafe.sbt.web.SbtWeb
+import Dependencies._
 import play.routes.compiler.InjectedRoutesGenerator
 import play.sbt.PlayImport.PlayKeys
 import play.sbt.routes.RoutesKeys
@@ -24,14 +25,7 @@ import sbt._
 import sbtassembly.AssemblyPlugin.autoImport._
 
 object Server {
-  private[this] val dependencies = {
-    import Dependencies._
-    Projectile.all ++ Seq(
-      Play.filters, Play.guice, Play.ws, Play.json, Play.cache,
-      WebJars.jquery, WebJars.fontAwesome, WebJars.materialize, WebJars.swaggerUi,
-      Utils.betterFiles, Utils.commonsIo, Utils.commonsLang, Utils.flyway, Testing.scalaTest
-    )
-  }
+  private[this] val dependencies = Projectile.all ++ Play.all ++ Utils.all ++ WebJars.all ++ Testing.all
 
   private[this] lazy val serverSettings = Shared.commonSettings ++ Seq(
     name := Shared.projectId,
