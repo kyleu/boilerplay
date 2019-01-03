@@ -19,18 +19,17 @@ object ModelBindables {
 
   /* Start model bindables */
   /* Projectile export section [boilerplay] */
-  import models.settings.SettingKeyType
-  private[this] def settingKeyTypeExtractor(v: Either[String, String]) = v match {
-    case Right(s) => Right(SettingKeyType.withValue(s))
+  private[this] def boilerplaySettingKeyTypeExtractor(v: Either[String, String]) = v match {
+    case Right(s) => Right(models.settings.SettingKeyType.withValue(s))
     case Left(x) => throw new IllegalStateException(x)
   }
-  implicit def settingKeyTypePathBindable(implicit binder: PathBindable[String]): PathBindable[SettingKeyType] = new PathBindable[SettingKeyType] {
-    override def bind(key: String, value: String) = settingKeyTypeExtractor(binder.bind(key, value))
-    override def unbind(key: String, e: SettingKeyType) = e.value
+  implicit def boilerplaySettingKeyTypePathBindable(implicit binder: PathBindable[String]): PathBindable[models.settings.SettingKeyType] = new PathBindable[models.settings.SettingKeyType] {
+    override def bind(key: String, value: String) = boilerplaySettingKeyTypeExtractor(binder.bind(key, value))
+    override def unbind(key: String, e: models.settings.SettingKeyType) = e.value
   }
-  implicit def settingKeyTypeQueryStringBindable(implicit binder: QueryStringBindable[String]): QueryStringBindable[SettingKeyType] = new QueryStringBindable[SettingKeyType] {
-    override def bind(key: String, params: Map[String, Seq[String]]) = binder.bind(key, params).map(settingKeyTypeExtractor)
-    override def unbind(key: String, e: SettingKeyType) = e.value
+  implicit def boilerplaySettingKeyTypeQueryStringBindable(implicit binder: QueryStringBindable[String]): QueryStringBindable[models.settings.SettingKeyType] = new QueryStringBindable[models.settings.SettingKeyType] {
+    override def bind(key: String, params: Map[String, Seq[String]]) = binder.bind(key, params).map(boilerplaySettingKeyTypeExtractor)
+    override def unbind(key: String, e: models.settings.SettingKeyType) = e.value
   }
   /* End model bindables */
 }

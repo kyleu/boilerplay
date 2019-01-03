@@ -1,3 +1,4 @@
+import com.kyleu.projectile.SbtProjectile
 import com.sksamuel.scapegoat.sbt.ScapegoatSbtPlugin.autoImport.{scapegoatDisabledInspections, scapegoatIgnoredFiles}
 import com.typesafe.sbt.GitPlugin.autoImport.git
 import com.typesafe.sbt.gzip.Import._
@@ -84,7 +85,7 @@ object Server {
   )
 
   lazy val server = Project(id = Shared.projectId, base = file(".")).enablePlugins(
-    SbtWeb, play.sbt.PlayScala, JavaAppPackaging, diagram.ClassDiagramPlugin,
+    SbtProjectile, SbtWeb, play.sbt.PlayScala, JavaAppPackaging, diagram.ClassDiagramPlugin,
     UniversalPlugin, LinuxPlugin, DebianPlugin, RpmPlugin, DockerPlugin, WindowsPlugin, JDKPackagerPlugin
   ).settings(serverSettings: _*).settings(Packaging.settings: _*)
 }

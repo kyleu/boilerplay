@@ -10,7 +10,7 @@ object Dependencies {
   }
 
   object Projectile {
-    val version = "0.8.0-SNAPSHOT"
+    val version = "0.8.0"
     val all = Seq("doobie", "slick", "auth").map(s => "com.kyleu" %% s"projectile-lib-$s" % version)
   }
 
@@ -23,8 +23,6 @@ object Dependencies {
 
   object Utils {
     val scapegoatVersion = "1.3.8"
-
-    val enumeratumCirceVersion = "1.5.18"
 
     val betterFiles = "com.github.pathikrit" %% "better-files" % "3.7.0"
     val commonsIo = "commons-io" % "commons-io" % "2.6"
