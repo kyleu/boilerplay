@@ -6,7 +6,7 @@
   @if(user.exists(_.role == com.kyleu.projectile.models.user.Role.Admin)) {
   <li><a class="theme-text" href="@controllers.admin.system.routes.AdminController.index()">Admin</a></li>
   }
-  <li><a class="theme-text" href="@controllers.routes.ProfileController.view()">Profile</a></li>
+  <li><a class="theme-text" href="@controllers.auth.routes.ProfileController.view()">Profile</a></li>
   <li><a class="theme-text" href="@controllers.auth.routes.AuthenticationController.signOut()">Sign Out</a></li>
   }
   <li><a class="theme-text" href="@util.Config.projectUrl" target="_blank">About</a></li>

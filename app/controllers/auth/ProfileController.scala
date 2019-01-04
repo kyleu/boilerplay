@@ -1,17 +1,17 @@
-package controllers
+package controllers.auth
 
+import com.kyleu.projectile.util.JsonSerializers._
+import com.kyleu.projectile.web.util.ControllerUtils
 import com.mohiva.play.silhouette.api.exceptions.ProviderException
 import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.api.util.{Credentials, PasswordHasher}
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
+import controllers.BaseController
 import models.Application
-
-import scala.concurrent.ExecutionContext.Implicits.global
 import models.user.{UserForms, UserProfile}
-import com.kyleu.projectile.util.JsonSerializers._
-import com.kyleu.projectile.web.util.ControllerUtils
 import services.user.SystemUserService
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 @javax.inject.Singleton
@@ -46,7 +46,7 @@ class ProfileController @javax.inject.Inject() (
   }
 
   def changePassword = withSession("change-password") { implicit request => implicit td =>
-    def errorResponse(msg: String) = Redirect(controllers.routes.ProfileController.changePasswordForm()).flashing("error" -> msg)
+    def errorResponse(msg: String) = Redirect(controllers.auth.routes.ProfileController.changePasswordForm()).flashing("error" -> msg)
     UserForms.changePasswordForm.bindFromRequest().fold(
       formWithErrors => {
         Future.successful(errorResponse(ControllerUtils.errorsToString(formWithErrors.errors)))
@@ -57,7 +57,7 @@ class ProfileController @javax.inject.Inject() (
         } else {
           val email = request.identity.profile.providerKey
           credentialsProvider.authenticate(Credentials(email, changePass.oldPassword)).flatMap { loginInfo =>
-            val okResponse = Redirect(controllers.routes.ProfileController.view()).flashing("success" -> "Password changed.")
+            val okResponse = Redirect(controllers.auth.routes.ProfileController.view()).flashing("success" -> "Password changed.")
             for {
               _ <- authInfoRepository.update(loginInfo, hasher.hash(changePass.newPassword))
               authenticator <- app.silhouette.env.authenticatorService.create(loginInfo)

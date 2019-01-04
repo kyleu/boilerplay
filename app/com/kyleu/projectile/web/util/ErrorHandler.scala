@@ -1,13 +1,13 @@
-package util.web
+package com.kyleu.projectile.web.util
 
-import io.circe.Json
-import javax.inject._
-import play.api.http.{DefaultHttpErrorHandler, MimeTypes}
-import play.api._
-import play.api.mvc._
-import play.api.routing.Router
 import com.kyleu.projectile.util.Logging
 import com.kyleu.projectile.util.tracing.OpenTracingService
+import io.circe.Json
+import javax.inject._
+import play.api._
+import play.api.http.{DefaultHttpErrorHandler, MimeTypes}
+import play.api.mvc._
+import play.api.routing.Router
 
 import scala.concurrent._
 

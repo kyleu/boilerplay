@@ -4,41 +4,41 @@
 )@traceData.logClass(getClass)@views.html.admin.layout.page(user, "explore", "Explore " + util.Config.projectName) {
   <ul class="collection with-header">
     <li class="collection-header">
-      <h5>Explore @util.Config.projectName. </h5>
+      <h5>Explore @util.Config.projectName</h5>
     </li>
     <!-- Start model list routes -->
     <!-- Projectile export section [boilerplay] -->
     <li class="collection-item">
       <a class="theme-text" href="@controllers.admin.audit.routes.AuditRowController.list()"><i class="fa @models.template.Icons.auditRow"></i> Audits</a>
-      <div><em>Manage the Audits of the system.</em></div>
+      <div><em>Manage the audits of the system</em></div>
     </li>
     <li class="collection-item">
       <a class="theme-text" href="@controllers.admin.audit.routes.AuditRecordRowController.list()"><i class="fa @models.template.Icons.auditRecordRow"></i> Audit Records</a>
-      <div><em>Manage the Audit Records of the system.</em></div>
+      <div><em>Manage the audit records of the system</em></div>
     </li>
     <li class="collection-item">
       <a class="theme-text" href="@controllers.admin.ddl.routes.FlywaySchemaHistoryRowController.list()"><i class="fa @models.template.Icons.flywaySchemaHistoryRow"></i> Flyway Schema Histories</a>
-      <div><em>Manage the Flyway Schema Histories of the system.</em></div>
+      <div><em>Manage the flyway schema histories of the system</em></div>
     </li>
     <li class="collection-item">
       <a class="theme-text" href="@controllers.admin.note.routes.NoteRowController.list()"><i class="fa @models.template.Icons.noteRow"></i> Notes</a>
-      <div><em>Manage the Notes of the system.</em></div>
+      <div><em>Manage the notes of the system</em></div>
     </li>
     <li class="collection-item">
       <a class="theme-text" href="@controllers.admin.task.routes.ScheduledTaskRunRowController.list()"><i class="fa @models.template.Icons.scheduledTaskRunRow"></i> Scheduled Task Runs</a>
-      <div><em>Manage the Scheduled Task Runs of the system.</em></div>
+      <div><em>Manage the scheduled task runs of the system</em></div>
     </li>
     <li class="collection-item">
       <a class="theme-text" href="@controllers.admin.settings.routes.SettingController.list()"><i class="fa @models.template.Icons.setting"></i> Settings</a>
-      <div><em>Manage the Settings of the system.</em></div>
+      <div><em>Manage the settings of the system</em></div>
     </li>
     <li class="collection-item">
       <a class="theme-text" href="@controllers.admin.sync.routes.SyncProgressRowController.list()"><i class="fa @models.template.Icons.syncProgressRow"></i> Sync Progresses</a>
-      <div><em>Manage the Sync Progresses of the system.</em></div>
+      <div><em>Manage the sync progresses of the system</em></div>
     </li>
     <li class="collection-item">
       <a class="theme-text" href="@controllers.admin.user.routes.SystemUserRowController.list()"><i class="fa @models.template.Icons.systemUserRow"></i> System Users</a>
-      <div><em>Manage the System Users of the system.</em></div>
+      <div><em>Manage the system users of the system</em></div>
     </li>
     <!-- End model list routes -->
   </ul>

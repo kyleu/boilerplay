@@ -1,6 +1,11 @@
 import sbt._
 
 object Dependencies {
+  object Projectile {
+    val version = "0.9.1-SNAPSHOT"
+    val all = Seq("doobie", "slick", "auth").map(s => "com.kyleu" %% s"projectile-lib-$s" % version)
+  }
+
   object Play {
     val filters = play.sbt.PlayImport.filters
     val cache = play.sbt.PlayImport.ehcache
@@ -9,11 +14,6 @@ object Dependencies {
     val ws = play.sbt.PlayImport.ws
 
     val all = Seq(filters, guice, ws, json, cache)
-  }
-
-  object Projectile {
-    val version = "0.9.0-SNAPSHOT"
-    val all = Seq("doobie", "slick", "auth").map(s => "com.kyleu" %% s"projectile-lib-$s" % version)
   }
 
   object WebJars {

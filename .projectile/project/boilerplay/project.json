@@ -1,7 +1,7 @@
 {
   "template" : "boilerplay",
   "key" : "boilerplay",
-  "input" : "boilerplay",
+  "input" : "boilerplay-db",
   "title" : "Boilerplay",
   "description" : "...",
   "features" : [ "doobie", "audit", "datamodel", "wiki", "thrift", "graphql", "openapi", "service", "slick", "controller", "scalajs", "core" ],

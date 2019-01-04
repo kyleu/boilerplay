@@ -2,6 +2,8 @@ GET         /                                        controllers.HomeController.
 GET         /ping                                    controllers.HomeController.ping(timestamp: Long)
 GET         /robots.txt                              controllers.HomeController.robots
 
+->          /auth                                    auth.Routes
+
 # Admin
 ->          /admin/system                            system.Routes
 ->          /admin/graphql                           graphql.Routes
@@ -18,19 +20,6 @@ GET         /robots.txt                              controllers.HomeController.
 ->          /admin/user                              user.Routes
 # End model route files
 
-# Authentication
-GET         /signup                                  controllers.auth.RegistrationController.registrationForm(email: Option[String] ?= None)
-POST        /signup                                  controllers.auth.RegistrationController.register
-GET         /signin                                  controllers.auth.AuthenticationController.signInForm
-POST        /signin                                  controllers.auth.AuthenticationController.authenticateCredentials
-GET         /signin/:provider                        controllers.auth.SocialAuthController.authenticate(provider)
-GET         /signout                                 controllers.auth.AuthenticationController.signOut
-
-# Profile
-GET         /profile                                 controllers.ProfileController.view
-POST        /profile                                 controllers.ProfileController.save
-GET         /password/change                         controllers.ProfileController.changePasswordForm
-POST        /password/change                         controllers.ProfileController.changePassword
 
 # Assets
 GET         /browserconfig.xml                       controllers.Assets.at(file = "browserconfig.xml")
