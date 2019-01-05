@@ -19,6 +19,8 @@ object Schema {
         models.graphql.audit.AuditRecordRowSchema.auditRecordRowByAuditIdFetcher,
         models.graphql.audit.AuditRecordRowSchema.auditRecordRowByPrimaryKeyFetcher,
         models.graphql.audit.AuditRowSchema.auditRowByPrimaryKeyFetcher,
+        models.graphql.auth.Oauth2InfoRowSchema.oauth2InfoRowByPrimaryKeyFetcher,
+        models.graphql.auth.PasswordInfoRowSchema.passwordInfoRowByPrimaryKeyFetcher,
         models.graphql.ddl.FlywaySchemaHistoryRowSchema.flywaySchemaHistoryRowByPrimaryKeyFetcher,
         models.graphql.note.NoteRowSchema.noteRowByAuthorFetcher,
         models.graphql.note.NoteRowSchema.noteRowByPrimaryKeyFetcher,
@@ -47,6 +49,8 @@ object Schema {
       /* Projectile export section [boilerplay] */
       models.graphql.audit.AuditRecordRowSchema.queryFields ++
       models.graphql.audit.AuditRowSchema.queryFields ++
+      models.graphql.auth.Oauth2InfoRowSchema.queryFields ++
+      models.graphql.auth.PasswordInfoRowSchema.queryFields ++
       models.graphql.ddl.FlywaySchemaHistoryRowSchema.queryFields ++
       models.graphql.note.NoteRowSchema.queryFields ++
       models.graphql.settings.SettingSchema.queryFields ++
@@ -88,6 +92,8 @@ object Schema {
       /* Projectile export section [boilerplay] */
       models.graphql.audit.AuditRecordRowSchema.mutationFields ++
       models.graphql.audit.AuditRowSchema.mutationFields ++
+      models.graphql.auth.Oauth2InfoRowSchema.mutationFields ++
+      models.graphql.auth.PasswordInfoRowSchema.mutationFields ++
       models.graphql.ddl.FlywaySchemaHistoryRowSchema.mutationFields ++
       models.graphql.note.NoteRowSchema.mutationFields ++
       models.graphql.settings.SettingSchema.mutationFields ++

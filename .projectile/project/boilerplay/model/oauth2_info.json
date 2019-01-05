@@ -1,19 +1,13 @@
 {
   "key" : "oauth2_info",
   "pkg" : [ "auth" ],
-  "features" : [ ],
+  "features" : [ "doobie", "datamodel", "thrift", "graphql", "service", "slick", "controller", "json", "core" ],
   "ignored" : [ ],
   "overrides" : [ {
     "k" : "title",
     "v" : "OAuth2 Info"
   }, {
     "k" : "plural",
-    "v" : "OAuth2 Info"
-  }, {
-    "k" : "propertyName",
-    "v" : "oAuth2Info"
-  }, {
-    "k" : "className",
-    "v" : "OAuth2Info"
+    "v" : "OAuth2 Infos"
   } ]
 }

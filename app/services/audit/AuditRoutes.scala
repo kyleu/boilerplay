@@ -16,6 +16,8 @@ object AuditRoutes extends Logging {
     case "auditrow" => controllers.admin.audit.routes.AuditRowController.view(uuidArg(arg(0)))
     case "flywayschemahistoryrow" => controllers.admin.ddl.routes.FlywaySchemaHistoryRowController.view(longArg(arg(0)))
     case "noterow" => controllers.admin.note.routes.NoteRowController.view(uuidArg(arg(0)))
+    case "oauth2inforow" => controllers.admin.auth.routes.Oauth2InfoRowController.view(stringArg(arg(0)), stringArg(arg(1)))
+    case "passwordinforow" => controllers.admin.auth.routes.PasswordInfoRowController.view(stringArg(arg(0)), stringArg(arg(1)))
     case "scheduledtaskrunrow" => controllers.admin.task.routes.ScheduledTaskRunRowController.view(uuidArg(arg(0)))
     case "setting" => controllers.admin.settings.routes.SettingController.view(enumArg(SettingKeyType)(arg(0)))
     case "syncprogressrow" => controllers.admin.sync.routes.SyncProgressRowController.view(stringArg(arg(0)))

@@ -2,7 +2,7 @@ GET         /                                        controllers.HomeController.
 GET         /ping                                    controllers.HomeController.ping(timestamp: Long)
 GET         /robots.txt                              controllers.HomeController.robots
 
-->          /auth                                    auth.Routes
+->          /profile                                 profile.Routes
 
 # Admin
 ->          /admin/system                            system.Routes
@@ -12,6 +12,7 @@ GET         /robots.txt                              controllers.HomeController.
 # Start model route files
 # Projectile export section [boilerplay]
 ->          /admin/audit                             audit.Routes
+->          /admin/auth                              auth.Routes
 ->          /admin/ddl                               ddl.Routes
 ->          /admin/note                              note.Routes
 ->          /admin/settings                          settings.Routes

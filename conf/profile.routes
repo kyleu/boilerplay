@@ -1,0 +1,13 @@
+# Profile
+GET         /                        controllers.auth.ProfileController.view
+POST        /                        controllers.auth.ProfileController.save
+GET         /password/change         controllers.auth.ProfileController.changePasswordForm
+POST        /password/change         controllers.auth.ProfileController.changePassword
+
+# Authentication
+GET         /signup                  controllers.auth.RegistrationController.registrationForm(email: Option[String] ?= None)
+POST        /signup                  controllers.auth.RegistrationController.register
+GET         /signin                  controllers.auth.AuthenticationController.signInForm
+POST        /signin                  controllers.auth.AuthenticationController.authenticateCredentials
+GET         /signin/:provider        controllers.auth.SocialAuthController.authenticate(provider)
+GET         /signout                 controllers.auth.AuthenticationController.signOut

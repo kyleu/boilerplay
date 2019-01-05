@@ -44,6 +44,8 @@ object Icons {
   val auditRow = "fa-map-pin"
   val flywaySchemaHistoryRow = "fa-hand-rock-o"
   val noteRow = "fa-code"
+  val oauth2InfoRow = "fa-beer"
+  val passwordInfoRow = "fa-hand-pointer-o"
   val scheduledTaskRunRow = "fa-folder-o"
   val setting = "fa-gamepad"
   val syncProgressRow = "fa-meh-o"

@@ -2,6 +2,8 @@
 /* Projectile export section [boilerplay] */
 include "services/audit/AuditRecordRowService.thrift"
 include "services/audit/AuditRowService.thrift"
+include "services/auth/Oauth2InfoRowService.thrift"
+include "services/auth/PasswordInfoRowService.thrift"
 include "services/ddl/FlywaySchemaHistoryRowService.thrift"
 include "services/note/NoteRowService.thrift"
 include "services/settings/SettingService.thrift"

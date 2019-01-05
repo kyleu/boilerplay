@@ -1,0 +1,53 @@
+@* Generated File *@
+@(user: com.kyleu.projectile.models.user.SystemUser, model: models.auth.Oauth2InfoRow, debug: Boolean)(
+    implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: com.kyleu.projectile.util.tracing.TraceData
+)@views.html.admin.layout.page(user, "explore", s"OAuth2 Info [${model.provider}, ${model.key}]") {
+  <div class="collection with-header">
+    <div class="collection-header">
+      <div class="right"><a class="theme-text" href="@controllers.admin.auth.routes.Oauth2InfoRowController.editForm(model.provider, model.key)">Edit</a></div>
+      <div class="right"><a class="theme-text remove-link" onclick="return confirm('Are you sure you want to remove this OAuth2 Info?')" href="@controllers.admin.auth.routes.Oauth2InfoRowController.remove(model.provider, model.key)">Remove</a></div>
+      <h5>
+        <a class="theme-text" href="@controllers.admin.auth.routes.Oauth2InfoRowController.list()"><i class="fa @models.template.Icons.oauth2InfoRow"></i></a>
+        OAuth2 Info [@model.provider, @model.key]
+      </h5>
+    </div>
+    <div class="collection-item">
+      <table class="highlight">
+        <tbody>
+          <tr>
+            <th>Provider</th>
+            <td>@model.provider</td>
+          </tr>
+          <tr>
+            <th>Key</th>
+            <td>@model.key</td>
+          </tr>
+          <tr>
+            <th>Access Token</th>
+            <td>@model.accessToken</td>
+          </tr>
+          <tr>
+            <th>Token Type</th>
+            <td>@model.tokenType</td>
+          </tr>
+          <tr>
+            <th>Expires In</th>
+            <td>@model.expiresIn</td>
+          </tr>
+          <tr>
+            <th>Refresh Token</th>
+            <td>@model.refreshToken</td>
+          </tr>
+          <tr>
+            <th>Params</th>
+            <td>@model.params</td>
+          </tr>
+          <tr>
+            <th>Created</th>
+            <td>@model.created</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+}

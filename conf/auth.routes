@@ -1,13 +1,21 @@
-# Authentication
-GET         /signup                                  controllers.auth.RegistrationController.registrationForm(email: Option[String] ?= None)
-POST        /signup                                  controllers.auth.RegistrationController.register
-GET         /signin                                  controllers.auth.AuthenticationController.signInForm
-POST        /signin                                  controllers.auth.AuthenticationController.authenticateCredentials
-GET         /signin/:provider                        controllers.auth.SocialAuthController.authenticate(provider)
-GET         /signout                                 controllers.auth.AuthenticationController.signOut
+# Generated File
+# OAuth2 Info Routes
+GET         /oauth2InfoRow                                            controllers.admin.auth.Oauth2InfoRowController.list(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None)
+GET         /oauth2InfoRow/autocomplete                               controllers.admin.auth.Oauth2InfoRowController.autocomplete(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None)
+GET         /oauth2InfoRow/form                                       controllers.admin.auth.Oauth2InfoRowController.createForm
+POST        /oauth2InfoRow                                            controllers.admin.auth.Oauth2InfoRowController.create
+GET         /oauth2InfoRow/:provider/:key                             controllers.admin.auth.Oauth2InfoRowController.view(provider: String, key: String, t: Option[String] ?= None)
+GET         /oauth2InfoRow/:provider/:key/form                        controllers.admin.auth.Oauth2InfoRowController.editForm(provider: String, key: String)
+POST        /oauth2InfoRow/:provider/:key                             controllers.admin.auth.Oauth2InfoRowController.edit(provider: String, key: String)
+GET         /oauth2InfoRow/:provider/:key/remove                      controllers.admin.auth.Oauth2InfoRowController.remove(provider: String, key: String)
 
-# Profile
-GET         /profile                                 controllers.auth.ProfileController.view
-POST        /profile                                 controllers.auth.ProfileController.save
-GET         /password/change                         controllers.auth.ProfileController.changePasswordForm
-POST        /password/change                         controllers.auth.ProfileController.changePassword
+# Password Info Routes
+GET         /passwordInfoRow                                          controllers.admin.auth.PasswordInfoRowController.list(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None)
+GET         /passwordInfoRow/autocomplete                             controllers.admin.auth.PasswordInfoRowController.autocomplete(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None)
+GET         /passwordInfoRow/form                                     controllers.admin.auth.PasswordInfoRowController.createForm
+POST        /passwordInfoRow                                          controllers.admin.auth.PasswordInfoRowController.create
+GET         /passwordInfoRow/:provider/:key                           controllers.admin.auth.PasswordInfoRowController.view(provider: String, key: String, t: Option[String] ?= None)
+GET         /passwordInfoRow/:provider/:key/form                      controllers.admin.auth.PasswordInfoRowController.editForm(provider: String, key: String)
+POST        /passwordInfoRow/:provider/:key                           controllers.admin.auth.PasswordInfoRowController.edit(provider: String, key: String)
+GET         /passwordInfoRow/:provider/:key/remove                    controllers.admin.auth.PasswordInfoRowController.remove(provider: String, key: String)
+
