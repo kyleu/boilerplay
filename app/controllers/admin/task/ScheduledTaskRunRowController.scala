@@ -1,13 +1,14 @@
 /* Generated File */
 package controllers.admin.task
 
+import com.kyleu.projectile.controllers.{ServiceAuthController, ServiceController}
+import com.kyleu.projectile.models.Application
 import com.kyleu.projectile.models.result.orderBy.OrderBy
+import com.kyleu.projectile.services.note.NoteService
 import com.kyleu.projectile.util.DateUtils
 import com.kyleu.projectile.util.JsonSerializers._
 import com.kyleu.projectile.web.util.ReftreeUtils._
-import controllers.admin.ServiceController
 import java.util.UUID
-import models.Application
 import models.task.{ScheduledTaskRunRow, ScheduledTaskRunRowResult}
 import play.api.http.MimeTypes
 import scala.concurrent.Future
@@ -17,8 +18,8 @@ import services.task.ScheduledTaskRunRowService
 
 @javax.inject.Singleton
 class ScheduledTaskRunRowController @javax.inject.Inject() (
-    override val app: Application, svc: ScheduledTaskRunRowService, auditRecordSvc: AuditRecordRowService
-) extends ServiceController(svc) {
+    override val app: Application, svc: ScheduledTaskRunRowService, noteSvc: NoteService
+) extends ServiceAuthController(svc) {
 
   def createForm = withSession("create.form", admin = true) { implicit request => implicit td =>
     val cancel = controllers.admin.task.routes.ScheduledTaskRunRowController.list()
@@ -60,7 +61,7 @@ class ScheduledTaskRunRowController @javax.inject.Inject() (
 
   def view(id: UUID, t: Option[String] = None) = withSession("view", admin = true) { implicit request => implicit td =>
     val modelF = svc.getByPrimaryKey(request, id)
-    val notesF = app.coreServices.notes.getFor(request, "scheduledTaskRunRow", id)
+    val notesF = noteSvc.getFor(request, "scheduledTaskRunRow", id)
 
     notesF.flatMap(notes => modelF.map {
       case Some(model) => renderChoice(t) {

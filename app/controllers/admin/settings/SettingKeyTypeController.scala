@@ -1,17 +1,16 @@
 /* Generated File */
 package controllers.admin.settings
 
+import com.kyleu.projectile.controllers.{AuthController, ServiceController}
+import com.kyleu.projectile.models.Application
 import com.kyleu.projectile.util.JsonSerializers._
-import controllers.BaseController
-import controllers.admin.ServiceController
-import models.Application
 import models.settings.SettingKeyType
 import play.twirl.api.Html
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits._
 
 @javax.inject.Singleton
-class SettingKeyTypeController @javax.inject.Inject() (override val app: Application) extends BaseController("settingKeyType") {
+class SettingKeyTypeController @javax.inject.Inject() (override val app: Application) extends AuthController("settingKeyType") {
 
   def list = withSession("list", admin = true) { implicit request => implicit td =>
     Future.successful(render {

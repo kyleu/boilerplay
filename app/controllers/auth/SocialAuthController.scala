@@ -2,17 +2,18 @@ package controllers.auth
 
 import java.util.UUID
 
+import com.kyleu.projectile.controllers.AuthController
+import com.kyleu.projectile.models.Application
 import com.kyleu.projectile.models.user.{Role, SystemUser}
 import com.mohiva.play.silhouette.api.exceptions.ProviderException
 import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.api.{LoginEvent, LoginInfo, Silhouette}
 import com.mohiva.play.silhouette.impl.providers.{CommonSocialProfileBuilder, SocialProvider, SocialProviderRegistry}
-import controllers.BaseController
-import models.Application
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import com.kyleu.projectile.models.auth.{AuthEnv, UserCredentials}
 import models.settings.SettingKeyType
+import services.settings.SettingsService
 import services.user.{SystemUserSearchService, SystemUserService}
 
 import scala.concurrent.Future
@@ -24,8 +25,9 @@ class SocialAuthController @javax.inject.Inject() (
     userService: SystemUserService,
     userSearchService: SystemUserSearchService,
     authInfoRepository: AuthInfoRepository,
-    socialProviderRegistry: SocialProviderRegistry
-) extends BaseController("socialAuth") {
+    socialProviderRegistry: SocialProviderRegistry,
+    settings: SettingsService
+) extends AuthController("socialAuth") {
   def authenticate(provider: String) = withoutSession("form") { implicit request => implicit td =>
     socialProviderRegistry.get[SocialProvider](provider) match {
       case Some(p: SocialProvider with CommonSocialProfileBuilder) =>
@@ -43,7 +45,7 @@ class SocialAuthController @javax.inject.Inject() (
                     id = UUID.randomUUID,
                     username = if (existing.isDefined) { username + "-" + scala.util.Random.alphanumeric.take(4).mkString } else { username },
                     profile = profile.loginInfo,
-                    role = Role.withValue(app.coreServices.settings(SettingKeyType.DefaultNewUserRole))
+                    role = Role.withValue(settings(SettingKeyType.DefaultNewUserRole))
                   )
                   userService.insert(UserCredentials(newUser, request.remoteAddress), newUser)
                 }

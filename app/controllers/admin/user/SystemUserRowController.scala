@@ -1,14 +1,15 @@
 /* Generated File */
 package controllers.admin.user
 
+import com.kyleu.projectile.controllers.{ServiceAuthController, ServiceController}
+import com.kyleu.projectile.models.Application
 import com.kyleu.projectile.models.result.RelationCount
 import com.kyleu.projectile.models.result.orderBy.OrderBy
+import com.kyleu.projectile.services.note.NoteService
 import com.kyleu.projectile.util.DateUtils
 import com.kyleu.projectile.util.JsonSerializers._
 import com.kyleu.projectile.web.util.ReftreeUtils._
-import controllers.admin.ServiceController
 import java.util.UUID
-import models.Application
 import models.user.{SystemUserRow, SystemUserRowResult}
 import play.api.http.MimeTypes
 import scala.concurrent.Future
@@ -19,9 +20,9 @@ import services.user.SystemUserRowService
 
 @javax.inject.Singleton
 class SystemUserRowController @javax.inject.Inject() (
-    override val app: Application, svc: SystemUserRowService, auditRecordSvc: AuditRecordRowService,
+    override val app: Application, svc: SystemUserRowService, noteSvc: NoteService,
     noteRowS: NoteRowService
-) extends ServiceController(svc) {
+) extends ServiceAuthController(svc) {
 
   def createForm = withSession("create.form", admin = true) { implicit request => implicit td =>
     val cancel = controllers.admin.user.routes.SystemUserRowController.list()
@@ -63,7 +64,7 @@ class SystemUserRowController @javax.inject.Inject() (
 
   def view(id: UUID, t: Option[String] = None) = withSession("view", admin = true) { implicit request => implicit td =>
     val modelF = svc.getByPrimaryKey(request, id)
-    val notesF = app.coreServices.notes.getFor(request, "systemUserRow", id)
+    val notesF = noteSvc.getFor(request, "systemUserRow", id)
 
     notesF.flatMap(notes => modelF.map {
       case Some(model) => renderChoice(t) {

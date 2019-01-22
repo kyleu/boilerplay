@@ -2,11 +2,11 @@ import sbt._
 
 object Dependencies {
   object Projectile {
-    val version = "1.0.0"
+    val version = "1.0.7"
     val all = Seq("doobie", "slick", "auth").map(s => "com.kyleu" %% s"projectile-lib-$s" % version)
   }
 
-  object Play {
+  object PlayFramework {
     val filters = play.sbt.PlayImport.filters
     val cache = play.sbt.PlayImport.ehcache
     val guice = play.sbt.PlayImport.guice

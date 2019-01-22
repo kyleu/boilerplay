@@ -1,13 +1,13 @@
 package controllers.auth
 
+import com.kyleu.projectile.controllers.AuthController
+import com.kyleu.projectile.models.Application
 import com.kyleu.projectile.util.JsonSerializers._
 import com.kyleu.projectile.web.util.ControllerUtils
 import com.mohiva.play.silhouette.api.exceptions.ProviderException
 import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.api.util.{Credentials, PasswordHasher}
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
-import controllers.BaseController
-import models.Application
 import models.user.{UserForms, UserProfile}
 import services.user.SystemUserService
 
@@ -21,7 +21,7 @@ class ProfileController @javax.inject.Inject() (
     credentialsProvider: CredentialsProvider,
     hasher: PasswordHasher,
     userService: SystemUserService
-) extends BaseController("profile") {
+) extends AuthController("profile") {
   def view = withSession("view") { implicit request => implicit td =>
     Future.successful(render {
       case Accepts.Html() => Ok(views.html.profile.view(request.identity))

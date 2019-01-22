@@ -2,8 +2,9 @@ package controllers.admin.system
 
 import akka.util.Timeout
 import com.google.inject.Injector
-import controllers.BaseController
-import models.Application
+import com.kyleu.projectile.controllers.AuthController
+import com.kyleu.projectile.models.Application
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import models.sandbox.SandboxTask
 import com.kyleu.projectile.util.JsonSerializers._
@@ -12,7 +13,7 @@ import scala.concurrent.Future
 import scala.concurrent.duration._
 
 @javax.inject.Singleton
-class SandboxController @javax.inject.Inject() (override val app: Application, injector: Injector) extends BaseController("sandbox") {
+class SandboxController @javax.inject.Inject() (override val app: Application, injector: Injector) extends AuthController("sandbox") {
   implicit val timeout: Timeout = Timeout(10.seconds)
 
   def list = withSession("sandbox.list", admin = true) { implicit request => implicit td =>

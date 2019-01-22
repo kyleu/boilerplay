@@ -3,7 +3,8 @@ package services.task
 import java.util.UUID
 
 import akka.actor.ActorSystem
-import models.Configuration
+import com.kyleu.projectile.models.Configuration
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import com.kyleu.projectile.models.auth.UserCredentials
 import models.task.ScheduledTaskRunRow

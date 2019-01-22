@@ -1,12 +1,13 @@
 /* Generated File */
 package controllers.admin.ddl
 
+import com.kyleu.projectile.controllers.{ServiceAuthController, ServiceController}
+import com.kyleu.projectile.models.Application
 import com.kyleu.projectile.models.result.orderBy.OrderBy
+import com.kyleu.projectile.services.note.NoteService
 import com.kyleu.projectile.util.DateUtils
 import com.kyleu.projectile.util.JsonSerializers._
 import com.kyleu.projectile.web.util.ReftreeUtils._
-import controllers.admin.ServiceController
-import models.Application
 import models.ddl.{FlywaySchemaHistoryRow, FlywaySchemaHistoryRowResult}
 import play.api.http.MimeTypes
 import scala.concurrent.Future
@@ -16,8 +17,8 @@ import services.ddl.FlywaySchemaHistoryRowService
 
 @javax.inject.Singleton
 class FlywaySchemaHistoryRowController @javax.inject.Inject() (
-    override val app: Application, svc: FlywaySchemaHistoryRowService, auditRecordSvc: AuditRecordRowService
-) extends ServiceController(svc) {
+    override val app: Application, svc: FlywaySchemaHistoryRowService, noteSvc: NoteService
+) extends ServiceAuthController(svc) {
 
   def createForm = withSession("create.form", admin = true) { implicit request => implicit td =>
     val cancel = controllers.admin.ddl.routes.FlywaySchemaHistoryRowController.list()
@@ -59,7 +60,7 @@ class FlywaySchemaHistoryRowController @javax.inject.Inject() (
 
   def view(installedRank: Long, t: Option[String] = None) = withSession("view", admin = true) { implicit request => implicit td =>
     val modelF = svc.getByPrimaryKey(request, installedRank)
-    val notesF = app.coreServices.notes.getFor(request, "flywaySchemaHistoryRow", installedRank)
+    val notesF = noteSvc.getFor(request, "flywaySchemaHistoryRow", installedRank)
 
     notesF.flatMap(notes => modelF.map {
       case Some(model) => renderChoice(t) {

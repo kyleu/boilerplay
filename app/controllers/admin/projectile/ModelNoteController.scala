@@ -1,8 +1,9 @@
 package controllers.admin.projectile
 
-import controllers.BaseController
-import controllers.admin.ServiceController
-import models.Application
+import com.kyleu.projectile.controllers.AuthController
+import com.kyleu.projectile.models.Application
+import com.kyleu.projectile.controllers.ServiceController
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import models.note.NoteRow
 import services.note.ModelNoteService
@@ -11,7 +12,7 @@ import com.kyleu.projectile.util.JsonSerializers._
 import scala.concurrent.Future
 
 @javax.inject.Singleton
-class ModelNoteController @javax.inject.Inject() (override val app: Application, svc: ModelNoteService) extends BaseController("note") {
+class ModelNoteController @javax.inject.Inject() (override val app: Application, svc: ModelNoteService) extends AuthController("note") {
   def view(model: String, pk: String) = withSession("list", admin = true) { implicit request => implicit td =>
     svc.getFor(request, model, pk).map(notes => render {
       case Accepts.Html() => Ok(views.html.admin.note.modelNoteList(request.identity, notes, model, pk))

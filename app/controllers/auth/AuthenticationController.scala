@@ -1,14 +1,16 @@
 package controllers.auth
 
+import com.kyleu.projectile.controllers.AuthController
+import com.kyleu.projectile.models.Application
 import com.mohiva.play.silhouette.api.exceptions.ProviderException
 import com.mohiva.play.silhouette.api.{LoginEvent, LogoutEvent}
 import com.mohiva.play.silhouette.impl.exceptions.IdentityNotFoundException
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
-import controllers.BaseController
-import models.Application
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import models.user.UserForms
 import play.api.mvc.Result
+import services.settings.SettingsService
 import services.user.SystemUserSearchService
 
 import scala.concurrent.Future
@@ -17,19 +19,20 @@ import scala.concurrent.Future
 class AuthenticationController @javax.inject.Inject() (
     override val app: Application,
     userSearchService: SystemUserSearchService,
-    credentialsProvider: CredentialsProvider
-) extends BaseController("authentication") {
+    credentialsProvider: CredentialsProvider,
+    settings: SettingsService
+) extends AuthController("authentication") {
   val providers = if (app.config.authGoogleSettings.clientSecret.nonEmpty) { Seq("google") } else { Nil }
 
   def signInForm = withoutSession("form") { implicit request => implicit td =>
     //val src = request.headers.get("Referer").filter(_.contains(request.host))
-    val resp = Ok(views.html.auth.signin(request.identity, UserForms.signInForm, providers, app.coreServices.settings.allowRegistration))
+    val resp = Ok(views.html.auth.signin(request.identity, UserForms.signInForm, providers, settings.allowRegistration))
     Future.successful(resp)
   }
 
   def authenticateCredentials = withoutSession("authenticate") { implicit request => implicit td =>
     UserForms.signInForm.bindFromRequest.fold(
-      form => Future.successful(BadRequest(views.html.auth.signin(request.identity, form, providers, app.coreServices.settings.allowRegistration))),
+      form => Future.successful(BadRequest(views.html.auth.signin(request.identity, form, providers, settings.allowRegistration))),
       credentials => {
         val creds = credentials.copy(identifier = credentials.identifier.toLowerCase)
         credentialsProvider.authenticate(creds).flatMap { loginInfo =>

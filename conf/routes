@@ -3,6 +3,7 @@ GET         /ping                                    controllers.HomeController.
 GET         /robots.txt                              controllers.HomeController.robots
 
 ->          /profile                                 profile.Routes
+->          /projectile                              projectile.Routes
 
 # Admin
 ->          /admin/system                            system.Routes
@@ -20,7 +21,6 @@ GET         /robots.txt                              controllers.HomeController.
 ->          /admin/task                              task.Routes
 ->          /admin/user                              user.Routes
 # End model route files
-
 
 # Assets
 GET         /browserconfig.xml                       controllers.Assets.at(file = "browserconfig.xml")

@@ -1,12 +1,13 @@
 /* Generated File */
 package controllers.admin.auth
 
+import com.kyleu.projectile.controllers.{ServiceAuthController, ServiceController}
+import com.kyleu.projectile.models.Application
 import com.kyleu.projectile.models.result.orderBy.OrderBy
+import com.kyleu.projectile.services.note.NoteService
 import com.kyleu.projectile.util.DateUtils
 import com.kyleu.projectile.util.JsonSerializers._
 import com.kyleu.projectile.web.util.ReftreeUtils._
-import controllers.admin.ServiceController
-import models.Application
 import models.auth.{Oauth2InfoRow, Oauth2InfoRowResult}
 import play.api.http.MimeTypes
 import scala.concurrent.Future
@@ -16,8 +17,8 @@ import services.auth.Oauth2InfoRowService
 
 @javax.inject.Singleton
 class Oauth2InfoRowController @javax.inject.Inject() (
-    override val app: Application, svc: Oauth2InfoRowService, auditRecordSvc: AuditRecordRowService
-) extends ServiceController(svc) {
+    override val app: Application, svc: Oauth2InfoRowService, noteSvc: NoteService
+) extends ServiceAuthController(svc) {
 
   def createForm = withSession("create.form", admin = true) { implicit request => implicit td =>
     val cancel = controllers.admin.auth.routes.Oauth2InfoRowController.list()
@@ -59,16 +60,17 @@ class Oauth2InfoRowController @javax.inject.Inject() (
 
   def view(provider: String, key: String, t: Option[String] = None) = withSession("view", admin = true) { implicit request => implicit td =>
     val modelF = svc.getByPrimaryKey(request, provider, key)
+    val notesF = noteSvc.getFor(request, "oauth2InfoRow", provider, key)
 
-    modelF.map {
+    notesF.flatMap(notes => modelF.map {
       case Some(model) => renderChoice(t) {
-        case MimeTypes.HTML => Ok(views.html.admin.auth.oauth2InfoRowView(request.identity, model, app.config.debug))
+        case MimeTypes.HTML => Ok(views.html.admin.auth.oauth2InfoRowView(request.identity, model, notes, app.config.debug))
         case MimeTypes.JSON => Ok(model.asJson)
         case ServiceController.MimeTypes.png => Ok(renderToPng(v = model)).as(ServiceController.MimeTypes.png)
         case ServiceController.MimeTypes.svg => Ok(renderToSvg(v = model)).as(ServiceController.MimeTypes.svg)
       }
       case None => NotFound(s"No Oauth2InfoRow found with provider, key [$provider, $key].")
-    }
+    })
   }
 
   def editForm(provider: String, key: String) = withSession("edit.form", admin = true) { implicit request => implicit td =>

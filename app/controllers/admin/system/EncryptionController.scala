@@ -1,7 +1,8 @@
 package controllers.admin.system
 
-import controllers.BaseController
-import models.Application
+import com.kyleu.projectile.controllers.AuthController
+import com.kyleu.projectile.models.Application
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import util.EncryptionUtils
 import com.kyleu.projectile.web.util.ControllerUtils
@@ -9,7 +10,7 @@ import com.kyleu.projectile.web.util.ControllerUtils
 import scala.concurrent.Future
 
 @javax.inject.Singleton
-class EncryptionController @javax.inject.Inject() (override val app: Application) extends BaseController("encryption") {
+class EncryptionController @javax.inject.Inject() (override val app: Application) extends AuthController("encryption") {
   def form = withSession("list", admin = true) { implicit request => implicit td =>
     Future.successful(Ok(views.html.admin.encryption(request.identity)))
   }

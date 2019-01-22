@@ -3,6 +3,7 @@ package models.graphql.auth
 
 import com.kyleu.projectile.graphql.{GraphQLContext, GraphQLSchemaHelper}
 import com.kyleu.projectile.graphql.GraphQLUtils._
+import com.kyleu.projectile.models.graphql.note.NoteSchema
 import models.auth.{PasswordInfoRow, PasswordInfoRowResult}
 import sangria.execution.deferred.{Fetcher, HasId}
 import sangria.schema._

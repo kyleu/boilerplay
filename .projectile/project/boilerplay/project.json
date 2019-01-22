@@ -7,10 +7,7 @@
   "paths" : { },
   "packages" : { },
   "classOverrides" : { },
-  "defaultEnumFeatures" : [ "slick", "doobie", "controller", "core", "graphql" ],
-  "defaultModelFeatures" : [ "slick", "json", "doobie", "datamodel", "service", "thrift", "controller", "notes", "core", "graphql" ],
-  "defaultServiceFeatures" : [ "core" ],
-  "status" : null,
-  "created" : "2018-10-27T13:57:01.672048",
-  "updated" : "2018-10-27T13:57:01.672053"
+  "defaultEnumFeatures" : [ "auth", "slick", "doobie", "controller", "core", "graphql" ],
+  "defaultModelFeatures" : [ "auth", "slick", "json", "doobie", "datamodel", "service", "thrift", "controller", "notes", "core", "graphql" ],
+  "defaultServiceFeatures" : [ "core" ]
 }

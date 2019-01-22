@@ -2,18 +2,19 @@ package controllers.auth
 
 import java.util.UUID
 
+import com.kyleu.projectile.controllers.AuthController
+import com.kyleu.projectile.models.Application
 import com.kyleu.projectile.models.user.{Role, SystemUser}
 import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.api.util.PasswordHasher
 import com.mohiva.play.silhouette.api.{LoginEvent, LoginInfo, SignUpEvent}
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
-import controllers.BaseController
-import models.Application
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import com.kyleu.projectile.models.auth.UserCredentials
 import models.settings.SettingKeyType
 import models.user._
+import services.settings.SettingsService
 import services.user.{SystemUserSearchService, SystemUserService}
 
 import scala.concurrent.Future
@@ -24,10 +25,11 @@ class RegistrationController @javax.inject.Inject() (
     userSearchService: SystemUserSearchService,
     authInfoRepository: AuthInfoRepository,
     hasher: PasswordHasher,
-    userService: SystemUserService
-) extends BaseController("registration") {
+    userService: SystemUserService,
+    settings: SettingsService
+) extends AuthController("registration") {
   def registrationForm(email: Option[String] = None) = withoutSession("form") { implicit request => implicit td =>
-    if (app.coreServices.settings.allowRegistration) {
+    if (settings.allowRegistration) {
       val form = UserForms.registrationForm.fill(RegistrationData(
         username = email.map(e => if (e.contains('@')) { e.substring(0, e.indexOf('@')) } else { "" }).getOrElse(""),
         email = email.getOrElse("")
@@ -39,7 +41,7 @@ class RegistrationController @javax.inject.Inject() (
   }
 
   def register = withoutSession("register") { implicit request => implicit td =>
-    if (!app.coreServices.settings.allowRegistration) {
+    if (!settings.allowRegistration) {
       throw new IllegalStateException("You cannot sign up at this time. Contact your administrator.")
     }
     UserForms.registrationForm.bindFromRequest.fold(
@@ -55,7 +57,7 @@ class RegistrationController @javax.inject.Inject() (
           )
           case None =>
             val authInfo = hasher.hash(data.password)
-            val role = Role.withValue(app.coreServices.settings(SettingKeyType.DefaultNewUserRole))
+            val role = Role.withValue(settings(SettingKeyType.DefaultNewUserRole))
             val user = SystemUser(
               id = UUID.randomUUID,
               username = data.username,

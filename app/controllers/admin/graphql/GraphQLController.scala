@@ -1,10 +1,10 @@
 package controllers.admin.graphql
 
+import com.kyleu.projectile.controllers.AuthController
+import com.kyleu.projectile.models.Application
 import com.kyleu.projectile.models.user.Role
-import controllers.BaseController
 import graphql.GraphQLService
 import io.circe.Json
-import models.Application
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import com.kyleu.projectile.models.auth.UserCredentials
@@ -18,7 +18,7 @@ import com.kyleu.projectile.web.util.ControllerUtils.{jsonBody, jsonObject}
 import scala.concurrent.Future
 
 @javax.inject.Singleton
-class GraphQLController @javax.inject.Inject() (override val app: Application, graphQLService: GraphQLService) extends BaseController("graphql") {
+class GraphQLController @javax.inject.Inject() (override val app: Application, graphQLService: GraphQLService) extends AuthController("graphql") {
   private[this] val secretKey = "GraphTastesBad"
 
   def graphql(query: Option[String], variables: Option[String]) = withSession("graphql.ui", admin = true) { implicit request => implicit td =>

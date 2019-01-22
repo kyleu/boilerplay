@@ -1,13 +1,14 @@
 /* Generated File */
 package controllers.admin.note
 
+import com.kyleu.projectile.controllers.{ServiceAuthController, ServiceController}
+import com.kyleu.projectile.models.Application
 import com.kyleu.projectile.models.result.orderBy.OrderBy
+import com.kyleu.projectile.services.note.NoteService
 import com.kyleu.projectile.util.DateUtils
 import com.kyleu.projectile.util.JsonSerializers._
 import com.kyleu.projectile.web.util.ReftreeUtils._
-import controllers.admin.ServiceController
 import java.util.UUID
-import models.Application
 import models.note.{NoteRow, NoteRowResult}
 import play.api.http.MimeTypes
 import scala.concurrent.Future
@@ -17,8 +18,8 @@ import services.note.NoteRowService
 
 @javax.inject.Singleton
 class NoteRowController @javax.inject.Inject() (
-    override val app: Application, svc: NoteRowService, auditRecordSvc: AuditRecordRowService
-) extends ServiceController(svc) {
+    override val app: Application, svc: NoteRowService, noteSvc: NoteService
+) extends ServiceAuthController(svc) {
 
   def createForm = withSession("create.form", admin = true) { implicit request => implicit td =>
     val cancel = controllers.admin.note.routes.NoteRowController.list()
@@ -75,7 +76,7 @@ class NoteRowController @javax.inject.Inject() (
 
   def view(id: UUID, t: Option[String] = None) = withSession("view", admin = true) { implicit request => implicit td =>
     val modelF = svc.getByPrimaryKey(request, id)
-    val notesF = app.coreServices.notes.getFor(request, "noteRow", id)
+    val notesF = noteSvc.getFor(request, "noteRow", id)
 
     notesF.flatMap(notes => modelF.map {
       case Some(model) => renderChoice(t) {
