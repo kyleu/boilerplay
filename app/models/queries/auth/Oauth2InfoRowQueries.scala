@@ -17,7 +17,7 @@ object Oauth2InfoRowQueries extends BaseQueries[Oauth2InfoRow]("oauth2InfoRow", 
     DatabaseField(title = "Token Type", prop = "tokenType", col = "token_type", typ = StringType),
     DatabaseField(title = "Expires In", prop = "expiresIn", col = "expires_in", typ = LongType),
     DatabaseField(title = "Refresh Token", prop = "refreshToken", col = "refresh_token", typ = StringType),
-    DatabaseField(title = "Params", prop = "params", col = "params", typ = TagsType),
+    DatabaseField(title = "Params", prop = "params", col = "params", typ = JsonType),
     DatabaseField(title = "Created", prop = "created", col = "created", typ = TimestampType)
   )
   override protected val pkColumns = Seq("provider", "key")
@@ -69,7 +69,7 @@ object Oauth2InfoRowQueries extends BaseQueries[Oauth2InfoRow]("oauth2InfoRow", 
     tokenType = StringType.opt(row, "token_type"),
     expiresIn = LongType.opt(row, "expires_in"),
     refreshToken = StringType.opt(row, "refresh_token"),
-    params = TagsType.opt(row, "params"),
+    params = JsonType.opt(row, "params"),
     created = TimestampType(row, "created")
   )
 }

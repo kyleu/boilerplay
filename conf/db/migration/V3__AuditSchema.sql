@@ -1,13 +1,11 @@
-﻿create extension if not exists hstore;
-
-create table if not exists "audit" (
+﻿create table if not exists "audit" (
   "id" uuid not null,
   "act" character varying(32) not null,
   "app" character varying(64) not null,
   "client" character varying(32) not null,
   "server" character varying(32) not null,
   "user_id" uuid not null,
-  "tags" hstore not null,
+  "tags" json not null,
   "msg" text not null,
   "started" timestamp without time zone not null,
   "completed" timestamp without time zone not null,
@@ -19,7 +17,6 @@ create index if not exists "audit_app" on "audit" using btree ("app" asc nulls l
 create index if not exists "audit_client" on "audit" using btree ("client" asc nulls last);
 create index if not exists "audit_server" on "audit" using btree ("server" asc nulls last);
 create index if not exists "audit_user_id" on "audit" using btree ("user_id" asc nulls last);
-create index if not exists "audit_tags" on "audit" using gin ("tags");
 
 create table if not exists "audit_record" (
   "id" uuid not null,

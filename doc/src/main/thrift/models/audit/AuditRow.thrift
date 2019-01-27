@@ -11,7 +11,7 @@ struct AuditRow {
   4: required string client;
   5: required string server;
   6: required common.UUID userId;
-  7: required list<common.Tag> tags;
+  7: required string tags;
   8: required string msg;
   9: required common.LocalDateTime started;
   10: required common.LocalDateTime completed;

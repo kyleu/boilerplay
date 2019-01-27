@@ -4,7 +4,6 @@ package services.audit
 import com.kyleu.projectile.models.result.data.DataField
 import com.kyleu.projectile.models.result.filter.Filter
 import com.kyleu.projectile.models.result.orderBy.OrderBy
-import com.kyleu.projectile.models.tag.Tag
 import com.kyleu.projectile.services.{Credentials, ModelServiceHelper}
 import com.kyleu.projectile.services.database.ApplicationDatabase
 import com.kyleu.projectile.util.CsvUtils
@@ -23,7 +22,9 @@ class AuditRowService @javax.inject.Inject() (override val tracing: TracingServi
   def getByPrimaryKeyRequired(creds: Credentials, id: UUID)(implicit trace: TraceData) = getByPrimaryKey(creds, id).map { opt =>
     opt.getOrElse(throw new IllegalStateException(s"Cannot load auditRow with id [$id]."))
   }
-  def getByPrimaryKeySeq(creds: Credentials, idSeq: Seq[UUID])(implicit trace: TraceData) = {
+  def getByPrimaryKeySeq(creds: Credentials, idSeq: Seq[UUID])(implicit trace: TraceData) = if (idSeq.isEmpty) {
+    Future.successful(Nil)
+  } else {
     traceF("get.by.primary.key.seq")(td => ApplicationDatabase.queryF(AuditRowQueries.getByPrimaryKeySeq(idSeq))(td))
   }
 
@@ -56,8 +57,12 @@ class AuditRowService @javax.inject.Inject() (override val tracing: TracingServi
   def getByAct(creds: Credentials, act: String, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData) = traceF("get.by.act") { td =>
     ApplicationDatabase.queryF(AuditRowQueries.GetByAct(act, orderBys, limit, offset))(td)
   }
-  def getByActSeq(creds: Credentials, actSeq: Seq[String])(implicit trace: TraceData) = traceF("get.by.act.seq") { td =>
-    ApplicationDatabase.queryF(AuditRowQueries.GetByActSeq(actSeq))(td)
+  def getByActSeq(creds: Credentials, actSeq: Seq[String])(implicit trace: TraceData) = if (actSeq.isEmpty) {
+    Future.successful(Nil)
+  } else {
+    traceF("get.by.act.seq") { td =>
+      ApplicationDatabase.queryF(AuditRowQueries.GetByActSeq(actSeq))(td)
+    }
   }
 
   def countByApp(creds: Credentials, app: String)(implicit trace: TraceData) = traceF("count.by.app") { td =>
@@ -66,8 +71,12 @@ class AuditRowService @javax.inject.Inject() (override val tracing: TracingServi
   def getByApp(creds: Credentials, app: String, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData) = traceF("get.by.app") { td =>
     ApplicationDatabase.queryF(AuditRowQueries.GetByApp(app, orderBys, limit, offset))(td)
   }
-  def getByAppSeq(creds: Credentials, appSeq: Seq[String])(implicit trace: TraceData) = traceF("get.by.app.seq") { td =>
-    ApplicationDatabase.queryF(AuditRowQueries.GetByAppSeq(appSeq))(td)
+  def getByAppSeq(creds: Credentials, appSeq: Seq[String])(implicit trace: TraceData) = if (appSeq.isEmpty) {
+    Future.successful(Nil)
+  } else {
+    traceF("get.by.app.seq") { td =>
+      ApplicationDatabase.queryF(AuditRowQueries.GetByAppSeq(appSeq))(td)
+    }
   }
 
   def countByClient(creds: Credentials, client: String)(implicit trace: TraceData) = traceF("count.by.client") { td =>
@@ -76,8 +85,12 @@ class AuditRowService @javax.inject.Inject() (override val tracing: TracingServi
   def getByClient(creds: Credentials, client: String, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData) = traceF("get.by.client") { td =>
     ApplicationDatabase.queryF(AuditRowQueries.GetByClient(client, orderBys, limit, offset))(td)
   }
-  def getByClientSeq(creds: Credentials, clientSeq: Seq[String])(implicit trace: TraceData) = traceF("get.by.client.seq") { td =>
-    ApplicationDatabase.queryF(AuditRowQueries.GetByClientSeq(clientSeq))(td)
+  def getByClientSeq(creds: Credentials, clientSeq: Seq[String])(implicit trace: TraceData) = if (clientSeq.isEmpty) {
+    Future.successful(Nil)
+  } else {
+    traceF("get.by.client.seq") { td =>
+      ApplicationDatabase.queryF(AuditRowQueries.GetByClientSeq(clientSeq))(td)
+    }
   }
 
   def countById(creds: Credentials, id: UUID)(implicit trace: TraceData) = traceF("count.by.id") { td =>
@@ -86,8 +99,12 @@ class AuditRowService @javax.inject.Inject() (override val tracing: TracingServi
   def getById(creds: Credentials, id: UUID, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData) = traceF("get.by.id") { td =>
     ApplicationDatabase.queryF(AuditRowQueries.GetById(id, orderBys, limit, offset))(td)
   }
-  def getByIdSeq(creds: Credentials, idSeq: Seq[UUID])(implicit trace: TraceData) = traceF("get.by.id.seq") { td =>
-    ApplicationDatabase.queryF(AuditRowQueries.GetByIdSeq(idSeq))(td)
+  def getByIdSeq(creds: Credentials, idSeq: Seq[UUID])(implicit trace: TraceData) = if (idSeq.isEmpty) {
+    Future.successful(Nil)
+  } else {
+    traceF("get.by.id.seq") { td =>
+      ApplicationDatabase.queryF(AuditRowQueries.GetByIdSeq(idSeq))(td)
+    }
   }
 
   def countByServer(creds: Credentials, server: String)(implicit trace: TraceData) = traceF("count.by.server") { td =>
@@ -96,18 +113,12 @@ class AuditRowService @javax.inject.Inject() (override val tracing: TracingServi
   def getByServer(creds: Credentials, server: String, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData) = traceF("get.by.server") { td =>
     ApplicationDatabase.queryF(AuditRowQueries.GetByServer(server, orderBys, limit, offset))(td)
   }
-  def getByServerSeq(creds: Credentials, serverSeq: Seq[String])(implicit trace: TraceData) = traceF("get.by.server.seq") { td =>
-    ApplicationDatabase.queryF(AuditRowQueries.GetByServerSeq(serverSeq))(td)
-  }
-
-  def countByTags(creds: Credentials, tags: List[Tag])(implicit trace: TraceData) = traceF("count.by.tags") { td =>
-    ApplicationDatabase.queryF(AuditRowQueries.CountByTags(tags))(td)
-  }
-  def getByTags(creds: Credentials, tags: List[Tag], orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData) = traceF("get.by.tags") { td =>
-    ApplicationDatabase.queryF(AuditRowQueries.GetByTags(tags, orderBys, limit, offset))(td)
-  }
-  def getByTagsSeq(creds: Credentials, tagsSeq: Seq[List[Tag]])(implicit trace: TraceData) = traceF("get.by.tags.seq") { td =>
-    ApplicationDatabase.queryF(AuditRowQueries.GetByTagsSeq(tagsSeq))(td)
+  def getByServerSeq(creds: Credentials, serverSeq: Seq[String])(implicit trace: TraceData) = if (serverSeq.isEmpty) {
+    Future.successful(Nil)
+  } else {
+    traceF("get.by.server.seq") { td =>
+      ApplicationDatabase.queryF(AuditRowQueries.GetByServerSeq(serverSeq))(td)
+    }
   }
 
   def countByUserId(creds: Credentials, userId: UUID)(implicit trace: TraceData) = traceF("count.by.userId") { td =>
@@ -116,8 +127,12 @@ class AuditRowService @javax.inject.Inject() (override val tracing: TracingServi
   def getByUserId(creds: Credentials, userId: UUID, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData) = traceF("get.by.userId") { td =>
     ApplicationDatabase.queryF(AuditRowQueries.GetByUserId(userId, orderBys, limit, offset))(td)
   }
-  def getByUserIdSeq(creds: Credentials, userIdSeq: Seq[UUID])(implicit trace: TraceData) = traceF("get.by.userId.seq") { td =>
-    ApplicationDatabase.queryF(AuditRowQueries.GetByUserIdSeq(userIdSeq))(td)
+  def getByUserIdSeq(creds: Credentials, userIdSeq: Seq[UUID])(implicit trace: TraceData) = if (userIdSeq.isEmpty) {
+    Future.successful(Nil)
+  } else {
+    traceF("get.by.userId.seq") { td =>
+      ApplicationDatabase.queryF(AuditRowQueries.GetByUserIdSeq(userIdSeq))(td)
+    }
   }
 
   // Mutations

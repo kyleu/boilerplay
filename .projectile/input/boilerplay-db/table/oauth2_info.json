@@ -108,10 +108,10 @@
     "notNull" : false,
     "autoIncrement" : false,
     "columnType" : {
-      "t" : "hstore"
+      "t" : "json"
     },
     "sqlTypeCode" : 1111,
-    "sqlTypeName" : "hstore",
+    "sqlTypeName" : "json",
     "size" : "2147483647",
     "sizeAsInt" : 2147483647,
     "scale" : 0,

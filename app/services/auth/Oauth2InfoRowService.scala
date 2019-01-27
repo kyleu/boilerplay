@@ -18,7 +18,9 @@ class Oauth2InfoRowService @javax.inject.Inject() (override val tracing: Tracing
   def getByPrimaryKey(creds: Credentials, provider: String, key: String)(implicit trace: TraceData) = {
     traceF("get.by.primary.key")(td => ApplicationDatabase.queryF(Oauth2InfoRowQueries.getByPrimaryKey(provider, key))(td))
   }
-  def getByPrimaryKeySeq(creds: Credentials, pkSeq: Seq[(String, String)])(implicit trace: TraceData) = {
+  def getByPrimaryKeySeq(creds: Credentials, pkSeq: Seq[(String, String)])(implicit trace: TraceData) = if (pkSeq.isEmpty) {
+    Future.successful(Nil)
+  } else {
     traceF("get.by.primary.key.seq")(td => ApplicationDatabase.queryF(Oauth2InfoRowQueries.getByPrimaryKeySeq(pkSeq))(td))
   }
 
@@ -51,8 +53,12 @@ class Oauth2InfoRowService @javax.inject.Inject() (override val tracing: Tracing
   def getByKey(creds: Credentials, key: String, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData) = traceF("get.by.key") { td =>
     ApplicationDatabase.queryF(Oauth2InfoRowQueries.GetByKey(key, orderBys, limit, offset))(td)
   }
-  def getByKeySeq(creds: Credentials, keySeq: Seq[String])(implicit trace: TraceData) = traceF("get.by.key.seq") { td =>
-    ApplicationDatabase.queryF(Oauth2InfoRowQueries.GetByKeySeq(keySeq))(td)
+  def getByKeySeq(creds: Credentials, keySeq: Seq[String])(implicit trace: TraceData) = if (keySeq.isEmpty) {
+    Future.successful(Nil)
+  } else {
+    traceF("get.by.key.seq") { td =>
+      ApplicationDatabase.queryF(Oauth2InfoRowQueries.GetByKeySeq(keySeq))(td)
+    }
   }
 
   def countByProvider(creds: Credentials, provider: String)(implicit trace: TraceData) = traceF("count.by.provider") { td =>
@@ -61,8 +67,12 @@ class Oauth2InfoRowService @javax.inject.Inject() (override val tracing: Tracing
   def getByProvider(creds: Credentials, provider: String, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData) = traceF("get.by.provider") { td =>
     ApplicationDatabase.queryF(Oauth2InfoRowQueries.GetByProvider(provider, orderBys, limit, offset))(td)
   }
-  def getByProviderSeq(creds: Credentials, providerSeq: Seq[String])(implicit trace: TraceData) = traceF("get.by.provider.seq") { td =>
-    ApplicationDatabase.queryF(Oauth2InfoRowQueries.GetByProviderSeq(providerSeq))(td)
+  def getByProviderSeq(creds: Credentials, providerSeq: Seq[String])(implicit trace: TraceData) = if (providerSeq.isEmpty) {
+    Future.successful(Nil)
+  } else {
+    traceF("get.by.provider.seq") { td =>
+      ApplicationDatabase.queryF(Oauth2InfoRowQueries.GetByProviderSeq(providerSeq))(td)
+    }
   }
 
   // Mutations

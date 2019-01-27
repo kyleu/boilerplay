@@ -7,7 +7,6 @@ import com.kyleu.projectile.models.queries.{BaseQueries, ResultFieldHelper}
 import com.kyleu.projectile.models.result.data.DataField
 import com.kyleu.projectile.models.result.filter.Filter
 import com.kyleu.projectile.models.result.orderBy.OrderBy
-import com.kyleu.projectile.models.tag.Tag
 import java.util.UUID
 import models.audit.AuditRow
 
@@ -19,13 +18,13 @@ object AuditRowQueries extends BaseQueries[AuditRow]("auditRow", "audit") {
     DatabaseField(title = "Client", prop = "client", col = "client", typ = StringType),
     DatabaseField(title = "Server", prop = "server", col = "server", typ = StringType),
     DatabaseField(title = "User Id", prop = "userId", col = "user_id", typ = UuidType),
-    DatabaseField(title = "Tags", prop = "tags", col = "tags", typ = TagsType),
+    DatabaseField(title = "Tags", prop = "tags", col = "tags", typ = JsonType),
     DatabaseField(title = "Msg", prop = "msg", col = "msg", typ = StringType),
     DatabaseField(title = "Started", prop = "started", col = "started", typ = TimestampType),
     DatabaseField(title = "Completed", prop = "completed", col = "completed", typ = TimestampType)
   )
   override protected val pkColumns = Seq("id")
-  override protected val searchColumns = Seq("id", "act", "app", "client", "server", "user_id", "tags")
+  override protected val searchColumns = Seq("id", "act", "app", "client", "server", "user_id")
 
   def countAll(filters: Seq[Filter] = Nil) = onCountAll(filters)
   def getAll(filters: Seq[Filter] = Nil, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) = {
@@ -76,13 +75,6 @@ object AuditRowQueries extends BaseQueries[AuditRow]("auditRow", "audit") {
   )
   final case class GetByServerSeq(serverSeq: Seq[String]) extends ColSeqQuery(column = "server", values = serverSeq)
 
-  final case class CountByTags(tags: List[Tag]) extends ColCount(column = "tags", values = Seq(tags))
-  final case class GetByTags(tags: List[Tag], orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) extends SeqQuery(
-    whereClause = Some(quote("tags") + "  = ?"), orderBy = ResultFieldHelper.orderClause(fields, orderBys: _*),
-    limit = limit, offset = offset, values = Seq(tags)
-  )
-  final case class GetByTagsSeq(tagsSeq: Seq[List[Tag]]) extends ColSeqQuery(column = "tags", values = tagsSeq)
-
   final case class CountByUserId(userId: UUID) extends ColCount(column = "user_id", values = Seq(userId))
   final case class GetByUserId(userId: UUID, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) extends SeqQuery(
     whereClause = Some(quote("user_id") + "  = ?"), orderBy = ResultFieldHelper.orderClause(fields, orderBys: _*),
@@ -105,7 +97,7 @@ object AuditRowQueries extends BaseQueries[AuditRow]("auditRow", "audit") {
     client = StringType(row, "client"),
     server = StringType(row, "server"),
     userId = UuidType(row, "user_id"),
-    tags = TagsType(row, "tags"),
+    tags = JsonType(row, "tags"),
     msg = StringType(row, "msg"),
     started = TimestampType(row, "started"),
     completed = TimestampType(row, "completed")

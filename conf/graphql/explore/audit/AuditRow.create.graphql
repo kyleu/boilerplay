@@ -9,10 +9,7 @@ mutation AuditRowCreate {
       client
       server
       userId
-      tags {
-        k
-        v
-      }
+      tags
       msg
       started
       completed

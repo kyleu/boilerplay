@@ -21,7 +21,9 @@ class SettingService @javax.inject.Inject() (override val tracing: TracingServic
   def getByPrimaryKeyRequired(creds: Credentials, k: SettingKeyType)(implicit trace: TraceData) = getByPrimaryKey(creds, k).map { opt =>
     opt.getOrElse(throw new IllegalStateException(s"Cannot load setting with k [$k]."))
   }
-  def getByPrimaryKeySeq(creds: Credentials, kSeq: Seq[SettingKeyType])(implicit trace: TraceData) = {
+  def getByPrimaryKeySeq(creds: Credentials, kSeq: Seq[SettingKeyType])(implicit trace: TraceData) = if (kSeq.isEmpty) {
+    Future.successful(Nil)
+  } else {
     traceF("get.by.primary.key.seq")(td => ApplicationDatabase.queryF(SettingQueries.getByPrimaryKeySeq(kSeq))(td))
   }
 
@@ -54,8 +56,12 @@ class SettingService @javax.inject.Inject() (override val tracing: TracingServic
   def getByK(creds: Credentials, k: SettingKeyType, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData) = traceF("get.by.k") { td =>
     ApplicationDatabase.queryF(SettingQueries.GetByK(k, orderBys, limit, offset))(td)
   }
-  def getByKSeq(creds: Credentials, kSeq: Seq[SettingKeyType])(implicit trace: TraceData) = traceF("get.by.k.seq") { td =>
-    ApplicationDatabase.queryF(SettingQueries.GetByKSeq(kSeq))(td)
+  def getByKSeq(creds: Credentials, kSeq: Seq[SettingKeyType])(implicit trace: TraceData) = if (kSeq.isEmpty) {
+    Future.successful(Nil)
+  } else {
+    traceF("get.by.k.seq") { td =>
+      ApplicationDatabase.queryF(SettingQueries.GetByKSeq(kSeq))(td)
+    }
   }
 
   // Mutations

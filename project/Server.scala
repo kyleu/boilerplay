@@ -6,13 +6,8 @@ import com.typesafe.sbt.jse.JsEngineImport.JsEngineKeys
 import com.typesafe.sbt.less.Import._
 import com.typesafe.sbt.packager.Keys._
 import com.typesafe.sbt.packager.archetypes.JavaAppPackaging
-import com.typesafe.sbt.packager.debian.DebianPlugin
 import com.typesafe.sbt.packager.docker.DockerPlugin
-import com.typesafe.sbt.packager.jdkpackager.JDKPackagerPlugin
-import com.typesafe.sbt.packager.linux.LinuxPlugin
-import com.typesafe.sbt.packager.rpm.RpmPlugin
 import com.typesafe.sbt.packager.universal.UniversalPlugin
-import com.typesafe.sbt.packager.windows.WindowsPlugin
 import com.typesafe.sbt.web.Import._
 import com.typesafe.sbt.web.SbtWeb
 import Dependencies._
@@ -32,12 +27,6 @@ object Server {
     maintainer := "Boilerplay User <admin@boilerplay.com>",
     description := Shared.projectName,
 
-    resolvers ++= Seq(
-      Resolver.jcenterRepo,
-      Resolver.bintrayRepo("stanch", "maven"),
-      "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/"
-    ),
-
     libraryDependencies ++= dependencies,
 
     // Play
@@ -48,6 +37,13 @@ object Server {
     PlayKeys.playDefaultPort := Shared.projectPort,
     PlayKeys.playInteractionMode := PlayUtils.NonBlockingInteractionMode,
 
+    // Assets
+    packagedArtifacts in publishLocal := {
+      val artifacts: Map[sbt.Artifact, java.io.File] = (packagedArtifacts in publishLocal).value
+      val assets: java.io.File = (PlayKeys.playPackageAssets in Compile).value
+      artifacts + (Artifact(moduleName.value, "jar", "jar", "assets") -> assets)
+    },
+    
     // Scala.js
     scalaJSProjects := Seq(Client.client),
 
@@ -79,7 +75,6 @@ object Server {
   )
 
   lazy val server = Project(id = Shared.projectId, base = file(".")).enablePlugins(
-    SbtProjectile, SbtWeb, play.sbt.PlayScala, JavaAppPackaging, diagram.ClassDiagramPlugin,
-    UniversalPlugin, LinuxPlugin, DebianPlugin, RpmPlugin, DockerPlugin, WindowsPlugin, JDKPackagerPlugin
+    SbtProjectile, SbtWeb, play.sbt.PlayScala, JavaAppPackaging, diagram.ClassDiagramPlugin, UniversalPlugin, DockerPlugin
   ).settings(serverSettings: _*).settings(Packaging.settings: _*)
 }

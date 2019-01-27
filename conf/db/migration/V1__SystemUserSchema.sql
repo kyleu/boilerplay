@@ -1,5 +1,3 @@
-create extension if not exists hstore;
-
 create table if not exists "system_users" (
   "id" uuid primary key,
   "username" character varying(256) unique,
@@ -32,7 +30,7 @@ create table if not exists "oauth2_info" (
   "token_type" varchar(128),
   "expires_in" integer,
   "refresh_token" varchar(1024),
-  "params" hstore,
+  "params" json,
   "created" timestamp without time zone not null,
   constraint "oauth2_info_pkey" primary key ("provider", "key")
 );

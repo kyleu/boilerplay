@@ -22,7 +22,9 @@ class FlywaySchemaHistoryRowService @javax.inject.Inject() (override val tracing
   def getByPrimaryKeyRequired(creds: Credentials, installedRank: Long)(implicit trace: TraceData) = getByPrimaryKey(creds, installedRank).map { opt =>
     opt.getOrElse(throw new IllegalStateException(s"Cannot load flywaySchemaHistoryRow with installedRank [$installedRank]."))
   }
-  def getByPrimaryKeySeq(creds: Credentials, installedRankSeq: Seq[Long])(implicit trace: TraceData) = {
+  def getByPrimaryKeySeq(creds: Credentials, installedRankSeq: Seq[Long])(implicit trace: TraceData) = if (installedRankSeq.isEmpty) {
+    Future.successful(Nil)
+  } else {
     traceF("get.by.primary.key.seq")(td => ApplicationDatabase.queryF(FlywaySchemaHistoryRowQueries.getByPrimaryKeySeq(installedRankSeq))(td))
   }
 
@@ -55,8 +57,12 @@ class FlywaySchemaHistoryRowService @javax.inject.Inject() (override val tracing
   def getByDescription(creds: Credentials, description: String, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData) = traceF("get.by.description") { td =>
     ApplicationDatabase.queryF(FlywaySchemaHistoryRowQueries.GetByDescription(description, orderBys, limit, offset))(td)
   }
-  def getByDescriptionSeq(creds: Credentials, descriptionSeq: Seq[String])(implicit trace: TraceData) = traceF("get.by.description.seq") { td =>
-    ApplicationDatabase.queryF(FlywaySchemaHistoryRowQueries.GetByDescriptionSeq(descriptionSeq))(td)
+  def getByDescriptionSeq(creds: Credentials, descriptionSeq: Seq[String])(implicit trace: TraceData) = if (descriptionSeq.isEmpty) {
+    Future.successful(Nil)
+  } else {
+    traceF("get.by.description.seq") { td =>
+      ApplicationDatabase.queryF(FlywaySchemaHistoryRowQueries.GetByDescriptionSeq(descriptionSeq))(td)
+    }
   }
 
   def countByInstalledOn(creds: Credentials, installedOn: LocalDateTime)(implicit trace: TraceData) = traceF("count.by.installedOn") { td =>
@@ -65,8 +71,12 @@ class FlywaySchemaHistoryRowService @javax.inject.Inject() (override val tracing
   def getByInstalledOn(creds: Credentials, installedOn: LocalDateTime, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData) = traceF("get.by.installedOn") { td =>
     ApplicationDatabase.queryF(FlywaySchemaHistoryRowQueries.GetByInstalledOn(installedOn, orderBys, limit, offset))(td)
   }
-  def getByInstalledOnSeq(creds: Credentials, installedOnSeq: Seq[LocalDateTime])(implicit trace: TraceData) = traceF("get.by.installedOn.seq") { td =>
-    ApplicationDatabase.queryF(FlywaySchemaHistoryRowQueries.GetByInstalledOnSeq(installedOnSeq))(td)
+  def getByInstalledOnSeq(creds: Credentials, installedOnSeq: Seq[LocalDateTime])(implicit trace: TraceData) = if (installedOnSeq.isEmpty) {
+    Future.successful(Nil)
+  } else {
+    traceF("get.by.installedOn.seq") { td =>
+      ApplicationDatabase.queryF(FlywaySchemaHistoryRowQueries.GetByInstalledOnSeq(installedOnSeq))(td)
+    }
   }
 
   def countByInstalledRank(creds: Credentials, installedRank: Long)(implicit trace: TraceData) = traceF("count.by.installedRank") { td =>
@@ -75,8 +85,12 @@ class FlywaySchemaHistoryRowService @javax.inject.Inject() (override val tracing
   def getByInstalledRank(creds: Credentials, installedRank: Long, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData) = traceF("get.by.installedRank") { td =>
     ApplicationDatabase.queryF(FlywaySchemaHistoryRowQueries.GetByInstalledRank(installedRank, orderBys, limit, offset))(td)
   }
-  def getByInstalledRankSeq(creds: Credentials, installedRankSeq: Seq[Long])(implicit trace: TraceData) = traceF("get.by.installedRank.seq") { td =>
-    ApplicationDatabase.queryF(FlywaySchemaHistoryRowQueries.GetByInstalledRankSeq(installedRankSeq))(td)
+  def getByInstalledRankSeq(creds: Credentials, installedRankSeq: Seq[Long])(implicit trace: TraceData) = if (installedRankSeq.isEmpty) {
+    Future.successful(Nil)
+  } else {
+    traceF("get.by.installedRank.seq") { td =>
+      ApplicationDatabase.queryF(FlywaySchemaHistoryRowQueries.GetByInstalledRankSeq(installedRankSeq))(td)
+    }
   }
 
   def countBySuccess(creds: Credentials, success: Boolean)(implicit trace: TraceData) = traceF("count.by.success") { td =>
@@ -85,8 +99,12 @@ class FlywaySchemaHistoryRowService @javax.inject.Inject() (override val tracing
   def getBySuccess(creds: Credentials, success: Boolean, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData) = traceF("get.by.success") { td =>
     ApplicationDatabase.queryF(FlywaySchemaHistoryRowQueries.GetBySuccess(success, orderBys, limit, offset))(td)
   }
-  def getBySuccessSeq(creds: Credentials, successSeq: Seq[Boolean])(implicit trace: TraceData) = traceF("get.by.success.seq") { td =>
-    ApplicationDatabase.queryF(FlywaySchemaHistoryRowQueries.GetBySuccessSeq(successSeq))(td)
+  def getBySuccessSeq(creds: Credentials, successSeq: Seq[Boolean])(implicit trace: TraceData) = if (successSeq.isEmpty) {
+    Future.successful(Nil)
+  } else {
+    traceF("get.by.success.seq") { td =>
+      ApplicationDatabase.queryF(FlywaySchemaHistoryRowQueries.GetBySuccessSeq(successSeq))(td)
+    }
   }
 
   def countByTyp(creds: Credentials, typ: String)(implicit trace: TraceData) = traceF("count.by.typ") { td =>
@@ -95,8 +113,12 @@ class FlywaySchemaHistoryRowService @javax.inject.Inject() (override val tracing
   def getByTyp(creds: Credentials, typ: String, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData) = traceF("get.by.typ") { td =>
     ApplicationDatabase.queryF(FlywaySchemaHistoryRowQueries.GetByTyp(typ, orderBys, limit, offset))(td)
   }
-  def getByTypSeq(creds: Credentials, typSeq: Seq[String])(implicit trace: TraceData) = traceF("get.by.typ.seq") { td =>
-    ApplicationDatabase.queryF(FlywaySchemaHistoryRowQueries.GetByTypSeq(typSeq))(td)
+  def getByTypSeq(creds: Credentials, typSeq: Seq[String])(implicit trace: TraceData) = if (typSeq.isEmpty) {
+    Future.successful(Nil)
+  } else {
+    traceF("get.by.typ.seq") { td =>
+      ApplicationDatabase.queryF(FlywaySchemaHistoryRowQueries.GetByTypSeq(typSeq))(td)
+    }
   }
 
   def countByVersion(creds: Credentials, version: String)(implicit trace: TraceData) = traceF("count.by.version") { td =>
@@ -105,8 +127,12 @@ class FlywaySchemaHistoryRowService @javax.inject.Inject() (override val tracing
   def getByVersion(creds: Credentials, version: String, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData) = traceF("get.by.version") { td =>
     ApplicationDatabase.queryF(FlywaySchemaHistoryRowQueries.GetByVersion(version, orderBys, limit, offset))(td)
   }
-  def getByVersionSeq(creds: Credentials, versionSeq: Seq[String])(implicit trace: TraceData) = traceF("get.by.version.seq") { td =>
-    ApplicationDatabase.queryF(FlywaySchemaHistoryRowQueries.GetByVersionSeq(versionSeq))(td)
+  def getByVersionSeq(creds: Credentials, versionSeq: Seq[String])(implicit trace: TraceData) = if (versionSeq.isEmpty) {
+    Future.successful(Nil)
+  } else {
+    traceF("get.by.version.seq") { td =>
+      ApplicationDatabase.queryF(FlywaySchemaHistoryRowQueries.GetByVersionSeq(versionSeq))(td)
+    }
   }
 
   // Mutations

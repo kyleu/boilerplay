@@ -9,10 +9,7 @@ mutation Oauth2InfoRowCreate {
       tokenType
       expiresIn
       refreshToken
-      params {
-        k
-        v
-      }
+      params
       created
     }
   }

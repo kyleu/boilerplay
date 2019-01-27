@@ -29,7 +29,7 @@ class ProjectileModule extends AbstractModule with ScalaModule {
   @Provides
   def provideApplicationActions: Application.Actions = Application.Actions(
     projectName = Version.projectName,
-    failedRedirect = controllers.routes.HomeController.home()
+    failedRedirect = controllers.auth.routes.AuthenticationController.signInForm()
   )
 
   @Provides

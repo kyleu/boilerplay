@@ -18,7 +18,7 @@
             @views.html.components.form.textField(selected = isNew, key = "client", title = "Client", value = Some(model.client.toString), nullable = false)
             @views.html.components.form.textField(selected = isNew, key = "server", title = "Server", value = Some(model.server.toString), nullable = false)
             @views.html.components.form.textField(selected = isNew, key = "userId", title = "User Id", value = Some(model.userId.toString), nullable = false, dataType = "uuid")
-            @views.html.components.form.textField(selected = isNew, key = "tags", title = "Tags", value = Some(model.tags.toString), nullable = false, dataType = "hstore")
+            @views.html.components.form.textField(selected = isNew, key = "tags", title = "Tags", value = Some(model.tags.toString), nullable = false, dataType = "json")
             @views.html.components.form.textField(selected = isNew, key = "msg", title = "Msg", value = Some(model.msg.toString), nullable = false)
             @views.html.components.form.localDateTimeField(selected = isNew, key = "started", title = "Started", value = Some(model.started), nullable = false)
             @views.html.components.form.localDateTimeField(selected = isNew, key = "completed", title = "Completed", value = Some(model.completed), nullable = false)

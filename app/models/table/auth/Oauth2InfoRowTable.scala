@@ -1,8 +1,8 @@
 /* Generated File */
 package models.table.auth
 
-import com.kyleu.projectile.models.tag.Tag
 import com.kyleu.projectile.services.database.slick.SlickQueryService.imports._
+import io.circe.Json
 import java.time.LocalDateTime
 import models.auth.Oauth2InfoRow
 
@@ -19,7 +19,7 @@ class Oauth2InfoRowTable(tag: slick.lifted.Tag) extends Table[Oauth2InfoRow](tag
   val tokenType = column[Option[String]]("token_type")
   val expiresIn = column[Option[Long]]("expires_in")
   val refreshToken = column[Option[String]]("refresh_token")
-  val params = column[Option[List[Tag]]]("params")
+  val params = column[Option[Json]]("params")
   val created = column[LocalDateTime]("created")
 
   val modelPrimaryKey = primaryKey("pk_oauth2_info", (provider, key))

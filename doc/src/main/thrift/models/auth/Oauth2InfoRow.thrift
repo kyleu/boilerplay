@@ -11,7 +11,7 @@ struct Oauth2InfoRow {
   4: optional string tokenType;
   5: optional common.long expiresIn;
   6: optional string refreshToken;
-  7: optional list<common.Tag> params;
+  7: optional string params;
   8: required common.LocalDateTime created;
 }
 

@@ -21,10 +21,7 @@ query Oauth2InfoRow {
       tokenType
       expiresIn
       refreshToken
-      params {
-        k
-        v
-      }
+      params
       created
     }
     durationMs

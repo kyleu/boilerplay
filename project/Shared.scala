@@ -9,7 +9,7 @@ object Shared {
   val projectPort = 9000
 
   object Versions {
-    val app = "1.0.0"
+    val app = "1.1.1-SNAPSHOT"
     val scala = "2.12.8"
   }
 

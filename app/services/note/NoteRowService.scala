@@ -23,7 +23,9 @@ class NoteRowService @javax.inject.Inject() (override val tracing: TracingServic
   def getByPrimaryKeyRequired(creds: Credentials, id: UUID)(implicit trace: TraceData) = getByPrimaryKey(creds, id).map { opt =>
     opt.getOrElse(throw new IllegalStateException(s"Cannot load noteRow with id [$id]."))
   }
-  def getByPrimaryKeySeq(creds: Credentials, idSeq: Seq[UUID])(implicit trace: TraceData) = {
+  def getByPrimaryKeySeq(creds: Credentials, idSeq: Seq[UUID])(implicit trace: TraceData) = if (idSeq.isEmpty) {
+    Future.successful(Nil)
+  } else {
     traceF("get.by.primary.key.seq")(td => ApplicationDatabase.queryF(NoteRowQueries.getByPrimaryKeySeq(idSeq))(td))
   }
 
@@ -56,8 +58,12 @@ class NoteRowService @javax.inject.Inject() (override val tracing: TracingServic
   def getByAuthor(creds: Credentials, author: UUID, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData) = traceF("get.by.author") { td =>
     ApplicationDatabase.queryF(NoteRowQueries.GetByAuthor(author, orderBys, limit, offset))(td)
   }
-  def getByAuthorSeq(creds: Credentials, authorSeq: Seq[UUID])(implicit trace: TraceData) = traceF("get.by.author.seq") { td =>
-    ApplicationDatabase.queryF(NoteRowQueries.GetByAuthorSeq(authorSeq))(td)
+  def getByAuthorSeq(creds: Credentials, authorSeq: Seq[UUID])(implicit trace: TraceData) = if (authorSeq.isEmpty) {
+    Future.successful(Nil)
+  } else {
+    traceF("get.by.author.seq") { td =>
+      ApplicationDatabase.queryF(NoteRowQueries.GetByAuthorSeq(authorSeq))(td)
+    }
   }
 
   def countByCreated(creds: Credentials, created: LocalDateTime)(implicit trace: TraceData) = traceF("count.by.created") { td =>
@@ -66,8 +72,12 @@ class NoteRowService @javax.inject.Inject() (override val tracing: TracingServic
   def getByCreated(creds: Credentials, created: LocalDateTime, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData) = traceF("get.by.created") { td =>
     ApplicationDatabase.queryF(NoteRowQueries.GetByCreated(created, orderBys, limit, offset))(td)
   }
-  def getByCreatedSeq(creds: Credentials, createdSeq: Seq[LocalDateTime])(implicit trace: TraceData) = traceF("get.by.created.seq") { td =>
-    ApplicationDatabase.queryF(NoteRowQueries.GetByCreatedSeq(createdSeq))(td)
+  def getByCreatedSeq(creds: Credentials, createdSeq: Seq[LocalDateTime])(implicit trace: TraceData) = if (createdSeq.isEmpty) {
+    Future.successful(Nil)
+  } else {
+    traceF("get.by.created.seq") { td =>
+      ApplicationDatabase.queryF(NoteRowQueries.GetByCreatedSeq(createdSeq))(td)
+    }
   }
 
   def countById(creds: Credentials, id: UUID)(implicit trace: TraceData) = traceF("count.by.id") { td =>
@@ -76,8 +86,12 @@ class NoteRowService @javax.inject.Inject() (override val tracing: TracingServic
   def getById(creds: Credentials, id: UUID, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData) = traceF("get.by.id") { td =>
     ApplicationDatabase.queryF(NoteRowQueries.GetById(id, orderBys, limit, offset))(td)
   }
-  def getByIdSeq(creds: Credentials, idSeq: Seq[UUID])(implicit trace: TraceData) = traceF("get.by.id.seq") { td =>
-    ApplicationDatabase.queryF(NoteRowQueries.GetByIdSeq(idSeq))(td)
+  def getByIdSeq(creds: Credentials, idSeq: Seq[UUID])(implicit trace: TraceData) = if (idSeq.isEmpty) {
+    Future.successful(Nil)
+  } else {
+    traceF("get.by.id.seq") { td =>
+      ApplicationDatabase.queryF(NoteRowQueries.GetByIdSeq(idSeq))(td)
+    }
   }
 
   def countByRelPk(creds: Credentials, relPk: String)(implicit trace: TraceData) = traceF("count.by.relPk") { td =>
@@ -86,8 +100,12 @@ class NoteRowService @javax.inject.Inject() (override val tracing: TracingServic
   def getByRelPk(creds: Credentials, relPk: String, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData) = traceF("get.by.relPk") { td =>
     ApplicationDatabase.queryF(NoteRowQueries.GetByRelPk(relPk, orderBys, limit, offset))(td)
   }
-  def getByRelPkSeq(creds: Credentials, relPkSeq: Seq[String])(implicit trace: TraceData) = traceF("get.by.relPk.seq") { td =>
-    ApplicationDatabase.queryF(NoteRowQueries.GetByRelPkSeq(relPkSeq))(td)
+  def getByRelPkSeq(creds: Credentials, relPkSeq: Seq[String])(implicit trace: TraceData) = if (relPkSeq.isEmpty) {
+    Future.successful(Nil)
+  } else {
+    traceF("get.by.relPk.seq") { td =>
+      ApplicationDatabase.queryF(NoteRowQueries.GetByRelPkSeq(relPkSeq))(td)
+    }
   }
 
   def countByRelType(creds: Credentials, relType: String)(implicit trace: TraceData) = traceF("count.by.relType") { td =>
@@ -96,8 +114,12 @@ class NoteRowService @javax.inject.Inject() (override val tracing: TracingServic
   def getByRelType(creds: Credentials, relType: String, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData) = traceF("get.by.relType") { td =>
     ApplicationDatabase.queryF(NoteRowQueries.GetByRelType(relType, orderBys, limit, offset))(td)
   }
-  def getByRelTypeSeq(creds: Credentials, relTypeSeq: Seq[String])(implicit trace: TraceData) = traceF("get.by.relType.seq") { td =>
-    ApplicationDatabase.queryF(NoteRowQueries.GetByRelTypeSeq(relTypeSeq))(td)
+  def getByRelTypeSeq(creds: Credentials, relTypeSeq: Seq[String])(implicit trace: TraceData) = if (relTypeSeq.isEmpty) {
+    Future.successful(Nil)
+  } else {
+    traceF("get.by.relType.seq") { td =>
+      ApplicationDatabase.queryF(NoteRowQueries.GetByRelTypeSeq(relTypeSeq))(td)
+    }
   }
 
   def countByText(creds: Credentials, text: String)(implicit trace: TraceData) = traceF("count.by.text") { td =>
@@ -106,8 +128,12 @@ class NoteRowService @javax.inject.Inject() (override val tracing: TracingServic
   def getByText(creds: Credentials, text: String, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData) = traceF("get.by.text") { td =>
     ApplicationDatabase.queryF(NoteRowQueries.GetByText(text, orderBys, limit, offset))(td)
   }
-  def getByTextSeq(creds: Credentials, textSeq: Seq[String])(implicit trace: TraceData) = traceF("get.by.text.seq") { td =>
-    ApplicationDatabase.queryF(NoteRowQueries.GetByTextSeq(textSeq))(td)
+  def getByTextSeq(creds: Credentials, textSeq: Seq[String])(implicit trace: TraceData) = if (textSeq.isEmpty) {
+    Future.successful(Nil)
+  } else {
+    traceF("get.by.text.seq") { td =>
+      ApplicationDatabase.queryF(NoteRowQueries.GetByTextSeq(textSeq))(td)
+    }
   }
 
   // Mutations

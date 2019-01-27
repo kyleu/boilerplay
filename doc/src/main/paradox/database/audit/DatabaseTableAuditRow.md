@@ -11,7 +11,7 @@
 | client                       | string             | true   | false  | true     |
 | server                       | string             | true   | false  | true     |
 | user_id                      | uuid               | true   | false  | true     |
-| tags                         | hstore             | true   | false  | true     |
+| tags                         | json               | true   | false  | false    |
 | msg                          | string             | true   | false  | false    |
 | started                      | timestamp          | true   | false  | false    |
 | completed                    | timestamp          | true   | false  | false    |

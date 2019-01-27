@@ -22,7 +22,9 @@ class SyncProgressRowService @javax.inject.Inject() (override val tracing: Traci
   def getByPrimaryKeyRequired(creds: Credentials, key: String)(implicit trace: TraceData) = getByPrimaryKey(creds, key).map { opt =>
     opt.getOrElse(throw new IllegalStateException(s"Cannot load syncProgressRow with key [$key]."))
   }
-  def getByPrimaryKeySeq(creds: Credentials, keySeq: Seq[String])(implicit trace: TraceData) = {
+  def getByPrimaryKeySeq(creds: Credentials, keySeq: Seq[String])(implicit trace: TraceData) = if (keySeq.isEmpty) {
+    Future.successful(Nil)
+  } else {
     traceF("get.by.primary.key.seq")(td => ApplicationDatabase.queryF(SyncProgressRowQueries.getByPrimaryKeySeq(keySeq))(td))
   }
 
@@ -55,8 +57,12 @@ class SyncProgressRowService @javax.inject.Inject() (override val tracing: Traci
   def getByKey(creds: Credentials, key: String, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData) = traceF("get.by.key") { td =>
     ApplicationDatabase.queryF(SyncProgressRowQueries.GetByKey(key, orderBys, limit, offset))(td)
   }
-  def getByKeySeq(creds: Credentials, keySeq: Seq[String])(implicit trace: TraceData) = traceF("get.by.key.seq") { td =>
-    ApplicationDatabase.queryF(SyncProgressRowQueries.GetByKeySeq(keySeq))(td)
+  def getByKeySeq(creds: Credentials, keySeq: Seq[String])(implicit trace: TraceData) = if (keySeq.isEmpty) {
+    Future.successful(Nil)
+  } else {
+    traceF("get.by.key.seq") { td =>
+      ApplicationDatabase.queryF(SyncProgressRowQueries.GetByKeySeq(keySeq))(td)
+    }
   }
 
   def countByLastTime(creds: Credentials, lastTime: LocalDateTime)(implicit trace: TraceData) = traceF("count.by.lastTime") { td =>
@@ -65,8 +71,12 @@ class SyncProgressRowService @javax.inject.Inject() (override val tracing: Traci
   def getByLastTime(creds: Credentials, lastTime: LocalDateTime, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData) = traceF("get.by.lastTime") { td =>
     ApplicationDatabase.queryF(SyncProgressRowQueries.GetByLastTime(lastTime, orderBys, limit, offset))(td)
   }
-  def getByLastTimeSeq(creds: Credentials, lastTimeSeq: Seq[LocalDateTime])(implicit trace: TraceData) = traceF("get.by.lastTime.seq") { td =>
-    ApplicationDatabase.queryF(SyncProgressRowQueries.GetByLastTimeSeq(lastTimeSeq))(td)
+  def getByLastTimeSeq(creds: Credentials, lastTimeSeq: Seq[LocalDateTime])(implicit trace: TraceData) = if (lastTimeSeq.isEmpty) {
+    Future.successful(Nil)
+  } else {
+    traceF("get.by.lastTime.seq") { td =>
+      ApplicationDatabase.queryF(SyncProgressRowQueries.GetByLastTimeSeq(lastTimeSeq))(td)
+    }
   }
 
   def countByMessage(creds: Credentials, message: String)(implicit trace: TraceData) = traceF("count.by.message") { td =>
@@ -75,8 +85,12 @@ class SyncProgressRowService @javax.inject.Inject() (override val tracing: Traci
   def getByMessage(creds: Credentials, message: String, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData) = traceF("get.by.message") { td =>
     ApplicationDatabase.queryF(SyncProgressRowQueries.GetByMessage(message, orderBys, limit, offset))(td)
   }
-  def getByMessageSeq(creds: Credentials, messageSeq: Seq[String])(implicit trace: TraceData) = traceF("get.by.message.seq") { td =>
-    ApplicationDatabase.queryF(SyncProgressRowQueries.GetByMessageSeq(messageSeq))(td)
+  def getByMessageSeq(creds: Credentials, messageSeq: Seq[String])(implicit trace: TraceData) = if (messageSeq.isEmpty) {
+    Future.successful(Nil)
+  } else {
+    traceF("get.by.message.seq") { td =>
+      ApplicationDatabase.queryF(SyncProgressRowQueries.GetByMessageSeq(messageSeq))(td)
+    }
   }
 
   def countByStatus(creds: Credentials, status: String)(implicit trace: TraceData) = traceF("count.by.status") { td =>
@@ -85,8 +99,12 @@ class SyncProgressRowService @javax.inject.Inject() (override val tracing: Traci
   def getByStatus(creds: Credentials, status: String, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData) = traceF("get.by.status") { td =>
     ApplicationDatabase.queryF(SyncProgressRowQueries.GetByStatus(status, orderBys, limit, offset))(td)
   }
-  def getByStatusSeq(creds: Credentials, statusSeq: Seq[String])(implicit trace: TraceData) = traceF("get.by.status.seq") { td =>
-    ApplicationDatabase.queryF(SyncProgressRowQueries.GetByStatusSeq(statusSeq))(td)
+  def getByStatusSeq(creds: Credentials, statusSeq: Seq[String])(implicit trace: TraceData) = if (statusSeq.isEmpty) {
+    Future.successful(Nil)
+  } else {
+    traceF("get.by.status.seq") { td =>
+      ApplicationDatabase.queryF(SyncProgressRowQueries.GetByStatusSeq(statusSeq))(td)
+    }
   }
 
   // Mutations

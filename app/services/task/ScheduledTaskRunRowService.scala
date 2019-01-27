@@ -23,7 +23,9 @@ class ScheduledTaskRunRowService @javax.inject.Inject() (override val tracing: T
   def getByPrimaryKeyRequired(creds: Credentials, id: UUID)(implicit trace: TraceData) = getByPrimaryKey(creds, id).map { opt =>
     opt.getOrElse(throw new IllegalStateException(s"Cannot load scheduledTaskRunRow with id [$id]."))
   }
-  def getByPrimaryKeySeq(creds: Credentials, idSeq: Seq[UUID])(implicit trace: TraceData) = {
+  def getByPrimaryKeySeq(creds: Credentials, idSeq: Seq[UUID])(implicit trace: TraceData) = if (idSeq.isEmpty) {
+    Future.successful(Nil)
+  } else {
     traceF("get.by.primary.key.seq")(td => ApplicationDatabase.queryF(ScheduledTaskRunRowQueries.getByPrimaryKeySeq(idSeq))(td))
   }
 
@@ -56,8 +58,12 @@ class ScheduledTaskRunRowService @javax.inject.Inject() (override val tracing: T
   def getByArguments(creds: Credentials, arguments: List[String], orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData) = traceF("get.by.arguments") { td =>
     ApplicationDatabase.queryF(ScheduledTaskRunRowQueries.GetByArguments(arguments, orderBys, limit, offset))(td)
   }
-  def getByArgumentsSeq(creds: Credentials, argumentsSeq: Seq[List[String]])(implicit trace: TraceData) = traceF("get.by.arguments.seq") { td =>
-    ApplicationDatabase.queryF(ScheduledTaskRunRowQueries.GetByArgumentsSeq(argumentsSeq))(td)
+  def getByArgumentsSeq(creds: Credentials, argumentsSeq: Seq[List[String]])(implicit trace: TraceData) = if (argumentsSeq.isEmpty) {
+    Future.successful(Nil)
+  } else {
+    traceF("get.by.arguments.seq") { td =>
+      ApplicationDatabase.queryF(ScheduledTaskRunRowQueries.GetByArgumentsSeq(argumentsSeq))(td)
+    }
   }
 
   def countById(creds: Credentials, id: UUID)(implicit trace: TraceData) = traceF("count.by.id") { td =>
@@ -66,8 +72,12 @@ class ScheduledTaskRunRowService @javax.inject.Inject() (override val tracing: T
   def getById(creds: Credentials, id: UUID, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData) = traceF("get.by.id") { td =>
     ApplicationDatabase.queryF(ScheduledTaskRunRowQueries.GetById(id, orderBys, limit, offset))(td)
   }
-  def getByIdSeq(creds: Credentials, idSeq: Seq[UUID])(implicit trace: TraceData) = traceF("get.by.id.seq") { td =>
-    ApplicationDatabase.queryF(ScheduledTaskRunRowQueries.GetByIdSeq(idSeq))(td)
+  def getByIdSeq(creds: Credentials, idSeq: Seq[UUID])(implicit trace: TraceData) = if (idSeq.isEmpty) {
+    Future.successful(Nil)
+  } else {
+    traceF("get.by.id.seq") { td =>
+      ApplicationDatabase.queryF(ScheduledTaskRunRowQueries.GetByIdSeq(idSeq))(td)
+    }
   }
 
   def countByStarted(creds: Credentials, started: LocalDateTime)(implicit trace: TraceData) = traceF("count.by.started") { td =>
@@ -76,8 +86,12 @@ class ScheduledTaskRunRowService @javax.inject.Inject() (override val tracing: T
   def getByStarted(creds: Credentials, started: LocalDateTime, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData) = traceF("get.by.started") { td =>
     ApplicationDatabase.queryF(ScheduledTaskRunRowQueries.GetByStarted(started, orderBys, limit, offset))(td)
   }
-  def getByStartedSeq(creds: Credentials, startedSeq: Seq[LocalDateTime])(implicit trace: TraceData) = traceF("get.by.started.seq") { td =>
-    ApplicationDatabase.queryF(ScheduledTaskRunRowQueries.GetByStartedSeq(startedSeq))(td)
+  def getByStartedSeq(creds: Credentials, startedSeq: Seq[LocalDateTime])(implicit trace: TraceData) = if (startedSeq.isEmpty) {
+    Future.successful(Nil)
+  } else {
+    traceF("get.by.started.seq") { td =>
+      ApplicationDatabase.queryF(ScheduledTaskRunRowQueries.GetByStartedSeq(startedSeq))(td)
+    }
   }
 
   def countByStatus(creds: Credentials, status: String)(implicit trace: TraceData) = traceF("count.by.status") { td =>
@@ -86,8 +100,12 @@ class ScheduledTaskRunRowService @javax.inject.Inject() (override val tracing: T
   def getByStatus(creds: Credentials, status: String, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData) = traceF("get.by.status") { td =>
     ApplicationDatabase.queryF(ScheduledTaskRunRowQueries.GetByStatus(status, orderBys, limit, offset))(td)
   }
-  def getByStatusSeq(creds: Credentials, statusSeq: Seq[String])(implicit trace: TraceData) = traceF("get.by.status.seq") { td =>
-    ApplicationDatabase.queryF(ScheduledTaskRunRowQueries.GetByStatusSeq(statusSeq))(td)
+  def getByStatusSeq(creds: Credentials, statusSeq: Seq[String])(implicit trace: TraceData) = if (statusSeq.isEmpty) {
+    Future.successful(Nil)
+  } else {
+    traceF("get.by.status.seq") { td =>
+      ApplicationDatabase.queryF(ScheduledTaskRunRowQueries.GetByStatusSeq(statusSeq))(td)
+    }
   }
 
   def countByTask(creds: Credentials, task: String)(implicit trace: TraceData) = traceF("count.by.task") { td =>
@@ -96,8 +114,12 @@ class ScheduledTaskRunRowService @javax.inject.Inject() (override val tracing: T
   def getByTask(creds: Credentials, task: String, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData) = traceF("get.by.task") { td =>
     ApplicationDatabase.queryF(ScheduledTaskRunRowQueries.GetByTask(task, orderBys, limit, offset))(td)
   }
-  def getByTaskSeq(creds: Credentials, taskSeq: Seq[String])(implicit trace: TraceData) = traceF("get.by.task.seq") { td =>
-    ApplicationDatabase.queryF(ScheduledTaskRunRowQueries.GetByTaskSeq(taskSeq))(td)
+  def getByTaskSeq(creds: Credentials, taskSeq: Seq[String])(implicit trace: TraceData) = if (taskSeq.isEmpty) {
+    Future.successful(Nil)
+  } else {
+    traceF("get.by.task.seq") { td =>
+      ApplicationDatabase.queryF(ScheduledTaskRunRowQueries.GetByTaskSeq(taskSeq))(td)
+    }
   }
 
   // Mutations

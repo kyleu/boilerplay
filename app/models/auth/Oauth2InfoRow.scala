@@ -2,16 +2,16 @@
 package models.auth
 
 import com.kyleu.projectile.models.result.data.{DataField, DataFieldModel, DataSummary}
-import com.kyleu.projectile.models.tag.Tag
 import com.kyleu.projectile.util.DateUtils
 import com.kyleu.projectile.util.JsonSerializers._
+import io.circe.Json
 import java.time.LocalDateTime
 
 object Oauth2InfoRow {
   implicit val jsonEncoder: Encoder[Oauth2InfoRow] = deriveEncoder
   implicit val jsonDecoder: Decoder[Oauth2InfoRow] = deriveDecoder
 
-  def empty(provider: String = "", key: String = "", accessToken: String = "", tokenType: Option[String] = None, expiresIn: Option[Long] = None, refreshToken: Option[String] = None, params: Option[List[Tag]] = None, created: LocalDateTime = DateUtils.now) = {
+  def empty(provider: String = "", key: String = "", accessToken: String = "", tokenType: Option[String] = None, expiresIn: Option[Long] = None, refreshToken: Option[String] = None, params: Option[Json] = None, created: LocalDateTime = DateUtils.now) = {
     Oauth2InfoRow(provider, key, accessToken, tokenType, expiresIn, refreshToken, params, created)
   }
 }
@@ -23,7 +23,7 @@ final case class Oauth2InfoRow(
     tokenType: Option[String],
     expiresIn: Option[Long],
     refreshToken: Option[String],
-    params: Option[List[Tag]],
+    params: Option[Json],
     created: LocalDateTime
 ) extends DataFieldModel {
   override def toDataFields = Seq(

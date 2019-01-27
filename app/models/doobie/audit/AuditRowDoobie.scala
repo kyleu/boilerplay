@@ -12,7 +12,7 @@ object AuditRowDoobie extends DoobieQueries[AuditRow]("audit") {
   override val selectFragment = fr"""select "id", "act", "app", "client", "server", "user_id", "tags", "msg", "started", "completed" from "audit""""
 
   override val columns = Seq("id", "act", "app", "client", "server", "user_id", "tags", "msg", "started", "completed")
-  override val searchColumns = Seq("id", "act", "app", "client", "server", "user_id", "tags")
+  override val searchColumns = Seq("id", "act", "app", "client", "server", "user_id")
 
   override def searchFragment(q: String) = {
     fr""""id"::text = $q or "act"::text = $q or "app"::text = $q or "client"::text = $q or "server"::text = $q or "user_id"::text = $q or "tags"::text = $q or "msg"::text = $q or "started"::text = $q or "completed"::text = $q"""

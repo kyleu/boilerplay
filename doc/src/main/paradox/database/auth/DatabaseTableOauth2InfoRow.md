@@ -11,6 +11,6 @@
 | token_type                   | string             | false  | false  | false    |
 | expires_in                   | long               | false  | false  | false    |
 | refresh_token                | string             | false  | false  | false    |
-| params                       | hstore             | false  | false  | false    |
+| params                       | json               | false  | false  | false    |
 | created                      | timestamp          | true   | false  | false    |
 

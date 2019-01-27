@@ -22,7 +22,9 @@ class SystemUserRowService @javax.inject.Inject() (override val tracing: Tracing
   def getByPrimaryKeyRequired(creds: Credentials, id: UUID)(implicit trace: TraceData) = getByPrimaryKey(creds, id).map { opt =>
     opt.getOrElse(throw new IllegalStateException(s"Cannot load systemUserRow with id [$id]."))
   }
-  def getByPrimaryKeySeq(creds: Credentials, idSeq: Seq[UUID])(implicit trace: TraceData) = {
+  def getByPrimaryKeySeq(creds: Credentials, idSeq: Seq[UUID])(implicit trace: TraceData) = if (idSeq.isEmpty) {
+    Future.successful(Nil)
+  } else {
     traceF("get.by.primary.key.seq")(td => ApplicationDatabase.queryF(SystemUserRowQueries.getByPrimaryKeySeq(idSeq))(td))
   }
 
@@ -55,8 +57,12 @@ class SystemUserRowService @javax.inject.Inject() (override val tracing: Tracing
   def getById(creds: Credentials, id: UUID, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData) = traceF("get.by.id") { td =>
     ApplicationDatabase.queryF(SystemUserRowQueries.GetById(id, orderBys, limit, offset))(td)
   }
-  def getByIdSeq(creds: Credentials, idSeq: Seq[UUID])(implicit trace: TraceData) = traceF("get.by.id.seq") { td =>
-    ApplicationDatabase.queryF(SystemUserRowQueries.GetByIdSeq(idSeq))(td)
+  def getByIdSeq(creds: Credentials, idSeq: Seq[UUID])(implicit trace: TraceData) = if (idSeq.isEmpty) {
+    Future.successful(Nil)
+  } else {
+    traceF("get.by.id.seq") { td =>
+      ApplicationDatabase.queryF(SystemUserRowQueries.GetByIdSeq(idSeq))(td)
+    }
   }
 
   def countByKey(creds: Credentials, key: String)(implicit trace: TraceData) = traceF("count.by.key") { td =>
@@ -65,8 +71,12 @@ class SystemUserRowService @javax.inject.Inject() (override val tracing: Tracing
   def getByKey(creds: Credentials, key: String, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData) = traceF("get.by.key") { td =>
     ApplicationDatabase.queryF(SystemUserRowQueries.GetByKey(key, orderBys, limit, offset))(td)
   }
-  def getByKeySeq(creds: Credentials, keySeq: Seq[String])(implicit trace: TraceData) = traceF("get.by.key.seq") { td =>
-    ApplicationDatabase.queryF(SystemUserRowQueries.GetByKeySeq(keySeq))(td)
+  def getByKeySeq(creds: Credentials, keySeq: Seq[String])(implicit trace: TraceData) = if (keySeq.isEmpty) {
+    Future.successful(Nil)
+  } else {
+    traceF("get.by.key.seq") { td =>
+      ApplicationDatabase.queryF(SystemUserRowQueries.GetByKeySeq(keySeq))(td)
+    }
   }
 
   def countByProvider(creds: Credentials, provider: String)(implicit trace: TraceData) = traceF("count.by.provider") { td =>
@@ -75,8 +85,12 @@ class SystemUserRowService @javax.inject.Inject() (override val tracing: Tracing
   def getByProvider(creds: Credentials, provider: String, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData) = traceF("get.by.provider") { td =>
     ApplicationDatabase.queryF(SystemUserRowQueries.GetByProvider(provider, orderBys, limit, offset))(td)
   }
-  def getByProviderSeq(creds: Credentials, providerSeq: Seq[String])(implicit trace: TraceData) = traceF("get.by.provider.seq") { td =>
-    ApplicationDatabase.queryF(SystemUserRowQueries.GetByProviderSeq(providerSeq))(td)
+  def getByProviderSeq(creds: Credentials, providerSeq: Seq[String])(implicit trace: TraceData) = if (providerSeq.isEmpty) {
+    Future.successful(Nil)
+  } else {
+    traceF("get.by.provider.seq") { td =>
+      ApplicationDatabase.queryF(SystemUserRowQueries.GetByProviderSeq(providerSeq))(td)
+    }
   }
 
   def countByUsername(creds: Credentials, username: String)(implicit trace: TraceData) = traceF("count.by.username") { td =>
@@ -85,8 +99,12 @@ class SystemUserRowService @javax.inject.Inject() (override val tracing: Tracing
   def getByUsername(creds: Credentials, username: String, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData) = traceF("get.by.username") { td =>
     ApplicationDatabase.queryF(SystemUserRowQueries.GetByUsername(username, orderBys, limit, offset))(td)
   }
-  def getByUsernameSeq(creds: Credentials, usernameSeq: Seq[String])(implicit trace: TraceData) = traceF("get.by.username.seq") { td =>
-    ApplicationDatabase.queryF(SystemUserRowQueries.GetByUsernameSeq(usernameSeq))(td)
+  def getByUsernameSeq(creds: Credentials, usernameSeq: Seq[String])(implicit trace: TraceData) = if (usernameSeq.isEmpty) {
+    Future.successful(Nil)
+  } else {
+    traceF("get.by.username.seq") { td =>
+      ApplicationDatabase.queryF(SystemUserRowQueries.GetByUsernameSeq(usernameSeq))(td)
+    }
   }
 
   // Mutations
