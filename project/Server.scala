@@ -1,5 +1,5 @@
-import com.kyleu.projectile.SbtProjectile
-import com.sksamuel.scapegoat.sbt.ScapegoatSbtPlugin.autoImport.{scapegoatDisabledInspections, scapegoatIgnoredFiles}
+import com.kyleu.projectile.sbt.SbtProjectile
+import com.kyleu.projectile.sbt.ProjectVersion
 import com.typesafe.sbt.GitPlugin.autoImport.git
 import com.typesafe.sbt.gzip.Import._
 import com.typesafe.sbt.jse.JsEngineImport.JsEngineKeys
@@ -20,7 +20,7 @@ import sbt._
 import sbtassembly.AssemblyPlugin.autoImport._
 
 object Server {
-  private[this] val dependencies = Projectile.all ++ PlayFramework.all ++ Utils.all ++ Testing.all :+ WebJars.swaggerUi
+  private[this] val dependencies = Projectile.all ++ PlayFramework.all ++ Utils.all ++ Testing.all
 
   private[this] lazy val serverSettings = Shared.commonSettings ++ Seq(
     name := Shared.projectId,
@@ -43,7 +43,7 @@ object Server {
       val assets: java.io.File = (PlayKeys.playPackageAssets in Compile).value
       artifacts + (Artifact(moduleName.value, "jar", "jar", "assets") -> assets)
     },
-    
+
     // Scala.js
     scalaJSProjects := Seq(Client.client),
 
@@ -68,13 +68,10 @@ object Server {
     fullClasspath in assembly += Attributed.blank(PlayKeys.playPackageAssets.value),
     mainClass in assembly := Some("Entrypoint"),
 
-    scapegoatIgnoredFiles := Seq(".*/Routes.scala", ".*/RoutesPrefix.scala", ".*/*ReverseRoutes.scala", ".*/*.template.scala"),
-    scapegoatDisabledInspections := Seq("UnusedMethodParameter"),
-
     (sourceGenerators in Compile) += ProjectVersion.writeConfig(Shared.projectId, Shared.projectName, Shared.projectPort).taskValue
   )
 
   lazy val server = Project(id = Shared.projectId, base = file(".")).enablePlugins(
-    SbtProjectile, SbtWeb, play.sbt.PlayScala, JavaAppPackaging, diagram.ClassDiagramPlugin, UniversalPlugin, DockerPlugin
+    SbtProjectile, SbtWeb, play.sbt.PlayScala, JavaAppPackaging, UniversalPlugin, DockerPlugin
   ).settings(serverSettings: _*).settings(Packaging.settings: _*)
 }

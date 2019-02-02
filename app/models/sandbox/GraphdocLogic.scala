@@ -2,8 +2,8 @@ package models.sandbox
 
 import better.files._
 import com.google.inject.Injector
+import com.kyleu.projectile.graphql.GraphQLService
 import com.kyleu.projectile.util.tracing.TraceData
-import graphql.GraphQLService
 import com.kyleu.projectile.models.auth.UserCredentials
 
 import scala.concurrent.ExecutionContext.Implicits.global

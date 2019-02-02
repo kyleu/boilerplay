@@ -1,5 +1,4 @@
-@import com.kyleu.projectile.models.user.SystemUser
-@(user: SystemUser, results: Seq[models.task.ScheduledTaskRunRow])(
+@(user: com.kyleu.projectile.models.user.SystemUser, results: Seq[models.task.ScheduledTaskRunRow])(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: com.kyleu.projectile.util.tracing.TraceData
 )@traceData.logClass(getClass)@views.html.admin.layout.page(user = user, activeSection = "status", title = "Scheduled Task Result") {
   @if(results.isEmpty) {

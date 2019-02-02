@@ -3,7 +3,7 @@ scalacOptions ++= Seq( "-unchecked", "-deprecation" )
 resolvers += Resolver.typesafeRepo("releases")
 
 // Projectile
-addSbtPlugin("com.kyleu" % "projectile-sbt" % "1.1.2")
+addSbtPlugin("com.kyleu" % "projectile-sbt" % "1.1.4")
 
 // The Play plugin
 addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.6.21")
@@ -30,19 +30,7 @@ addSbtPlugin("io.get-coursier" % "sbt-coursier" % "1.0.0")
 
 // Code Quality
 addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "1.0.0") // scalastyle
-addSbtPlugin("com.sksamuel.scapegoat" %% "sbt-scapegoat" % "1.0.7")
 addSbtPlugin("org.scalariform" % "sbt-scalariform" % "1.8.1") // scalariformFormat
-addSbtPlugin("com.github.sbt" % "sbt-cpd" % "2.0.0")
-
-// Utilities
-addSbtPlugin("net.virtual-void" % "sbt-dependency-graph" % "0.9.0") // dependencyGraph
-addSbtPlugin("com.timushev.sbt" % "sbt-updates" % "0.3.4") // dependencyUpdates
-addSbtPlugin("com.orrsella" % "sbt-stats" % "1.0.7") // stats
-addSbtPlugin("com.typesafe.sbt" % "sbt-license-report" % "1.2.0")
-
-// Visualization
-addSbtPlugin("com.dwijnand" % "sbt-project-graph" % "0.4.0") // projectsGraphDot
-addSbtPlugin("com.github.xuwei-k" % "sbt-class-diagram" % "0.2.1") // classDiagram
 
 // Documentation
 addSbtPlugin("com.lightbend.paradox" % "sbt-paradox" % "0.4.2")

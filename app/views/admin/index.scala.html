@@ -1,5 +1,4 @@
-@import com.kyleu.projectile.models.user.SystemUser
-@(user: SystemUser)(
+@(user: com.kyleu.projectile.models.user.SystemUser)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: com.kyleu.projectile.util.tracing.TraceData
 )@traceData.logClass(getClass)@views.html.admin.layout.page(user, "", util.Config.projectName + " Administration") {
   <ul class="collection with-header">
@@ -12,11 +11,11 @@
       <div><em>Manage the models of the system.</em></div>
     </li>
     <li class="collection-item">
-      <a class="theme-text" href="@controllers.admin.graphql.routes.GraphQLController.graphql()">GraphQL</a>
+      <a class="theme-text" href="@com.kyleu.projectile.controllers.graphql.routes.GraphQLController.graphql()">GraphQL</a>
       <div><em>
         Query the system using GraphQL or view the
-        <a class="theme-text" href="@controllers.admin.graphql.routes.SchemaController.voyager("Query")">query</a> or
-        <a class="theme-text" href="@controllers.admin.graphql.routes.SchemaController.voyager("Mutation")">mutation</a> schema.
+        <a class="theme-text" href="@com.kyleu.projectile.controllers.graphql.routes.SchemaController.voyager("Query")">query</a> or
+        <a class="theme-text" href="@com.kyleu.projectile.controllers.graphql.routes.SchemaController.voyager("Mutation")">mutation</a> schema.
       </em></div>
     </li>
     <li class="collection-item">

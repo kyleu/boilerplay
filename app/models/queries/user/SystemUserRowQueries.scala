@@ -10,7 +10,7 @@ import com.kyleu.projectile.models.result.orderBy.OrderBy
 import java.util.UUID
 import models.user.SystemUserRow
 
-object SystemUserRowQueries extends BaseQueries[SystemUserRow]("systemUserRow", "system_users") {
+object SystemUserRowQueries extends BaseQueries[SystemUserRow]("systemUserRow", "system_user") {
   override val fields = Seq(
     DatabaseField(title = "Id", prop = "id", col = "id", typ = UuidType),
     DatabaseField(title = "Username", prop = "username", col = "username", typ = StringType),

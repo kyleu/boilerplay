@@ -12,7 +12,6 @@ import models.ddl.{FlywaySchemaHistoryRow, FlywaySchemaHistoryRowResult}
 import play.api.http.MimeTypes
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits._
-import services.audit.AuditRecordRowService
 import services.ddl.FlywaySchemaHistoryRowService
 
 @javax.inject.Singleton

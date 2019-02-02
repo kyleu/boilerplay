@@ -12,7 +12,6 @@ import models.sync.{SyncProgressRow, SyncProgressRowResult}
 import play.api.http.MimeTypes
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits._
-import services.audit.AuditRecordRowService
 import services.sync.SyncProgressRowService
 
 @javax.inject.Singleton

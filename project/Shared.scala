@@ -1,4 +1,3 @@
-import com.github.sbt.cpd.CpdKeys.cpdSkipDuplicateFiles
 import sbt.Keys._
 import sbt._
 import sbtassembly.AssemblyPlugin.autoImport._
@@ -34,8 +33,6 @@ object Shared {
     publishMavenStyle := false,
 
     evictionWarningOptions in update := EvictionWarningOptions.default.withWarnTransitiveEvictions(false).withWarnDirectEvictions(false),
-
-    cpdSkipDuplicateFiles := true,
 
     test in assembly := {},
     assemblyMergeStrategy in assembly := {

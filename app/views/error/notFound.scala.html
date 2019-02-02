@@ -1,8 +1,0 @@
-@(path: String)(
-    implicit session: Session, flash: Flash, traceData: com.kyleu.projectile.util.tracing.TraceData
-)@traceData.logClass(getClass)@layout.materialize(None, "Page Not Found") {
-  <div class="text-centered">
-    <h1>@path</h1>
-    <div class="text-large"><em>Page Not Found</em></div>
-  </div>
-}

@@ -1,18 +1,17 @@
 package controllers
 
-import akka.actor.ActorSystem
-import akka.stream.Materializer
 import io.circe.Json
 import com.kyleu.projectile.controllers.AuthController
 import com.kyleu.projectile.models.Application
+import com.kyleu.projectile.services.database.ApplicationDatabase
+import com.kyleu.projectile.util.tracing.TraceData
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 @javax.inject.Singleton
-class HomeController @javax.inject.Inject() (
-    override val app: Application, implicit val system: ActorSystem, implicit val materializer: Materializer
-) extends AuthController("home") {
+class HomeController @javax.inject.Inject() (override val app: Application) extends AuthController("home") {
+  ApplicationDatabase.migrateSafe()
 
   def home() = withSession("home") { implicit request => implicit td =>
     Future.successful(Ok(views.html.index(request.identity, app.config.debug)))

@@ -12,7 +12,6 @@ import models.auth.{PasswordInfoRow, PasswordInfoRowResult}
 import play.api.http.MimeTypes
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits._
-import services.audit.AuditRecordRowService
 import services.auth.PasswordInfoRowService
 
 @javax.inject.Singleton

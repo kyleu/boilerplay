@@ -1,5 +1,4 @@
-@import com.kyleu.projectile.models.user.SystemUser
-@(user: SystemUser, title: String, section: String, vals: Seq[Html])(
+@(user: com.kyleu.projectile.models.user.SystemUser, title: String, section: String, vals: Seq[Html])(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: com.kyleu.projectile.util.tracing.TraceData
 )@traceData.logClass(getClass)@views.html.admin.layout.page(user, section, title) {
   <ul class="collection with-header">

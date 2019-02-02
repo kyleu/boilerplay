@@ -1,8 +1,0 @@
-@(path: String, error: String)(
-    implicit session: Session, flash: Flash, traceData: com.kyleu.projectile.util.tracing.TraceData
-)@traceData.logClass(getClass)@layout.materialize(None, "Bad Request") {
-  <div class="text-centered">
-    <h1>@path</h1>
-    <div class="text-large"><em>Bad Request: @error</em></div>
-  </div>
-}

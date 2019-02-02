@@ -12,7 +12,6 @@ import models.settings.{Setting, SettingKeyType, SettingResult}
 import play.api.http.MimeTypes
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits._
-import services.audit.AuditRecordRowService
 import services.settings.SettingService
 
 @javax.inject.Singleton

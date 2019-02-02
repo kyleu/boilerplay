@@ -1,5 +1,4 @@
-@import com.kyleu.projectile.models.user.SystemUser
-@(user: SystemUser, unenc: String = "", enc: String = "")(
+@(user: com.kyleu.projectile.models.user.SystemUser, unenc: String = "", enc: String = "")(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: com.kyleu.projectile.util.tracing.TraceData
 )@traceData.logClass(getClass)@views.html.admin.layout.page(user, "", util.Config.projectName + " Administration") {
   <form method="post" action="@controllers.admin.system.routes.EncryptionController.post">

@@ -109,7 +109,7 @@
   "foreignKeys" : [ {
     "name" : "note_author_fkey",
     "propertyName" : "noteAuthorFkeyRel",
-    "targetTable" : "system_users",
+    "targetTable" : "system_user",
     "references" : [ {
       "source" : "author",
       "target" : "id"

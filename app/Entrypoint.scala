@@ -12,6 +12,7 @@ object Entrypoint {
     val config: ServerConfig = ProdServerStart.readServerConfigSettings(process)
     val application: Application = {
       val environment = Environment(config.rootDir, process.classLoader, Mode.Prod)
+      // val context = ApplicationLoader.Context.create(environment)
       val context = ApplicationLoader.createContext(environment)
       val loader = ApplicationLoader(context)
       loader.load(context)

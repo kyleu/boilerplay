@@ -12,7 +12,6 @@ import models.auth.{Oauth2InfoRow, Oauth2InfoRowResult}
 import play.api.http.MimeTypes
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits._
-import services.audit.AuditRecordRowService
 import services.auth.Oauth2InfoRowService
 
 @javax.inject.Singleton

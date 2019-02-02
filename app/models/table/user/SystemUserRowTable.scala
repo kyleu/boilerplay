@@ -13,7 +13,7 @@ object SystemUserRowTable {
   def getByPrimaryKeySeq(idSeq: Seq[UUID]) = query.filter(_.id.inSet(idSeq)).result
 }
 
-class SystemUserRowTable(tag: slick.lifted.Tag) extends Table[SystemUserRow](tag, "system_users") {
+class SystemUserRowTable(tag: slick.lifted.Tag) extends Table[SystemUserRow](tag, "system_user") {
   val id = column[UUID]("id", O.PrimaryKey)
   val username = column[Option[String]]("username")
   val provider = column[String]("provider")

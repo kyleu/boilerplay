@@ -1,5 +1,3 @@
 # Note Routes
-GET         /                                                         controllers.admin.projectile.ProjectileController.index()
-
 GET         /view/:model/*pk                                          controllers.admin.projectile.ModelNoteController.view(model, pk)
 GET         /add/:model/*pk                                           controllers.admin.projectile.ModelNoteController.addForm(model, pk)

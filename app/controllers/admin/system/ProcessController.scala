@@ -4,8 +4,8 @@ import java.util.UUID
 
 import com.google.inject.Injector
 import com.kyleu.projectile.controllers.AuthController
+import com.kyleu.projectile.graphql.GraphQLService
 import com.kyleu.projectile.models.Application
-import graphql.GraphQLService
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import services.process.ProcessService

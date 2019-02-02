@@ -1,6 +1,5 @@
-@import com.kyleu.projectile.models.user.SystemUser
-@(user: SystemUser, activeSection: String)
-@views.html.components.userDropdown(Some(user))
+@(user: com.kyleu.projectile.models.user.SystemUser, activeSection: String)
+@com.kyleu.projectile.views.html.components.userDropdown(Some(user))
 
 <header>
   <nav id="topnav" class="theme">
@@ -13,9 +12,9 @@
         <li><a class="dropdown-trigger" href="@controllers.admin.system.routes.AdminController.explore()" data-target="dropdown-explore">Explore</a></li>
       }
       @if(activeSection == "graphql") {
-        <li class="active"><a href="@controllers.admin.graphql.routes.GraphQLController.graphql()">GraphQL</a></li>
+        <li class="active"><a href="@com.kyleu.projectile.controllers.graphql.routes.GraphQLController.graphql()">GraphQL</a></li>
       } else {
-        <li><a href="@controllers.admin.graphql.routes.GraphQLController.graphql()">GraphQL</a></li>
+        <li><a href="@com.kyleu.projectile.controllers.graphql.routes.GraphQLController.graphql()">GraphQL</a></li>
       }
       @if(activeSection == "rest") {
         <li class="active"><a href="@controllers.admin.rest.routes.OpenApiController.ui()">Rest</a></li>
@@ -30,7 +29,7 @@
     </ul>
 
     <ul class="right hide-on-small-only nav-name">
-      <li><a class="dropdown-trigger" href="@controllers.auth.routes.ProfileController.view()" data-target="dropdown-user">
+      <li><a class="dropdown-trigger" href="/profile" data-target="dropdown-user">
         @user.username <i id="user-dropdown-toggle" class="fa @models.template.Icons.dropdownToggle right"></i>
       </a></li>
     </ul>

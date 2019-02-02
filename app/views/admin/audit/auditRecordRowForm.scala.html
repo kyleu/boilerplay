@@ -12,14 +12,14 @@
       <div class="collection-item">
         <table>
           <tbody>
-            @views.html.components.form.textField(selected = isNew, key = "id", title = "Id", value = Some(model.id.toString), nullable = false, dataType = "uuid")
-            @views.html.components.form.autocompleteField(
+            @com.kyleu.projectile.views.html.components.form.textField(selected = isNew, key = "id", title = "Id", value = Some(model.id.toString), nullable = false, dataType = "uuid")
+            @com.kyleu.projectile.views.html.components.form.autocompleteField(
               selected = isNew, key = "auditId", title = "Audit Id", value = Some(model.auditId.toString), nullable = false, dataType = "uuid",
               call = controllers.admin.audit.routes.AuditRowController.autocomplete(), acType = ("auditRow", "Audit"), icon = models.template.Icons.auditRow
             )
-            @views.html.components.form.textField(selected = isNew, key = "t", title = "T", value = Some(model.t.toString), nullable = false)
-            @views.html.components.form.textField(selected = isNew, key = "pk", title = "Pk", value = Some(model.pk.toString), nullable = false, dataType = "list")
-            @views.html.components.form.textField(selected = isNew, key = "changes", title = "Changes", value = Some(model.changes.toString), nullable = false, dataType = "json")
+            @com.kyleu.projectile.views.html.components.form.textField(selected = isNew, key = "t", title = "T", value = Some(model.t.toString), nullable = false)
+            @com.kyleu.projectile.views.html.components.form.textField(selected = isNew, key = "pk", title = "Pk", value = Some(model.pk.toString), nullable = false, dataType = "list")
+            @com.kyleu.projectile.views.html.components.form.textField(selected = isNew, key = "changes", title = "Changes", value = Some(model.changes.toString), nullable = false, dataType = "json")
           </tbody>
         </table>
       </div>

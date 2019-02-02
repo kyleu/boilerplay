@@ -7,9 +7,9 @@ import com.kyleu.projectile.services.database.doobie.DoobieQueryService.Imports.
 import java.util.UUID
 import models.user.SystemUserRow
 
-object SystemUserRowDoobie extends DoobieQueries[SystemUserRow]("system_users") {
-  override val countFragment = fr"""select count(*) from "system_users""""
-  override val selectFragment = fr"""select "id", "username", "provider", "key", "role", "created" from "system_users""""
+object SystemUserRowDoobie extends DoobieQueries[SystemUserRow]("system_user") {
+  override val countFragment = fr"""select count(*) from "system_user""""
+  override val selectFragment = fr"""select "id", "username", "provider", "key", "role", "created" from "system_user""""
 
   override val columns = Seq("id", "username", "provider", "key", "role", "created")
   override val searchColumns = Seq("id", "username", "provider", "key")

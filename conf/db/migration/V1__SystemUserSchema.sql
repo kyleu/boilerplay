@@ -1,4 +1,4 @@
-create table if not exists "system_users" (
+create table if not exists "system_user" (
   "id" uuid primary key,
   "username" character varying(256) unique,
   "provider" character varying(64) not null,
@@ -7,10 +7,10 @@ create table if not exists "system_users" (
   "created" timestamp without time zone not null
 );
 
-create index if not exists "system_users_username" on "system_users" using btree ("username" asc);
-create unique index if not exists "system_users_provider_key" on "system_users" using btree ("provider" asc, "key" asc);
-create index if not exists "system_users_provider" on "system_users" using btree ("provider" asc);
-create index if not exists "system_users_key" on "system_users" using btree ("key" asc);
+create index if not exists "system_user_username" on "system_user" using btree ("username" asc);
+create unique index if not exists "system_user_provider_key" on "system_user" using btree ("provider" asc, "key" asc);
+create index if not exists "system_user_provider" on "system_user" using btree ("provider" asc);
+create index if not exists "system_user_key" on "system_user" using btree ("key" asc);
 
 create table if not exists "password_info" (
   "provider" varchar(64) not null,

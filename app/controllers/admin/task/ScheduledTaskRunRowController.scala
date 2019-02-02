@@ -13,7 +13,6 @@ import models.task.{ScheduledTaskRunRow, ScheduledTaskRunRowResult}
 import play.api.http.MimeTypes
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits._
-import services.audit.AuditRecordRowService
 import services.task.ScheduledTaskRunRowService
 
 @javax.inject.Singleton

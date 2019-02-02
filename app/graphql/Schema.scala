@@ -1,6 +1,6 @@
 package graphql
 
-import com.kyleu.projectile.graphql.GraphQLContext
+import com.kyleu.projectile.graphql.{GraphQLContext, GraphQLSchema}
 import models.graphql.sandbox
 import models.graphql.sandbox.SandboxSchema
 import sangria.execution.deferred.DeferredResolver
@@ -9,9 +9,9 @@ import util.Config
 
 import scala.concurrent.Future
 
-object Schema {
+object Schema extends GraphQLSchema {
   // Fetchers
-  val modelFetchers = {
+  private[this] val modelFetchers = {
     Nil ++
       /* Start model fetchers */
       /* Projectile export section [boilerplay] */
@@ -33,7 +33,7 @@ object Schema {
         Nil
   }
 
-  val resolver = DeferredResolver.fetchers(modelFetchers: _*)
+  override val resolver = DeferredResolver.fetchers(modelFetchers: _*)
 
   private[this] val customQueryFields = fields[GraphQLContext, Unit](
     Field(name = "status", fieldType = StringType, resolve = _ => Future.successful("OK")),
@@ -41,9 +41,9 @@ object Schema {
   )
 
   // Query Types
-  val baseQueryFields = customQueryFields ++ SandboxSchema.queryFields
+  private[this] val baseQueryFields = customQueryFields ++ SandboxSchema.queryFields
 
-  val modelQueryFields: Seq[Field[GraphQLContext, Unit]] = {
+  private[this] val modelQueryFields: Seq[Field[GraphQLContext, Unit]] = {
     Nil ++
       /* Start model query fields */
       /* Projectile export section [boilerplay] */
@@ -61,7 +61,7 @@ object Schema {
       Nil
   }
 
-  val enumQueryFields: Seq[Field[GraphQLContext, Unit]] = {
+  private[this] val enumQueryFields: Seq[Field[GraphQLContext, Unit]] = {
     Nil ++
       /* Start enum query fields */
       /* Projectile export section [boilerplay] */
@@ -70,23 +70,23 @@ object Schema {
       Nil
   }
 
-  val serviceQueryFields: Seq[Field[GraphQLContext, Unit]] = {
+  private[this] val serviceQueryFields: Seq[Field[GraphQLContext, Unit]] = {
     Nil ++
       /* Start service methods */
       /* End service methods */
       Nil
   }
 
-  val queryType = ObjectType(
+  override val queryType = ObjectType(
     name = "Query",
     description = "The main query interface.",
     fields = (baseQueryFields ++ modelQueryFields ++ enumQueryFields ++ serviceQueryFields).sortBy(_.name)
   )
 
   // Mutation Types
-  val baseMutationFields = sandbox.SandboxSchema.mutationFields
+  private[this] val baseMutationFields = sandbox.SandboxSchema.mutationFields
 
-  val modelMutationFields: Seq[Field[GraphQLContext, Unit]] = {
+  private[this] val modelMutationFields: Seq[Field[GraphQLContext, Unit]] = {
     Nil ++
       /* Start model mutation fields */
       /* Projectile export section [boilerplay] */
@@ -104,17 +104,9 @@ object Schema {
       Nil
   }
 
-  val mutationType = ObjectType(
+  override val mutationType = ObjectType(
     name = "Mutation",
     description = "The main mutation interface.",
     fields = (baseMutationFields ++ modelMutationFields).sortBy(_.name)
-  )
-
-  // Schema
-  val schema = sangria.schema.Schema(
-    query = queryType,
-    mutation = Some(mutationType),
-    subscription = None,
-    additionalTypes = Nil
   )
 }

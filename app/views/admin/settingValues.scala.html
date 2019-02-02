@@ -1,6 +1,4 @@
-@import com.kyleu.projectile.models.user.Role
-@import com.kyleu.projectile.models.user.SystemUser
-@(user: SystemUser, settingService: services.settings.SettingsService)(implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: com.kyleu.projectile.util.tracing.TraceData)
+@(user: com.kyleu.projectile.models.user.SystemUser, settingService: services.settings.SettingsService)(implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: com.kyleu.projectile.util.tracing.TraceData)
 @import models.settings.SettingKeyType
 
 @settingPanel(key: models.settings.SettingKeyType, colWidth: Int = 12)(content: Html) = {
@@ -13,7 +11,7 @@
   </div>
 }
 
-@roleRadio(name: String, r: Role, selected: Role, title: String) = {
+@roleRadio(name: String, r: com.kyleu.projectile.models.user.Role, selected: com.kyleu.projectile.models.user.Role, title: String) = {
   <div>
     <label for="role-@name-@r">
       <input type="radio" id="role-@name-@r" name="@name" value="@r" @if(selected == r) { checked="checked" } />

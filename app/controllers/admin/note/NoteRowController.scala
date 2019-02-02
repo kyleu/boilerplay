@@ -13,7 +13,6 @@ import models.note.{NoteRow, NoteRowResult}
 import play.api.http.MimeTypes
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits._
-import services.audit.AuditRecordRowService
 import services.note.NoteRowService
 
 @javax.inject.Singleton

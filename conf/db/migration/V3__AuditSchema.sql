@@ -38,5 +38,5 @@ create table if not exists "note" (
   "text" text not null,
   "author" uuid not null,
   "created" timestamp without time zone not null,
-  foreign key ("author") references "system_users" ("id")
+  foreign key ("author") references "system_user" ("id")
 );

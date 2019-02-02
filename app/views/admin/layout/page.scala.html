@@ -1,7 +1,6 @@
-@import com.kyleu.projectile.models.user.SystemUser
-@(user: SystemUser, activeSection: String, title: String, scripts: Seq[String] = Nil, stylesheets: Seq[String] = Nil)(content: Html)(
+@(user: com.kyleu.projectile.models.user.SystemUser, activeSection: String, title: String, scripts: Seq[String] = Nil, stylesheets: Seq[String] = Nil)(content: Html)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: com.kyleu.projectile.util.tracing.TraceData
-)@traceData.logClass(getClass)@layout.materialize(user = Some(user), title = title, scripts = scripts, stylesheets = stylesheets) {
+)@traceData.logClass(getClass)@com.kyleu.projectile.views.html.layout.materialize(title = title, scripts = scripts, stylesheets = stylesheets) {
   @views.html.admin.layout.menu(user, activeSection)
   <main>
     @flash.get("error").map { err =>
