@@ -5,7 +5,7 @@ import com.kyleu.projectile.graphql.{GraphQLContext, GraphQLSchemaHelper}
 import com.kyleu.projectile.graphql.GraphQLUtils._
 import com.kyleu.projectile.models.graphql.note.NoteSchema
 import java.util.UUID
-import models.graphql.user.SystemUserRowSchema
+import models.graphql.auth.SystemUserRowSchema
 import models.note.{NoteRow, NoteRowResult}
 import sangria.execution.deferred.{Fetcher, HasId, Relation}
 import sangria.schema._

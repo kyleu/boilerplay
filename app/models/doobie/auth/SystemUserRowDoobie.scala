@@ -1,11 +1,11 @@
 /* Generated File */
-package models.doobie.user
+package models.doobie.auth
 
 import cats.data.NonEmptyList
 import com.kyleu.projectile.services.database.doobie.DoobieQueries
 import com.kyleu.projectile.services.database.doobie.DoobieQueryService.Imports._
 import java.util.UUID
-import models.user.SystemUserRow
+import models.auth.SystemUserRow
 
 object SystemUserRowDoobie extends DoobieQueries[SystemUserRow]("system_user") {
   override val countFragment = fr"""select count(*) from "system_user""""

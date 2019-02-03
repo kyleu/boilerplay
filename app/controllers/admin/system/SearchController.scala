@@ -7,14 +7,14 @@ import com.kyleu.projectile.controllers.AuthController
 import com.kyleu.projectile.models.Application
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import com.kyleu.projectile.models.auth.UserCredentials
+import com.kyleu.projectile.models.auth.{AuthActions, UserCredentials}
 import play.twirl.api.Html
 import com.kyleu.projectile.util.tracing.TraceData
 
 import scala.concurrent.Future
 
 @javax.inject.Singleton
-class SearchController @javax.inject.Inject() (override val app: Application, injector: Injector) extends AuthController("search") {
+class SearchController @javax.inject.Inject() (override val app: Application, authActions: AuthActions, injector: Injector) extends AuthController("search") {
   def search(q: String) = withSession("admin.search", admin = true) { implicit request => implicit td =>
     val creds = UserCredentials.fromRequest(request)
     val results = try {
@@ -27,7 +27,7 @@ class SearchController @javax.inject.Inject() (override val app: Application, in
       }
     }
     results.map { r =>
-      Ok(views.html.admin.explore.searchResults(q, r, request.identity))
+      Ok(com.kyleu.projectile.views.html.admin.explore.searchResults(q, r, request.identity, authActions))
     }
   }
 
@@ -49,7 +49,7 @@ class SearchController @javax.inject.Inject() (override val app: Application, in
         injector.getInstance(classOf[services.audit.AuditRowService]).getByPrimaryKey(creds, id).map(_.map(model => views.html.admin.audit.auditRowSearchResult(model, s"Audit [${model.id}] matched [$q].")).toSeq),
         injector.getInstance(classOf[services.note.NoteRowService]).getByPrimaryKey(creds, id).map(_.map(model => views.html.admin.note.noteRowSearchResult(model, s"Note [${model.id}] matched [$q].")).toSeq),
         injector.getInstance(classOf[services.task.ScheduledTaskRunRowService]).getByPrimaryKey(creds, id).map(_.map(model => views.html.admin.task.scheduledTaskRunRowSearchResult(model, s"Scheduled Task Run [${model.id}] matched [$q].")).toSeq),
-        injector.getInstance(classOf[services.user.SystemUserRowService]).getByPrimaryKey(creds, id).map(_.map(model => views.html.admin.user.systemUserRowSearchResult(model, s"System User [${model.id}] matched [$q].")).toSeq)
+        injector.getInstance(classOf[services.auth.SystemUserRowService]).getByPrimaryKey(creds, id).map(_.map(model => views.html.admin.auth.systemUserRowSearchResult(model, s"System User [${model.id}] matched [$q].")).toSeq)
       ) ++
         /* End uuid searches */
         Nil
@@ -71,7 +71,7 @@ class SearchController @javax.inject.Inject() (override val app: Application, in
         injector.getInstance(classOf[services.task.ScheduledTaskRunRowService]).searchExact(creds, q = q, limit = Some(5)).map(_.map(model => views.html.admin.task.scheduledTaskRunRowSearchResult(model, s"Scheduled Task Run [${model.id}] matched [$q]."))),
         injector.getInstance(classOf[services.settings.SettingService]).searchExact(creds, q = q, limit = Some(5)).map(_.map(model => views.html.admin.settings.settingSearchResult(model, s"Setting [${model.k}] matched [$q]."))),
         injector.getInstance(classOf[services.sync.SyncProgressRowService]).searchExact(creds, q = q, limit = Some(5)).map(_.map(model => views.html.admin.sync.syncProgressRowSearchResult(model, s"Sync Progress [${model.key}] matched [$q]."))),
-        injector.getInstance(classOf[services.user.SystemUserRowService]).searchExact(creds, q = q, limit = Some(5)).map(_.map(model => views.html.admin.user.systemUserRowSearchResult(model, s"System User [${model.id}] matched [$q].")))
+        injector.getInstance(classOf[services.auth.SystemUserRowService]).searchExact(creds, q = q, limit = Some(5)).map(_.map(model => views.html.admin.auth.systemUserRowSearchResult(model, s"System User [${model.id}] matched [$q].")))
       ) ++
         /* End string searches */
         Nil

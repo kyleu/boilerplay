@@ -3,6 +3,7 @@ package controllers.admin.auth
 
 import com.kyleu.projectile.controllers.{ServiceAuthController, ServiceController}
 import com.kyleu.projectile.models.Application
+import com.kyleu.projectile.models.auth.AuthActions
 import com.kyleu.projectile.models.result.orderBy.OrderBy
 import com.kyleu.projectile.services.note.NoteService
 import com.kyleu.projectile.util.DateUtils
@@ -16,14 +17,14 @@ import services.auth.PasswordInfoRowService
 
 @javax.inject.Singleton
 class PasswordInfoRowController @javax.inject.Inject() (
-    override val app: Application, svc: PasswordInfoRowService, noteSvc: NoteService
+    override val app: Application, authActions: AuthActions, svc: PasswordInfoRowService, noteSvc: NoteService
 ) extends ServiceAuthController(svc) {
 
   def createForm = withSession("create.form", admin = true) { implicit request => implicit td =>
     val cancel = controllers.admin.auth.routes.PasswordInfoRowController.list()
     val call = controllers.admin.auth.routes.PasswordInfoRowController.create()
     Future.successful(Ok(views.html.admin.auth.passwordInfoRowForm(
-      request.identity, PasswordInfoRow.empty(), "New Password Info", cancel, call, isNew = true, debug = app.config.debug
+      request.identity, authActions, PasswordInfoRow.empty(), "New Password Info", cancel, call, isNew = true, debug = app.config.debug
     )))
   }
 
@@ -40,7 +41,7 @@ class PasswordInfoRowController @javax.inject.Inject() (
       val orderBys = OrderBy.forVals(orderBy, orderAsc).toSeq
       searchWithCount(q, orderBys, limit, offset).map(r => renderChoice(t) {
         case MimeTypes.HTML => Ok(views.html.admin.auth.passwordInfoRowList(
-          request.identity, Some(r._1), r._2, q, orderBy, orderAsc, limit.getOrElse(100), offset.getOrElse(0)
+          request.identity, authActions, Some(r._1), r._2, q, orderBy, orderAsc, limit.getOrElse(100), offset.getOrElse(0)
         ))
         case MimeTypes.JSON => Ok(PasswordInfoRowResult.fromRecords(q, Nil, orderBys, limit, offset, startMs, r._1, r._2).asJson)
         case ServiceController.MimeTypes.csv => csvResponse("PasswordInfoRow", svc.csvFor(r._1, r._2))
@@ -63,7 +64,7 @@ class PasswordInfoRowController @javax.inject.Inject() (
 
     notesF.flatMap(notes => modelF.map {
       case Some(model) => renderChoice(t) {
-        case MimeTypes.HTML => Ok(views.html.admin.auth.passwordInfoRowView(request.identity, model, notes, app.config.debug))
+        case MimeTypes.HTML => Ok(views.html.admin.auth.passwordInfoRowView(request.identity, authActions, model, notes, app.config.debug))
         case MimeTypes.JSON => Ok(model.asJson)
         case ServiceController.MimeTypes.png => Ok(renderToPng(v = model)).as(ServiceController.MimeTypes.png)
         case ServiceController.MimeTypes.svg => Ok(renderToSvg(v = model)).as(ServiceController.MimeTypes.svg)
@@ -77,7 +78,7 @@ class PasswordInfoRowController @javax.inject.Inject() (
     val call = controllers.admin.auth.routes.PasswordInfoRowController.edit(provider, key)
     svc.getByPrimaryKey(request, provider, key).map {
       case Some(model) => Ok(
-        views.html.admin.auth.passwordInfoRowForm(request.identity, model, s"Password Info [$provider, $key]", cancel, call, debug = app.config.debug)
+        views.html.admin.auth.passwordInfoRowForm(request.identity, authActions, model, s"Password Info [$provider, $key]", cancel, call, debug = app.config.debug)
       )
       case None => NotFound(s"No PasswordInfoRow found with provider, key [$provider, $key].")
     }

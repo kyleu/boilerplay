@@ -1,10 +1,10 @@
 /* Generated File */
-package models.table.user
+package models.table.auth
 
 import com.kyleu.projectile.services.database.slick.SlickQueryService.imports._
 import java.time.LocalDateTime
 import java.util.UUID
-import models.user.SystemUserRow
+import models.auth.SystemUserRow
 
 object SystemUserRowTable {
   val query = TableQuery[SystemUserRowTable]

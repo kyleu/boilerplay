@@ -3,6 +3,7 @@ package controllers.admin.note
 
 import com.kyleu.projectile.controllers.{ServiceAuthController, ServiceController}
 import com.kyleu.projectile.models.Application
+import com.kyleu.projectile.models.auth.AuthActions
 import com.kyleu.projectile.models.result.orderBy.OrderBy
 import com.kyleu.projectile.services.note.NoteService
 import com.kyleu.projectile.util.DateUtils
@@ -17,14 +18,14 @@ import services.note.NoteRowService
 
 @javax.inject.Singleton
 class NoteRowController @javax.inject.Inject() (
-    override val app: Application, svc: NoteRowService, noteSvc: NoteService
+    override val app: Application, authActions: AuthActions, svc: NoteRowService, noteSvc: NoteService
 ) extends ServiceAuthController(svc) {
 
   def createForm = withSession("create.form", admin = true) { implicit request => implicit td =>
     val cancel = controllers.admin.note.routes.NoteRowController.list()
     val call = controllers.admin.note.routes.NoteRowController.create()
     Future.successful(Ok(views.html.admin.note.noteRowForm(
-      request.identity, NoteRow.empty(), "New Note", cancel, call, isNew = true, debug = app.config.debug
+      request.identity, authActions, NoteRow.empty(), "New Note", cancel, call, isNew = true, debug = app.config.debug
     )))
   }
 
@@ -41,7 +42,7 @@ class NoteRowController @javax.inject.Inject() (
       val orderBys = OrderBy.forVals(orderBy, orderAsc).toSeq
       searchWithCount(q, orderBys, limit, offset).map(r => renderChoice(t) {
         case MimeTypes.HTML => Ok(views.html.admin.note.noteRowList(
-          request.identity, Some(r._1), r._2, q, orderBy, orderAsc, limit.getOrElse(100), offset.getOrElse(0)
+          request.identity, authActions, Some(r._1), r._2, q, orderBy, orderAsc, limit.getOrElse(100), offset.getOrElse(0)
         ))
         case MimeTypes.JSON => Ok(NoteRowResult.fromRecords(q, Nil, orderBys, limit, offset, startMs, r._1, r._2).asJson)
         case ServiceController.MimeTypes.csv => csvResponse("NoteRow", svc.csvFor(r._1, r._2))
@@ -63,7 +64,7 @@ class NoteRowController @javax.inject.Inject() (
       val orderBys = OrderBy.forVals(orderBy, orderAsc).toSeq
       svc.getByAuthor(request, author, orderBys, limit, offset).map(models => renderChoice(t) {
         case MimeTypes.HTML => Ok(views.html.admin.note.noteRowByAuthor(
-          request.identity, author, models, orderBy, orderAsc, limit.getOrElse(5), offset.getOrElse(0)
+          request.identity, authActions, author, models, orderBy, orderAsc, limit.getOrElse(5), offset.getOrElse(0)
         ))
         case MimeTypes.JSON => Ok(models.asJson)
         case ServiceController.MimeTypes.csv => csvResponse("NoteRow by author", svc.csvFor(0, models))
@@ -79,7 +80,7 @@ class NoteRowController @javax.inject.Inject() (
 
     notesF.flatMap(notes => modelF.map {
       case Some(model) => renderChoice(t) {
-        case MimeTypes.HTML => Ok(views.html.admin.note.noteRowView(request.identity, model, notes, app.config.debug))
+        case MimeTypes.HTML => Ok(views.html.admin.note.noteRowView(request.identity, authActions, model, notes, app.config.debug))
         case MimeTypes.JSON => Ok(model.asJson)
         case ServiceController.MimeTypes.png => Ok(renderToPng(v = model)).as(ServiceController.MimeTypes.png)
         case ServiceController.MimeTypes.svg => Ok(renderToSvg(v = model)).as(ServiceController.MimeTypes.svg)
@@ -93,7 +94,7 @@ class NoteRowController @javax.inject.Inject() (
     val call = controllers.admin.note.routes.NoteRowController.edit(id)
     svc.getByPrimaryKey(request, id).map {
       case Some(model) => Ok(
-        views.html.admin.note.noteRowForm(request.identity, model, s"Note [$id]", cancel, call, debug = app.config.debug)
+        views.html.admin.note.noteRowForm(request.identity, authActions, model, s"Note [$id]", cancel, call, debug = app.config.debug)
       )
       case None => NotFound(s"No NoteRow found with id [$id].")
     }

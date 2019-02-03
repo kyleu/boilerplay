@@ -1,5 +1,5 @@
 // Generated File
-namespace java models.user
+namespace java models.auth
 
 include "../../common.thrift"
 include "../../result.thrift"

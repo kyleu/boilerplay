@@ -1,5 +1,5 @@
 /* Generated File */
-package models.queries.user
+package models.queries.auth
 
 import com.kyleu.projectile.models.database.{DatabaseField, Row}
 import com.kyleu.projectile.models.database.DatabaseFieldType._
@@ -8,7 +8,7 @@ import com.kyleu.projectile.models.result.data.DataField
 import com.kyleu.projectile.models.result.filter.Filter
 import com.kyleu.projectile.models.result.orderBy.OrderBy
 import java.util.UUID
-import models.user.SystemUserRow
+import models.auth.SystemUserRow
 
 object SystemUserRowQueries extends BaseQueries[SystemUserRow]("systemUserRow", "system_user") {
   override val fields = Seq(

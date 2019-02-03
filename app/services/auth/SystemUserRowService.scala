@@ -1,5 +1,5 @@
 /* Generated File */
-package services.user
+package services.auth
 
 import com.kyleu.projectile.models.result.data.DataField
 import com.kyleu.projectile.models.result.filter.Filter
@@ -9,8 +9,8 @@ import com.kyleu.projectile.services.database.ApplicationDatabase
 import com.kyleu.projectile.util.CsvUtils
 import com.kyleu.projectile.util.tracing.{TraceData, TracingService}
 import java.util.UUID
-import models.queries.user.SystemUserRowQueries
-import models.user.SystemUserRow
+import models.auth.SystemUserRow
+import models.queries.auth.SystemUserRowQueries
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits._
 

@@ -1,6 +1,6 @@
-@(user: com.kyleu.projectile.models.user.SystemUser, procs: Seq[models.process.CachedProc])(
+@(user: com.kyleu.projectile.models.user.SystemUser, authActions: com.kyleu.projectile.models.auth.AuthActions, procs: Seq[models.process.CachedProc])(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: com.kyleu.projectile.util.tracing.TraceData
-)@traceData.logClass(getClass)@views.html.admin.layout.page(user, "status", util.Config.projectName + " Status") {
+)@traceData.logClass(getClass)@com.kyleu.projectile.views.html.admin.layout.page(user, authActions, "status", util.Config.projectName + " Status") {
   <ul class="collection with-header">
     <li class="collection-header">
       <div class="right">

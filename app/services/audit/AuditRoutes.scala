@@ -21,7 +21,7 @@ object AuditRoutes extends Logging {
     case "scheduledtaskrunrow" => controllers.admin.task.routes.ScheduledTaskRunRowController.view(uuidArg(arg(0)))
     case "setting" => controllers.admin.settings.routes.SettingController.view(enumArg(SettingKeyType)(arg(0)))
     case "syncprogressrow" => controllers.admin.sync.routes.SyncProgressRowController.view(stringArg(arg(0)))
-    case "systemuserrow" => controllers.admin.user.routes.SystemUserRowController.view(uuidArg(arg(0)))
+    case "systemuserrow" => controllers.admin.auth.routes.SystemUserRowController.view(uuidArg(arg(0)))
     /* End audit calls */
 
     case _ =>

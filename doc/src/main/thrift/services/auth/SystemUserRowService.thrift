@@ -1,9 +1,9 @@
 // Generated File
-namespace java services.user
+namespace java services.auth
 
 include "../../common.thrift"
 include "../../result.thrift"
-include "../../models/user/SystemUserRow.thrift"
+include "../../models/auth/SystemUserRow.thrift"
 
 service SystemUserRowService {
   SystemUserRow.SystemUserRow getByPrimaryKey(

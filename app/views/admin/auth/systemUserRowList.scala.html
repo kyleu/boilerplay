@@ -1,0 +1,31 @@
+@* Generated File *@
+@(user: com.kyleu.projectile.models.user.SystemUser, authActions: com.kyleu.projectile.models.auth.AuthActions, totalCount: Option[Int], modelSeq: Seq[models.auth.SystemUserRow], q: Option[String], orderBy: Option[String], orderAsc: Boolean, limit: Int, offset: Int)(
+    implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: com.kyleu.projectile.util.tracing.TraceData
+)
+@com.kyleu.projectile.views.html.admin.explore.list(
+  user = user,
+  authActions = authActions,
+  model = "System User",
+  modelPlural = "System Users",
+  icon = models.template.Icons.systemUserRow,
+  cols = Seq(
+    "id" -> "Id",
+    "username" -> "Username",
+    "provider" -> "Provider",
+    "key" -> "Key"
+  ),
+  totalCount = totalCount,
+  rows = modelSeq.map(model => views.html.admin.auth.systemUserRowDataRow(model)),
+  orderBy = orderBy,
+  orderAsc = orderAsc,
+  calls = com.kyleu.projectile.models.result.web.ListCalls(
+    newCall = Some(controllers.admin.auth.routes.SystemUserRowController.createForm()),
+    orderBy = Some(controllers.admin.auth.routes.SystemUserRowController.list(q, _, _, Some(limit), Some(0))),
+    search = Some(controllers.admin.auth.routes.SystemUserRowController.list(None, orderBy, orderAsc, Some(limit), None)),
+    next = controllers.admin.auth.routes.SystemUserRowController.list(q, orderBy, orderAsc, Some(limit), Some(offset + limit)),
+    prev = controllers.admin.auth.routes.SystemUserRowController.list(q, orderBy, orderAsc, Some(limit), Some(offset - limit))
+  ),
+  limit = limit,
+  offset = offset,
+  q = q
+)

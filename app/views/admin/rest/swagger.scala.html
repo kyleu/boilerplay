@@ -1,7 +1,8 @@
-@(user: com.kyleu.projectile.models.user.SystemUser)(
+@(user: com.kyleu.projectile.models.user.SystemUser, authActions: com.kyleu.projectile.models.auth.AuthActions)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: com.kyleu.projectile.util.tracing.TraceData
-)@traceData.logClass(getClass)@views.html.admin.layout.page(
+)@traceData.logClass(getClass)@com.kyleu.projectile.views.html.admin.layout.page(
   user = user,
+  authActions = authActions,
   activeSection = "rest",
   title = "Swagger UI",
   stylesheets = Seq(controllers.routes.Assets.versioned("lib/swagger-ui/swagger-ui.css").url)

@@ -9,6 +9,7 @@ import com.kyleu.projectile.services.note.NoteService
 import com.kyleu.projectile.util.metrics.MetricsConfig
 import com.kyleu.projectile.util.tracing.{OpenTracingService, TracingService}
 import com.kyleu.projectile.web.util.ErrorHandler
+import models.graphql.Schema
 import net.codingwell.scalaguice.ScalaModule
 import services.note.ModelNoteService
 import services.settings.SettingsService
@@ -32,8 +33,9 @@ class ProjectileModule extends AbstractModule with ScalaModule {
   def providesAuthActions(settings: SettingsService) = new AuthActions(projectName = Version.projectName) {
     override def allowRegistration = settings.allowRegistration
     override def defaultRole = Role.Admin
+    override def adminMenu = views.html.admin.layout.menu.apply
   }
 
   @Provides
-  def provideGraphQLSchema(): GraphQLSchema = _root_.graphql.Schema
+  def provideGraphQLSchema(): GraphQLSchema = Schema
 }

@@ -1,7 +1,7 @@
 @* Generated File *@
-@(user: com.kyleu.projectile.models.user.SystemUser, model: models.sync.SyncProgressRow, notes: Seq[com.kyleu.projectile.models.note.Note], debug: Boolean)(
+@(user: com.kyleu.projectile.models.user.SystemUser, authActions: com.kyleu.projectile.models.auth.AuthActions, model: models.sync.SyncProgressRow, notes: Seq[com.kyleu.projectile.models.note.Note], debug: Boolean)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: com.kyleu.projectile.util.tracing.TraceData
-)@views.html.admin.layout.page(user, "explore", s"Sync Progress [${model.key}]") {
+)@com.kyleu.projectile.views.html.admin.layout.page(user, authActions, "explore", s"Sync Progress [${model.key}]") {
   <div class="collection with-header">
     <div class="collection-header">
       <div class="right"><a class="theme-text" href="@controllers.admin.sync.routes.SyncProgressRowController.editForm(model.key)">Edit</a></div>

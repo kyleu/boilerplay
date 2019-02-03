@@ -1,5 +1,5 @@
 /* Generated File */
-package models.user
+package models.auth
 
 import com.kyleu.projectile.models.result.data.{DataField, DataFieldModel, DataSummary}
 import com.kyleu.projectile.util.DateUtils

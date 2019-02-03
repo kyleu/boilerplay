@@ -1,6 +1,6 @@
-@(user: com.kyleu.projectile.models.user.SystemUser)(
+@(user: com.kyleu.projectile.models.user.SystemUser, authActions: com.kyleu.projectile.models.auth.AuthActions)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: com.kyleu.projectile.util.tracing.TraceData
-)@traceData.logClass(getClass)@views.html.admin.layout.page(user, "explore", "Explore " + util.Config.projectName) {
+)@traceData.logClass(getClass)@com.kyleu.projectile.views.html.admin.layout.page(user, authActions, "explore", "Explore " + util.Config.projectName) {
   <ul class="collection with-header">
     <li class="collection-header">
       <h5>Explore @util.Config.projectName</h5>
@@ -44,7 +44,7 @@
       <div><em>Manage the sync progresses of the system</em></div>
     </li>
     <li class="collection-item">
-      <a class="theme-text" href="@controllers.admin.user.routes.SystemUserRowController.list()"><i class="fa @models.template.Icons.systemUserRow"></i> System Users</a>
+      <a class="theme-text" href="@controllers.admin.auth.routes.SystemUserRowController.list()"><i class="fa @models.template.Icons.systemUserRow"></i> System Users</a>
       <div><em>Manage the system users of the system</em></div>
     </li>
     <!-- End model list routes -->

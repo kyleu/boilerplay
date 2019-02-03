@@ -1,5 +1,5 @@
 <!-- Generated File -->
-# system_users
+# system_user
 
 ## Columns
 

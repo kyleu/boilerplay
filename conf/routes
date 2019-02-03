@@ -19,7 +19,6 @@ GET         /robots.txt                              controllers.HomeController.
 ->          /admin/settings                          settings.Routes
 ->          /admin/sync                              sync.Routes
 ->          /admin/task                              task.Routes
-->          /admin/user                              user.Routes
 # End model route files
 
 # Assets

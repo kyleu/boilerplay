@@ -3,6 +3,7 @@ package controllers.admin.task
 
 import com.kyleu.projectile.controllers.{ServiceAuthController, ServiceController}
 import com.kyleu.projectile.models.Application
+import com.kyleu.projectile.models.auth.AuthActions
 import com.kyleu.projectile.models.result.orderBy.OrderBy
 import com.kyleu.projectile.services.note.NoteService
 import com.kyleu.projectile.util.DateUtils
@@ -17,14 +18,14 @@ import services.task.ScheduledTaskRunRowService
 
 @javax.inject.Singleton
 class ScheduledTaskRunRowController @javax.inject.Inject() (
-    override val app: Application, svc: ScheduledTaskRunRowService, noteSvc: NoteService
+    override val app: Application, authActions: AuthActions, svc: ScheduledTaskRunRowService, noteSvc: NoteService
 ) extends ServiceAuthController(svc) {
 
   def createForm = withSession("create.form", admin = true) { implicit request => implicit td =>
     val cancel = controllers.admin.task.routes.ScheduledTaskRunRowController.list()
     val call = controllers.admin.task.routes.ScheduledTaskRunRowController.create()
     Future.successful(Ok(views.html.admin.task.scheduledTaskRunRowForm(
-      request.identity, ScheduledTaskRunRow.empty(), "New Scheduled Task Run", cancel, call, isNew = true, debug = app.config.debug
+      request.identity, authActions, ScheduledTaskRunRow.empty(), "New Scheduled Task Run", cancel, call, isNew = true, debug = app.config.debug
     )))
   }
 
@@ -41,7 +42,7 @@ class ScheduledTaskRunRowController @javax.inject.Inject() (
       val orderBys = OrderBy.forVals(orderBy, orderAsc).toSeq
       searchWithCount(q, orderBys, limit, offset).map(r => renderChoice(t) {
         case MimeTypes.HTML => Ok(views.html.admin.task.scheduledTaskRunRowList(
-          request.identity, Some(r._1), r._2, q, orderBy, orderAsc, limit.getOrElse(100), offset.getOrElse(0)
+          request.identity, authActions, Some(r._1), r._2, q, orderBy, orderAsc, limit.getOrElse(100), offset.getOrElse(0)
         ))
         case MimeTypes.JSON => Ok(ScheduledTaskRunRowResult.fromRecords(q, Nil, orderBys, limit, offset, startMs, r._1, r._2).asJson)
         case ServiceController.MimeTypes.csv => csvResponse("ScheduledTaskRunRow", svc.csvFor(r._1, r._2))
@@ -64,7 +65,7 @@ class ScheduledTaskRunRowController @javax.inject.Inject() (
 
     notesF.flatMap(notes => modelF.map {
       case Some(model) => renderChoice(t) {
-        case MimeTypes.HTML => Ok(views.html.admin.task.scheduledTaskRunRowView(request.identity, model, notes, app.config.debug))
+        case MimeTypes.HTML => Ok(views.html.admin.task.scheduledTaskRunRowView(request.identity, authActions, model, notes, app.config.debug))
         case MimeTypes.JSON => Ok(model.asJson)
         case ServiceController.MimeTypes.png => Ok(renderToPng(v = model)).as(ServiceController.MimeTypes.png)
         case ServiceController.MimeTypes.svg => Ok(renderToSvg(v = model)).as(ServiceController.MimeTypes.svg)
@@ -78,7 +79,7 @@ class ScheduledTaskRunRowController @javax.inject.Inject() (
     val call = controllers.admin.task.routes.ScheduledTaskRunRowController.edit(id)
     svc.getByPrimaryKey(request, id).map {
       case Some(model) => Ok(
-        views.html.admin.task.scheduledTaskRunRowForm(request.identity, model, s"Scheduled Task Run [$id]", cancel, call, debug = app.config.debug)
+        views.html.admin.task.scheduledTaskRunRowForm(request.identity, authActions, model, s"Scheduled Task Run [$id]", cancel, call, debug = app.config.debug)
       )
       case None => NotFound(s"No ScheduledTaskRunRow found with id [$id].")
     }

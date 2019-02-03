@@ -1,10 +1,10 @@
 // Generated File
 {
-  "/admin/user": {
+  "/admin/auth/systemUserRow": {
     "get": {
       "summary": "Queries and filters the system SystemUserRow entities.",
-      "operationId": "user.SystemUserRow.list",
-      "tags": ["user"],
+      "operationId": "auth.SystemUserRow.list",
+      "tags": ["auth"],
       "parameters": [
         {
           "$ref": "#/components/parameters/q"
@@ -27,7 +27,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/user.SystemUserRowResult"
+                "$ref": "#/components/schemas/auth.SystemUserRowResult"
               }
             }
           }
@@ -54,8 +54,8 @@
     },
     "post": {
       "summary": "Creates a new SystemUserRow entity.",
-      "operationId": "user.SystemUserRow.create",
-      "tags": ["user"],
+      "operationId": "auth.SystemUserRow.create",
+      "tags": ["auth"],
       "requestBody": {
         "content": {
           "application/json": {
@@ -73,7 +73,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/user.SystemUserRow"
+                "$ref": "#/components/schemas/auth.SystemUserRow"
               }
             }
           }
@@ -99,11 +99,11 @@
       }
     }
   },
-  "/admin/user/{id}": {
+  "/admin/auth/systemUserRow/{id}": {
     "get": {
       "summary": "View the SystemUserRow entity matching the provided [id].",
-      "operationId": "user.SystemUserRow.view",
-      "tags": ["user"],
+      "operationId": "auth.SystemUserRow.view",
+      "tags": ["auth"],
       "parameters": [
         {
           "name": "id",
@@ -119,7 +119,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/user.SystemUserRow"
+                "$ref": "#/components/schemas/auth.SystemUserRow"
               }
             }
           }
@@ -146,8 +146,8 @@
     },
     "post": {
       "summary": "Updates the SystemUserRow entity matching the provided [id] using the provided fields.",
-      "operationId": "user.SystemUserRow.edit",
-      "tags": ["user"],
+      "operationId": "auth.SystemUserRow.edit",
+      "tags": ["auth"],
       "parameters": [
         {
           "name": "id",
@@ -175,7 +175,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/user.SystemUserRow"
+                "$ref": "#/components/schemas/auth.SystemUserRow"
               }
             }
           }
@@ -201,11 +201,11 @@
       }
     }
   },
-  "/admin/user/{id}/remove": {
+  "/admin/auth/systemUserRow/{id}/remove": {
     "get": {
       "summary": "Removes the SystemUserRow entity matching the provided [id].",
-      "operationId": "user.SystemUserRow.remove",
-      "tags": ["user"],
+      "operationId": "auth.SystemUserRow.remove",
+      "tags": ["auth"],
       "parameters": [
         {
           "name": "id",
@@ -221,7 +221,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/user.SystemUserRow"
+                "$ref": "#/components/schemas/auth.SystemUserRow"
               }
             }
           }

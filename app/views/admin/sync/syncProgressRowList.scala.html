@@ -1,9 +1,10 @@
 @* Generated File *@
-@(user: com.kyleu.projectile.models.user.SystemUser, totalCount: Option[Int], modelSeq: Seq[models.sync.SyncProgressRow], q: Option[String], orderBy: Option[String], orderAsc: Boolean, limit: Int, offset: Int)(
+@(user: com.kyleu.projectile.models.user.SystemUser, authActions: com.kyleu.projectile.models.auth.AuthActions, totalCount: Option[Int], modelSeq: Seq[models.sync.SyncProgressRow], q: Option[String], orderBy: Option[String], orderAsc: Boolean, limit: Int, offset: Int)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: com.kyleu.projectile.util.tracing.TraceData
 )
-@views.html.admin.explore.list(
+@com.kyleu.projectile.views.html.admin.explore.list(
   user = user,
+  authActions = authActions,
   model = "Sync Progress",
   modelPlural = "Sync Progresses",
   icon = models.template.Icons.syncProgressRow,

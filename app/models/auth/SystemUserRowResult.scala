@@ -1,5 +1,5 @@
 /* Generated File */
-package models.user
+package models.auth
 
 import com.kyleu.projectile.models.result.BaseResult
 import com.kyleu.projectile.models.result.filter.Filter

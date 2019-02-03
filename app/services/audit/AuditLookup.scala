@@ -29,7 +29,7 @@ class AuditLookup @javax.inject.Inject() (injector: Injector) extends Logging {
     case "scheduledtaskrunrow" => injector.getInstance(classOf[services.task.ScheduledTaskRunRowService]).getByPrimaryKey(creds, uuidArg(arg(0)))
     case "setting" => injector.getInstance(classOf[services.settings.SettingService]).getByPrimaryKey(creds, enumArg(models.settings.SettingKeyType)(arg(0)))
     case "syncprogressrow" => injector.getInstance(classOf[services.sync.SyncProgressRowService]).getByPrimaryKey(creds, stringArg(arg(0)))
-    case "systemuserrow" => injector.getInstance(classOf[services.user.SystemUserRowService]).getByPrimaryKey(creds, uuidArg(arg(0)))
+    case "systemuserrow" => injector.getInstance(classOf[services.auth.SystemUserRowService]).getByPrimaryKey(creds, uuidArg(arg(0)))
     /* End registry lookups */
     case _ =>
       log.warn(s"Attempted to load invalid object type [$key:${arg(0)}].")

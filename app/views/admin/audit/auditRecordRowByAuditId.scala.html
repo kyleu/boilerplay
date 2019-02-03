@@ -1,9 +1,10 @@
 @* Generated File *@
-@(user: com.kyleu.projectile.models.user.SystemUser, auditId: java.util.UUID, modelSeq: Seq[models.audit.AuditRecordRow], orderBy: Option[String], orderAsc: Boolean, limit: Int, offset: Int)(
+@(user: com.kyleu.projectile.models.user.SystemUser, authActions: com.kyleu.projectile.models.auth.AuthActions, auditId: java.util.UUID, modelSeq: Seq[models.audit.AuditRecordRow], orderBy: Option[String], orderAsc: Boolean, limit: Int, offset: Int)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: com.kyleu.projectile.util.tracing.TraceData
 )
-@views.html.admin.explore.list(
+@com.kyleu.projectile.views.html.admin.explore.list(
   user = user,
+  authActions = authActions,
   model = "Audit Record",
   modelPlural = "Audit Records",
   icon = models.template.Icons.auditRecordRow,

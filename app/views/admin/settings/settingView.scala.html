@@ -1,7 +1,7 @@
 @* Generated File *@
-@(user: com.kyleu.projectile.models.user.SystemUser, model: models.settings.Setting, notes: Seq[com.kyleu.projectile.models.note.Note], debug: Boolean)(
+@(user: com.kyleu.projectile.models.user.SystemUser, authActions: com.kyleu.projectile.models.auth.AuthActions, model: models.settings.Setting, notes: Seq[com.kyleu.projectile.models.note.Note], debug: Boolean)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: com.kyleu.projectile.util.tracing.TraceData
-)@views.html.admin.layout.page(user, "explore", s"Setting [${model.k}]") {
+)@com.kyleu.projectile.views.html.admin.layout.page(user, authActions, "explore", s"Setting [${model.k}]") {
   <div class="collection with-header">
     <div class="collection-header">
       <div class="right"><a class="theme-text" href="@controllers.admin.settings.routes.SettingController.editForm(model.k)">Edit</a></div>

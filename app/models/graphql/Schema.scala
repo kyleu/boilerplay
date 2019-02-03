@@ -1,7 +1,6 @@
-package graphql
+package models.graphql
 
 import com.kyleu.projectile.graphql.{GraphQLContext, GraphQLSchema}
-import models.graphql.sandbox
 import models.graphql.sandbox.SandboxSchema
 import sangria.execution.deferred.DeferredResolver
 import sangria.schema._
@@ -21,13 +20,13 @@ object Schema extends GraphQLSchema {
         models.graphql.audit.AuditRowSchema.auditRowByPrimaryKeyFetcher,
         models.graphql.auth.Oauth2InfoRowSchema.oauth2InfoRowByPrimaryKeyFetcher,
         models.graphql.auth.PasswordInfoRowSchema.passwordInfoRowByPrimaryKeyFetcher,
+        models.graphql.auth.SystemUserRowSchema.systemUserRowByPrimaryKeyFetcher,
         models.graphql.ddl.FlywaySchemaHistoryRowSchema.flywaySchemaHistoryRowByPrimaryKeyFetcher,
         models.graphql.note.NoteRowSchema.noteRowByAuthorFetcher,
         models.graphql.note.NoteRowSchema.noteRowByPrimaryKeyFetcher,
         models.graphql.settings.SettingSchema.settingByPrimaryKeyFetcher,
         models.graphql.sync.SyncProgressRowSchema.syncProgressRowByPrimaryKeyFetcher,
-        models.graphql.task.ScheduledTaskRunRowSchema.scheduledTaskRunRowByPrimaryKeyFetcher,
-        models.graphql.user.SystemUserRowSchema.systemUserRowByPrimaryKeyFetcher
+        models.graphql.task.ScheduledTaskRunRowSchema.scheduledTaskRunRowByPrimaryKeyFetcher
       ) ++
         /* End model fetchers */
         Nil
@@ -51,12 +50,12 @@ object Schema extends GraphQLSchema {
       models.graphql.audit.AuditRowSchema.queryFields ++
       models.graphql.auth.Oauth2InfoRowSchema.queryFields ++
       models.graphql.auth.PasswordInfoRowSchema.queryFields ++
+      models.graphql.auth.SystemUserRowSchema.queryFields ++
       models.graphql.ddl.FlywaySchemaHistoryRowSchema.queryFields ++
       models.graphql.note.NoteRowSchema.queryFields ++
       models.graphql.settings.SettingSchema.queryFields ++
       models.graphql.sync.SyncProgressRowSchema.queryFields ++
       models.graphql.task.ScheduledTaskRunRowSchema.queryFields ++
-      models.graphql.user.SystemUserRowSchema.queryFields ++
       /* End model query fields */
       Nil
   }
@@ -94,12 +93,12 @@ object Schema extends GraphQLSchema {
       models.graphql.audit.AuditRowSchema.mutationFields ++
       models.graphql.auth.Oauth2InfoRowSchema.mutationFields ++
       models.graphql.auth.PasswordInfoRowSchema.mutationFields ++
+      models.graphql.auth.SystemUserRowSchema.mutationFields ++
       models.graphql.ddl.FlywaySchemaHistoryRowSchema.mutationFields ++
       models.graphql.note.NoteRowSchema.mutationFields ++
       models.graphql.settings.SettingSchema.mutationFields ++
       models.graphql.sync.SyncProgressRowSchema.mutationFields ++
       models.graphql.task.ScheduledTaskRunRowSchema.mutationFields ++
-      models.graphql.user.SystemUserRowSchema.mutationFields ++
       /* End model mutation fields */
       Nil
   }

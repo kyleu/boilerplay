@@ -12,7 +12,7 @@
  - [scheduled_task_run](DatabaseTableScheduledTaskRunRow)
  - [setting_values](DatabaseTableSetting)
  - [sync_progress](DatabaseTableSyncProgressRow)
- - [system_users](DatabaseTableSystemUserRow)
+ - [system_user](DatabaseTableSystemUserRow)
 
 ## [Enums](DatabaseEnums)
 

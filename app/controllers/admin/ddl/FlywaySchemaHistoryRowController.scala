@@ -3,6 +3,7 @@ package controllers.admin.ddl
 
 import com.kyleu.projectile.controllers.{ServiceAuthController, ServiceController}
 import com.kyleu.projectile.models.Application
+import com.kyleu.projectile.models.auth.AuthActions
 import com.kyleu.projectile.models.result.orderBy.OrderBy
 import com.kyleu.projectile.services.note.NoteService
 import com.kyleu.projectile.util.DateUtils
@@ -16,14 +17,14 @@ import services.ddl.FlywaySchemaHistoryRowService
 
 @javax.inject.Singleton
 class FlywaySchemaHistoryRowController @javax.inject.Inject() (
-    override val app: Application, svc: FlywaySchemaHistoryRowService, noteSvc: NoteService
+    override val app: Application, authActions: AuthActions, svc: FlywaySchemaHistoryRowService, noteSvc: NoteService
 ) extends ServiceAuthController(svc) {
 
   def createForm = withSession("create.form", admin = true) { implicit request => implicit td =>
     val cancel = controllers.admin.ddl.routes.FlywaySchemaHistoryRowController.list()
     val call = controllers.admin.ddl.routes.FlywaySchemaHistoryRowController.create()
     Future.successful(Ok(views.html.admin.ddl.flywaySchemaHistoryRowForm(
-      request.identity, FlywaySchemaHistoryRow.empty(), "New Flyway Schema History", cancel, call, isNew = true, debug = app.config.debug
+      request.identity, authActions, FlywaySchemaHistoryRow.empty(), "New Flyway Schema History", cancel, call, isNew = true, debug = app.config.debug
     )))
   }
 
@@ -40,7 +41,7 @@ class FlywaySchemaHistoryRowController @javax.inject.Inject() (
       val orderBys = OrderBy.forVals(orderBy, orderAsc).toSeq
       searchWithCount(q, orderBys, limit, offset).map(r => renderChoice(t) {
         case MimeTypes.HTML => Ok(views.html.admin.ddl.flywaySchemaHistoryRowList(
-          request.identity, Some(r._1), r._2, q, orderBy, orderAsc, limit.getOrElse(100), offset.getOrElse(0)
+          request.identity, authActions, Some(r._1), r._2, q, orderBy, orderAsc, limit.getOrElse(100), offset.getOrElse(0)
         ))
         case MimeTypes.JSON => Ok(FlywaySchemaHistoryRowResult.fromRecords(q, Nil, orderBys, limit, offset, startMs, r._1, r._2).asJson)
         case ServiceController.MimeTypes.csv => csvResponse("FlywaySchemaHistoryRow", svc.csvFor(r._1, r._2))
@@ -63,7 +64,7 @@ class FlywaySchemaHistoryRowController @javax.inject.Inject() (
 
     notesF.flatMap(notes => modelF.map {
       case Some(model) => renderChoice(t) {
-        case MimeTypes.HTML => Ok(views.html.admin.ddl.flywaySchemaHistoryRowView(request.identity, model, notes, app.config.debug))
+        case MimeTypes.HTML => Ok(views.html.admin.ddl.flywaySchemaHistoryRowView(request.identity, authActions, model, notes, app.config.debug))
         case MimeTypes.JSON => Ok(model.asJson)
         case ServiceController.MimeTypes.png => Ok(renderToPng(v = model)).as(ServiceController.MimeTypes.png)
         case ServiceController.MimeTypes.svg => Ok(renderToSvg(v = model)).as(ServiceController.MimeTypes.svg)
@@ -77,7 +78,7 @@ class FlywaySchemaHistoryRowController @javax.inject.Inject() (
     val call = controllers.admin.ddl.routes.FlywaySchemaHistoryRowController.edit(installedRank)
     svc.getByPrimaryKey(request, installedRank).map {
       case Some(model) => Ok(
-        views.html.admin.ddl.flywaySchemaHistoryRowForm(request.identity, model, s"Flyway Schema History [$installedRank]", cancel, call, debug = app.config.debug)
+        views.html.admin.ddl.flywaySchemaHistoryRowForm(request.identity, authActions, model, s"Flyway Schema History [$installedRank]", cancel, call, debug = app.config.debug)
       )
       case None => NotFound(s"No FlywaySchemaHistoryRow found with installedRank [$installedRank].")
     }

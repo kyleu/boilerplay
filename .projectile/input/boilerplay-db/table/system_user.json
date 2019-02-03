@@ -1,5 +1,5 @@
 {
-  "name" : "note",
+  "name" : "system_user",
   "catalog" : null,
   "schema" : "public",
   "description" : null,
@@ -21,23 +21,7 @@
     "scale" : 0,
     "defaultValue" : null
   }, {
-    "name" : "rel_type",
-    "description" : null,
-    "definition" : null,
-    "primaryKey" : false,
-    "notNull" : false,
-    "autoIncrement" : false,
-    "columnType" : {
-      "t" : "string"
-    },
-    "sqlTypeCode" : 12,
-    "sqlTypeName" : "varchar",
-    "size" : "128",
-    "sizeAsInt" : 128,
-    "scale" : 0,
-    "defaultValue" : null
-  }, {
-    "name" : "rel_pk",
+    "name" : "username",
     "description" : null,
     "definition" : null,
     "primaryKey" : false,
@@ -53,7 +37,7 @@
     "scale" : 0,
     "defaultValue" : null
   }, {
-    "name" : "text",
+    "name" : "provider",
     "description" : null,
     "definition" : null,
     "primaryKey" : false,
@@ -63,25 +47,41 @@
       "t" : "string"
     },
     "sqlTypeCode" : 12,
-    "sqlTypeName" : "text",
-    "size" : "2147483647",
-    "sizeAsInt" : 2147483647,
+    "sqlTypeName" : "varchar",
+    "size" : "64",
+    "sizeAsInt" : 64,
     "scale" : 0,
     "defaultValue" : null
   }, {
-    "name" : "author",
+    "name" : "key",
     "description" : null,
     "definition" : null,
     "primaryKey" : false,
     "notNull" : true,
     "autoIncrement" : false,
     "columnType" : {
-      "t" : "uuid"
+      "t" : "string"
     },
-    "sqlTypeCode" : 1111,
-    "sqlTypeName" : "uuid",
-    "size" : "2147483647",
-    "sizeAsInt" : 2147483647,
+    "sqlTypeCode" : 12,
+    "sqlTypeName" : "varchar",
+    "size" : "2048",
+    "sizeAsInt" : 2048,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "role",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "string"
+    },
+    "sqlTypeCode" : 12,
+    "sqlTypeName" : "varchar",
+    "size" : "64",
+    "sizeAsInt" : 64,
     "scale" : 0,
     "defaultValue" : null
   }, {
@@ -103,24 +103,59 @@
   } ],
   "rowIdentifier" : [ "id" ],
   "primaryKey" : {
-    "name" : "note_pkey",
+    "name" : "system_user_pkey",
     "columns" : [ "id" ]
   },
-  "foreignKeys" : [ {
-    "name" : "note_author_fkey",
-    "propertyName" : "noteAuthorFkeyRel",
-    "targetTable" : "system_user",
-    "references" : [ {
-      "source" : "author",
-      "target" : "id"
-    } ]
-  } ],
+  "foreignKeys" : [ ],
   "indexes" : [ {
-    "name" : "note_pkey",
+    "name" : "system_user_key",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "key",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "system_user_pkey",
     "unique" : true,
     "indexType" : "other",
     "columns" : [ {
       "name" : "id",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "system_user_provider",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "provider",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "system_user_provider_key",
+    "unique" : true,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "provider",
+      "ascending" : true
+    }, {
+      "name" : "key",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "system_user_username",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "username",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "system_user_username_key",
+    "unique" : true,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "username",
       "ascending" : true
     } ]
   } ]

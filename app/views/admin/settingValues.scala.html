@@ -1,4 +1,8 @@
-@(user: com.kyleu.projectile.models.user.SystemUser, settingService: services.settings.SettingsService)(implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: com.kyleu.projectile.util.tracing.TraceData)
+@(
+    user: com.kyleu.projectile.models.user.SystemUser,
+    authActions: com.kyleu.projectile.models.auth.AuthActions,
+    settingService: services.settings.SettingsService
+)(implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: com.kyleu.projectile.util.tracing.TraceData)
 @import models.settings.SettingKeyType
 
 @settingPanel(key: models.settings.SettingKeyType, colWidth: Int = 12)(content: Html) = {
@@ -22,7 +26,7 @@
 
 @traceData.logClass(getClass)
 
-@views.html.admin.layout.page(user, "status", "System Preferences") {
+@com.kyleu.projectile.views.html.admin.layout.page(user, authActions, "status", "System Preferences") {
   <div class="static-container container">
   <form action="@controllers.admin.system.routes.SettingsController.saveSettings()" method="post">
     <div class="collection with-header">

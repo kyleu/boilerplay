@@ -1,6 +1,6 @@
-@(user: com.kyleu.projectile.models.user.SystemUser, notes: Seq[com.kyleu.projectile.models.note.Note], model: String, pk: String)(
+@(user: com.kyleu.projectile.models.user.SystemUser, authActions: com.kyleu.projectile.models.auth.AuthActions, notes: Seq[com.kyleu.projectile.models.note.Note], model: String, pk: String)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: com.kyleu.projectile.util.tracing.TraceData
 )@traceData.logClass(getClass)
-@views.html.admin.layout.page(user, "explore", s"Notes for [$model $pk]") {
+@com.kyleu.projectile.views.html.admin.layout.page(user, authActions, "explore", s"Notes for [$model $pk]") {
   <h5>Notes for [@model @pk]</h5>
 }

@@ -2,8 +2,8 @@ import sbt._
 
 object Dependencies {
   object Projectile {
-    val version = "1.1.4"
-    val all = Seq("auth-graphql", "doobie", "graphql", "slick").map(s => "com.kyleu" %% s"projectile-lib-$s" % version)
+    val version = "1.1.5"
+    val all = Seq("auth-graphql", "doobie", "slick").map(s => "com.kyleu" %% s"projectile-lib-$s" % version)
   }
 
   object PlayFramework {
