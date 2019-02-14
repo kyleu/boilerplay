@@ -1,5 +1,5 @@
 # Generated File
-# Creates a new FlywaySchemaHistoryRow entity.
+# Creates a new FlywaySchemaHistoryRow entity
 mutation FlywaySchemaHistoryRowCreate {
   flywaySchemaHistoryRow {
     create(fields: [{k: "", v: ""}]) {

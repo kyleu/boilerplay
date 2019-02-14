@@ -54,7 +54,7 @@ object PasswordInfoRowQueries extends BaseQueries[PasswordInfoRow]("passwordInfo
 
   def insert(model: PasswordInfoRow) = new Insert(model)
   def insertBatch(models: Seq[PasswordInfoRow]) = new InsertBatch(models)
-  def create(dataFields: Seq[DataField]) = new CreateFields(dataFields)
+  def create(dataFields: Seq[DataField]) = new InsertFields(dataFields)
 
   def removeByPrimaryKey(provider: String, key: String) = new RemoveByPrimaryKey(Seq[Any](provider, key))
 

@@ -20,7 +20,7 @@
           </tr>
           <tr>
             <th>Version</th>
-            <td>@model.version</td>
+            <td>@model.version.getOrElse(com.kyleu.projectile.util.NullUtils.str)</td>
           </tr>
           <tr>
             <th>Description</th>
@@ -36,7 +36,7 @@
           </tr>
           <tr>
             <th>Checksum</th>
-            <td>@model.checksum</td>
+            <td>@model.checksum.getOrElse(com.kyleu.projectile.util.NullUtils.str)</td>
           </tr>
           <tr>
             <th>Installed By</th>

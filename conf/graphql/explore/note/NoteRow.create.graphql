@@ -1,5 +1,5 @@
 # Generated File
-# Creates a new NoteRow entity.
+# Creates a new NoteRow entity
 mutation NoteRowCreate {
   noteRow {
     create(fields: [{k: "", v: ""}]) {

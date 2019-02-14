@@ -40,7 +40,7 @@ object SettingQueries extends BaseQueries[Setting]("setting", "setting_values") 
 
   def insert(model: Setting) = new Insert(model)
   def insertBatch(models: Seq[Setting]) = new InsertBatch(models)
-  def create(dataFields: Seq[DataField]) = new CreateFields(dataFields)
+  def create(dataFields: Seq[DataField]) = new InsertFields(dataFields)
 
   def removeByPrimaryKey(k: SettingKeyType) = new RemoveByPrimaryKey(Seq[Any](k))
 

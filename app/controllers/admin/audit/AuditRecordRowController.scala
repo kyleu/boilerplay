@@ -85,7 +85,7 @@ class AuditRecordRowController @javax.inject.Inject() (
         case ServiceController.MimeTypes.png => Ok(renderToPng(v = model)).as(ServiceController.MimeTypes.png)
         case ServiceController.MimeTypes.svg => Ok(renderToSvg(v = model)).as(ServiceController.MimeTypes.svg)
       }
-      case None => NotFound(s"No AuditRecordRow found with id [$id].")
+      case None => NotFound(s"No AuditRecordRow found with id [$id]")
     })
   }
 
@@ -96,7 +96,7 @@ class AuditRecordRowController @javax.inject.Inject() (
       case Some(model) => Ok(
         views.html.admin.audit.auditRecordRowForm(request.identity, authActions, model, s"Audit Record [$id]", cancel, call, debug = app.config.debug)
       )
-      case None => NotFound(s"No AuditRecordRow found with id [$id].")
+      case None => NotFound(s"No AuditRecordRow found with id [$id]")
     }
   }
 

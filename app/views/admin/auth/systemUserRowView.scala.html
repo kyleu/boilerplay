@@ -20,7 +20,7 @@
           </tr>
           <tr>
             <th>Username</th>
-            <td>@model.username</td>
+            <td>@model.username.getOrElse(com.kyleu.projectile.util.NullUtils.str)</td>
           </tr>
           <tr>
             <th>Provider</th>

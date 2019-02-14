@@ -1,14 +1,24 @@
 @* Generated File *@
 @(model: models.note.NoteRow)<tr>
-  <td><a href="@controllers.admin.note.routes.NoteRowController.view(model.id)" class="theme-text">@model.id</a></td>
-  <td>@model.relType</td>
-  <td>@model.relPk</td>
-  <td>@model.text</td>
+  <td>
+    <a href="@controllers.admin.note.routes.NoteRowController.view(model.id)" class="theme-text">@model.id</a>
+  </td>
+  <td>
+    @model.relType
+  </td>
+  <td>
+    @model.relPk
+  </td>
+  <td>
+    @model.text
+  </td>
   <td>
     @model.author
     <a class="theme-text" href="@controllers.admin.auth.routes.SystemUserRowController.view(model.author)">
       <i class="fa @models.template.Icons.systemUserRow"></i>
     </a>
   </td>
-  <td>@model.created</td>
+  <td>
+    @model.created
+  </td>
 </tr>

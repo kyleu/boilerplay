@@ -1,5 +1,5 @@
 # Generated File
-# Remove a single Setting entity from the system.
+# Remove a single Setting entity from the system
 mutation SettingRemove {
   setting {
     remove(k: "") {

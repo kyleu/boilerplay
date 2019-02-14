@@ -20,7 +20,7 @@ class SystemUserRowService @javax.inject.Inject() (override val tracing: Tracing
     traceF("get.by.primary.key")(td => ApplicationDatabase.queryF(SystemUserRowQueries.getByPrimaryKey(id))(td))
   }
   def getByPrimaryKeyRequired(creds: Credentials, id: UUID)(implicit trace: TraceData) = getByPrimaryKey(creds, id).map { opt =>
-    opt.getOrElse(throw new IllegalStateException(s"Cannot load systemUserRow with id [$id]."))
+    opt.getOrElse(throw new IllegalStateException(s"Cannot load systemUserRow with id [$id]"))
   }
   def getByPrimaryKeySeq(creds: Credentials, idSeq: Seq[UUID])(implicit trace: TraceData) = if (idSeq.isEmpty) {
     Future.successful(Nil)
@@ -127,21 +127,21 @@ class SystemUserRowService @javax.inject.Inject() (override val tracing: Tracing
     traceF("remove")(td => getByPrimaryKey(creds, id)(td).flatMap {
       case Some(current) =>
         ApplicationDatabase.executeF(SystemUserRowQueries.removeByPrimaryKey(id))(td).map(_ => current)
-      case None => throw new IllegalStateException(s"Cannot find SystemUserRow matching [$id].")
+      case None => throw new IllegalStateException(s"Cannot find SystemUserRow matching [$id]")
     })
   }
 
   def update(creds: Credentials, id: UUID, fields: Seq[DataField])(implicit trace: TraceData) = {
     traceF("update")(td => getByPrimaryKey(creds, id)(td).flatMap {
-      case Some(current) if fields.isEmpty => Future.successful(current -> s"No changes required for System User [$id].")
+      case Some(current) if fields.isEmpty => Future.successful(current -> s"No changes required for System User [$id]")
       case Some(_) => ApplicationDatabase.executeF(SystemUserRowQueries.update(id, fields))(td).flatMap { _ =>
         getByPrimaryKey(creds, id)(td).map {
           case Some(newModel) =>
-            newModel -> s"Updated [${fields.size}] fields of System User [$id]."
-          case None => throw new IllegalStateException(s"Cannot find SystemUserRow matching [$id].")
+            newModel -> s"Updated [${fields.size}] fields of System User [$id]"
+          case None => throw new IllegalStateException(s"Cannot find SystemUserRow matching [$id]")
         }
       }
-      case None => throw new IllegalStateException(s"Cannot find SystemUserRow matching [$id].")
+      case None => throw new IllegalStateException(s"Cannot find SystemUserRow matching [$id]")
     })
   }
 

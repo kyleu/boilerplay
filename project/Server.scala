@@ -3,7 +3,6 @@ import com.kyleu.projectile.sbt.ProjectVersion
 import com.typesafe.sbt.GitPlugin.autoImport.git
 import com.typesafe.sbt.gzip.Import._
 import com.typesafe.sbt.jse.JsEngineImport.JsEngineKeys
-import com.typesafe.sbt.less.Import._
 import com.typesafe.sbt.packager.Keys._
 import com.typesafe.sbt.packager.archetypes.JavaAppPackaging
 import com.typesafe.sbt.packager.docker.DockerPlugin
@@ -51,9 +50,6 @@ object Server {
     JsEngineKeys.engineType := JsEngineKeys.EngineType.Node,
     pipelineStages in Assets := Seq(scalaJSPipeline),
     pipelineStages ++= Seq(gzip),
-    includeFilter in (Assets, LessKeys.less) := "*.less",
-    excludeFilter in (Assets, LessKeys.less) := "_*.less",
-    LessKeys.compress in Assets := true,
 
     // Source Control
     scmInfo := Some(ScmInfo(url("https://github.com/KyleU/boilerplay"), "git@github.com:KyleU/boilerplay.git")),

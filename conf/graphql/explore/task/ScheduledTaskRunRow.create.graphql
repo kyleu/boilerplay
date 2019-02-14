@@ -1,5 +1,5 @@
 # Generated File
-# Creates a new ScheduledTaskRunRow entity.
+# Creates a new ScheduledTaskRunRow entity
 mutation ScheduledTaskRunRowCreate {
   scheduledTaskRunRow {
     create(fields: [{k: "", v: ""}]) {

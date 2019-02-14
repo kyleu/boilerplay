@@ -69,7 +69,7 @@ class SettingController @javax.inject.Inject() (
         case ServiceController.MimeTypes.png => Ok(renderToPng(v = model)).as(ServiceController.MimeTypes.png)
         case ServiceController.MimeTypes.svg => Ok(renderToSvg(v = model)).as(ServiceController.MimeTypes.svg)
       }
-      case None => NotFound(s"No Setting found with k [$k].")
+      case None => NotFound(s"No Setting found with k [$k]")
     })
   }
 
@@ -80,7 +80,7 @@ class SettingController @javax.inject.Inject() (
       case Some(model) => Ok(
         views.html.admin.settings.settingForm(request.identity, authActions, model, s"Setting [$k]", cancel, call, debug = app.config.debug)
       )
-      case None => NotFound(s"No Setting found with k [$k].")
+      case None => NotFound(s"No Setting found with k [$k]")
     }
   }
 

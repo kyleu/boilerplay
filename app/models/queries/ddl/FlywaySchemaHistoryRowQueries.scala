@@ -84,7 +84,7 @@ object FlywaySchemaHistoryRowQueries extends BaseQueries[FlywaySchemaHistoryRow]
 
   def insert(model: FlywaySchemaHistoryRow) = new Insert(model)
   def insertBatch(models: Seq[FlywaySchemaHistoryRow]) = new InsertBatch(models)
-  def create(dataFields: Seq[DataField]) = new CreateFields(dataFields)
+  def create(dataFields: Seq[DataField]) = new InsertFields(dataFields)
 
   def removeByPrimaryKey(installedRank: Long) = new RemoveByPrimaryKey(Seq[Any](installedRank))
 

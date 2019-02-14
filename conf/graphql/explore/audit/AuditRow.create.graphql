@@ -1,5 +1,5 @@
 # Generated File
-# Creates a new AuditRow entity.
+# Creates a new AuditRow entity
 mutation AuditRowCreate {
   auditRow {
     create(fields: [{k: "", v: ""}]) {

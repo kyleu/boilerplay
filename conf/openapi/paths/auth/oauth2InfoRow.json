@@ -101,7 +101,7 @@
   },
   "/admin/auth/oauth2InfoRow/{provider}/{key}": {
     "get": {
-      "summary": "View the Oauth2InfoRow entity matching the provided [provider, key].",
+      "summary": "View the Oauth2InfoRow entity matching the provided [provider, key]",
       "operationId": "auth.Oauth2InfoRow.view",
       "tags": ["auth"],
       "parameters": [
@@ -151,7 +151,7 @@
       }
     },
     "post": {
-      "summary": "Updates the Oauth2InfoRow entity matching the provided [provider, key] using the provided fields.",
+      "summary": "Updates the Oauth2InfoRow entity matching the provided [provider, key] using the provided fields",
       "operationId": "auth.Oauth2InfoRow.edit",
       "tags": ["auth"],
       "parameters": [
@@ -215,7 +215,7 @@
   },
   "/admin/auth/oauth2InfoRow/{provider}/{key}/remove": {
     "get": {
-      "summary": "Removes the Oauth2InfoRow entity matching the provided [provider, key].",
+      "summary": "Removes the Oauth2InfoRow entity matching the provided [provider, key]",
       "operationId": "auth.Oauth2InfoRow.remove",
       "tags": ["auth"],
       "parameters": [

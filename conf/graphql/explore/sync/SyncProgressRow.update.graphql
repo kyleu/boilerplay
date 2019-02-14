@@ -1,5 +1,5 @@
 # Generated File
-# Updates a single SyncProgressRow entity using the provided fields.
+# Updates a single SyncProgressRow entity using the provided fields
 mutation SyncProgressRowUpdate {
   syncProgressRow {
     update(key: "", fields: [{k: "", v: ""}]) {

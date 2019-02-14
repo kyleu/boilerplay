@@ -81,7 +81,7 @@ object NoteRowQueries extends BaseQueries[NoteRow]("noteRow", "note") {
 
   def insert(model: NoteRow) = new Insert(model)
   def insertBatch(models: Seq[NoteRow]) = new InsertBatch(models)
-  def create(dataFields: Seq[DataField]) = new CreateFields(dataFields)
+  def create(dataFields: Seq[DataField]) = new InsertFields(dataFields)
 
   def removeByPrimaryKey(id: UUID) = new RemoveByPrimaryKey(Seq[Any](id))
 

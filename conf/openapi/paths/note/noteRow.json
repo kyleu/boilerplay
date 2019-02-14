@@ -101,7 +101,7 @@
   },
   "/admin/note/{id}": {
     "get": {
-      "summary": "View the NoteRow entity matching the provided [id].",
+      "summary": "View the NoteRow entity matching the provided [id]",
       "operationId": "note.NoteRow.view",
       "tags": ["note"],
       "parameters": [
@@ -145,7 +145,7 @@
       }
     },
     "post": {
-      "summary": "Updates the NoteRow entity matching the provided [id] using the provided fields.",
+      "summary": "Updates the NoteRow entity matching the provided [id] using the provided fields",
       "operationId": "note.NoteRow.edit",
       "tags": ["note"],
       "parameters": [
@@ -203,7 +203,7 @@
   },
   "/admin/note/byAuthor/{author}": {
     "get": {
-      "summary": "Finds the NoteRow entities associated to the provided [author].",
+      "summary": "Finds the NoteRow entities associated to the provided [author]",
       "operationId": "note.NoteRow.byAuthor",
       "tags": ["note"],
       "parameters": [
@@ -252,7 +252,7 @@
   },
   "/admin/note/{id}/remove": {
     "get": {
-      "summary": "Removes the NoteRow entity matching the provided [id].",
+      "summary": "Removes the NoteRow entity matching the provided [id]",
       "operationId": "note.NoteRow.remove",
       "tags": ["note"],
       "parameters": [

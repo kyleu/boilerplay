@@ -19,7 +19,7 @@ class SettingService @javax.inject.Inject() (override val tracing: TracingServic
     traceF("get.by.primary.key")(td => ApplicationDatabase.queryF(SettingQueries.getByPrimaryKey(k))(td))
   }
   def getByPrimaryKeyRequired(creds: Credentials, k: SettingKeyType)(implicit trace: TraceData) = getByPrimaryKey(creds, k).map { opt =>
-    opt.getOrElse(throw new IllegalStateException(s"Cannot load setting with k [$k]."))
+    opt.getOrElse(throw new IllegalStateException(s"Cannot load setting with k [$k]"))
   }
   def getByPrimaryKeySeq(creds: Credentials, kSeq: Seq[SettingKeyType])(implicit trace: TraceData) = if (kSeq.isEmpty) {
     Future.successful(Nil)
@@ -84,21 +84,21 @@ class SettingService @javax.inject.Inject() (override val tracing: TracingServic
     traceF("remove")(td => getByPrimaryKey(creds, k)(td).flatMap {
       case Some(current) =>
         ApplicationDatabase.executeF(SettingQueries.removeByPrimaryKey(k))(td).map(_ => current)
-      case None => throw new IllegalStateException(s"Cannot find Setting matching [$k].")
+      case None => throw new IllegalStateException(s"Cannot find Setting matching [$k]")
     })
   }
 
   def update(creds: Credentials, k: SettingKeyType, fields: Seq[DataField])(implicit trace: TraceData) = {
     traceF("update")(td => getByPrimaryKey(creds, k)(td).flatMap {
-      case Some(current) if fields.isEmpty => Future.successful(current -> s"No changes required for Setting [$k].")
+      case Some(current) if fields.isEmpty => Future.successful(current -> s"No changes required for Setting [$k]")
       case Some(_) => ApplicationDatabase.executeF(SettingQueries.update(k, fields))(td).flatMap { _ =>
         getByPrimaryKey(creds, k)(td).map {
           case Some(newModel) =>
-            newModel -> s"Updated [${fields.size}] fields of Setting [$k]."
-          case None => throw new IllegalStateException(s"Cannot find Setting matching [$k].")
+            newModel -> s"Updated [${fields.size}] fields of Setting [$k]"
+          case None => throw new IllegalStateException(s"Cannot find Setting matching [$k]")
         }
       }
-      case None => throw new IllegalStateException(s"Cannot find Setting matching [$k].")
+      case None => throw new IllegalStateException(s"Cannot find Setting matching [$k]")
     })
   }
 

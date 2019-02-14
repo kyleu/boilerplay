@@ -1,5 +1,5 @@
 # Generated File
-# Creates a new SyncProgressRow entity.
+# Creates a new SyncProgressRow entity
 mutation SyncProgressRowCreate {
   syncProgressRow {
     create(fields: [{k: "", v: ""}]) {

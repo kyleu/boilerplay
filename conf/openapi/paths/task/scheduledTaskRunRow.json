@@ -101,7 +101,7 @@
   },
   "/admin/task/{id}": {
     "get": {
-      "summary": "View the ScheduledTaskRunRow entity matching the provided [id].",
+      "summary": "View the ScheduledTaskRunRow entity matching the provided [id]",
       "operationId": "task.ScheduledTaskRunRow.view",
       "tags": ["task"],
       "parameters": [
@@ -145,7 +145,7 @@
       }
     },
     "post": {
-      "summary": "Updates the ScheduledTaskRunRow entity matching the provided [id] using the provided fields.",
+      "summary": "Updates the ScheduledTaskRunRow entity matching the provided [id] using the provided fields",
       "operationId": "task.ScheduledTaskRunRow.edit",
       "tags": ["task"],
       "parameters": [
@@ -203,7 +203,7 @@
   },
   "/admin/task/{id}/remove": {
     "get": {
-      "summary": "Removes the ScheduledTaskRunRow entity matching the provided [id].",
+      "summary": "Removes the ScheduledTaskRunRow entity matching the provided [id]",
       "operationId": "task.ScheduledTaskRunRow.remove",
       "tags": ["task"],
       "parameters": [

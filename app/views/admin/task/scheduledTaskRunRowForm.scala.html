@@ -13,10 +13,10 @@
         <table>
           <tbody>
             @com.kyleu.projectile.views.html.components.form.textField(selected = isNew, key = "id", title = "Id", value = Some(model.id.toString), nullable = false, dataType = "uuid")
-            @com.kyleu.projectile.views.html.components.form.textField(selected = isNew, key = "task", title = "Task", value = Some(model.task.toString), nullable = false)
-            @com.kyleu.projectile.views.html.components.form.textField(selected = isNew, key = "arguments", title = "Arguments", value = Some(model.arguments.toString), nullable = false, dataType = "list")
-            @com.kyleu.projectile.views.html.components.form.textField(selected = isNew, key = "status", title = "Status", value = Some(model.status.toString), nullable = false)
-            @com.kyleu.projectile.views.html.components.form.textField(selected = isNew, key = "output", title = "Output", value = Some(model.output.toString), nullable = false, dataType = "json")
+            @com.kyleu.projectile.views.html.components.form.textField(selected = isNew, key = "task", title = "Task", value = Some(model.task), nullable = false)
+            @com.kyleu.projectile.views.html.components.form.collectionField(selected = isNew, key = "arguments", title = "Arguments", value = Some(model.arguments), nullable = false)
+            @com.kyleu.projectile.views.html.components.form.textField(selected = isNew, key = "status", title = "Status", value = Some(model.status), nullable = false)
+            @com.kyleu.projectile.views.html.components.form.jsonField(selected = isNew, key = "output", title = "Output", value = Some(model.output), nullable = false)
             @com.kyleu.projectile.views.html.components.form.localDateTimeField(selected = isNew, key = "started", title = "Started", value = Some(model.started), nullable = false)
             @com.kyleu.projectile.views.html.components.form.localDateTimeField(selected = isNew, key = "completed", title = "Completed", value = Some(model.completed), nullable = false)
           </tbody>
@@ -26,4 +26,5 @@
   </form>
 }
 @views.html.components.includeScalaJs(debug)
+@com.kyleu.projectile.views.html.components.includeTagEditor(debug)
 <script>$(function() { new FormService('form-edit-scheduledTaskRunRow'); })</script>

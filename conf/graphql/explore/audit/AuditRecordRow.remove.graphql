@@ -1,5 +1,5 @@
 # Generated File
-# Remove a single AuditRecordRow entity from the system.
+# Remove a single AuditRecordRow entity from the system
 mutation AuditRecordRowRemove {
   auditRecordRow {
     remove(id: "00000000-0000-0000-0000-000000000000") {

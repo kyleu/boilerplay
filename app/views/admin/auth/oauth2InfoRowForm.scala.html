@@ -12,13 +12,13 @@
       <div class="collection-item">
         <table>
           <tbody>
-            @com.kyleu.projectile.views.html.components.form.textField(selected = isNew, key = "provider", title = "Provider", value = Some(model.provider.toString), nullable = false)
-            @com.kyleu.projectile.views.html.components.form.textField(selected = isNew, key = "key", title = "Key", value = Some(model.key.toString), nullable = false)
-            @com.kyleu.projectile.views.html.components.form.textField(selected = isNew, key = "accessToken", title = "Access Token", value = Some(model.accessToken.toString), nullable = false)
-            @com.kyleu.projectile.views.html.components.form.textField(selected = isNew, key = "tokenType", title = "Token Type", value = model.tokenType.map(_.toString), nullable = true)
-            @com.kyleu.projectile.views.html.components.form.textField(selected = isNew, key = "expiresIn", title = "Expires In", value = model.expiresIn.map(_.toString), nullable = true, dataType = "long")
-            @com.kyleu.projectile.views.html.components.form.textField(selected = isNew, key = "refreshToken", title = "Refresh Token", value = model.refreshToken.map(_.toString), nullable = true)
-            @com.kyleu.projectile.views.html.components.form.textField(selected = isNew, key = "params", title = "Params", value = model.params.map(_.toString), nullable = true, dataType = "json")
+            @com.kyleu.projectile.views.html.components.form.textField(selected = isNew, key = "provider", title = "Provider", value = Some(model.provider), nullable = false)
+            @com.kyleu.projectile.views.html.components.form.textField(selected = isNew, key = "key", title = "Key", value = Some(model.key), nullable = false)
+            @com.kyleu.projectile.views.html.components.form.textField(selected = isNew, key = "accessToken", title = "Access Token", value = Some(model.accessToken), nullable = false)
+            @com.kyleu.projectile.views.html.components.form.textField(selected = false, key = "tokenType", title = "Token Type", value = model.tokenType, nullable = true)
+            @com.kyleu.projectile.views.html.components.form.textField(selected = false, key = "expiresIn", title = "Expires In", value = model.expiresIn.map(_.toString), nullable = true, dataType = "long")
+            @com.kyleu.projectile.views.html.components.form.textField(selected = false, key = "refreshToken", title = "Refresh Token", value = model.refreshToken, nullable = true)
+            @com.kyleu.projectile.views.html.components.form.jsonField(selected = false, key = "params", title = "Params", value = model.params, nullable = true)
             @com.kyleu.projectile.views.html.components.form.localDateTimeField(selected = isNew, key = "created", title = "Created", value = Some(model.created), nullable = false)
           </tbody>
         </table>

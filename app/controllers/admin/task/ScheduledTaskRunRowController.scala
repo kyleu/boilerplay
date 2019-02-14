@@ -70,7 +70,7 @@ class ScheduledTaskRunRowController @javax.inject.Inject() (
         case ServiceController.MimeTypes.png => Ok(renderToPng(v = model)).as(ServiceController.MimeTypes.png)
         case ServiceController.MimeTypes.svg => Ok(renderToSvg(v = model)).as(ServiceController.MimeTypes.svg)
       }
-      case None => NotFound(s"No ScheduledTaskRunRow found with id [$id].")
+      case None => NotFound(s"No ScheduledTaskRunRow found with id [$id]")
     })
   }
 
@@ -81,7 +81,7 @@ class ScheduledTaskRunRowController @javax.inject.Inject() (
       case Some(model) => Ok(
         views.html.admin.task.scheduledTaskRunRowForm(request.identity, authActions, model, s"Scheduled Task Run [$id]", cancel, call, debug = app.config.debug)
       )
-      case None => NotFound(s"No ScheduledTaskRunRow found with id [$id].")
+      case None => NotFound(s"No ScheduledTaskRunRow found with id [$id]")
     }
   }
 

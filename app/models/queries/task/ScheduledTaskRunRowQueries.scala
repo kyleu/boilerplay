@@ -75,7 +75,7 @@ object ScheduledTaskRunRowQueries extends BaseQueries[ScheduledTaskRunRow]("sche
 
   def insert(model: ScheduledTaskRunRow) = new Insert(model)
   def insertBatch(models: Seq[ScheduledTaskRunRow]) = new InsertBatch(models)
-  def create(dataFields: Seq[DataField]) = new CreateFields(dataFields)
+  def create(dataFields: Seq[DataField]) = new InsertFields(dataFields)
 
   def removeByPrimaryKey(id: UUID) = new RemoveByPrimaryKey(Seq[Any](id))
 

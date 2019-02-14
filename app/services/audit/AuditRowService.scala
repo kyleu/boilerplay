@@ -20,7 +20,7 @@ class AuditRowService @javax.inject.Inject() (override val tracing: TracingServi
     traceF("get.by.primary.key")(td => ApplicationDatabase.queryF(AuditRowQueries.getByPrimaryKey(id))(td))
   }
   def getByPrimaryKeyRequired(creds: Credentials, id: UUID)(implicit trace: TraceData) = getByPrimaryKey(creds, id).map { opt =>
-    opt.getOrElse(throw new IllegalStateException(s"Cannot load auditRow with id [$id]."))
+    opt.getOrElse(throw new IllegalStateException(s"Cannot load auditRow with id [$id]"))
   }
   def getByPrimaryKeySeq(creds: Credentials, idSeq: Seq[UUID])(implicit trace: TraceData) = if (idSeq.isEmpty) {
     Future.successful(Nil)
@@ -155,21 +155,21 @@ class AuditRowService @javax.inject.Inject() (override val tracing: TracingServi
     traceF("remove")(td => getByPrimaryKey(creds, id)(td).flatMap {
       case Some(current) =>
         ApplicationDatabase.executeF(AuditRowQueries.removeByPrimaryKey(id))(td).map(_ => current)
-      case None => throw new IllegalStateException(s"Cannot find AuditRow matching [$id].")
+      case None => throw new IllegalStateException(s"Cannot find AuditRow matching [$id]")
     })
   }
 
   def update(creds: Credentials, id: UUID, fields: Seq[DataField])(implicit trace: TraceData) = {
     traceF("update")(td => getByPrimaryKey(creds, id)(td).flatMap {
-      case Some(current) if fields.isEmpty => Future.successful(current -> s"No changes required for Audit [$id].")
+      case Some(current) if fields.isEmpty => Future.successful(current -> s"No changes required for Audit [$id]")
       case Some(_) => ApplicationDatabase.executeF(AuditRowQueries.update(id, fields))(td).flatMap { _ =>
         getByPrimaryKey(creds, id)(td).map {
           case Some(newModel) =>
-            newModel -> s"Updated [${fields.size}] fields of Audit [$id]."
-          case None => throw new IllegalStateException(s"Cannot find AuditRow matching [$id].")
+            newModel -> s"Updated [${fields.size}] fields of Audit [$id]"
+          case None => throw new IllegalStateException(s"Cannot find AuditRow matching [$id]")
         }
       }
-      case None => throw new IllegalStateException(s"Cannot find AuditRow matching [$id].")
+      case None => throw new IllegalStateException(s"Cannot find AuditRow matching [$id]")
     })
   }
 

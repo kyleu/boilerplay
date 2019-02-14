@@ -64,7 +64,7 @@ object SyncProgressRowQueries extends BaseQueries[SyncProgressRow]("syncProgress
 
   def insert(model: SyncProgressRow) = new Insert(model)
   def insertBatch(models: Seq[SyncProgressRow]) = new InsertBatch(models)
-  def create(dataFields: Seq[DataField]) = new CreateFields(dataFields)
+  def create(dataFields: Seq[DataField]) = new InsertFields(dataFields)
 
   def removeByPrimaryKey(key: String) = new RemoveByPrimaryKey(Seq[Any](key))
 

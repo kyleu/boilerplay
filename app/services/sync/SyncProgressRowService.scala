@@ -20,7 +20,7 @@ class SyncProgressRowService @javax.inject.Inject() (override val tracing: Traci
     traceF("get.by.primary.key")(td => ApplicationDatabase.queryF(SyncProgressRowQueries.getByPrimaryKey(key))(td))
   }
   def getByPrimaryKeyRequired(creds: Credentials, key: String)(implicit trace: TraceData) = getByPrimaryKey(creds, key).map { opt =>
-    opt.getOrElse(throw new IllegalStateException(s"Cannot load syncProgressRow with key [$key]."))
+    opt.getOrElse(throw new IllegalStateException(s"Cannot load syncProgressRow with key [$key]"))
   }
   def getByPrimaryKeySeq(creds: Credentials, keySeq: Seq[String])(implicit trace: TraceData) = if (keySeq.isEmpty) {
     Future.successful(Nil)
@@ -127,21 +127,21 @@ class SyncProgressRowService @javax.inject.Inject() (override val tracing: Traci
     traceF("remove")(td => getByPrimaryKey(creds, key)(td).flatMap {
       case Some(current) =>
         ApplicationDatabase.executeF(SyncProgressRowQueries.removeByPrimaryKey(key))(td).map(_ => current)
-      case None => throw new IllegalStateException(s"Cannot find SyncProgressRow matching [$key].")
+      case None => throw new IllegalStateException(s"Cannot find SyncProgressRow matching [$key]")
     })
   }
 
   def update(creds: Credentials, key: String, fields: Seq[DataField])(implicit trace: TraceData) = {
     traceF("update")(td => getByPrimaryKey(creds, key)(td).flatMap {
-      case Some(current) if fields.isEmpty => Future.successful(current -> s"No changes required for Sync Progress [$key].")
+      case Some(current) if fields.isEmpty => Future.successful(current -> s"No changes required for Sync Progress [$key]")
       case Some(_) => ApplicationDatabase.executeF(SyncProgressRowQueries.update(key, fields))(td).flatMap { _ =>
         getByPrimaryKey(creds, key)(td).map {
           case Some(newModel) =>
-            newModel -> s"Updated [${fields.size}] fields of Sync Progress [$key]."
-          case None => throw new IllegalStateException(s"Cannot find SyncProgressRow matching [$key].")
+            newModel -> s"Updated [${fields.size}] fields of Sync Progress [$key]"
+          case None => throw new IllegalStateException(s"Cannot find SyncProgressRow matching [$key]")
         }
       }
-      case None => throw new IllegalStateException(s"Cannot find SyncProgressRow matching [$key].")
+      case None => throw new IllegalStateException(s"Cannot find SyncProgressRow matching [$key]")
     })
   }
 

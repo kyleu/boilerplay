@@ -101,7 +101,7 @@
   },
   "/admin/settings/setting/{k}": {
     "get": {
-      "summary": "View the Setting entity matching the provided [k].",
+      "summary": "View the Setting entity matching the provided [k]",
       "operationId": "settings.Setting.view",
       "tags": ["settings"],
       "parameters": [
@@ -144,7 +144,7 @@
       }
     },
     "post": {
-      "summary": "Updates the Setting entity matching the provided [k] using the provided fields.",
+      "summary": "Updates the Setting entity matching the provided [k] using the provided fields",
       "operationId": "settings.Setting.edit",
       "tags": ["settings"],
       "parameters": [
@@ -201,7 +201,7 @@
   },
   "/admin/settings/setting/{k}/remove": {
     "get": {
-      "summary": "Removes the Setting entity matching the provided [k].",
+      "summary": "Removes the Setting entity matching the provided [k]",
       "operationId": "settings.Setting.remove",
       "tags": ["settings"],
       "parameters": [

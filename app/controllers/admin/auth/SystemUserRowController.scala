@@ -73,7 +73,7 @@ class SystemUserRowController @javax.inject.Inject() (
         case ServiceController.MimeTypes.png => Ok(renderToPng(v = model)).as(ServiceController.MimeTypes.png)
         case ServiceController.MimeTypes.svg => Ok(renderToSvg(v = model)).as(ServiceController.MimeTypes.svg)
       }
-      case None => NotFound(s"No SystemUserRow found with id [$id].")
+      case None => NotFound(s"No SystemUserRow found with id [$id]")
     })
   }
 
@@ -84,7 +84,7 @@ class SystemUserRowController @javax.inject.Inject() (
       case Some(model) => Ok(
         views.html.admin.auth.systemUserRowForm(request.identity, authActions, model, s"System User [$id]", cancel, call, debug = app.config.debug)
       )
-      case None => NotFound(s"No SystemUserRow found with id [$id].")
+      case None => NotFound(s"No SystemUserRow found with id [$id]")
     }
   }
 

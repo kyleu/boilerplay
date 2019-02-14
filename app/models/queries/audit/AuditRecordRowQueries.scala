@@ -65,7 +65,7 @@ object AuditRecordRowQueries extends BaseQueries[AuditRecordRow]("auditRecordRow
 
   def insert(model: AuditRecordRow) = new Insert(model)
   def insertBatch(models: Seq[AuditRecordRow]) = new InsertBatch(models)
-  def create(dataFields: Seq[DataField]) = new CreateFields(dataFields)
+  def create(dataFields: Seq[DataField]) = new InsertFields(dataFields)
 
   def removeByPrimaryKey(id: UUID) = new RemoveByPrimaryKey(Seq[Any](id))
 

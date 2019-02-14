@@ -12,8 +12,8 @@
       <div class="collection-item">
         <table>
           <tbody>
-            @com.kyleu.projectile.views.html.components.form.selectField(selected = isNew, key = "k", title = "K", value = Some(model.k.toString), options = Seq("AllowRegistration" -> "AllowRegistration", "DefaultNewUserRole" -> "DefaultNewUserRole"), nullable = false, dataType = "setting_key")
-            @com.kyleu.projectile.views.html.components.form.textField(selected = isNew, key = "v", title = "V", value = Some(model.v.toString), nullable = false)
+            @com.kyleu.projectile.views.html.components.form.selectField(selected = isNew, key = "k", title = "K", value = Some(model.k.toString), nullable = false, options = Seq("AllowRegistration" -> "AllowRegistration", "DefaultNewUserRole" -> "DefaultNewUserRole"), dataType = "setting_key")
+            @com.kyleu.projectile.views.html.components.form.textField(selected = isNew, key = "v", title = "V", value = Some(model.v), nullable = false)
           </tbody>
         </table>
       </div>

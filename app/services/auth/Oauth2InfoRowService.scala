@@ -95,21 +95,21 @@ class Oauth2InfoRowService @javax.inject.Inject() (override val tracing: Tracing
     traceF("remove")(td => getByPrimaryKey(creds, provider, key)(td).flatMap {
       case Some(current) =>
         ApplicationDatabase.executeF(Oauth2InfoRowQueries.removeByPrimaryKey(provider, key))(td).map(_ => current)
-      case None => throw new IllegalStateException(s"Cannot find Oauth2InfoRow matching [$provider, $key].")
+      case None => throw new IllegalStateException(s"Cannot find Oauth2InfoRow matching [$provider, $key]")
     })
   }
 
   def update(creds: Credentials, provider: String, key: String, fields: Seq[DataField])(implicit trace: TraceData) = {
     traceF("update")(td => getByPrimaryKey(creds, provider, key)(td).flatMap {
-      case Some(current) if fields.isEmpty => Future.successful(current -> s"No changes required for OAuth2 Info [$provider, $key].")
+      case Some(current) if fields.isEmpty => Future.successful(current -> s"No changes required for OAuth2 Info [$provider, $key]")
       case Some(_) => ApplicationDatabase.executeF(Oauth2InfoRowQueries.update(provider, key, fields))(td).flatMap { _ =>
         getByPrimaryKey(creds, provider, key)(td).map {
           case Some(newModel) =>
-            newModel -> s"Updated [${fields.size}] fields of OAuth2 Info [$provider, $key]."
-          case None => throw new IllegalStateException(s"Cannot find Oauth2InfoRow matching [$provider, $key].")
+            newModel -> s"Updated [${fields.size}] fields of OAuth2 Info [$provider, $key]"
+          case None => throw new IllegalStateException(s"Cannot find Oauth2InfoRow matching [$provider, $key]")
         }
       }
-      case None => throw new IllegalStateException(s"Cannot find Oauth2InfoRow matching [$provider, $key].")
+      case None => throw new IllegalStateException(s"Cannot find Oauth2InfoRow matching [$provider, $key]")
     })
   }
 

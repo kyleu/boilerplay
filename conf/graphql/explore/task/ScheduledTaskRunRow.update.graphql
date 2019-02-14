@@ -1,5 +1,5 @@
 # Generated File
-# Updates a single ScheduledTaskRunRow entity using the provided fields.
+# Updates a single ScheduledTaskRunRow entity using the provided fields
 mutation ScheduledTaskRunRowUpdate {
   scheduledTaskRunRow {
     update(id: "00000000-0000-0000-0000-000000000000", fields: [{k: "", v: ""}]) {

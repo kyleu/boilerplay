@@ -1,6 +1,12 @@
 @* Generated File *@
 @(model: models.audit.AuditRecordRow)<tr>
-  <td><a href="@controllers.admin.audit.routes.AuditRecordRowController.view(model.id)" class="theme-text">@model.id</a></td>
-  <td>@model.t</td>
-  <td>@model.pk</td>
+  <td>
+    <a href="@controllers.admin.audit.routes.AuditRecordRowController.view(model.id)" class="theme-text">@model.id</a>
+  </td>
+  <td>
+    @model.t
+  </td>
+  <td>
+    @model.pk
+  </td>
 </tr>

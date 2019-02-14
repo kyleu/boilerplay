@@ -69,7 +69,7 @@ class Oauth2InfoRowController @javax.inject.Inject() (
         case ServiceController.MimeTypes.png => Ok(renderToPng(v = model)).as(ServiceController.MimeTypes.png)
         case ServiceController.MimeTypes.svg => Ok(renderToSvg(v = model)).as(ServiceController.MimeTypes.svg)
       }
-      case None => NotFound(s"No Oauth2InfoRow found with provider, key [$provider, $key].")
+      case None => NotFound(s"No Oauth2InfoRow found with provider, key [$provider, $key]")
     })
   }
 
@@ -80,7 +80,7 @@ class Oauth2InfoRowController @javax.inject.Inject() (
       case Some(model) => Ok(
         views.html.admin.auth.oauth2InfoRowForm(request.identity, authActions, model, s"OAuth2 Info [$provider, $key]", cancel, call, debug = app.config.debug)
       )
-      case None => NotFound(s"No Oauth2InfoRow found with provider, key [$provider, $key].")
+      case None => NotFound(s"No Oauth2InfoRow found with provider, key [$provider, $key]")
     }
   }
 

@@ -56,7 +56,7 @@ object Oauth2InfoRowQueries extends BaseQueries[Oauth2InfoRow]("oauth2InfoRow", 
 
   def insert(model: Oauth2InfoRow) = new Insert(model)
   def insertBatch(models: Seq[Oauth2InfoRow]) = new InsertBatch(models)
-  def create(dataFields: Seq[DataField]) = new CreateFields(dataFields)
+  def create(dataFields: Seq[DataField]) = new InsertFields(dataFields)
 
   def removeByPrimaryKey(provider: String, key: String) = new RemoveByPrimaryKey(Seq[Any](provider, key))
 

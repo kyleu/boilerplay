@@ -13,9 +13,9 @@
         <table>
           <tbody>
             @com.kyleu.projectile.views.html.components.form.textField(selected = isNew, key = "id", title = "Id", value = Some(model.id.toString), nullable = false, dataType = "uuid")
-            @com.kyleu.projectile.views.html.components.form.textField(selected = isNew, key = "relType", title = "Rel Type", value = model.relType.map(_.toString), nullable = true)
-            @com.kyleu.projectile.views.html.components.form.textField(selected = isNew, key = "relPk", title = "Rel Pk", value = model.relPk.map(_.toString), nullable = true)
-            @com.kyleu.projectile.views.html.components.form.textField(selected = isNew, key = "text", title = "Text", value = Some(model.text.toString), nullable = false)
+            @com.kyleu.projectile.views.html.components.form.textField(selected = false, key = "relType", title = "Rel Type", value = model.relType, nullable = true)
+            @com.kyleu.projectile.views.html.components.form.textField(selected = false, key = "relPk", title = "Rel Pk", value = model.relPk, nullable = true)
+            @com.kyleu.projectile.views.html.components.form.textField(selected = isNew, key = "text", title = "Text", value = Some(model.text), nullable = false)
             @com.kyleu.projectile.views.html.components.form.autocompleteField(
               selected = isNew, key = "author", title = "Author", value = Some(model.author.toString), nullable = false, dataType = "uuid",
               call = controllers.admin.auth.routes.SystemUserRowController.autocomplete(), acType = ("systemUserRow", "System User"), icon = models.template.Icons.systemUserRow

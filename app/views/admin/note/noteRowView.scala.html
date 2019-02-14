@@ -20,11 +20,11 @@
           </tr>
           <tr>
             <th>Rel Type</th>
-            <td>@model.relType</td>
+            <td>@model.relType.getOrElse(com.kyleu.projectile.util.NullUtils.str)</td>
           </tr>
           <tr>
             <th>Rel Pk</th>
-            <td>@model.relPk</td>
+            <td>@model.relPk.getOrElse(com.kyleu.projectile.util.NullUtils.str)</td>
           </tr>
           <tr>
             <th>Text</th>

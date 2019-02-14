@@ -1,5 +1,5 @@
 # Generated File
-# Creates a new Setting entity.
+# Creates a new Setting entity
 mutation SettingCreate {
   setting {
     create(fields: [{k: "", v: ""}]) {

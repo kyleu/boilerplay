@@ -1,5 +1,5 @@
 # Generated File
-# Updates a single FlywaySchemaHistoryRow entity using the provided fields.
+# Updates a single FlywaySchemaHistoryRow entity using the provided fields
 mutation FlywaySchemaHistoryRowUpdate {
   flywaySchemaHistoryRow {
     update(installedRank: 0, fields: [{k: "", v: ""}]) {

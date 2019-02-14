@@ -101,7 +101,7 @@
   },
   "/admin/auth/systemUserRow/{id}": {
     "get": {
-      "summary": "View the SystemUserRow entity matching the provided [id].",
+      "summary": "View the SystemUserRow entity matching the provided [id]",
       "operationId": "auth.SystemUserRow.view",
       "tags": ["auth"],
       "parameters": [
@@ -145,7 +145,7 @@
       }
     },
     "post": {
-      "summary": "Updates the SystemUserRow entity matching the provided [id] using the provided fields.",
+      "summary": "Updates the SystemUserRow entity matching the provided [id] using the provided fields",
       "operationId": "auth.SystemUserRow.edit",
       "tags": ["auth"],
       "parameters": [
@@ -203,7 +203,7 @@
   },
   "/admin/auth/systemUserRow/{id}/remove": {
     "get": {
-      "summary": "Removes the SystemUserRow entity matching the provided [id].",
+      "summary": "Removes the SystemUserRow entity matching the provided [id]",
       "operationId": "auth.SystemUserRow.remove",
       "tags": ["auth"],
       "parameters": [

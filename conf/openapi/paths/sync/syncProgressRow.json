@@ -101,7 +101,7 @@
   },
   "/admin/sync/{key}": {
     "get": {
-      "summary": "View the SyncProgressRow entity matching the provided [key].",
+      "summary": "View the SyncProgressRow entity matching the provided [key]",
       "operationId": "sync.SyncProgressRow.view",
       "tags": ["sync"],
       "parameters": [
@@ -144,7 +144,7 @@
       }
     },
     "post": {
-      "summary": "Updates the SyncProgressRow entity matching the provided [key] using the provided fields.",
+      "summary": "Updates the SyncProgressRow entity matching the provided [key] using the provided fields",
       "operationId": "sync.SyncProgressRow.edit",
       "tags": ["sync"],
       "parameters": [
@@ -201,7 +201,7 @@
   },
   "/admin/sync/{key}/remove": {
     "get": {
-      "summary": "Removes the SyncProgressRow entity matching the provided [key].",
+      "summary": "Removes the SyncProgressRow entity matching the provided [key]",
       "operationId": "sync.SyncProgressRow.remove",
       "tags": ["sync"],
       "parameters": [

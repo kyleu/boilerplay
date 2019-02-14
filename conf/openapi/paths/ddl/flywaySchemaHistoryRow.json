@@ -101,7 +101,7 @@
   },
   "/admin/ddl/{installedRank}": {
     "get": {
-      "summary": "View the FlywaySchemaHistoryRow entity matching the provided [installedRank].",
+      "summary": "View the FlywaySchemaHistoryRow entity matching the provided [installedRank]",
       "operationId": "ddl.FlywaySchemaHistoryRow.view",
       "tags": ["ddl"],
       "parameters": [
@@ -144,7 +144,7 @@
       }
     },
     "post": {
-      "summary": "Updates the FlywaySchemaHistoryRow entity matching the provided [installedRank] using the provided fields.",
+      "summary": "Updates the FlywaySchemaHistoryRow entity matching the provided [installedRank] using the provided fields",
       "operationId": "ddl.FlywaySchemaHistoryRow.edit",
       "tags": ["ddl"],
       "parameters": [
@@ -201,7 +201,7 @@
   },
   "/admin/ddl/{installedRank}/remove": {
     "get": {
-      "summary": "Removes the FlywaySchemaHistoryRow entity matching the provided [installedRank].",
+      "summary": "Removes the FlywaySchemaHistoryRow entity matching the provided [installedRank]",
       "operationId": "ddl.FlywaySchemaHistoryRow.remove",
       "tags": ["ddl"],
       "parameters": [

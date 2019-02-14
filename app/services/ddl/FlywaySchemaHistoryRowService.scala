@@ -20,7 +20,7 @@ class FlywaySchemaHistoryRowService @javax.inject.Inject() (override val tracing
     traceF("get.by.primary.key")(td => ApplicationDatabase.queryF(FlywaySchemaHistoryRowQueries.getByPrimaryKey(installedRank))(td))
   }
   def getByPrimaryKeyRequired(creds: Credentials, installedRank: Long)(implicit trace: TraceData) = getByPrimaryKey(creds, installedRank).map { opt =>
-    opt.getOrElse(throw new IllegalStateException(s"Cannot load flywaySchemaHistoryRow with installedRank [$installedRank]."))
+    opt.getOrElse(throw new IllegalStateException(s"Cannot load flywaySchemaHistoryRow with installedRank [$installedRank]"))
   }
   def getByPrimaryKeySeq(creds: Credentials, installedRankSeq: Seq[Long])(implicit trace: TraceData) = if (installedRankSeq.isEmpty) {
     Future.successful(Nil)
@@ -155,21 +155,21 @@ class FlywaySchemaHistoryRowService @javax.inject.Inject() (override val tracing
     traceF("remove")(td => getByPrimaryKey(creds, installedRank)(td).flatMap {
       case Some(current) =>
         ApplicationDatabase.executeF(FlywaySchemaHistoryRowQueries.removeByPrimaryKey(installedRank))(td).map(_ => current)
-      case None => throw new IllegalStateException(s"Cannot find FlywaySchemaHistoryRow matching [$installedRank].")
+      case None => throw new IllegalStateException(s"Cannot find FlywaySchemaHistoryRow matching [$installedRank]")
     })
   }
 
   def update(creds: Credentials, installedRank: Long, fields: Seq[DataField])(implicit trace: TraceData) = {
     traceF("update")(td => getByPrimaryKey(creds, installedRank)(td).flatMap {
-      case Some(current) if fields.isEmpty => Future.successful(current -> s"No changes required for Flyway Schema History [$installedRank].")
+      case Some(current) if fields.isEmpty => Future.successful(current -> s"No changes required for Flyway Schema History [$installedRank]")
       case Some(_) => ApplicationDatabase.executeF(FlywaySchemaHistoryRowQueries.update(installedRank, fields))(td).flatMap { _ =>
         getByPrimaryKey(creds, installedRank)(td).map {
           case Some(newModel) =>
-            newModel -> s"Updated [${fields.size}] fields of Flyway Schema History [$installedRank]."
-          case None => throw new IllegalStateException(s"Cannot find FlywaySchemaHistoryRow matching [$installedRank].")
+            newModel -> s"Updated [${fields.size}] fields of Flyway Schema History [$installedRank]"
+          case None => throw new IllegalStateException(s"Cannot find FlywaySchemaHistoryRow matching [$installedRank]")
         }
       }
-      case None => throw new IllegalStateException(s"Cannot find FlywaySchemaHistoryRow matching [$installedRank].")
+      case None => throw new IllegalStateException(s"Cannot find FlywaySchemaHistoryRow matching [$installedRank]")
     })
   }
 

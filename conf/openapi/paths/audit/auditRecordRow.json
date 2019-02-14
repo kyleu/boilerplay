@@ -101,7 +101,7 @@
   },
   "/admin/audit/auditRecordRow/{id}": {
     "get": {
-      "summary": "View the AuditRecordRow entity matching the provided [id].",
+      "summary": "View the AuditRecordRow entity matching the provided [id]",
       "operationId": "audit.AuditRecordRow.view",
       "tags": ["audit"],
       "parameters": [
@@ -145,7 +145,7 @@
       }
     },
     "post": {
-      "summary": "Updates the AuditRecordRow entity matching the provided [id] using the provided fields.",
+      "summary": "Updates the AuditRecordRow entity matching the provided [id] using the provided fields",
       "operationId": "audit.AuditRecordRow.edit",
       "tags": ["audit"],
       "parameters": [
@@ -203,7 +203,7 @@
   },
   "/admin/audit/auditRecordRow/byAuditId/{auditId}": {
     "get": {
-      "summary": "Finds the AuditRecordRow entities associated to the provided [auditId].",
+      "summary": "Finds the AuditRecordRow entities associated to the provided [auditId]",
       "operationId": "audit.AuditRecordRow.byAuditId",
       "tags": ["audit"],
       "parameters": [
@@ -252,7 +252,7 @@
   },
   "/admin/audit/auditRecordRow/{id}/remove": {
     "get": {
-      "summary": "Removes the AuditRecordRow entity matching the provided [id].",
+      "summary": "Removes the AuditRecordRow entity matching the provided [id]",
       "operationId": "audit.AuditRecordRow.remove",
       "tags": ["audit"],
       "parameters": [

@@ -101,7 +101,7 @@
   },
   "/admin/audit/auditRow/{id}": {
     "get": {
-      "summary": "View the AuditRow entity matching the provided [id].",
+      "summary": "View the AuditRow entity matching the provided [id]",
       "operationId": "audit.AuditRow.view",
       "tags": ["audit"],
       "parameters": [
@@ -145,7 +145,7 @@
       }
     },
     "post": {
-      "summary": "Updates the AuditRow entity matching the provided [id] using the provided fields.",
+      "summary": "Updates the AuditRow entity matching the provided [id] using the provided fields",
       "operationId": "audit.AuditRow.edit",
       "tags": ["audit"],
       "parameters": [
@@ -203,7 +203,7 @@
   },
   "/admin/audit/auditRow/{id}/remove": {
     "get": {
-      "summary": "Removes the AuditRow entity matching the provided [id].",
+      "summary": "Removes the AuditRow entity matching the provided [id]",
       "operationId": "audit.AuditRow.remove",
       "tags": ["audit"],
       "parameters": [

@@ -69,7 +69,7 @@ class FlywaySchemaHistoryRowController @javax.inject.Inject() (
         case ServiceController.MimeTypes.png => Ok(renderToPng(v = model)).as(ServiceController.MimeTypes.png)
         case ServiceController.MimeTypes.svg => Ok(renderToSvg(v = model)).as(ServiceController.MimeTypes.svg)
       }
-      case None => NotFound(s"No FlywaySchemaHistoryRow found with installedRank [$installedRank].")
+      case None => NotFound(s"No FlywaySchemaHistoryRow found with installedRank [$installedRank]")
     })
   }
 
@@ -80,7 +80,7 @@ class FlywaySchemaHistoryRowController @javax.inject.Inject() (
       case Some(model) => Ok(
         views.html.admin.ddl.flywaySchemaHistoryRowForm(request.identity, authActions, model, s"Flyway Schema History [$installedRank]", cancel, call, debug = app.config.debug)
       )
-      case None => NotFound(s"No FlywaySchemaHistoryRow found with installedRank [$installedRank].")
+      case None => NotFound(s"No FlywaySchemaHistoryRow found with installedRank [$installedRank]")
     }
   }
 

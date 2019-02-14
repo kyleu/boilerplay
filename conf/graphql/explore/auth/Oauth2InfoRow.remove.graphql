@@ -1,5 +1,5 @@
 # Generated File
-# Remove a single Oauth2InfoRow entity from the system.
+# Remove a single Oauth2InfoRow entity from the system
 mutation Oauth2InfoRowRemove {
   oauth2InfoRow {
     remove(provider: "", key: "") {

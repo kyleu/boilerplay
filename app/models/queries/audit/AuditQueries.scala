@@ -43,7 +43,7 @@ object AuditQueries extends BaseQueries[Audit]("audit", "audit") {
 
   def insert(model: Audit) = new Insert(model)
   def insertBatch(models: Seq[Audit]) = new InsertBatch(models)
-  def create(dataFields: Seq[DataField]) = new CreateFields(dataFields)
+  def create(dataFields: Seq[DataField]) = new InsertFields(dataFields)
 
   def removeByPrimaryKey(id: UUID) = new RemoveByPrimaryKey(Seq[Any](id))
 

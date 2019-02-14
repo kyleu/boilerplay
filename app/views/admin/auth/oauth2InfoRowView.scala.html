@@ -28,19 +28,19 @@
           </tr>
           <tr>
             <th>Token Type</th>
-            <td>@model.tokenType</td>
+            <td>@model.tokenType.getOrElse(com.kyleu.projectile.util.NullUtils.str)</td>
           </tr>
           <tr>
             <th>Expires In</th>
-            <td>@model.expiresIn</td>
+            <td>@model.expiresIn.getOrElse(com.kyleu.projectile.util.NullUtils.str)</td>
           </tr>
           <tr>
             <th>Refresh Token</th>
-            <td>@model.refreshToken</td>
+            <td>@model.refreshToken.getOrElse(com.kyleu.projectile.util.NullUtils.str)</td>
           </tr>
           <tr>
             <th>Params</th>
-            <td><pre>@model.params<pre></td>
+            <td><pre>@model.params.getOrElse(com.kyleu.projectile.util.NullUtils.str)<pre></td>
           </tr>
           <tr>
             <th>Created</th>

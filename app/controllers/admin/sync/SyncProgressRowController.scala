@@ -69,7 +69,7 @@ class SyncProgressRowController @javax.inject.Inject() (
         case ServiceController.MimeTypes.png => Ok(renderToPng(v = model)).as(ServiceController.MimeTypes.png)
         case ServiceController.MimeTypes.svg => Ok(renderToSvg(v = model)).as(ServiceController.MimeTypes.svg)
       }
-      case None => NotFound(s"No SyncProgressRow found with key [$key].")
+      case None => NotFound(s"No SyncProgressRow found with key [$key]")
     })
   }
 
@@ -80,7 +80,7 @@ class SyncProgressRowController @javax.inject.Inject() (
       case Some(model) => Ok(
         views.html.admin.sync.syncProgressRowForm(request.identity, authActions, model, s"Sync Progress [$key]", cancel, call, debug = app.config.debug)
       )
-      case None => NotFound(s"No SyncProgressRow found with key [$key].")
+      case None => NotFound(s"No SyncProgressRow found with key [$key]")
     }
   }
 

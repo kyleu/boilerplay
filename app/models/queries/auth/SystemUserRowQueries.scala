@@ -66,7 +66,7 @@ object SystemUserRowQueries extends BaseQueries[SystemUserRow]("systemUserRow", 
 
   def insert(model: SystemUserRow) = new Insert(model)
   def insertBatch(models: Seq[SystemUserRow]) = new InsertBatch(models)
-  def create(dataFields: Seq[DataField]) = new CreateFields(dataFields)
+  def create(dataFields: Seq[DataField]) = new InsertFields(dataFields)
 
   def removeByPrimaryKey(id: UUID) = new RemoveByPrimaryKey(Seq[Any](id))
 
