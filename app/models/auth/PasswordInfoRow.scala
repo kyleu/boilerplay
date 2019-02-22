@@ -10,7 +10,14 @@ object PasswordInfoRow {
   implicit val jsonEncoder: Encoder[PasswordInfoRow] = deriveEncoder
   implicit val jsonDecoder: Decoder[PasswordInfoRow] = deriveDecoder
 
-  def empty(provider: String = "", key: String = "", hasher: String = "", password: String = "", salt: Option[String] = None, created: LocalDateTime = DateUtils.now) = {
+  def empty(
+    provider: String = "",
+    key: String = "",
+    hasher: String = "",
+    password: String = "",
+    salt: Option[String] = None,
+    created: LocalDateTime = DateUtils.now
+  ) = {
     PasswordInfoRow(provider, key, hasher, password, salt, created)
   }
 }

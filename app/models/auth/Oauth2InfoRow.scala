@@ -11,7 +11,16 @@ object Oauth2InfoRow {
   implicit val jsonEncoder: Encoder[Oauth2InfoRow] = deriveEncoder
   implicit val jsonDecoder: Decoder[Oauth2InfoRow] = deriveDecoder
 
-  def empty(provider: String = "", key: String = "", accessToken: String = "", tokenType: Option[String] = None, expiresIn: Option[Long] = None, refreshToken: Option[String] = None, params: Option[Json] = None, created: LocalDateTime = DateUtils.now) = {
+  def empty(
+    provider: String = "",
+    key: String = "",
+    accessToken: String = "",
+    tokenType: Option[String] = None,
+    expiresIn: Option[Long] = None,
+    refreshToken: Option[String] = None,
+    params: Option[Json] = None,
+    created: LocalDateTime = DateUtils.now
+  ) = {
     Oauth2InfoRow(provider, key, accessToken, tokenType, expiresIn, refreshToken, params, created)
   }
 }

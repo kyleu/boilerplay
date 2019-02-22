@@ -10,7 +10,13 @@ object AuditRecordRow {
   implicit val jsonEncoder: Encoder[AuditRecordRow] = deriveEncoder
   implicit val jsonDecoder: Decoder[AuditRecordRow] = deriveDecoder
 
-  def empty(id: UUID = UUID.randomUUID, auditId: UUID = UUID.randomUUID, t: String = "", pk: List[String] = List.empty, changes: Json = Json.obj()) = {
+  def empty(
+    id: UUID = UUID.randomUUID,
+    auditId: UUID = UUID.randomUUID,
+    t: String = "",
+    pk: List[String] = List.empty,
+    changes: Json = Json.obj()
+  ) = {
     AuditRecordRow(id, auditId, t, pk, changes)
   }
 }

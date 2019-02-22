@@ -12,7 +12,15 @@ object ScheduledTaskRunRow {
   implicit val jsonEncoder: Encoder[ScheduledTaskRunRow] = deriveEncoder
   implicit val jsonDecoder: Decoder[ScheduledTaskRunRow] = deriveDecoder
 
-  def empty(id: UUID = UUID.randomUUID, task: String = "", arguments: List[String] = List.empty, status: String = "", output: Json = Json.obj(), started: LocalDateTime = DateUtils.now, completed: LocalDateTime = DateUtils.now) = {
+  def empty(
+    id: UUID = UUID.randomUUID,
+    task: String = "",
+    arguments: List[String] = List.empty,
+    status: String = "",
+    output: Json = Json.obj(),
+    started: LocalDateTime = DateUtils.now,
+    completed: LocalDateTime = DateUtils.now
+  ) = {
     ScheduledTaskRunRow(id, task, arguments, status, output, started, completed)
   }
 }

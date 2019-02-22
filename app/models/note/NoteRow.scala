@@ -11,7 +11,14 @@ object NoteRow {
   implicit val jsonEncoder: Encoder[NoteRow] = deriveEncoder
   implicit val jsonDecoder: Decoder[NoteRow] = deriveDecoder
 
-  def empty(id: UUID = UUID.randomUUID, relType: Option[String] = None, relPk: Option[String] = None, text: String = "", author: UUID = UUID.randomUUID, created: LocalDateTime = DateUtils.now) = {
+  def empty(
+    id: UUID = UUID.randomUUID,
+    relType: Option[String] = None,
+    relPk: Option[String] = None,
+    text: String = "",
+    author: UUID = UUID.randomUUID,
+    created: LocalDateTime = DateUtils.now
+  ) = {
     NoteRow(id, relType, relPk, text, author, created)
   }
 }
@@ -33,5 +40,5 @@ final case class NoteRow(
     DataField("created", Some(created.toString))
   )
 
-  def toSummary = DataSummary(model = "noteRow", pk = id.toString, title = s"relType: ${relType.map(_.toString).getOrElse("-empty-")}, relPk: ${relPk.map(_.toString).getOrElse("-empty-")}, text: $text, author: $author, created: $created")
+  def toSummary = DataSummary(model = "noteRow", pk = id.toString, title = s"relType: ${relType.map(_.toString).getOrElse("∅")}, relPk: ${relPk.map(_.toString).getOrElse("∅")}, text: $text, author: $author, created: $created")
 }

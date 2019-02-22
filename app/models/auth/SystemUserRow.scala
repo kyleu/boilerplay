@@ -11,7 +11,14 @@ object SystemUserRow {
   implicit val jsonEncoder: Encoder[SystemUserRow] = deriveEncoder
   implicit val jsonDecoder: Decoder[SystemUserRow] = deriveDecoder
 
-  def empty(id: UUID = UUID.randomUUID, username: Option[String] = None, provider: String = "", key: String = "", role: String = "", created: LocalDateTime = DateUtils.now) = {
+  def empty(
+    id: UUID = UUID.randomUUID,
+    username: Option[String] = None,
+    provider: String = "",
+    key: String = "",
+    role: String = "",
+    created: LocalDateTime = DateUtils.now
+  ) = {
     SystemUserRow(id, username, provider, key, role, created)
   }
 }
@@ -33,5 +40,5 @@ final case class SystemUserRow(
     DataField("created", Some(created.toString))
   )
 
-  def toSummary = DataSummary(model = "systemUserRow", pk = id.toString, title = s"username: ${username.map(_.toString).getOrElse("-empty-")}, provider: $provider, key: $key")
+  def toSummary = DataSummary(model = "systemUserRow", pk = id.toString, title = s"username: ${username.map(_.toString).getOrElse("∅")}, provider: $provider, key: $key")
 }

@@ -10,7 +10,18 @@ object FlywaySchemaHistoryRow {
   implicit val jsonEncoder: Encoder[FlywaySchemaHistoryRow] = deriveEncoder
   implicit val jsonDecoder: Decoder[FlywaySchemaHistoryRow] = deriveDecoder
 
-  def empty(installedRank: Long = 0L, version: Option[String] = None, description: String = "", typ: String = "", script: String = "", checksum: Option[Long] = None, installedBy: String = "", installedOn: LocalDateTime = DateUtils.now, executionTime: Long = 0L, success: Boolean = false) = {
+  def empty(
+    installedRank: Long = 0L,
+    version: Option[String] = None,
+    description: String = "",
+    typ: String = "",
+    script: String = "",
+    checksum: Option[Long] = None,
+    installedBy: String = "",
+    installedOn: LocalDateTime = DateUtils.now,
+    executionTime: Long = 0L,
+    success: Boolean = false
+  ) = {
     FlywaySchemaHistoryRow(installedRank, version, description, typ, script, checksum, installedBy, installedOn, executionTime, success)
   }
 }
@@ -40,5 +51,5 @@ final case class FlywaySchemaHistoryRow(
     DataField("success", Some(success.toString))
   )
 
-  def toSummary = DataSummary(model = "flywaySchemaHistoryRow", pk = installedRank.toString, title = s"version: ${version.map(_.toString).getOrElse("-empty-")}, description: $description, typ: $typ, installedOn: $installedOn, success: $success")
+  def toSummary = DataSummary(model = "flywaySchemaHistoryRow", pk = installedRank.toString, title = s"version: ${version.map(_.toString).getOrElse("∅")}, description: $description, typ: $typ, installedOn: $installedOn, success: $success")
 }
