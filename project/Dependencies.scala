@@ -2,7 +2,7 @@ import sbt._
 
 object Dependencies {
   object Projectile {
-    val version = "1.3.1"
+    val version = "1.4.1"
     val all = Seq("auth-graphql", "doobie", "slick").map(s => "com.kyleu" %% s"projectile-lib-$s" % version)
   }
 
