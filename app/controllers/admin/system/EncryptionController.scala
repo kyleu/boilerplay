@@ -2,7 +2,6 @@ package controllers.admin.system
 
 import com.kyleu.projectile.controllers.AuthController
 import com.kyleu.projectile.models.Application
-import com.kyleu.projectile.models.auth.AuthActions
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import util.EncryptionUtils
@@ -11,9 +10,9 @@ import com.kyleu.projectile.web.util.ControllerUtils
 import scala.concurrent.Future
 
 @javax.inject.Singleton
-class EncryptionController @javax.inject.Inject() (override val app: Application, authActions: AuthActions) extends AuthController("encryption") {
+class EncryptionController @javax.inject.Inject() (override val app: Application) extends AuthController("encryption") {
   def form = withSession("list", admin = true) { implicit request => implicit td =>
-    Future.successful(Ok(views.html.admin.encryption(request.identity, authActions)))
+    Future.successful(Ok(views.html.admin.encryption(request.identity, app.cfg(Some(request.identity), admin = true))))
   }
 
   def post() = withSession("list", admin = true) { implicit request => implicit td =>
@@ -29,6 +28,6 @@ class EncryptionController @javax.inject.Inject() (override val app: Application
       case _ => throw new IllegalStateException("Must provide [action] value of \"encrypt\" or \"decrypt\".")
     }
 
-    Future.successful(Ok(views.html.admin.encryption(request.identity, authActions, unenc, enc)))
+    Future.successful(Ok(views.html.admin.encryption(request.identity, app.cfg(Some(request.identity), admin = true), unenc, enc)))
   }
 }

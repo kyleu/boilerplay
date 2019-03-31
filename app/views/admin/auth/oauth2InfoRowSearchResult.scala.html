@@ -3,7 +3,7 @@
   <div class="right">OAuth2 Info</div>
   <div>
     <i class="fa @models.template.Icons.oauth2InfoRow"></i>
-    <a class="theme-text" href="@controllers.admin.auth.routes.Oauth2InfoRowController.view(model.provider, model.key)">@model.provider, @model.key</a>
+    <a href="@controllers.admin.auth.routes.Oauth2InfoRowController.view(model.provider, model.key)">@model.provider, @model.key</a>
   </div>
   <em>@hit</em>
 </div>

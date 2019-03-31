@@ -1,15 +1,4 @@
 # Generated File
-# System User Routes
-GET         /systemUserRow                                            controllers.admin.auth.SystemUserRowController.list(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None)
-GET         /systemUserRow/autocomplete                               controllers.admin.auth.SystemUserRowController.autocomplete(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None)
-GET         /systemUserRow/form                                       controllers.admin.auth.SystemUserRowController.createForm
-POST        /systemUserRow                                            controllers.admin.auth.SystemUserRowController.create
-GET         /systemUserRow/:id                                        controllers.admin.auth.SystemUserRowController.view(id: java.util.UUID, t: Option[String] ?= None)
-GET         /systemUserRow/:id/counts                                 controllers.admin.auth.SystemUserRowController.relationCounts(id: java.util.UUID)
-GET         /systemUserRow/:id/form                                   controllers.admin.auth.SystemUserRowController.editForm(id: java.util.UUID)
-POST        /systemUserRow/:id                                        controllers.admin.auth.SystemUserRowController.edit(id: java.util.UUID)
-GET         /systemUserRow/:id/remove                                 controllers.admin.auth.SystemUserRowController.remove(id: java.util.UUID)
-
 # OAuth2 Info Routes
 GET         /oauth2InfoRow                                            controllers.admin.auth.Oauth2InfoRowController.list(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None)
 GET         /oauth2InfoRow/autocomplete                               controllers.admin.auth.Oauth2InfoRowController.autocomplete(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None)
@@ -29,4 +18,15 @@ GET         /passwordInfoRow/:provider/:key                           controller
 GET         /passwordInfoRow/:provider/:key/form                      controllers.admin.auth.PasswordInfoRowController.editForm(provider: String, key: String)
 POST        /passwordInfoRow/:provider/:key                           controllers.admin.auth.PasswordInfoRowController.edit(provider: String, key: String)
 GET         /passwordInfoRow/:provider/:key/remove                    controllers.admin.auth.PasswordInfoRowController.remove(provider: String, key: String)
+
+# System User Routes
+GET         /systemUserRow                                            controllers.admin.auth.SystemUserRowController.list(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None)
+GET         /systemUserRow/autocomplete                               controllers.admin.auth.SystemUserRowController.autocomplete(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None)
+GET         /systemUserRow/form                                       controllers.admin.auth.SystemUserRowController.createForm
+POST        /systemUserRow                                            controllers.admin.auth.SystemUserRowController.create
+GET         /systemUserRow/:id                                        controllers.admin.auth.SystemUserRowController.view(id: java.util.UUID, t: Option[String] ?= None)
+GET         /systemUserRow/:id/counts                                 controllers.admin.auth.SystemUserRowController.relationCounts(id: java.util.UUID)
+GET         /systemUserRow/:id/form                                   controllers.admin.auth.SystemUserRowController.editForm(id: java.util.UUID)
+POST        /systemUserRow/:id                                        controllers.admin.auth.SystemUserRowController.edit(id: java.util.UUID)
+GET         /systemUserRow/:id/remove                                 controllers.admin.auth.SystemUserRowController.remove(id: java.util.UUID)
 

@@ -19,8 +19,8 @@
       <tbody>
         @records.map { record =>
           <tr>
-            <td><a href="@controllers.admin.audit.routes.AuditRecordRowController.view(record.id)" class="theme-text">@record.id</a></td>
-            <td><a href="@controllers.admin.audit.routes.AuditRowController.view(record.auditId)" class="theme-text">@record.auditId</a></td>
+            <td><a href="@controllers.admin.audit.routes.AuditRecordRowController.view(record.id)">@record.id</a></td>
+            <td><a href="@controllers.admin.audit.routes.AuditRowController.view(record.auditId)">@record.auditId</a></td>
             <td>@record.t</td>
             <td>@record.pk.mkString(", ")</td>
             <td>

@@ -7,14 +7,14 @@ import com.kyleu.projectile.controllers.AuthController
 import com.kyleu.projectile.models.Application
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import com.kyleu.projectile.models.auth.{AuthActions, UserCredentials}
+import com.kyleu.projectile.models.auth.UserCredentials
 import play.twirl.api.Html
 import com.kyleu.projectile.util.tracing.TraceData
 
 import scala.concurrent.Future
 
 @javax.inject.Singleton
-class SearchController @javax.inject.Inject() (override val app: Application, authActions: AuthActions, injector: Injector) extends AuthController("search") {
+class SearchController @javax.inject.Inject() (override val app: Application, injector: Injector) extends AuthController("search") {
   def search(q: String) = withSession("admin.search", admin = true) { implicit request => implicit td =>
     val creds = UserCredentials.fromRequest(request)
     val results = try {
@@ -27,7 +27,7 @@ class SearchController @javax.inject.Inject() (override val app: Application, au
       }
     }
     results.map { r =>
-      Ok(com.kyleu.projectile.views.html.admin.explore.searchResults(q, r, request.identity, authActions))
+      Ok(com.kyleu.projectile.views.html.admin.explore.searchResults(q, r, app.cfg(Some(request.identity), admin = true, "Search", q)))
     }
   }
 

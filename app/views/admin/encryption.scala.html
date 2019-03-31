@@ -1,6 +1,6 @@
-@(user: com.kyleu.projectile.models.user.SystemUser, authActions: com.kyleu.projectile.models.auth.AuthActions, unenc: String = "", enc: String = "")(
-    implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: com.kyleu.projectile.util.tracing.TraceData
-)@traceData.logClass(getClass)@com.kyleu.projectile.views.html.admin.layout.page(user, authActions, "", util.Config.projectName + " Administration") {
+@(user: com.kyleu.projectile.models.user.SystemUser, cfg: com.kyleu.projectile.models.config.UiConfig, unenc: String = "", enc: String = "")(
+    implicit request: Request[AnyContent], session: Session, flash: Flash
+)@com.kyleu.projectile.components.views.html.layout.page(util.Config.projectName + " Administration", cfg) {
   <form method="post" action="@controllers.admin.system.routes.EncryptionController.post">
   <ul class="collection with-header">
     <li class="collection-header">
@@ -14,9 +14,9 @@
     </li>
     <li class="collection-item">
       <div class="right">
-        <button class="btn"><i class="fa @models.template.Icons.upArrow"></i> Decrypt</button>
+        <button class="btn">Decrypt</button>
       </div>
-      <button class="btn"><i class="fa @models.template.Icons.downArrow"></i> Encrypt</button>
+      <button class="btn">Encrypt</button>
     </li>
     <li class="collection-item">
       <div class="input-field">

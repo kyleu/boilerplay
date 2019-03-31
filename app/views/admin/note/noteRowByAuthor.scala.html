@@ -1,10 +1,9 @@
 @* Generated File *@
-@(user: com.kyleu.projectile.models.user.SystemUser, authActions: com.kyleu.projectile.models.auth.AuthActions, author: java.util.UUID, modelSeq: Seq[models.note.NoteRow], orderBy: Option[String], orderAsc: Boolean, limit: Int, offset: Int)(
-    implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: com.kyleu.projectile.util.tracing.TraceData
+@(user: com.kyleu.projectile.models.user.SystemUser, cfg: com.kyleu.projectile.models.config.UiConfig, author: java.util.UUID, modelSeq: Seq[models.note.NoteRow], orderBy: Option[String], orderAsc: Boolean, limit: Int, offset: Int)(
+    implicit request: Request[AnyContent], session: Session, flash: Flash
 )
 @com.kyleu.projectile.views.html.admin.explore.list(
-  user = user,
-  authActions = authActions,
+  cfg = cfg,
   model = "Note",
   modelPlural = "Notes",
   icon = models.template.Icons.noteRow,

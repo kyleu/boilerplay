@@ -1,13 +1,14 @@
 {
-  "template" : "boilerplay",
   "key" : "boilerplay",
+  "template" : "play",
   "input" : "boilerplay-db",
   "description" : "...",
-  "features" : [ "doobie", "audit", "datamodel", "wiki", "thrift", "graphql", "openapi", "service", "slick", "controller", "scalajs", "notes", "core", "tests" ],
+  "features" : [ "doobie", "audit", "datamodel", "graphql", "openapi", "service", "slick", "controller", "scalajs", "notes", "core", "tests" ],
+  "flags" : [ "components" ],
   "paths" : { },
   "packages" : { },
   "classOverrides" : { },
   "defaultEnumFeatures" : [ "auth", "slick", "doobie", "controller", "core", "graphql" ],
-  "defaultModelFeatures" : [ "auth", "slick", "json", "doobie", "datamodel", "service", "thrift", "controller", "notes", "core", "graphql" ],
+  "defaultModelFeatures" : [ "auth", "slick", "json", "doobie", "datamodel", "service", "controller", "notes", "core", "graphql" ],
   "defaultServiceFeatures" : [ "core" ]
 }

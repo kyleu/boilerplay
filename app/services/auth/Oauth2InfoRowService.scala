@@ -11,7 +11,7 @@ import com.kyleu.projectile.util.tracing.{TraceData, TracingService}
 import models.auth.Oauth2InfoRow
 import models.queries.auth.Oauth2InfoRowQueries
 import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits._
+import scala.concurrent.ExecutionContext.Implicits.global
 
 @javax.inject.Singleton
 class Oauth2InfoRowService @javax.inject.Inject() (override val tracing: TracingService) extends ModelServiceHelper[Oauth2InfoRow]("oauth2InfoRow") {

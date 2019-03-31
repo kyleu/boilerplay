@@ -11,7 +11,7 @@ import com.kyleu.projectile.util.tracing.{TraceData, TracingService}
 import models.auth.PasswordInfoRow
 import models.queries.auth.PasswordInfoRowQueries
 import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits._
+import scala.concurrent.ExecutionContext.Implicits.global
 
 @javax.inject.Singleton
 class PasswordInfoRowService @javax.inject.Inject() (override val tracing: TracingService) extends ModelServiceHelper[PasswordInfoRow]("passwordInfoRow") {

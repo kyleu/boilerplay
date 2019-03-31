@@ -1,7 +1,7 @@
 {
   "key" : "oauth2_info",
   "pkg" : [ "auth" ],
-  "features" : [ "doobie", "datamodel", "thrift", "auth", "graphql", "service", "slick", "controller", "notes", "json", "core" ],
+  "features" : [ "doobie", "datamodel", "auth", "graphql", "service", "slick", "controller", "notes", "json", "core" ],
   "ignored" : [ ],
   "overrides" : [ {
     "k" : "title",

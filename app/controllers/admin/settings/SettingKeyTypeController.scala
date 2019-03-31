@@ -3,19 +3,22 @@ package controllers.admin.settings
 
 import com.kyleu.projectile.controllers.{AuthController, ServiceController}
 import com.kyleu.projectile.models.Application
-import com.kyleu.projectile.models.auth.AuthActions
 import com.kyleu.projectile.util.JsonSerializers._
 import models.settings.SettingKeyType
 import play.twirl.api.Html
 import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits._
+import scala.concurrent.ExecutionContext.Implicits.global
 
 @javax.inject.Singleton
-class SettingKeyTypeController @javax.inject.Inject() (override val app: Application, authActions: AuthActions) extends AuthController("settingKeyType") {
+class SettingKeyTypeController @javax.inject.Inject() (override val app: Application) extends AuthController("settingKeyType") {
 
   def list = withSession("list", admin = true) { implicit request => implicit td =>
     Future.successful(render {
-      case Accepts.Html() => Ok(com.kyleu.projectile.views.html.admin.layout.listPage(request.identity, authActions, "SettingKeyType", "explore", SettingKeyType.values.map(v => Html(v.toString))))
+      case Accepts.Html() => Ok(com.kyleu.projectile.views.html.admin.layout.listPage(
+        title = "SettingKeyType",
+        cfg = app.cfg(u = Some(request.identity), admin = true),
+        vals = SettingKeyType.values.map(v => Html(v.toString))
+      ))
       case Accepts.Json() => Ok(SettingKeyType.values.asJson)
       case ServiceController.acceptsCsv() => Ok(SettingKeyType.values.mkString(", ")).as("text/csv")
     })

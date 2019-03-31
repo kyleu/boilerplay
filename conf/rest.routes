@@ -1,2 +1,0 @@
-GET        /                    controllers.admin.rest.OpenApiController.ui()
-GET        /openapi.json        controllers.admin.rest.OpenApiController.json()

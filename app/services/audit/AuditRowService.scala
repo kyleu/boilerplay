@@ -12,7 +12,7 @@ import java.util.UUID
 import models.audit.AuditRow
 import models.queries.audit.AuditRowQueries
 import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits._
+import scala.concurrent.ExecutionContext.Implicits.global
 
 @javax.inject.Singleton
 class AuditRowService @javax.inject.Inject() (override val tracing: TracingService) extends ModelServiceHelper[AuditRow]("auditRow") {

@@ -12,7 +12,7 @@ import java.time.LocalDateTime
 import models.queries.sync.SyncProgressRowQueries
 import models.sync.SyncProgressRow
 import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits._
+import scala.concurrent.ExecutionContext.Implicits.global
 
 @javax.inject.Singleton
 class SyncProgressRowService @javax.inject.Inject() (override val tracing: TracingService) extends ModelServiceHelper[SyncProgressRow]("syncProgressRow") {

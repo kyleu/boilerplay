@@ -12,7 +12,7 @@ import java.time.LocalDateTime
 import models.ddl.FlywaySchemaHistoryRow
 import models.queries.ddl.FlywaySchemaHistoryRowQueries
 import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits._
+import scala.concurrent.ExecutionContext.Implicits.global
 
 @javax.inject.Singleton
 class FlywaySchemaHistoryRowService @javax.inject.Inject() (override val tracing: TracingService) extends ModelServiceHelper[FlywaySchemaHistoryRow]("flywaySchemaHistoryRow") {

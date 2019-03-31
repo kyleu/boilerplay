@@ -13,7 +13,7 @@ import java.util.UUID
 import models.queries.task.ScheduledTaskRunRowQueries
 import models.task.ScheduledTaskRunRow
 import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits._
+import scala.concurrent.ExecutionContext.Implicits.global
 
 @javax.inject.Singleton
 class ScheduledTaskRunRowService @javax.inject.Inject() (override val tracing: TracingService) extends ModelServiceHelper[ScheduledTaskRunRow]("scheduledTaskRunRow") {

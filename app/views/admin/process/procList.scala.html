@@ -1,6 +1,6 @@
-@(user: com.kyleu.projectile.models.user.SystemUser, authActions: com.kyleu.projectile.models.auth.AuthActions, procs: Seq[models.process.CachedProc])(
-    implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: com.kyleu.projectile.util.tracing.TraceData
-)@traceData.logClass(getClass)@com.kyleu.projectile.views.html.admin.layout.page(user, authActions, "status", util.Config.projectName + " Status") {
+@(user: com.kyleu.projectile.models.user.SystemUser, cfg: com.kyleu.projectile.models.config.UiConfig, procs: Seq[models.process.CachedProc])(
+    implicit request: Request[AnyContent], session: Session, flash: Flash
+)@com.kyleu.projectile.components.views.html.layout.page(util.Config.projectName + " Status", cfg) {
   <ul class="collection with-header">
     <li class="collection-header">
       <div class="right">
@@ -8,11 +8,11 @@
           <input name="cmd" placeholder="Run new process" />
         </form>
       </div>
-      <h5><i class="fa @models.template.Icons.process"></i> System Processes</h5>
+      <h5>System Processes</h5>
     </li>
     @procs.map { proc =>
       <li class="collection-item">
-        <div><a class="theme-text" href="@controllers.admin.system.routes.ProcessController.detail(proc.id)">@proc.id</a></div>
+        <div><a href="@controllers.admin.system.routes.ProcessController.detail(proc.id)">@proc.id</a></div>
         <div>@proc.cmd.mkString(" ")</div>
         <div>@proc.started.map(com.kyleu.projectile.util.DateUtils.niceDateTime)</div>
         <div class="clear"></div>

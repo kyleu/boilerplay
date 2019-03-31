@@ -1,10 +1,9 @@
 @* Generated File *@
-@(user: com.kyleu.projectile.models.user.SystemUser, authActions: com.kyleu.projectile.models.auth.AuthActions, totalCount: Option[Int], modelSeq: Seq[models.auth.SystemUserRow], q: Option[String], orderBy: Option[String], orderAsc: Boolean, limit: Int, offset: Int)(
-    implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: com.kyleu.projectile.util.tracing.TraceData
+@(user: com.kyleu.projectile.models.user.SystemUser, cfg: com.kyleu.projectile.models.config.UiConfig, totalCount: Option[Int], modelSeq: Seq[models.auth.SystemUserRow], q: Option[String], orderBy: Option[String], orderAsc: Boolean, limit: Int, offset: Int)(
+    implicit request: Request[AnyContent], session: Session, flash: Flash
 )
 @com.kyleu.projectile.views.html.admin.explore.list(
-  user = user,
-  authActions = authActions,
+  cfg = cfg,
   model = "System User",
   modelPlural = "System Users",
   icon = models.template.Icons.systemUserRow,

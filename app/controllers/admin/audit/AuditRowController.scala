@@ -3,7 +3,7 @@ package controllers.admin.audit
 
 import com.kyleu.projectile.controllers.{ServiceAuthController, ServiceController}
 import com.kyleu.projectile.models.Application
-import com.kyleu.projectile.models.auth.AuthActions
+import com.kyleu.projectile.models.config.UiConfig
 import com.kyleu.projectile.models.result.RelationCount
 import com.kyleu.projectile.models.result.orderBy.OrderBy
 import com.kyleu.projectile.services.note.NoteService
@@ -14,12 +14,12 @@ import java.util.UUID
 import models.audit.{AuditRow, AuditRowResult}
 import play.api.http.MimeTypes
 import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits._
+import scala.concurrent.ExecutionContext.Implicits.global
 import services.audit.{AuditRecordRowService, AuditRowService}
 
 @javax.inject.Singleton
 class AuditRowController @javax.inject.Inject() (
-    override val app: Application, authActions: AuthActions, svc: AuditRowService, noteSvc: NoteService,
+    override val app: Application, svc: AuditRowService, noteSvc: NoteService,
     auditRecordRowS: AuditRecordRowService
 ) extends ServiceAuthController(svc) {
 
@@ -27,7 +27,7 @@ class AuditRowController @javax.inject.Inject() (
     val cancel = controllers.admin.audit.routes.AuditRowController.list()
     val call = controllers.admin.audit.routes.AuditRowController.create()
     Future.successful(Ok(views.html.admin.audit.auditRowForm(
-      request.identity, authActions, AuditRow.empty(), "New Audit", cancel, call, isNew = true, debug = app.config.debug
+      request.identity, app.cfg(Some(request.identity), true, "audit", "Audits"), AuditRow.empty(), "New Audit", cancel, call, isNew = true, debug = app.config.debug
     )))
   }
 
@@ -44,7 +44,7 @@ class AuditRowController @javax.inject.Inject() (
       val orderBys = OrderBy.forVals(orderBy, orderAsc).toSeq
       searchWithCount(q, orderBys, limit, offset).map(r => renderChoice(t) {
         case MimeTypes.HTML => Ok(views.html.admin.audit.auditRowList(
-          request.identity, authActions, Some(r._1), r._2, q, orderBy, orderAsc, limit.getOrElse(100), offset.getOrElse(0)
+          request.identity, app.cfg(u = Some(request.identity), admin = true, "audit", "Audits"), Some(r._1), r._2, q, orderBy, orderAsc, limit.getOrElse(100), offset.getOrElse(0)
         ))
         case MimeTypes.JSON => Ok(AuditRowResult.fromRecords(q, Nil, orderBys, limit, offset, startMs, r._1, r._2).asJson)
         case ServiceController.MimeTypes.csv => csvResponse("AuditRow", svc.csvFor(r._1, r._2))
@@ -67,7 +67,7 @@ class AuditRowController @javax.inject.Inject() (
 
     notesF.flatMap(notes => modelF.map {
       case Some(model) => renderChoice(t) {
-        case MimeTypes.HTML => Ok(views.html.admin.audit.auditRowView(request.identity, authActions, model, notes, app.config.debug))
+        case MimeTypes.HTML => Ok(views.html.admin.audit.auditRowView(request.identity, app.cfg(Some(request.identity), true, "audit", "Audits"), model, notes, app.config.debug))
         case MimeTypes.JSON => Ok(model.asJson)
         case ServiceController.MimeTypes.png => Ok(renderToPng(v = model)).as(ServiceController.MimeTypes.png)
         case ServiceController.MimeTypes.svg => Ok(renderToSvg(v = model)).as(ServiceController.MimeTypes.svg)
@@ -81,7 +81,7 @@ class AuditRowController @javax.inject.Inject() (
     val call = controllers.admin.audit.routes.AuditRowController.edit(id)
     svc.getByPrimaryKey(request, id).map {
       case Some(model) => Ok(
-        views.html.admin.audit.auditRowForm(request.identity, authActions, model, s"Audit [$id]", cancel, call, debug = app.config.debug)
+        views.html.admin.audit.auditRowForm(request.identity, app.cfg(Some(request.identity), true, "audit", "Audits"), model, s"Audit [$id]", cancel, call, debug = app.config.debug)
       )
       case None => NotFound(s"No AuditRow found with id [$id]")
     }

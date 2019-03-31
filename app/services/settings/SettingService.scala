@@ -11,7 +11,7 @@ import com.kyleu.projectile.util.tracing.{TraceData, TracingService}
 import models.queries.settings.SettingQueries
 import models.settings.{Setting, SettingKeyType}
 import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits._
+import scala.concurrent.ExecutionContext.Implicits.global
 
 @javax.inject.Singleton
 class SettingService @javax.inject.Inject() (override val tracing: TracingService) extends ModelServiceHelper[Setting]("setting") {

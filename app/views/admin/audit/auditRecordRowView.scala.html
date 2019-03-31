@@ -1,13 +1,13 @@
 @* Generated File *@
-@(user: com.kyleu.projectile.models.user.SystemUser, authActions: com.kyleu.projectile.models.auth.AuthActions, model: models.audit.AuditRecordRow, notes: Seq[com.kyleu.projectile.models.note.Note], debug: Boolean)(
-    implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: com.kyleu.projectile.util.tracing.TraceData
-)@com.kyleu.projectile.views.html.admin.layout.page(user, authActions, "explore", s"Audit Record [${model.id}]") {
+@(user: com.kyleu.projectile.models.user.SystemUser, cfg: com.kyleu.projectile.models.config.UiConfig, model: models.audit.AuditRecordRow, notes: Seq[com.kyleu.projectile.models.note.Note], debug: Boolean)(
+    implicit request: Request[AnyContent], session: Session, flash: Flash
+)@com.kyleu.projectile.components.views.html.layout.page(s"Audit Record [${model.id}]", cfg) {
   <div class="collection with-header">
     <div class="collection-header">
-      <div class="right"><a class="theme-text" href="@controllers.admin.audit.routes.AuditRecordRowController.editForm(model.id)">Edit</a></div>
+      <div class="right"><a href="@controllers.admin.audit.routes.AuditRecordRowController.editForm(model.id)">Edit</a></div>
       <div class="right"><a class="theme-text remove-link" onclick="return confirm('Are you sure you want to remove this Audit Record?')" href="@controllers.admin.audit.routes.AuditRecordRowController.remove(model.id)">Remove</a></div>
       <h5>
-        <a class="theme-text" href="@controllers.admin.audit.routes.AuditRecordRowController.list()"><i class="fa @models.template.Icons.auditRecordRow"></i></a>
+        <a href="@controllers.admin.audit.routes.AuditRecordRowController.list()"><i class="fa @models.template.Icons.auditRecordRow"></i></a>
         Audit Record [@model.id]
       </h5>
     </div>
@@ -22,7 +22,7 @@
             <th>Audit Id</th>
             <td>
               @model.auditId
-              <a class="theme-text" href="@controllers.admin.audit.routes.AuditRowController.view(model.auditId)"><i class="fa @models.template.Icons.auditRow"></i></a>
+              <a href="@controllers.admin.audit.routes.AuditRowController.view(model.auditId)"><i class="fa @models.template.Icons.auditRow"></i></a>
             </td>
           </tr>
           <tr>

@@ -1,54 +1,33 @@
 package models.template
 
 object Icons {
-  val sortAsc = "fa-sort-asc"
-  val sortDesc = "fa-sort-desc"
-
-  val upArrow = "fa-sort-asc"
-  val downArrow = "fa-sort-desc"
-
-  val bars = "fa-bars"
-  val spin = "fa-spin"
-  val settings = "fa-gear"
-
-  val check = "fa-check"
-  val search = "fa-search"
-  val error = "fa-exclamation"
-
-  val connected = "fa-check"
-  val started = "fa-caret-square-o-right"
-  val completed = "fa-caret-square-o-left"
-
-  val signIn = "fa-sign-in"
-  val signOut = "fa-sign-out"
-
-  val help = "fa-key"
-  val close = "fa-close"
-
-  val date = "fa-calendar-o"
-  val time = "fa-clock-o"
-  val calendar = "fa-calendar-o"
-
-  val file = "fa-file-text-o"
-  val directory = "fa-folder-o"
-  val directoryOpen = "fa-folder-open-o"
-
-  val dropdownToggle = "fa-angle-down"
-
-  val process = "fa-shield"
-  val sandbox = "fa-folder-o"
+  // Material Icons
+  val button = "send"
+  val fullscreen = "settings_overscan"
+  val notifications = "notifications_none"
+  val profile = "person_outline"
+  val search = "search"
+  val signout = "keyboard_tab"
 
   /* Start model icons */
   /* Projectile export section [boilerplay] */
-  val auditRecordRow = "fa-moon-o"
-  val auditRow = "fa-map-pin"
-  val flywaySchemaHistoryRow = "fa-hand-rock-o"
-  val noteRow = "fa-code"
-  val oauth2InfoRow = "fa-beer"
-  val passwordInfoRow = "fa-hand-pointer-o"
-  val scheduledTaskRunRow = "fa-folder-o"
-  val setting = "fa-gamepad"
-  val syncProgressRow = "fa-meh-o"
-  val systemUserRow = "fa-bell-o"
+  val pkg_audit = "account_balance"
+  val pkg_auth = "videocam"
+  val pkg_ddl = "account_balance"
+  val pkg_note = "gps_fixed"
+  val pkg_settings = "home"
+  val pkg_sync = "event"
+  val pkg_task = "motorcycle"
+
+  val auditRecordRow = "list"
+  val auditRow = "storage"
+  val flywaySchemaHistoryRow = "videogame_asset"
+  val noteRow = "eject"
+  val oauth2InfoRow = "graphic_eq"
+  val passwordInfoRow = "home"
+  val scheduledTaskRunRow = "storage"
+  val setting = "alarm"
+  val syncProgressRow = "graphic_eq"
+  val systemUserRow = "cached"
   /* End model icons */
 }

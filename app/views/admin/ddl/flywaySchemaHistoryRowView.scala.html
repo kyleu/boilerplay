@@ -1,13 +1,13 @@
 @* Generated File *@
-@(user: com.kyleu.projectile.models.user.SystemUser, authActions: com.kyleu.projectile.models.auth.AuthActions, model: models.ddl.FlywaySchemaHistoryRow, notes: Seq[com.kyleu.projectile.models.note.Note], debug: Boolean)(
-    implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: com.kyleu.projectile.util.tracing.TraceData
-)@com.kyleu.projectile.views.html.admin.layout.page(user, authActions, "explore", s"Flyway Schema History [${model.installedRank}]") {
+@(user: com.kyleu.projectile.models.user.SystemUser, cfg: com.kyleu.projectile.models.config.UiConfig, model: models.ddl.FlywaySchemaHistoryRow, notes: Seq[com.kyleu.projectile.models.note.Note], debug: Boolean)(
+    implicit request: Request[AnyContent], session: Session, flash: Flash
+)@com.kyleu.projectile.components.views.html.layout.page(s"Flyway Schema History [${model.installedRank}]", cfg) {
   <div class="collection with-header">
     <div class="collection-header">
-      <div class="right"><a class="theme-text" href="@controllers.admin.ddl.routes.FlywaySchemaHistoryRowController.editForm(model.installedRank)">Edit</a></div>
+      <div class="right"><a href="@controllers.admin.ddl.routes.FlywaySchemaHistoryRowController.editForm(model.installedRank)">Edit</a></div>
       <div class="right"><a class="theme-text remove-link" onclick="return confirm('Are you sure you want to remove this Flyway Schema History?')" href="@controllers.admin.ddl.routes.FlywaySchemaHistoryRowController.remove(model.installedRank)">Remove</a></div>
       <h5>
-        <a class="theme-text" href="@controllers.admin.ddl.routes.FlywaySchemaHistoryRowController.list()"><i class="fa @models.template.Icons.flywaySchemaHistoryRow"></i></a>
+        <a href="@controllers.admin.ddl.routes.FlywaySchemaHistoryRowController.list()"><i class="fa @models.template.Icons.flywaySchemaHistoryRow"></i></a>
         Flyway Schema History [@model.installedRank]
       </h5>
     </div>

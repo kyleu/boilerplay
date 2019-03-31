@@ -2,9 +2,9 @@ GET         /                                        controllers.HomeController.
 GET         /ping                                    controllers.HomeController.ping(timestamp: Long)
 GET         /robots.txt                              controllers.HomeController.robots
 
-->          /style                                   style.Routes
 ->          /profile                                 profile.Routes
 ->          /projectile                              projectile.Routes
+->          /components                              components.Routes
 
 # Admin
 ->          /admin/system                            system.Routes

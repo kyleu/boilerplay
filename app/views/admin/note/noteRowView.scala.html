@@ -1,13 +1,13 @@
 @* Generated File *@
-@(user: com.kyleu.projectile.models.user.SystemUser, authActions: com.kyleu.projectile.models.auth.AuthActions, model: models.note.NoteRow, notes: Seq[com.kyleu.projectile.models.note.Note], debug: Boolean)(
-    implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: com.kyleu.projectile.util.tracing.TraceData
-)@com.kyleu.projectile.views.html.admin.layout.page(user, authActions, "explore", s"Note [${model.id}]") {
+@(user: com.kyleu.projectile.models.user.SystemUser, cfg: com.kyleu.projectile.models.config.UiConfig, model: models.note.NoteRow, notes: Seq[com.kyleu.projectile.models.note.Note], debug: Boolean)(
+    implicit request: Request[AnyContent], session: Session, flash: Flash
+)@com.kyleu.projectile.components.views.html.layout.page(s"Note [${model.id}]", cfg) {
   <div class="collection with-header">
     <div class="collection-header">
-      <div class="right"><a class="theme-text" href="@controllers.admin.note.routes.NoteRowController.editForm(model.id)">Edit</a></div>
+      <div class="right"><a href="@controllers.admin.note.routes.NoteRowController.editForm(model.id)">Edit</a></div>
       <div class="right"><a class="theme-text remove-link" onclick="return confirm('Are you sure you want to remove this Note?')" href="@controllers.admin.note.routes.NoteRowController.remove(model.id)">Remove</a></div>
       <h5>
-        <a class="theme-text" href="@controllers.admin.note.routes.NoteRowController.list()"><i class="fa @models.template.Icons.noteRow"></i></a>
+        <a href="@controllers.admin.note.routes.NoteRowController.list()"><i class="fa @models.template.Icons.noteRow"></i></a>
         Note [@model.id]
       </h5>
     </div>
@@ -34,7 +34,7 @@
             <th>Author</th>
             <td>
               @model.author
-              <a class="theme-text" href="@controllers.admin.auth.routes.SystemUserRowController.view(model.author)"><i class="fa @models.template.Icons.systemUserRow"></i></a>
+              <a href="@controllers.admin.auth.routes.SystemUserRowController.view(model.author)"><i class="fa @models.template.Icons.systemUserRow"></i></a>
             </td>
           </tr>
           <tr>

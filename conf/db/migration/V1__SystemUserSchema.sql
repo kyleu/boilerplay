@@ -4,6 +4,7 @@ create table if not exists "system_user" (
   "provider" character varying(64) not null,
   "key" varchar(2048) not null,
   "role" character varying(64) not null,
+  "settings" json not null default '{}'::json,
   "created" timestamp without time zone not null
 );
 

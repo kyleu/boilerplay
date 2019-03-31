@@ -1,7 +1,7 @@
 @* Generated File *@
 @(model: models.note.NoteRow)<tr>
   <td>
-    <a href="@controllers.admin.note.routes.NoteRowController.view(model.id)" class="theme-text">@model.id</a>
+    <a href="@controllers.admin.note.routes.NoteRowController.view(model.id)">@model.id</a>
   </td>
   <td>
     @model.relType
@@ -14,7 +14,7 @@
   </td>
   <td>
     @model.author
-    <a class="theme-text" href="@controllers.admin.auth.routes.SystemUserRowController.view(model.author)">
+    <a href="@controllers.admin.auth.routes.SystemUserRowController.view(model.author)">
       <i class="fa @models.template.Icons.systemUserRow"></i>
     </a>
   </td>

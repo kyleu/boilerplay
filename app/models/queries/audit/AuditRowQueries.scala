@@ -7,6 +7,8 @@ import com.kyleu.projectile.models.queries.{BaseQueries, ResultFieldHelper}
 import com.kyleu.projectile.models.result.data.DataField
 import com.kyleu.projectile.models.result.filter.Filter
 import com.kyleu.projectile.models.result.orderBy.OrderBy
+import io.circe.Json
+import java.time.LocalDateTime
 import java.util.UUID
 import models.audit.AuditRow
 

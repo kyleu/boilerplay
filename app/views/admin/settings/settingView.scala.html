@@ -1,13 +1,13 @@
 @* Generated File *@
-@(user: com.kyleu.projectile.models.user.SystemUser, authActions: com.kyleu.projectile.models.auth.AuthActions, model: models.settings.Setting, notes: Seq[com.kyleu.projectile.models.note.Note], debug: Boolean)(
-    implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: com.kyleu.projectile.util.tracing.TraceData
-)@com.kyleu.projectile.views.html.admin.layout.page(user, authActions, "explore", s"Setting [${model.k}]") {
+@(user: com.kyleu.projectile.models.user.SystemUser, cfg: com.kyleu.projectile.models.config.UiConfig, model: models.settings.Setting, notes: Seq[com.kyleu.projectile.models.note.Note], debug: Boolean)(
+    implicit request: Request[AnyContent], session: Session, flash: Flash
+)@com.kyleu.projectile.components.views.html.layout.page(s"Setting [${model.k}]", cfg) {
   <div class="collection with-header">
     <div class="collection-header">
-      <div class="right"><a class="theme-text" href="@controllers.admin.settings.routes.SettingController.editForm(model.k)">Edit</a></div>
+      <div class="right"><a href="@controllers.admin.settings.routes.SettingController.editForm(model.k)">Edit</a></div>
       <div class="right"><a class="theme-text remove-link" onclick="return confirm('Are you sure you want to remove this Setting?')" href="@controllers.admin.settings.routes.SettingController.remove(model.k)">Remove</a></div>
       <h5>
-        <a class="theme-text" href="@controllers.admin.settings.routes.SettingController.list()"><i class="fa @models.template.Icons.setting"></i></a>
+        <a href="@controllers.admin.settings.routes.SettingController.list()"><i class="fa @models.template.Icons.setting"></i></a>
         Setting [@model.k]
       </h5>
     </div>

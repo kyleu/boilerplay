@@ -23,4 +23,5 @@ GET         /process/run           controllers.admin.system.ProcessController.ru
 GET         /process/:id           controllers.admin.system.ProcessController.detail(id: java.util.UUID)
 
 GET         /sandbox               controllers.admin.system.SandboxController.list
+GET         /sandbox/scratchpad    controllers.admin.system.SandboxController.scratchpad()
 GET         /sandbox/:key          controllers.admin.system.SandboxController.run(key, arg: Option[String] ?= None)

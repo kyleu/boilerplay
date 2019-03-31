@@ -1,8 +1,8 @@
 @(
     user: com.kyleu.projectile.models.user.SystemUser,
-    authActions: com.kyleu.projectile.models.auth.AuthActions,
+    cfg: com.kyleu.projectile.models.config.UiConfig,
     settingService: services.settings.SettingsService
-)(implicit request: Request[AnyContent], session: Session, flash: Flash, traceData: com.kyleu.projectile.util.tracing.TraceData)
+)(implicit request: Request[AnyContent], session: Session, flash: Flash)
 @import models.settings.SettingKeyType
 
 @settingPanel(key: models.settings.SettingKeyType, colWidth: Int = 12)(content: Html) = {
@@ -24,14 +24,12 @@
   </div>
 }
 
-@traceData.logClass(getClass)
-
-@com.kyleu.projectile.views.html.admin.layout.page(user, authActions, "status", "System Preferences") {
+@com.kyleu.projectile.components.views.html.layout.page("System Preferences", cfg) {
   <div class="static-container container">
   <form action="@controllers.admin.system.routes.SettingsController.saveSettings()" method="post">
     <div class="collection with-header">
       <div class="collection-header">
-        <h4><i class="fa @models.template.Icons.settings"></i> System Preferences</h4>
+        <h4>System Preferences</h4>
       </div>
 
       @settingPanel(SettingKeyType.AllowRegistration) {
@@ -61,7 +59,7 @@
       }
     </div>
     <div class="panel-action">
-      <button class="right btn theme waves-effect waves-light" type="submit">Save</button>
+      <button class="right btn waves-effect waves-light" type="submit">Save</button>
       <a class="right theme-text btn-flat" href="@controllers.admin.system.routes.AdminController.index()">Cancel</a>
       <div class="clear"></div>
     </div>
