@@ -1,8 +1,9 @@
 @* Generated File *@
 @(model: models.settings.Setting, hit: String)<div class="search-result">
-  <div class="right">Setting</div>
+  <div class="right">
+    <i class="material-icons small">@models.template.Icons.setting</i> Setting
+  </div>
   <div>
-    <i class="fa @models.template.Icons.setting"></i>
     <a href="@controllers.admin.settings.routes.SettingController.view(model.k)">@model.k</a>
   </div>
   <em>@hit</em>

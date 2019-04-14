@@ -24,7 +24,7 @@ class FlywaySchemaHistoryRowController @javax.inject.Inject() (
     val cancel = controllers.admin.ddl.routes.FlywaySchemaHistoryRowController.list()
     val call = controllers.admin.ddl.routes.FlywaySchemaHistoryRowController.create()
     Future.successful(Ok(views.html.admin.ddl.flywaySchemaHistoryRowForm(
-      request.identity, app.cfg(Some(request.identity), true, "ddl", "Flyway Schema Histories"), FlywaySchemaHistoryRow.empty(), "New Flyway Schema History", cancel, call, isNew = true, debug = app.config.debug
+      app.cfg(Some(request.identity), true, "ddl", "flyway_schema_history", "Create"), FlywaySchemaHistoryRow.empty(), "New Flyway Schema History", cancel, call, isNew = true, debug = app.config.debug
     )))
   }
 
@@ -41,7 +41,7 @@ class FlywaySchemaHistoryRowController @javax.inject.Inject() (
       val orderBys = OrderBy.forVals(orderBy, orderAsc).toSeq
       searchWithCount(q, orderBys, limit, offset).map(r => renderChoice(t) {
         case MimeTypes.HTML => Ok(views.html.admin.ddl.flywaySchemaHistoryRowList(
-          request.identity, app.cfg(u = Some(request.identity), admin = true, "ddl", "Flyway Schema Histories"), Some(r._1), r._2, q, orderBy, orderAsc, limit.getOrElse(100), offset.getOrElse(0)
+          app.cfg(u = Some(request.identity), admin = true, "ddl", "flyway_schema_history"), Some(r._1), r._2, q, orderBy, orderAsc, limit.getOrElse(100), offset.getOrElse(0)
         ))
         case MimeTypes.JSON => Ok(FlywaySchemaHistoryRowResult.fromRecords(q, Nil, orderBys, limit, offset, startMs, r._1, r._2).asJson)
         case ServiceController.MimeTypes.csv => csvResponse("FlywaySchemaHistoryRow", svc.csvFor(r._1, r._2))
@@ -64,7 +64,7 @@ class FlywaySchemaHistoryRowController @javax.inject.Inject() (
 
     notesF.flatMap(notes => modelF.map {
       case Some(model) => renderChoice(t) {
-        case MimeTypes.HTML => Ok(views.html.admin.ddl.flywaySchemaHistoryRowView(request.identity, app.cfg(Some(request.identity), true, "ddl", "Flyway Schema Histories"), model, notes, app.config.debug))
+        case MimeTypes.HTML => Ok(views.html.admin.ddl.flywaySchemaHistoryRowView(app.cfg(Some(request.identity), true, "ddl", "flyway_schema_history", model.installedRank.toString), model, notes, app.config.debug))
         case MimeTypes.JSON => Ok(model.asJson)
         case ServiceController.MimeTypes.png => Ok(renderToPng(v = model)).as(ServiceController.MimeTypes.png)
         case ServiceController.MimeTypes.svg => Ok(renderToSvg(v = model)).as(ServiceController.MimeTypes.svg)
@@ -78,7 +78,7 @@ class FlywaySchemaHistoryRowController @javax.inject.Inject() (
     val call = controllers.admin.ddl.routes.FlywaySchemaHistoryRowController.edit(installedRank)
     svc.getByPrimaryKey(request, installedRank).map {
       case Some(model) => Ok(
-        views.html.admin.ddl.flywaySchemaHistoryRowForm(request.identity, app.cfg(Some(request.identity), true, "ddl", "Flyway Schema Histories"), model, s"Flyway Schema History [$installedRank]", cancel, call, debug = app.config.debug)
+        views.html.admin.ddl.flywaySchemaHistoryRowForm(app.cfg(Some(request.identity), true, "ddl", "flyway_schema_history", "Edit"), model, s"Flyway Schema History [$installedRank]", cancel, call, debug = app.config.debug)
       )
       case None => NotFound(s"No FlywaySchemaHistoryRow found with installedRank [$installedRank]")
     }

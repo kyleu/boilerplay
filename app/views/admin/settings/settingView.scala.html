@@ -1,30 +1,23 @@
 @* Generated File *@
-@(user: com.kyleu.projectile.models.user.SystemUser, cfg: com.kyleu.projectile.models.config.UiConfig, model: models.settings.Setting, notes: Seq[com.kyleu.projectile.models.note.Note], debug: Boolean)(
+@(cfg: com.kyleu.projectile.models.config.UiConfig, model: models.settings.Setting, notes: Seq[com.kyleu.projectile.models.note.Note], debug: Boolean)(
     implicit request: Request[AnyContent], session: Session, flash: Flash
-)@com.kyleu.projectile.components.views.html.layout.page(s"Setting [${model.k}]", cfg) {
-  <div class="collection with-header">
-    <div class="collection-header">
-      <div class="right"><a href="@controllers.admin.settings.routes.SettingController.editForm(model.k)">Edit</a></div>
-      <div class="right"><a class="theme-text remove-link" onclick="return confirm('Are you sure you want to remove this Setting?')" href="@controllers.admin.settings.routes.SettingController.remove(model.k)">Remove</a></div>
-      <h5>
-        <a href="@controllers.admin.settings.routes.SettingController.list()"><i class="fa @models.template.Icons.setting"></i></a>
-        Setting [@model.k]
-      </h5>
-    </div>
-    <div class="collection-item">
-      <table class="highlight">
-        <tbody>
-          <tr>
-            <th>K</th>
-            <td>@model.k</td>
-          </tr>
-          <tr>
-            <th>V</th>
-            <td>@model.v</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    @views.html.admin.note.notes(notes, "setting", "Setting", model.k)
-  </div>
+)@com.kyleu.projectile.components.views.html.layout.page(s"Setting", cfg) {
+  @com.kyleu.projectile.components.views.html.layout.card(None) {
+    <div class="right"><a class="btn" href="@controllers.admin.settings.routes.SettingController.editForm(model.k)">Edit</a></div>
+    <div class="right"><a class="btn-flat remove-link" onclick="return confirm('Are you sure you want to remove this Setting?')" href="@controllers.admin.settings.routes.SettingController.remove(model.k)">Remove</a></div>
+    <table class="highlight responsive-table">
+      <tbody>
+        <tr>
+          <th>K</th>
+          <td>@model.k</td>
+        </tr>
+        <tr>
+          <th>V</th>
+          <td>@model.v</td>
+        </tr>
+      </tbody>
+    </table>
+  }
+
+  @views.html.admin.note.notes(notes, "setting", "Setting", model.k)
 }

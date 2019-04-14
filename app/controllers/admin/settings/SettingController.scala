@@ -24,7 +24,7 @@ class SettingController @javax.inject.Inject() (
     val cancel = controllers.admin.settings.routes.SettingController.list()
     val call = controllers.admin.settings.routes.SettingController.create()
     Future.successful(Ok(views.html.admin.settings.settingForm(
-      request.identity, app.cfg(Some(request.identity), true, "settings", "Settings"), Setting.empty(), "New Setting", cancel, call, isNew = true, debug = app.config.debug
+      app.cfg(Some(request.identity), true, "settings", "setting_values", "Create"), Setting.empty(), "New Setting", cancel, call, isNew = true, debug = app.config.debug
     )))
   }
 
@@ -41,7 +41,7 @@ class SettingController @javax.inject.Inject() (
       val orderBys = OrderBy.forVals(orderBy, orderAsc).toSeq
       searchWithCount(q, orderBys, limit, offset).map(r => renderChoice(t) {
         case MimeTypes.HTML => Ok(views.html.admin.settings.settingList(
-          request.identity, app.cfg(u = Some(request.identity), admin = true, "settings", "Settings"), Some(r._1), r._2, q, orderBy, orderAsc, limit.getOrElse(100), offset.getOrElse(0)
+          app.cfg(u = Some(request.identity), admin = true, "settings", "setting_values"), Some(r._1), r._2, q, orderBy, orderAsc, limit.getOrElse(100), offset.getOrElse(0)
         ))
         case MimeTypes.JSON => Ok(SettingResult.fromRecords(q, Nil, orderBys, limit, offset, startMs, r._1, r._2).asJson)
         case ServiceController.MimeTypes.csv => csvResponse("Setting", svc.csvFor(r._1, r._2))
@@ -64,7 +64,7 @@ class SettingController @javax.inject.Inject() (
 
     notesF.flatMap(notes => modelF.map {
       case Some(model) => renderChoice(t) {
-        case MimeTypes.HTML => Ok(views.html.admin.settings.settingView(request.identity, app.cfg(Some(request.identity), true, "settings", "Settings"), model, notes, app.config.debug))
+        case MimeTypes.HTML => Ok(views.html.admin.settings.settingView(app.cfg(Some(request.identity), true, "settings", "setting_values", model.k.toString), model, notes, app.config.debug))
         case MimeTypes.JSON => Ok(model.asJson)
         case ServiceController.MimeTypes.png => Ok(renderToPng(v = model)).as(ServiceController.MimeTypes.png)
         case ServiceController.MimeTypes.svg => Ok(renderToSvg(v = model)).as(ServiceController.MimeTypes.svg)
@@ -78,7 +78,7 @@ class SettingController @javax.inject.Inject() (
     val call = controllers.admin.settings.routes.SettingController.edit(k)
     svc.getByPrimaryKey(request, k).map {
       case Some(model) => Ok(
-        views.html.admin.settings.settingForm(request.identity, app.cfg(Some(request.identity), true, "settings", "Settings"), model, s"Setting [$k]", cancel, call, debug = app.config.debug)
+        views.html.admin.settings.settingForm(app.cfg(Some(request.identity), true, "settings", "setting_values", "Edit"), model, s"Setting [$k]", cancel, call, debug = app.config.debug)
       )
       case None => NotFound(s"No Setting found with k [$k]")
     }

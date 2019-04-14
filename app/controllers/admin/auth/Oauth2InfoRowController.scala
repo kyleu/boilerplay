@@ -24,7 +24,7 @@ class Oauth2InfoRowController @javax.inject.Inject() (
     val cancel = controllers.admin.auth.routes.Oauth2InfoRowController.list()
     val call = controllers.admin.auth.routes.Oauth2InfoRowController.create()
     Future.successful(Ok(views.html.admin.auth.oauth2InfoRowForm(
-      request.identity, app.cfg(Some(request.identity), true, "auth", "OAuth2 Infos"), Oauth2InfoRow.empty(), "New OAuth2 Info", cancel, call, isNew = true, debug = app.config.debug
+      app.cfg(Some(request.identity), true, "auth", "oauth2_info", "Create"), Oauth2InfoRow.empty(), "New OAuth2 Info", cancel, call, isNew = true, debug = app.config.debug
     )))
   }
 
@@ -41,7 +41,7 @@ class Oauth2InfoRowController @javax.inject.Inject() (
       val orderBys = OrderBy.forVals(orderBy, orderAsc).toSeq
       searchWithCount(q, orderBys, limit, offset).map(r => renderChoice(t) {
         case MimeTypes.HTML => Ok(views.html.admin.auth.oauth2InfoRowList(
-          request.identity, app.cfg(u = Some(request.identity), admin = true, "auth", "OAuth2 Infos"), Some(r._1), r._2, q, orderBy, orderAsc, limit.getOrElse(100), offset.getOrElse(0)
+          app.cfg(u = Some(request.identity), admin = true, "auth", "oauth2_info"), Some(r._1), r._2, q, orderBy, orderAsc, limit.getOrElse(100), offset.getOrElse(0)
         ))
         case MimeTypes.JSON => Ok(Oauth2InfoRowResult.fromRecords(q, Nil, orderBys, limit, offset, startMs, r._1, r._2).asJson)
         case ServiceController.MimeTypes.csv => csvResponse("Oauth2InfoRow", svc.csvFor(r._1, r._2))
@@ -64,7 +64,7 @@ class Oauth2InfoRowController @javax.inject.Inject() (
 
     notesF.flatMap(notes => modelF.map {
       case Some(model) => renderChoice(t) {
-        case MimeTypes.HTML => Ok(views.html.admin.auth.oauth2InfoRowView(request.identity, app.cfg(Some(request.identity), true, "auth", "OAuth2 Infos"), model, notes, app.config.debug))
+        case MimeTypes.HTML => Ok(views.html.admin.auth.oauth2InfoRowView(app.cfg(Some(request.identity), true, "auth", "oauth2_info", s"${model.provider}, ${model.key}"), model, notes, app.config.debug))
         case MimeTypes.JSON => Ok(model.asJson)
         case ServiceController.MimeTypes.png => Ok(renderToPng(v = model)).as(ServiceController.MimeTypes.png)
         case ServiceController.MimeTypes.svg => Ok(renderToSvg(v = model)).as(ServiceController.MimeTypes.svg)
@@ -78,7 +78,7 @@ class Oauth2InfoRowController @javax.inject.Inject() (
     val call = controllers.admin.auth.routes.Oauth2InfoRowController.edit(provider, key)
     svc.getByPrimaryKey(request, provider, key).map {
       case Some(model) => Ok(
-        views.html.admin.auth.oauth2InfoRowForm(request.identity, app.cfg(Some(request.identity), true, "auth", "OAuth2 Infos"), model, s"OAuth2 Info [$provider, $key]", cancel, call, debug = app.config.debug)
+        views.html.admin.auth.oauth2InfoRowForm(app.cfg(Some(request.identity), true, "auth", "oauth2_info", "Edit"), model, s"OAuth2 Info [$provider, $key]", cancel, call, debug = app.config.debug)
       )
       case None => NotFound(s"No Oauth2InfoRow found with provider, key [$provider, $key]")
     }

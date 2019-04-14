@@ -15,7 +15,7 @@ import scala.concurrent.Future
 class ModelNoteController @javax.inject.Inject() (override val app: Application, svc: ModelNoteService) extends AuthController("note") {
   def view(model: String, pk: String) = withSession("list", admin = true) { implicit request => implicit td =>
     svc.getFor(request, model, pk).map(notes => render {
-      case Accepts.Html() => Ok(views.html.admin.note.modelNoteList(request.identity, app.cfg(Some(request.identity), admin = true), notes, model, pk))
+      case Accepts.Html() => Ok(views.html.admin.note.modelNoteList(app.cfg(Some(request.identity), admin = true), notes, model, pk))
       case Accepts.Json() => Ok(notes.asJson)
       case ServiceController.acceptsCsv() => Ok(svc.csvFor(model + " " + pk.mkString("/"), 0, notes)).as("text/csv")
     })
@@ -26,8 +26,6 @@ class ModelNoteController @javax.inject.Inject() (override val app: Application,
     val cancel = controllers.admin.projectile.routes.ModelNoteController.view(model, pk)
     val call = controllers.admin.note.routes.NoteRowController.create()
     val cfg = app.cfg(Some(request.identity), admin = true)
-    Future.successful(Ok(views.html.admin.note.noteRowForm(
-      request.identity, cfg, note, s"Note for $model:$pk", cancel, call, isNew = true, debug = app.config.debug
-    )))
+    Future.successful(Ok(views.html.admin.note.noteRowForm(cfg, note, s"Note for $model:$pk", cancel, call, isNew = true, debug = app.config.debug)))
   }
 }

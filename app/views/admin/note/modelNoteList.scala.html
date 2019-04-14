@@ -1,6 +1,5 @@
-@(user: com.kyleu.projectile.models.user.SystemUser, cfg: com.kyleu.projectile.models.config.UiConfig, notes: Seq[com.kyleu.projectile.models.note.Note], model: String, pk: String)(
+@(cfg: com.kyleu.projectile.models.config.UiConfig, notes: Seq[com.kyleu.projectile.models.note.Note], model: String, pk: String)(
     implicit request: Request[AnyContent], session: Session, flash: Flash
-)
-@com.kyleu.projectile.components.views.html.layout.page(s"Notes for [$model $pk]", cfg) {
+) @com.kyleu.projectile.components.views.html.layout.page(s"Notes for [$model $pk]", cfg) {
   <h5>Notes for [@model @pk]</h5>
 }

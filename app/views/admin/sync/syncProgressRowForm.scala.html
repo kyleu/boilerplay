@@ -1,25 +1,21 @@
 @* Generated File *@
-@(user: com.kyleu.projectile.models.user.SystemUser, cfg: com.kyleu.projectile.models.config.UiConfig, model: models.sync.SyncProgressRow, title: String, cancel: Call, act: Call, isNew: Boolean = false, debug: Boolean = false)(
+@(cfg: com.kyleu.projectile.models.config.UiConfig, model: models.sync.SyncProgressRow, title: String, cancel: Call, act: Call, isNew: Boolean = false, debug: Boolean = false)(
     implicit request: Request[AnyContent], session: Session, flash: Flash
 )@com.kyleu.projectile.components.views.html.layout.page(title, cfg) {
   <form id="form-edit-syncProgressRow" action="@act" method="post">
-    <div class="collection with-header">
-      <div class="collection-header">
-        <div class="right"><button type="submit" class="btn theme">@if(isNew) {Create} else {Save} Sync Progress</button></div>
-        <div class="right"><a href="@cancel" class="theme-text cancel-link">Cancel</a></div>
-        <h5><i class="fa @models.template.Icons.syncProgressRow"></i> @title</h5>
-      </div>
-      <div class="collection-item">
-        <table>
-          <tbody>
-            @com.kyleu.projectile.views.html.components.form.textField(selected = isNew, key = "key", title = "Key", value = Some(model.key), nullable = false)
-            @com.kyleu.projectile.views.html.components.form.textField(selected = isNew, key = "status", title = "Status", value = Some(model.status), nullable = false)
-            @com.kyleu.projectile.views.html.components.form.textField(selected = isNew, key = "message", title = "Message", value = Some(model.message), nullable = false)
-            @com.kyleu.projectile.views.html.components.form.localDateTimeField(selected = isNew, key = "lastTime", title = "Last Time", value = Some(model.lastTime), nullable = false)
-          </tbody>
-        </table>
-      </div>
-    </div>
+    @com.kyleu.projectile.components.views.html.layout.card(None) {
+      <div class="right"><button type="submit" class="btn theme">@if(isNew) {Create} else {Save} Sync Progress</button></div>
+      <div class="right"><a href="@cancel" class="btn-flat cancel-link">Cancel</a></div>
+      <div class="clear"></div>
+      <table>
+        <tbody>
+          @com.kyleu.projectile.views.html.components.form.textField(selected = isNew, key = "key", title = "Key", value = Some(model.key), nullable = false)
+          @com.kyleu.projectile.views.html.components.form.textField(selected = isNew, key = "status", title = "Status", value = Some(model.status), nullable = false)
+          @com.kyleu.projectile.views.html.components.form.textField(selected = isNew, key = "message", title = "Message", value = Some(model.message), nullable = false)
+          @com.kyleu.projectile.views.html.components.form.localDateTimeField(selected = isNew, key = "lastTime", title = "Last Time", value = Some(model.lastTime), nullable = false)
+        </tbody>
+      </table>
+    }
   </form>
 }
 @views.html.components.includeScalaJs(debug)

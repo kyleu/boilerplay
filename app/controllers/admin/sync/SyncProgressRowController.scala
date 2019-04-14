@@ -24,7 +24,7 @@ class SyncProgressRowController @javax.inject.Inject() (
     val cancel = controllers.admin.sync.routes.SyncProgressRowController.list()
     val call = controllers.admin.sync.routes.SyncProgressRowController.create()
     Future.successful(Ok(views.html.admin.sync.syncProgressRowForm(
-      request.identity, app.cfg(Some(request.identity), true, "sync", "Sync Progresses"), SyncProgressRow.empty(), "New Sync Progress", cancel, call, isNew = true, debug = app.config.debug
+      app.cfg(Some(request.identity), true, "sync", "sync_progress", "Create"), SyncProgressRow.empty(), "New Sync Progress", cancel, call, isNew = true, debug = app.config.debug
     )))
   }
 
@@ -41,7 +41,7 @@ class SyncProgressRowController @javax.inject.Inject() (
       val orderBys = OrderBy.forVals(orderBy, orderAsc).toSeq
       searchWithCount(q, orderBys, limit, offset).map(r => renderChoice(t) {
         case MimeTypes.HTML => Ok(views.html.admin.sync.syncProgressRowList(
-          request.identity, app.cfg(u = Some(request.identity), admin = true, "sync", "Sync Progresses"), Some(r._1), r._2, q, orderBy, orderAsc, limit.getOrElse(100), offset.getOrElse(0)
+          app.cfg(u = Some(request.identity), admin = true, "sync", "sync_progress"), Some(r._1), r._2, q, orderBy, orderAsc, limit.getOrElse(100), offset.getOrElse(0)
         ))
         case MimeTypes.JSON => Ok(SyncProgressRowResult.fromRecords(q, Nil, orderBys, limit, offset, startMs, r._1, r._2).asJson)
         case ServiceController.MimeTypes.csv => csvResponse("SyncProgressRow", svc.csvFor(r._1, r._2))
@@ -64,7 +64,7 @@ class SyncProgressRowController @javax.inject.Inject() (
 
     notesF.flatMap(notes => modelF.map {
       case Some(model) => renderChoice(t) {
-        case MimeTypes.HTML => Ok(views.html.admin.sync.syncProgressRowView(request.identity, app.cfg(Some(request.identity), true, "sync", "Sync Progresses"), model, notes, app.config.debug))
+        case MimeTypes.HTML => Ok(views.html.admin.sync.syncProgressRowView(app.cfg(Some(request.identity), true, "sync", "sync_progress", model.key), model, notes, app.config.debug))
         case MimeTypes.JSON => Ok(model.asJson)
         case ServiceController.MimeTypes.png => Ok(renderToPng(v = model)).as(ServiceController.MimeTypes.png)
         case ServiceController.MimeTypes.svg => Ok(renderToSvg(v = model)).as(ServiceController.MimeTypes.svg)
@@ -78,7 +78,7 @@ class SyncProgressRowController @javax.inject.Inject() (
     val call = controllers.admin.sync.routes.SyncProgressRowController.edit(key)
     svc.getByPrimaryKey(request, key).map {
       case Some(model) => Ok(
-        views.html.admin.sync.syncProgressRowForm(request.identity, app.cfg(Some(request.identity), true, "sync", "Sync Progresses"), model, s"Sync Progress [$key]", cancel, call, debug = app.config.debug)
+        views.html.admin.sync.syncProgressRowForm(app.cfg(Some(request.identity), true, "sync", "sync_progress", "Edit"), model, s"Sync Progress [$key]", cancel, call, debug = app.config.debug)
       )
       case None => NotFound(s"No SyncProgressRow found with key [$key]")
     }

@@ -1,8 +1,9 @@
 @* Generated File *@
 @(model: models.auth.Oauth2InfoRow, hit: String)<div class="search-result">
-  <div class="right">OAuth2 Info</div>
+  <div class="right">
+    <i class="material-icons small">@models.template.Icons.oauth2InfoRow</i> OAuth2 Info
+  </div>
   <div>
-    <i class="fa @models.template.Icons.oauth2InfoRow"></i>
     <a href="@controllers.admin.auth.routes.Oauth2InfoRowController.view(model.provider, model.key)">@model.provider, @model.key</a>
   </div>
   <em>@hit</em>

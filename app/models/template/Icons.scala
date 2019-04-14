@@ -18,7 +18,6 @@ object Icons {
   val pkg_settings = "home"
   val pkg_sync = "event"
   val pkg_task = "motorcycle"
-
   val auditRecordRow = "list"
   val auditRow = "storage"
   val flywaySchemaHistoryRow = "videogame_asset"

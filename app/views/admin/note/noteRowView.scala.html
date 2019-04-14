@@ -1,49 +1,42 @@
 @* Generated File *@
-@(user: com.kyleu.projectile.models.user.SystemUser, cfg: com.kyleu.projectile.models.config.UiConfig, model: models.note.NoteRow, notes: Seq[com.kyleu.projectile.models.note.Note], debug: Boolean)(
+@(cfg: com.kyleu.projectile.models.config.UiConfig, model: models.note.NoteRow, notes: Seq[com.kyleu.projectile.models.note.Note], debug: Boolean)(
     implicit request: Request[AnyContent], session: Session, flash: Flash
-)@com.kyleu.projectile.components.views.html.layout.page(s"Note [${model.id}]", cfg) {
-  <div class="collection with-header">
-    <div class="collection-header">
-      <div class="right"><a href="@controllers.admin.note.routes.NoteRowController.editForm(model.id)">Edit</a></div>
-      <div class="right"><a class="theme-text remove-link" onclick="return confirm('Are you sure you want to remove this Note?')" href="@controllers.admin.note.routes.NoteRowController.remove(model.id)">Remove</a></div>
-      <h5>
-        <a href="@controllers.admin.note.routes.NoteRowController.list()"><i class="fa @models.template.Icons.noteRow"></i></a>
-        Note [@model.id]
-      </h5>
-    </div>
-    <div class="collection-item">
-      <table class="highlight">
-        <tbody>
-          <tr>
-            <th>Id</th>
-            <td>@model.id</td>
-          </tr>
-          <tr>
-            <th>Rel Type</th>
-            <td>@model.relType.getOrElse(com.kyleu.projectile.util.NullUtils.str)</td>
-          </tr>
-          <tr>
-            <th>Rel Pk</th>
-            <td>@model.relPk.getOrElse(com.kyleu.projectile.util.NullUtils.str)</td>
-          </tr>
-          <tr>
-            <th>Text</th>
-            <td>@model.text</td>
-          </tr>
-          <tr>
-            <th>Author</th>
-            <td>
-              @model.author
-              <a href="@controllers.admin.auth.routes.SystemUserRowController.view(model.author)"><i class="fa @models.template.Icons.systemUserRow"></i></a>
-            </td>
-          </tr>
-          <tr>
-            <th>Created</th>
-            <td>@model.created</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    @views.html.admin.note.notes(notes, "noteRow", "Note", model.id)
-  </div>
+)@com.kyleu.projectile.components.views.html.layout.page(s"Note", cfg) {
+  @com.kyleu.projectile.components.views.html.layout.card(None) {
+    <div class="right"><a class="btn" href="@controllers.admin.note.routes.NoteRowController.editForm(model.id)">Edit</a></div>
+    <div class="right"><a class="btn-flat remove-link" onclick="return confirm('Are you sure you want to remove this Note?')" href="@controllers.admin.note.routes.NoteRowController.remove(model.id)">Remove</a></div>
+    <table class="highlight responsive-table">
+      <tbody>
+        <tr>
+          <th>Id</th>
+          <td>@model.id</td>
+        </tr>
+        <tr>
+          <th>Rel Type</th>
+          <td>@model.relType.getOrElse(com.kyleu.projectile.util.NullUtils.str)</td>
+        </tr>
+        <tr>
+          <th>Rel Pk</th>
+          <td>@model.relPk.getOrElse(com.kyleu.projectile.util.NullUtils.str)</td>
+        </tr>
+        <tr>
+          <th>Text</th>
+          <td>@model.text</td>
+        </tr>
+        <tr>
+          <th>Author</th>
+          <td>
+            @model.author
+            <a href="@controllers.admin.auth.routes.SystemUserRowController.view(model.author)"><i class="material-icons small">@models.template.Icons.systemUserRow</i></a>
+          </td>
+        </tr>
+        <tr>
+          <th>Created</th>
+          <td>@model.created</td>
+        </tr>
+      </tbody>
+    </table>
+  }
+
+  @views.html.admin.note.notes(notes, "noteRow", "Note", model.id)
 }

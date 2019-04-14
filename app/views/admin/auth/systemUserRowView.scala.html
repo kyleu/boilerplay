@@ -1,53 +1,46 @@
 @* Generated File *@
-@(user: com.kyleu.projectile.models.user.SystemUser, cfg: com.kyleu.projectile.models.config.UiConfig, model: models.auth.SystemUserRow, notes: Seq[com.kyleu.projectile.models.note.Note], debug: Boolean)(
+@(cfg: com.kyleu.projectile.models.config.UiConfig, model: models.auth.SystemUserRow, notes: Seq[com.kyleu.projectile.models.note.Note], debug: Boolean)(
     implicit request: Request[AnyContent], session: Session, flash: Flash
-)@com.kyleu.projectile.components.views.html.layout.page(s"System User [${model.id}]", cfg) {
-  <div class="collection with-header">
-    <div class="collection-header">
-      <div class="right"><a href="@controllers.admin.auth.routes.SystemUserRowController.editForm(model.id)">Edit</a></div>
-      <div class="right"><a class="theme-text remove-link" onclick="return confirm('Are you sure you want to remove this System User?')" href="@controllers.admin.auth.routes.SystemUserRowController.remove(model.id)">Remove</a></div>
-      <h5>
-        <a href="@controllers.admin.auth.routes.SystemUserRowController.list()"><i class="fa @models.template.Icons.systemUserRow"></i></a>
-        System User [@model.id]
-      </h5>
-    </div>
-    <div class="collection-item">
-      <table class="highlight">
-        <tbody>
-          <tr>
-            <th>Id</th>
-            <td>@model.id</td>
-          </tr>
-          <tr>
-            <th>Username</th>
-            <td>@model.username.getOrElse(com.kyleu.projectile.util.NullUtils.str)</td>
-          </tr>
-          <tr>
-            <th>Provider</th>
-            <td>@model.provider</td>
-          </tr>
-          <tr>
-            <th>Key</th>
-            <td>@model.key</td>
-          </tr>
-          <tr>
-            <th>Role</th>
-            <td>@model.role</td>
-          </tr>
-          <tr>
-            <th>Created</th>
-            <td>@model.created</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    @views.html.admin.note.notes(notes, "systemUserRow", "System User", model.id)
-  </div>
+)@com.kyleu.projectile.components.views.html.layout.page(s"System User", cfg) {
+  @com.kyleu.projectile.components.views.html.layout.card(None) {
+    <div class="right"><a class="btn" href="@controllers.admin.auth.routes.SystemUserRowController.editForm(model.id)">Edit</a></div>
+    <div class="right"><a class="btn-flat remove-link" onclick="return confirm('Are you sure you want to remove this System User?')" href="@controllers.admin.auth.routes.SystemUserRowController.remove(model.id)">Remove</a></div>
+    <table class="highlight responsive-table">
+      <tbody>
+        <tr>
+          <th>Id</th>
+          <td>@model.id</td>
+        </tr>
+        <tr>
+          <th>Username</th>
+          <td>@model.username.getOrElse(com.kyleu.projectile.util.NullUtils.str)</td>
+        </tr>
+        <tr>
+          <th>Provider</th>
+          <td>@model.provider</td>
+        </tr>
+        <tr>
+          <th>Key</th>
+          <td>@model.key</td>
+        </tr>
+        <tr>
+          <th>Role</th>
+          <td>@model.role</td>
+        </tr>
+        <tr>
+          <th>Created</th>
+          <td>@model.created</td>
+        </tr>
+      </tbody>
+    </table>
+  }
+
+  @views.html.admin.note.notes(notes, "systemUserRow", "System User", model.id)
 
   <ul id="model-relations" class="collapsible" data-collapsible="expandable">
     <li id="relation-noteRow-author" data-table="noteRow" data-field="author" data-singular="Note" data-plural="Notes" data-url="@controllers.admin.note.routes.NoteRowController.byAuthor(model.id, limit = Some(5))">
       <div class="collapsible-header">
-        <i class="fa @models.template.Icons.noteRow"></i>
+        <i class="material-icons small">@models.template.Icons.noteRow</i>
         <span class="title">Notes</span>&nbsp;by Author
       </div>
       <div class="collapsible-body"><span>Loading...</span></div>

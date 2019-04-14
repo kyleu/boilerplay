@@ -25,7 +25,7 @@ class NoteRowController @javax.inject.Inject() (
     val cancel = controllers.admin.note.routes.NoteRowController.list()
     val call = controllers.admin.note.routes.NoteRowController.create()
     Future.successful(Ok(views.html.admin.note.noteRowForm(
-      request.identity, app.cfg(Some(request.identity), true, "note", "Notes"), NoteRow.empty(), "New Note", cancel, call, isNew = true, debug = app.config.debug
+      app.cfg(Some(request.identity), true, "note", "note", "Create"), NoteRow.empty(), "New Note", cancel, call, isNew = true, debug = app.config.debug
     )))
   }
 
@@ -42,7 +42,7 @@ class NoteRowController @javax.inject.Inject() (
       val orderBys = OrderBy.forVals(orderBy, orderAsc).toSeq
       searchWithCount(q, orderBys, limit, offset).map(r => renderChoice(t) {
         case MimeTypes.HTML => Ok(views.html.admin.note.noteRowList(
-          request.identity, app.cfg(u = Some(request.identity), admin = true, "note", "Notes"), Some(r._1), r._2, q, orderBy, orderAsc, limit.getOrElse(100), offset.getOrElse(0)
+          app.cfg(u = Some(request.identity), admin = true, "note", "note"), Some(r._1), r._2, q, orderBy, orderAsc, limit.getOrElse(100), offset.getOrElse(0)
         ))
         case MimeTypes.JSON => Ok(NoteRowResult.fromRecords(q, Nil, orderBys, limit, offset, startMs, r._1, r._2).asJson)
         case ServiceController.MimeTypes.csv => csvResponse("NoteRow", svc.csvFor(r._1, r._2))
@@ -64,7 +64,7 @@ class NoteRowController @javax.inject.Inject() (
       val orderBys = OrderBy.forVals(orderBy, orderAsc).toSeq
       svc.getByAuthor(request, author, orderBys, limit, offset).map(models => renderChoice(t) {
         case MimeTypes.HTML => Ok(views.html.admin.note.noteRowByAuthor(
-          request.identity, app.cfg(Some(request.identity), true, "note", "Notes"), author, models, orderBy, orderAsc, limit.getOrElse(5), offset.getOrElse(0)
+          app.cfg(Some(request.identity), true, "note", "note", "Author"), author, models, orderBy, orderAsc, limit.getOrElse(5), offset.getOrElse(0)
         ))
         case MimeTypes.JSON => Ok(models.asJson)
         case ServiceController.MimeTypes.csv => csvResponse("NoteRow by author", svc.csvFor(0, models))
@@ -80,7 +80,7 @@ class NoteRowController @javax.inject.Inject() (
 
     notesF.flatMap(notes => modelF.map {
       case Some(model) => renderChoice(t) {
-        case MimeTypes.HTML => Ok(views.html.admin.note.noteRowView(request.identity, app.cfg(Some(request.identity), true, "note", "Notes"), model, notes, app.config.debug))
+        case MimeTypes.HTML => Ok(views.html.admin.note.noteRowView(app.cfg(Some(request.identity), true, "note", "note", model.id.toString), model, notes, app.config.debug))
         case MimeTypes.JSON => Ok(model.asJson)
         case ServiceController.MimeTypes.png => Ok(renderToPng(v = model)).as(ServiceController.MimeTypes.png)
         case ServiceController.MimeTypes.svg => Ok(renderToSvg(v = model)).as(ServiceController.MimeTypes.svg)
@@ -94,7 +94,7 @@ class NoteRowController @javax.inject.Inject() (
     val call = controllers.admin.note.routes.NoteRowController.edit(id)
     svc.getByPrimaryKey(request, id).map {
       case Some(model) => Ok(
-        views.html.admin.note.noteRowForm(request.identity, app.cfg(Some(request.identity), true, "note", "Notes"), model, s"Note [$id]", cancel, call, debug = app.config.debug)
+        views.html.admin.note.noteRowForm(app.cfg(Some(request.identity), true, "note", "note", "Edit"), model, s"Note [$id]", cancel, call, debug = app.config.debug)
       )
       case None => NotFound(s"No NoteRow found with id [$id]")
     }

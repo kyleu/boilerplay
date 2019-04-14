@@ -1,9 +1,17 @@
 @* Generated File *@
 @(model: models.ddl.FlywaySchemaHistoryRow, hit: String)<div class="search-result">
-  <div class="right">Flyway Schema History</div>
+  <div class="right">
+    <i class="material-icons small">@models.template.Icons.flywaySchemaHistoryRow</i> Flyway Schema History
+  </div>
   <div>
-    <i class="fa @models.template.Icons.flywaySchemaHistoryRow"></i>
     <a href="@controllers.admin.ddl.routes.FlywaySchemaHistoryRowController.view(model.installedRank)">@model.installedRank</a>
   </div>
   <em>@hit</em>
+  <div style="margin-top: 12px;">
+    <div class="chip">Version: @model.version</div>
+    <div class="chip">Description: @model.description</div>
+    <div class="chip">Type: @model.typ</div>
+    <div class="chip">Installed On: @model.installedOn</div>
+    <div class="chip">Success: @model.success</div>
+  </div>
 </div>

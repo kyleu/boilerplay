@@ -1,38 +1,31 @@
 @* Generated File *@
-@(user: com.kyleu.projectile.models.user.SystemUser, cfg: com.kyleu.projectile.models.config.UiConfig, model: models.sync.SyncProgressRow, notes: Seq[com.kyleu.projectile.models.note.Note], debug: Boolean)(
+@(cfg: com.kyleu.projectile.models.config.UiConfig, model: models.sync.SyncProgressRow, notes: Seq[com.kyleu.projectile.models.note.Note], debug: Boolean)(
     implicit request: Request[AnyContent], session: Session, flash: Flash
-)@com.kyleu.projectile.components.views.html.layout.page(s"Sync Progress [${model.key}]", cfg) {
-  <div class="collection with-header">
-    <div class="collection-header">
-      <div class="right"><a href="@controllers.admin.sync.routes.SyncProgressRowController.editForm(model.key)">Edit</a></div>
-      <div class="right"><a class="theme-text remove-link" onclick="return confirm('Are you sure you want to remove this Sync Progress?')" href="@controllers.admin.sync.routes.SyncProgressRowController.remove(model.key)">Remove</a></div>
-      <h5>
-        <a href="@controllers.admin.sync.routes.SyncProgressRowController.list()"><i class="fa @models.template.Icons.syncProgressRow"></i></a>
-        Sync Progress [@model.key]
-      </h5>
-    </div>
-    <div class="collection-item">
-      <table class="highlight">
-        <tbody>
-          <tr>
-            <th>Key</th>
-            <td>@model.key</td>
-          </tr>
-          <tr>
-            <th>Status</th>
-            <td>@model.status</td>
-          </tr>
-          <tr>
-            <th>Message</th>
-            <td>@model.message</td>
-          </tr>
-          <tr>
-            <th>Last Time</th>
-            <td>@model.lastTime</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    @views.html.admin.note.notes(notes, "syncProgressRow", "Sync Progress", model.key)
-  </div>
+)@com.kyleu.projectile.components.views.html.layout.page(s"Sync Progress", cfg) {
+  @com.kyleu.projectile.components.views.html.layout.card(None) {
+    <div class="right"><a class="btn" href="@controllers.admin.sync.routes.SyncProgressRowController.editForm(model.key)">Edit</a></div>
+    <div class="right"><a class="btn-flat remove-link" onclick="return confirm('Are you sure you want to remove this Sync Progress?')" href="@controllers.admin.sync.routes.SyncProgressRowController.remove(model.key)">Remove</a></div>
+    <table class="highlight responsive-table">
+      <tbody>
+        <tr>
+          <th>Key</th>
+          <td>@model.key</td>
+        </tr>
+        <tr>
+          <th>Status</th>
+          <td>@model.status</td>
+        </tr>
+        <tr>
+          <th>Message</th>
+          <td>@model.message</td>
+        </tr>
+        <tr>
+          <th>Last Time</th>
+          <td>@model.lastTime</td>
+        </tr>
+      </tbody>
+    </table>
+  }
+
+  @views.html.admin.note.notes(notes, "syncProgressRow", "Sync Progress", model.key)
 }

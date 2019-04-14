@@ -11,12 +11,11 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 @javax.inject.Singleton
 class SettingKeyTypeController @javax.inject.Inject() (override val app: Application) extends AuthController("settingKeyType") {
-
   def list = withSession("list", admin = true) { implicit request => implicit td =>
     Future.successful(render {
       case Accepts.Html() => Ok(com.kyleu.projectile.views.html.admin.layout.listPage(
         title = "SettingKeyType",
-        cfg = app.cfg(u = Some(request.identity), admin = true),
+        cfg = app.cfg(u = Some(request.identity), admin = true, "settings", "setting_key"),
         vals = SettingKeyType.values.map(v => Html(v.toString))
       ))
       case Accepts.Json() => Ok(SettingKeyType.values.asJson)

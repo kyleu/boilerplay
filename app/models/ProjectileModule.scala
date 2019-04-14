@@ -39,7 +39,7 @@ class ProjectileModule extends AbstractModule with ScalaModule {
         val theme = settings("theme").map(extract[String]).getOrElse("dark")
         val user = UserSettings(name = u.username, theme = theme, avatarUrl = Some(GravatarUrl(u.email)))
 
-        val html = NavHtml(com.fevo.coco.nut.views.html.components.headerRightMenu(user.name, user.avatarUrl.getOrElse("")))
+        val html = NavHtml(views.html.components.headerRightMenu(user.name, user.avatarUrl.getOrElse("")))
 
         val breadcrumbs = UserMenu.breadcrumbs(menu, crumbs)
 
