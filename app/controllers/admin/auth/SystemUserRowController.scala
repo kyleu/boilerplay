@@ -3,7 +3,6 @@ package controllers.admin.auth
 
 import com.kyleu.projectile.controllers.{ServiceAuthController, ServiceController}
 import com.kyleu.projectile.models.Application
-import com.kyleu.projectile.models.config.UiConfig
 import com.kyleu.projectile.models.result.RelationCount
 import com.kyleu.projectile.models.result.orderBy.OrderBy
 import com.kyleu.projectile.services.note.NoteService
@@ -104,9 +103,9 @@ class SystemUserRowController @javax.inject.Inject() (
 
   def relationCounts(id: UUID) = withSession("relation.counts", admin = true) { implicit request => implicit td =>
     val noteRowByAuthorF = noteRowS.countByAuthor(request, id)
-    for (noteRowC <- noteRowByAuthorF) yield {
+    for (noteRowByAuthorC <- noteRowByAuthorF) yield {
       Ok(Seq(
-        RelationCount(model = "noteRow", field = "author", count = noteRowC)
+        RelationCount(model = "noteRow", field = "author", count = noteRowByAuthorC)
       ).asJson)
     }
   }

@@ -3,7 +3,6 @@ package controllers.admin.audit
 
 import com.kyleu.projectile.controllers.{ServiceAuthController, ServiceController}
 import com.kyleu.projectile.models.Application
-import com.kyleu.projectile.models.config.UiConfig
 import com.kyleu.projectile.models.result.RelationCount
 import com.kyleu.projectile.models.result.orderBy.OrderBy
 import com.kyleu.projectile.services.note.NoteService
@@ -103,9 +102,9 @@ class AuditRowController @javax.inject.Inject() (
 
   def relationCounts(id: UUID) = withSession("relation.counts", admin = true) { implicit request => implicit td =>
     val auditRecordRowByAuditIdF = auditRecordRowS.countByAuditId(request, id)
-    for (auditRecordRowC <- auditRecordRowByAuditIdF) yield {
+    for (auditRecordRowByAuditIdC <- auditRecordRowByAuditIdF) yield {
       Ok(Seq(
-        RelationCount(model = "auditRecordRow", field = "auditId", count = auditRecordRowC)
+        RelationCount(model = "auditRecordRow", field = "auditId", count = auditRecordRowByAuditIdC)
       ).asJson)
     }
   }
