@@ -20,8 +20,25 @@ final case class FlywaySchemaHistoryRowResult(
 ) extends BaseResult[FlywaySchemaHistoryRow]
 
 object FlywaySchemaHistoryRowResult {
-  implicit val jsonEncoder: Encoder[FlywaySchemaHistoryRowResult] = deriveEncoder
-  implicit val jsonDecoder: Decoder[FlywaySchemaHistoryRowResult] = deriveDecoder
+  implicit val jsonEncoder: Encoder[FlywaySchemaHistoryRowResult] = (r: FlywaySchemaHistoryRowResult) => io.circe.Json.obj(
+    ("filters", r.filters.asJson),
+    ("orderBys", r.orderBys.asJson),
+    ("totalCount", r.totalCount.asJson),
+    ("paging", r.paging.asJson),
+    ("results", r.results.asJson),
+    ("durationMs", r.durationMs.asJson),
+    ("occurred", r.occurred.asJson)
+  )
+
+  implicit val jsonDecoder: Decoder[FlywaySchemaHistoryRowResult] = (c: io.circe.HCursor) => for {
+    filters <- c.downField("filters").as[Seq[Filter]]
+    orderBys <- c.downField("orderBys").as[Seq[OrderBy]]
+    totalCount <- c.downField("totalCount").as[Int]
+    paging <- c.downField("paging").as[PagingOptions]
+    results <- c.downField("results").as[Seq[FlywaySchemaHistoryRow]]
+    durationMs <- c.downField("durationMs").as[Int]
+    occurred <- c.downField("occurred").as[LocalDateTime]
+  } yield FlywaySchemaHistoryRowResult(filters, orderBys, totalCount, paging, results, durationMs, occurred)
 
   def fromRecords(
     q: Option[String], filters: Seq[Filter] = Nil, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None,

@@ -20,8 +20,25 @@ final case class SettingResult(
 ) extends BaseResult[Setting]
 
 object SettingResult {
-  implicit val jsonEncoder: Encoder[SettingResult] = deriveEncoder
-  implicit val jsonDecoder: Decoder[SettingResult] = deriveDecoder
+  implicit val jsonEncoder: Encoder[SettingResult] = (r: SettingResult) => io.circe.Json.obj(
+    ("filters", r.filters.asJson),
+    ("orderBys", r.orderBys.asJson),
+    ("totalCount", r.totalCount.asJson),
+    ("paging", r.paging.asJson),
+    ("results", r.results.asJson),
+    ("durationMs", r.durationMs.asJson),
+    ("occurred", r.occurred.asJson)
+  )
+
+  implicit val jsonDecoder: Decoder[SettingResult] = (c: io.circe.HCursor) => for {
+    filters <- c.downField("filters").as[Seq[Filter]]
+    orderBys <- c.downField("orderBys").as[Seq[OrderBy]]
+    totalCount <- c.downField("totalCount").as[Int]
+    paging <- c.downField("paging").as[PagingOptions]
+    results <- c.downField("results").as[Seq[Setting]]
+    durationMs <- c.downField("durationMs").as[Int]
+    occurred <- c.downField("occurred").as[LocalDateTime]
+  } yield SettingResult(filters, orderBys, totalCount, paging, results, durationMs, occurred)
 
   def fromRecords(
     q: Option[String], filters: Seq[Filter] = Nil, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None,

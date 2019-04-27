@@ -6,6 +6,7 @@ import com.kyleu.projectile.models.Application
 import com.kyleu.projectile.models.auth.AuthActions
 import com.kyleu.projectile.models.config.{NavHtml, NavUrls, UiConfig, UserSettings}
 import com.kyleu.projectile.models.user.Role
+import com.kyleu.projectile.services.database.{ApplicationDatabase, JdbcDatabase}
 import com.kyleu.projectile.services.note.NoteService
 import com.kyleu.projectile.util.JsonSerializers.extract
 import com.kyleu.projectile.util.metrics.MetricsConfig
@@ -25,10 +26,13 @@ class ProjectileModule extends AbstractModule with ScalaModule {
   }
 
   @Provides
-  def provideTracingService(cnf: MetricsConfig): TracingService = new OpenTracingService(cnf)
+  def providesTracingService(cnf: MetricsConfig): TracingService = new OpenTracingService(cnf)
 
   @Provides
-  def provideApplicationActions = Application.Actions(
+  def providesJdbcDatabase(): JdbcDatabase = ApplicationDatabase
+
+  @Provides
+  def providesApplicationActions = Application.Actions(
     projectName = Version.projectName,
     configForUser = (su, admin, crumbs) => su match {
       case None => UiConfig.empty.copy(projectName = Version.projectName, menu = UserMenu.guestMenu)
@@ -57,5 +61,5 @@ class ProjectileModule extends AbstractModule with ScalaModule {
   }
 
   @Provides
-  def provideGraphQLSchema(): GraphQLSchema = Schema
+  def providesGraphQLSchema(): GraphQLSchema = Schema
 }

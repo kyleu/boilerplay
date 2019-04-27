@@ -7,8 +7,19 @@ import com.kyleu.projectile.util.JsonSerializers._
 import java.time.LocalDateTime
 
 object SyncProgressRow {
-  implicit val jsonEncoder: Encoder[SyncProgressRow] = deriveEncoder
-  implicit val jsonDecoder: Decoder[SyncProgressRow] = deriveDecoder
+  implicit val jsonEncoder: Encoder[SyncProgressRow] = (r: SyncProgressRow) => io.circe.Json.obj(
+    ("key", r.key.asJson),
+    ("status", r.status.asJson),
+    ("message", r.message.asJson),
+    ("lastTime", r.lastTime.asJson)
+  )
+
+  implicit val jsonDecoder: Decoder[SyncProgressRow] = (c: io.circe.HCursor) => for {
+    key <- c.downField("key").as[String]
+    status <- c.downField("status").as[String]
+    message <- c.downField("message").as[String]
+    lastTime <- c.downField("lastTime").as[LocalDateTime]
+  } yield SyncProgressRow(key, status, message, lastTime)
 
   def empty(
     key: String = "",

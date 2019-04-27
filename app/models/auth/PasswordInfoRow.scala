@@ -7,8 +7,23 @@ import com.kyleu.projectile.util.JsonSerializers._
 import java.time.LocalDateTime
 
 object PasswordInfoRow {
-  implicit val jsonEncoder: Encoder[PasswordInfoRow] = deriveEncoder
-  implicit val jsonDecoder: Decoder[PasswordInfoRow] = deriveDecoder
+  implicit val jsonEncoder: Encoder[PasswordInfoRow] = (r: PasswordInfoRow) => io.circe.Json.obj(
+    ("provider", r.provider.asJson),
+    ("key", r.key.asJson),
+    ("hasher", r.hasher.asJson),
+    ("password", r.password.asJson),
+    ("salt", r.salt.asJson),
+    ("created", r.created.asJson)
+  )
+
+  implicit val jsonDecoder: Decoder[PasswordInfoRow] = (c: io.circe.HCursor) => for {
+    provider <- c.downField("provider").as[String]
+    key <- c.downField("key").as[String]
+    hasher <- c.downField("hasher").as[String]
+    password <- c.downField("password").as[String]
+    salt <- c.downField("salt").as[Option[String]]
+    created <- c.downField("created").as[LocalDateTime]
+  } yield PasswordInfoRow(provider, key, hasher, password, salt, created)
 
   def empty(
     provider: String = "",

@@ -20,8 +20,25 @@ final case class AuditRecordRowResult(
 ) extends BaseResult[AuditRecordRow]
 
 object AuditRecordRowResult {
-  implicit val jsonEncoder: Encoder[AuditRecordRowResult] = deriveEncoder
-  implicit val jsonDecoder: Decoder[AuditRecordRowResult] = deriveDecoder
+  implicit val jsonEncoder: Encoder[AuditRecordRowResult] = (r: AuditRecordRowResult) => io.circe.Json.obj(
+    ("filters", r.filters.asJson),
+    ("orderBys", r.orderBys.asJson),
+    ("totalCount", r.totalCount.asJson),
+    ("paging", r.paging.asJson),
+    ("results", r.results.asJson),
+    ("durationMs", r.durationMs.asJson),
+    ("occurred", r.occurred.asJson)
+  )
+
+  implicit val jsonDecoder: Decoder[AuditRecordRowResult] = (c: io.circe.HCursor) => for {
+    filters <- c.downField("filters").as[Seq[Filter]]
+    orderBys <- c.downField("orderBys").as[Seq[OrderBy]]
+    totalCount <- c.downField("totalCount").as[Int]
+    paging <- c.downField("paging").as[PagingOptions]
+    results <- c.downField("results").as[Seq[AuditRecordRow]]
+    durationMs <- c.downField("durationMs").as[Int]
+    occurred <- c.downField("occurred").as[LocalDateTime]
+  } yield AuditRecordRowResult(filters, orderBys, totalCount, paging, results, durationMs, occurred)
 
   def fromRecords(
     q: Option[String], filters: Seq[Filter] = Nil, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None,

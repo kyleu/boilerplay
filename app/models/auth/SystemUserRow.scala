@@ -8,8 +8,23 @@ import java.time.LocalDateTime
 import java.util.UUID
 
 object SystemUserRow {
-  implicit val jsonEncoder: Encoder[SystemUserRow] = deriveEncoder
-  implicit val jsonDecoder: Decoder[SystemUserRow] = deriveDecoder
+  implicit val jsonEncoder: Encoder[SystemUserRow] = (r: SystemUserRow) => io.circe.Json.obj(
+    ("id", r.id.asJson),
+    ("username", r.username.asJson),
+    ("provider", r.provider.asJson),
+    ("key", r.key.asJson),
+    ("role", r.role.asJson),
+    ("created", r.created.asJson)
+  )
+
+  implicit val jsonDecoder: Decoder[SystemUserRow] = (c: io.circe.HCursor) => for {
+    id <- c.downField("id").as[UUID]
+    username <- c.downField("username").as[Option[String]]
+    provider <- c.downField("provider").as[String]
+    key <- c.downField("key").as[String]
+    role <- c.downField("role").as[String]
+    created <- c.downField("created").as[LocalDateTime]
+  } yield SystemUserRow(id, username, provider, key, role, created)
 
   def empty(
     id: UUID = UUID.randomUUID,

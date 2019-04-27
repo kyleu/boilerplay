@@ -9,8 +9,25 @@ import java.time.LocalDateTime
 import java.util.UUID
 
 object ScheduledTaskRunRow {
-  implicit val jsonEncoder: Encoder[ScheduledTaskRunRow] = deriveEncoder
-  implicit val jsonDecoder: Decoder[ScheduledTaskRunRow] = deriveDecoder
+  implicit val jsonEncoder: Encoder[ScheduledTaskRunRow] = (r: ScheduledTaskRunRow) => io.circe.Json.obj(
+    ("id", r.id.asJson),
+    ("task", r.task.asJson),
+    ("arguments", r.arguments.asJson),
+    ("status", r.status.asJson),
+    ("output", r.output.asJson),
+    ("started", r.started.asJson),
+    ("completed", r.completed.asJson)
+  )
+
+  implicit val jsonDecoder: Decoder[ScheduledTaskRunRow] = (c: io.circe.HCursor) => for {
+    id <- c.downField("id").as[UUID]
+    task <- c.downField("task").as[String]
+    arguments <- c.downField("arguments").as[List[String]]
+    status <- c.downField("status").as[String]
+    output <- c.downField("output").as[Json]
+    started <- c.downField("started").as[LocalDateTime]
+    completed <- c.downField("completed").as[LocalDateTime]
+  } yield ScheduledTaskRunRow(id, task, arguments, status, output, started, completed)
 
   def empty(
     id: UUID = UUID.randomUUID,

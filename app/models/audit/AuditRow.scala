@@ -9,8 +9,31 @@ import java.time.LocalDateTime
 import java.util.UUID
 
 object AuditRow {
-  implicit val jsonEncoder: Encoder[AuditRow] = deriveEncoder
-  implicit val jsonDecoder: Decoder[AuditRow] = deriveDecoder
+  implicit val jsonEncoder: Encoder[AuditRow] = (r: AuditRow) => io.circe.Json.obj(
+    ("id", r.id.asJson),
+    ("act", r.act.asJson),
+    ("app", r.app.asJson),
+    ("client", r.client.asJson),
+    ("server", r.server.asJson),
+    ("userId", r.userId.asJson),
+    ("tags", r.tags.asJson),
+    ("msg", r.msg.asJson),
+    ("started", r.started.asJson),
+    ("completed", r.completed.asJson)
+  )
+
+  implicit val jsonDecoder: Decoder[AuditRow] = (c: io.circe.HCursor) => for {
+    id <- c.downField("id").as[UUID]
+    act <- c.downField("act").as[String]
+    app <- c.downField("app").as[String]
+    client <- c.downField("client").as[String]
+    server <- c.downField("server").as[String]
+    userId <- c.downField("userId").as[UUID]
+    tags <- c.downField("tags").as[Json]
+    msg <- c.downField("msg").as[String]
+    started <- c.downField("started").as[LocalDateTime]
+    completed <- c.downField("completed").as[LocalDateTime]
+  } yield AuditRow(id, act, app, client, server, userId, tags, msg, started, completed)
 
   def empty(
     id: UUID = UUID.randomUUID,

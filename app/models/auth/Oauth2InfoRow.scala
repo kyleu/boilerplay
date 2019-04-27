@@ -8,8 +8,27 @@ import io.circe.Json
 import java.time.LocalDateTime
 
 object Oauth2InfoRow {
-  implicit val jsonEncoder: Encoder[Oauth2InfoRow] = deriveEncoder
-  implicit val jsonDecoder: Decoder[Oauth2InfoRow] = deriveDecoder
+  implicit val jsonEncoder: Encoder[Oauth2InfoRow] = (r: Oauth2InfoRow) => io.circe.Json.obj(
+    ("provider", r.provider.asJson),
+    ("key", r.key.asJson),
+    ("accessToken", r.accessToken.asJson),
+    ("tokenType", r.tokenType.asJson),
+    ("expiresIn", r.expiresIn.asJson),
+    ("refreshToken", r.refreshToken.asJson),
+    ("params", r.params.asJson),
+    ("created", r.created.asJson)
+  )
+
+  implicit val jsonDecoder: Decoder[Oauth2InfoRow] = (c: io.circe.HCursor) => for {
+    provider <- c.downField("provider").as[String]
+    key <- c.downField("key").as[String]
+    accessToken <- c.downField("accessToken").as[String]
+    tokenType <- c.downField("tokenType").as[Option[String]]
+    expiresIn <- c.downField("expiresIn").as[Option[Long]]
+    refreshToken <- c.downField("refreshToken").as[Option[String]]
+    params <- c.downField("params").as[Option[Json]]
+    created <- c.downField("created").as[LocalDateTime]
+  } yield Oauth2InfoRow(provider, key, accessToken, tokenType, expiresIn, refreshToken, params, created)
 
   def empty(
     provider: String = "",

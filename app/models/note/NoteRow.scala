@@ -8,8 +8,23 @@ import java.time.LocalDateTime
 import java.util.UUID
 
 object NoteRow {
-  implicit val jsonEncoder: Encoder[NoteRow] = deriveEncoder
-  implicit val jsonDecoder: Decoder[NoteRow] = deriveDecoder
+  implicit val jsonEncoder: Encoder[NoteRow] = (r: NoteRow) => io.circe.Json.obj(
+    ("id", r.id.asJson),
+    ("relType", r.relType.asJson),
+    ("relPk", r.relPk.asJson),
+    ("text", r.text.asJson),
+    ("author", r.author.asJson),
+    ("created", r.created.asJson)
+  )
+
+  implicit val jsonDecoder: Decoder[NoteRow] = (c: io.circe.HCursor) => for {
+    id <- c.downField("id").as[UUID]
+    relType <- c.downField("relType").as[Option[String]]
+    relPk <- c.downField("relPk").as[Option[String]]
+    text <- c.downField("text").as[String]
+    author <- c.downField("author").as[UUID]
+    created <- c.downField("created").as[LocalDateTime]
+  } yield NoteRow(id, relType, relPk, text, author, created)
 
   def empty(
     id: UUID = UUID.randomUUID,
