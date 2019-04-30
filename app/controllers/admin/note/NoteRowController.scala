@@ -1,6 +1,7 @@
 /* Generated File */
 package controllers.admin.note
 
+import com.kyleu.projectile.components.views.html.layout.{card, page}
 import com.kyleu.projectile.controllers.{ServiceAuthController, ServiceController}
 import com.kyleu.projectile.models.Application
 import com.kyleu.projectile.models.result.orderBy.OrderBy
@@ -58,13 +59,13 @@ class NoteRowController @javax.inject.Inject() (
     }
   }
 
-  def byAuthor(author: UUID, orderBy: Option[String], orderAsc: Boolean, limit: Option[Int], offset: Option[Int], t: Option[String] = None) = {
+  def byAuthor(author: UUID, orderBy: Option[String], orderAsc: Boolean, limit: Option[Int], offset: Option[Int], t: Option[String] = None, embedded: Boolean = false) = {
     withSession("get.by.author", admin = true) { implicit request => implicit td =>
       val orderBys = OrderBy.forVals(orderBy, orderAsc).toSeq
       svc.getByAuthor(request, author, orderBys, limit, offset).map(models => renderChoice(t) {
-        case MimeTypes.HTML => Ok(views.html.admin.note.noteRowByAuthor(
-          app.cfg(Some(request.identity), true, "note", "note", "Author"), author, models, orderBy, orderAsc, limit.getOrElse(5), offset.getOrElse(0)
-        ))
+        case MimeTypes.HTML =>
+          val list = views.html.admin.note.noteRowByAuthor(app.cfg(Some(request.identity), true, "note", "note", "Author"), author, models, orderBy, orderAsc, limit.getOrElse(5), offset.getOrElse(0))
+          if (embedded) { Ok(list) } else { Ok(page(s"Page Locations by Page Id [$pageId]", app.cfg(Some(request.identity), true))(card(None)(list))) }
         case MimeTypes.JSON => Ok(models.asJson)
         case ServiceController.MimeTypes.csv => csvResponse("NoteRow by author", svc.csvFor(0, models))
         case ServiceController.MimeTypes.png => Ok(renderToPng(v = models)).as(ServiceController.MimeTypes.png)

@@ -2,7 +2,7 @@ import sbt._
 
 object Dependencies {
   object Projectile {
-    val version = "1.7.2"
+    val version = "1.7.7"
     val all = Seq("admin", "doobie", "slick").map(s => "com.kyleu" %% s"projectile-lib-$s" % version)
   }
 
@@ -10,7 +10,7 @@ object Dependencies {
     val filters = play.sbt.PlayImport.filters
     val cache = play.sbt.PlayImport.ehcache
     val guice = play.sbt.PlayImport.guice
-    val json = "com.typesafe.play" %% "play-json" % "2.6.13"
+    val json = "com.typesafe.play" %% "play-json" % "2.7.3"
     val ws = play.sbt.PlayImport.ws
 
     val all = Seq(filters, guice, ws, json, cache)

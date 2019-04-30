@@ -15,7 +15,7 @@ GET         /auditRecordRow                                           controller
 GET         /auditRecordRow/autocomplete                              controllers.admin.audit.AuditRecordRowController.autocomplete(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None)
 GET         /auditRecordRow/form                                      controllers.admin.audit.AuditRecordRowController.createForm
 POST        /auditRecordRow                                           controllers.admin.audit.AuditRecordRowController.create
-GET         /auditRecordRow/byAuditId/:auditId                        controllers.admin.audit.AuditRecordRowController.byAuditId(auditId: java.util.UUID, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None)
+GET         /auditRecordRow/byAuditId/:auditId                        controllers.admin.audit.AuditRecordRowController.byAuditId(auditId: java.util.UUID, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None, embedded: Boolean ?= false)
 GET         /auditRecordRow/:id                                       controllers.admin.audit.AuditRecordRowController.view(id: java.util.UUID, t: Option[String] ?= None)
 GET         /auditRecordRow/:id/form                                  controllers.admin.audit.AuditRecordRowController.editForm(id: java.util.UUID)
 POST        /auditRecordRow/:id                                       controllers.admin.audit.AuditRecordRowController.edit(id: java.util.UUID)
