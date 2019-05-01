@@ -15,6 +15,7 @@
           @com.kyleu.projectile.views.html.components.form.textField(selected = isNew, key = "key", title = "Key", value = Some(model.key), nullable = false)
           @com.kyleu.projectile.views.html.components.form.textField(selected = isNew, key = "role", title = "Role", value = Some(model.role), nullable = false)
           @com.kyleu.projectile.views.html.components.form.localDateTimeField(selected = isNew, key = "created", title = "Created", value = Some(model.created), nullable = false)
+          @com.kyleu.projectile.views.html.components.form.jsonField(selected = isNew, key = "settings", title = "Settings", value = Some(model.settings), nullable = false)
         </tbody>
       </table>
     }

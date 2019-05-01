@@ -3,9 +3,11 @@
   "template" : "play",
   "input" : "boilerplay-db",
   "description" : "...",
-  "features" : [ "doobie", "audit", "datamodel", "graphql", "openapi", "service", "slick", "controller", "scalajs", "notes", "core", "tests" ],
+  "features" : [ "doobie", "audit", "datamodel", "wiki", "graphql", "openapi", "service", "slick", "controller", "scalajs", "notes", "core", "tests" ],
   "flags" : [ "components" ],
-  "paths" : { },
+  "paths" : {
+    "wiki" : "doc/src/main/paradox"
+  },
   "packages" : { },
   "classOverrides" : { },
   "defaultEnumFeatures" : [ "auth", "slick", "doobie", "controller", "core", "graphql" ],

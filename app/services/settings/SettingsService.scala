@@ -1,19 +1,20 @@
 package services.settings
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import com.kyleu.projectile.models.auth.UserCredentials
 import com.kyleu.projectile.models.result.data.DataField
+import com.kyleu.projectile.services.database.JdbcDatabase
 import models.settings.{Setting, SettingKeyType}
-import com.kyleu.projectile.services.database.ApplicationDatabase
 import com.kyleu.projectile.util.Logging
 import com.kyleu.projectile.util.tracing.TraceData
 import models.queries.settings.SettingQueries
 import com.kyleu.projectile.util.tracing.OpenTracingService
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @javax.inject.Singleton
-class SettingsService @javax.inject.Inject() (tracing: OpenTracingService, svc: SettingService) extends Logging {
+class SettingsService @javax.inject.Inject() (
+    tracing: OpenTracingService, db: JdbcDatabase, svc: SettingService
+)(implicit ec: ExecutionContext) extends Logging {
   private[this] var settings = Seq.empty[Setting]
   private[this] var settingsMap = Map.empty[SettingKeyType, String]
 
@@ -27,7 +28,7 @@ class SettingsService @javax.inject.Inject() (tracing: OpenTracingService, svc: 
   }
 
   def load()(implicit trace: TraceData) = tracing.trace("settings.service.load") { _ =>
-    ApplicationDatabase.queryF(SettingQueries.getAll()).map { set =>
+    db.queryF(SettingQueries.getAll()).map { set =>
       settingsMap = set.map(s => s.k -> s.v).toMap
       settings = SettingKeyType.values.map(k => Setting(k, settingsMap.getOrElse(k, k.default)))
       log.info(s"Loaded [${set.size}] system settings.")

@@ -1,4 +1,3 @@
-/* Generated File */
 package models.template
 
 import com.kyleu.projectile.models.config.NavMenu

@@ -11,14 +11,13 @@ import com.kyleu.projectile.web.util.ReftreeUtils._
 import java.util.UUID
 import models.task.{ScheduledTaskRunRow, ScheduledTaskRunRowResult}
 import play.api.http.MimeTypes
-import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.{ExecutionContext, Future}
 import services.task.ScheduledTaskRunRowService
 
 @javax.inject.Singleton
 class ScheduledTaskRunRowController @javax.inject.Inject() (
     override val app: Application, svc: ScheduledTaskRunRowService, noteSvc: NoteService
-) extends ServiceAuthController(svc) {
+)(implicit ec: ExecutionContext) extends ServiceAuthController(svc) {
 
   def createForm = withSession("create.form", admin = true) { implicit request => implicit td =>
     val cancel = controllers.admin.task.routes.ScheduledTaskRunRowController.list()

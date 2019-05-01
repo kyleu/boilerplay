@@ -1,14 +1,12 @@
 package services.task.scheduled
 
 import com.kyleu.projectile.util.DateUtils
-
-import scala.concurrent.ExecutionContext.Implicits.global
 import com.kyleu.projectile.models.auth.UserCredentials
 import models.task.scheduled.ScheduledTask
 import services.sync.SyncService
 import com.kyleu.projectile.util.tracing.TraceData
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 import scala.util.{Failure, Success, Try}
 
@@ -16,7 +14,7 @@ import scala.util.{Failure, Success, Try}
 class ScheduledTasks @javax.inject.Inject() (
     helloWorldTask: HelloWorldTask,
     syncService: SyncService
-) {
+)(implicit ec: ExecutionContext) {
   val all = Seq[ScheduledTask](helloWorldTask)
 
   def byKey(key: String) = all.find(_.key == key).getOrElse(throw new IllegalStateException(s"No task with key [$key]."))

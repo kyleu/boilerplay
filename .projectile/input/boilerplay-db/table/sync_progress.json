@@ -76,6 +76,22 @@
   },
   "foreignKeys" : [ ],
   "indexes" : [ {
+    "name" : "sync_progress_last_time_idx",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "last_time",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "sync_progress_message_idx",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "message",
+      "ascending" : true
+    } ]
+  }, {
     "name" : "sync_progress_pkey",
     "unique" : true,
     "indexType" : "other",

@@ -12,11 +12,10 @@ import java.time.LocalDateTime
 import java.util.UUID
 import models.queries.task.ScheduledTaskRunRowQueries
 import models.task.ScheduledTaskRunRow
-import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.{ExecutionContext, Future}
 
 @javax.inject.Singleton
-class ScheduledTaskRunRowService @javax.inject.Inject() (val db: JdbcDatabase, override val tracing: TracingService) extends ModelServiceHelper[ScheduledTaskRunRow]("scheduledTaskRunRow") {
+class ScheduledTaskRunRowService @javax.inject.Inject() (val db: JdbcDatabase, override val tracing: TracingService)(implicit ec: ExecutionContext) extends ModelServiceHelper[ScheduledTaskRunRow]("scheduledTaskRunRow") {
   def getByPrimaryKey(creds: Credentials, id: UUID)(implicit trace: TraceData) = {
     traceF("get.by.primary.key")(td => db.queryF(ScheduledTaskRunRowQueries.getByPrimaryKey(id))(td))
   }

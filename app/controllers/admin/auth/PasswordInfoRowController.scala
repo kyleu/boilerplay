@@ -10,14 +10,13 @@ import com.kyleu.projectile.util.JsonSerializers._
 import com.kyleu.projectile.web.util.ReftreeUtils._
 import models.auth.{PasswordInfoRow, PasswordInfoRowResult}
 import play.api.http.MimeTypes
-import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.{ExecutionContext, Future}
 import services.auth.PasswordInfoRowService
 
 @javax.inject.Singleton
 class PasswordInfoRowController @javax.inject.Inject() (
     override val app: Application, svc: PasswordInfoRowService, noteSvc: NoteService
-) extends ServiceAuthController(svc) {
+)(implicit ec: ExecutionContext) extends ServiceAuthController(svc) {
 
   def createForm = withSession("create.form", admin = true) { implicit request => implicit td =>
     val cancel = controllers.admin.auth.routes.PasswordInfoRowController.list()

@@ -12,11 +12,10 @@ import java.time.LocalDateTime
 import java.util.UUID
 import models.note.NoteRow
 import models.queries.note.NoteRowQueries
-import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.{ExecutionContext, Future}
 
 @javax.inject.Singleton
-class NoteRowService @javax.inject.Inject() (val db: JdbcDatabase, override val tracing: TracingService) extends ModelServiceHelper[NoteRow]("noteRow") {
+class NoteRowService @javax.inject.Inject() (val db: JdbcDatabase, override val tracing: TracingService)(implicit ec: ExecutionContext) extends ModelServiceHelper[NoteRow]("noteRow") {
   def getByPrimaryKey(creds: Credentials, id: UUID)(implicit trace: TraceData) = {
     traceF("get.by.primary.key")(td => db.queryF(NoteRowQueries.getByPrimaryKey(id))(td))
   }

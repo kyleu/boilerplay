@@ -6,11 +6,10 @@ import com.kyleu.projectile.models.Application
 import com.kyleu.projectile.util.JsonSerializers._
 import models.settings.SettingKeyType
 import play.twirl.api.Html
-import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.{ExecutionContext, Future}
 
 @javax.inject.Singleton
-class SettingKeyTypeController @javax.inject.Inject() (override val app: Application) extends AuthController("settingKeyType") {
+class SettingKeyTypeController @javax.inject.Inject() (override val app: Application)(implicit ec: ExecutionContext) extends AuthController("settingKeyType") {
   def list = withSession("list", admin = true) { implicit request => implicit td =>
     Future.successful(render {
       case Accepts.Html() => Ok(com.kyleu.projectile.views.html.admin.layout.listPage(

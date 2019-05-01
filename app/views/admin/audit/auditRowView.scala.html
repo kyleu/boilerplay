@@ -54,10 +54,11 @@
   @views.html.admin.note.notes(notes, "auditRow", "Audit", model.id)
 
   <ul id="model-relations" class="collapsible" data-collapsible="expandable">
-    <li id="relation-auditRecordRow-auditId" data-table="auditRecordRow" data-field="auditId" data-singular="Audit Record" data-plural="Audit Records" data-url="@controllers.admin.audit.routes.AuditRecordRowController.byAuditId(model.id, limit = Some(5))">
+    <li id="relation-auditRecordRow-auditId" data-table="auditRecordRow" data-field="auditId" data-singular="Audit Record" data-plural="Audit Records" data-url="@controllers.admin.audit.routes.AuditRecordRowController.byAuditId(model.id, limit = Some(5), embedded = true)">
       <div class="collapsible-header">
         <i class="material-icons small">@models.template.Icons.auditRecordRow</i>
         <span class="title">Audit Records</span>&nbsp;by Audit Id
+        <span class="badge"><a href="@controllers.admin.audit.routes.AuditRecordRowController.byAuditId(model.id)"><i class="material-icons">insert_link</i></a></span>
       </div>
       <div class="collapsible-body"><span>Loading...</span></div>
     </li>

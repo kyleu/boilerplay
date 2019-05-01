@@ -1,5 +1,6 @@
 {
-  "url" : "jdbc:postgresql://localhost/boilerplay",
+  "host" : "localhost",
+  "port" : 5432,
   "username" : "boilerplay",
   "password" : "boilerplay",
   "ssl" : false,

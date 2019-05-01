@@ -10,11 +10,10 @@ import com.kyleu.projectile.util.CsvUtils
 import com.kyleu.projectile.util.tracing.{TraceData, TracingService}
 import models.queries.settings.SettingQueries
 import models.settings.{Setting, SettingKeyType}
-import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.{ExecutionContext, Future}
 
 @javax.inject.Singleton
-class SettingService @javax.inject.Inject() (val db: JdbcDatabase, override val tracing: TracingService) extends ModelServiceHelper[Setting]("setting") {
+class SettingService @javax.inject.Inject() (val db: JdbcDatabase, override val tracing: TracingService)(implicit ec: ExecutionContext) extends ModelServiceHelper[Setting]("setting") {
   def getByPrimaryKey(creds: Credentials, k: SettingKeyType)(implicit trace: TraceData) = {
     traceF("get.by.primary.key")(td => db.queryF(SettingQueries.getByPrimaryKey(k))(td))
   }

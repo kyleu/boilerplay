@@ -7,6 +7,7 @@ import com.kyleu.projectile.models.queries.{BaseQueries, ResultFieldHelper}
 import com.kyleu.projectile.models.result.data.DataField
 import com.kyleu.projectile.models.result.filter.Filter
 import com.kyleu.projectile.models.result.orderBy.OrderBy
+import io.circe.Json
 import java.time.LocalDateTime
 import java.util.UUID
 import models.auth.SystemUserRow
@@ -18,7 +19,8 @@ object SystemUserRowQueries extends BaseQueries[SystemUserRow]("systemUserRow", 
     DatabaseField(title = "Provider", prop = "provider", col = "provider", typ = StringType),
     DatabaseField(title = "Key", prop = "key", col = "key", typ = StringType),
     DatabaseField(title = "Role", prop = "role", col = "role", typ = StringType),
-    DatabaseField(title = "Created", prop = "created", col = "created", typ = TimestampType)
+    DatabaseField(title = "Created", prop = "created", col = "created", typ = TimestampType),
+    DatabaseField(title = "Settings", prop = "settings", col = "settings", typ = JsonType)
   )
   override protected val pkColumns = Seq("id")
   override protected val searchColumns = Seq("id", "username", "provider", "key")
@@ -79,6 +81,7 @@ object SystemUserRowQueries extends BaseQueries[SystemUserRow]("systemUserRow", 
     provider = StringType(row, "provider"),
     key = StringType(row, "key"),
     role = StringType(row, "role"),
-    created = TimestampType(row, "created")
+    created = TimestampType(row, "created"),
+    settings = JsonType(row, "settings")
   )
 }

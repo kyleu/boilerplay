@@ -4,9 +4,9 @@ import com.google.inject.{AbstractModule, Provides}
 import com.kyleu.projectile.graphql.GraphQLSchema
 import com.kyleu.projectile.models.Application
 import com.kyleu.projectile.models.auth.AuthActions
-import com.kyleu.projectile.models.config.{NavHtml, NavUrls, UiConfig, UserSettings}
+import com.kyleu.projectile.models.config.{NavHtml, UiConfig, UserSettings}
 import com.kyleu.projectile.models.user.Role
-import com.kyleu.projectile.services.database.{ApplicationDatabase, JdbcDatabase}
+import com.kyleu.projectile.services.database.JdbcDatabase
 import com.kyleu.projectile.services.note.NoteService
 import com.kyleu.projectile.util.JsonSerializers.extract
 import com.kyleu.projectile.util.metrics.MetricsConfig
@@ -18,6 +18,8 @@ import models.template.UserMenu
 import net.codingwell.scalaguice.ScalaModule
 import services.note.ModelNoteService
 import services.settings.SettingsService
+
+import scala.concurrent.ExecutionContext
 import util.Version
 
 class ProjectileModule extends AbstractModule with ScalaModule {
@@ -25,17 +27,17 @@ class ProjectileModule extends AbstractModule with ScalaModule {
     bind[NoteService].to(classOf[ModelNoteService])
   }
 
-  @Provides
-  def providesTracingService(cnf: MetricsConfig): TracingService = new OpenTracingService(cnf)
+  @Provides @javax.inject.Singleton
+  def providesTracingService(cnf: MetricsConfig): TracingService = new OpenTracingService(cnf)(ExecutionContext.global)
 
-  @Provides
-  def providesJdbcDatabase(): JdbcDatabase = ApplicationDatabase
+  @Provides @javax.inject.Singleton
+  def providesJdbcDatabase(): JdbcDatabase = new JdbcDatabase("application", "database.application")(ExecutionContext.global)
 
-  @Provides
+  @Provides @javax.inject.Singleton
   def providesApplicationActions = Application.Actions(
     projectName = Version.projectName,
-    configForUser = (su, admin, crumbs) => su match {
-      case None => UiConfig.empty.copy(projectName = Version.projectName, menu = UserMenu.guestMenu)
+    configForUser = (su, admin, notifications, crumbs) => su match {
+      case None => UiConfig(projectName = Version.projectName, menu = UserMenu.guestMenu)
       case Some(u) =>
         val menu = if (admin) { UserMenu.adminMenu(u) } else { UserMenu.standardMenu(u) }
 
@@ -43,23 +45,30 @@ class ProjectileModule extends AbstractModule with ScalaModule {
         val theme = settings("theme").map(extract[String]).getOrElse("dark")
         val user = UserSettings(name = u.username, theme = theme, avatarUrl = Some(GravatarUrl(u.email)))
 
-        val html = NavHtml(views.html.components.headerRightMenu(user.name, user.avatarUrl.getOrElse("")))
+        val html = NavHtml(com.kyleu.projectile.views.html.components.headerRightMenu(user.name, user.avatarUrl.getOrElse(""), notifications))
 
         val breadcrumbs = UserMenu.breadcrumbs(menu, crumbs)
 
-        UiConfig(projectName = Version.projectName, menu = menu, urls = NavUrls(), html = html, user = user, breadcrumbs = breadcrumbs)
+        UiConfig(
+          projectName = Version.projectName,
+          menu = menu,
+          html = html,
+          user = user,
+          notifications = notifications,
+          breadcrumbs = breadcrumbs
+        )
     }
   )
 
-  @Provides
+  @Provides @javax.inject.Singleton
   def providesErrorActions() = new ErrorHandler.Actions()
 
-  @Provides
+  @Provides @javax.inject.Singleton
   def providesAuthActions(settings: SettingsService) = new AuthActions(projectName = Version.projectName) {
     override def allowRegistration = settings.allowRegistration
     override def defaultRole = Role.Admin
   }
 
-  @Provides
+  @Provides @javax.inject.Singleton
   def providesGraphQLSchema(): GraphQLSchema = Schema
 }

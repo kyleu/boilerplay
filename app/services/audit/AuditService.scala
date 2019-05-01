@@ -1,6 +1,7 @@
 package services.audit
 
 import com.kyleu.projectile.models.Configuration
+import com.kyleu.projectile.services.database.JdbcDatabase
 import com.kyleu.projectile.util.Logging
 import com.kyleu.projectile.util.tracing.TraceData
 import models.audit._
@@ -9,13 +10,13 @@ import com.kyleu.projectile.util.tracing.OpenTracingService
 
 @javax.inject.Singleton
 class AuditService @javax.inject.Inject() (
-    tracing: OpenTracingService, inject: Injector, config: Configuration, lookup: AuditLookup, val svc: AuditRowService
+    db: JdbcDatabase, tracing: OpenTracingService, inject: Injector, config: Configuration, lookup: AuditLookup, val svc: AuditRowService
 ) extends Logging {
   AuditHelper.init(this)
 
   def callback(a: Audit, records: Seq[AuditRecordRow])(implicit trace: TraceData) = {
     if (records.exists(r => r.changes.as[Seq[AuditField]].right.get.nonEmpty)) {
-      AuditNotifications.persist(a, records)
+      AuditNotifications.persist(db, a, records)
       log.info(a.changeLog)
       a
     } else {

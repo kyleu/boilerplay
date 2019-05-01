@@ -4,8 +4,6 @@ import java.util.UUID
 
 import akka.actor.ActorSystem
 import com.kyleu.projectile.models.Configuration
-
-import scala.concurrent.ExecutionContext.Implicits.global
 import com.kyleu.projectile.models.auth.UserCredentials
 import models.task.ScheduledTaskRunRow
 import models.task.scheduled.{ScheduledTask, ScheduledTaskOutput}
@@ -15,7 +13,7 @@ import com.kyleu.projectile.util.JsonSerializers._
 import com.kyleu.projectile.util.{DateUtils, Logging}
 import com.kyleu.projectile.util.tracing.{TraceData, TracingService}
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 
 @javax.inject.Singleton
@@ -25,7 +23,7 @@ class ScheduledTaskService @javax.inject.Inject() (
     scheduledTasks: ScheduledTasks,
     tracingService: TracingService,
     syncService: SyncService
-) extends Logging {
+)(implicit ec: ExecutionContext) extends Logging {
   def initSchedule(system: ActorSystem, creds: UserCredentials, args: Seq[String], delaySecs: Int = 5, intervalSecs: Int = 15)(implicit td: TraceData): Unit = {
     if (config.scheduledTaskEnabled) {
       import scala.concurrent.duration._

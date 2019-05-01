@@ -4,9 +4,9 @@ package models.graphql.settings
 import com.kyleu.projectile.graphql.{CommonSchema, GraphQLSchemaHelper}
 import models.settings.SettingKeyType
 import sangria.schema.{EnumType, ListType, fields}
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
-object SettingKeyTypeSchema extends GraphQLSchemaHelper("settingKeyType") {
+object SettingKeyTypeSchema extends GraphQLSchemaHelper("settingKeyType")(ExecutionContext.global) {
   implicit val settingKeyTypeEnumType: EnumType[SettingKeyType] = CommonSchema.deriveStringEnumeratumType(
     name = "SettingKeyType",
     values = SettingKeyType.values

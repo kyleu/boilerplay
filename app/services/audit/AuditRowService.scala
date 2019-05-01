@@ -11,11 +11,10 @@ import com.kyleu.projectile.util.tracing.{TraceData, TracingService}
 import java.util.UUID
 import models.audit.AuditRow
 import models.queries.audit.AuditRowQueries
-import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.{ExecutionContext, Future}
 
 @javax.inject.Singleton
-class AuditRowService @javax.inject.Inject() (val db: JdbcDatabase, override val tracing: TracingService) extends ModelServiceHelper[AuditRow]("auditRow") {
+class AuditRowService @javax.inject.Inject() (val db: JdbcDatabase, override val tracing: TracingService)(implicit ec: ExecutionContext) extends ModelServiceHelper[AuditRow]("auditRow") {
   def getByPrimaryKey(creds: Credentials, id: UUID)(implicit trace: TraceData) = {
     traceF("get.by.primary.key")(td => db.queryF(AuditRowQueries.getByPrimaryKey(id))(td))
   }

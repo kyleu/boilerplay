@@ -12,15 +12,14 @@ import com.kyleu.projectile.web.util.ReftreeUtils._
 import java.util.UUID
 import models.audit.{AuditRow, AuditRowResult}
 import play.api.http.MimeTypes
-import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.{ExecutionContext, Future}
 import services.audit.{AuditRecordRowService, AuditRowService}
 
 @javax.inject.Singleton
 class AuditRowController @javax.inject.Inject() (
     override val app: Application, svc: AuditRowService, noteSvc: NoteService,
     auditRecordRowS: AuditRecordRowService
-) extends ServiceAuthController(svc) {
+)(implicit ec: ExecutionContext) extends ServiceAuthController(svc) {
 
   def createForm = withSession("create.form", admin = true) { implicit request => implicit td =>
     val cancel = controllers.admin.audit.routes.AuditRowController.list()

@@ -1,10 +1,12 @@
 /* Generated File */
-import com.kyleu.projectile.services.database.ApplicationDatabase
+import com.kyleu.projectile.services.database.JdbcDatabase
 import com.kyleu.projectile.util.tracing.TracingService
+import scala.concurrent.ExecutionContext
 
 object TestServices {
+  private[this] implicit val ec = ExecutionContext.global
   private[this] val trace = TracingService.noop
-  private[this] val db = ApplicationDatabase
+  private[this] val db = new JdbcDatabase("application", "database.application")
 
   val auditRowService = new services.audit.AuditRowService(db, trace)
   val auditRecordRowService = new services.audit.AuditRecordRowService(db, trace)

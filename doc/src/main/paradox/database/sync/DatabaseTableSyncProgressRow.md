@@ -7,6 +7,6 @@
 |------------------------------|--------------------|--------|--------|----------|--------------------
 | key                          | string             | true   | true   | true     |
 | status                       | string             | true   | false  | true     |
-| message                      | string             | true   | false  | false    |
-| last_time                    | timestamp          | true   | false  | false    |
+| message                      | string             | true   | false  | true     |
+| last_time                    | timestamp          | true   | false  | true     |
 

@@ -10,11 +10,10 @@ import com.kyleu.projectile.util.CsvUtils
 import com.kyleu.projectile.util.tracing.{TraceData, TracingService}
 import models.auth.PasswordInfoRow
 import models.queries.auth.PasswordInfoRowQueries
-import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.{ExecutionContext, Future}
 
 @javax.inject.Singleton
-class PasswordInfoRowService @javax.inject.Inject() (val db: JdbcDatabase, override val tracing: TracingService) extends ModelServiceHelper[PasswordInfoRow]("passwordInfoRow") {
+class PasswordInfoRowService @javax.inject.Inject() (val db: JdbcDatabase, override val tracing: TracingService)(implicit ec: ExecutionContext) extends ModelServiceHelper[PasswordInfoRow]("passwordInfoRow") {
   def getByPrimaryKey(creds: Credentials, provider: String, key: String)(implicit trace: TraceData) = {
     traceF("get.by.primary.key")(td => db.queryF(PasswordInfoRowQueries.getByPrimaryKey(provider, key))(td))
   }

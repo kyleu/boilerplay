@@ -12,14 +12,13 @@ import com.kyleu.projectile.web.util.ReftreeUtils._
 import java.util.UUID
 import models.audit.{AuditRecordRow, AuditRecordRowResult}
 import play.api.http.MimeTypes
-import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.{ExecutionContext, Future}
 import services.audit.AuditRecordRowService
 
 @javax.inject.Singleton
 class AuditRecordRowController @javax.inject.Inject() (
     override val app: Application, svc: AuditRecordRowService, noteSvc: NoteService
-) extends ServiceAuthController(svc) {
+)(implicit ec: ExecutionContext) extends ServiceAuthController(svc) {
 
   def createForm = withSession("create.form", admin = true) { implicit request => implicit td =>
     val cancel = controllers.admin.audit.routes.AuditRecordRowController.list()
@@ -64,8 +63,9 @@ class AuditRecordRowController @javax.inject.Inject() (
       val orderBys = OrderBy.forVals(orderBy, orderAsc).toSeq
       svc.getByAuditId(request, auditId, orderBys, limit, offset).map(models => renderChoice(t) {
         case MimeTypes.HTML =>
-          val list = views.html.admin.audit.auditRecordRowByAuditId(app.cfg(Some(request.identity), true, "audit", "audit_record", "Audit Id"), auditId, models, orderBy, orderAsc, limit.getOrElse(5), offset.getOrElse(0))
-          if (embedded) { Ok(list) } else { Ok(page(s"Page Locations by Page Id [$pageId]", app.cfg(Some(request.identity), true))(card(None)(list))) }
+          val cfg = app.cfg(Some(request.identity), true, "audit", "audit_record", "Audit Id")
+          val list = views.html.admin.audit.auditRecordRowByAuditId(cfg, auditId, models, orderBy, orderAsc, limit.getOrElse(5), offset.getOrElse(0))
+          if (embedded) { Ok(list) } else { Ok(page(s"Audit Records by Audit Id [$auditId]", cfg)(card(None)(list))) }
         case MimeTypes.JSON => Ok(models.asJson)
         case ServiceController.MimeTypes.csv => csvResponse("AuditRecordRow by auditId", svc.csvFor(0, models))
         case ServiceController.MimeTypes.png => Ok(renderToPng(v = models)).as(ServiceController.MimeTypes.png)

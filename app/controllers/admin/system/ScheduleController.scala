@@ -2,13 +2,11 @@ package controllers.admin.system
 
 import com.kyleu.projectile.controllers.AuthController
 import com.kyleu.projectile.models.Application
-
-import scala.concurrent.ExecutionContext.Implicits.global
 import services.sync.SyncService
 import services.task.ScheduledTaskService
 import services.task.scheduled.ScheduledTasks
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @javax.inject.Singleton
 class ScheduleController @javax.inject.Inject() (
@@ -16,7 +14,7 @@ class ScheduleController @javax.inject.Inject() (
     svc: ScheduledTaskService,
     syncService: SyncService,
     tasks: ScheduledTasks
-) extends AuthController("schedule") {
+)(implicit ec: ExecutionContext) extends AuthController("schedule") {
   def list = withSession("list", admin = true) { implicit request => implicit td =>
     syncService.progressSvc.getByKeySeq(request, tasks.all.map(_.key)).map { syncs =>
       Ok(views.html.admin.task.scheduleList(request.identity, app.cfg(Some(request.identity), admin = true), tasks.all, syncs))

@@ -9,6 +9,7 @@ mutation SystemUserRowRemove {
       key
       role
       created
+      settings
     }
   }
 }

@@ -3,7 +3,7 @@ scalacOptions ++= Seq( "-unchecked", "-deprecation" )
 resolvers += Resolver.typesafeRepo("releases")
 
 // Projectile
-addSbtPlugin("com.kyleu" % "projectile-sbt" % "1.7.7")
+addSbtPlugin("com.kyleu" % "projectile-sbt" % "1.7.8")
 
 // The Play plugin
 addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.7.2")

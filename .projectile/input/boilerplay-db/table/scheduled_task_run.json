@@ -127,6 +127,14 @@
   },
   "foreignKeys" : [ ],
   "indexes" : [ {
+    "name" : "scheduled_task_run_arguments_idx",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "arguments",
+      "ascending" : true
+    } ]
+  }, {
     "name" : "scheduled_task_run_pkey",
     "unique" : true,
     "indexType" : "other",

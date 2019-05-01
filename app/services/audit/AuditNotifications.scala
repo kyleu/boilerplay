@@ -1,6 +1,6 @@
 package services.audit
 
-import com.kyleu.projectile.services.database.ApplicationDatabase
+import com.kyleu.projectile.services.database.JdbcDatabase
 import models.audit.{Audit, AuditRecordRow}
 import scala.concurrent.ExecutionContext.Implicits.global
 import models.queries.audit.{AuditQueries, AuditRecordRowQueries}
@@ -14,10 +14,10 @@ object AuditNotifications extends Logging {
     ret.flatMap(s => f(i).map(_ +: s)(ec))(ec)
   }
 
-  def persist(a: Audit, records: Seq[AuditRecordRow])(implicit trace: TraceData) = {
+  def persist(db: JdbcDatabase, a: Audit, records: Seq[AuditRecordRow])(implicit trace: TraceData) = {
     log.debug(s"Persisting audit [${a.id}]...")
-    val ret = ApplicationDatabase.executeF(AuditQueries.insert(a)).map { _ =>
-      acc(records, (r: AuditRecordRow) => ApplicationDatabase.executeF(AuditRecordRowQueries.insert(r)).map { _ =>
+    val ret = db.executeF(AuditQueries.insert(a)).map { _ =>
+      acc(records, (r: AuditRecordRow) => db.executeF(AuditRecordRowQueries.insert(r)).map { _ =>
         log.debug(s"Persisted audit record [${r.id}] for audit [${a.id}].")
       })(global).map { _ =>
         log.debug(s"Persisted audit [${a.id}] with [${records.size}] records.")

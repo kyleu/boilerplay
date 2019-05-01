@@ -1,5 +1,5 @@
 <!-- Generated File -->
 # setting_key
 
- - AllowRegistration
- - DefaultNewUserRole
+ - Some(AllowRegistration): AllowRegistration
+ - Some(DefaultNewUserRole): DefaultNewUserRole

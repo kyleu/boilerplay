@@ -11,6 +11,7 @@
 | key                          | string             | true   | true   | true     |
 | role                         | string             | true   | false  | false    |
 | created                      | timestamp          | true   | false  | false    |
+| settings                     | json               | true   | false  | false    | '{}'::json
 
 ## References
 

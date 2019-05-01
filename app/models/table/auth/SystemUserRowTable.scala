@@ -2,6 +2,7 @@
 package models.table.auth
 
 import com.kyleu.projectile.services.database.slick.SlickQueryService.imports._
+import io.circe.Json
 import java.time.LocalDateTime
 import java.util.UUID
 import models.auth.SystemUserRow
@@ -20,8 +21,9 @@ class SystemUserRowTable(tag: slick.lifted.Tag) extends Table[SystemUserRow](tag
   val key = column[String]("key")
   val role = column[String]("role")
   val created = column[LocalDateTime]("created")
+  val settings = column[Json]("settings")
 
-  override val * = (id, username, provider, key, role, created) <> (
+  override val * = (id, username, provider, key, role, created, settings) <> (
     (SystemUserRow.apply _).tupled,
     SystemUserRow.unapply
   )

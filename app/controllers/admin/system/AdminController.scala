@@ -3,11 +3,10 @@ package controllers.admin.system
 import com.kyleu.projectile.controllers.AuthController
 import com.kyleu.projectile.models.Application
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @javax.inject.Singleton
-class AdminController @javax.inject.Inject() (override val app: Application) extends AuthController("admin") {
+class AdminController @javax.inject.Inject() (override val app: Application)(implicit ec: ExecutionContext) extends AuthController("admin") {
   def index = withSession("admin.index", admin = true) { implicit request => implicit td =>
     Future.successful(Ok(views.html.admin.index(request.identity, app.cfg(Some(request.identity), admin = true))))
   }

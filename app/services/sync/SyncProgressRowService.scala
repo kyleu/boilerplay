@@ -11,11 +11,10 @@ import com.kyleu.projectile.util.tracing.{TraceData, TracingService}
 import java.time.LocalDateTime
 import models.queries.sync.SyncProgressRowQueries
 import models.sync.SyncProgressRow
-import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.{ExecutionContext, Future}
 
 @javax.inject.Singleton
-class SyncProgressRowService @javax.inject.Inject() (val db: JdbcDatabase, override val tracing: TracingService) extends ModelServiceHelper[SyncProgressRow]("syncProgressRow") {
+class SyncProgressRowService @javax.inject.Inject() (val db: JdbcDatabase, override val tracing: TracingService)(implicit ec: ExecutionContext) extends ModelServiceHelper[SyncProgressRow]("syncProgressRow") {
   def getByPrimaryKey(creds: Credentials, key: String)(implicit trace: TraceData) = {
     traceF("get.by.primary.key")(td => db.queryF(SyncProgressRowQueries.getByPrimaryKey(key))(td))
   }

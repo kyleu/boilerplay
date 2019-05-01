@@ -10,14 +10,13 @@ import com.kyleu.projectile.util.JsonSerializers._
 import com.kyleu.projectile.web.util.ReftreeUtils._
 import models.ddl.{FlywaySchemaHistoryRow, FlywaySchemaHistoryRowResult}
 import play.api.http.MimeTypes
-import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.{ExecutionContext, Future}
 import services.ddl.FlywaySchemaHistoryRowService
 
 @javax.inject.Singleton
 class FlywaySchemaHistoryRowController @javax.inject.Inject() (
     override val app: Application, svc: FlywaySchemaHistoryRowService, noteSvc: NoteService
-) extends ServiceAuthController(svc) {
+)(implicit ec: ExecutionContext) extends ServiceAuthController(svc) {
 
   def createForm = withSession("create.form", admin = true) { implicit request => implicit td =>
     val cancel = controllers.admin.ddl.routes.FlywaySchemaHistoryRowController.list()

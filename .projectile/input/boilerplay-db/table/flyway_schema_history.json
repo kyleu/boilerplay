@@ -172,6 +172,22 @@
   },
   "foreignKeys" : [ ],
   "indexes" : [ {
+    "name" : "flyway_schema_history_description_idx",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "description",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "flyway_schema_history_installed_on_idx",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "installed_on",
+      "ascending" : true
+    } ]
+  }, {
     "name" : "flyway_schema_history_pk",
     "unique" : true,
     "indexType" : "other",
@@ -185,6 +201,22 @@
     "indexType" : "other",
     "columns" : [ {
       "name" : "success",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "flyway_schema_history_type_idx",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "type",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "flyway_schema_history_version_idx",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "version",
       "ascending" : true
     } ]
   } ]

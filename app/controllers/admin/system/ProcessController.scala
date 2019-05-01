@@ -6,16 +6,14 @@ import com.google.inject.Injector
 import com.kyleu.projectile.controllers.AuthController
 import com.kyleu.projectile.graphql.GraphQLService
 import com.kyleu.projectile.models.Application
-
-import scala.concurrent.ExecutionContext.Implicits.global
 import services.process.ProcessService
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @javax.inject.Singleton
 class ProcessController @javax.inject.Inject() (
     override val app: Application, injector: Injector, graphQLService: GraphQLService
-) extends AuthController("process") {
+)(implicit ec: ExecutionContext) extends AuthController("process") {
   def list = withSession("sandbox.list", admin = true) { implicit request => implicit td =>
     Future.successful(Ok(views.html.admin.process.procList(request.identity, app.cfg(Some(request.identity), admin = true), ProcessService.getActive)))
   }

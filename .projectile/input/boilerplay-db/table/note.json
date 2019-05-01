@@ -116,11 +116,51 @@
     } ]
   } ],
   "indexes" : [ {
+    "name" : "note_author_idx",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "author",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "note_created_idx",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "created",
+      "ascending" : true
+    } ]
+  }, {
     "name" : "note_pkey",
     "unique" : true,
     "indexType" : "other",
     "columns" : [ {
       "name" : "id",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "note_rel_pk_idx",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "rel_pk",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "note_rel_type_idx",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "rel_type",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "note_text_idx",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "text",
       "ascending" : true
     } ]
   } ]

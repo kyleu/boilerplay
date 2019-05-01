@@ -12,8 +12,7 @@ import com.kyleu.projectile.web.util.ReftreeUtils._
 import java.util.UUID
 import models.auth.{SystemUserRow, SystemUserRowResult}
 import play.api.http.MimeTypes
-import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.{ExecutionContext, Future}
 import services.auth.SystemUserRowService
 import services.note.NoteRowService
 
@@ -21,7 +20,7 @@ import services.note.NoteRowService
 class SystemUserRowController @javax.inject.Inject() (
     override val app: Application, svc: SystemUserRowService, noteSvc: NoteService,
     noteRowS: NoteRowService
-) extends ServiceAuthController(svc) {
+)(implicit ec: ExecutionContext) extends ServiceAuthController(svc) {
 
   def createForm = withSession("create.form", admin = true) { implicit request => implicit td =>
     val cancel = controllers.admin.auth.routes.SystemUserRowController.list()

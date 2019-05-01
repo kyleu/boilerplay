@@ -1,7 +1,7 @@
 package services.database
 
 import com.kyleu.projectile.models.database.{Row, SingleRowQuery}
-import com.kyleu.projectile.services.database.{ApplicationDatabase, JdbcDatabase}
+import com.kyleu.projectile.services.database.JdbcDatabase
 import org.flywaydb.core.Flyway
 import com.kyleu.projectile.util.Logging
 import com.kyleu.projectile.util.tracing.TraceData
@@ -15,12 +15,12 @@ trait DatabaseMigration extends Logging { this: JdbcDatabase =>
     })(TraceData.noop)
 
     val flyway = if (!flywayExists) {
-      val f = Flyway.configure().dataSource(ApplicationDatabase.source).baselineVersion("0").load()
+      val f = Flyway.configure().dataSource(source).baselineVersion("0").load()
       log.info("Initializing Flyway database migrations")(TraceData.noop)
       f.baseline()
       f
     } else {
-      Flyway.configure().dataSource(ApplicationDatabase.source).load()
+      Flyway.configure().dataSource(source).load()
     }
     val numApplied = flyway.migrate()
     if (numApplied > 0) {

@@ -6,7 +6,8 @@
       "provider",
       "key",
       "role",
-      "created"
+      "created",
+      "settings"
     ],
     "properties": {
       "id": {
@@ -28,6 +29,9 @@
       "created": {
         "type": "string",
         "example": "2018-01-01 00:00:00"
+      },
+      "settings": {
+        "type": "object"
       }
     }
   },

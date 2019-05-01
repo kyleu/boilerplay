@@ -5,17 +5,17 @@ import java.util.UUID
 import com.google.inject.Injector
 import com.kyleu.projectile.controllers.AuthController
 import com.kyleu.projectile.models.Application
-
-import scala.concurrent.ExecutionContext.Implicits.global
 import com.kyleu.projectile.models.auth.UserCredentials
 import play.twirl.api.Html
 import com.kyleu.projectile.util.tracing.TraceData
 import play.api.mvc.Call
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @javax.inject.Singleton
-class SearchController @javax.inject.Inject() (override val app: Application, injector: Injector) extends AuthController("search") {
+class SearchController @javax.inject.Inject() (
+    override val app: Application, injector: Injector
+)(implicit ec: ExecutionContext) extends AuthController("search") {
   def search(q: String) = withSession("admin.search", admin = true) { implicit request => implicit td =>
     val creds = UserCredentials.fromRequest(request)
     val results = try {

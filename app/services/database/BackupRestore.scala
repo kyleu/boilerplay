@@ -1,6 +1,6 @@
 package services.database
 
-import com.kyleu.projectile.services.database.ApplicationDatabase
+import com.kyleu.projectile.services.database.JdbcDatabase
 import com.kyleu.projectile.util.DateUtils
 import services.file.FileService
 
@@ -9,7 +9,7 @@ import scala.sys.process._
 object BackupRestore {
   private[this] val backupRoot = FileService.getDir("backup")
 
-  def backup() = {
+  def backup(db: JdbcDatabase) = {
     val filename = s"${util.Config.projectId}-backup-${DateUtils.today.toString}.sql"
     val f = backupRoot / filename
     if (f.exists) {
@@ -23,8 +23,8 @@ object BackupRestore {
     }
 
     val path = (backupRoot / filename).path.toAbsolutePath.toString
-    val host = ApplicationDatabase.getConfig.host
-    val schema = ApplicationDatabase.getConfig.database.getOrElse(util.Config.projectId)
+    val host = db.getConfig.host
+    val schema = db.getConfig.database.getOrElse(util.Config.projectId)
     val dumpResult = Seq("pg_dump", "-Fp", "-h", host, "-O", "-f", path, "-d", schema).!!
     if (!f.exists) {
       throw new IllegalStateException(s"Backup to file [$filename] failed: [$dumpResult].")

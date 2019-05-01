@@ -12,14 +12,13 @@ import com.kyleu.projectile.web.util.ReftreeUtils._
 import java.util.UUID
 import models.note.{NoteRow, NoteRowResult}
 import play.api.http.MimeTypes
-import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.{ExecutionContext, Future}
 import services.note.NoteRowService
 
 @javax.inject.Singleton
 class NoteRowController @javax.inject.Inject() (
     override val app: Application, svc: NoteRowService, noteSvc: NoteService
-) extends ServiceAuthController(svc) {
+)(implicit ec: ExecutionContext) extends ServiceAuthController(svc) {
 
   def createForm = withSession("create.form", admin = true) { implicit request => implicit td =>
     val cancel = controllers.admin.note.routes.NoteRowController.list()
@@ -64,8 +63,9 @@ class NoteRowController @javax.inject.Inject() (
       val orderBys = OrderBy.forVals(orderBy, orderAsc).toSeq
       svc.getByAuthor(request, author, orderBys, limit, offset).map(models => renderChoice(t) {
         case MimeTypes.HTML =>
-          val list = views.html.admin.note.noteRowByAuthor(app.cfg(Some(request.identity), true, "note", "note", "Author"), author, models, orderBy, orderAsc, limit.getOrElse(5), offset.getOrElse(0))
-          if (embedded) { Ok(list) } else { Ok(page(s"Page Locations by Page Id [$pageId]", app.cfg(Some(request.identity), true))(card(None)(list))) }
+          val cfg = app.cfg(Some(request.identity), true, "note", "note", "Author")
+          val list = views.html.admin.note.noteRowByAuthor(cfg, author, models, orderBy, orderAsc, limit.getOrElse(5), offset.getOrElse(0))
+          if (embedded) { Ok(list) } else { Ok(page(s"Notes by Author [$author]", cfg)(card(None)(list))) }
         case MimeTypes.JSON => Ok(models.asJson)
         case ServiceController.MimeTypes.csv => csvResponse("NoteRow by author", svc.csvFor(0, models))
         case ServiceController.MimeTypes.png => Ok(renderToPng(v = models)).as(ServiceController.MimeTypes.png)

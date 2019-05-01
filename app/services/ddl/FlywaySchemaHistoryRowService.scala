@@ -11,11 +11,10 @@ import com.kyleu.projectile.util.tracing.{TraceData, TracingService}
 import java.time.LocalDateTime
 import models.ddl.FlywaySchemaHistoryRow
 import models.queries.ddl.FlywaySchemaHistoryRowQueries
-import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.{ExecutionContext, Future}
 
 @javax.inject.Singleton
-class FlywaySchemaHistoryRowService @javax.inject.Inject() (val db: JdbcDatabase, override val tracing: TracingService) extends ModelServiceHelper[FlywaySchemaHistoryRow]("flywaySchemaHistoryRow") {
+class FlywaySchemaHistoryRowService @javax.inject.Inject() (val db: JdbcDatabase, override val tracing: TracingService)(implicit ec: ExecutionContext) extends ModelServiceHelper[FlywaySchemaHistoryRow]("flywaySchemaHistoryRow") {
   def getByPrimaryKey(creds: Credentials, installedRank: Long)(implicit trace: TraceData) = {
     traceF("get.by.primary.key")(td => db.queryF(FlywaySchemaHistoryRowQueries.getByPrimaryKey(installedRank))(td))
   }

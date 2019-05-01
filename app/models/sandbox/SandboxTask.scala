@@ -2,14 +2,16 @@ package models.sandbox
 
 import com.google.inject.Injector
 import enumeratum.{CirceEnum, Enum, EnumEntry}
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import com.kyleu.projectile.models.auth.UserCredentials
+import com.kyleu.projectile.services.database.JdbcDatabase
 import services.database.BackupRestore
 import com.kyleu.projectile.util.JsonSerializers._
 import com.kyleu.projectile.util.Logging
 import com.kyleu.projectile.util.tracing.{TraceData, TracingService}
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 sealed abstract class SandboxTask(val id: String, val name: String, val description: String) extends EnumEntry with Logging {
   def run(cfg: SandboxTask.Config)(implicit trace: TraceData): Future[SandboxTask.Result] = {
@@ -46,7 +48,7 @@ object SandboxTask extends Enum[SandboxTask] with CirceEnum[SandboxTask] {
 
   case object DatabaseBackup extends SandboxTask("databaseBackup", "Database Backup", "Backs up the database.") {
     override def call(cfg: Config)(implicit trace: TraceData) = {
-      Future.successful(BackupRestore.backup())
+      Future.successful(BackupRestore.backup(cfg.injector.getInstance(classOf[JdbcDatabase])))
     }
   }
 

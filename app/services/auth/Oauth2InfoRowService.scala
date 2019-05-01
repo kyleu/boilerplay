@@ -10,11 +10,10 @@ import com.kyleu.projectile.util.CsvUtils
 import com.kyleu.projectile.util.tracing.{TraceData, TracingService}
 import models.auth.Oauth2InfoRow
 import models.queries.auth.Oauth2InfoRowQueries
-import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.{ExecutionContext, Future}
 
 @javax.inject.Singleton
-class Oauth2InfoRowService @javax.inject.Inject() (val db: JdbcDatabase, override val tracing: TracingService) extends ModelServiceHelper[Oauth2InfoRow]("oauth2InfoRow") {
+class Oauth2InfoRowService @javax.inject.Inject() (val db: JdbcDatabase, override val tracing: TracingService)(implicit ec: ExecutionContext) extends ModelServiceHelper[Oauth2InfoRow]("oauth2InfoRow") {
   def getByPrimaryKey(creds: Credentials, provider: String, key: String)(implicit trace: TraceData) = {
     traceF("get.by.primary.key")(td => db.queryF(Oauth2InfoRowQueries.getByPrimaryKey(provider, key))(td))
   }
