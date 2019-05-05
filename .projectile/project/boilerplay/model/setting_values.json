@@ -1,7 +1,7 @@
 {
   "key" : "setting_values",
   "pkg" : [ "settings" ],
-  "features" : [ "doobie", "datamodel", "auth", "graphql", "service", "slick", "controller", "notes", "json", "core" ],
+  "features" : [ ],
   "ignored" : [ ],
   "overrides" : [ {
     "k" : "title",

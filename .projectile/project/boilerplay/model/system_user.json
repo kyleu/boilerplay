@@ -1,7 +1,7 @@
 {
   "key" : "system_user",
   "pkg" : [ "auth" ],
-  "features" : [ "doobie", "datamodel", "auth", "graphql", "service", "slick", "controller", "notes", "json", "core" ],
+  "features" : [ ],
   "ignored" : [ ],
   "overrides" : [ ]
 }

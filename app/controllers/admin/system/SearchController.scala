@@ -47,11 +47,7 @@ class SearchController @javax.inject.Inject() (
       /* Start uuid searches */
       /* Projectile export section [boilerplay] */
       Seq(
-        injector.getInstance(classOf[services.audit.AuditRecordRowService]).getByPrimaryKey(creds, id).map(_.map(model => controllers.admin.audit.routes.AuditRecordRowController.view(model.id) -> views.html.admin.audit.auditRecordRowSearchResult(model, s"Audit Record [${model.id}] matched [$q]")).toSeq),
-        injector.getInstance(classOf[services.audit.AuditRowService]).getByPrimaryKey(creds, id).map(_.map(model => controllers.admin.audit.routes.AuditRowController.view(model.id) -> views.html.admin.audit.auditRowSearchResult(model, s"Audit [${model.id}] matched [$q]")).toSeq),
-        injector.getInstance(classOf[services.note.NoteRowService]).getByPrimaryKey(creds, id).map(_.map(model => controllers.admin.note.routes.NoteRowController.view(model.id) -> views.html.admin.note.noteRowSearchResult(model, s"Note [${model.id}] matched [$q]")).toSeq),
-        injector.getInstance(classOf[services.task.ScheduledTaskRunRowService]).getByPrimaryKey(creds, id).map(_.map(model => controllers.admin.task.routes.ScheduledTaskRunRowController.view(model.id) -> views.html.admin.task.scheduledTaskRunRowSearchResult(model, s"Scheduled Task Run [${model.id}] matched [$q]")).toSeq),
-        injector.getInstance(classOf[services.auth.SystemUserRowService]).getByPrimaryKey(creds, id).map(_.map(model => controllers.admin.auth.routes.SystemUserRowController.view(model.id) -> views.html.admin.auth.systemUserRowSearchResult(model, s"System User [${model.id}] matched [$q]")).toSeq)
+        injector.getInstance(classOf[services.task.ScheduledTaskRunRowService]).getByPrimaryKey(creds, id).map(_.map(model => controllers.admin.task.routes.ScheduledTaskRunRowController.view(model.id) -> views.html.admin.task.scheduledTaskRunRowSearchResult(model, s"Scheduled Task Run [${model.id}] matched [$q]")).toSeq)
       ) ++
         /* End uuid searches */
         Nil
@@ -64,16 +60,8 @@ class SearchController @javax.inject.Inject() (
       /* Start string searches */
       /* Projectile export section [boilerplay] */
       Seq(
-        injector.getInstance(classOf[services.audit.AuditRecordRowService]).searchExact(creds, q = q, limit = Some(5)).map(_.map(model => controllers.admin.audit.routes.AuditRecordRowController.view(model.id) -> views.html.admin.audit.auditRecordRowSearchResult(model, s"Audit Record [${model.id}] matched [$q]"))),
-        injector.getInstance(classOf[services.audit.AuditRowService]).searchExact(creds, q = q, limit = Some(5)).map(_.map(model => controllers.admin.audit.routes.AuditRowController.view(model.id) -> views.html.admin.audit.auditRowSearchResult(model, s"Audit [${model.id}] matched [$q]"))),
-        injector.getInstance(classOf[services.ddl.FlywaySchemaHistoryRowService]).searchExact(creds, q = q, limit = Some(5)).map(_.map(model => controllers.admin.ddl.routes.FlywaySchemaHistoryRowController.view(model.installedRank) -> views.html.admin.ddl.flywaySchemaHistoryRowSearchResult(model, s"Flyway Schema History [${model.installedRank}] matched [$q]"))),
-        injector.getInstance(classOf[services.note.NoteRowService]).searchExact(creds, q = q, limit = Some(5)).map(_.map(model => controllers.admin.note.routes.NoteRowController.view(model.id) -> views.html.admin.note.noteRowSearchResult(model, s"Note [${model.id}] matched [$q]"))),
-        injector.getInstance(classOf[services.auth.Oauth2InfoRowService]).searchExact(creds, q = q, limit = Some(5)).map(_.map(model => controllers.admin.auth.routes.Oauth2InfoRowController.view(model.provider, model.key) -> views.html.admin.auth.oauth2InfoRowSearchResult(model, s"OAuth2 Info [${model.provider}, ${model.key}] matched [$q]"))),
-        injector.getInstance(classOf[services.auth.PasswordInfoRowService]).searchExact(creds, q = q, limit = Some(5)).map(_.map(model => controllers.admin.auth.routes.PasswordInfoRowController.view(model.provider, model.key) -> views.html.admin.auth.passwordInfoRowSearchResult(model, s"Password Info [${model.provider}, ${model.key}] matched [$q]"))),
         injector.getInstance(classOf[services.task.ScheduledTaskRunRowService]).searchExact(creds, q = q, limit = Some(5)).map(_.map(model => controllers.admin.task.routes.ScheduledTaskRunRowController.view(model.id) -> views.html.admin.task.scheduledTaskRunRowSearchResult(model, s"Scheduled Task Run [${model.id}] matched [$q]"))),
-        injector.getInstance(classOf[services.settings.SettingService]).searchExact(creds, q = q, limit = Some(5)).map(_.map(model => controllers.admin.settings.routes.SettingController.view(model.k) -> views.html.admin.settings.settingSearchResult(model, s"Setting [${model.k}] matched [$q]"))),
-        injector.getInstance(classOf[services.sync.SyncProgressRowService]).searchExact(creds, q = q, limit = Some(5)).map(_.map(model => controllers.admin.sync.routes.SyncProgressRowController.view(model.key) -> views.html.admin.sync.syncProgressRowSearchResult(model, s"Sync Progress [${model.key}] matched [$q]"))),
-        injector.getInstance(classOf[services.auth.SystemUserRowService]).searchExact(creds, q = q, limit = Some(5)).map(_.map(model => controllers.admin.auth.routes.SystemUserRowController.view(model.id) -> views.html.admin.auth.systemUserRowSearchResult(model, s"System User [${model.id}] matched [$q]")))
+        injector.getInstance(classOf[services.sync.SyncProgressRowService]).searchExact(creds, q = q, limit = Some(5)).map(_.map(model => controllers.admin.sync.routes.SyncProgressRowController.view(model.key) -> views.html.admin.sync.syncProgressRowSearchResult(model, s"Sync Progress [${model.key}] matched [$q]")))
       ) ++
         /* End string searches */
         Nil

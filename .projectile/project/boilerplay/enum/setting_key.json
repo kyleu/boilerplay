@@ -1,7 +1,7 @@
 {
   "key" : "setting_key",
   "pkg" : [ "settings" ],
-  "features" : [ "doobie", "auth", "graphql", "slick", "controller", "core" ],
+  "features" : [ ],
   "ignored" : [ ],
   "overrides" : [ ]
 }

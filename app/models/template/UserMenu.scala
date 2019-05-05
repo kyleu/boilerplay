@@ -33,11 +33,12 @@ object UserMenu {
   }
 
   private[this] val staticStatus = NavMenu(key = "status", title = "Status", children = Seq(
-    NavMenu(key = "prefs", title = "System Preferences", url = Some(controllers.admin.system.routes.SettingsController.settings().url), icon = Some("flag")),
-    NavMenu(key = "audits", title = "Audit Trail", url = Some(controllers.admin.audit.routes.AuditRowController.list().url), icon = Some("settings")),
+    NavMenu(key = "notes", title = "Notes", url = Some(com.kyleu.projectile.controllers.admin.note.routes.NoteController.list().url), icon = Some("folder_open")),
+    NavMenu(key = "audit", title = "Audits", url = Some(com.kyleu.projectile.controllers.admin.audit.routes.AuditController.list().url), icon = Some("memory")),
+    NavMenu(key = "user", title = "System Users", url = Some(com.kyleu.projectile.controllers.admin.user.routes.SystemUserController.list().url), icon = Some("account_circle")),
     NavMenu(key = "metrics", title = "Metrics", url = Some(controllers.admin.system.routes.MetricsController.showMetrics().url), icon = Some("short_text")),
-    NavMenu(key = "tasks", title = "Scheduled Tasks", url = Some(controllers.admin.system.routes.ScheduleController.list().url), icon = Some("access_time")),
-    NavMenu(key = "sandbox", title = "Sandbox Methods", url = Some(controllers.admin.system.routes.SandboxController.list().url), icon = Some("widgets"))
+    NavMenu(key = "sandbox", title = "Sandbox Methods", url = Some(controllers.admin.system.routes.SandboxController.list().url), icon = Some("widgets")),
+    NavMenu(key = "tasks", title = "Scheduled Tasks", url = Some(controllers.admin.system.routes.ScheduleController.list().url), icon = Some("access_time"))
   ), flatSection = true)
 
   private[this] val staticMenu = ComponentMenu.menu ++ Seq(staticGraphQL, staticRest, staticStatus)

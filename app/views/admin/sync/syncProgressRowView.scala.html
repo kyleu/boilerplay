@@ -1,5 +1,5 @@
 @* Generated File *@
-@(cfg: com.kyleu.projectile.models.config.UiConfig, model: models.sync.SyncProgressRow, notes: Seq[com.kyleu.projectile.models.note.Note], debug: Boolean)(
+@(cfg: com.kyleu.projectile.models.config.UiConfig, model: models.sync.SyncProgressRow, notes: Seq[com.kyleu.projectile.models.note.Note], auditRecords: Seq[com.kyleu.projectile.models.audit.AuditRecord], debug: Boolean)(
     implicit request: Request[AnyContent], session: Session, flash: Flash
 )@com.kyleu.projectile.components.views.html.layout.page(s"Sync Progress", cfg) {
   @com.kyleu.projectile.components.views.html.layout.card(None) {
@@ -27,5 +27,7 @@
     </table>
   }
 
-  @views.html.admin.note.notes(notes, "syncProgressRow", "Sync Progress", model.key)
+  @com.kyleu.projectile.views.html.admin.note.notes(cfg, notes, "SyncProgressRow", "Sync Progress", model.key)
+
+  @com.kyleu.projectile.views.html.admin.audit.auditRecords(auditRecords, "SyncProgressRow", "Sync Progress", model.key)
 }

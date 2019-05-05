@@ -1,9 +1,0 @@
-syntax = "proto3";
-
-option java_multiple_files = true;
-
-import public "result.proto";
-
-/* Begin generated Protobuf model includes */
-import public "models/note/Note.proto";
-/* End generated Protobuf model includes */

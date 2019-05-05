@@ -5,6 +5,7 @@ import com.kyleu.projectile.models.result.data.DataField
 import com.kyleu.projectile.models.result.filter.Filter
 import com.kyleu.projectile.models.result.orderBy.OrderBy
 import com.kyleu.projectile.services.{Credentials, ModelServiceHelper}
+import com.kyleu.projectile.services.audit.AuditHelper
 import com.kyleu.projectile.services.database.JdbcDatabase
 import com.kyleu.projectile.util.CsvUtils
 import com.kyleu.projectile.util.tracing.{TraceData, TracingService}
@@ -124,7 +125,10 @@ class ScheduledTaskRunRowService @javax.inject.Inject() (val db: JdbcDatabase, o
   // Mutations
   def insert(creds: Credentials, model: ScheduledTaskRunRow)(implicit trace: TraceData) = traceF("insert") { td =>
     db.executeF(ScheduledTaskRunRowQueries.insert(model))(td).flatMap {
-      case 1 => getByPrimaryKey(creds, model.id)(td)
+      case 1 => getByPrimaryKey(creds, model.id)(td).map(_.map { n =>
+        AuditHelper.onInsert("ScheduledTaskRunRow", Seq(n.id.toString), n.toDataFields, creds)
+        n
+      })
       case _ => throw new IllegalStateException("Unable to find newly-inserted Scheduled Task Run.")
     }
   }
@@ -133,6 +137,7 @@ class ScheduledTaskRunRowService @javax.inject.Inject() (val db: JdbcDatabase, o
   }
   def create(creds: Credentials, fields: Seq[DataField])(implicit trace: TraceData) = traceF("create") { td =>
     db.executeF(ScheduledTaskRunRowQueries.create(fields))(td).flatMap { _ =>
+      AuditHelper.onInsert("ScheduledTaskRunRow", Seq(fieldVal(fields, "id")), fields, creds)
       getByPrimaryKey(creds, UUID.fromString(fieldVal(fields, "id")))
     }
   }
@@ -140,6 +145,7 @@ class ScheduledTaskRunRowService @javax.inject.Inject() (val db: JdbcDatabase, o
   def remove(creds: Credentials, id: UUID)(implicit trace: TraceData) = {
     traceF("remove")(td => getByPrimaryKey(creds, id)(td).flatMap {
       case Some(current) =>
+        AuditHelper.onRemove("ScheduledTaskRunRow", Seq(id.toString), current.toDataFields, creds)
         db.executeF(ScheduledTaskRunRowQueries.removeByPrimaryKey(id))(td).map(_ => current)
       case None => throw new IllegalStateException(s"Cannot find ScheduledTaskRunRow matching [$id]")
     })
@@ -148,9 +154,10 @@ class ScheduledTaskRunRowService @javax.inject.Inject() (val db: JdbcDatabase, o
   def update(creds: Credentials, id: UUID, fields: Seq[DataField])(implicit trace: TraceData) = {
     traceF("update")(td => getByPrimaryKey(creds, id)(td).flatMap {
       case Some(current) if fields.isEmpty => Future.successful(current -> s"No changes required for Scheduled Task Run [$id]")
-      case Some(_) => db.executeF(ScheduledTaskRunRowQueries.update(id, fields))(td).flatMap { _ =>
+      case Some(current) => db.executeF(ScheduledTaskRunRowQueries.update(id, fields))(td).flatMap { _ =>
         getByPrimaryKey(creds, id)(td).map {
           case Some(newModel) =>
+            AuditHelper.onUpdate("ScheduledTaskRunRow", Seq(id.toString), current.toDataFields, fields, creds)
             newModel -> s"Updated [${fields.size}] fields of Scheduled Task Run [$id]"
           case None => throw new IllegalStateException(s"Cannot find ScheduledTaskRunRow matching [$id]")
         }

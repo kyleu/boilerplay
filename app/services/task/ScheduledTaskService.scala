@@ -86,7 +86,7 @@ class ScheduledTaskService @javax.inject.Inject() (
       f.flatMap { runs =>
         if (args.contains("persist")) {
           Future.sequence(runs.map { run =>
-            runService.insert(creds, run).map(_.getOrElse(throw new IllegalStateException(s"Could not find inserted run [$id]."))).recover {
+            runService.insert(creds, run).map(_.get).recover {
               case NonFatal(_) => run.copy(status = "SaveError")
             }
           })

@@ -4,6 +4,7 @@ package controllers.admin.task
 import com.kyleu.projectile.controllers.{ServiceAuthController, ServiceController}
 import com.kyleu.projectile.models.Application
 import com.kyleu.projectile.models.result.orderBy.OrderBy
+import com.kyleu.projectile.services.audit.AuditService
 import com.kyleu.projectile.services.note.NoteService
 import com.kyleu.projectile.util.DateUtils
 import com.kyleu.projectile.util.JsonSerializers._
@@ -16,7 +17,7 @@ import services.task.ScheduledTaskRunRowService
 
 @javax.inject.Singleton
 class ScheduledTaskRunRowController @javax.inject.Inject() (
-    override val app: Application, svc: ScheduledTaskRunRowService, noteSvc: NoteService
+    override val app: Application, svc: ScheduledTaskRunRowService, noteSvc: NoteService, auditRecordSvc: AuditService
 )(implicit ec: ExecutionContext) extends ServiceAuthController(svc) {
 
   def createForm = withSession("create.form", admin = true) { implicit request => implicit td =>
@@ -39,9 +40,10 @@ class ScheduledTaskRunRowController @javax.inject.Inject() (
       val startMs = DateUtils.nowMillis
       val orderBys = OrderBy.forVals(orderBy, orderAsc).toSeq
       searchWithCount(q, orderBys, limit, offset).map(r => renderChoice(t) {
-        case MimeTypes.HTML => Ok(views.html.admin.task.scheduledTaskRunRowList(
-          app.cfg(u = Some(request.identity), admin = true, "task", "scheduled_task_run"), Some(r._1), r._2, q, orderBy, orderAsc, limit.getOrElse(100), offset.getOrElse(0)
-        ))
+        case MimeTypes.HTML => r._2.toList match {
+          case model :: Nil => Redirect(controllers.admin.task.routes.ScheduledTaskRunRowController.view(model.id))
+          case _ => Ok(views.html.admin.task.scheduledTaskRunRowList(app.cfg(u = Some(request.identity), admin = true, "task", "scheduled_task_run"), Some(r._1), r._2, q, orderBy, orderAsc, limit.getOrElse(100), offset.getOrElse(0)))
+        }
         case MimeTypes.JSON => Ok(ScheduledTaskRunRowResult.fromRecords(q, Nil, orderBys, limit, offset, startMs, r._1, r._2).asJson)
         case ServiceController.MimeTypes.csv => csvResponse("ScheduledTaskRunRow", svc.csvFor(r._1, r._2))
         case ServiceController.MimeTypes.png => Ok(renderToPng(v = r._2)).as(ServiceController.MimeTypes.png)
@@ -59,17 +61,18 @@ class ScheduledTaskRunRowController @javax.inject.Inject() (
 
   def view(id: UUID, t: Option[String] = None) = withSession("view", admin = true) { implicit request => implicit td =>
     val modelF = svc.getByPrimaryKey(request, id)
-    val notesF = noteSvc.getFor(request, "scheduledTaskRunRow", id)
+    val auditsF = auditRecordSvc.getByModel(request, "ScheduledTaskRunRow", id)
+    val notesF = noteSvc.getFor(request, "ScheduledTaskRunRow", id)
 
-    notesF.flatMap(notes => modelF.map {
+    notesF.flatMap(notes => auditsF.flatMap(audits => modelF.map {
       case Some(model) => renderChoice(t) {
-        case MimeTypes.HTML => Ok(views.html.admin.task.scheduledTaskRunRowView(app.cfg(Some(request.identity), true, "task", "scheduled_task_run", model.id.toString), model, notes, app.config.debug))
+        case MimeTypes.HTML => Ok(views.html.admin.task.scheduledTaskRunRowView(app.cfg(Some(request.identity), true, "task", "scheduled_task_run", model.id.toString), model, notes, audits, app.config.debug))
         case MimeTypes.JSON => Ok(model.asJson)
         case ServiceController.MimeTypes.png => Ok(renderToPng(v = model)).as(ServiceController.MimeTypes.png)
         case ServiceController.MimeTypes.svg => Ok(renderToSvg(v = model)).as(ServiceController.MimeTypes.svg)
       }
       case None => NotFound(s"No ScheduledTaskRunRow found with id [$id]")
-    })
+    }))
   }
 
   def editForm(id: UUID) = withSession("edit.form", admin = true) { implicit request => implicit td =>

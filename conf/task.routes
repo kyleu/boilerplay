@@ -1,4 +1,5 @@
 # Generated File
+
 # Scheduled Task Run Routes
 GET         /                                                         controllers.admin.task.ScheduledTaskRunRowController.list(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None)
 GET         /autocomplete                                            controllers.admin.task.ScheduledTaskRunRowController.autocomplete(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None)
@@ -8,4 +9,3 @@ GET         /:id                                                      controller
 GET         /:id/form                                                 controllers.admin.task.ScheduledTaskRunRowController.editForm(id: java.util.UUID)
 POST        /:id                                                      controllers.admin.task.ScheduledTaskRunRowController.edit(id: java.util.UUID)
 GET         /:id/remove                                               controllers.admin.task.ScheduledTaskRunRowController.remove(id: java.util.UUID)
-

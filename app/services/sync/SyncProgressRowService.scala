@@ -5,6 +5,7 @@ import com.kyleu.projectile.models.result.data.DataField
 import com.kyleu.projectile.models.result.filter.Filter
 import com.kyleu.projectile.models.result.orderBy.OrderBy
 import com.kyleu.projectile.services.{Credentials, ModelServiceHelper}
+import com.kyleu.projectile.services.audit.AuditHelper
 import com.kyleu.projectile.services.database.JdbcDatabase
 import com.kyleu.projectile.util.CsvUtils
 import com.kyleu.projectile.util.tracing.{TraceData, TracingService}
@@ -109,7 +110,10 @@ class SyncProgressRowService @javax.inject.Inject() (val db: JdbcDatabase, overr
   // Mutations
   def insert(creds: Credentials, model: SyncProgressRow)(implicit trace: TraceData) = traceF("insert") { td =>
     db.executeF(SyncProgressRowQueries.insert(model))(td).flatMap {
-      case 1 => getByPrimaryKey(creds, model.key)(td)
+      case 1 => getByPrimaryKey(creds, model.key)(td).map(_.map { n =>
+        AuditHelper.onInsert("SyncProgressRow", Seq(n.key.toString), n.toDataFields, creds)
+        n
+      })
       case _ => throw new IllegalStateException("Unable to find newly-inserted Sync Progress.")
     }
   }
@@ -118,6 +122,7 @@ class SyncProgressRowService @javax.inject.Inject() (val db: JdbcDatabase, overr
   }
   def create(creds: Credentials, fields: Seq[DataField])(implicit trace: TraceData) = traceF("create") { td =>
     db.executeF(SyncProgressRowQueries.create(fields))(td).flatMap { _ =>
+      AuditHelper.onInsert("SyncProgressRow", Seq(fieldVal(fields, "key")), fields, creds)
       getByPrimaryKey(creds, fieldVal(fields, "key"))
     }
   }
@@ -125,6 +130,7 @@ class SyncProgressRowService @javax.inject.Inject() (val db: JdbcDatabase, overr
   def remove(creds: Credentials, key: String)(implicit trace: TraceData) = {
     traceF("remove")(td => getByPrimaryKey(creds, key)(td).flatMap {
       case Some(current) =>
+        AuditHelper.onRemove("SyncProgressRow", Seq(key.toString), current.toDataFields, creds)
         db.executeF(SyncProgressRowQueries.removeByPrimaryKey(key))(td).map(_ => current)
       case None => throw new IllegalStateException(s"Cannot find SyncProgressRow matching [$key]")
     })
@@ -133,9 +139,10 @@ class SyncProgressRowService @javax.inject.Inject() (val db: JdbcDatabase, overr
   def update(creds: Credentials, key: String, fields: Seq[DataField])(implicit trace: TraceData) = {
     traceF("update")(td => getByPrimaryKey(creds, key)(td).flatMap {
       case Some(current) if fields.isEmpty => Future.successful(current -> s"No changes required for Sync Progress [$key]")
-      case Some(_) => db.executeF(SyncProgressRowQueries.update(key, fields))(td).flatMap { _ =>
+      case Some(current) => db.executeF(SyncProgressRowQueries.update(key, fields))(td).flatMap { _ =>
         getByPrimaryKey(creds, key)(td).map {
           case Some(newModel) =>
+            AuditHelper.onUpdate("SyncProgressRow", Seq(key.toString), current.toDataFields, fields, creds)
             newModel -> s"Updated [${fields.size}] fields of Sync Progress [$key]"
           case None => throw new IllegalStateException(s"Cannot find SyncProgressRow matching [$key]")
         }

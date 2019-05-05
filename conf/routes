@@ -3,21 +3,19 @@ GET         /ping                                    controllers.HomeController.
 GET         /robots.txt                              controllers.HomeController.robots
 
 ->          /profile                                 profile.Routes
-->          /projectile                              projectile.Routes
 ->          /components                              components.Routes
 
 # Admin
 ->          /admin/system                            system.Routes
+
 ->          /admin/graphql                           graphql.Routes
 ->          /admin/rest                              rest.Routes
+->          /admin/audit                             audit.Routes
+->          /admin/note                              note.Routes
+->          /admin/systemUser                        systemUser.Routes
 
 # Start model route files
 # Projectile export section [boilerplay]
-->          /admin/audit                             audit.Routes
-->          /admin/auth                              auth.Routes
-->          /admin/ddl                               ddl.Routes
-->          /admin/note                              note.Routes
-->          /admin/settings                          settings.Routes
 ->          /admin/sync                              sync.Routes
 ->          /admin/task                              task.Routes
 # End model route files

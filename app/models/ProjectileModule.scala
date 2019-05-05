@@ -7,7 +7,6 @@ import com.kyleu.projectile.models.auth.AuthActions
 import com.kyleu.projectile.models.config.{NavHtml, UiConfig, UserSettings}
 import com.kyleu.projectile.models.user.Role
 import com.kyleu.projectile.services.database.JdbcDatabase
-import com.kyleu.projectile.services.note.NoteService
 import com.kyleu.projectile.util.JsonSerializers.extract
 import com.kyleu.projectile.util.metrics.MetricsConfig
 import com.kyleu.projectile.util.tracing.{OpenTracingService, TracingService}
@@ -16,22 +15,16 @@ import io.circe.JsonObject
 import models.graphql.Schema
 import models.template.UserMenu
 import net.codingwell.scalaguice.ScalaModule
-import services.note.ModelNoteService
-import services.settings.SettingsService
 
 import scala.concurrent.ExecutionContext
 import util.Version
 
 class ProjectileModule extends AbstractModule with ScalaModule {
-  override def configure() = {
-    bind[NoteService].to(classOf[ModelNoteService])
-  }
+  @Provides @javax.inject.Singleton
+  def providesTracingService(cnf: MetricsConfig, ec: ExecutionContext): TracingService = new OpenTracingService(cnf)(ec)
 
   @Provides @javax.inject.Singleton
-  def providesTracingService(cnf: MetricsConfig): TracingService = new OpenTracingService(cnf)(ExecutionContext.global)
-
-  @Provides @javax.inject.Singleton
-  def providesJdbcDatabase(): JdbcDatabase = new JdbcDatabase("application", "database.application")(ExecutionContext.global)
+  def providesJdbcDatabase(ec: ExecutionContext): JdbcDatabase = new JdbcDatabase("application", "database.application")(ec)
 
   @Provides @javax.inject.Singleton
   def providesApplicationActions = Application.Actions(
@@ -64,8 +57,8 @@ class ProjectileModule extends AbstractModule with ScalaModule {
   def providesErrorActions() = new ErrorHandler.Actions()
 
   @Provides @javax.inject.Singleton
-  def providesAuthActions(settings: SettingsService) = new AuthActions(projectName = Version.projectName) {
-    override def allowRegistration = settings.allowRegistration
+  def providesAuthActions() = new AuthActions(projectName = Version.projectName) {
+    override def allowRegistration = true
     override def defaultRole = Role.Admin
   }
 

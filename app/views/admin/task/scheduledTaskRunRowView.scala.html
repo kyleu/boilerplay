@@ -1,5 +1,5 @@
 @* Generated File *@
-@(cfg: com.kyleu.projectile.models.config.UiConfig, model: models.task.ScheduledTaskRunRow, notes: Seq[com.kyleu.projectile.models.note.Note], debug: Boolean)(
+@(cfg: com.kyleu.projectile.models.config.UiConfig, model: models.task.ScheduledTaskRunRow, notes: Seq[com.kyleu.projectile.models.note.Note], auditRecords: Seq[com.kyleu.projectile.models.audit.AuditRecord], debug: Boolean)(
     implicit request: Request[AnyContent], session: Session, flash: Flash
 )@com.kyleu.projectile.components.views.html.layout.page(s"Scheduled Task Run", cfg) {
   @com.kyleu.projectile.components.views.html.layout.card(None) {
@@ -39,5 +39,7 @@
     </table>
   }
 
-  @views.html.admin.note.notes(notes, "scheduledTaskRunRow", "Scheduled Task Run", model.id)
+  @com.kyleu.projectile.views.html.admin.note.notes(cfg, notes, "ScheduledTaskRunRow", "Scheduled Task Run", model.id)
+
+  @com.kyleu.projectile.views.html.admin.audit.auditRecords(auditRecords, "ScheduledTaskRunRow", "Scheduled Task Run", model.id)
 }

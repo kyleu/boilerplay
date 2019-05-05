@@ -4,6 +4,7 @@ package controllers.admin.sync
 import com.kyleu.projectile.controllers.{ServiceAuthController, ServiceController}
 import com.kyleu.projectile.models.Application
 import com.kyleu.projectile.models.result.orderBy.OrderBy
+import com.kyleu.projectile.services.audit.AuditService
 import com.kyleu.projectile.services.note.NoteService
 import com.kyleu.projectile.util.DateUtils
 import com.kyleu.projectile.util.JsonSerializers._
@@ -15,7 +16,7 @@ import services.sync.SyncProgressRowService
 
 @javax.inject.Singleton
 class SyncProgressRowController @javax.inject.Inject() (
-    override val app: Application, svc: SyncProgressRowService, noteSvc: NoteService
+    override val app: Application, svc: SyncProgressRowService, noteSvc: NoteService, auditRecordSvc: AuditService
 )(implicit ec: ExecutionContext) extends ServiceAuthController(svc) {
 
   def createForm = withSession("create.form", admin = true) { implicit request => implicit td =>
@@ -38,9 +39,10 @@ class SyncProgressRowController @javax.inject.Inject() (
       val startMs = DateUtils.nowMillis
       val orderBys = OrderBy.forVals(orderBy, orderAsc).toSeq
       searchWithCount(q, orderBys, limit, offset).map(r => renderChoice(t) {
-        case MimeTypes.HTML => Ok(views.html.admin.sync.syncProgressRowList(
-          app.cfg(u = Some(request.identity), admin = true, "sync", "sync_progress"), Some(r._1), r._2, q, orderBy, orderAsc, limit.getOrElse(100), offset.getOrElse(0)
-        ))
+        case MimeTypes.HTML => r._2.toList match {
+          case model :: Nil => Redirect(controllers.admin.sync.routes.SyncProgressRowController.view(model.key))
+          case _ => Ok(views.html.admin.sync.syncProgressRowList(app.cfg(u = Some(request.identity), admin = true, "sync", "sync_progress"), Some(r._1), r._2, q, orderBy, orderAsc, limit.getOrElse(100), offset.getOrElse(0)))
+        }
         case MimeTypes.JSON => Ok(SyncProgressRowResult.fromRecords(q, Nil, orderBys, limit, offset, startMs, r._1, r._2).asJson)
         case ServiceController.MimeTypes.csv => csvResponse("SyncProgressRow", svc.csvFor(r._1, r._2))
         case ServiceController.MimeTypes.png => Ok(renderToPng(v = r._2)).as(ServiceController.MimeTypes.png)
@@ -58,17 +60,18 @@ class SyncProgressRowController @javax.inject.Inject() (
 
   def view(key: String, t: Option[String] = None) = withSession("view", admin = true) { implicit request => implicit td =>
     val modelF = svc.getByPrimaryKey(request, key)
-    val notesF = noteSvc.getFor(request, "syncProgressRow", key)
+    val auditsF = auditRecordSvc.getByModel(request, "SyncProgressRow", key)
+    val notesF = noteSvc.getFor(request, "SyncProgressRow", key)
 
-    notesF.flatMap(notes => modelF.map {
+    notesF.flatMap(notes => auditsF.flatMap(audits => modelF.map {
       case Some(model) => renderChoice(t) {
-        case MimeTypes.HTML => Ok(views.html.admin.sync.syncProgressRowView(app.cfg(Some(request.identity), true, "sync", "sync_progress", model.key), model, notes, app.config.debug))
+        case MimeTypes.HTML => Ok(views.html.admin.sync.syncProgressRowView(app.cfg(Some(request.identity), true, "sync", "sync_progress", model.key), model, notes, audits, app.config.debug))
         case MimeTypes.JSON => Ok(model.asJson)
         case ServiceController.MimeTypes.png => Ok(renderToPng(v = model)).as(ServiceController.MimeTypes.png)
         case ServiceController.MimeTypes.svg => Ok(renderToSvg(v = model)).as(ServiceController.MimeTypes.svg)
       }
       case None => NotFound(s"No SyncProgressRow found with key [$key]")
-    })
+    }))
   }
 
   def editForm(key: String) = withSession("edit.form", admin = true) { implicit request => implicit td =>

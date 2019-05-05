@@ -6,14 +6,6 @@
 
   // Start schema paths
   // Projectile export section [boilerplay]
-  "#include:audit/auditRecordRow.json": "*",
-  "#include:audit/auditRow.json": "*",
-  "#include:auth/oauth2InfoRow.json": "*",
-  "#include:auth/passwordInfoRow.json": "*",
-  "#include:auth/systemUserRow.json": "*",
-  "#include:ddl/flywaySchemaHistoryRow.json": "*",
-  "#include:note/noteRow.json": "*",
-  "#include:settings/setting.json": "*",
   "#include:sync/syncProgressRow.json": "*",
   "#include:task/scheduledTaskRunRow.json": "*",
   // End schema paths

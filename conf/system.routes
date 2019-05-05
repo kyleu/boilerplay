@@ -1,15 +1,12 @@
 GET         /                      controllers.admin.system.AdminController.index
-GET         /status                controllers.admin.system.AdminController.status
-GET         /metrics               controllers.admin.system.MetricsController.showMetrics
 
 GET         /search                controllers.admin.system.SearchController.search(q ?= "")
 GET         /explore               controllers.admin.system.AdminController.explore
 
+GET         /metrics               controllers.admin.system.MetricsController.showMetrics
+
 # Start model routes
 # End model routes
-
-GET         /settings              controllers.admin.system.SettingsController.settings
-POST        /settings              controllers.admin.system.SettingsController.saveSettings
 
 GET         /encrypt               controllers.admin.system.EncryptionController.form
 POST        /encrypt               controllers.admin.system.EncryptionController.post
