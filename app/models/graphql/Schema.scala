@@ -4,7 +4,7 @@ import com.kyleu.projectile.graphql.{GraphQLContext, GraphQLSchema}
 import models.graphql.sandbox.SandboxSchema
 import sangria.execution.deferred.DeferredResolver
 import sangria.schema._
-import util.Config
+import util.Version
 
 import scala.concurrent.Future
 
@@ -26,7 +26,7 @@ object Schema extends GraphQLSchema {
 
   private[this] val customQueryFields = fields[GraphQLContext, Unit](
     Field(name = "status", fieldType = StringType, resolve = _ => Future.successful("OK")),
-    Field(name = "version", fieldType = StringType, resolve = _ => Future.successful(Config.version))
+    Field(name = "version", fieldType = StringType, resolve = _ => Future.successful(Version.version))
   )
 
   // Query Types

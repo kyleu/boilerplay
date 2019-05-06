@@ -1,6 +1,6 @@
 @(user: com.kyleu.projectile.models.user.SystemUser, cfg: com.kyleu.projectile.models.config.UiConfig, unenc: String = "", enc: String = "")(
     implicit request: Request[AnyContent], session: Session, flash: Flash
-)@com.kyleu.projectile.components.views.html.layout.page(util.Config.projectName + " Administration", cfg) {
+)@com.kyleu.projectile.components.views.html.layout.page(util.Version.projectName + " Administration", cfg) {
   <form method="post" action="@controllers.admin.system.routes.EncryptionController.post">
   <ul class="collection with-header">
     <li class="collection-header">

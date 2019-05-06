@@ -10,7 +10,7 @@ object BackupRestore {
   private[this] val backupRoot = FileService.getDir("backup")
 
   def backup(db: JdbcDatabase) = {
-    val filename = s"${util.Config.projectId}-backup-${DateUtils.today.toString}.sql"
+    val filename = s"${util.Version.projectId}-backup-${DateUtils.today.toString}.sql"
     val f = backupRoot / filename
     if (f.exists) {
       throw new IllegalStateException(s"File [$filename] already exists.")
@@ -24,7 +24,7 @@ object BackupRestore {
 
     val path = (backupRoot / filename).path.toAbsolutePath.toString
     val host = db.getConfig.host
-    val schema = db.getConfig.database.getOrElse(util.Config.projectId)
+    val schema = db.getConfig.database.getOrElse(util.Version.projectId)
     val dumpResult = Seq("pg_dump", "-Fp", "-h", host, "-O", "-f", path, "-d", schema).!!
     if (!f.exists) {
       throw new IllegalStateException(s"Backup to file [$filename] failed: [$dumpResult].")
