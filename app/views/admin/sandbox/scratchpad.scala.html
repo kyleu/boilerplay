@@ -3,8 +3,8 @@
     cfg: com.kyleu.projectile.models.config.UiConfig
 )(
     implicit request: Request[AnyContent], session: Session, flash: Flash
-)@com.kyleu.projectile.components.views.html.layout.page("Hello!", cfg) {
-  @com.kyleu.projectile.components.views.html.layout.card(Some("Hello!")) {
+)@com.kyleu.projectile.views.html.layout.page("Hello!", cfg) {
+  @com.kyleu.projectile.views.html.layout.card(Some("Hello!")) {
     Howdy.
   }
 }

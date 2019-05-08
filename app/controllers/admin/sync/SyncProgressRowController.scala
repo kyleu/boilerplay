@@ -4,11 +4,11 @@ package controllers.admin.sync
 import com.kyleu.projectile.controllers.{ServiceAuthController, ServiceController}
 import com.kyleu.projectile.models.Application
 import com.kyleu.projectile.models.result.orderBy.OrderBy
+import com.kyleu.projectile.models.web.ReftreeUtils._
 import com.kyleu.projectile.services.audit.AuditService
 import com.kyleu.projectile.services.note.NoteService
 import com.kyleu.projectile.util.DateUtils
 import com.kyleu.projectile.util.JsonSerializers._
-import com.kyleu.projectile.web.util.ReftreeUtils._
 import models.sync.{SyncProgressRow, SyncProgressRowResult}
 import play.api.http.MimeTypes
 import scala.concurrent.{ExecutionContext, Future}
@@ -87,7 +87,7 @@ class SyncProgressRowController @javax.inject.Inject() (
 
   def edit(key: String) = withSession("edit", admin = true) { implicit request => implicit td =>
     svc.update(request, key = key, fields = modelForm(request.body)).map(res => render {
-      case Accepts.Html() => Redirect(controllers.admin.sync.routes.SyncProgressRowController.view(res._1.key)).flashing("success" -> res._2)
+      case Accepts.Html() => Redirect(controllers.admin.sync.routes.SyncProgressRowController.view(res._1.key))
       case Accepts.Json() => Ok(res.asJson)
     })
   }

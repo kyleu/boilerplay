@@ -1,6 +1,6 @@
 @(user: com.kyleu.projectile.models.user.SystemUser, cfg: com.kyleu.projectile.models.config.UiConfig, devmode: Boolean)(
     implicit request: Request[AnyContent], session: Session, flash: Flash
-)@com.kyleu.projectile.components.views.html.layout.splash(util.Version.projectName, cfg) {
+)@com.kyleu.projectile.views.html.layout.splash(util.Version.projectName) {
   <div class="row" style="width: 50%;">
     <div class="col s12">
       <ul class="collection with-header">

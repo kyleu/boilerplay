@@ -4,11 +4,11 @@ package controllers.admin.task
 import com.kyleu.projectile.controllers.{ServiceAuthController, ServiceController}
 import com.kyleu.projectile.models.Application
 import com.kyleu.projectile.models.result.orderBy.OrderBy
+import com.kyleu.projectile.models.web.ReftreeUtils._
 import com.kyleu.projectile.services.audit.AuditService
 import com.kyleu.projectile.services.note.NoteService
 import com.kyleu.projectile.util.DateUtils
 import com.kyleu.projectile.util.JsonSerializers._
-import com.kyleu.projectile.web.util.ReftreeUtils._
 import java.util.UUID
 import models.task.{ScheduledTaskRunRow, ScheduledTaskRunRowResult}
 import play.api.http.MimeTypes
@@ -88,7 +88,7 @@ class ScheduledTaskRunRowController @javax.inject.Inject() (
 
   def edit(id: UUID) = withSession("edit", admin = true) { implicit request => implicit td =>
     svc.update(request, id = id, fields = modelForm(request.body)).map(res => render {
-      case Accepts.Html() => Redirect(controllers.admin.task.routes.ScheduledTaskRunRowController.view(res._1.id)).flashing("success" -> res._2)
+      case Accepts.Html() => Redirect(controllers.admin.task.routes.ScheduledTaskRunRowController.view(res._1.id))
       case Accepts.Json() => Ok(res.asJson)
     })
   }

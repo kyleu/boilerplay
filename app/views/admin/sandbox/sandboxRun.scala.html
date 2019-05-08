@@ -1,6 +1,6 @@
 @(user: com.kyleu.projectile.models.user.SystemUser, cfg: com.kyleu.projectile.models.config.UiConfig, result: models.sandbox.SandboxTask.Result)(
     implicit request: Request[AnyContent], session: Session, flash: Flash
-)@com.kyleu.projectile.components.views.html.layout.page(title = s"${result.task.name} Result", cfg = cfg) {
+)@com.kyleu.projectile.views.html.layout.page(title = s"${result.task.name} Result", cfg = cfg) {
   <div class="row">
     <div class="col s12">
       <div class="collection with-header">

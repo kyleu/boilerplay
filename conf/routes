@@ -1,5 +1,4 @@
 GET         /                                        controllers.HomeController.home
-GET         /ping                                    controllers.HomeController.ping(timestamp: Long)
 GET         /robots.txt                              controllers.HomeController.robots
 
 ->          /profile                                 profile.Routes

@@ -1,6 +1,6 @@
 @(user: com.kyleu.projectile.models.user.SystemUser, cfg: com.kyleu.projectile.models.config.UiConfig, results: Seq[models.task.ScheduledTaskRunRow])(
     implicit request: Request[AnyContent], session: Session, flash: Flash
-)@com.kyleu.projectile.components.views.html.layout.page(title = "Scheduled Task Result", cfg = cfg) {
+)@com.kyleu.projectile.views.html.layout.page(title = "Scheduled Task Result", cfg = cfg) {
   @if(results.isEmpty) {
     <div>No results...</div>
   }

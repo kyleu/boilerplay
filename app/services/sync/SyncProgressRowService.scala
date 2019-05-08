@@ -140,7 +140,7 @@ class SyncProgressRowService @javax.inject.Inject() (val db: JdbcDatabase, overr
     traceF("update")(td => getByPrimaryKey(creds, key)(td).flatMap {
       case Some(current) if fields.isEmpty => Future.successful(current -> s"No changes required for Sync Progress [$key]")
       case Some(current) => db.executeF(SyncProgressRowQueries.update(key, fields))(td).flatMap { _ =>
-        getByPrimaryKey(creds, key)(td).map {
+        getByPrimaryKey(creds, fields.find(_.k == "key").flatMap(_.v).map(s => s).getOrElse(key))(td).map {
           case Some(newModel) =>
             AuditHelper.onUpdate("SyncProgressRow", Seq(key.toString), current.toDataFields, fields, creds)
             newModel -> s"Updated [${fields.size}] fields of Sync Progress [$key]"

@@ -18,7 +18,7 @@
   rows = modelSeq.map(model => views.html.admin.task.scheduledTaskRunRowDataRow(model)),
   orderBy = orderBy,
   orderAsc = orderAsc,
-  calls = com.kyleu.projectile.models.result.web.ListCalls(
+  calls = com.kyleu.projectile.models.web.ListCalls(
     newCall = Some(controllers.admin.task.routes.ScheduledTaskRunRowController.createForm()),
     orderBy = Some(controllers.admin.task.routes.ScheduledTaskRunRowController.list(q, _, _, Some(limit), Some(0))),
     search = Some(controllers.admin.task.routes.ScheduledTaskRunRowController.list(None, orderBy, orderAsc, Some(limit), None)),

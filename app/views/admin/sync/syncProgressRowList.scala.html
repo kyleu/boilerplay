@@ -17,7 +17,7 @@
   rows = modelSeq.map(model => views.html.admin.sync.syncProgressRowDataRow(model)),
   orderBy = orderBy,
   orderAsc = orderAsc,
-  calls = com.kyleu.projectile.models.result.web.ListCalls(
+  calls = com.kyleu.projectile.models.web.ListCalls(
     newCall = Some(controllers.admin.sync.routes.SyncProgressRowController.createForm()),
     orderBy = Some(controllers.admin.sync.routes.SyncProgressRowController.list(q, _, _, Some(limit), Some(0))),
     search = Some(controllers.admin.sync.routes.SyncProgressRowController.list(None, orderBy, orderAsc, Some(limit), None)),

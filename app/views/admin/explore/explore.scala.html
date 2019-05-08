@@ -1,6 +1,6 @@
 @(user: com.kyleu.projectile.models.user.SystemUser, cfg: com.kyleu.projectile.models.config.UiConfig)(
     implicit request: Request[AnyContent], session: Session, flash: Flash
-)@com.kyleu.projectile.components.views.html.layout.page("Explore " + util.Version.projectName, cfg) {
+)@com.kyleu.projectile.views.html.layout.page("Explore " + util.Version.projectName, cfg) {
   <ul class="collection with-header">
     <li class="collection-header">
       <h5>Explore @util.Version.projectName</h5>

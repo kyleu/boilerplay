@@ -1,6 +1,6 @@
 @(user: com.kyleu.projectile.models.user.SystemUser, cfg: com.kyleu.projectile.models.config.UiConfig, tasks: Seq[models.task.scheduled.ScheduledTask], syncs: Seq[models.sync.SyncProgressRow])(
     implicit request: Request[AnyContent], session: Session, flash: Flash
-)@com.kyleu.projectile.components.views.html.layout.page("Scheduled Tasks", cfg) {
+)@com.kyleu.projectile.views.html.layout.page("Scheduled Tasks", cfg) {
   <ul class="collection with-header">
     <li class="collection-header">
       <div class="right"><a href="@controllers.admin.system.routes.ScheduleController.run("all")">Run All</a></div>

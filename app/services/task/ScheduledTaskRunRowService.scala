@@ -155,7 +155,7 @@ class ScheduledTaskRunRowService @javax.inject.Inject() (val db: JdbcDatabase, o
     traceF("update")(td => getByPrimaryKey(creds, id)(td).flatMap {
       case Some(current) if fields.isEmpty => Future.successful(current -> s"No changes required for Scheduled Task Run [$id]")
       case Some(current) => db.executeF(ScheduledTaskRunRowQueries.update(id, fields))(td).flatMap { _ =>
-        getByPrimaryKey(creds, id)(td).map {
+        getByPrimaryKey(creds, fields.find(_.k == "id").flatMap(_.v).map(s => UUID.fromString(s)).getOrElse(id))(td).map {
           case Some(newModel) =>
             AuditHelper.onUpdate("ScheduledTaskRunRow", Seq(id.toString), current.toDataFields, fields, creds)
             newModel -> s"Updated [${fields.size}] fields of Scheduled Task Run [$id]"

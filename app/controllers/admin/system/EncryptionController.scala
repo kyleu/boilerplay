@@ -3,7 +3,7 @@ package controllers.admin.system
 import com.kyleu.projectile.controllers.AuthController
 import com.kyleu.projectile.models.Application
 import util.EncryptionUtils
-import com.kyleu.projectile.web.util.ControllerUtils
+import com.kyleu.projectile.models.web.ControllerUtils
 
 import scala.concurrent.{ExecutionContext, Future}
 
