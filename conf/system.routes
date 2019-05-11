@@ -3,8 +3,6 @@ GET         /                      controllers.admin.system.AdminController.inde
 GET         /search                controllers.admin.system.SearchController.search(q ?= "")
 GET         /explore               controllers.admin.system.AdminController.explore
 
-GET         /metrics               controllers.admin.system.MetricsController.showMetrics
-
 # Start model routes
 # End model routes
 
