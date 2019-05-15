@@ -3,12 +3,7 @@ scalacOptions ++= Seq( "-unchecked", "-deprecation" )
 resolvers += Resolver.typesafeRepo("releases")
 
 // Projectile
-addSbtPlugin("com.kyleu" % "projectile-sbt" % "1.8.4")
-
-// SBT-Web plugins
-addSbtPlugin("com.typesafe.sbt" % "sbt-web" % "1.4.4")
-addSbtPlugin("com.typesafe.sbt" % "sbt-less" % "1.1.2")
-addSbtPlugin("com.typesafe.sbt" % "sbt-gzip" % "1.0.2")
+addSbtPlugin("com.kyleu" % "projectile-sbt" % "1.8.6")
 
 // Scala.js
 addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.26")

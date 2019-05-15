@@ -26,7 +26,6 @@ lazy val server = Project(id = projectId, base = file(".")).enablePlugins(Projec
 
   JsEngineKeys.engineType := JsEngineKeys.EngineType.Node,
   pipelineStages in Assets := Seq(scalaJSPipeline),
-  pipelineStages ++= Seq(gzip),
 
   scmInfo := Some(ScmInfo(url("https://github.com/KyleU/boilerplay"), "git@github.com:KyleU/boilerplay.git")),
   git.remoteRepo := scmInfo.value.get.connection,

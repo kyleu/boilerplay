@@ -7,11 +7,14 @@ GET         /robots.txt                              controllers.HomeController.
 # Admin
 ->          /admin/system                            system.Routes
 
+->          /admin/encrypt                           encrypt.Routes
+->          /admin/sandbox                           sandbox.Routes
 ->          /admin/graphql                           graphql.Routes
 ->          /admin/rest                              rest.Routes
 ->          /admin/audit                             audit.Routes
 ->          /admin/note                              note.Routes
 ->          /admin/systemUser                        systemUser.Routes
+->          /admin/status                            status.Routes
 
 # Start model route files
 # Projectile export section [boilerplay]

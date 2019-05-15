@@ -1,12 +1,9 @@
 logs
-conf/generated.keystore
 project/project/target
 project/target
-doc/src/main/graphdoc
 target
 tmp
 .history
-dist
 /.idea
 /*.iml
 /out
@@ -14,7 +11,5 @@ dist
 /.idea_modules
 /.classpath
 /.project
-/RUNNING_PID
 /.settings
-
-buildinfo.properties
+/RUNNING_PID

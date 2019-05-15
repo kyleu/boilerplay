@@ -1,7 +1,7 @@
 package models.graphql
 
 import com.kyleu.projectile.graphql.{GraphQLContext, GraphQLSchema}
-import models.graphql.sandbox.SandboxSchema
+import com.kyleu.projectile.models.graphql.sandbox.SandboxSchema
 import sangria.execution.deferred.DeferredResolver
 import sangria.schema._
 import util.Version
@@ -63,7 +63,7 @@ object Schema extends GraphQLSchema {
   )
 
   // Mutation Types
-  private[this] val baseMutationFields = sandbox.SandboxSchema.mutationFields
+  private[this] val baseMutationFields = SandboxSchema.mutationFields
 
   private[this] val modelMutationFields: Seq[Field[GraphQLContext, Unit]] = {
     Nil ++

@@ -23,7 +23,4 @@ Boilerplay relies on a whole lot of tremendous open source projects. Here's a fe
 * [circe](https://circe.github.io/circe)
 * [Silhouette](https://www.silhouette.rocks)
 * [Prometheus](https://prometheus.io)
-* [Netty](http://netty.io)
-* [ScalaCrypt](https://github.com/Richard-W/scalacrypt)
-* [Font Awesome](http://fontawesome.io)
 * [JQuery](https://jquery.com/)

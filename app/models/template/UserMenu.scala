@@ -5,7 +5,6 @@ import com.kyleu.projectile.models.user.SystemUser
 
 object UserMenu extends MenuProvider {
   private[this] lazy val system = NavMenu(key = "system", title = "System", children = NavMenu.all ++ Seq(
-    NavMenu(key = "sandbox", title = "Sandbox Methods", url = Some(controllers.admin.system.routes.SandboxController.list().url), icon = Some("widgets")),
     NavMenu(key = "tasks", title = "Scheduled Tasks", url = Some(controllers.admin.system.routes.ScheduleController.list().url), icon = Some("access_time"))
   ), flatSection = true)
 
