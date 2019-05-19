@@ -1,4 +1,4 @@
-package util.web
+package models.module
 
 import com.kyleu.projectile.models.user.Role
 import play.api.mvc.{PathBindable, QueryStringBindable}

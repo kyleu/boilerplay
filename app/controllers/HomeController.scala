@@ -1,7 +1,7 @@
 package controllers
 
 import com.kyleu.projectile.controllers.AuthController
-import com.kyleu.projectile.models.Application
+import com.kyleu.projectile.models.module.Application
 
 import scala.concurrent.{ExecutionContext, Future}
 

@@ -2,9 +2,6 @@
   "#include:common.json": "*",
 
   // Start model schemas
-  // Projectile export section [boilerplay]
-  "#include:sync/syncProgressRow.json": "*",
-  "#include:task/scheduledTaskRunRow.json": "*",
   // End model schemas
 
   "#include:system.json": "*"

@@ -1,7 +1,7 @@
 {
   "key" : "scheduled_task_run",
   "pkg" : [ "task" ],
-  "features" : [ "doobie", "audit", "datamodel", "auth", "graphql", "service", "slick", "controller", "notes", "json", "core" ],
+  "features" : [ ],
   "ignored" : [ ],
   "overrides" : [ ]
 }

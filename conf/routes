@@ -1,44 +1,47 @@
-GET         /                                        controllers.HomeController.home
-GET         /robots.txt                              controllers.HomeController.robots
+GET        /                                        controllers.HomeController.home
+GET        /robots.txt                              controllers.HomeController.robots
 
-->          /profile                                 profile.Routes
-->          /components                              components.Routes
+# Projectile
+->         /profile                                 profile.Routes
+->         /components                              components.Routes
 
 # Admin
-->          /admin/system                            system.Routes
+->         /admin/search                            search.Routes
 
-->          /admin/encrypt                           encrypt.Routes
-->          /admin/sandbox                           sandbox.Routes
-->          /admin/graphql                           graphql.Routes
-->          /admin/rest                              rest.Routes
-->          /admin/audit                             audit.Routes
-->          /admin/note                              note.Routes
-->          /admin/systemUser                        systemUser.Routes
-->          /admin/status                            status.Routes
+->         /admin/graphql                           graphql.Routes
+->         /admin/rest                              rest.Routes
+
+->         /admin/audit                             audit.Routes
+->         /admin/note                              note.Routes
+->         /admin/systemUser                        systemUser.Routes
+
+->         /admin/encrypt                           encrypt.Routes
+->         /admin/sandbox                           sandbox.Routes
+->         /admin/task                              task.Routes
+->         /admin/process                           process.Routes
+
+->         /admin/status                            status.Routes
 
 # Start model route files
-# Projectile export section [boilerplay]
-->          /admin/sync                              sync.Routes
-->          /admin/task                              task.Routes
 # End model route files
 
 # Assets
-GET         /browserconfig.xml                       controllers.Assets.at(file = "browserconfig.xml")
-GET         /manifest.json                           controllers.Assets.at(file = "manifest.json")
+GET        /browserconfig.xml                       controllers.Assets.at(file = "browserconfig.xml")
+GET        /manifest.json                           controllers.Assets.at(file = "manifest.json")
 
-GET         /android-chrome-192x192.png              controllers.Assets.at(file = "images/ui/favicon/android-chrome-192x192.png")
-GET         /android-chrome-512x512.png              controllers.Assets.at(file = "images/ui/favicon/android-chrome-512x512.png")
-GET         /apple-touch-icon-precomposed.png        controllers.Assets.at(file = "images/ui/favicon/apple-touch-icon-precomposed.png")
-GET         /apple-touch-icon.png                    controllers.Assets.at(file = "images/ui/favicon/apple-touch-icon.png")
-GET         /favicon-16x16.png                       controllers.Assets.at(file = "images/ui/favicon/favicon-16x16.png")
-GET         /favicon-32x32.png                       controllers.Assets.at(file = "images/ui/favicon/favicon-32x32.png")
-GET         /favicon.ico                             controllers.Assets.at(file = "images/ui/favicon/favicon.ico")
-GET         /favicon.png                             controllers.Assets.at(file = "images/ui/favicon/favicon.png")
-GET         /mstile-144x144.png                      controllers.Assets.at(file = "images/ui/favicon/mstile-144x144.png")
-GET         /mstile-150x150.png                      controllers.Assets.at(file = "images/ui/favicon/mstile-150x150.png")
-GET         /mstile-310x150.png                      controllers.Assets.at(file = "images/ui/favicon/mstile-310x150.png")
-GET         /mstile-310x310.png                      controllers.Assets.at(file = "images/ui/favicon/mstile-310x310.png")
-GET         /mstile-70x70.png                        controllers.Assets.at(file = "images/ui/favicon/mstile-70x70.png")
-GET         /safari-pinned-tab.svg                   controllers.Assets.at(file = "images/ui/favicon/safari-pinned-tab.svg")
+GET        /android-chrome-192x192.png              controllers.Assets.at(file = "images/ui/favicon/android-chrome-192x192.png")
+GET        /android-chrome-512x512.png              controllers.Assets.at(file = "images/ui/favicon/android-chrome-512x512.png")
+GET        /apple-touch-icon-precomposed.png        controllers.Assets.at(file = "images/ui/favicon/apple-touch-icon-precomposed.png")
+GET        /apple-touch-icon.png                    controllers.Assets.at(file = "images/ui/favicon/apple-touch-icon.png")
+GET        /favicon-16x16.png                       controllers.Assets.at(file = "images/ui/favicon/favicon-16x16.png")
+GET        /favicon-32x32.png                       controllers.Assets.at(file = "images/ui/favicon/favicon-32x32.png")
+GET        /favicon.ico                             controllers.Assets.at(file = "images/ui/favicon/favicon.ico")
+GET        /favicon.png                             controllers.Assets.at(file = "images/ui/favicon/favicon.png")
+GET        /mstile-144x144.png                      controllers.Assets.at(file = "images/ui/favicon/mstile-144x144.png")
+GET        /mstile-150x150.png                      controllers.Assets.at(file = "images/ui/favicon/mstile-150x150.png")
+GET        /mstile-310x150.png                      controllers.Assets.at(file = "images/ui/favicon/mstile-310x150.png")
+GET        /mstile-310x310.png                      controllers.Assets.at(file = "images/ui/favicon/mstile-310x310.png")
+GET        /mstile-70x70.png                        controllers.Assets.at(file = "images/ui/favicon/mstile-70x70.png")
+GET        /safari-pinned-tab.svg                   controllers.Assets.at(file = "images/ui/favicon/safari-pinned-tab.svg")
 
-GET         /assets/*file                            controllers.Assets.versioned(file)
+GET        /assets/*file                            controllers.Assets.versioned(file)

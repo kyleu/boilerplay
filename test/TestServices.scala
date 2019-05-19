@@ -11,5 +11,4 @@ object TestServices {
   lazy val slick = new SlickQueryService("test", db.source, 30, trace)
 
   lazy val scheduledTaskRunRowService = new services.task.ScheduledTaskRunRowService(db, trace)
-  lazy val syncProgressRowService = new services.sync.SyncProgressRowService(db, trace)
 }

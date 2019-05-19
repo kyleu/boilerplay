@@ -14,14 +14,13 @@ lazy val doc = Project(id = "doc", base = file("./doc")).settings(
 ).enablePlugins(ParadoxPlugin, ParadoxSitePlugin, SiteScaladocPlugin, GhpagesPlugin)
 
 lazy val server = Project(id = projectId, base = file(".")).enablePlugins(ProjectilePlayProject).settings(
-  projectileProjectId := projectId,
-  projectileProjectName := "Boilerplay",
+  projectileProjectTitle := "Boilerplay",
   projectileProjectPort := 9000,
 
   maintainer := "Boilerplay User <admin@boilerplay.com>",
   libraryDependencies ++= Seq(projectileLib("slick"), projectileLib("doobie")),
 
-  play.sbt.routes.RoutesKeys.routesImport += "util.web.ModelBindables._",
+  play.sbt.routes.RoutesKeys.routesImport += "models.module.ModelBindables._",
   scalaJSProjects := Seq(client),
 
   JsEngineKeys.engineType := JsEngineKeys.EngineType.Node,

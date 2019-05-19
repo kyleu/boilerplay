@@ -9,13 +9,11 @@ object TestModelSupport {
 
   def insert(m: DataFieldModel) = m match {
     case model: models.task.ScheduledTaskRunRow => TestServices.scheduledTaskRunRowService.insert(creds, model)
-    case model: models.sync.SyncProgressRow => TestServices.syncProgressRowService.insert(creds, model)
     case model => throw new IllegalStateException(s"Unable to insert unhandled model [$model]")
   }
 
   def remove(m: DataFieldModel) = m match {
     case model: models.task.ScheduledTaskRunRow => TestServices.scheduledTaskRunRowService.remove(creds, model.id)
-    case model: models.sync.SyncProgressRow => TestServices.syncProgressRowService.remove(creds, model.key)
     case model => throw new IllegalStateException(s"Unable to remove unhandled model [$model]")
   }
 }
