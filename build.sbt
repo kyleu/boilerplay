@@ -1,12 +1,9 @@
 val projectId = "boilerplay"
 val projectVersion = "2.0.0"
 
-lazy val client = (project in file("client")).settings(
-  version := projectVersion,
-  libraryDependencies ++= Seq("com.kyleu" %%% "projectile-lib-scalajs" % projectileVersion)
-).enablePlugins(ScalaJSPlugin, ScalaJSWeb)
+lazy val client = (project in file("client")).settings(version := projectVersion).enablePlugins(ProjectileScalaJSProject)
 
-lazy val doc = Project(id = "doc", base = file("./doc")).settings(
+lazy val doc = Project(id = "doc", base = file("doc")).settings(
   version := projectVersion,
   paradoxTheme := Some(builtinParadoxTheme("generic")),
   sourceDirectory in Paradox := sourceDirectory.value / "main" / "paradox",
@@ -21,9 +18,9 @@ lazy val server = Project(id = projectId, base = file(".")).enablePlugins(Projec
   libraryDependencies ++= Seq(projectileLib("slick"), projectileLib("doobie")),
 
   play.sbt.routes.RoutesKeys.routesImport += "models.module.ModelBindables._",
-  scalaJSProjects := Seq(client),
-
   JsEngineKeys.engineType := JsEngineKeys.EngineType.Node,
+
+  scalaJSProjects := Seq(client),
   pipelineStages in Assets := Seq(scalaJSPipeline),
 
   scmInfo := Some(ScmInfo(url("https://github.com/KyleU/boilerplay"), "git@github.com:KyleU/boilerplay.git")),
