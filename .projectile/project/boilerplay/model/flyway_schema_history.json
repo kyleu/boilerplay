@@ -1,6 +1,6 @@
 {
   "key" : "flyway_schema_history",
-  "pkg" : [ "ddl" ],
+  "pkg" : [ ],
   "features" : [ ],
   "ignored" : [ ],
   "overrides" : [ {

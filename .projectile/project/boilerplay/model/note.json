@@ -1,6 +1,6 @@
 {
   "key" : "note",
-  "pkg" : [ "note" ],
+  "pkg" : [ ],
   "features" : [ ],
   "ignored" : [ ],
   "overrides" : [ {

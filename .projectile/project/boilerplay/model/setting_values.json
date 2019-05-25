@@ -1,6 +1,6 @@
 {
   "key" : "setting_values",
-  "pkg" : [ "settings" ],
+  "pkg" : [ ],
   "features" : [ ],
   "ignored" : [ ],
   "overrides" : [ {
@@ -9,11 +9,5 @@
   }, {
     "k" : "plural",
     "v" : "Settings"
-  }, {
-    "k" : "propertyName",
-    "v" : "setting"
-  }, {
-    "k" : "className",
-    "v" : "Setting"
   } ]
 }

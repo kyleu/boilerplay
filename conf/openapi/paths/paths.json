@@ -1,9 +1,0 @@
-{
-  // Start enum paths
-  // End enum paths
-
-  // Start schema paths
-  // End schema paths
-
-  "#include:common.json": "*"
-}

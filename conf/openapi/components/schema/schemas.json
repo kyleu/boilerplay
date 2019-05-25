@@ -1,8 +1,0 @@
-{
-  "#include:common.json": "*",
-
-  // Start model schemas
-  // End model schemas
-
-  "#include:system.json": "*"
-}
