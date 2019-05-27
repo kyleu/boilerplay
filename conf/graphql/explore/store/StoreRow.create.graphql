@@ -1,0 +1,12 @@
+# Generated File
+# Creates a new StoreRow entity
+mutation StoreRowCreate {
+  storeRow {
+    create(fields: [{k: "", v: ""}]) {
+      storeId
+      managerStaffId
+      addressId
+      lastUpdate
+    }
+  }
+}

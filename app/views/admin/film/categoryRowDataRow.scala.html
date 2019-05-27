@@ -1,0 +1,12 @@
+@* Generated File *@
+@(model: models.film.CategoryRow)<tr>
+  <td>
+    <a href="@controllers.admin.film.routes.CategoryRowController.view(model.categoryId)">@model.categoryId</a>
+  </td>
+  <td>
+    @model.name
+  </td>
+  <td>
+    @model.lastUpdate
+  </td>
+</tr>

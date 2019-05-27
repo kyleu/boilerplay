@@ -1,0 +1,12 @@
+# Generated File
+# Updates a single CityRow entity using the provided fields
+mutation CityRowUpdate {
+  cityRow {
+    update(cityId: 0, fields: [{k: "", v: ""}]) {
+      cityId
+      city
+      countryId
+      lastUpdate
+    }
+  }
+}

@@ -1,0 +1,18 @@
+@* Generated File *@
+@(model: models.store.InventoryRow)<tr>
+  <td>
+    <a href="@controllers.admin.store.routes.InventoryRowController.view(model.inventoryId)">@model.inventoryId</a>
+  </td>
+  <td>
+    @model.filmId
+    <a href="@controllers.admin.film.routes.FilmRowController.view(model.filmId)">
+      <i class="material-icons small">@models.template.Icons.filmRow</i>
+    </a>
+  </td>
+  <td>
+    @model.storeId
+    <a href="@controllers.admin.store.routes.StoreRowController.view(model.storeId)">
+      <i class="material-icons small">@models.template.Icons.storeRow</i>
+    </a>
+  </td>
+</tr>

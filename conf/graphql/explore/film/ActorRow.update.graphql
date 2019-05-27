@@ -1,0 +1,12 @@
+# Generated File
+# Updates a single ActorRow entity using the provided fields
+mutation ActorRowUpdate {
+  actorRow {
+    update(actorId: 0, fields: [{k: "", v: ""}]) {
+      actorId
+      firstName
+      lastName
+      lastUpdate
+    }
+  }
+}

@@ -1,0 +1,86 @@
+@* Generated File *@
+@(cfg: com.kyleu.projectile.models.config.UiConfig, model: models.customer.CustomerRow, notes: Seq[com.kyleu.projectile.models.note.Note], debug: Boolean)(
+    implicit request: Request[AnyContent], session: Session, flash: Flash
+)@com.kyleu.projectile.views.html.layout.page(title = s"Customer", cfg = cfg, icon = Some(models.template.Icons.customerRow)) {
+  @com.kyleu.projectile.views.html.layout.card(None) {
+    <div class="right"><a class="btn @cfg.user.buttonColor" href="@controllers.admin.customer.routes.CustomerRowController.editForm(model.customerId)">Edit</a></div>
+    <div class="right"><a class="btn-flat remove-link" onclick="return confirm('Are you sure you want to remove this Customer?')" href="@controllers.admin.customer.routes.CustomerRowController.remove(model.customerId)">Remove</a></div>
+    <table class="highlight responsive-table">
+      <tbody>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.customerId.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Customer Id</div></th>
+          <td>@model.customerId</td>
+        </tr>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.storeId.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Store Id</div></th>
+          <td>
+            @model.storeId
+            <a href="@controllers.admin.store.routes.StoreRowController.view(model.storeId)"><i class="material-icons small">@models.template.Icons.storeRow</i></a>
+          </td>
+        </tr>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.firstName.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">First Name</div></th>
+          <td>@model.firstName</td>
+        </tr>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.lastName.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Last Name</div></th>
+          <td>@model.lastName</td>
+        </tr>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.email.map(_.toString.replaceAllLiterally("'", ""))')" style="cursor: pointer;">Email</div></th>
+          <td>@model.email.getOrElse(com.kyleu.projectile.util.NullUtils.str)</td>
+        </tr>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.addressId.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Address Id</div></th>
+          <td>
+            @model.addressId
+            <a href="@controllers.admin.address.routes.AddressRowController.view(model.addressId)"><i class="material-icons small">@models.template.Icons.addressRow</i></a>
+          </td>
+        </tr>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.activebool.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Activebool</div></th>
+          <td>@model.activebool</td>
+        </tr>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.createDate.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Create Date</div></th>
+          <td>@model.createDate</td>
+        </tr>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.lastUpdate.map(_.toString.replaceAllLiterally("'", ""))')" style="cursor: pointer;">Last Update</div></th>
+          <td>@model.lastUpdate.getOrElse(com.kyleu.projectile.util.NullUtils.str)</td>
+        </tr>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.active.map(_.toString.replaceAllLiterally("'", ""))')" style="cursor: pointer;">Active</div></th>
+          <td>@model.active.getOrElse(com.kyleu.projectile.util.NullUtils.str)</td>
+        </tr>
+      </tbody>
+    </table>
+  }
+
+  @com.kyleu.projectile.services.augment.AugmentService.views.augment(model, request.queryString, cfg)
+
+  @com.kyleu.projectile.views.html.admin.note.notes(cfg, notes, "CustomerRow", "Customer", model.customerId)
+
+  <ul id="model-relations" class="collapsible" data-collapsible="expandable">
+    <li id="relation-paymentRow-customerId" data-table="paymentRow" data-field="customerId" data-singular="Payment" data-plural="Payments" data-url="@controllers.admin.payment.routes.PaymentRowController.byCustomerId(model.customerId, limit = Some(5), embedded = true)">
+      <div class="collapsible-header">
+        <i class="material-icons small">@models.template.Icons.paymentRow</i>
+        <span class="title">Payments</span>&nbsp;by Customer Id
+        <span class="badge"><a href="@controllers.admin.payment.routes.PaymentRowController.byCustomerId(model.customerId)"><i class="material-icons">insert_link</i></a></span>
+      </div>
+      <div class="collapsible-body"><span>Loading...</span></div>
+    </li>
+    <li id="relation-rentalRow-customerId" data-table="rentalRow" data-field="customerId" data-singular="Rental" data-plural="Rentals" data-url="@controllers.admin.customer.routes.RentalRowController.byCustomerId(model.customerId, limit = Some(5), embedded = true)">
+      <div class="collapsible-header">
+        <i class="material-icons small">@models.template.Icons.rentalRow</i>
+        <span class="title">Rentals</span>&nbsp;by Customer Id
+        <span class="badge"><a href="@controllers.admin.customer.routes.RentalRowController.byCustomerId(model.customerId)"><i class="material-icons">insert_link</i></a></span>
+      </div>
+      <div class="collapsible-body"><span>Loading...</span></div>
+    </li>
+  </ul>
+  @com.kyleu.projectile.views.html.components.includeScalaJs(debug)
+  <script>$(function() { new RelationService('@controllers.admin.customer.routes.CustomerRowController.relationCounts(model.customerId)') });</script>
+
+  @com.kyleu.projectile.views.html.components.includeScalaJs(debug)
+}

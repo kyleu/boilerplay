@@ -1,0 +1,30 @@
+@* Generated File *@
+@(cfg: com.kyleu.projectile.models.config.UiConfig, addressId: Int, modelSeq: Seq[models.store.StoreRow], orderBy: Option[String], orderAsc: Boolean, limit: Int, offset: Int)(
+    implicit request: Request[AnyContent], session: Session, flash: Flash
+)
+@com.kyleu.projectile.views.html.admin.explore.list(
+  cfg = cfg,
+  model = "Store",
+  modelPlural = "Stores",
+  icon = models.template.Icons.storeRow,
+  cols = Seq(
+    "storeId" -> "Store Id",
+    "managerStaffId" -> "Manager Staff Id",
+    "addressId" -> "Address Id",
+    "lastUpdate" -> "Last Update"
+  ),
+  orderBy = orderBy,
+  orderAsc = orderAsc,
+  totalCount = None,
+  rows = modelSeq.map(model => views.html.admin.store.storeRowDataRow(model)),
+  calls = com.kyleu.projectile.models.web.ListCalls(
+    orderBy = Some(controllers.admin.store.routes.StoreRowController.byAddressId(addressId, _, _, Some(limit), Some(0))),
+    search = None,
+    next = controllers.admin.store.routes.StoreRowController.byAddressId(addressId, orderBy, orderAsc, Some(limit), Some(offset + limit)),
+    prev = controllers.admin.store.routes.StoreRowController.byAddressId(addressId, orderBy, orderAsc, Some(limit), Some(offset - limit)),
+  ),
+  limit = limit,
+  offset = offset,
+  q = None,
+  fullUI = false
+)

@@ -1,0 +1,33 @@
+@* Generated File *@
+@(cfg: com.kyleu.projectile.models.config.UiConfig, addressId: Int, modelSeq: Seq[models.store.StaffRow], orderBy: Option[String], orderAsc: Boolean, limit: Int, offset: Int)(
+    implicit request: Request[AnyContent], session: Session, flash: Flash
+)
+@com.kyleu.projectile.views.html.admin.explore.list(
+  cfg = cfg,
+  model = "Staff",
+  modelPlural = "Staff",
+  icon = models.template.Icons.staffRow,
+  cols = Seq(
+    "staffId" -> "Staff Id",
+    "firstName" -> "First Name",
+    "lastName" -> "Last Name",
+    "addressId" -> "Address Id",
+    "email" -> "Email",
+    "storeId" -> "Store Id",
+    "username" -> "Username"
+  ),
+  orderBy = orderBy,
+  orderAsc = orderAsc,
+  totalCount = None,
+  rows = modelSeq.map(model => views.html.admin.store.staffRowDataRow(model)),
+  calls = com.kyleu.projectile.models.web.ListCalls(
+    orderBy = Some(controllers.admin.store.routes.StaffRowController.byAddressId(addressId, _, _, Some(limit), Some(0))),
+    search = None,
+    next = controllers.admin.store.routes.StaffRowController.byAddressId(addressId, orderBy, orderAsc, Some(limit), Some(offset + limit)),
+    prev = controllers.admin.store.routes.StaffRowController.byAddressId(addressId, orderBy, orderAsc, Some(limit), Some(offset - limit)),
+  ),
+  limit = limit,
+  offset = offset,
+  q = None,
+  fullUI = false
+)

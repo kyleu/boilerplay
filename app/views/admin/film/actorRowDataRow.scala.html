@@ -1,0 +1,15 @@
+@* Generated File *@
+@(model: models.film.ActorRow)<tr>
+  <td>
+    <a href="@controllers.admin.film.routes.ActorRowController.view(model.actorId)">@model.actorId</a>
+  </td>
+  <td>
+    @model.firstName
+  </td>
+  <td>
+    @model.lastName
+  </td>
+  <td>
+    @model.lastUpdate
+  </td>
+</tr>

@@ -1,0 +1,26 @@
+@* Generated File *@
+@(cfg: com.kyleu.projectile.models.config.UiConfig, model: models.store.StoreRow, title: String, cancel: Call, act: Call, isNew: Boolean = false, debug: Boolean = false)(
+    implicit request: Request[AnyContent], session: Session, flash: Flash
+)@com.kyleu.projectile.views.html.layout.page(title = title, cfg = cfg, icon = Some(models.template.Icons.storeRow)) {
+  <form id="form-edit-storeRow" action="@act" method="post">
+    @com.kyleu.projectile.views.html.layout.card(None) {
+      <div class="right"><button type="submit" class="btn @cfg.user.buttonColor">@if(isNew) {Create} else {Save} Store</button></div>
+      <div class="right"><a href="@cancel" class="btn-flat cancel-link">Cancel</a></div>
+      <div class="clear"></div>
+      <table>
+        <tbody>
+          @com.kyleu.projectile.views.html.components.form.textField(selected = isNew, key = "storeId", title = "Store Id", value = Some(model.storeId.toString), nullable = false, dataType = "integer")
+          @com.kyleu.projectile.views.html.components.form.textField(selected = isNew, key = "managerStaffId", title = "Manager Staff Id", value = Some(model.managerStaffId.toString), nullable = false, dataType = "integer")
+          @com.kyleu.projectile.views.html.components.form.autocompleteField(
+            selected = isNew, key = "addressId", title = "Address Id", value = Some(model.addressId.toString), nullable = false, dataType = "integer",
+            call = controllers.admin.address.routes.AddressRowController.autocomplete(), acType = ("addressRow", "Address"), icon = models.template.Icons.addressRow
+          )
+          @com.kyleu.projectile.views.html.components.form.zonedDateTimeField(selected = isNew, key = "lastUpdate", title = "Last Update", value = Some(model.lastUpdate), nullable = false)
+        </tbody>
+      </table>
+    }
+  </form>
+}
+@com.kyleu.projectile.views.html.components.includeScalaJs(debug)
+@com.kyleu.projectile.views.html.components.includeAutocomplete(debug)
+<script>$(function() { new FormService('form-edit-storeRow'); })</script>

@@ -1,0 +1,31 @@
+@* Generated File *@
+@(cfg: com.kyleu.projectile.models.config.UiConfig, customerId: Int, modelSeq: Seq[models.payment.PaymentRow], orderBy: Option[String], orderAsc: Boolean, limit: Int, offset: Int)(
+    implicit request: Request[AnyContent], session: Session, flash: Flash
+)
+@com.kyleu.projectile.views.html.admin.explore.list(
+  cfg = cfg,
+  model = "Payment",
+  modelPlural = "Payments",
+  icon = models.template.Icons.paymentRow,
+  cols = Seq(
+    "paymentId" -> "Payment Id",
+    "customerId" -> "Customer Id",
+    "staffId" -> "Staff Id",
+    "rentalId" -> "Rental Id",
+    "amount" -> "Amount"
+  ),
+  orderBy = orderBy,
+  orderAsc = orderAsc,
+  totalCount = None,
+  rows = modelSeq.map(model => views.html.admin.payment.paymentRowDataRow(model)),
+  calls = com.kyleu.projectile.models.web.ListCalls(
+    orderBy = Some(controllers.admin.payment.routes.PaymentRowController.byCustomerId(customerId, _, _, Some(limit), Some(0))),
+    search = None,
+    next = controllers.admin.payment.routes.PaymentRowController.byCustomerId(customerId, orderBy, orderAsc, Some(limit), Some(offset + limit)),
+    prev = controllers.admin.payment.routes.PaymentRowController.byCustomerId(customerId, orderBy, orderAsc, Some(limit), Some(offset - limit)),
+  ),
+  limit = limit,
+  offset = offset,
+  q = None,
+  fullUI = false
+)

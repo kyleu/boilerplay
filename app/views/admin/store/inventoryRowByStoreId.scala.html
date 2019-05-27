@@ -1,0 +1,29 @@
+@* Generated File *@
+@(cfg: com.kyleu.projectile.models.config.UiConfig, storeId: Int, modelSeq: Seq[models.store.InventoryRow], orderBy: Option[String], orderAsc: Boolean, limit: Int, offset: Int)(
+    implicit request: Request[AnyContent], session: Session, flash: Flash
+)
+@com.kyleu.projectile.views.html.admin.explore.list(
+  cfg = cfg,
+  model = "Inventory",
+  modelPlural = "Inventories",
+  icon = models.template.Icons.inventoryRow,
+  cols = Seq(
+    "inventoryId" -> "Inventory Id",
+    "filmId" -> "Film Id",
+    "storeId" -> "Store Id"
+  ),
+  orderBy = orderBy,
+  orderAsc = orderAsc,
+  totalCount = None,
+  rows = modelSeq.map(model => views.html.admin.store.inventoryRowDataRow(model)),
+  calls = com.kyleu.projectile.models.web.ListCalls(
+    orderBy = Some(controllers.admin.store.routes.InventoryRowController.byStoreId(storeId, _, _, Some(limit), Some(0))),
+    search = None,
+    next = controllers.admin.store.routes.InventoryRowController.byStoreId(storeId, orderBy, orderAsc, Some(limit), Some(offset + limit)),
+    prev = controllers.admin.store.routes.InventoryRowController.byStoreId(storeId, orderBy, orderAsc, Some(limit), Some(offset - limit)),
+  ),
+  limit = limit,
+  offset = offset,
+  q = None,
+  fullUI = false
+)

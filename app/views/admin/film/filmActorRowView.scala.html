@@ -1,0 +1,37 @@
+@* Generated File *@
+@(cfg: com.kyleu.projectile.models.config.UiConfig, model: models.film.FilmActorRow, notes: Seq[com.kyleu.projectile.models.note.Note], debug: Boolean)(
+    implicit request: Request[AnyContent], session: Session, flash: Flash
+)@com.kyleu.projectile.views.html.layout.page(title = s"Film Actor", cfg = cfg, icon = Some(models.template.Icons.filmActorRow)) {
+  @com.kyleu.projectile.views.html.layout.card(None) {
+    <div class="right"><a class="btn @cfg.user.buttonColor" href="@controllers.admin.film.routes.FilmActorRowController.editForm(model.actorId, model.filmId)">Edit</a></div>
+    <div class="right"><a class="btn-flat remove-link" onclick="return confirm('Are you sure you want to remove this Film Actor?')" href="@controllers.admin.film.routes.FilmActorRowController.remove(model.actorId, model.filmId)">Remove</a></div>
+    <table class="highlight responsive-table">
+      <tbody>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.actorId.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Actor Id</div></th>
+          <td>
+            @model.actorId
+            <a href="@controllers.admin.film.routes.ActorRowController.view(model.actorId)"><i class="material-icons small">@models.template.Icons.actorRow</i></a>
+          </td>
+        </tr>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.filmId.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Film Id</div></th>
+          <td>
+            @model.filmId
+            <a href="@controllers.admin.film.routes.FilmRowController.view(model.filmId)"><i class="material-icons small">@models.template.Icons.filmRow</i></a>
+          </td>
+        </tr>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.lastUpdate.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Last Update</div></th>
+          <td>@model.lastUpdate</td>
+        </tr>
+      </tbody>
+    </table>
+  }
+
+  @com.kyleu.projectile.services.augment.AugmentService.views.augment(model, request.queryString, cfg)
+
+  @com.kyleu.projectile.views.html.admin.note.notes(cfg, notes, "FilmActorRow", "Film Actor", model.actorId, model.filmId)
+
+  @com.kyleu.projectile.views.html.components.includeScalaJs(debug)
+}

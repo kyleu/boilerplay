@@ -1,0 +1,48 @@
+@* Generated File *@
+@(cfg: com.kyleu.projectile.models.config.UiConfig, model: models.film.ActorRow, notes: Seq[com.kyleu.projectile.models.note.Note], debug: Boolean)(
+    implicit request: Request[AnyContent], session: Session, flash: Flash
+)@com.kyleu.projectile.views.html.layout.page(title = s"Actor", cfg = cfg, icon = Some(models.template.Icons.actorRow)) {
+  @com.kyleu.projectile.views.html.layout.card(None) {
+    <div class="right"><a class="btn @cfg.user.buttonColor" href="@controllers.admin.film.routes.ActorRowController.editForm(model.actorId)">Edit</a></div>
+    <div class="right"><a class="btn-flat remove-link" onclick="return confirm('Are you sure you want to remove this Actor?')" href="@controllers.admin.film.routes.ActorRowController.remove(model.actorId)">Remove</a></div>
+    <table class="highlight responsive-table">
+      <tbody>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.actorId.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Actor Id</div></th>
+          <td>@model.actorId</td>
+        </tr>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.firstName.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">First Name</div></th>
+          <td>@model.firstName</td>
+        </tr>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.lastName.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Last Name</div></th>
+          <td>@model.lastName</td>
+        </tr>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.lastUpdate.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Last Update</div></th>
+          <td>@model.lastUpdate</td>
+        </tr>
+      </tbody>
+    </table>
+  }
+
+  @com.kyleu.projectile.services.augment.AugmentService.views.augment(model, request.queryString, cfg)
+
+  @com.kyleu.projectile.views.html.admin.note.notes(cfg, notes, "ActorRow", "Actor", model.actorId)
+
+  <ul id="model-relations" class="collapsible" data-collapsible="expandable">
+    <li id="relation-filmActorRow-actorId" data-table="filmActorRow" data-field="actorId" data-singular="Film Actor" data-plural="Film Actors" data-url="@controllers.admin.film.routes.FilmActorRowController.byActorId(model.actorId, limit = Some(5), embedded = true)">
+      <div class="collapsible-header">
+        <i class="material-icons small">@models.template.Icons.filmActorRow</i>
+        <span class="title">Film Actors</span>&nbsp;by Actor Id
+        <span class="badge"><a href="@controllers.admin.film.routes.FilmActorRowController.byActorId(model.actorId)"><i class="material-icons">insert_link</i></a></span>
+      </div>
+      <div class="collapsible-body"><span>Loading...</span></div>
+    </li>
+  </ul>
+  @com.kyleu.projectile.views.html.components.includeScalaJs(debug)
+  <script>$(function() { new RelationService('@controllers.admin.film.routes.ActorRowController.relationCounts(model.actorId)') });</script>
+
+  @com.kyleu.projectile.views.html.components.includeScalaJs(debug)
+}

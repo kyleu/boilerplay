@@ -1,0 +1,34 @@
+@* Generated File *@
+@(cfg: com.kyleu.projectile.models.config.UiConfig, totalCount: Option[Int], modelSeq: Seq[models.address.AddressRow], q: Option[String], orderBy: Option[String], orderAsc: Boolean, limit: Int, offset: Int)(
+    implicit request: Request[AnyContent], session: Session, flash: Flash
+)
+@com.kyleu.projectile.views.html.admin.explore.list(
+  cfg = cfg,
+  model = "Address",
+  modelPlural = "Addresses",
+  icon = models.template.Icons.addressRow,
+  cols = Seq(
+    "addressId" -> "Address Id",
+    "address" -> "Address",
+    "address2" -> "Address2",
+    "district" -> "District",
+    "cityId" -> "City Id",
+    "postalCode" -> "Postal Code",
+    "phone" -> "Phone",
+    "lastUpdate" -> "Last Update"
+  ),
+  totalCount = totalCount,
+  rows = modelSeq.map(model => views.html.admin.address.addressRowDataRow(model)),
+  orderBy = orderBy,
+  orderAsc = orderAsc,
+  calls = com.kyleu.projectile.models.web.ListCalls(
+    newCall = Some(controllers.admin.address.routes.AddressRowController.createForm()),
+    orderBy = Some(controllers.admin.address.routes.AddressRowController.list(q, _, _, Some(limit), Some(0))),
+    search = Some(controllers.admin.address.routes.AddressRowController.list(None, orderBy, orderAsc, Some(limit), None)),
+    next = controllers.admin.address.routes.AddressRowController.list(q, orderBy, orderAsc, Some(limit), Some(offset + limit)),
+    prev = controllers.admin.address.routes.AddressRowController.list(q, orderBy, orderAsc, Some(limit), Some(offset - limit))
+  ),
+  limit = limit,
+  offset = offset,
+  q = q
+)

@@ -1,0 +1,14 @@
+@* Generated File *@
+@(model: models.customer.LanguageRow, hit: String)<div class="search-result">
+  <div class="right">
+    <i class="material-icons small">@models.template.Icons.languageRow</i> Language
+  </div>
+  <div>
+    <a href="@controllers.admin.customer.routes.LanguageRowController.view(model.languageId)">@model.languageId</a>
+  </div>
+  <em>@hit</em>
+  <div style="margin-top: 12px;">
+    <div class="chip">Name: @model.name</div>
+    <div class="chip">Last Update: @model.lastUpdate</div>
+  </div>
+</div>

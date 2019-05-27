@@ -1,0 +1,15 @@
+# Generated File
+# Remove a single RentalRow entity from the system
+mutation RentalRowRemove {
+  rentalRow {
+    remove(rentalId: 0) {
+      rentalId
+      rentalDate
+      inventoryId
+      customerId
+      returnDate
+      staffId
+      lastUpdate
+    }
+  }
+}

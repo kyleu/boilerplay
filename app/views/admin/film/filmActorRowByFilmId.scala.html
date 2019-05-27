@@ -1,0 +1,29 @@
+@* Generated File *@
+@(cfg: com.kyleu.projectile.models.config.UiConfig, filmId: Int, modelSeq: Seq[models.film.FilmActorRow], orderBy: Option[String], orderAsc: Boolean, limit: Int, offset: Int)(
+    implicit request: Request[AnyContent], session: Session, flash: Flash
+)
+@com.kyleu.projectile.views.html.admin.explore.list(
+  cfg = cfg,
+  model = "Film Actor",
+  modelPlural = "Film Actors",
+  icon = models.template.Icons.filmActorRow,
+  cols = Seq(
+    "actorId" -> "Actor Id",
+    "filmId" -> "Film Id",
+    "lastUpdate" -> "Last Update"
+  ),
+  orderBy = orderBy,
+  orderAsc = orderAsc,
+  totalCount = None,
+  rows = modelSeq.map(model => views.html.admin.film.filmActorRowDataRow(model)),
+  calls = com.kyleu.projectile.models.web.ListCalls(
+    orderBy = Some(controllers.admin.film.routes.FilmActorRowController.byFilmId(filmId, _, _, Some(limit), Some(0))),
+    search = None,
+    next = controllers.admin.film.routes.FilmActorRowController.byFilmId(filmId, orderBy, orderAsc, Some(limit), Some(offset + limit)),
+    prev = controllers.admin.film.routes.FilmActorRowController.byFilmId(filmId, orderBy, orderAsc, Some(limit), Some(offset - limit)),
+  ),
+  limit = limit,
+  offset = offset,
+  q = None,
+  fullUI = false
+)

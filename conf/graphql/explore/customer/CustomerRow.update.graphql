@@ -1,0 +1,18 @@
+# Generated File
+# Updates a single CustomerRow entity using the provided fields
+mutation CustomerRowUpdate {
+  customerRow {
+    update(customerId: 0, fields: [{k: "", v: ""}]) {
+      customerId
+      storeId
+      firstName
+      lastName
+      email
+      addressId
+      activebool
+      createDate
+      lastUpdate
+      active
+    }
+  }
+}

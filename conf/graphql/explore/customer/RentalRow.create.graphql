@@ -1,0 +1,15 @@
+# Generated File
+# Creates a new RentalRow entity
+mutation RentalRowCreate {
+  rentalRow {
+    create(fields: [{k: "", v: ""}]) {
+      rentalId
+      rentalDate
+      inventoryId
+      customerId
+      returnDate
+      staffId
+      lastUpdate
+    }
+  }
+}

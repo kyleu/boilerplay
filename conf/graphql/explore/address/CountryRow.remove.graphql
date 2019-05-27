@@ -1,0 +1,11 @@
+# Generated File
+# Remove a single CountryRow entity from the system
+mutation CountryRowRemove {
+  countryRow {
+    remove(countryId: 0) {
+      countryId
+      country
+      lastUpdate
+    }
+  }
+}

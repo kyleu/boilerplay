@@ -1,0 +1,15 @@
+@* Generated File *@
+@(model: models.store.StoreRow, hit: String)<div class="search-result">
+  <div class="right">
+    <i class="material-icons small">@models.template.Icons.storeRow</i> Store
+  </div>
+  <div>
+    <a href="@controllers.admin.store.routes.StoreRowController.view(model.storeId)">@model.storeId</a>
+  </div>
+  <em>@hit</em>
+  <div style="margin-top: 12px;">
+    <div class="chip">Manager Staff Id: @model.managerStaffId</div>
+    <div class="chip">Address Id: @model.addressId</div>
+    <div class="chip">Last Update: @model.lastUpdate</div>
+  </div>
+</div>

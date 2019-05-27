@@ -1,0 +1,11 @@
+# Generated File
+# Creates a new LanguageRow entity
+mutation LanguageRowCreate {
+  languageRow {
+    create(fields: [{k: "", v: ""}]) {
+      languageId
+      name
+      lastUpdate
+    }
+  }
+}

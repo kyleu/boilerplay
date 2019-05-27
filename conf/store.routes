@@ -1,0 +1,39 @@
+# Generated File
+
+# Inventory Routes
+GET         /inventoryRow                                             controllers.admin.store.InventoryRowController.list(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None)
+GET         /inventoryRow/autocomplete                                controllers.admin.store.InventoryRowController.autocomplete(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None)
+GET         /inventoryRow/form                                        controllers.admin.store.InventoryRowController.createForm
+POST        /inventoryRow                                             controllers.admin.store.InventoryRowController.create
+GET         /inventoryRow/byFilmId/:filmId                            controllers.admin.store.InventoryRowController.byFilmId(filmId: Int, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None, embedded: Boolean ?= false)
+GET         /inventoryRow/byStoreId/:storeId                          controllers.admin.store.InventoryRowController.byStoreId(storeId: Int, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None, embedded: Boolean ?= false)
+GET         /inventoryRow/:inventoryId                                controllers.admin.store.InventoryRowController.view(inventoryId: Long, t: Option[String] ?= None)
+GET         /inventoryRow/:inventoryId/counts                         controllers.admin.store.InventoryRowController.relationCounts(inventoryId: Long)
+GET         /inventoryRow/:inventoryId/form                           controllers.admin.store.InventoryRowController.editForm(inventoryId: Long)
+POST        /inventoryRow/:inventoryId                                controllers.admin.store.InventoryRowController.edit(inventoryId: Long)
+GET         /inventoryRow/:inventoryId/remove                         controllers.admin.store.InventoryRowController.remove(inventoryId: Long)
+
+# Staff Routes
+GET         /staffRow                                                 controllers.admin.store.StaffRowController.list(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None)
+GET         /staffRow/autocomplete                                    controllers.admin.store.StaffRowController.autocomplete(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None)
+GET         /staffRow/form                                            controllers.admin.store.StaffRowController.createForm
+POST        /staffRow                                                 controllers.admin.store.StaffRowController.create
+GET         /staffRow/byStoreId/:storeId                              controllers.admin.store.StaffRowController.byStoreId(storeId: Int, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None, embedded: Boolean ?= false)
+GET         /staffRow/byAddressId/:addressId                          controllers.admin.store.StaffRowController.byAddressId(addressId: Int, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None, embedded: Boolean ?= false)
+GET         /staffRow/:staffId                                        controllers.admin.store.StaffRowController.view(staffId: Int, t: Option[String] ?= None)
+GET         /staffRow/:staffId/counts                                 controllers.admin.store.StaffRowController.relationCounts(staffId: Int)
+GET         /staffRow/:staffId/form                                   controllers.admin.store.StaffRowController.editForm(staffId: Int)
+POST        /staffRow/:staffId                                        controllers.admin.store.StaffRowController.edit(staffId: Int)
+GET         /staffRow/:staffId/remove                                 controllers.admin.store.StaffRowController.remove(staffId: Int)
+
+# Store Routes
+GET         /storeRow                                                 controllers.admin.store.StoreRowController.list(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None)
+GET         /storeRow/autocomplete                                    controllers.admin.store.StoreRowController.autocomplete(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None)
+GET         /storeRow/form                                            controllers.admin.store.StoreRowController.createForm
+POST        /storeRow                                                 controllers.admin.store.StoreRowController.create
+GET         /storeRow/byAddressId/:addressId                          controllers.admin.store.StoreRowController.byAddressId(addressId: Int, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None, embedded: Boolean ?= false)
+GET         /storeRow/:storeId                                        controllers.admin.store.StoreRowController.view(storeId: Int, t: Option[String] ?= None)
+GET         /storeRow/:storeId/counts                                 controllers.admin.store.StoreRowController.relationCounts(storeId: Int)
+GET         /storeRow/:storeId/form                                   controllers.admin.store.StoreRowController.editForm(storeId: Int)
+POST        /storeRow/:storeId                                        controllers.admin.store.StoreRowController.edit(storeId: Int)
+GET         /storeRow/:storeId/remove                                 controllers.admin.store.StoreRowController.remove(storeId: Int)

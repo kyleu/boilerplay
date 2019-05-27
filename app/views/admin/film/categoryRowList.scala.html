@@ -1,0 +1,29 @@
+@* Generated File *@
+@(cfg: com.kyleu.projectile.models.config.UiConfig, totalCount: Option[Int], modelSeq: Seq[models.film.CategoryRow], q: Option[String], orderBy: Option[String], orderAsc: Boolean, limit: Int, offset: Int)(
+    implicit request: Request[AnyContent], session: Session, flash: Flash
+)
+@com.kyleu.projectile.views.html.admin.explore.list(
+  cfg = cfg,
+  model = "Category",
+  modelPlural = "Categories",
+  icon = models.template.Icons.categoryRow,
+  cols = Seq(
+    "categoryId" -> "Category Id",
+    "name" -> "Name",
+    "lastUpdate" -> "Last Update"
+  ),
+  totalCount = totalCount,
+  rows = modelSeq.map(model => views.html.admin.film.categoryRowDataRow(model)),
+  orderBy = orderBy,
+  orderAsc = orderAsc,
+  calls = com.kyleu.projectile.models.web.ListCalls(
+    newCall = Some(controllers.admin.film.routes.CategoryRowController.createForm()),
+    orderBy = Some(controllers.admin.film.routes.CategoryRowController.list(q, _, _, Some(limit), Some(0))),
+    search = Some(controllers.admin.film.routes.CategoryRowController.list(None, orderBy, orderAsc, Some(limit), None)),
+    next = controllers.admin.film.routes.CategoryRowController.list(q, orderBy, orderAsc, Some(limit), Some(offset + limit)),
+    prev = controllers.admin.film.routes.CategoryRowController.list(q, orderBy, orderAsc, Some(limit), Some(offset - limit))
+  ),
+  limit = limit,
+  offset = offset,
+  q = q
+)

@@ -1,0 +1,86 @@
+// Generated File
+{
+  "store.StaffRow": {
+    "required": [
+      "staffId",
+      "firstName",
+      "lastName",
+      "addressId",
+      "storeId",
+      "active",
+      "username",
+      "lastUpdate"
+    ],
+    "properties": {
+      "staffId": {
+        "type": "integer"
+      },
+      "firstName": {
+        "type": "string"
+      },
+      "lastName": {
+        "type": "string"
+      },
+      "addressId": {
+        "type": "integer"
+      },
+      "email": {
+        "type": "string"
+      },
+      "storeId": {
+        "type": "integer"
+      },
+      "active": {
+        "type": "boolean"
+      },
+      "username": {
+        "type": "string"
+      },
+      "password": {
+        "type": "string"
+      },
+      "lastUpdate": {
+        "type": "string",
+        "example": "2018-01-01 00:00:00+0"
+      },
+      "picture": {
+        "type": "string"
+      }
+    }
+  },
+  "store.StaffRowResult": {
+    "properties": {
+      "filters": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/common.Filter"
+        }
+      },
+      "orderBys": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/common.OrderBy"
+        }
+      },
+      "totalCount": {
+        "type": "integer"
+      },
+      "paging": {
+        "$ref": "#/components/schemas/common.PagingOptions"
+      },
+      "results": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/store.StaffRow"
+        }
+      },
+      "durationMs": {
+        "type": "integer"
+      },
+      "occurred": {
+        "type": "string",
+        "example": "2018-01-01 00:00:00"
+      }
+    }
+  }
+}

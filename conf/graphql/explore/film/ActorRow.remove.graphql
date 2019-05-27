@@ -1,0 +1,12 @@
+# Generated File
+# Remove a single ActorRow entity from the system
+mutation ActorRowRemove {
+  actorRow {
+    remove(actorId: 0) {
+      actorId
+      firstName
+      lastName
+      lastUpdate
+    }
+  }
+}

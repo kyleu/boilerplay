@@ -1,0 +1,16 @@
+# Generated File
+# Remove a single AddressRow entity from the system
+mutation AddressRowRemove {
+  addressRow {
+    remove(addressId: 0) {
+      addressId
+      address
+      address2
+      district
+      cityId
+      postalCode
+      phone
+      lastUpdate
+    }
+  }
+}

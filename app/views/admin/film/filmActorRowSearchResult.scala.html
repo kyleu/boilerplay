@@ -1,0 +1,13 @@
+@* Generated File *@
+@(model: models.film.FilmActorRow, hit: String)<div class="search-result">
+  <div class="right">
+    <i class="material-icons small">@models.template.Icons.filmActorRow</i> Film Actor
+  </div>
+  <div>
+    <a href="@controllers.admin.film.routes.FilmActorRowController.view(model.actorId, model.filmId)">@model.actorId, @model.filmId</a>
+  </div>
+  <em>@hit</em>
+  <div style="margin-top: 12px;">
+    <div class="chip">Last Update: @model.lastUpdate</div>
+  </div>
+</div>

@@ -1,0 +1,32 @@
+@* Generated File *@
+@(cfg: com.kyleu.projectile.models.config.UiConfig, customerId: Int, modelSeq: Seq[models.customer.RentalRow], orderBy: Option[String], orderAsc: Boolean, limit: Int, offset: Int)(
+    implicit request: Request[AnyContent], session: Session, flash: Flash
+)
+@com.kyleu.projectile.views.html.admin.explore.list(
+  cfg = cfg,
+  model = "Rental",
+  modelPlural = "Rentals",
+  icon = models.template.Icons.rentalRow,
+  cols = Seq(
+    "rentalId" -> "Rental Id",
+    "rentalDate" -> "Rental Date",
+    "inventoryId" -> "Inventory Id",
+    "customerId" -> "Customer Id",
+    "returnDate" -> "Return Date",
+    "staffId" -> "Staff Id"
+  ),
+  orderBy = orderBy,
+  orderAsc = orderAsc,
+  totalCount = None,
+  rows = modelSeq.map(model => views.html.admin.customer.rentalRowDataRow(model)),
+  calls = com.kyleu.projectile.models.web.ListCalls(
+    orderBy = Some(controllers.admin.customer.routes.RentalRowController.byCustomerId(customerId, _, _, Some(limit), Some(0))),
+    search = None,
+    next = controllers.admin.customer.routes.RentalRowController.byCustomerId(customerId, orderBy, orderAsc, Some(limit), Some(offset + limit)),
+    prev = controllers.admin.customer.routes.RentalRowController.byCustomerId(customerId, orderBy, orderAsc, Some(limit), Some(offset - limit)),
+  ),
+  limit = limit,
+  offset = offset,
+  q = None,
+  fullUI = false
+)

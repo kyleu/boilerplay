@@ -1,0 +1,14 @@
+@* Generated File *@
+@(model: models.address.CityRow, hit: String)<div class="search-result">
+  <div class="right">
+    <i class="material-icons small">@models.template.Icons.cityRow</i> City
+  </div>
+  <div>
+    <a href="@controllers.admin.address.routes.CityRowController.view(model.cityId)">@model.cityId</a>
+  </div>
+  <em>@hit</em>
+  <div style="margin-top: 12px;">
+    <div class="chip">City: @model.city</div>
+    <div class="chip">Country Id: @model.countryId</div>
+  </div>
+</div>

@@ -1,0 +1,30 @@
+# Generated File
+# Queries the system for Addresses.
+query AddressRow {
+  addressRow(
+    q: null, # Or string literal
+    filters: null, # Or filters of type `{ k: "", o: Equal, v: "" }`
+    orderBy: null, # Or orderBy of type `{ col: "", dir: Ascending }`
+    limit: null, # Or number
+    offset: null # Or number
+  ) {
+    totalCount
+    paging {
+      current
+      next
+      itemsPerPage
+    }
+    results {
+      addressId
+      address
+      address2
+      district
+      cityId
+      postalCode
+      phone
+      lastUpdate
+    }
+    durationMs
+    occurred
+  }
+}

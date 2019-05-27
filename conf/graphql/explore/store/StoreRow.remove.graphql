@@ -1,0 +1,12 @@
+# Generated File
+# Remove a single StoreRow entity from the system
+mutation StoreRowRemove {
+  storeRow {
+    remove(storeId: 0) {
+      storeId
+      managerStaffId
+      addressId
+      lastUpdate
+    }
+  }
+}

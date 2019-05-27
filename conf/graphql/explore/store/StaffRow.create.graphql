@@ -1,0 +1,19 @@
+# Generated File
+# Creates a new StaffRow entity
+mutation StaffRowCreate {
+  staffRow {
+    create(fields: [{k: "", v: ""}]) {
+      staffId
+      firstName
+      lastName
+      addressId
+      email
+      storeId
+      active
+      username
+      password
+      lastUpdate
+      picture
+    }
+  }
+}

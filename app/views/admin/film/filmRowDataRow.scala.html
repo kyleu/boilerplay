@@ -1,0 +1,29 @@
+@* Generated File *@
+@(model: models.film.FilmRow)<tr>
+  <td>
+    <a href="@controllers.admin.film.routes.FilmRowController.view(model.filmId)">@model.filmId</a>
+  </td>
+  <td>
+    @model.title
+  </td>
+  <td>
+    @model.languageId
+    <a href="@controllers.admin.customer.routes.LanguageRowController.view(model.languageId)">
+      <i class="material-icons small">@models.template.Icons.languageRow</i>
+    </a>
+  </td>
+  <td>
+    @model.originalLanguageId
+    @model.originalLanguageId.map { v =>
+      <a href="@controllers.admin.customer.routes.LanguageRowController.view(v)">
+        <i class="material-icons small">@models.template.Icons.languageRow</i>
+      </a>
+    }
+  </td>
+  <td>
+    @model.rating
+  </td>
+  <td>
+    @model.lastUpdate
+  </td>
+</tr>

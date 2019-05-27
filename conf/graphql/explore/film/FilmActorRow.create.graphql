@@ -1,0 +1,11 @@
+# Generated File
+# Creates a new FilmActorRow entity
+mutation FilmActorRowCreate {
+  filmActorRow {
+    create(fields: [{k: "", v: ""}]) {
+      actorId
+      filmId
+      lastUpdate
+    }
+  }
+}

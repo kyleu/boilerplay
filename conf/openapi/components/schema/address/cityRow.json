@@ -1,0 +1,61 @@
+// Generated File
+{
+  "address.CityRow": {
+    "required": [
+      "cityId",
+      "city",
+      "countryId",
+      "lastUpdate"
+    ],
+    "properties": {
+      "cityId": {
+        "type": "integer"
+      },
+      "city": {
+        "type": "string"
+      },
+      "countryId": {
+        "type": "integer"
+      },
+      "lastUpdate": {
+        "type": "string",
+        "example": "2018-01-01 00:00:00+0"
+      }
+    }
+  },
+  "address.CityRowResult": {
+    "properties": {
+      "filters": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/common.Filter"
+        }
+      },
+      "orderBys": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/common.OrderBy"
+        }
+      },
+      "totalCount": {
+        "type": "integer"
+      },
+      "paging": {
+        "$ref": "#/components/schemas/common.PagingOptions"
+      },
+      "results": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/address.CityRow"
+        }
+      },
+      "durationMs": {
+        "type": "integer"
+      },
+      "occurred": {
+        "type": "string",
+        "example": "2018-01-01 00:00:00"
+      }
+    }
+  }
+}

@@ -1,0 +1,62 @@
+# Generated File
+
+# Actor Routes
+GET         /actorRow                                                 controllers.admin.film.ActorRowController.list(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None)
+GET         /actorRow/autocomplete                                    controllers.admin.film.ActorRowController.autocomplete(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None)
+GET         /actorRow/form                                            controllers.admin.film.ActorRowController.createForm
+POST        /actorRow                                                 controllers.admin.film.ActorRowController.create
+GET         /actorRow/:actorId                                        controllers.admin.film.ActorRowController.view(actorId: Int, t: Option[String] ?= None)
+GET         /actorRow/:actorId/counts                                 controllers.admin.film.ActorRowController.relationCounts(actorId: Int)
+GET         /actorRow/:actorId/form                                   controllers.admin.film.ActorRowController.editForm(actorId: Int)
+POST        /actorRow/:actorId                                        controllers.admin.film.ActorRowController.edit(actorId: Int)
+GET         /actorRow/:actorId/remove                                 controllers.admin.film.ActorRowController.remove(actorId: Int)
+
+# Category Routes
+GET         /categoryRow                                              controllers.admin.film.CategoryRowController.list(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None)
+GET         /categoryRow/autocomplete                                 controllers.admin.film.CategoryRowController.autocomplete(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None)
+GET         /categoryRow/form                                         controllers.admin.film.CategoryRowController.createForm
+POST        /categoryRow                                              controllers.admin.film.CategoryRowController.create
+GET         /categoryRow/:categoryId                                  controllers.admin.film.CategoryRowController.view(categoryId: Int, t: Option[String] ?= None)
+GET         /categoryRow/:categoryId/counts                           controllers.admin.film.CategoryRowController.relationCounts(categoryId: Int)
+GET         /categoryRow/:categoryId/form                             controllers.admin.film.CategoryRowController.editForm(categoryId: Int)
+POST        /categoryRow/:categoryId                                  controllers.admin.film.CategoryRowController.edit(categoryId: Int)
+GET         /categoryRow/:categoryId/remove                           controllers.admin.film.CategoryRowController.remove(categoryId: Int)
+
+# Film Routes
+GET         /filmRow                                                  controllers.admin.film.FilmRowController.list(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None)
+GET         /filmRow/autocomplete                                     controllers.admin.film.FilmRowController.autocomplete(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None)
+GET         /filmRow/form                                             controllers.admin.film.FilmRowController.createForm
+POST        /filmRow                                                  controllers.admin.film.FilmRowController.create
+GET         /filmRow/byLanguageId/:languageId                         controllers.admin.film.FilmRowController.byLanguageId(languageId: Int, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None, embedded: Boolean ?= false)
+GET         /filmRow/byOriginalLanguageId/:originalLanguageId         controllers.admin.film.FilmRowController.byOriginalLanguageId(originalLanguageId: Int, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None, embedded: Boolean ?= false)
+GET         /filmRow/:filmId                                          controllers.admin.film.FilmRowController.view(filmId: Int, t: Option[String] ?= None)
+GET         /filmRow/:filmId/counts                                   controllers.admin.film.FilmRowController.relationCounts(filmId: Int)
+GET         /filmRow/:filmId/form                                     controllers.admin.film.FilmRowController.editForm(filmId: Int)
+POST        /filmRow/:filmId                                          controllers.admin.film.FilmRowController.edit(filmId: Int)
+GET         /filmRow/:filmId/remove                                   controllers.admin.film.FilmRowController.remove(filmId: Int)
+
+# Film Actor Routes
+GET         /filmActorRow                                             controllers.admin.film.FilmActorRowController.list(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None)
+GET         /filmActorRow/autocomplete                                controllers.admin.film.FilmActorRowController.autocomplete(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None)
+GET         /filmActorRow/form                                        controllers.admin.film.FilmActorRowController.createForm
+POST        /filmActorRow                                             controllers.admin.film.FilmActorRowController.create
+GET         /filmActorRow/byFilmId/:filmId                            controllers.admin.film.FilmActorRowController.byFilmId(filmId: Int, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None, embedded: Boolean ?= false)
+GET         /filmActorRow/byActorId/:actorId                          controllers.admin.film.FilmActorRowController.byActorId(actorId: Int, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None, embedded: Boolean ?= false)
+GET         /filmActorRow/:actorId/:filmId                            controllers.admin.film.FilmActorRowController.view(actorId: Int, filmId: Int, t: Option[String] ?= None)
+GET         /filmActorRow/:actorId/:filmId/form                       controllers.admin.film.FilmActorRowController.editForm(actorId: Int, filmId: Int)
+POST        /filmActorRow/:actorId/:filmId                            controllers.admin.film.FilmActorRowController.edit(actorId: Int, filmId: Int)
+GET         /filmActorRow/:actorId/:filmId/remove                     controllers.admin.film.FilmActorRowController.remove(actorId: Int, filmId: Int)
+
+# Film Category Routes
+GET         /filmCategoryRow                                          controllers.admin.film.FilmCategoryRowController.list(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None)
+GET         /filmCategoryRow/autocomplete                             controllers.admin.film.FilmCategoryRowController.autocomplete(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None)
+GET         /filmCategoryRow/form                                     controllers.admin.film.FilmCategoryRowController.createForm
+POST        /filmCategoryRow                                          controllers.admin.film.FilmCategoryRowController.create
+GET         /filmCategoryRow/byFilmId/:filmId                         controllers.admin.film.FilmCategoryRowController.byFilmId(filmId: Int, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None, embedded: Boolean ?= false)
+GET         /filmCategoryRow/byCategoryId/:categoryId                 controllers.admin.film.FilmCategoryRowController.byCategoryId(categoryId: Int, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None, embedded: Boolean ?= false)
+GET         /filmCategoryRow/:filmId/:categoryId                      controllers.admin.film.FilmCategoryRowController.view(filmId: Int, categoryId: Int, t: Option[String] ?= None)
+GET         /filmCategoryRow/:filmId/:categoryId/form                 controllers.admin.film.FilmCategoryRowController.editForm(filmId: Int, categoryId: Int)
+POST        /filmCategoryRow/:filmId/:categoryId                      controllers.admin.film.FilmCategoryRowController.edit(filmId: Int, categoryId: Int)
+GET         /filmCategoryRow/:filmId/:categoryId/remove               controllers.admin.film.FilmCategoryRowController.remove(filmId: Int, categoryId: Int)
+GET         /mpaaRatingType                                           controllers.admin.film.MpaaRatingTypeController.list()
+

@@ -1,0 +1,51 @@
+@* Generated File *@
+@(cfg: com.kyleu.projectile.models.config.UiConfig, model: models.address.CityRow, notes: Seq[com.kyleu.projectile.models.note.Note], debug: Boolean)(
+    implicit request: Request[AnyContent], session: Session, flash: Flash
+)@com.kyleu.projectile.views.html.layout.page(title = s"City", cfg = cfg, icon = Some(models.template.Icons.cityRow)) {
+  @com.kyleu.projectile.views.html.layout.card(None) {
+    <div class="right"><a class="btn @cfg.user.buttonColor" href="@controllers.admin.address.routes.CityRowController.editForm(model.cityId)">Edit</a></div>
+    <div class="right"><a class="btn-flat remove-link" onclick="return confirm('Are you sure you want to remove this City?')" href="@controllers.admin.address.routes.CityRowController.remove(model.cityId)">Remove</a></div>
+    <table class="highlight responsive-table">
+      <tbody>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.cityId.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">City Id</div></th>
+          <td>@model.cityId</td>
+        </tr>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.city.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">City</div></th>
+          <td>@model.city</td>
+        </tr>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.countryId.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Country Id</div></th>
+          <td>
+            @model.countryId
+            <a href="@controllers.admin.address.routes.CountryRowController.view(model.countryId)"><i class="material-icons small">@models.template.Icons.countryRow</i></a>
+          </td>
+        </tr>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.lastUpdate.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Last Update</div></th>
+          <td>@model.lastUpdate</td>
+        </tr>
+      </tbody>
+    </table>
+  }
+
+  @com.kyleu.projectile.services.augment.AugmentService.views.augment(model, request.queryString, cfg)
+
+  @com.kyleu.projectile.views.html.admin.note.notes(cfg, notes, "CityRow", "City", model.cityId)
+
+  <ul id="model-relations" class="collapsible" data-collapsible="expandable">
+    <li id="relation-addressRow-cityId" data-table="addressRow" data-field="cityId" data-singular="Address" data-plural="Addresses" data-url="@controllers.admin.address.routes.AddressRowController.byCityId(model.cityId, limit = Some(5), embedded = true)">
+      <div class="collapsible-header">
+        <i class="material-icons small">@models.template.Icons.addressRow</i>
+        <span class="title">Addresses</span>&nbsp;by City Id
+        <span class="badge"><a href="@controllers.admin.address.routes.AddressRowController.byCityId(model.cityId)"><i class="material-icons">insert_link</i></a></span>
+      </div>
+      <div class="collapsible-body"><span>Loading...</span></div>
+    </li>
+  </ul>
+  @com.kyleu.projectile.views.html.components.includeScalaJs(debug)
+  <script>$(function() { new RelationService('@controllers.admin.address.routes.CityRowController.relationCounts(model.cityId)') });</script>
+
+  @com.kyleu.projectile.views.html.components.includeScalaJs(debug)
+}

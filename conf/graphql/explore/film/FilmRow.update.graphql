@@ -1,0 +1,22 @@
+# Generated File
+# Updates a single FilmRow entity using the provided fields
+mutation FilmRowUpdate {
+  filmRow {
+    update(filmId: 0, fields: [{k: "", v: ""}]) {
+      filmId
+      title
+      description
+      releaseYear
+      languageId
+      originalLanguageId
+      rentalDuration
+      rentalRate
+      length
+      replacementCost
+      rating
+      lastUpdate
+      specialFeatures
+      fulltext
+    }
+  }
+}

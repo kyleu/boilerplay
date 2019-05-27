@@ -1,0 +1,22 @@
+# Generated File
+# Remove a single FilmRow entity from the system
+mutation FilmRowRemove {
+  filmRow {
+    remove(filmId: 0) {
+      filmId
+      title
+      description
+      releaseYear
+      languageId
+      originalLanguageId
+      rentalDuration
+      rentalRate
+      length
+      replacementCost
+      rating
+      lastUpdate
+      specialFeatures
+      fulltext
+    }
+  }
+}

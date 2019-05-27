@@ -1,0 +1,16 @@
+# Generated File
+# Creates a new AddressRow entity
+mutation AddressRowCreate {
+  addressRow {
+    create(fields: [{k: "", v: ""}]) {
+      addressId
+      address
+      address2
+      district
+      cityId
+      postalCode
+      phone
+      lastUpdate
+    }
+  }
+}

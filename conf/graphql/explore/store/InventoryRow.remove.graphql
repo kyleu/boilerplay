@@ -1,0 +1,12 @@
+# Generated File
+# Remove a single InventoryRow entity from the system
+mutation InventoryRowRemove {
+  inventoryRow {
+    remove(inventoryId: 0) {
+      inventoryId
+      filmId
+      storeId
+      lastUpdate
+    }
+  }
+}

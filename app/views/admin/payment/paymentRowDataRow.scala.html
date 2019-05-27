@@ -1,0 +1,27 @@
+@* Generated File *@
+@(model: models.payment.PaymentRow)<tr>
+  <td>
+    <a href="@controllers.admin.payment.routes.PaymentRowController.view(model.paymentId)">@model.paymentId</a>
+  </td>
+  <td>
+    @model.customerId
+    <a href="@controllers.admin.customer.routes.CustomerRowController.view(model.customerId)">
+      <i class="material-icons small">@models.template.Icons.customerRow</i>
+    </a>
+  </td>
+  <td>
+    @model.staffId
+    <a href="@controllers.admin.store.routes.StaffRowController.view(model.staffId)">
+      <i class="material-icons small">@models.template.Icons.staffRow</i>
+    </a>
+  </td>
+  <td>
+    @model.rentalId
+    <a href="@controllers.admin.customer.routes.RentalRowController.view(model.rentalId)">
+      <i class="material-icons small">@models.template.Icons.rentalRow</i>
+    </a>
+  </td>
+  <td>
+    @model.amount
+  </td>
+</tr>

@@ -1,0 +1,69 @@
+// Generated File
+{
+  "payment.PaymentRow": {
+    "required": [
+      "paymentId",
+      "customerId",
+      "staffId",
+      "rentalId",
+      "amount",
+      "paymentDate"
+    ],
+    "properties": {
+      "paymentId": {
+        "type": "integer"
+      },
+      "customerId": {
+        "type": "integer"
+      },
+      "staffId": {
+        "type": "integer"
+      },
+      "rentalId": {
+        "type": "integer"
+      },
+      "amount": {
+        "type": "number"
+      },
+      "paymentDate": {
+        "type": "string",
+        "example": "2018-01-01 00:00:00+0"
+      }
+    }
+  },
+  "payment.PaymentRowResult": {
+    "properties": {
+      "filters": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/common.Filter"
+        }
+      },
+      "orderBys": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/common.OrderBy"
+        }
+      },
+      "totalCount": {
+        "type": "integer"
+      },
+      "paging": {
+        "$ref": "#/components/schemas/common.PagingOptions"
+      },
+      "results": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/payment.PaymentRow"
+        }
+      },
+      "durationMs": {
+        "type": "integer"
+      },
+      "occurred": {
+        "type": "string",
+        "example": "2018-01-01 00:00:00"
+      }
+    }
+  }
+}

@@ -1,0 +1,22 @@
+# Generated File
+# Creates a new FilmRow entity
+mutation FilmRowCreate {
+  filmRow {
+    create(fields: [{k: "", v: ""}]) {
+      filmId
+      title
+      description
+      releaseYear
+      languageId
+      originalLanguageId
+      rentalDuration
+      rentalRate
+      length
+      replacementCost
+      rating
+      lastUpdate
+      specialFeatures
+      fulltext
+    }
+  }
+}

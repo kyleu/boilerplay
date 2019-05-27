@@ -1,0 +1,15 @@
+# Generated File
+# Updates a single RentalRow entity using the provided fields
+mutation RentalRowUpdate {
+  rentalRow {
+    update(rentalId: 0, fields: [{k: "", v: ""}]) {
+      rentalId
+      rentalDate
+      inventoryId
+      customerId
+      returnDate
+      staffId
+      lastUpdate
+    }
+  }
+}

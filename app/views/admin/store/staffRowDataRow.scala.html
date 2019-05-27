@@ -1,0 +1,30 @@
+@* Generated File *@
+@(model: models.store.StaffRow)<tr>
+  <td>
+    <a href="@controllers.admin.store.routes.StaffRowController.view(model.staffId)">@model.staffId</a>
+  </td>
+  <td>
+    @model.firstName
+  </td>
+  <td>
+    @model.lastName
+  </td>
+  <td>
+    @model.addressId
+    <a href="@controllers.admin.address.routes.AddressRowController.view(model.addressId)">
+      <i class="material-icons small">@models.template.Icons.addressRow</i>
+    </a>
+  </td>
+  <td>
+    @model.email
+  </td>
+  <td>
+    @model.storeId
+    <a href="@controllers.admin.store.routes.StoreRowController.view(model.storeId)">
+      <i class="material-icons small">@models.template.Icons.storeRow</i>
+    </a>
+  </td>
+  <td>
+    @model.username
+  </td>
+</tr>

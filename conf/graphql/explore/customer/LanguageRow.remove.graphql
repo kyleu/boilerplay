@@ -1,0 +1,11 @@
+# Generated File
+# Remove a single LanguageRow entity from the system
+mutation LanguageRowRemove {
+  languageRow {
+    remove(languageId: 0) {
+      languageId
+      name
+      lastUpdate
+    }
+  }
+}

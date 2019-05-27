@@ -1,0 +1,83 @@
+@* Generated File *@
+@(cfg: com.kyleu.projectile.models.config.UiConfig, model: models.address.AddressRow, notes: Seq[com.kyleu.projectile.models.note.Note], debug: Boolean)(
+    implicit request: Request[AnyContent], session: Session, flash: Flash
+)@com.kyleu.projectile.views.html.layout.page(title = s"Address", cfg = cfg, icon = Some(models.template.Icons.addressRow)) {
+  @com.kyleu.projectile.views.html.layout.card(None) {
+    <div class="right"><a class="btn @cfg.user.buttonColor" href="@controllers.admin.address.routes.AddressRowController.editForm(model.addressId)">Edit</a></div>
+    <div class="right"><a class="btn-flat remove-link" onclick="return confirm('Are you sure you want to remove this Address?')" href="@controllers.admin.address.routes.AddressRowController.remove(model.addressId)">Remove</a></div>
+    <table class="highlight responsive-table">
+      <tbody>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.addressId.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Address Id</div></th>
+          <td>@model.addressId</td>
+        </tr>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.address.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Address</div></th>
+          <td>@model.address</td>
+        </tr>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.address2.map(_.toString.replaceAllLiterally("'", ""))')" style="cursor: pointer;">Address2</div></th>
+          <td>@model.address2.getOrElse(com.kyleu.projectile.util.NullUtils.str)</td>
+        </tr>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.district.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">District</div></th>
+          <td>@model.district</td>
+        </tr>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.cityId.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">City Id</div></th>
+          <td>
+            @model.cityId
+            <a href="@controllers.admin.address.routes.CityRowController.view(model.cityId)"><i class="material-icons small">@models.template.Icons.cityRow</i></a>
+          </td>
+        </tr>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.postalCode.map(_.toString.replaceAllLiterally("'", ""))')" style="cursor: pointer;">Postal Code</div></th>
+          <td>@model.postalCode.getOrElse(com.kyleu.projectile.util.NullUtils.str)</td>
+        </tr>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.phone.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Phone</div></th>
+          <td>@model.phone</td>
+        </tr>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.lastUpdate.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Last Update</div></th>
+          <td>@model.lastUpdate</td>
+        </tr>
+      </tbody>
+    </table>
+  }
+
+  @com.kyleu.projectile.services.augment.AugmentService.views.augment(model, request.queryString, cfg)
+
+  @com.kyleu.projectile.views.html.admin.note.notes(cfg, notes, "AddressRow", "Address", model.addressId)
+
+  <ul id="model-relations" class="collapsible" data-collapsible="expandable">
+    <li id="relation-customerRow-addressId" data-table="customerRow" data-field="addressId" data-singular="Customer" data-plural="Customers" data-url="@controllers.admin.customer.routes.CustomerRowController.byAddressId(model.addressId, limit = Some(5), embedded = true)">
+      <div class="collapsible-header">
+        <i class="material-icons small">@models.template.Icons.customerRow</i>
+        <span class="title">Customers</span>&nbsp;by Address Id
+        <span class="badge"><a href="@controllers.admin.customer.routes.CustomerRowController.byAddressId(model.addressId)"><i class="material-icons">insert_link</i></a></span>
+      </div>
+      <div class="collapsible-body"><span>Loading...</span></div>
+    </li>
+    <li id="relation-staffRow-addressId" data-table="staffRow" data-field="addressId" data-singular="Staff" data-plural="Staff" data-url="@controllers.admin.store.routes.StaffRowController.byAddressId(model.addressId, limit = Some(5), embedded = true)">
+      <div class="collapsible-header">
+        <i class="material-icons small">@models.template.Icons.staffRow</i>
+        <span class="title">Staff</span>&nbsp;by Address Id
+        <span class="badge"><a href="@controllers.admin.store.routes.StaffRowController.byAddressId(model.addressId)"><i class="material-icons">insert_link</i></a></span>
+      </div>
+      <div class="collapsible-body"><span>Loading...</span></div>
+    </li>
+    <li id="relation-storeRow-addressId" data-table="storeRow" data-field="addressId" data-singular="Store" data-plural="Stores" data-url="@controllers.admin.store.routes.StoreRowController.byAddressId(model.addressId, limit = Some(5), embedded = true)">
+      <div class="collapsible-header">
+        <i class="material-icons small">@models.template.Icons.storeRow</i>
+        <span class="title">Stores</span>&nbsp;by Address Id
+        <span class="badge"><a href="@controllers.admin.store.routes.StoreRowController.byAddressId(model.addressId)"><i class="material-icons">insert_link</i></a></span>
+      </div>
+      <div class="collapsible-body"><span>Loading...</span></div>
+    </li>
+  </ul>
+  @com.kyleu.projectile.views.html.components.includeScalaJs(debug)
+  <script>$(function() { new RelationService('@controllers.admin.address.routes.AddressRowController.relationCounts(model.addressId)') });</script>
+
+  @com.kyleu.projectile.views.html.components.includeScalaJs(debug)
+}

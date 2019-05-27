@@ -1,0 +1,83 @@
+// Generated File
+{
+  "customer.CustomerRow": {
+    "required": [
+      "customerId",
+      "storeId",
+      "firstName",
+      "lastName",
+      "addressId",
+      "activebool",
+      "createDate"
+    ],
+    "properties": {
+      "customerId": {
+        "type": "integer"
+      },
+      "storeId": {
+        "type": "integer"
+      },
+      "firstName": {
+        "type": "string"
+      },
+      "lastName": {
+        "type": "string"
+      },
+      "email": {
+        "type": "string"
+      },
+      "addressId": {
+        "type": "integer"
+      },
+      "activebool": {
+        "type": "boolean"
+      },
+      "createDate": {
+        "type": "string",
+        "example": "2018-01-01"
+      },
+      "lastUpdate": {
+        "type": "string",
+        "example": "2018-01-01 00:00:00+0"
+      },
+      "active": {
+        "type": "integer"
+      }
+    }
+  },
+  "customer.CustomerRowResult": {
+    "properties": {
+      "filters": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/common.Filter"
+        }
+      },
+      "orderBys": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/common.OrderBy"
+        }
+      },
+      "totalCount": {
+        "type": "integer"
+      },
+      "paging": {
+        "$ref": "#/components/schemas/common.PagingOptions"
+      },
+      "results": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/customer.CustomerRow"
+        }
+      },
+      "durationMs": {
+        "type": "integer"
+      },
+      "occurred": {
+        "type": "string",
+        "example": "2018-01-01 00:00:00"
+      }
+    }
+  }
+}

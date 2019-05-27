@@ -1,0 +1,98 @@
+// Generated File
+{
+  "film.FilmRow": {
+    "required": [
+      "filmId",
+      "title",
+      "languageId",
+      "rentalDuration",
+      "rentalRate",
+      "replacementCost",
+      "lastUpdate",
+      "fulltext"
+    ],
+    "properties": {
+      "filmId": {
+        "type": "integer"
+      },
+      "title": {
+        "type": "string"
+      },
+      "description": {
+        "type": "string"
+      },
+      "releaseYear": {
+        "type": "integer"
+      },
+      "languageId": {
+        "type": "integer"
+      },
+      "originalLanguageId": {
+        "type": "integer"
+      },
+      "rentalDuration": {
+        "type": "integer"
+      },
+      "rentalRate": {
+        "type": "number"
+      },
+      "length": {
+        "type": "integer"
+      },
+      "replacementCost": {
+        "type": "number"
+      },
+      "rating": {
+        "type": "MpaaRatingType"
+      },
+      "lastUpdate": {
+        "type": "string",
+        "example": "2018-01-01 00:00:00+0"
+      },
+      "specialFeatures": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "fulltext": {
+        "type": "string"
+      }
+    }
+  },
+  "film.FilmRowResult": {
+    "properties": {
+      "filters": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/common.Filter"
+        }
+      },
+      "orderBys": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/common.OrderBy"
+        }
+      },
+      "totalCount": {
+        "type": "integer"
+      },
+      "paging": {
+        "$ref": "#/components/schemas/common.PagingOptions"
+      },
+      "results": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/film.FilmRow"
+        }
+      },
+      "durationMs": {
+        "type": "integer"
+      },
+      "occurred": {
+        "type": "string",
+        "example": "2018-01-01 00:00:00"
+      }
+    }
+  }
+}

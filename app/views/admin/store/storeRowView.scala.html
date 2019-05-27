@@ -1,0 +1,67 @@
+@* Generated File *@
+@(cfg: com.kyleu.projectile.models.config.UiConfig, model: models.store.StoreRow, notes: Seq[com.kyleu.projectile.models.note.Note], debug: Boolean)(
+    implicit request: Request[AnyContent], session: Session, flash: Flash
+)@com.kyleu.projectile.views.html.layout.page(title = s"Store", cfg = cfg, icon = Some(models.template.Icons.storeRow)) {
+  @com.kyleu.projectile.views.html.layout.card(None) {
+    <div class="right"><a class="btn @cfg.user.buttonColor" href="@controllers.admin.store.routes.StoreRowController.editForm(model.storeId)">Edit</a></div>
+    <div class="right"><a class="btn-flat remove-link" onclick="return confirm('Are you sure you want to remove this Store?')" href="@controllers.admin.store.routes.StoreRowController.remove(model.storeId)">Remove</a></div>
+    <table class="highlight responsive-table">
+      <tbody>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.storeId.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Store Id</div></th>
+          <td>@model.storeId</td>
+        </tr>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.managerStaffId.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Manager Staff Id</div></th>
+          <td>@model.managerStaffId</td>
+        </tr>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.addressId.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Address Id</div></th>
+          <td>
+            @model.addressId
+            <a href="@controllers.admin.address.routes.AddressRowController.view(model.addressId)"><i class="material-icons small">@models.template.Icons.addressRow</i></a>
+          </td>
+        </tr>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.lastUpdate.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Last Update</div></th>
+          <td>@model.lastUpdate</td>
+        </tr>
+      </tbody>
+    </table>
+  }
+
+  @com.kyleu.projectile.services.augment.AugmentService.views.augment(model, request.queryString, cfg)
+
+  @com.kyleu.projectile.views.html.admin.note.notes(cfg, notes, "StoreRow", "Store", model.storeId)
+
+  <ul id="model-relations" class="collapsible" data-collapsible="expandable">
+    <li id="relation-customerRow-storeId" data-table="customerRow" data-field="storeId" data-singular="Customer" data-plural="Customers" data-url="@controllers.admin.customer.routes.CustomerRowController.byStoreId(model.storeId, limit = Some(5), embedded = true)">
+      <div class="collapsible-header">
+        <i class="material-icons small">@models.template.Icons.customerRow</i>
+        <span class="title">Customers</span>&nbsp;by Store Id
+        <span class="badge"><a href="@controllers.admin.customer.routes.CustomerRowController.byStoreId(model.storeId)"><i class="material-icons">insert_link</i></a></span>
+      </div>
+      <div class="collapsible-body"><span>Loading...</span></div>
+    </li>
+    <li id="relation-inventoryRow-storeId" data-table="inventoryRow" data-field="storeId" data-singular="Inventory" data-plural="Inventories" data-url="@controllers.admin.store.routes.InventoryRowController.byStoreId(model.storeId, limit = Some(5), embedded = true)">
+      <div class="collapsible-header">
+        <i class="material-icons small">@models.template.Icons.inventoryRow</i>
+        <span class="title">Inventories</span>&nbsp;by Store Id
+        <span class="badge"><a href="@controllers.admin.store.routes.InventoryRowController.byStoreId(model.storeId)"><i class="material-icons">insert_link</i></a></span>
+      </div>
+      <div class="collapsible-body"><span>Loading...</span></div>
+    </li>
+    <li id="relation-staffRow-storeId" data-table="staffRow" data-field="storeId" data-singular="Staff" data-plural="Staff" data-url="@controllers.admin.store.routes.StaffRowController.byStoreId(model.storeId, limit = Some(5), embedded = true)">
+      <div class="collapsible-header">
+        <i class="material-icons small">@models.template.Icons.staffRow</i>
+        <span class="title">Staff</span>&nbsp;by Store Id
+        <span class="badge"><a href="@controllers.admin.store.routes.StaffRowController.byStoreId(model.storeId)"><i class="material-icons">insert_link</i></a></span>
+      </div>
+      <div class="collapsible-body"><span>Loading...</span></div>
+    </li>
+  </ul>
+  @com.kyleu.projectile.views.html.components.includeScalaJs(debug)
+  <script>$(function() { new RelationService('@controllers.admin.store.routes.StoreRowController.relationCounts(model.storeId)') });</script>
+
+  @com.kyleu.projectile.views.html.components.includeScalaJs(debug)
+}

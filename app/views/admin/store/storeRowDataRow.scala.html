@@ -1,0 +1,18 @@
+@* Generated File *@
+@(model: models.store.StoreRow)<tr>
+  <td>
+    <a href="@controllers.admin.store.routes.StoreRowController.view(model.storeId)">@model.storeId</a>
+  </td>
+  <td>
+    @model.managerStaffId
+  </td>
+  <td>
+    @model.addressId
+    <a href="@controllers.admin.address.routes.AddressRowController.view(model.addressId)">
+      <i class="material-icons small">@models.template.Icons.addressRow</i>
+    </a>
+  </td>
+  <td>
+    @model.lastUpdate
+  </td>
+</tr>

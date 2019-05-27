@@ -1,0 +1,17 @@
+@* Generated File *@
+@(model: models.film.FilmRow, hit: String)<div class="search-result">
+  <div class="right">
+    <i class="material-icons small">@models.template.Icons.filmRow</i> Film
+  </div>
+  <div>
+    <a href="@controllers.admin.film.routes.FilmRowController.view(model.filmId)">@model.filmId</a>
+  </div>
+  <em>@hit</em>
+  <div style="margin-top: 12px;">
+    <div class="chip">Title: @model.title</div>
+    <div class="chip">Language Id: @model.languageId</div>
+    <div class="chip">Original Language Id: @model.originalLanguageId</div>
+    <div class="chip">Rating: @model.rating</div>
+    <div class="chip">Last Update: @model.lastUpdate</div>
+  </div>
+</div>

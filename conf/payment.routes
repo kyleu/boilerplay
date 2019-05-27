@@ -1,0 +1,14 @@
+# Generated File
+
+# Payment Routes
+GET         /                                                         controllers.admin.payment.PaymentRowController.list(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None)
+GET         /autocomplete                                            controllers.admin.payment.PaymentRowController.autocomplete(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None)
+GET         /form                                                    controllers.admin.payment.PaymentRowController.createForm
+POST        /                                                         controllers.admin.payment.PaymentRowController.create
+GET         /byStaffId/:staffId                                       controllers.admin.payment.PaymentRowController.byStaffId(staffId: Int, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None, embedded: Boolean ?= false)
+GET         /byRentalId/:rentalId                                     controllers.admin.payment.PaymentRowController.byRentalId(rentalId: Long, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None, embedded: Boolean ?= false)
+GET         /byCustomerId/:customerId                                 controllers.admin.payment.PaymentRowController.byCustomerId(customerId: Int, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None, embedded: Boolean ?= false)
+GET         /:paymentId                                               controllers.admin.payment.PaymentRowController.view(paymentId: Long, t: Option[String] ?= None)
+GET         /:paymentId/form                                          controllers.admin.payment.PaymentRowController.editForm(paymentId: Long)
+POST        /:paymentId                                               controllers.admin.payment.PaymentRowController.edit(paymentId: Long)
+GET         /:paymentId/remove                                        controllers.admin.payment.PaymentRowController.remove(paymentId: Long)

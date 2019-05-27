@@ -1,0 +1,11 @@
+# Generated File
+# Creates a new CountryRow entity
+mutation CountryRowCreate {
+  countryRow {
+    create(fields: [{k: "", v: ""}]) {
+      countryId
+      country
+      lastUpdate
+    }
+  }
+}

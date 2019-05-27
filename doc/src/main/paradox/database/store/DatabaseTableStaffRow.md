@@ -1,0 +1,25 @@
+<!-- Generated File -->
+# staff
+
+## Columns
+
+| Name                         | Type               | NotNull| Unique | Indexed  | Default
+|------------------------------|--------------------|--------|--------|----------|--------------------
+| staff_id                     | integer            | true   | true   | true     |
+| first_name                   | string             | true   | false  | false    |
+| last_name                    | string             | true   | false  | false    |
+| address_id                   | integer            | true   | false  | false    |
+| email                        | string             | false  | false  | false    |
+| store_id                     | integer            | true   | false  | false    |
+| active                       | boolean            | true   | false  | false    |
+| username                     | string             | true   | false  | false    |
+| password                     | string             | false  | false  | false    |
+| last_update                  | timestamptz        | true   | false  | false    |
+| picture                      | byteArray          | false  | false  | false    |
+
+## References
+
+| Name                         | Target             | Table                                  | Column
+|------------------------------|--------------------|----------------------------------------|--------------------
+| paymentStaffIdFkey           | staff_id           | [payment](DatabaseTablePaymentRow)     | staff_id
+| rentalStaffIdFkey            | staff_id           | [rental](DatabaseTableRentalRow)       | staff_id

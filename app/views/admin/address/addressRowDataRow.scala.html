@@ -1,0 +1,30 @@
+@* Generated File *@
+@(model: models.address.AddressRow)<tr>
+  <td>
+    <a href="@controllers.admin.address.routes.AddressRowController.view(model.addressId)">@model.addressId</a>
+  </td>
+  <td>
+    @model.address
+  </td>
+  <td>
+    @model.address2
+  </td>
+  <td>
+    @model.district
+  </td>
+  <td>
+    @model.cityId
+    <a href="@controllers.admin.address.routes.CityRowController.view(model.cityId)">
+      <i class="material-icons small">@models.template.Icons.cityRow</i>
+    </a>
+  </td>
+  <td>
+    @model.postalCode
+  </td>
+  <td>
+    @model.phone
+  </td>
+  <td>
+    @model.lastUpdate
+  </td>
+</tr>

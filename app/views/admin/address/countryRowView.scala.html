@@ -1,0 +1,44 @@
+@* Generated File *@
+@(cfg: com.kyleu.projectile.models.config.UiConfig, model: models.address.CountryRow, notes: Seq[com.kyleu.projectile.models.note.Note], debug: Boolean)(
+    implicit request: Request[AnyContent], session: Session, flash: Flash
+)@com.kyleu.projectile.views.html.layout.page(title = s"Country", cfg = cfg, icon = Some(models.template.Icons.countryRow)) {
+  @com.kyleu.projectile.views.html.layout.card(None) {
+    <div class="right"><a class="btn @cfg.user.buttonColor" href="@controllers.admin.address.routes.CountryRowController.editForm(model.countryId)">Edit</a></div>
+    <div class="right"><a class="btn-flat remove-link" onclick="return confirm('Are you sure you want to remove this Country?')" href="@controllers.admin.address.routes.CountryRowController.remove(model.countryId)">Remove</a></div>
+    <table class="highlight responsive-table">
+      <tbody>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.countryId.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Country Id</div></th>
+          <td>@model.countryId</td>
+        </tr>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.country.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Country</div></th>
+          <td>@model.country</td>
+        </tr>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.lastUpdate.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Last Update</div></th>
+          <td>@model.lastUpdate</td>
+        </tr>
+      </tbody>
+    </table>
+  }
+
+  @com.kyleu.projectile.services.augment.AugmentService.views.augment(model, request.queryString, cfg)
+
+  @com.kyleu.projectile.views.html.admin.note.notes(cfg, notes, "CountryRow", "Country", model.countryId)
+
+  <ul id="model-relations" class="collapsible" data-collapsible="expandable">
+    <li id="relation-cityRow-countryId" data-table="cityRow" data-field="countryId" data-singular="City" data-plural="Cities" data-url="@controllers.admin.address.routes.CityRowController.byCountryId(model.countryId, limit = Some(5), embedded = true)">
+      <div class="collapsible-header">
+        <i class="material-icons small">@models.template.Icons.cityRow</i>
+        <span class="title">Cities</span>&nbsp;by Country Id
+        <span class="badge"><a href="@controllers.admin.address.routes.CityRowController.byCountryId(model.countryId)"><i class="material-icons">insert_link</i></a></span>
+      </div>
+      <div class="collapsible-body"><span>Loading...</span></div>
+    </li>
+  </ul>
+  @com.kyleu.projectile.views.html.components.includeScalaJs(debug)
+  <script>$(function() { new RelationService('@controllers.admin.address.routes.CountryRowController.relationCounts(model.countryId)') });</script>
+
+  @com.kyleu.projectile.views.html.components.includeScalaJs(debug)
+}

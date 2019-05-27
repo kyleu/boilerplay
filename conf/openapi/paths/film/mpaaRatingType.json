@@ -1,0 +1,24 @@
+// Generated File
+{
+  "/admin/film/mpaaRatingType": {
+    "get": {
+      "summary": "Lists the possible MpaaRatingType values.",
+      "operationId": "models.film.MpaaRatingType.list",
+      "tags": ["film"],
+      "responses": {
+        "200": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

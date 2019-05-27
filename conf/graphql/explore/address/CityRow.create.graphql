@@ -1,0 +1,12 @@
+# Generated File
+# Creates a new CityRow entity
+mutation CityRowCreate {
+  cityRow {
+    create(fields: [{k: "", v: ""}]) {
+      cityId
+      city
+      countryId
+      lastUpdate
+    }
+  }
+}

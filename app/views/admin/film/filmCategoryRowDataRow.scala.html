@@ -1,0 +1,18 @@
+@* Generated File *@
+@(model: models.film.FilmCategoryRow)<tr>
+  <td>
+    <a href="@controllers.admin.film.routes.FilmCategoryRowController.view(model.filmId, model.categoryId)">@model.filmId</a>
+    <a href="@controllers.admin.film.routes.FilmRowController.view(model.filmId)">
+      <i class="material-icons small">@models.template.Icons.filmRow</i>
+    </a>
+  </td>
+  <td>
+    <a href="@controllers.admin.film.routes.FilmCategoryRowController.view(model.filmId, model.categoryId)">@model.categoryId</a>
+    <a href="@controllers.admin.film.routes.CategoryRowController.view(model.categoryId)">
+      <i class="material-icons small">@models.template.Icons.categoryRow</i>
+    </a>
+  </td>
+  <td>
+    @model.lastUpdate
+  </td>
+</tr>

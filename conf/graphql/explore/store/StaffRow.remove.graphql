@@ -1,0 +1,19 @@
+# Generated File
+# Remove a single StaffRow entity from the system
+mutation StaffRowRemove {
+  staffRow {
+    remove(staffId: 0) {
+      staffId
+      firstName
+      lastName
+      addressId
+      email
+      storeId
+      active
+      username
+      password
+      lastUpdate
+      picture
+    }
+  }
+}

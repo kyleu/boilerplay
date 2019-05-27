@@ -1,0 +1,11 @@
+# Generated File
+# Remove a single CategoryRow entity from the system
+mutation CategoryRowRemove {
+  categoryRow {
+    remove(categoryId: 0) {
+      categoryId
+      name
+      lastUpdate
+    }
+  }
+}

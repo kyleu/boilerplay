@@ -1,0 +1,16 @@
+# Generated File
+# Updates a single AddressRow entity using the provided fields
+mutation AddressRowUpdate {
+  addressRow {
+    update(addressId: 0, fields: [{k: "", v: ""}]) {
+      addressId
+      address
+      address2
+      district
+      cityId
+      postalCode
+      phone
+      lastUpdate
+    }
+  }
+}

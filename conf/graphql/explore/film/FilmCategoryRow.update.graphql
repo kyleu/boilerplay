@@ -1,0 +1,11 @@
+# Generated File
+# Updates a single FilmCategoryRow entity using the provided fields
+mutation FilmCategoryRowUpdate {
+  filmCategoryRow {
+    update(filmId: 0, categoryId: 0, fields: [{k: "", v: ""}]) {
+      filmId
+      categoryId
+      lastUpdate
+    }
+  }
+}

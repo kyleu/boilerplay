@@ -1,0 +1,11 @@
+# Generated File
+# Updates a single CountryRow entity using the provided fields
+mutation CountryRowUpdate {
+  countryRow {
+    update(countryId: 0, fields: [{k: "", v: ""}]) {
+      countryId
+      country
+      lastUpdate
+    }
+  }
+}

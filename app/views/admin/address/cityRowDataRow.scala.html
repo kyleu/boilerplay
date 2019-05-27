@@ -1,0 +1,15 @@
+@* Generated File *@
+@(model: models.address.CityRow)<tr>
+  <td>
+    <a href="@controllers.admin.address.routes.CityRowController.view(model.cityId)">@model.cityId</a>
+  </td>
+  <td>
+    @model.city
+  </td>
+  <td>
+    @model.countryId
+    <a href="@controllers.admin.address.routes.CountryRowController.view(model.countryId)">
+      <i class="material-icons small">@models.template.Icons.countryRow</i>
+    </a>
+  </td>
+</tr>

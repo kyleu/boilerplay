@@ -1,0 +1,12 @@
+# Generated File
+# Updates a single InventoryRow entity using the provided fields
+mutation InventoryRowUpdate {
+  inventoryRow {
+    update(inventoryId: 0, fields: [{k: "", v: ""}]) {
+      inventoryId
+      filmId
+      storeId
+      lastUpdate
+    }
+  }
+}

@@ -1,0 +1,30 @@
+@* Generated File *@
+@(model: models.customer.RentalRow)<tr>
+  <td>
+    <a href="@controllers.admin.customer.routes.RentalRowController.view(model.rentalId)">@model.rentalId</a>
+  </td>
+  <td>
+    @model.rentalDate
+  </td>
+  <td>
+    @model.inventoryId
+    <a href="@controllers.admin.store.routes.InventoryRowController.view(model.inventoryId)">
+      <i class="material-icons small">@models.template.Icons.inventoryRow</i>
+    </a>
+  </td>
+  <td>
+    @model.customerId
+    <a href="@controllers.admin.customer.routes.CustomerRowController.view(model.customerId)">
+      <i class="material-icons small">@models.template.Icons.customerRow</i>
+    </a>
+  </td>
+  <td>
+    @model.returnDate
+  </td>
+  <td>
+    @model.staffId
+    <a href="@controllers.admin.store.routes.StaffRowController.view(model.staffId)">
+      <i class="material-icons small">@models.template.Icons.staffRow</i>
+    </a>
+  </td>
+</tr>

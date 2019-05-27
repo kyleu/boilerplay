@@ -5,7 +5,7 @@ import com.kyleu.projectile.graphql.GraphQLSchema
 import com.kyleu.projectile.models.audit.AuditCallbackProvider
 import com.kyleu.projectile.models.status.AppStatus
 import com.kyleu.projectile.models.module.{AdminModule, Application}
-import models.audit.AuditCallbacks
+import services.audit.AuditCallbacks
 import models.graphql.Schema
 import models.search.SearchHelper
 import models.template.UserMenu
@@ -16,6 +16,12 @@ class ProjectileModule extends AdminModule(projectName = Version.projectName, al
     AuditCallbackProvider.init(new AuditCallbacks(injector))
 
     /* Start injected startup code */
+    /* Projectile export section [boilerplay] */
+    com.kyleu.projectile.services.auth.PermissionService.registerPackage("address", "Address", models.template.Icons.pkg_address)
+    com.kyleu.projectile.services.auth.PermissionService.registerPackage("customer", "Customer", models.template.Icons.pkg_customer)
+    com.kyleu.projectile.services.auth.PermissionService.registerPackage("film", "Film", models.template.Icons.pkg_film)
+    com.kyleu.projectile.services.auth.PermissionService.registerPackage("payment", "Payment", models.template.Icons.pkg_payment)
+    com.kyleu.projectile.services.auth.PermissionService.registerPackage("store", "Store", models.template.Icons.pkg_store)
     /* End injected startup code */
   }
 

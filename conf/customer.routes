@@ -1,0 +1,39 @@
+# Generated File
+
+# Customer Routes
+GET         /customerRow                                              controllers.admin.customer.CustomerRowController.list(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None)
+GET         /customerRow/autocomplete                                 controllers.admin.customer.CustomerRowController.autocomplete(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None)
+GET         /customerRow/form                                         controllers.admin.customer.CustomerRowController.createForm
+POST        /customerRow                                              controllers.admin.customer.CustomerRowController.create
+GET         /customerRow/byStoreId/:storeId                           controllers.admin.customer.CustomerRowController.byStoreId(storeId: Int, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None, embedded: Boolean ?= false)
+GET         /customerRow/byAddressId/:addressId                       controllers.admin.customer.CustomerRowController.byAddressId(addressId: Int, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None, embedded: Boolean ?= false)
+GET         /customerRow/:customerId                                  controllers.admin.customer.CustomerRowController.view(customerId: Int, t: Option[String] ?= None)
+GET         /customerRow/:customerId/counts                           controllers.admin.customer.CustomerRowController.relationCounts(customerId: Int)
+GET         /customerRow/:customerId/form                             controllers.admin.customer.CustomerRowController.editForm(customerId: Int)
+POST        /customerRow/:customerId                                  controllers.admin.customer.CustomerRowController.edit(customerId: Int)
+GET         /customerRow/:customerId/remove                           controllers.admin.customer.CustomerRowController.remove(customerId: Int)
+
+# Language Routes
+GET         /languageRow                                              controllers.admin.customer.LanguageRowController.list(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None)
+GET         /languageRow/autocomplete                                 controllers.admin.customer.LanguageRowController.autocomplete(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None)
+GET         /languageRow/form                                         controllers.admin.customer.LanguageRowController.createForm
+POST        /languageRow                                              controllers.admin.customer.LanguageRowController.create
+GET         /languageRow/:languageId                                  controllers.admin.customer.LanguageRowController.view(languageId: Int, t: Option[String] ?= None)
+GET         /languageRow/:languageId/counts                           controllers.admin.customer.LanguageRowController.relationCounts(languageId: Int)
+GET         /languageRow/:languageId/form                             controllers.admin.customer.LanguageRowController.editForm(languageId: Int)
+POST        /languageRow/:languageId                                  controllers.admin.customer.LanguageRowController.edit(languageId: Int)
+GET         /languageRow/:languageId/remove                           controllers.admin.customer.LanguageRowController.remove(languageId: Int)
+
+# Rental Routes
+GET         /rentalRow                                                controllers.admin.customer.RentalRowController.list(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None)
+GET         /rentalRow/autocomplete                                   controllers.admin.customer.RentalRowController.autocomplete(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None)
+GET         /rentalRow/form                                           controllers.admin.customer.RentalRowController.createForm
+POST        /rentalRow                                                controllers.admin.customer.RentalRowController.create
+GET         /rentalRow/byStaffId/:staffId                             controllers.admin.customer.RentalRowController.byStaffId(staffId: Int, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None, embedded: Boolean ?= false)
+GET         /rentalRow/byInventoryId/:inventoryId                     controllers.admin.customer.RentalRowController.byInventoryId(inventoryId: Long, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None, embedded: Boolean ?= false)
+GET         /rentalRow/byCustomerId/:customerId                       controllers.admin.customer.RentalRowController.byCustomerId(customerId: Int, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None, embedded: Boolean ?= false)
+GET         /rentalRow/:rentalId                                      controllers.admin.customer.RentalRowController.view(rentalId: Long, t: Option[String] ?= None)
+GET         /rentalRow/:rentalId/counts                               controllers.admin.customer.RentalRowController.relationCounts(rentalId: Long)
+GET         /rentalRow/:rentalId/form                                 controllers.admin.customer.RentalRowController.editForm(rentalId: Long)
+POST        /rentalRow/:rentalId                                      controllers.admin.customer.RentalRowController.edit(rentalId: Long)
+GET         /rentalRow/:rentalId/remove                               controllers.admin.customer.RentalRowController.remove(rentalId: Long)

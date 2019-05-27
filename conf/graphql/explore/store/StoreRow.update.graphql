@@ -1,0 +1,12 @@
+# Generated File
+# Updates a single StoreRow entity using the provided fields
+mutation StoreRowUpdate {
+  storeRow {
+    update(storeId: 0, fields: [{k: "", v: ""}]) {
+      storeId
+      managerStaffId
+      addressId
+      lastUpdate
+    }
+  }
+}

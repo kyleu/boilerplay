@@ -1,0 +1,14 @@
+# Generated File
+# Creates a new PaymentRow entity
+mutation PaymentRowCreate {
+  paymentRow {
+    create(fields: [{k: "", v: ""}]) {
+      paymentId
+      customerId
+      staffId
+      rentalId
+      amount
+      paymentDate
+    }
+  }
+}

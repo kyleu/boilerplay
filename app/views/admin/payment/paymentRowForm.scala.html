@@ -1,0 +1,34 @@
+@* Generated File *@
+@(cfg: com.kyleu.projectile.models.config.UiConfig, model: models.payment.PaymentRow, title: String, cancel: Call, act: Call, isNew: Boolean = false, debug: Boolean = false)(
+    implicit request: Request[AnyContent], session: Session, flash: Flash
+)@com.kyleu.projectile.views.html.layout.page(title = title, cfg = cfg, icon = Some(models.template.Icons.paymentRow)) {
+  <form id="form-edit-paymentRow" action="@act" method="post">
+    @com.kyleu.projectile.views.html.layout.card(None) {
+      <div class="right"><button type="submit" class="btn @cfg.user.buttonColor">@if(isNew) {Create} else {Save} Payment</button></div>
+      <div class="right"><a href="@cancel" class="btn-flat cancel-link">Cancel</a></div>
+      <div class="clear"></div>
+      <table>
+        <tbody>
+          @com.kyleu.projectile.views.html.components.form.textField(selected = isNew, key = "paymentId", title = "Payment Id", value = Some(model.paymentId.toString), nullable = false, dataType = "long")
+          @com.kyleu.projectile.views.html.components.form.autocompleteField(
+            selected = isNew, key = "customerId", title = "Customer Id", value = Some(model.customerId.toString), nullable = false, dataType = "integer",
+            call = controllers.admin.customer.routes.CustomerRowController.autocomplete(), acType = ("customerRow", "Customer"), icon = models.template.Icons.customerRow
+          )
+          @com.kyleu.projectile.views.html.components.form.autocompleteField(
+            selected = isNew, key = "staffId", title = "Staff Id", value = Some(model.staffId.toString), nullable = false, dataType = "integer",
+            call = controllers.admin.store.routes.StaffRowController.autocomplete(), acType = ("staffRow", "Staff"), icon = models.template.Icons.staffRow
+          )
+          @com.kyleu.projectile.views.html.components.form.autocompleteField(
+            selected = isNew, key = "rentalId", title = "Rental Id", value = Some(model.rentalId.toString), nullable = false, dataType = "long",
+            call = controllers.admin.customer.routes.RentalRowController.autocomplete(), acType = ("rentalRow", "Rental"), icon = models.template.Icons.rentalRow
+          )
+          @com.kyleu.projectile.views.html.components.form.textField(selected = isNew, key = "amount", title = "Amount", value = Some(model.amount.toString), nullable = false, dataType = "decimal")
+          @com.kyleu.projectile.views.html.components.form.zonedDateTimeField(selected = isNew, key = "paymentDate", title = "Payment Date", value = Some(model.paymentDate), nullable = false)
+        </tbody>
+      </table>
+    }
+  </form>
+}
+@com.kyleu.projectile.views.html.components.includeScalaJs(debug)
+@com.kyleu.projectile.views.html.components.includeAutocomplete(debug)
+<script>$(function() { new FormService('form-edit-paymentRow'); })</script>

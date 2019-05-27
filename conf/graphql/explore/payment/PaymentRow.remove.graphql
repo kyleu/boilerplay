@@ -1,0 +1,14 @@
+# Generated File
+# Remove a single PaymentRow entity from the system
+mutation PaymentRowRemove {
+  paymentRow {
+    remove(paymentId: 0) {
+      paymentId
+      customerId
+      staffId
+      rentalId
+      amount
+      paymentDate
+    }
+  }
+}

@@ -1,0 +1,90 @@
+@* Generated File *@
+@(cfg: com.kyleu.projectile.models.config.UiConfig, model: models.store.StaffRow, notes: Seq[com.kyleu.projectile.models.note.Note], debug: Boolean)(
+    implicit request: Request[AnyContent], session: Session, flash: Flash
+)@com.kyleu.projectile.views.html.layout.page(title = s"Staff", cfg = cfg, icon = Some(models.template.Icons.staffRow)) {
+  @com.kyleu.projectile.views.html.layout.card(None) {
+    <div class="right"><a class="btn @cfg.user.buttonColor" href="@controllers.admin.store.routes.StaffRowController.editForm(model.staffId)">Edit</a></div>
+    <div class="right"><a class="btn-flat remove-link" onclick="return confirm('Are you sure you want to remove this Staff?')" href="@controllers.admin.store.routes.StaffRowController.remove(model.staffId)">Remove</a></div>
+    <table class="highlight responsive-table">
+      <tbody>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.staffId.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Staff Id</div></th>
+          <td>@model.staffId</td>
+        </tr>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.firstName.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">First Name</div></th>
+          <td>@model.firstName</td>
+        </tr>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.lastName.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Last Name</div></th>
+          <td>@model.lastName</td>
+        </tr>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.addressId.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Address Id</div></th>
+          <td>
+            @model.addressId
+            <a href="@controllers.admin.address.routes.AddressRowController.view(model.addressId)"><i class="material-icons small">@models.template.Icons.addressRow</i></a>
+          </td>
+        </tr>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.email.map(_.toString.replaceAllLiterally("'", ""))')" style="cursor: pointer;">Email</div></th>
+          <td>@model.email.getOrElse(com.kyleu.projectile.util.NullUtils.str)</td>
+        </tr>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.storeId.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Store Id</div></th>
+          <td>
+            @model.storeId
+            <a href="@controllers.admin.store.routes.StoreRowController.view(model.storeId)"><i class="material-icons small">@models.template.Icons.storeRow</i></a>
+          </td>
+        </tr>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.active.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Active</div></th>
+          <td>@model.active</td>
+        </tr>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.username.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Username</div></th>
+          <td>@model.username</td>
+        </tr>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.password.map(_.toString.replaceAllLiterally("'", ""))')" style="cursor: pointer;">Password</div></th>
+          <td>@model.password.getOrElse(com.kyleu.projectile.util.NullUtils.str)</td>
+        </tr>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.lastUpdate.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Last Update</div></th>
+          <td>@model.lastUpdate</td>
+        </tr>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.picture.map(_.toString.replaceAllLiterally("'", ""))')" style="cursor: pointer;">Picture</div></th>
+          <td>@model.picture.getOrElse(com.kyleu.projectile.util.NullUtils.str)</td>
+        </tr>
+      </tbody>
+    </table>
+  }
+
+  @com.kyleu.projectile.services.augment.AugmentService.views.augment(model, request.queryString, cfg)
+
+  @com.kyleu.projectile.views.html.admin.note.notes(cfg, notes, "StaffRow", "Staff", model.staffId)
+
+  <ul id="model-relations" class="collapsible" data-collapsible="expandable">
+    <li id="relation-paymentRow-staffId" data-table="paymentRow" data-field="staffId" data-singular="Payment" data-plural="Payments" data-url="@controllers.admin.payment.routes.PaymentRowController.byStaffId(model.staffId, limit = Some(5), embedded = true)">
+      <div class="collapsible-header">
+        <i class="material-icons small">@models.template.Icons.paymentRow</i>
+        <span class="title">Payments</span>&nbsp;by Staff Id
+        <span class="badge"><a href="@controllers.admin.payment.routes.PaymentRowController.byStaffId(model.staffId)"><i class="material-icons">insert_link</i></a></span>
+      </div>
+      <div class="collapsible-body"><span>Loading...</span></div>
+    </li>
+    <li id="relation-rentalRow-staffId" data-table="rentalRow" data-field="staffId" data-singular="Rental" data-plural="Rentals" data-url="@controllers.admin.customer.routes.RentalRowController.byStaffId(model.staffId, limit = Some(5), embedded = true)">
+      <div class="collapsible-header">
+        <i class="material-icons small">@models.template.Icons.rentalRow</i>
+        <span class="title">Rentals</span>&nbsp;by Staff Id
+        <span class="badge"><a href="@controllers.admin.customer.routes.RentalRowController.byStaffId(model.staffId)"><i class="material-icons">insert_link</i></a></span>
+      </div>
+      <div class="collapsible-body"><span>Loading...</span></div>
+    </li>
+  </ul>
+  @com.kyleu.projectile.views.html.components.includeScalaJs(debug)
+  <script>$(function() { new RelationService('@controllers.admin.store.routes.StaffRowController.relationCounts(model.staffId)') });</script>
+
+  @com.kyleu.projectile.views.html.components.includeScalaJs(debug)
+}

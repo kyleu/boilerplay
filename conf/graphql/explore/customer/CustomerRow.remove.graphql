@@ -1,0 +1,18 @@
+# Generated File
+# Remove a single CustomerRow entity from the system
+mutation CustomerRowRemove {
+  customerRow {
+    remove(customerId: 0) {
+      customerId
+      storeId
+      firstName
+      lastName
+      email
+      addressId
+      activebool
+      createDate
+      lastUpdate
+      active
+    }
+  }
+}

@@ -1,0 +1,11 @@
+# Generated File
+# Updates a single LanguageRow entity using the provided fields
+mutation LanguageRowUpdate {
+  languageRow {
+    update(languageId: 0, fields: [{k: "", v: ""}]) {
+      languageId
+      name
+      lastUpdate
+    }
+  }
+}

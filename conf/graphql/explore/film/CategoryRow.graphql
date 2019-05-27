@@ -1,0 +1,25 @@
+# Generated File
+# Queries the system for Categories.
+query CategoryRow {
+  categoryRow(
+    q: null, # Or string literal
+    filters: null, # Or filters of type `{ k: "", o: Equal, v: "" }`
+    orderBy: null, # Or orderBy of type `{ col: "", dir: Ascending }`
+    limit: null, # Or number
+    offset: null # Or number
+  ) {
+    totalCount
+    paging {
+      current
+      next
+      itemsPerPage
+    }
+    results {
+      categoryId
+      name
+      lastUpdate
+    }
+    durationMs
+    occurred
+  }
+}

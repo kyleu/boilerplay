@@ -1,0 +1,29 @@
+@* Generated File *@
+@(cfg: com.kyleu.projectile.models.config.UiConfig, totalCount: Option[Int], modelSeq: Seq[models.customer.LanguageRow], q: Option[String], orderBy: Option[String], orderAsc: Boolean, limit: Int, offset: Int)(
+    implicit request: Request[AnyContent], session: Session, flash: Flash
+)
+@com.kyleu.projectile.views.html.admin.explore.list(
+  cfg = cfg,
+  model = "Language",
+  modelPlural = "Languages",
+  icon = models.template.Icons.languageRow,
+  cols = Seq(
+    "languageId" -> "Language Id",
+    "name" -> "Name",
+    "lastUpdate" -> "Last Update"
+  ),
+  totalCount = totalCount,
+  rows = modelSeq.map(model => views.html.admin.customer.languageRowDataRow(model)),
+  orderBy = orderBy,
+  orderAsc = orderAsc,
+  calls = com.kyleu.projectile.models.web.ListCalls(
+    newCall = Some(controllers.admin.customer.routes.LanguageRowController.createForm()),
+    orderBy = Some(controllers.admin.customer.routes.LanguageRowController.list(q, _, _, Some(limit), Some(0))),
+    search = Some(controllers.admin.customer.routes.LanguageRowController.list(None, orderBy, orderAsc, Some(limit), None)),
+    next = controllers.admin.customer.routes.LanguageRowController.list(q, orderBy, orderAsc, Some(limit), Some(offset + limit)),
+    prev = controllers.admin.customer.routes.LanguageRowController.list(q, orderBy, orderAsc, Some(limit), Some(offset - limit))
+  ),
+  limit = limit,
+  offset = offset,
+  q = q
+)

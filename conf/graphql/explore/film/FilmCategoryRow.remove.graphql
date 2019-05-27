@@ -1,0 +1,11 @@
+# Generated File
+# Remove a single FilmCategoryRow entity from the system
+mutation FilmCategoryRowRemove {
+  filmCategoryRow {
+    remove(filmId: 0, categoryId: 0) {
+      filmId
+      categoryId
+      lastUpdate
+    }
+  }
+}

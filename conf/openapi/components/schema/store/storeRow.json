@@ -1,0 +1,61 @@
+// Generated File
+{
+  "store.StoreRow": {
+    "required": [
+      "storeId",
+      "managerStaffId",
+      "addressId",
+      "lastUpdate"
+    ],
+    "properties": {
+      "storeId": {
+        "type": "integer"
+      },
+      "managerStaffId": {
+        "type": "integer"
+      },
+      "addressId": {
+        "type": "integer"
+      },
+      "lastUpdate": {
+        "type": "string",
+        "example": "2018-01-01 00:00:00+0"
+      }
+    }
+  },
+  "store.StoreRowResult": {
+    "properties": {
+      "filters": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/common.Filter"
+        }
+      },
+      "orderBys": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/common.OrderBy"
+        }
+      },
+      "totalCount": {
+        "type": "integer"
+      },
+      "paging": {
+        "$ref": "#/components/schemas/common.PagingOptions"
+      },
+      "results": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/store.StoreRow"
+        }
+      },
+      "durationMs": {
+        "type": "integer"
+      },
+      "occurred": {
+        "type": "string",
+        "example": "2018-01-01 00:00:00"
+      }
+    }
+  }
+}

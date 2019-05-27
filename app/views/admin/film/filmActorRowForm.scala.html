@@ -1,0 +1,28 @@
+@* Generated File *@
+@(cfg: com.kyleu.projectile.models.config.UiConfig, model: models.film.FilmActorRow, title: String, cancel: Call, act: Call, isNew: Boolean = false, debug: Boolean = false)(
+    implicit request: Request[AnyContent], session: Session, flash: Flash
+)@com.kyleu.projectile.views.html.layout.page(title = title, cfg = cfg, icon = Some(models.template.Icons.filmActorRow)) {
+  <form id="form-edit-filmActorRow" action="@act" method="post">
+    @com.kyleu.projectile.views.html.layout.card(None) {
+      <div class="right"><button type="submit" class="btn @cfg.user.buttonColor">@if(isNew) {Create} else {Save} Film Actor</button></div>
+      <div class="right"><a href="@cancel" class="btn-flat cancel-link">Cancel</a></div>
+      <div class="clear"></div>
+      <table>
+        <tbody>
+          @com.kyleu.projectile.views.html.components.form.autocompleteField(
+            selected = isNew, key = "actorId", title = "Actor Id", value = Some(model.actorId.toString), nullable = false, dataType = "integer",
+            call = controllers.admin.film.routes.ActorRowController.autocomplete(), acType = ("actorRow", "Actor"), icon = models.template.Icons.actorRow
+          )
+          @com.kyleu.projectile.views.html.components.form.autocompleteField(
+            selected = isNew, key = "filmId", title = "Film Id", value = Some(model.filmId.toString), nullable = false, dataType = "integer",
+            call = controllers.admin.film.routes.FilmRowController.autocomplete(), acType = ("filmRow", "Film"), icon = models.template.Icons.filmRow
+          )
+          @com.kyleu.projectile.views.html.components.form.zonedDateTimeField(selected = isNew, key = "lastUpdate", title = "Last Update", value = Some(model.lastUpdate), nullable = false)
+        </tbody>
+      </table>
+    }
+  </form>
+}
+@com.kyleu.projectile.views.html.components.includeScalaJs(debug)
+@com.kyleu.projectile.views.html.components.includeAutocomplete(debug)
+<script>$(function() { new FormService('form-edit-filmActorRow'); })</script>

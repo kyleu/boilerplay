@@ -1,0 +1,14 @@
+@* Generated File *@
+@(model: models.store.InventoryRow, hit: String)<div class="search-result">
+  <div class="right">
+    <i class="material-icons small">@models.template.Icons.inventoryRow</i> Inventory
+  </div>
+  <div>
+    <a href="@controllers.admin.store.routes.InventoryRowController.view(model.inventoryId)">@model.inventoryId</a>
+  </div>
+  <em>@hit</em>
+  <div style="margin-top: 12px;">
+    <div class="chip">Film Id: @model.filmId</div>
+    <div class="chip">Store Id: @model.storeId</div>
+  </div>
+</div>

@@ -1,0 +1,14 @@
+# Generated File
+# Updates a single PaymentRow entity using the provided fields
+mutation PaymentRowUpdate {
+  paymentRow {
+    update(paymentId: 0, fields: [{k: "", v: ""}]) {
+      paymentId
+      customerId
+      staffId
+      rentalId
+      amount
+      paymentDate
+    }
+  }
+}

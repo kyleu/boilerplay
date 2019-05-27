@@ -1,0 +1,364 @@
+// Generated File
+{
+  "/admin/film/filmCategoryRow": {
+    "get": {
+      "summary": "Queries and filters the system FilmCategoryRow entities.",
+      "operationId": "film.FilmCategoryRow.list",
+      "tags": ["film"],
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/q"
+        },
+        {
+          "$ref": "#/components/parameters/orderBy"
+        },
+        {
+          "$ref": "#/components/parameters/orderAsc"
+        },
+        {
+          "$ref": "#/components/parameters/limit"
+        },
+        {
+          "$ref": "#/components/parameters/offset"
+        }
+      ],
+      "responses": {
+        "200": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/film.FilmCategoryRowResult"
+              }
+            }
+          }
+        },
+        "4XX": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/common.NotFound"
+              }
+            }
+          }
+        },
+        "5XX": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/common.Error"
+              }
+            }
+          }
+        }
+      }
+    },
+    "post": {
+      "summary": "Creates a new FilmCategoryRow entity.",
+      "operationId": "film.FilmCategoryRow.create",
+      "tags": ["film"],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/common.DataField"
+              }
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/film.FilmCategoryRow"
+              }
+            }
+          }
+        },
+        "4XX": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/common.NotFound"
+              }
+            }
+          }
+        },
+        "5XX": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/common.Error"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/admin/film/filmCategoryRow/{filmId}/{categoryId}": {
+    "get": {
+      "summary": "View the FilmCategoryRow entity matching the provided [filmId, categoryId]",
+      "operationId": "film.FilmCategoryRow.view",
+      "tags": ["film"],
+      "parameters": [
+        {
+          "name": "filmId",
+          "in": "path",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        {
+          "name": "categoryId",
+          "in": "path",
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/film.FilmCategoryRow"
+              }
+            }
+          }
+        },
+        "4XX": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/common.NotFound"
+              }
+            }
+          }
+        },
+        "5XX": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/common.Error"
+              }
+            }
+          }
+        }
+      }
+    },
+    "post": {
+      "summary": "Updates the FilmCategoryRow entity matching the provided [filmId, categoryId] using the provided fields",
+      "operationId": "film.FilmCategoryRow.edit",
+      "tags": ["film"],
+      "parameters": [
+        {
+          "name": "filmId",
+          "in": "path",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        {
+          "name": "categoryId",
+          "in": "path",
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/common.DataField"
+              }
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/film.FilmCategoryRow"
+              }
+            }
+          }
+        },
+        "4XX": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/common.NotFound"
+              }
+            }
+          }
+        },
+        "5XX": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/common.Error"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/admin/film/filmCategoryRow/byFilmId/{filmId}": {
+    "get": {
+      "summary": "Finds the FilmCategoryRow entities associated to the provided [filmId]",
+      "operationId": "film.FilmCategoryRow.byFilmId",
+      "tags": ["film"],
+      "parameters": [
+        {
+          "name": "filmId",
+          "in": "path",
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/film.FilmCategoryRow"
+                }
+              }
+            }
+          }
+        },
+        "4XX": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/common.NotFound"
+              }
+            }
+          }
+        },
+        "5XX": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/common.Error"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/admin/film/filmCategoryRow/byCategoryId/{categoryId}": {
+    "get": {
+      "summary": "Finds the FilmCategoryRow entities associated to the provided [categoryId]",
+      "operationId": "film.FilmCategoryRow.byCategoryId",
+      "tags": ["film"],
+      "parameters": [
+        {
+          "name": "categoryId",
+          "in": "path",
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/film.FilmCategoryRow"
+                }
+              }
+            }
+          }
+        },
+        "4XX": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/common.NotFound"
+              }
+            }
+          }
+        },
+        "5XX": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/common.Error"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/admin/film/filmCategoryRow/{filmId}/{categoryId}/remove": {
+    "get": {
+      "summary": "Removes the FilmCategoryRow entity matching the provided [filmId, categoryId]",
+      "operationId": "film.FilmCategoryRow.remove",
+      "tags": ["film"],
+      "parameters": [
+        {
+          "name": "filmId",
+          "in": "path",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        {
+          "name": "categoryId",
+          "in": "path",
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/film.FilmCategoryRow"
+              }
+            }
+          }
+        },
+        "4XX": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/common.NotFound"
+              }
+            }
+          }
+        },
+        "5XX": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/common.Error"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

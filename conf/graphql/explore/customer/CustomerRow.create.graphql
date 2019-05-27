@@ -1,0 +1,18 @@
+# Generated File
+# Creates a new CustomerRow entity
+mutation CustomerRowCreate {
+  customerRow {
+    create(fields: [{k: "", v: ""}]) {
+      customerId
+      storeId
+      firstName
+      lastName
+      email
+      addressId
+      activebool
+      createDate
+      lastUpdate
+      active
+    }
+  }
+}

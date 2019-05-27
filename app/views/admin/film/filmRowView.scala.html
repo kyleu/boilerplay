@@ -1,0 +1,112 @@
+@* Generated File *@
+@(cfg: com.kyleu.projectile.models.config.UiConfig, model: models.film.FilmRow, notes: Seq[com.kyleu.projectile.models.note.Note], debug: Boolean)(
+    implicit request: Request[AnyContent], session: Session, flash: Flash
+)@com.kyleu.projectile.views.html.layout.page(title = s"Film", cfg = cfg, icon = Some(models.template.Icons.filmRow)) {
+  @com.kyleu.projectile.views.html.layout.card(None) {
+    <div class="right"><a class="btn @cfg.user.buttonColor" href="@controllers.admin.film.routes.FilmRowController.editForm(model.filmId)">Edit</a></div>
+    <div class="right"><a class="btn-flat remove-link" onclick="return confirm('Are you sure you want to remove this Film?')" href="@controllers.admin.film.routes.FilmRowController.remove(model.filmId)">Remove</a></div>
+    <table class="highlight responsive-table">
+      <tbody>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.filmId.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Film Id</div></th>
+          <td>@model.filmId</td>
+        </tr>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.title.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Title</div></th>
+          <td>@model.title</td>
+        </tr>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.description.map(_.toString.replaceAllLiterally("'", ""))')" style="cursor: pointer;">Description</div></th>
+          <td>@model.description.getOrElse(com.kyleu.projectile.util.NullUtils.str)</td>
+        </tr>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.releaseYear.map(_.toString.replaceAllLiterally("'", ""))')" style="cursor: pointer;">Release Year</div></th>
+          <td>@model.releaseYear.getOrElse(com.kyleu.projectile.util.NullUtils.str)</td>
+        </tr>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.languageId.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Language Id</div></th>
+          <td>
+            @model.languageId
+            <a href="@controllers.admin.customer.routes.LanguageRowController.view(model.languageId)"><i class="material-icons small">@models.template.Icons.languageRow</i></a>
+          </td>
+        </tr>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.originalLanguageId.map(_.toString.replaceAllLiterally("'", ""))')" style="cursor: pointer;">Original Language Id</div></th>
+          <td>
+            @model.originalLanguageId.getOrElse(com.kyleu.projectile.util.NullUtils.str)
+            @model.originalLanguageId.map { v =>
+              <a href="@controllers.admin.customer.routes.LanguageRowController.view(v)"><i class="material-icons small">@models.template.Icons.languageRow</i></a>
+            }
+          </td>
+        </tr>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.rentalDuration.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Rental Duration</div></th>
+          <td>@model.rentalDuration</td>
+        </tr>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.rentalRate.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Rental Rate</div></th>
+          <td>@model.rentalRate</td>
+        </tr>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.length.map(_.toString.replaceAllLiterally("'", ""))')" style="cursor: pointer;">Length</div></th>
+          <td>@model.length.getOrElse(com.kyleu.projectile.util.NullUtils.str)</td>
+        </tr>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.replacementCost.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Replacement Cost</div></th>
+          <td>@model.replacementCost</td>
+        </tr>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.rating.map(_.toString.replaceAllLiterally("'", ""))')" style="cursor: pointer;">Rating</div></th>
+          <td>@model.rating.getOrElse(com.kyleu.projectile.util.NullUtils.str)</td>
+        </tr>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.lastUpdate.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Last Update</div></th>
+          <td>@model.lastUpdate</td>
+        </tr>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.specialFeatures.map(_.toString.replaceAllLiterally("'", ""))')" style="cursor: pointer;">Special Features</div></th>
+          <td>@model.specialFeatures.map(_.mkString(", "))</td>
+        </tr>
+        <tr>
+          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.fulltext.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Fulltext</div></th>
+          <td>@model.fulltext</td>
+        </tr>
+      </tbody>
+    </table>
+  }
+
+  @com.kyleu.projectile.services.augment.AugmentService.views.augment(model, request.queryString, cfg)
+
+  @com.kyleu.projectile.views.html.admin.note.notes(cfg, notes, "FilmRow", "Film", model.filmId)
+
+  <ul id="model-relations" class="collapsible" data-collapsible="expandable">
+    <li id="relation-filmActorRow-filmId" data-table="filmActorRow" data-field="filmId" data-singular="Film Actor" data-plural="Film Actors" data-url="@controllers.admin.film.routes.FilmActorRowController.byFilmId(model.filmId, limit = Some(5), embedded = true)">
+      <div class="collapsible-header">
+        <i class="material-icons small">@models.template.Icons.filmActorRow</i>
+        <span class="title">Film Actors</span>&nbsp;by Film Id
+        <span class="badge"><a href="@controllers.admin.film.routes.FilmActorRowController.byFilmId(model.filmId)"><i class="material-icons">insert_link</i></a></span>
+      </div>
+      <div class="collapsible-body"><span>Loading...</span></div>
+    </li>
+    <li id="relation-filmCategoryRow-filmId" data-table="filmCategoryRow" data-field="filmId" data-singular="Film Category" data-plural="Film Categories" data-url="@controllers.admin.film.routes.FilmCategoryRowController.byFilmId(model.filmId, limit = Some(5), embedded = true)">
+      <div class="collapsible-header">
+        <i class="material-icons small">@models.template.Icons.filmCategoryRow</i>
+        <span class="title">Film Categories</span>&nbsp;by Film Id
+        <span class="badge"><a href="@controllers.admin.film.routes.FilmCategoryRowController.byFilmId(model.filmId)"><i class="material-icons">insert_link</i></a></span>
+      </div>
+      <div class="collapsible-body"><span>Loading...</span></div>
+    </li>
+    <li id="relation-inventoryRow-filmId" data-table="inventoryRow" data-field="filmId" data-singular="Inventory" data-plural="Inventories" data-url="@controllers.admin.store.routes.InventoryRowController.byFilmId(model.filmId, limit = Some(5), embedded = true)">
+      <div class="collapsible-header">
+        <i class="material-icons small">@models.template.Icons.inventoryRow</i>
+        <span class="title">Inventories</span>&nbsp;by Film Id
+        <span class="badge"><a href="@controllers.admin.store.routes.InventoryRowController.byFilmId(model.filmId)"><i class="material-icons">insert_link</i></a></span>
+      </div>
+      <div class="collapsible-body"><span>Loading...</span></div>
+    </li>
+  </ul>
+  @com.kyleu.projectile.views.html.components.includeScalaJs(debug)
+  <script>$(function() { new RelationService('@controllers.admin.film.routes.FilmRowController.relationCounts(model.filmId)') });</script>
+
+  @com.kyleu.projectile.views.html.components.includeScalaJs(debug)
+}

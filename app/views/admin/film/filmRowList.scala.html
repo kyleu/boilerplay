@@ -1,0 +1,32 @@
+@* Generated File *@
+@(cfg: com.kyleu.projectile.models.config.UiConfig, totalCount: Option[Int], modelSeq: Seq[models.film.FilmRow], q: Option[String], orderBy: Option[String], orderAsc: Boolean, limit: Int, offset: Int)(
+    implicit request: Request[AnyContent], session: Session, flash: Flash
+)
+@com.kyleu.projectile.views.html.admin.explore.list(
+  cfg = cfg,
+  model = "Film",
+  modelPlural = "Films",
+  icon = models.template.Icons.filmRow,
+  cols = Seq(
+    "filmId" -> "Film Id",
+    "title" -> "Title",
+    "languageId" -> "Language Id",
+    "originalLanguageId" -> "Original Language Id",
+    "rating" -> "Rating",
+    "lastUpdate" -> "Last Update"
+  ),
+  totalCount = totalCount,
+  rows = modelSeq.map(model => views.html.admin.film.filmRowDataRow(model)),
+  orderBy = orderBy,
+  orderAsc = orderAsc,
+  calls = com.kyleu.projectile.models.web.ListCalls(
+    newCall = Some(controllers.admin.film.routes.FilmRowController.createForm()),
+    orderBy = Some(controllers.admin.film.routes.FilmRowController.list(q, _, _, Some(limit), Some(0))),
+    search = Some(controllers.admin.film.routes.FilmRowController.list(None, orderBy, orderAsc, Some(limit), None)),
+    next = controllers.admin.film.routes.FilmRowController.list(q, orderBy, orderAsc, Some(limit), Some(offset + limit)),
+    prev = controllers.admin.film.routes.FilmRowController.list(q, orderBy, orderAsc, Some(limit), Some(offset - limit))
+  ),
+  limit = limit,
+  offset = offset,
+  q = q
+)

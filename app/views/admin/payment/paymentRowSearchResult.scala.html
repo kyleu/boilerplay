@@ -1,0 +1,16 @@
+@* Generated File *@
+@(model: models.payment.PaymentRow, hit: String)<div class="search-result">
+  <div class="right">
+    <i class="material-icons small">@models.template.Icons.paymentRow</i> Payment
+  </div>
+  <div>
+    <a href="@controllers.admin.payment.routes.PaymentRowController.view(model.paymentId)">@model.paymentId</a>
+  </div>
+  <em>@hit</em>
+  <div style="margin-top: 12px;">
+    <div class="chip">Customer Id: @model.customerId</div>
+    <div class="chip">Staff Id: @model.staffId</div>
+    <div class="chip">Rental Id: @model.rentalId</div>
+    <div class="chip">Amount: @model.amount</div>
+  </div>
+</div>

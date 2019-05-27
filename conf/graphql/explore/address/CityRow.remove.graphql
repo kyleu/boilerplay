@@ -1,0 +1,12 @@
+# Generated File
+# Remove a single CityRow entity from the system
+mutation CityRowRemove {
+  cityRow {
+    remove(cityId: 0) {
+      cityId
+      city
+      countryId
+      lastUpdate
+    }
+  }
+}

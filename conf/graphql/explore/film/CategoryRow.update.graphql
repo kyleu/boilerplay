@@ -1,0 +1,11 @@
+# Generated File
+# Updates a single CategoryRow entity using the provided fields
+mutation CategoryRowUpdate {
+  categoryRow {
+    update(categoryId: 0, fields: [{k: "", v: ""}]) {
+      categoryId
+      name
+      lastUpdate
+    }
+  }
+}
