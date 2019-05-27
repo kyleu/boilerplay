@@ -1,0 +1,37 @@
+{
+  "key" : "staff",
+  "pkg" : [ "store" ],
+  "features" : [ "doobie", "datamodel", "auth", "graphql", "service", "slick", "controller", "notes", "json", "core" ],
+  "ignored" : [ ],
+  "overrides" : [ {
+    "k" : "plural",
+    "v" : "Staff"
+  }, {
+    "k" : "staff_id.type",
+    "v" : "integer"
+  }, {
+    "k" : "first_name.search",
+    "v" : "true"
+  }, {
+    "k" : "last_name.search",
+    "v" : "true"
+  }, {
+    "k" : "address_id.search",
+    "v" : "true"
+  }, {
+    "k" : "email.search",
+    "v" : "true"
+  }, {
+    "k" : "store_id.search",
+    "v" : "true"
+  }, {
+    "k" : "username.search",
+    "v" : "true"
+  }, {
+    "k" : "fk.staff_store_id_fkey.propertyName",
+    "v" : "staffStoreIdFkeyRel"
+  }, {
+    "k" : "fk.staff_address_id_fkey.propertyName",
+    "v" : "staffAddressIdFkeyRel"
+  } ]
+}

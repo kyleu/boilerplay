@@ -1,0 +1,239 @@
+{
+  "name" : "customer",
+  "catalog" : null,
+  "schema" : "public",
+  "description" : null,
+  "definition" : null,
+  "columns" : [ {
+    "name" : "customer_id",
+    "description" : null,
+    "definition" : "nextval('customer_customer_id_seq1'::regclass)",
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : true,
+    "columnType" : {
+      "t" : "long"
+    },
+    "sqlTypeCode" : 4,
+    "sqlTypeName" : "serial",
+    "size" : "10",
+    "sizeAsInt" : 10,
+    "scale" : 0,
+    "defaultValue" : "nextval('customer_customer_id_seq1'::regclass)"
+  }, {
+    "name" : "store_id",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "integer"
+    },
+    "sqlTypeCode" : 5,
+    "sqlTypeName" : "int2",
+    "size" : "5",
+    "sizeAsInt" : 5,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "first_name",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "string"
+    },
+    "sqlTypeCode" : 12,
+    "sqlTypeName" : "text",
+    "size" : "2147483647",
+    "sizeAsInt" : 2147483647,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "last_name",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "string"
+    },
+    "sqlTypeCode" : 12,
+    "sqlTypeName" : "text",
+    "size" : "2147483647",
+    "sizeAsInt" : 2147483647,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "email",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : false,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "string"
+    },
+    "sqlTypeCode" : 12,
+    "sqlTypeName" : "text",
+    "size" : "2147483647",
+    "sizeAsInt" : 2147483647,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "address_id",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "integer"
+    },
+    "sqlTypeCode" : 5,
+    "sqlTypeName" : "int2",
+    "size" : "5",
+    "sizeAsInt" : 5,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "activebool",
+    "description" : null,
+    "definition" : "true",
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "boolean"
+    },
+    "sqlTypeCode" : -7,
+    "sqlTypeName" : "bool",
+    "size" : "1",
+    "sizeAsInt" : 1,
+    "scale" : 0,
+    "defaultValue" : "true"
+  }, {
+    "name" : "create_date",
+    "description" : null,
+    "definition" : "('now'::text)::date",
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "date"
+    },
+    "sqlTypeCode" : 91,
+    "sqlTypeName" : "date",
+    "size" : "13",
+    "sizeAsInt" : 13,
+    "scale" : 0,
+    "defaultValue" : "('now'::text)::date"
+  }, {
+    "name" : "last_update",
+    "description" : null,
+    "definition" : "now()",
+    "primaryKey" : false,
+    "notNull" : false,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "timestamptz"
+    },
+    "sqlTypeCode" : 93,
+    "sqlTypeName" : "timestamptz",
+    "size" : "35",
+    "sizeAsInt" : 35,
+    "scale" : 0,
+    "defaultValue" : "now()"
+  }, {
+    "name" : "active",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : false,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "long"
+    },
+    "sqlTypeCode" : 4,
+    "sqlTypeName" : "int4",
+    "size" : "10",
+    "sizeAsInt" : 10,
+    "scale" : 0,
+    "defaultValue" : null
+  } ],
+  "rowIdentifier" : [ "customer_id" ],
+  "primaryKey" : {
+    "name" : "customer_pkey",
+    "columns" : [ "customer_id" ]
+  },
+  "foreignKeys" : [ {
+    "name" : "customer_store_id_fkey",
+    "propertyName" : "customerStoreIdFkeyRel",
+    "targetTable" : "store",
+    "references" : [ {
+      "source" : "store_id",
+      "target" : "store_id"
+    } ]
+  }, {
+    "name" : "customer_address_id_fkey",
+    "propertyName" : "customerAddressIdFkeyRel",
+    "targetTable" : "address",
+    "references" : [ {
+      "source" : "address_id",
+      "target" : "address_id"
+    } ]
+  } ],
+  "indexes" : [ {
+    "name" : "customer_email_idx",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "email",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "customer_first_name_idx",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "first_name",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "customer_pkey",
+    "unique" : true,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "customer_id",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "idx_fk_address_id",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "address_id",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "idx_fk_store_id",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "store_id",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "idx_last_name",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "last_name",
+      "ascending" : true
+    } ]
+  } ]
+}

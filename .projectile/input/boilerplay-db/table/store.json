@@ -1,0 +1,119 @@
+{
+  "name" : "store",
+  "catalog" : null,
+  "schema" : "public",
+  "description" : null,
+  "definition" : null,
+  "columns" : [ {
+    "name" : "store_id",
+    "description" : null,
+    "definition" : "nextval('store_store_id_seq'::regclass)",
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : true,
+    "columnType" : {
+      "t" : "long"
+    },
+    "sqlTypeCode" : 4,
+    "sqlTypeName" : "serial",
+    "size" : "10",
+    "sizeAsInt" : 10,
+    "scale" : 0,
+    "defaultValue" : "nextval('store_store_id_seq'::regclass)"
+  }, {
+    "name" : "manager_staff_id",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "integer"
+    },
+    "sqlTypeCode" : 5,
+    "sqlTypeName" : "int2",
+    "size" : "5",
+    "sizeAsInt" : 5,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "address_id",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "integer"
+    },
+    "sqlTypeCode" : 5,
+    "sqlTypeName" : "int2",
+    "size" : "5",
+    "sizeAsInt" : 5,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "last_update",
+    "description" : null,
+    "definition" : "now()",
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "timestamptz"
+    },
+    "sqlTypeCode" : 93,
+    "sqlTypeName" : "timestamptz",
+    "size" : "35",
+    "sizeAsInt" : 35,
+    "scale" : 0,
+    "defaultValue" : "now()"
+  } ],
+  "rowIdentifier" : [ "store_id" ],
+  "primaryKey" : {
+    "name" : "store_pkey",
+    "columns" : [ "store_id" ]
+  },
+  "foreignKeys" : [ {
+    "name" : "store_address_id_fkey",
+    "propertyName" : "storeAddressIdFkeyRel",
+    "targetTable" : "address",
+    "references" : [ {
+      "source" : "address_id",
+      "target" : "address_id"
+    } ]
+  } ],
+  "indexes" : [ {
+    "name" : "idx_unq_manager_staff_id",
+    "unique" : true,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "manager_staff_id",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "store_address_id_idx",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "address_id",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "store_last_update_idx",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "last_update",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "store_pkey",
+    "unique" : true,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "store_id",
+      "ascending" : true
+    } ]
+  } ]
+}

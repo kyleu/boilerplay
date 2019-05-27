@@ -1,0 +1,34 @@
+{
+  "key" : "address",
+  "pkg" : [ "address" ],
+  "features" : [ "doobie", "datamodel", "auth", "graphql", "service", "slick", "controller", "notes", "json", "core" ],
+  "ignored" : [ ],
+  "overrides" : [ {
+    "k" : "plural",
+    "v" : "Addresses"
+  }, {
+    "k" : "address_id.type",
+    "v" : "integer"
+  }, {
+    "k" : "address.search",
+    "v" : "true"
+  }, {
+    "k" : "address2.search",
+    "v" : "true"
+  }, {
+    "k" : "district.search",
+    "v" : "true"
+  }, {
+    "k" : "postal_code.search",
+    "v" : "true"
+  }, {
+    "k" : "phone.search",
+    "v" : "true"
+  }, {
+    "k" : "last_update.search",
+    "v" : "true"
+  }, {
+    "k" : "fk.address_city_id_fkey.propertyName",
+    "v" : "addressCityIdFkeyRel"
+  } ]
+}

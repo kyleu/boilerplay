@@ -1,0 +1,16 @@
+{
+  "key" : "language",
+  "pkg" : [ "customer" ],
+  "features" : [ "doobie", "datamodel", "auth", "graphql", "service", "slick", "controller", "notes", "json", "core" ],
+  "ignored" : [ ],
+  "overrides" : [ {
+    "k" : "language_id.type",
+    "v" : "integer"
+  }, {
+    "k" : "name.search",
+    "v" : "true"
+  }, {
+    "k" : "last_update.search",
+    "v" : "true"
+  } ]
+}

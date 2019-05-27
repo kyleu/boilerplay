@@ -1,0 +1,87 @@
+{
+  "name" : "country",
+  "catalog" : null,
+  "schema" : "public",
+  "description" : null,
+  "definition" : null,
+  "columns" : [ {
+    "name" : "country_id",
+    "description" : null,
+    "definition" : "nextval('country_country_id_seq'::regclass)",
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : true,
+    "columnType" : {
+      "t" : "long"
+    },
+    "sqlTypeCode" : 4,
+    "sqlTypeName" : "serial",
+    "size" : "10",
+    "sizeAsInt" : 10,
+    "scale" : 0,
+    "defaultValue" : "nextval('country_country_id_seq'::regclass)"
+  }, {
+    "name" : "country",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "string"
+    },
+    "sqlTypeCode" : 12,
+    "sqlTypeName" : "text",
+    "size" : "2147483647",
+    "sizeAsInt" : 2147483647,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "last_update",
+    "description" : null,
+    "definition" : "now()",
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "timestamptz"
+    },
+    "sqlTypeCode" : 93,
+    "sqlTypeName" : "timestamptz",
+    "size" : "35",
+    "sizeAsInt" : 35,
+    "scale" : 0,
+    "defaultValue" : "now()"
+  } ],
+  "rowIdentifier" : [ "country_id" ],
+  "primaryKey" : {
+    "name" : "country_pkey",
+    "columns" : [ "country_id" ]
+  },
+  "foreignKeys" : [ ],
+  "indexes" : [ {
+    "name" : "country_country_idx",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "country",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "country_last_update_idx",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "last_update",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "country_pkey",
+    "unique" : true,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "country_id",
+      "ascending" : true
+    } ]
+  } ]
+}

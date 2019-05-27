@@ -1,0 +1,111 @@
+{
+  "name" : "actor",
+  "catalog" : null,
+  "schema" : "public",
+  "description" : null,
+  "definition" : null,
+  "columns" : [ {
+    "name" : "actor_id",
+    "description" : null,
+    "definition" : "nextval('actor_actor_id_seq'::regclass)",
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : true,
+    "columnType" : {
+      "t" : "long"
+    },
+    "sqlTypeCode" : 4,
+    "sqlTypeName" : "serial",
+    "size" : "10",
+    "sizeAsInt" : 10,
+    "scale" : 0,
+    "defaultValue" : "nextval('actor_actor_id_seq'::regclass)"
+  }, {
+    "name" : "first_name",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "string"
+    },
+    "sqlTypeCode" : 12,
+    "sqlTypeName" : "text",
+    "size" : "2147483647",
+    "sizeAsInt" : 2147483647,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "last_name",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "string"
+    },
+    "sqlTypeCode" : 12,
+    "sqlTypeName" : "text",
+    "size" : "2147483647",
+    "sizeAsInt" : 2147483647,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "last_update",
+    "description" : null,
+    "definition" : "now()",
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "timestamptz"
+    },
+    "sqlTypeCode" : 93,
+    "sqlTypeName" : "timestamptz",
+    "size" : "35",
+    "sizeAsInt" : 35,
+    "scale" : 0,
+    "defaultValue" : "now()"
+  } ],
+  "rowIdentifier" : [ "actor_id" ],
+  "primaryKey" : {
+    "name" : "actor_pkey",
+    "columns" : [ "actor_id" ]
+  },
+  "foreignKeys" : [ ],
+  "indexes" : [ {
+    "name" : "actor_first_name_idx",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "first_name",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "actor_last_update_idx",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "last_update",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "actor_pkey",
+    "unique" : true,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "actor_id",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "idx_actor_last_name",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "last_name",
+      "ascending" : true
+    } ]
+  } ]
+}

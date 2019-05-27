@@ -1,0 +1,215 @@
+{
+  "name" : "address",
+  "catalog" : null,
+  "schema" : "public",
+  "description" : null,
+  "definition" : null,
+  "columns" : [ {
+    "name" : "address_id",
+    "description" : null,
+    "definition" : "nextval('address_address_id_seq'::regclass)",
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : true,
+    "columnType" : {
+      "t" : "long"
+    },
+    "sqlTypeCode" : 4,
+    "sqlTypeName" : "serial",
+    "size" : "10",
+    "sizeAsInt" : 10,
+    "scale" : 0,
+    "defaultValue" : "nextval('address_address_id_seq'::regclass)"
+  }, {
+    "name" : "address",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "string"
+    },
+    "sqlTypeCode" : 12,
+    "sqlTypeName" : "text",
+    "size" : "2147483647",
+    "sizeAsInt" : 2147483647,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "address2",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : false,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "string"
+    },
+    "sqlTypeCode" : 12,
+    "sqlTypeName" : "text",
+    "size" : "2147483647",
+    "sizeAsInt" : 2147483647,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "district",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "string"
+    },
+    "sqlTypeCode" : 12,
+    "sqlTypeName" : "text",
+    "size" : "2147483647",
+    "sizeAsInt" : 2147483647,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "city_id",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "integer"
+    },
+    "sqlTypeCode" : 5,
+    "sqlTypeName" : "int2",
+    "size" : "5",
+    "sizeAsInt" : 5,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "postal_code",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : false,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "string"
+    },
+    "sqlTypeCode" : 12,
+    "sqlTypeName" : "text",
+    "size" : "2147483647",
+    "sizeAsInt" : 2147483647,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "phone",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "string"
+    },
+    "sqlTypeCode" : 12,
+    "sqlTypeName" : "text",
+    "size" : "2147483647",
+    "sizeAsInt" : 2147483647,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "last_update",
+    "description" : null,
+    "definition" : "now()",
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "timestamptz"
+    },
+    "sqlTypeCode" : 93,
+    "sqlTypeName" : "timestamptz",
+    "size" : "35",
+    "sizeAsInt" : 35,
+    "scale" : 0,
+    "defaultValue" : "now()"
+  } ],
+  "rowIdentifier" : [ "address_id" ],
+  "primaryKey" : {
+    "name" : "address_pkey",
+    "columns" : [ "address_id" ]
+  },
+  "foreignKeys" : [ {
+    "name" : "address_city_id_fkey",
+    "propertyName" : "addressCityIdFkeyRel",
+    "targetTable" : "city",
+    "references" : [ {
+      "source" : "city_id",
+      "target" : "city_id"
+    } ]
+  } ],
+  "indexes" : [ {
+    "name" : "address_address2_idx",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "address2",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "address_address_idx",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "address",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "address_district_idx",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "district",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "address_last_update_idx",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "last_update",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "address_phone_idx",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "phone",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "address_pkey",
+    "unique" : true,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "address_id",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "address_postal_code_idx",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "postal_code",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "idx_fk_city_id",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "city_id",
+      "ascending" : true
+    } ]
+  } ]
+}

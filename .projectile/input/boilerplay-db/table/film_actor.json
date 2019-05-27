@@ -1,0 +1,106 @@
+{
+  "name" : "film_actor",
+  "catalog" : null,
+  "schema" : "public",
+  "description" : null,
+  "definition" : null,
+  "columns" : [ {
+    "name" : "actor_id",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "integer"
+    },
+    "sqlTypeCode" : 5,
+    "sqlTypeName" : "int2",
+    "size" : "5",
+    "sizeAsInt" : 5,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "film_id",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "integer"
+    },
+    "sqlTypeCode" : 5,
+    "sqlTypeName" : "int2",
+    "size" : "5",
+    "sizeAsInt" : 5,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "last_update",
+    "description" : null,
+    "definition" : "now()",
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "timestamptz"
+    },
+    "sqlTypeCode" : 93,
+    "sqlTypeName" : "timestamptz",
+    "size" : "35",
+    "sizeAsInt" : 35,
+    "scale" : 0,
+    "defaultValue" : "now()"
+  } ],
+  "rowIdentifier" : [ "actor_id", "film_id" ],
+  "primaryKey" : {
+    "name" : "film_actor_pkey",
+    "columns" : [ "actor_id", "film_id" ]
+  },
+  "foreignKeys" : [ {
+    "name" : "film_actor_film_id_fkey",
+    "propertyName" : "filmActorFilmIdFkeyRel",
+    "targetTable" : "film",
+    "references" : [ {
+      "source" : "film_id",
+      "target" : "film_id"
+    } ]
+  }, {
+    "name" : "film_actor_actor_id_fkey",
+    "propertyName" : "filmActorActorIdFkeyRel",
+    "targetTable" : "actor",
+    "references" : [ {
+      "source" : "actor_id",
+      "target" : "actor_id"
+    } ]
+  } ],
+  "indexes" : [ {
+    "name" : "film_actor_last_update_idx",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "last_update",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "film_actor_pkey",
+    "unique" : true,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "actor_id",
+      "ascending" : true
+    }, {
+      "name" : "film_id",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "idx_fk_film_id",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "film_id",
+      "ascending" : true
+    } ]
+  } ]
+}

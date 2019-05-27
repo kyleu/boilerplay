@@ -1,0 +1,7 @@
+{
+  "key" : "mpaa_rating",
+  "pkg" : [ "film" ],
+  "features" : [ "doobie", "auth", "graphql", "slick", "controller", "core" ],
+  "ignored" : [ ],
+  "overrides" : [ ]
+}

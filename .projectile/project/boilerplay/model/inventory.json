@@ -1,0 +1,13 @@
+{
+  "key" : "inventory",
+  "pkg" : [ "store" ],
+  "features" : [ "doobie", "datamodel", "auth", "graphql", "service", "slick", "controller", "notes", "json", "core" ],
+  "ignored" : [ ],
+  "overrides" : [ {
+    "k" : "fk.inventory_film_id_fkey.propertyName",
+    "v" : "inventoryFilmIdFkeyRel"
+  }, {
+    "k" : "fk.inventory_store_id_fkey.propertyName",
+    "v" : "inventoryStoreIdFkeyRel"
+  } ]
+}

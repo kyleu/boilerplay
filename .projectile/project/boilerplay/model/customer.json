@@ -1,0 +1,22 @@
+{
+  "key" : "customer",
+  "pkg" : [ "customer" ],
+  "features" : [ "doobie", "datamodel", "auth", "graphql", "service", "slick", "controller", "notes", "json", "core" ],
+  "ignored" : [ ],
+  "overrides" : [ {
+    "k" : "customer_id.type",
+    "v" : "integer"
+  }, {
+    "k" : "first_name.search",
+    "v" : "true"
+  }, {
+    "k" : "email.search",
+    "v" : "true"
+  }, {
+    "k" : "fk.customer_store_id_fkey.propertyName",
+    "v" : "customerStoreIdFkeyRel"
+  }, {
+    "k" : "fk.customer_address_id_fkey.propertyName",
+    "v" : "customerAddressIdFkeyRel"
+  } ]
+}

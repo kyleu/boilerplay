@@ -1,0 +1,22 @@
+{
+  "key" : "rental",
+  "pkg" : [ "customer" ],
+  "features" : [ "doobie", "datamodel", "auth", "graphql", "service", "slick", "controller", "notes", "json", "core" ],
+  "ignored" : [ ],
+  "overrides" : [ {
+    "k" : "return_date.search",
+    "v" : "true"
+  }, {
+    "k" : "staff_id.search",
+    "v" : "true"
+  }, {
+    "k" : "fk.rental_staff_id_fkey.propertyName",
+    "v" : "rentalStaffIdFkeyRel"
+  }, {
+    "k" : "fk.rental_inventory_id_fkey.propertyName",
+    "v" : "rentalInventoryIdFkeyRel"
+  }, {
+    "k" : "fk.rental_customer_id_fkey.propertyName",
+    "v" : "rentalCustomerIdFkeyRel"
+  } ]
+}

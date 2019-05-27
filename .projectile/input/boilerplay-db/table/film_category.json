@@ -1,0 +1,98 @@
+{
+  "name" : "film_category",
+  "catalog" : null,
+  "schema" : "public",
+  "description" : null,
+  "definition" : null,
+  "columns" : [ {
+    "name" : "film_id",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "integer"
+    },
+    "sqlTypeCode" : 5,
+    "sqlTypeName" : "int2",
+    "size" : "5",
+    "sizeAsInt" : 5,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "category_id",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "integer"
+    },
+    "sqlTypeCode" : 5,
+    "sqlTypeName" : "int2",
+    "size" : "5",
+    "sizeAsInt" : 5,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "last_update",
+    "description" : null,
+    "definition" : "now()",
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "timestamptz"
+    },
+    "sqlTypeCode" : 93,
+    "sqlTypeName" : "timestamptz",
+    "size" : "35",
+    "sizeAsInt" : 35,
+    "scale" : 0,
+    "defaultValue" : "now()"
+  } ],
+  "rowIdentifier" : [ "film_id", "category_id" ],
+  "primaryKey" : {
+    "name" : "film_category_pkey",
+    "columns" : [ "film_id", "category_id" ]
+  },
+  "foreignKeys" : [ {
+    "name" : "film_category_film_id_fkey",
+    "propertyName" : "filmCategoryFilmIdFkeyRel",
+    "targetTable" : "film",
+    "references" : [ {
+      "source" : "film_id",
+      "target" : "film_id"
+    } ]
+  }, {
+    "name" : "film_category_category_id_fkey",
+    "propertyName" : "filmCategoryCategoryIdFkeyRel",
+    "targetTable" : "category",
+    "references" : [ {
+      "source" : "category_id",
+      "target" : "category_id"
+    } ]
+  } ],
+  "indexes" : [ {
+    "name" : "film_category_last_update_idx",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "last_update",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "film_category_pkey",
+    "unique" : true,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "film_id",
+      "ascending" : true
+    }, {
+      "name" : "category_id",
+      "ascending" : true
+    } ]
+  } ]
+}

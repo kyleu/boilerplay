@@ -1,0 +1,193 @@
+{
+  "name" : "system_permission",
+  "catalog" : null,
+  "schema" : "public",
+  "description" : null,
+  "definition" : null,
+  "columns" : [ {
+    "name" : "role",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "string"
+    },
+    "sqlTypeCode" : 12,
+    "sqlTypeName" : "varchar",
+    "size" : "256",
+    "sizeAsInt" : 256,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "pkg",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "string"
+    },
+    "sqlTypeCode" : 12,
+    "sqlTypeName" : "varchar",
+    "size" : "256",
+    "sizeAsInt" : 256,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "model",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "string"
+    },
+    "sqlTypeCode" : 12,
+    "sqlTypeName" : "varchar",
+    "size" : "256",
+    "sizeAsInt" : 256,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "action",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "string"
+    },
+    "sqlTypeCode" : 12,
+    "sqlTypeName" : "varchar",
+    "size" : "256",
+    "sizeAsInt" : 256,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "allow",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : false,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "boolean"
+    },
+    "sqlTypeCode" : -7,
+    "sqlTypeName" : "bool",
+    "size" : "1",
+    "sizeAsInt" : 1,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "created",
+    "description" : null,
+    "definition" : "now()",
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "timestamp"
+    },
+    "sqlTypeCode" : 93,
+    "sqlTypeName" : "timestamp",
+    "size" : "29",
+    "sizeAsInt" : 29,
+    "scale" : 0,
+    "defaultValue" : "now()"
+  }, {
+    "name" : "created_by",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : false,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "uuid"
+    },
+    "sqlTypeCode" : 1111,
+    "sqlTypeName" : "uuid",
+    "size" : "2147483647",
+    "sizeAsInt" : 2147483647,
+    "scale" : 0,
+    "defaultValue" : null
+  } ],
+  "rowIdentifier" : [ "role", "pkg", "model", "action" ],
+  "primaryKey" : {
+    "name" : "system_permission_pkey",
+    "columns" : [ "role", "pkg", "model", "action" ]
+  },
+  "foreignKeys" : [ {
+    "name" : "system_permission_created_by_fkey",
+    "propertyName" : "systemPermissionCreatedByFkeyRel",
+    "targetTable" : "system_user",
+    "references" : [ {
+      "source" : "created_by",
+      "target" : "id"
+    } ]
+  } ],
+  "indexes" : [ {
+    "name" : "system_permission_created_by_idx",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "created_by",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "system_permission_pkey",
+    "unique" : true,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "role",
+      "ascending" : true
+    }, {
+      "name" : "pkg",
+      "ascending" : true
+    }, {
+      "name" : "model",
+      "ascending" : true
+    }, {
+      "name" : "action",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "system_permission_role_idx",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "role",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "system_permission_role_package_idx",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "role",
+      "ascending" : true
+    }, {
+      "name" : "pkg",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "system_permission_role_package_model_idx",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "role",
+      "ascending" : true
+    }, {
+      "name" : "pkg",
+      "ascending" : true
+    }, {
+      "name" : "model",
+      "ascending" : true
+    } ]
+  } ]
+}

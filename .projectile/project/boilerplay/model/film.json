@@ -1,0 +1,25 @@
+{
+  "key" : "film",
+  "pkg" : [ "film" ],
+  "features" : [ "doobie", "datamodel", "auth", "graphql", "service", "slick", "controller", "notes", "json", "core" ],
+  "ignored" : [ ],
+  "overrides" : [ {
+    "k" : "film_id.type",
+    "v" : "integer"
+  }, {
+    "k" : "rating.search",
+    "v" : "true"
+  }, {
+    "k" : "last_update.search",
+    "v" : "true"
+  }, {
+    "k" : "fulltext.search",
+    "v" : "false"
+  }, {
+    "k" : "fk.film_language_id_fkey.propertyName",
+    "v" : "filmLanguageIdFkeyRel"
+  }, {
+    "k" : "fk.film_original_language_id_fkey.propertyName",
+    "v" : "filmOriginalLanguageIdFkeyRel"
+  } ]
+}

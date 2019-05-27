@@ -1,0 +1,22 @@
+{
+  "key" : "payment",
+  "pkg" : [ "payment" ],
+  "features" : [ "doobie", "datamodel", "auth", "graphql", "service", "slick", "controller", "notes", "json", "core" ],
+  "ignored" : [ ],
+  "overrides" : [ {
+    "k" : "rental_id.search",
+    "v" : "true"
+  }, {
+    "k" : "amount.search",
+    "v" : "true"
+  }, {
+    "k" : "fk.payment_staff_id_fkey.propertyName",
+    "v" : "paymentStaffIdFkeyRel"
+  }, {
+    "k" : "fk.payment_rental_id_fkey.propertyName",
+    "v" : "paymentRentalIdFkeyRel"
+  }, {
+    "k" : "fk.payment_customer_id_fkey.propertyName",
+    "v" : "paymentCustomerIdFkeyRel"
+  } ]
+}

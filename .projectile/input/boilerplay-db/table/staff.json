@@ -1,0 +1,263 @@
+{
+  "name" : "staff",
+  "catalog" : null,
+  "schema" : "public",
+  "description" : null,
+  "definition" : null,
+  "columns" : [ {
+    "name" : "staff_id",
+    "description" : null,
+    "definition" : "nextval('staff_staff_id_seq'::regclass)",
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : true,
+    "columnType" : {
+      "t" : "long"
+    },
+    "sqlTypeCode" : 4,
+    "sqlTypeName" : "serial",
+    "size" : "10",
+    "sizeAsInt" : 10,
+    "scale" : 0,
+    "defaultValue" : "nextval('staff_staff_id_seq'::regclass)"
+  }, {
+    "name" : "first_name",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "string"
+    },
+    "sqlTypeCode" : 12,
+    "sqlTypeName" : "text",
+    "size" : "2147483647",
+    "sizeAsInt" : 2147483647,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "last_name",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "string"
+    },
+    "sqlTypeCode" : 12,
+    "sqlTypeName" : "text",
+    "size" : "2147483647",
+    "sizeAsInt" : 2147483647,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "address_id",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "integer"
+    },
+    "sqlTypeCode" : 5,
+    "sqlTypeName" : "int2",
+    "size" : "5",
+    "sizeAsInt" : 5,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "email",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : false,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "string"
+    },
+    "sqlTypeCode" : 12,
+    "sqlTypeName" : "text",
+    "size" : "2147483647",
+    "sizeAsInt" : 2147483647,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "store_id",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "integer"
+    },
+    "sqlTypeCode" : 5,
+    "sqlTypeName" : "int2",
+    "size" : "5",
+    "sizeAsInt" : 5,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "active",
+    "description" : null,
+    "definition" : "true",
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "boolean"
+    },
+    "sqlTypeCode" : -7,
+    "sqlTypeName" : "bool",
+    "size" : "1",
+    "sizeAsInt" : 1,
+    "scale" : 0,
+    "defaultValue" : "true"
+  }, {
+    "name" : "username",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "string"
+    },
+    "sqlTypeCode" : 12,
+    "sqlTypeName" : "text",
+    "size" : "2147483647",
+    "sizeAsInt" : 2147483647,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "password",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : false,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "string"
+    },
+    "sqlTypeCode" : 12,
+    "sqlTypeName" : "text",
+    "size" : "2147483647",
+    "sizeAsInt" : 2147483647,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "last_update",
+    "description" : null,
+    "definition" : "now()",
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "timestamptz"
+    },
+    "sqlTypeCode" : 93,
+    "sqlTypeName" : "timestamptz",
+    "size" : "35",
+    "sizeAsInt" : 35,
+    "scale" : 0,
+    "defaultValue" : "now()"
+  }, {
+    "name" : "picture",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : false,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "byteArray"
+    },
+    "sqlTypeCode" : -2,
+    "sqlTypeName" : "bytea",
+    "size" : "2147483647",
+    "sizeAsInt" : 2147483647,
+    "scale" : 0,
+    "defaultValue" : null
+  } ],
+  "rowIdentifier" : [ "staff_id" ],
+  "primaryKey" : {
+    "name" : "staff_pkey",
+    "columns" : [ "staff_id" ]
+  },
+  "foreignKeys" : [ {
+    "name" : "staff_address_id_fkey",
+    "propertyName" : "staffAddressIdFkeyRel",
+    "targetTable" : "address",
+    "references" : [ {
+      "source" : "address_id",
+      "target" : "address_id"
+    } ]
+  }, {
+    "name" : "staff_store_id_fkey",
+    "propertyName" : "staffStoreIdFkeyRel",
+    "targetTable" : "store",
+    "references" : [ {
+      "source" : "store_id",
+      "target" : "store_id"
+    } ]
+  } ],
+  "indexes" : [ {
+    "name" : "staff_address_id_idx",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "address_id",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "staff_email_idx",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "email",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "staff_first_name_idx",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "first_name",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "staff_last_name_idx",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "last_name",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "staff_pkey",
+    "unique" : true,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "staff_id",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "staff_store_id_idx",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "store_id",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "staff_username_idx",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "username",
+      "ascending" : true
+    } ]
+  } ]
+}

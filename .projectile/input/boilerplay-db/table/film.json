@@ -1,0 +1,315 @@
+{
+  "name" : "film",
+  "catalog" : null,
+  "schema" : "public",
+  "description" : null,
+  "definition" : null,
+  "columns" : [ {
+    "name" : "film_id",
+    "description" : null,
+    "definition" : "nextval('film_film_id_seq'::regclass)",
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : true,
+    "columnType" : {
+      "t" : "long"
+    },
+    "sqlTypeCode" : 4,
+    "sqlTypeName" : "serial",
+    "size" : "10",
+    "sizeAsInt" : 10,
+    "scale" : 0,
+    "defaultValue" : "nextval('film_film_id_seq'::regclass)"
+  }, {
+    "name" : "title",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "string"
+    },
+    "sqlTypeCode" : 12,
+    "sqlTypeName" : "text",
+    "size" : "2147483647",
+    "sizeAsInt" : 2147483647,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "description",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : false,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "string"
+    },
+    "sqlTypeCode" : 12,
+    "sqlTypeName" : "text",
+    "size" : "2147483647",
+    "sizeAsInt" : 2147483647,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "release_year",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : false,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "long"
+    },
+    "sqlTypeCode" : 4,
+    "sqlTypeName" : "int4",
+    "size" : "10",
+    "sizeAsInt" : 10,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "language_id",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "integer"
+    },
+    "sqlTypeCode" : 5,
+    "sqlTypeName" : "int2",
+    "size" : "5",
+    "sizeAsInt" : 5,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "original_language_id",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : false,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "integer"
+    },
+    "sqlTypeCode" : 5,
+    "sqlTypeName" : "int2",
+    "size" : "5",
+    "sizeAsInt" : 5,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "rental_duration",
+    "description" : null,
+    "definition" : "3",
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "integer"
+    },
+    "sqlTypeCode" : 5,
+    "sqlTypeName" : "int2",
+    "size" : "5",
+    "sizeAsInt" : 5,
+    "scale" : 0,
+    "defaultValue" : "3"
+  }, {
+    "name" : "rental_rate",
+    "description" : null,
+    "definition" : "4.99",
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "decimal"
+    },
+    "sqlTypeCode" : 2,
+    "sqlTypeName" : "numeric",
+    "size" : "4",
+    "sizeAsInt" : 4,
+    "scale" : 0,
+    "defaultValue" : "4.99"
+  }, {
+    "name" : "length",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : false,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "integer"
+    },
+    "sqlTypeCode" : 5,
+    "sqlTypeName" : "int2",
+    "size" : "5",
+    "sizeAsInt" : 5,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "replacement_cost",
+    "description" : null,
+    "definition" : "19.99",
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "decimal"
+    },
+    "sqlTypeCode" : 2,
+    "sqlTypeName" : "numeric",
+    "size" : "5",
+    "sizeAsInt" : 5,
+    "scale" : 0,
+    "defaultValue" : "19.99"
+  }, {
+    "name" : "rating",
+    "description" : null,
+    "definition" : "'G'::mpaa_rating",
+    "primaryKey" : false,
+    "notNull" : false,
+    "autoIncrement" : false,
+    "columnType" : {
+      "key" : "mpaa_rating",
+      "t" : "enum"
+    },
+    "sqlTypeCode" : 12,
+    "sqlTypeName" : "mpaa_rating",
+    "size" : "2147483647",
+    "sizeAsInt" : 2147483647,
+    "scale" : 0,
+    "defaultValue" : "'G'::mpaa_rating"
+  }, {
+    "name" : "last_update",
+    "description" : null,
+    "definition" : "now()",
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "timestamptz"
+    },
+    "sqlTypeCode" : 93,
+    "sqlTypeName" : "timestamptz",
+    "size" : "35",
+    "sizeAsInt" : 35,
+    "scale" : 0,
+    "defaultValue" : "now()"
+  }, {
+    "name" : "special_features",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : false,
+    "autoIncrement" : false,
+    "columnType" : {
+      "typ" : {
+        "t" : "string"
+      },
+      "t" : "list"
+    },
+    "sqlTypeCode" : 2003,
+    "sqlTypeName" : "_text",
+    "size" : "2147483647",
+    "sizeAsInt" : 2147483647,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "fulltext",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "string"
+    },
+    "sqlTypeCode" : 1111,
+    "sqlTypeName" : "tsvector",
+    "size" : "2147483647",
+    "sizeAsInt" : 2147483647,
+    "scale" : 0,
+    "defaultValue" : null
+  } ],
+  "rowIdentifier" : [ "film_id" ],
+  "primaryKey" : {
+    "name" : "film_pkey",
+    "columns" : [ "film_id" ]
+  },
+  "foreignKeys" : [ {
+    "name" : "film_original_language_id_fkey",
+    "propertyName" : "filmOriginalLanguageIdFkeyRel",
+    "targetTable" : "language",
+    "references" : [ {
+      "source" : "original_language_id",
+      "target" : "language_id"
+    } ]
+  }, {
+    "name" : "film_language_id_fkey",
+    "propertyName" : "filmLanguageIdFkeyRel",
+    "targetTable" : "language",
+    "references" : [ {
+      "source" : "language_id",
+      "target" : "language_id"
+    } ]
+  } ],
+  "indexes" : [ {
+    "name" : "film_fulltext_idx",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "fulltext",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "film_last_update_idx",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "last_update",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "film_pkey",
+    "unique" : true,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "film_id",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "film_rating_idx",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "rating",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "idx_fk_language_id",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "language_id",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "idx_fk_original_language_id",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "original_language_id",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "idx_title",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "title",
+      "ascending" : true
+    } ]
+  } ]
+}

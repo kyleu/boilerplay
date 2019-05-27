@@ -1,0 +1,197 @@
+{
+  "name" : "rental",
+  "catalog" : null,
+  "schema" : "public",
+  "description" : null,
+  "definition" : null,
+  "columns" : [ {
+    "name" : "rental_id",
+    "description" : null,
+    "definition" : "nextval('rental_rental_id_seq'::regclass)",
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : true,
+    "columnType" : {
+      "t" : "long"
+    },
+    "sqlTypeCode" : 4,
+    "sqlTypeName" : "serial",
+    "size" : "10",
+    "sizeAsInt" : 10,
+    "scale" : 0,
+    "defaultValue" : "nextval('rental_rental_id_seq'::regclass)"
+  }, {
+    "name" : "rental_date",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "timestamptz"
+    },
+    "sqlTypeCode" : 93,
+    "sqlTypeName" : "timestamptz",
+    "size" : "35",
+    "sizeAsInt" : 35,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "inventory_id",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "long"
+    },
+    "sqlTypeCode" : 4,
+    "sqlTypeName" : "int4",
+    "size" : "10",
+    "sizeAsInt" : 10,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "customer_id",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "integer"
+    },
+    "sqlTypeCode" : 5,
+    "sqlTypeName" : "int2",
+    "size" : "5",
+    "sizeAsInt" : 5,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "return_date",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : false,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "timestamptz"
+    },
+    "sqlTypeCode" : 93,
+    "sqlTypeName" : "timestamptz",
+    "size" : "35",
+    "sizeAsInt" : 35,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "staff_id",
+    "description" : null,
+    "definition" : null,
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "integer"
+    },
+    "sqlTypeCode" : 5,
+    "sqlTypeName" : "int2",
+    "size" : "5",
+    "sizeAsInt" : 5,
+    "scale" : 0,
+    "defaultValue" : null
+  }, {
+    "name" : "last_update",
+    "description" : null,
+    "definition" : "now()",
+    "primaryKey" : false,
+    "notNull" : true,
+    "autoIncrement" : false,
+    "columnType" : {
+      "t" : "timestamptz"
+    },
+    "sqlTypeCode" : 93,
+    "sqlTypeName" : "timestamptz",
+    "size" : "35",
+    "sizeAsInt" : 35,
+    "scale" : 0,
+    "defaultValue" : "now()"
+  } ],
+  "rowIdentifier" : [ "rental_id" ],
+  "primaryKey" : {
+    "name" : "rental_pkey",
+    "columns" : [ "rental_id" ]
+  },
+  "foreignKeys" : [ {
+    "name" : "rental_customer_id_fkey",
+    "propertyName" : "rentalCustomerIdFkeyRel",
+    "targetTable" : "customer",
+    "references" : [ {
+      "source" : "customer_id",
+      "target" : "customer_id"
+    } ]
+  }, {
+    "name" : "rental_staff_id_fkey",
+    "propertyName" : "rentalStaffIdFkeyRel",
+    "targetTable" : "staff",
+    "references" : [ {
+      "source" : "staff_id",
+      "target" : "staff_id"
+    } ]
+  }, {
+    "name" : "rental_inventory_id_fkey",
+    "propertyName" : "rentalInventoryIdFkeyRel",
+    "targetTable" : "inventory",
+    "references" : [ {
+      "source" : "inventory_id",
+      "target" : "inventory_id"
+    } ]
+  } ],
+  "indexes" : [ {
+    "name" : "idx_fk_inventory_id",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "inventory_id",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "idx_unq_rental_rental_date_inventory_id_customer_id",
+    "unique" : true,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "rental_date",
+      "ascending" : true
+    }, {
+      "name" : "inventory_id",
+      "ascending" : true
+    }, {
+      "name" : "customer_id",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "rental_pkey",
+    "unique" : true,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "rental_id",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "rental_return_date_idx",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "return_date",
+      "ascending" : true
+    } ]
+  }, {
+    "name" : "rental_staff_id_idx",
+    "unique" : false,
+    "indexType" : "other",
+    "columns" : [ {
+      "name" : "staff_id",
+      "ascending" : true
+    } ]
+  } ]
+}

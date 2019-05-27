@@ -1,0 +1,16 @@
+{
+  "key" : "category",
+  "pkg" : [ "film" ],
+  "features" : [ "doobie", "datamodel", "auth", "graphql", "service", "slick", "controller", "notes", "json", "core" ],
+  "ignored" : [ ],
+  "overrides" : [ {
+    "k" : "category_id.type",
+    "v" : "integer"
+  }, {
+    "k" : "name.search",
+    "v" : "true"
+  }, {
+    "k" : "last_update.search",
+    "v" : "true"
+  } ]
+}

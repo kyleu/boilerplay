@@ -1,0 +1,16 @@
+{
+  "key" : "city",
+  "pkg" : [ "address" ],
+  "features" : [ "doobie", "datamodel", "auth", "graphql", "service", "slick", "controller", "notes", "json", "core" ],
+  "ignored" : [ ],
+  "overrides" : [ {
+    "k" : "city_id.type",
+    "v" : "integer"
+  }, {
+    "k" : "city.search",
+    "v" : "true"
+  }, {
+    "k" : "fk.city_country_id_fkey.propertyName",
+    "v" : "cityCountryIdFkeyRel"
+  } ]
+}

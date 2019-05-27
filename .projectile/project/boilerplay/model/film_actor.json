@@ -1,0 +1,16 @@
+{
+  "key" : "film_actor",
+  "pkg" : [ "film" ],
+  "features" : [ "doobie", "datamodel", "auth", "graphql", "service", "slick", "controller", "notes", "json", "core" ],
+  "ignored" : [ ],
+  "overrides" : [ {
+    "k" : "last_update.search",
+    "v" : "true"
+  }, {
+    "k" : "fk.film_actor_film_id_fkey.propertyName",
+    "v" : "filmActorFilmIdFkeyRel"
+  }, {
+    "k" : "fk.film_actor_actor_id_fkey.propertyName",
+    "v" : "filmActorActorIdFkeyRel"
+  } ]
+}
