@@ -1,7 +1,0 @@
-{
-  "key" : "scheduled_task_run",
-  "pkg" : [ "task" ],
-  "features" : [ ],
-  "ignored" : [ ],
-  "overrides" : [ ]
-}

@@ -1,7 +1,0 @@
-{
-  "key" : "audit_record",
-  "pkg" : [ "audit" ],
-  "features" : [ ],
-  "ignored" : [ ],
-  "overrides" : [ ]
-}
