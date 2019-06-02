@@ -10,8 +10,4 @@ class HomeController @javax.inject.Inject() (override val app: Application)(impl
   def home() = withSession("home") { implicit request => implicit td =>
     Future.successful(Ok(views.html.index(request.identity, app.cfg(Some(request.identity)), app.config.debug)))
   }
-
-  def robots() = withSession("robots") { implicit request => implicit td =>
-    Future.successful(Ok("User-agent: *\nDisallow: /"))
-  }
 }

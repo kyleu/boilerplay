@@ -1,30 +1,18 @@
-val projectId = "boilerplay"
-val projectVersion = "2.0.0"
+import sbtcrossproject.CrossPlugin.autoImport.crossProject
 
-lazy val client = (project in file("client")).settings(version := projectVersion).enablePlugins(ProjectileScalaJSProject)
+val projectVersion = "3.0.0"
 
-lazy val doc = Project(id = "doc", base = file("doc")).settings(
-  version := projectVersion,
-  paradoxTheme := Some(builtinParadoxTheme("generic")),
-  sourceDirectory in Paradox := sourceDirectory.value / "main" / "paradox",
-  git.remoteRepo := "git@github.com:KyleU/boilerplay.git"
-).enablePlugins(ParadoxPlugin, ParadoxSitePlugin, SiteScaladocPlugin, GhpagesPlugin)
+lazy val shared = projectileCrossProject(crossProject(JSPlatform, JVMPlatform), "shared").settings(version := projectVersion)
 
-lazy val server = Project(id = projectId, base = file(".")).enablePlugins(ProjectilePlayProject).settings(
+lazy val client = (project in file("client")).settings(version := projectVersion).dependsOn(shared.js).enablePlugins(ProjectileScalaJSProject)
+
+lazy val server = Project(id = "boilerplay", base = file(".")).settings(
   projectileProjectTitle := "Boilerplay",
   projectileProjectPort := 9000,
 
-  maintainer := "Boilerplay User <admin@boilerplay.com>",
+  play.sbt.routes.RoutesKeys.routesImport += "models.module.ModelBindables._",
   libraryDependencies ++= Seq(projectileLib("slick"), projectileLib("doobie")),
 
-  play.sbt.routes.RoutesKeys.routesImport += "models.module.ModelBindables._",
-  JsEngineKeys.engineType := JsEngineKeys.EngineType.Node,
-
   scalaJSProjects := Seq(client),
-  pipelineStages in Assets := Seq(scalaJSPipeline),
-
-  scmInfo := Some(ScmInfo(url("https://github.com/KyleU/boilerplay"), "git@github.com:KyleU/boilerplay.git")),
-  git.remoteRepo := scmInfo.value.get.connection,
-
-  javaOptions in Universal ++= Seq("-J-Xmx2g", "-J-Xms256m", s"-Dproject=$projectId")
-)
+  pipelineStages in Assets := Seq(scalaJSPipeline)
+).enablePlugins(ProjectilePlayProject).dependsOn(shared.jvm)

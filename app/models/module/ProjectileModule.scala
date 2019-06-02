@@ -25,11 +25,7 @@ class ProjectileModule extends AdminModule(projectName = Version.projectName, al
     /* End injected startup code */
   }
 
-  override protected def appStatus(app: Application, injector: Injector) = {
-    AppStatus(name = projectName, version = Version.version, status = "OK!")
-  }
-
+  override protected def appStatus(app: Application, injector: Injector) = AppStatus(name = projectName, version = Version.version)
   override protected def searchProvider = new SearchHelper()
-
-  override protected[this] def schema: GraphQLSchema = Schema
+  override protected def schema: GraphQLSchema = Schema
 }
