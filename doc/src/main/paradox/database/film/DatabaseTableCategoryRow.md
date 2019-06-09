@@ -6,8 +6,8 @@
 | Name                         | Type               | NotNull| Unique | Indexed  | Default
 |------------------------------|--------------------|--------|--------|----------|--------------------
 | category_id                  | integer            | true   | true   | true     |
-| name                         | string             | true   | false  | false    |
-| last_update                  | timestamptz        | true   | false  | false    |
+| name                         | string             | true   | false  | true     |
+| last_update                  | timestamptz        | true   | false  | true     |
 
 ## References
 

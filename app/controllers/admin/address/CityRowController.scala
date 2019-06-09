@@ -1,7 +1,7 @@
 /* Generated File */
 package controllers.admin.address
 
-import com.kyleu.projectile.controllers.{ServiceAuthController, ServiceController}
+import com.kyleu.projectile.controllers.{BaseController, ServiceAuthController}
 import com.kyleu.projectile.models.module.Application
 import com.kyleu.projectile.models.result.RelationCount
 import com.kyleu.projectile.models.result.orderBy.OrderBy
@@ -48,9 +48,9 @@ class CityRowController @javax.inject.Inject() (
           case _ => Ok(views.html.admin.address.cityRowList(app.cfg(u = Some(request.identity), "address", "city"), Some(r._1), r._2, q, orderBy, orderAsc, limit.getOrElse(100), offset.getOrElse(0)))
         }
         case MimeTypes.JSON => Ok(CityRowResult.fromRecords(q, Nil, orderBys, limit, offset, startMs, r._1, r._2).asJson)
-        case ServiceController.MimeTypes.csv => csvResponse("CityRow", svc.csvFor(r._1, r._2))
-        case ServiceController.MimeTypes.png => Ok(renderToPng(v = r._2)).as(ServiceController.MimeTypes.png)
-        case ServiceController.MimeTypes.svg => Ok(renderToSvg(v = r._2)).as(ServiceController.MimeTypes.svg)
+        case BaseController.MimeTypes.csv => csvResponse("CityRow", svc.csvFor(r._1, r._2))
+        case BaseController.MimeTypes.png => Ok(renderToPng(v = r._2)).as(BaseController.MimeTypes.png)
+        case BaseController.MimeTypes.svg => Ok(renderToSvg(v = r._2)).as(BaseController.MimeTypes.svg)
       })
     }
   }
@@ -71,9 +71,9 @@ class CityRowController @javax.inject.Inject() (
           val list = views.html.admin.address.cityRowByCountryId(cfg, countryId, models, orderBy, orderAsc, limit.getOrElse(5), offset.getOrElse(0))
           if (embedded) { Ok(list) } else { Ok(page(s"Cities by Country Id [$countryId]", cfg)(card(None)(list))) }
         case MimeTypes.JSON => Ok(models.asJson)
-        case ServiceController.MimeTypes.csv => csvResponse("CityRow by countryId", svc.csvFor(0, models))
-        case ServiceController.MimeTypes.png => Ok(renderToPng(v = models)).as(ServiceController.MimeTypes.png)
-        case ServiceController.MimeTypes.svg => Ok(renderToSvg(v = models)).as(ServiceController.MimeTypes.svg)
+        case BaseController.MimeTypes.csv => csvResponse("CityRow by countryId", svc.csvFor(0, models))
+        case BaseController.MimeTypes.png => Ok(renderToPng(v = models)).as(BaseController.MimeTypes.png)
+        case BaseController.MimeTypes.svg => Ok(renderToSvg(v = models)).as(BaseController.MimeTypes.svg)
       })
     }
   }
@@ -86,8 +86,8 @@ class CityRowController @javax.inject.Inject() (
       case Some(model) => renderChoice(t) {
         case MimeTypes.HTML => Ok(views.html.admin.address.cityRowView(app.cfg(u = Some(request.identity), "address", "city", model.cityId.toString), model, notes, app.config.debug))
         case MimeTypes.JSON => Ok(model.asJson)
-        case ServiceController.MimeTypes.png => Ok(renderToPng(v = model)).as(ServiceController.MimeTypes.png)
-        case ServiceController.MimeTypes.svg => Ok(renderToSvg(v = model)).as(ServiceController.MimeTypes.svg)
+        case BaseController.MimeTypes.png => Ok(renderToPng(v = model)).as(BaseController.MimeTypes.png)
+        case BaseController.MimeTypes.svg => Ok(renderToSvg(v = model)).as(BaseController.MimeTypes.svg)
       }
       case None => NotFound(s"No CityRow found with cityId [$cityId]")
     })

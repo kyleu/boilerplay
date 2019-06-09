@@ -6,9 +6,9 @@
 | Name                         | Type               | NotNull| Unique | Indexed  | Default
 |------------------------------|--------------------|--------|--------|----------|--------------------
 | actor_id                     | integer            | true   | true   | true     |
-| first_name                   | string             | true   | false  | false    |
+| first_name                   | string             | true   | false  | true     |
 | last_name                    | string             | true   | false  | true     |
-| last_update                  | timestamptz        | true   | false  | false    |
+| last_update                  | timestamptz        | true   | false  | true     |
 
 ## References
 

@@ -54,5 +54,5 @@ final case class PaymentRow(
     DataField("paymentDate", Some(paymentDate.toString))
   )
 
-  def toSummary = DataSummary(model = "paymentRow", pk = paymentId.toString, title = s"customerId: $customerId, staffId: $staffId")
+  def toSummary = DataSummary(model = "paymentRow", pk = paymentId.toString, title = s"customerId: $customerId, staffId: $staffId, rentalId: $rentalId, amount: $amount")
 }

@@ -7,5 +7,5 @@
 |------------------------------|--------------------|--------|--------|----------|--------------------
 | actor_id                     | integer            | true   | true   | true     |
 | film_id                      | integer            | true   | true   | true     |
-| last_update                  | timestamptz        | true   | false  | false    |
+| last_update                  | timestamptz        | true   | false  | true     |
 

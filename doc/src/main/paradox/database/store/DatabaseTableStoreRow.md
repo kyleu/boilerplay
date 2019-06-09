@@ -7,8 +7,8 @@
 |------------------------------|--------------------|--------|--------|----------|--------------------
 | store_id                     | integer            | true   | true   | true     |
 | manager_staff_id             | integer            | true   | true   | true     |
-| address_id                   | integer            | true   | false  | false    |
-| last_update                  | timestamptz        | true   | false  | false    |
+| address_id                   | integer            | true   | false  | true     |
+| last_update                  | timestamptz        | true   | false  | true     |
 
 ## References
 

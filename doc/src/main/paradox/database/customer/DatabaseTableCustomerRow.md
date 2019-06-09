@@ -7,9 +7,9 @@
 |------------------------------|--------------------|--------|--------|----------|--------------------
 | customer_id                  | integer            | true   | true   | true     |
 | store_id                     | integer            | true   | false  | true     |
-| first_name                   | string             | true   | false  | false    |
+| first_name                   | string             | true   | false  | true     |
 | last_name                    | string             | true   | false  | true     |
-| email                        | string             | false  | false  | false    |
+| email                        | string             | false  | false  | true     |
 | address_id                   | integer            | true   | false  | true     |
 | activebool                   | boolean            | true   | false  | false    |
 | create_date                  | date               | true   | false  | false    |

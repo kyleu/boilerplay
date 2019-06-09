@@ -1,7 +1,7 @@
 /* Generated File */
 package controllers.admin.payment
 
-import com.kyleu.projectile.controllers.{ServiceAuthController, ServiceController}
+import com.kyleu.projectile.controllers.{BaseController, ServiceAuthController}
 import com.kyleu.projectile.models.module.Application
 import com.kyleu.projectile.models.result.orderBy.OrderBy
 import com.kyleu.projectile.models.web.ReftreeUtils._
@@ -46,9 +46,9 @@ class PaymentRowController @javax.inject.Inject() (
           case _ => Ok(views.html.admin.payment.paymentRowList(app.cfg(u = Some(request.identity), "payment", "payment"), Some(r._1), r._2, q, orderBy, orderAsc, limit.getOrElse(100), offset.getOrElse(0)))
         }
         case MimeTypes.JSON => Ok(PaymentRowResult.fromRecords(q, Nil, orderBys, limit, offset, startMs, r._1, r._2).asJson)
-        case ServiceController.MimeTypes.csv => csvResponse("PaymentRow", svc.csvFor(r._1, r._2))
-        case ServiceController.MimeTypes.png => Ok(renderToPng(v = r._2)).as(ServiceController.MimeTypes.png)
-        case ServiceController.MimeTypes.svg => Ok(renderToSvg(v = r._2)).as(ServiceController.MimeTypes.svg)
+        case BaseController.MimeTypes.csv => csvResponse("PaymentRow", svc.csvFor(r._1, r._2))
+        case BaseController.MimeTypes.png => Ok(renderToPng(v = r._2)).as(BaseController.MimeTypes.png)
+        case BaseController.MimeTypes.svg => Ok(renderToSvg(v = r._2)).as(BaseController.MimeTypes.svg)
       })
     }
   }
@@ -69,9 +69,9 @@ class PaymentRowController @javax.inject.Inject() (
           val list = views.html.admin.payment.paymentRowByStaffId(cfg, staffId, models, orderBy, orderAsc, limit.getOrElse(5), offset.getOrElse(0))
           if (embedded) { Ok(list) } else { Ok(page(s"Payments by Staff Id [$staffId]", cfg)(card(None)(list))) }
         case MimeTypes.JSON => Ok(models.asJson)
-        case ServiceController.MimeTypes.csv => csvResponse("PaymentRow by staffId", svc.csvFor(0, models))
-        case ServiceController.MimeTypes.png => Ok(renderToPng(v = models)).as(ServiceController.MimeTypes.png)
-        case ServiceController.MimeTypes.svg => Ok(renderToSvg(v = models)).as(ServiceController.MimeTypes.svg)
+        case BaseController.MimeTypes.csv => csvResponse("PaymentRow by staffId", svc.csvFor(0, models))
+        case BaseController.MimeTypes.png => Ok(renderToPng(v = models)).as(BaseController.MimeTypes.png)
+        case BaseController.MimeTypes.svg => Ok(renderToSvg(v = models)).as(BaseController.MimeTypes.svg)
       })
     }
   }
@@ -85,9 +85,9 @@ class PaymentRowController @javax.inject.Inject() (
           val list = views.html.admin.payment.paymentRowByRentalId(cfg, rentalId, models, orderBy, orderAsc, limit.getOrElse(5), offset.getOrElse(0))
           if (embedded) { Ok(list) } else { Ok(page(s"Payments by Rental Id [$rentalId]", cfg)(card(None)(list))) }
         case MimeTypes.JSON => Ok(models.asJson)
-        case ServiceController.MimeTypes.csv => csvResponse("PaymentRow by rentalId", svc.csvFor(0, models))
-        case ServiceController.MimeTypes.png => Ok(renderToPng(v = models)).as(ServiceController.MimeTypes.png)
-        case ServiceController.MimeTypes.svg => Ok(renderToSvg(v = models)).as(ServiceController.MimeTypes.svg)
+        case BaseController.MimeTypes.csv => csvResponse("PaymentRow by rentalId", svc.csvFor(0, models))
+        case BaseController.MimeTypes.png => Ok(renderToPng(v = models)).as(BaseController.MimeTypes.png)
+        case BaseController.MimeTypes.svg => Ok(renderToSvg(v = models)).as(BaseController.MimeTypes.svg)
       })
     }
   }
@@ -101,9 +101,9 @@ class PaymentRowController @javax.inject.Inject() (
           val list = views.html.admin.payment.paymentRowByCustomerId(cfg, customerId, models, orderBy, orderAsc, limit.getOrElse(5), offset.getOrElse(0))
           if (embedded) { Ok(list) } else { Ok(page(s"Payments by Customer Id [$customerId]", cfg)(card(None)(list))) }
         case MimeTypes.JSON => Ok(models.asJson)
-        case ServiceController.MimeTypes.csv => csvResponse("PaymentRow by customerId", svc.csvFor(0, models))
-        case ServiceController.MimeTypes.png => Ok(renderToPng(v = models)).as(ServiceController.MimeTypes.png)
-        case ServiceController.MimeTypes.svg => Ok(renderToSvg(v = models)).as(ServiceController.MimeTypes.svg)
+        case BaseController.MimeTypes.csv => csvResponse("PaymentRow by customerId", svc.csvFor(0, models))
+        case BaseController.MimeTypes.png => Ok(renderToPng(v = models)).as(BaseController.MimeTypes.png)
+        case BaseController.MimeTypes.svg => Ok(renderToSvg(v = models)).as(BaseController.MimeTypes.svg)
       })
     }
   }
@@ -116,8 +116,8 @@ class PaymentRowController @javax.inject.Inject() (
       case Some(model) => renderChoice(t) {
         case MimeTypes.HTML => Ok(views.html.admin.payment.paymentRowView(app.cfg(u = Some(request.identity), "payment", "payment", model.paymentId.toString), model, notes, app.config.debug))
         case MimeTypes.JSON => Ok(model.asJson)
-        case ServiceController.MimeTypes.png => Ok(renderToPng(v = model)).as(ServiceController.MimeTypes.png)
-        case ServiceController.MimeTypes.svg => Ok(renderToSvg(v = model)).as(ServiceController.MimeTypes.svg)
+        case BaseController.MimeTypes.png => Ok(renderToPng(v = model)).as(BaseController.MimeTypes.png)
+        case BaseController.MimeTypes.svg => Ok(renderToSvg(v = model)).as(BaseController.MimeTypes.svg)
       }
       case None => NotFound(s"No PaymentRow found with paymentId [$paymentId]")
     })

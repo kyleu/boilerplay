@@ -6,7 +6,7 @@
 | Name                         | Type               | NotNull| Unique | Indexed  | Default
 |------------------------------|--------------------|--------|--------|----------|--------------------
 | city_id                      | integer            | true   | true   | true     |
-| city                         | string             | true   | false  | false    |
+| city                         | string             | true   | false  | true     |
 | country_id                   | integer            | true   | false  | true     |
 | last_update                  | timestamptz        | true   | false  | false    |
 

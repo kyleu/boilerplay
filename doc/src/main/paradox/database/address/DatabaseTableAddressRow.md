@@ -6,13 +6,13 @@
 | Name                         | Type               | NotNull| Unique | Indexed  | Default
 |------------------------------|--------------------|--------|--------|----------|--------------------
 | address_id                   | integer            | true   | true   | true     |
-| address                      | string             | true   | false  | false    |
-| address2                     | string             | false  | false  | false    |
-| district                     | string             | true   | false  | false    |
+| address                      | string             | true   | false  | true     |
+| address2                     | string             | false  | false  | true     |
+| district                     | string             | true   | false  | true     |
 | city_id                      | integer            | true   | false  | true     |
-| postal_code                  | string             | false  | false  | false    |
-| phone                        | string             | true   | false  | false    |
-| last_update                  | timestamptz        | true   | false  | false    |
+| postal_code                  | string             | false  | false  | true     |
+| phone                        | string             | true   | false  | true     |
+| last_update                  | timestamptz        | true   | false  | true     |
 
 ## References
 

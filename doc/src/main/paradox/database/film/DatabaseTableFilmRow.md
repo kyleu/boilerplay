@@ -15,8 +15,8 @@
 | rental_rate                  | decimal            | true   | false  | false    |
 | length                       | integer            | false  | false  | false    |
 | replacement_cost             | decimal            | true   | false  | false    |
-| rating                       | enum               | false  | false  | false    |
-| last_update                  | timestamptz        | true   | false  | false    |
+| rating                       | enum               | false  | false  | true     |
+| last_update                  | timestamptz        | true   | false  | true     |
 | special_features             | list               | false  | false  | false    |
 | fulltext                     | string             | true   | false  | true     |
 

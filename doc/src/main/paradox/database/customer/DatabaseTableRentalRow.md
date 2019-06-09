@@ -9,8 +9,8 @@
 | rental_date                  | timestamptz        | true   | true   | true     |
 | inventory_id                 | long               | true   | true   | true     |
 | customer_id                  | integer            | true   | true   | true     |
-| return_date                  | timestamptz        | false  | false  | false    |
-| staff_id                     | integer            | true   | false  | false    |
+| return_date                  | timestamptz        | false  | false  | true     |
+| staff_id                     | integer            | true   | false  | true     |
 | last_update                  | timestamptz        | true   | false  | false    |
 
 ## References

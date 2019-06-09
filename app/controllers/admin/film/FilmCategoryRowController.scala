@@ -1,7 +1,7 @@
 /* Generated File */
 package controllers.admin.film
 
-import com.kyleu.projectile.controllers.{ServiceAuthController, ServiceController}
+import com.kyleu.projectile.controllers.{BaseController, ServiceAuthController}
 import com.kyleu.projectile.models.module.Application
 import com.kyleu.projectile.models.result.orderBy.OrderBy
 import com.kyleu.projectile.models.web.ReftreeUtils._
@@ -46,9 +46,9 @@ class FilmCategoryRowController @javax.inject.Inject() (
           case _ => Ok(views.html.admin.film.filmCategoryRowList(app.cfg(u = Some(request.identity), "film", "film_category"), Some(r._1), r._2, q, orderBy, orderAsc, limit.getOrElse(100), offset.getOrElse(0)))
         }
         case MimeTypes.JSON => Ok(FilmCategoryRowResult.fromRecords(q, Nil, orderBys, limit, offset, startMs, r._1, r._2).asJson)
-        case ServiceController.MimeTypes.csv => csvResponse("FilmCategoryRow", svc.csvFor(r._1, r._2))
-        case ServiceController.MimeTypes.png => Ok(renderToPng(v = r._2)).as(ServiceController.MimeTypes.png)
-        case ServiceController.MimeTypes.svg => Ok(renderToSvg(v = r._2)).as(ServiceController.MimeTypes.svg)
+        case BaseController.MimeTypes.csv => csvResponse("FilmCategoryRow", svc.csvFor(r._1, r._2))
+        case BaseController.MimeTypes.png => Ok(renderToPng(v = r._2)).as(BaseController.MimeTypes.png)
+        case BaseController.MimeTypes.svg => Ok(renderToSvg(v = r._2)).as(BaseController.MimeTypes.svg)
       })
     }
   }
@@ -69,9 +69,9 @@ class FilmCategoryRowController @javax.inject.Inject() (
           val list = views.html.admin.film.filmCategoryRowByFilmId(cfg, filmId, models, orderBy, orderAsc, limit.getOrElse(5), offset.getOrElse(0))
           if (embedded) { Ok(list) } else { Ok(page(s"Film Categories by Film Id [$filmId]", cfg)(card(None)(list))) }
         case MimeTypes.JSON => Ok(models.asJson)
-        case ServiceController.MimeTypes.csv => csvResponse("FilmCategoryRow by filmId", svc.csvFor(0, models))
-        case ServiceController.MimeTypes.png => Ok(renderToPng(v = models)).as(ServiceController.MimeTypes.png)
-        case ServiceController.MimeTypes.svg => Ok(renderToSvg(v = models)).as(ServiceController.MimeTypes.svg)
+        case BaseController.MimeTypes.csv => csvResponse("FilmCategoryRow by filmId", svc.csvFor(0, models))
+        case BaseController.MimeTypes.png => Ok(renderToPng(v = models)).as(BaseController.MimeTypes.png)
+        case BaseController.MimeTypes.svg => Ok(renderToSvg(v = models)).as(BaseController.MimeTypes.svg)
       })
     }
   }
@@ -85,9 +85,9 @@ class FilmCategoryRowController @javax.inject.Inject() (
           val list = views.html.admin.film.filmCategoryRowByCategoryId(cfg, categoryId, models, orderBy, orderAsc, limit.getOrElse(5), offset.getOrElse(0))
           if (embedded) { Ok(list) } else { Ok(page(s"Film Categories by Category Id [$categoryId]", cfg)(card(None)(list))) }
         case MimeTypes.JSON => Ok(models.asJson)
-        case ServiceController.MimeTypes.csv => csvResponse("FilmCategoryRow by categoryId", svc.csvFor(0, models))
-        case ServiceController.MimeTypes.png => Ok(renderToPng(v = models)).as(ServiceController.MimeTypes.png)
-        case ServiceController.MimeTypes.svg => Ok(renderToSvg(v = models)).as(ServiceController.MimeTypes.svg)
+        case BaseController.MimeTypes.csv => csvResponse("FilmCategoryRow by categoryId", svc.csvFor(0, models))
+        case BaseController.MimeTypes.png => Ok(renderToPng(v = models)).as(BaseController.MimeTypes.png)
+        case BaseController.MimeTypes.svg => Ok(renderToSvg(v = models)).as(BaseController.MimeTypes.svg)
       })
     }
   }
@@ -100,8 +100,8 @@ class FilmCategoryRowController @javax.inject.Inject() (
       case Some(model) => renderChoice(t) {
         case MimeTypes.HTML => Ok(views.html.admin.film.filmCategoryRowView(app.cfg(u = Some(request.identity), "film", "film_category", s"${model.filmId}, ${model.categoryId}"), model, notes, app.config.debug))
         case MimeTypes.JSON => Ok(model.asJson)
-        case ServiceController.MimeTypes.png => Ok(renderToPng(v = model)).as(ServiceController.MimeTypes.png)
-        case ServiceController.MimeTypes.svg => Ok(renderToSvg(v = model)).as(ServiceController.MimeTypes.svg)
+        case BaseController.MimeTypes.png => Ok(renderToPng(v = model)).as(BaseController.MimeTypes.png)
+        case BaseController.MimeTypes.svg => Ok(renderToSvg(v = model)).as(BaseController.MimeTypes.svg)
       }
       case None => NotFound(s"No FilmCategoryRow found with filmId, categoryId [$filmId, $categoryId]")
     })

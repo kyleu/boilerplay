@@ -64,5 +64,5 @@ final case class AddressRow(
     DataField("lastUpdate", Some(lastUpdate.toString))
   )
 
-  def toSummary = DataSummary(model = "addressRow", pk = addressId.toString, title = s"cityId: $cityId")
+  def toSummary = DataSummary(model = "addressRow", pk = addressId.toString, title = s"address: $address, address2: ${address2.map(_.toString).getOrElse("∅")}, district: $district, cityId: $cityId, postalCode: ${postalCode.map(_.toString).getOrElse("∅")}, phone: $phone, lastUpdate: $lastUpdate")
 }

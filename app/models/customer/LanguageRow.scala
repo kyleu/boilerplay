@@ -39,5 +39,5 @@ final case class LanguageRow(
     DataField("lastUpdate", Some(lastUpdate.toString))
   )
 
-  def toSummary = DataSummary(model = "languageRow", pk = languageId.toString, title = s"languageId: $languageId")
+  def toSummary = DataSummary(model = "languageRow", pk = languageId.toString, title = s"name: $name, lastUpdate: $lastUpdate")
 }

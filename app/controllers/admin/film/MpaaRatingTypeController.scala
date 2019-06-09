@@ -1,7 +1,7 @@
 /* Generated File */
 package controllers.admin.film
 
-import com.kyleu.projectile.controllers.{AuthController, ServiceController}
+import com.kyleu.projectile.controllers.{AuthController, BaseController}
 import com.kyleu.projectile.models.module.Application
 import com.kyleu.projectile.util.JsonSerializers._
 import models.film.MpaaRatingType
@@ -18,7 +18,7 @@ class MpaaRatingTypeController @javax.inject.Inject() (override val app: Applica
         vals = MpaaRatingType.values.map(v => Html(v.toString))
       ))
       case Accepts.Json() => Ok(MpaaRatingType.values.asJson)
-      case ServiceController.acceptsCsv() => Ok(MpaaRatingType.values.mkString(", ")).as("text/csv")
+      case BaseController.acceptsCsv() => Ok(MpaaRatingType.values.mkString(", ")).as("text/csv")
     })
   }
 }
