@@ -8,7 +8,6 @@
     "name" : "category_id",
     "description" : null,
     "definition" : "nextval('category_category_id_seq'::regclass)",
-    "primaryKey" : false,
     "notNull" : true,
     "autoIncrement" : true,
     "columnType" : {
@@ -24,7 +23,6 @@
     "name" : "name",
     "description" : null,
     "definition" : null,
-    "primaryKey" : false,
     "notNull" : true,
     "autoIncrement" : false,
     "columnType" : {
@@ -40,7 +38,6 @@
     "name" : "last_update",
     "description" : null,
     "definition" : "now()",
-    "primaryKey" : false,
     "notNull" : true,
     "autoIncrement" : false,
     "columnType" : {

@@ -42,7 +42,7 @@ object StaffRow {
     addressId: Int = 0,
     email: Option[String] = None,
     storeId: Int = 0,
-    active: Boolean = false,
+    active: Boolean = true,
     username: String = "",
     password: Option[String] = None,
     lastUpdate: ZonedDateTime = DateUtils.nowZoned,

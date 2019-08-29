@@ -8,7 +8,6 @@
     "name" : "actor_id",
     "description" : null,
     "definition" : null,
-    "primaryKey" : false,
     "notNull" : true,
     "autoIncrement" : false,
     "columnType" : {
@@ -24,7 +23,6 @@
     "name" : "film_id",
     "description" : null,
     "definition" : null,
-    "primaryKey" : false,
     "notNull" : true,
     "autoIncrement" : false,
     "columnType" : {
@@ -40,7 +38,6 @@
     "name" : "last_update",
     "description" : null,
     "definition" : "now()",
-    "primaryKey" : false,
     "notNull" : true,
     "autoIncrement" : false,
     "columnType" : {

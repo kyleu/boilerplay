@@ -1,5 +1,5 @@
 @* Generated File *@
-@(model: models.store.InventoryRow)<tr>
+@(model: models.store.InventoryRow, additional: Option[Html] = None)<tr>
   <td>
     <a href="@controllers.admin.store.routes.InventoryRowController.view(model.inventoryId)">@model.inventoryId</a>
   </td>
@@ -15,4 +15,5 @@
       <i class="material-icons small">@models.template.Icons.storeRow</i>
     </a>
   </td>
+  @additional
 </tr>

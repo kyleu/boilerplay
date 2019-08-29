@@ -5,10 +5,10 @@
 
 | Name                         | Type               | NotNull| Unique | Indexed  | Default
 |------------------------------|--------------------|--------|--------|----------|--------------------
-| store_id                     | integer            | true   | true   | true     |
+| store_id                     | integer            | true   | true   | true     | nextval('store_store_id_seq'::regclass)
 | manager_staff_id             | integer            | true   | true   | true     |
 | address_id                   | integer            | true   | false  | true     |
-| last_update                  | timestamptz        | true   | false  | true     |
+| last_update                  | timestamptz        | true   | false  | true     | now()
 
 ## References
 

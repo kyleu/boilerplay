@@ -8,7 +8,6 @@
     "name" : "film_id",
     "description" : null,
     "definition" : "nextval('film_film_id_seq'::regclass)",
-    "primaryKey" : false,
     "notNull" : true,
     "autoIncrement" : true,
     "columnType" : {
@@ -24,7 +23,6 @@
     "name" : "title",
     "description" : null,
     "definition" : null,
-    "primaryKey" : false,
     "notNull" : true,
     "autoIncrement" : false,
     "columnType" : {
@@ -40,7 +38,6 @@
     "name" : "description",
     "description" : null,
     "definition" : null,
-    "primaryKey" : false,
     "notNull" : false,
     "autoIncrement" : false,
     "columnType" : {
@@ -56,7 +53,6 @@
     "name" : "release_year",
     "description" : null,
     "definition" : null,
-    "primaryKey" : false,
     "notNull" : false,
     "autoIncrement" : false,
     "columnType" : {
@@ -72,7 +68,6 @@
     "name" : "language_id",
     "description" : null,
     "definition" : null,
-    "primaryKey" : false,
     "notNull" : true,
     "autoIncrement" : false,
     "columnType" : {
@@ -88,7 +83,6 @@
     "name" : "original_language_id",
     "description" : null,
     "definition" : null,
-    "primaryKey" : false,
     "notNull" : false,
     "autoIncrement" : false,
     "columnType" : {
@@ -104,7 +98,6 @@
     "name" : "rental_duration",
     "description" : null,
     "definition" : "3",
-    "primaryKey" : false,
     "notNull" : true,
     "autoIncrement" : false,
     "columnType" : {
@@ -120,7 +113,6 @@
     "name" : "rental_rate",
     "description" : null,
     "definition" : "4.99",
-    "primaryKey" : false,
     "notNull" : true,
     "autoIncrement" : false,
     "columnType" : {
@@ -136,7 +128,6 @@
     "name" : "length",
     "description" : null,
     "definition" : null,
-    "primaryKey" : false,
     "notNull" : false,
     "autoIncrement" : false,
     "columnType" : {
@@ -152,7 +143,6 @@
     "name" : "replacement_cost",
     "description" : null,
     "definition" : "19.99",
-    "primaryKey" : false,
     "notNull" : true,
     "autoIncrement" : false,
     "columnType" : {
@@ -168,7 +158,6 @@
     "name" : "rating",
     "description" : null,
     "definition" : "'G'::mpaa_rating",
-    "primaryKey" : false,
     "notNull" : false,
     "autoIncrement" : false,
     "columnType" : {
@@ -185,7 +174,6 @@
     "name" : "last_update",
     "description" : null,
     "definition" : "now()",
-    "primaryKey" : false,
     "notNull" : true,
     "autoIncrement" : false,
     "columnType" : {
@@ -201,7 +189,6 @@
     "name" : "special_features",
     "description" : null,
     "definition" : null,
-    "primaryKey" : false,
     "notNull" : false,
     "autoIncrement" : false,
     "columnType" : {
@@ -220,7 +207,6 @@
     "name" : "fulltext",
     "description" : null,
     "definition" : null,
-    "primaryKey" : false,
     "notNull" : true,
     "autoIncrement" : false,
     "columnType" : {

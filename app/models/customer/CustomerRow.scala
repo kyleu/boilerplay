@@ -40,7 +40,7 @@ object CustomerRow {
     lastName: String = "",
     email: Option[String] = None,
     addressId: Int = 0,
-    activebool: Boolean = false,
+    activebool: Boolean = true,
     createDate: LocalDate = DateUtils.today,
     lastUpdate: Option[ZonedDateTime] = None,
     active: Option[Long] = None

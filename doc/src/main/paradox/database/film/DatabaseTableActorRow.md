@@ -5,10 +5,10 @@
 
 | Name                         | Type               | NotNull| Unique | Indexed  | Default
 |------------------------------|--------------------|--------|--------|----------|--------------------
-| actor_id                     | integer            | true   | true   | true     |
+| actor_id                     | integer            | true   | true   | true     | nextval('actor_actor_id_seq'::regclass)
 | first_name                   | string             | true   | false  | true     |
 | last_name                    | string             | true   | false  | true     |
-| last_update                  | timestamptz        | true   | false  | true     |
+| last_update                  | timestamptz        | true   | false  | true     | now()
 
 ## References
 

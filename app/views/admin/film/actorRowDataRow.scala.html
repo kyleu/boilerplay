@@ -1,5 +1,5 @@
 @* Generated File *@
-@(model: models.film.ActorRow)<tr>
+@(model: models.film.ActorRow, additional: Option[Html] = None)<tr>
   <td>
     <a href="@controllers.admin.film.routes.ActorRowController.view(model.actorId)">@model.actorId</a>
   </td>
@@ -12,4 +12,5 @@
   <td>
     @model.lastUpdate
   </td>
+  @additional
 </tr>

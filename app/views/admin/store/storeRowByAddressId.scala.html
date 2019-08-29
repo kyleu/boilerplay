@@ -1,30 +1,34 @@
 @* Generated File *@
 @(cfg: com.kyleu.projectile.models.config.UiConfig, addressId: Int, modelSeq: Seq[models.store.StoreRow], orderBy: Option[String], orderAsc: Boolean, limit: Int, offset: Int)(
-    implicit request: Request[AnyContent], session: Session, flash: Flash
+    implicit request: Request[AnyContent], flash: Flash, td: com.kyleu.projectile.util.tracing.TraceData
 )
-@com.kyleu.projectile.views.html.admin.explore.list(
-  cfg = cfg,
-  model = "Store",
-  modelPlural = "Stores",
-  icon = models.template.Icons.storeRow,
-  cols = Seq(
-    "storeId" -> "Store Id",
-    "managerStaffId" -> "Manager Staff Id",
-    "addressId" -> "Address Id",
-    "lastUpdate" -> "Last Update"
-  ),
-  orderBy = orderBy,
-  orderAsc = orderAsc,
-  totalCount = None,
-  rows = modelSeq.map(model => views.html.admin.store.storeRowDataRow(model)),
-  calls = com.kyleu.projectile.models.web.ListCalls(
-    orderBy = Some(controllers.admin.store.routes.StoreRowController.byAddressId(addressId, _, _, Some(limit), Some(0))),
-    search = None,
-    next = controllers.admin.store.routes.StoreRowController.byAddressId(addressId, orderBy, orderAsc, Some(limit), Some(offset + limit)),
-    prev = controllers.admin.store.routes.StoreRowController.byAddressId(addressId, orderBy, orderAsc, Some(limit), Some(offset - limit)),
-  ),
-  limit = limit,
-  offset = offset,
-  q = None,
-  fullUI = false
-)
+@defining(com.kyleu.projectile.services.augment.AugmentService.lists.augment(models = modelSeq, args = request.queryString, cfg = cfg)) { aug =>
+  @com.kyleu.projectile.views.html.admin.explore.list(
+    cfg = cfg,
+    model = "Store",
+    modelPlural = "Stores",
+    icon = models.template.Icons.storeRow,
+    cols = Seq(
+      "storeId" -> "Store Id",
+      "managerStaffId" -> "Manager Staff Id",
+      "addressId" -> "Address Id",
+      "lastUpdate" -> "Last Update"
+    ),
+    orderBy = orderBy,
+    orderAsc = orderAsc,
+    totalCount = None,
+    rows = modelSeq.map(model => views.html.admin.store.storeRowDataRow(model, additional = aug._3.get(model).flatten)),
+    calls = com.kyleu.projectile.models.web.ListCalls(
+      orderBy = Some(controllers.admin.store.routes.StoreRowController.byAddressId(addressId, _, _, Some(limit), Some(0))),
+      search = None,
+      next = controllers.admin.store.routes.StoreRowController.byAddressId(addressId, orderBy, orderAsc, Some(limit), Some(offset + limit)),
+      prev = controllers.admin.store.routes.StoreRowController.byAddressId(addressId, orderBy, orderAsc, Some(limit), Some(offset - limit)),
+    ),
+    limit = limit,
+    offset = offset,
+    q = None,
+    additionalHeader = aug._1,
+    additionalColumns = aug._2,
+    fullUI = false
+  )
+}

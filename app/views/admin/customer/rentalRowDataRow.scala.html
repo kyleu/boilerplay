@@ -1,5 +1,5 @@
 @* Generated File *@
-@(model: models.customer.RentalRow)<tr>
+@(model: models.customer.RentalRow, additional: Option[Html] = None)<tr>
   <td>
     <a href="@controllers.admin.customer.routes.RentalRowController.view(model.rentalId)">@model.rentalId</a>
   </td>
@@ -27,4 +27,5 @@
       <i class="material-icons small">@models.template.Icons.staffRow</i>
     </a>
   </td>
+  @additional
 </tr>

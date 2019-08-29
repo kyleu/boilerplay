@@ -1,5 +1,5 @@
 @* Generated File *@
-@(model: models.customer.LanguageRow)<tr>
+@(model: models.customer.LanguageRow, additional: Option[Html] = None)<tr>
   <td>
     <a href="@controllers.admin.customer.routes.LanguageRowController.view(model.languageId)">@model.languageId</a>
   </td>
@@ -9,4 +9,5 @@
   <td>
     @model.lastUpdate
   </td>
+  @additional
 </tr>

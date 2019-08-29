@@ -1,5 +1,5 @@
 @* Generated File *@
-@(model: models.address.AddressRow)<tr>
+@(model: models.address.AddressRow, additional: Option[Html] = None)<tr>
   <td>
     <a href="@controllers.admin.address.routes.AddressRowController.view(model.addressId)">@model.addressId</a>
   </td>
@@ -27,4 +27,5 @@
   <td>
     @model.lastUpdate
   </td>
+  @additional
 </tr>

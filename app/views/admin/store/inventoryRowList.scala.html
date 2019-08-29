@@ -1,29 +1,33 @@
 @* Generated File *@
 @(cfg: com.kyleu.projectile.models.config.UiConfig, totalCount: Option[Int], modelSeq: Seq[models.store.InventoryRow], q: Option[String], orderBy: Option[String], orderAsc: Boolean, limit: Int, offset: Int)(
-    implicit request: Request[AnyContent], session: Session, flash: Flash
+    implicit request: Request[AnyContent], flash: Flash, td: com.kyleu.projectile.util.tracing.TraceData
 )
-@com.kyleu.projectile.views.html.admin.explore.list(
-  cfg = cfg,
-  model = "Inventory",
-  modelPlural = "Inventories",
-  icon = models.template.Icons.inventoryRow,
-  cols = Seq(
-    "inventoryId" -> "Inventory Id",
-    "filmId" -> "Film Id",
-    "storeId" -> "Store Id"
-  ),
-  totalCount = totalCount,
-  rows = modelSeq.map(model => views.html.admin.store.inventoryRowDataRow(model)),
-  orderBy = orderBy,
-  orderAsc = orderAsc,
-  calls = com.kyleu.projectile.models.web.ListCalls(
-    newCall = Some(controllers.admin.store.routes.InventoryRowController.createForm()),
-    orderBy = Some(controllers.admin.store.routes.InventoryRowController.list(q, _, _, Some(limit), Some(0))),
-    search = Some(controllers.admin.store.routes.InventoryRowController.list(None, orderBy, orderAsc, Some(limit), None)),
-    next = controllers.admin.store.routes.InventoryRowController.list(q, orderBy, orderAsc, Some(limit), Some(offset + limit)),
-    prev = controllers.admin.store.routes.InventoryRowController.list(q, orderBy, orderAsc, Some(limit), Some(offset - limit))
-  ),
-  limit = limit,
-  offset = offset,
-  q = q
-)
+@defining(com.kyleu.projectile.services.augment.AugmentService.lists.augment(models = modelSeq, args = request.queryString, cfg = cfg)) { aug =>
+  @com.kyleu.projectile.views.html.admin.explore.list(
+    cfg = cfg,
+    model = "Inventory",
+    modelPlural = "Inventories",
+    icon = models.template.Icons.inventoryRow,
+    cols = Seq(
+      "inventoryId" -> "Inventory Id",
+      "filmId" -> "Film Id",
+      "storeId" -> "Store Id"
+    ),
+    totalCount = totalCount,
+    rows = modelSeq.map(model => views.html.admin.store.inventoryRowDataRow(model, additional = aug._3.get(model).flatten)),
+    orderBy = orderBy,
+    orderAsc = orderAsc,
+    calls = com.kyleu.projectile.models.web.ListCalls(
+      newCall = Some(controllers.admin.store.routes.InventoryRowController.createForm()),
+      orderBy = Some(controllers.admin.store.routes.InventoryRowController.list(q, _, _, Some(limit), Some(0))),
+      search = Some(controllers.admin.store.routes.InventoryRowController.list(None, orderBy, orderAsc, Some(limit), None)),
+      next = controllers.admin.store.routes.InventoryRowController.list(q, orderBy, orderAsc, Some(limit), Some(offset + limit)),
+      prev = controllers.admin.store.routes.InventoryRowController.list(q, orderBy, orderAsc, Some(limit), Some(offset - limit))
+    ),
+    limit = limit,
+    offset = offset,
+    q = q,
+    additionalHeader = aug._1,
+    additionalColumns = aug._2
+  )
+}

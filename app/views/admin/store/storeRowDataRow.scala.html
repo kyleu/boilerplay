@@ -1,5 +1,5 @@
 @* Generated File *@
-@(model: models.store.StoreRow)<tr>
+@(model: models.store.StoreRow, additional: Option[Html] = None)<tr>
   <td>
     <a href="@controllers.admin.store.routes.StoreRowController.view(model.storeId)">@model.storeId</a>
   </td>
@@ -15,4 +15,5 @@
   <td>
     @model.lastUpdate
   </td>
+  @additional
 </tr>

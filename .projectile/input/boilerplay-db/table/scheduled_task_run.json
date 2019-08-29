@@ -8,7 +8,6 @@
     "name" : "id",
     "description" : null,
     "definition" : null,
-    "primaryKey" : false,
     "notNull" : true,
     "autoIncrement" : false,
     "columnType" : {
@@ -24,7 +23,6 @@
     "name" : "task",
     "description" : null,
     "definition" : null,
-    "primaryKey" : false,
     "notNull" : true,
     "autoIncrement" : false,
     "columnType" : {
@@ -40,7 +38,6 @@
     "name" : "arguments",
     "description" : null,
     "definition" : null,
-    "primaryKey" : false,
     "notNull" : true,
     "autoIncrement" : false,
     "columnType" : {
@@ -59,7 +56,6 @@
     "name" : "status",
     "description" : null,
     "definition" : null,
-    "primaryKey" : false,
     "notNull" : true,
     "autoIncrement" : false,
     "columnType" : {
@@ -75,7 +71,6 @@
     "name" : "output",
     "description" : null,
     "definition" : null,
-    "primaryKey" : false,
     "notNull" : true,
     "autoIncrement" : false,
     "columnType" : {
@@ -91,7 +86,6 @@
     "name" : "started",
     "description" : null,
     "definition" : null,
-    "primaryKey" : false,
     "notNull" : true,
     "autoIncrement" : false,
     "columnType" : {
@@ -107,7 +101,6 @@
     "name" : "completed",
     "description" : null,
     "definition" : null,
-    "primaryKey" : false,
     "notNull" : true,
     "autoIncrement" : false,
     "columnType" : {

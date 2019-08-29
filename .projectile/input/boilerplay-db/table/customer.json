@@ -8,7 +8,6 @@
     "name" : "customer_id",
     "description" : null,
     "definition" : "nextval('customer_customer_id_seq1'::regclass)",
-    "primaryKey" : false,
     "notNull" : true,
     "autoIncrement" : true,
     "columnType" : {
@@ -24,7 +23,6 @@
     "name" : "store_id",
     "description" : null,
     "definition" : null,
-    "primaryKey" : false,
     "notNull" : true,
     "autoIncrement" : false,
     "columnType" : {
@@ -40,7 +38,6 @@
     "name" : "first_name",
     "description" : null,
     "definition" : null,
-    "primaryKey" : false,
     "notNull" : true,
     "autoIncrement" : false,
     "columnType" : {
@@ -56,7 +53,6 @@
     "name" : "last_name",
     "description" : null,
     "definition" : null,
-    "primaryKey" : false,
     "notNull" : true,
     "autoIncrement" : false,
     "columnType" : {
@@ -72,7 +68,6 @@
     "name" : "email",
     "description" : null,
     "definition" : null,
-    "primaryKey" : false,
     "notNull" : false,
     "autoIncrement" : false,
     "columnType" : {
@@ -88,7 +83,6 @@
     "name" : "address_id",
     "description" : null,
     "definition" : null,
-    "primaryKey" : false,
     "notNull" : true,
     "autoIncrement" : false,
     "columnType" : {
@@ -104,7 +98,6 @@
     "name" : "activebool",
     "description" : null,
     "definition" : "true",
-    "primaryKey" : false,
     "notNull" : true,
     "autoIncrement" : false,
     "columnType" : {
@@ -120,7 +113,6 @@
     "name" : "create_date",
     "description" : null,
     "definition" : "('now'::text)::date",
-    "primaryKey" : false,
     "notNull" : true,
     "autoIncrement" : false,
     "columnType" : {
@@ -136,7 +128,6 @@
     "name" : "last_update",
     "description" : null,
     "definition" : "now()",
-    "primaryKey" : false,
     "notNull" : false,
     "autoIncrement" : false,
     "columnType" : {
@@ -152,7 +143,6 @@
     "name" : "active",
     "description" : null,
     "definition" : null,
-    "primaryKey" : false,
     "notNull" : false,
     "autoIncrement" : false,
     "columnType" : {

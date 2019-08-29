@@ -1,5 +1,5 @@
 @* Generated File *@
-@(model: models.payment.PaymentRow)<tr>
+@(model: models.payment.PaymentRow, additional: Option[Html] = None)<tr>
   <td>
     <a href="@controllers.admin.payment.routes.PaymentRowController.view(model.paymentId)">@model.paymentId</a>
   </td>
@@ -24,4 +24,5 @@
   <td>
     @model.amount
   </td>
+  @additional
 </tr>

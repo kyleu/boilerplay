@@ -1,6 +1,6 @@
 /* Generated File */
 import com.kyleu.projectile.models.result.data.DataFieldModel
-import com.kyleu.projectile.services.Credentials
+import com.kyleu.projectile.util.Credentials
 import com.kyleu.projectile.util.tracing.TraceData
 
 object TestModelSupport {

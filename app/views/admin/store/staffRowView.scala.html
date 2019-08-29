@@ -1,6 +1,6 @@
 @* Generated File *@
 @(cfg: com.kyleu.projectile.models.config.UiConfig, model: models.store.StaffRow, notes: Seq[com.kyleu.projectile.models.note.Note], debug: Boolean)(
-    implicit request: Request[AnyContent], session: Session, flash: Flash
+    implicit request: Request[AnyContent], session: Session, flash: Flash, td: com.kyleu.projectile.util.tracing.TraceData
 )@com.kyleu.projectile.views.html.layout.page(title = s"Staff", cfg = cfg, icon = Some(models.template.Icons.staffRow)) {
   @com.kyleu.projectile.views.html.layout.card(None) {
     <div class="right"><a class="btn @cfg.user.buttonColor" href="@controllers.admin.store.routes.StaffRowController.editForm(model.staffId)">Edit</a></div>
@@ -39,7 +39,7 @@
         </tr>
         <tr>
           <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.active.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Active</div></th>
-          <td>@model.active</td>
+          <td>@com.kyleu.projectile.views.html.components.form.booleanDisplay(model.active)</td>
         </tr>
         <tr>
           <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.username.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Username</div></th>

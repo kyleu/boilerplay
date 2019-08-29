@@ -8,7 +8,6 @@
     "name" : "payment_id",
     "description" : null,
     "definition" : "nextval('payment_payment_id_seq'::regclass)",
-    "primaryKey" : false,
     "notNull" : true,
     "autoIncrement" : true,
     "columnType" : {
@@ -24,7 +23,6 @@
     "name" : "customer_id",
     "description" : null,
     "definition" : null,
-    "primaryKey" : false,
     "notNull" : true,
     "autoIncrement" : false,
     "columnType" : {
@@ -40,7 +38,6 @@
     "name" : "staff_id",
     "description" : null,
     "definition" : null,
-    "primaryKey" : false,
     "notNull" : true,
     "autoIncrement" : false,
     "columnType" : {
@@ -56,7 +53,6 @@
     "name" : "rental_id",
     "description" : null,
     "definition" : null,
-    "primaryKey" : false,
     "notNull" : true,
     "autoIncrement" : false,
     "columnType" : {
@@ -72,7 +68,6 @@
     "name" : "amount",
     "description" : null,
     "definition" : null,
-    "primaryKey" : false,
     "notNull" : true,
     "autoIncrement" : false,
     "columnType" : {
@@ -88,7 +83,6 @@
     "name" : "payment_date",
     "description" : null,
     "definition" : null,
-    "primaryKey" : false,
     "notNull" : true,
     "autoIncrement" : false,
     "columnType" : {

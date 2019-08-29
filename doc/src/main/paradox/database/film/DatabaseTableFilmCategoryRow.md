@@ -7,5 +7,5 @@
 |------------------------------|--------------------|--------|--------|----------|--------------------
 | film_id                      | integer            | true   | true   | true     |
 | category_id                  | integer            | true   | true   | true     |
-| last_update                  | timestamptz        | true   | false  | true     |
+| last_update                  | timestamptz        | true   | false  | true     | now()
 

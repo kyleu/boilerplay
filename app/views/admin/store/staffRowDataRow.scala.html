@@ -1,5 +1,5 @@
 @* Generated File *@
-@(model: models.store.StaffRow)<tr>
+@(model: models.store.StaffRow, additional: Option[Html] = None)<tr>
   <td>
     <a href="@controllers.admin.store.routes.StaffRowController.view(model.staffId)">@model.staffId</a>
   </td>
@@ -27,4 +27,5 @@
   <td>
     @model.username
   </td>
+  @additional
 </tr>

@@ -1,29 +1,33 @@
 @* Generated File *@
 @(cfg: com.kyleu.projectile.models.config.UiConfig, actorId: Int, modelSeq: Seq[models.film.FilmActorRow], orderBy: Option[String], orderAsc: Boolean, limit: Int, offset: Int)(
-    implicit request: Request[AnyContent], session: Session, flash: Flash
+    implicit request: Request[AnyContent], flash: Flash, td: com.kyleu.projectile.util.tracing.TraceData
 )
-@com.kyleu.projectile.views.html.admin.explore.list(
-  cfg = cfg,
-  model = "Film Actor",
-  modelPlural = "Film Actors",
-  icon = models.template.Icons.filmActorRow,
-  cols = Seq(
-    "actorId" -> "Actor Id",
-    "filmId" -> "Film Id",
-    "lastUpdate" -> "Last Update"
-  ),
-  orderBy = orderBy,
-  orderAsc = orderAsc,
-  totalCount = None,
-  rows = modelSeq.map(model => views.html.admin.film.filmActorRowDataRow(model)),
-  calls = com.kyleu.projectile.models.web.ListCalls(
-    orderBy = Some(controllers.admin.film.routes.FilmActorRowController.byActorId(actorId, _, _, Some(limit), Some(0))),
-    search = None,
-    next = controllers.admin.film.routes.FilmActorRowController.byActorId(actorId, orderBy, orderAsc, Some(limit), Some(offset + limit)),
-    prev = controllers.admin.film.routes.FilmActorRowController.byActorId(actorId, orderBy, orderAsc, Some(limit), Some(offset - limit)),
-  ),
-  limit = limit,
-  offset = offset,
-  q = None,
-  fullUI = false
-)
+@defining(com.kyleu.projectile.services.augment.AugmentService.lists.augment(models = modelSeq, args = request.queryString, cfg = cfg)) { aug =>
+  @com.kyleu.projectile.views.html.admin.explore.list(
+    cfg = cfg,
+    model = "Film Actor",
+    modelPlural = "Film Actors",
+    icon = models.template.Icons.filmActorRow,
+    cols = Seq(
+      "actorId" -> "Actor Id",
+      "filmId" -> "Film Id",
+      "lastUpdate" -> "Last Update"
+    ),
+    orderBy = orderBy,
+    orderAsc = orderAsc,
+    totalCount = None,
+    rows = modelSeq.map(model => views.html.admin.film.filmActorRowDataRow(model, additional = aug._3.get(model).flatten)),
+    calls = com.kyleu.projectile.models.web.ListCalls(
+      orderBy = Some(controllers.admin.film.routes.FilmActorRowController.byActorId(actorId, _, _, Some(limit), Some(0))),
+      search = None,
+      next = controllers.admin.film.routes.FilmActorRowController.byActorId(actorId, orderBy, orderAsc, Some(limit), Some(offset + limit)),
+      prev = controllers.admin.film.routes.FilmActorRowController.byActorId(actorId, orderBy, orderAsc, Some(limit), Some(offset - limit)),
+    ),
+    limit = limit,
+    offset = offset,
+    q = None,
+    additionalHeader = aug._1,
+    additionalColumns = aug._2,
+    fullUI = false
+  )
+}

@@ -5,9 +5,9 @@
 
 | Name                         | Type               | NotNull| Unique | Indexed  | Default
 |------------------------------|--------------------|--------|--------|----------|--------------------
-| language_id                  | integer            | true   | true   | true     |
+| language_id                  | integer            | true   | true   | true     | nextval('language_language_id_seq'::regclass)
 | name                         | string             | true   | false  | true     |
-| last_update                  | timestamptz        | true   | false  | true     |
+| last_update                  | timestamptz        | true   | false  | true     | now()
 
 ## References
 
