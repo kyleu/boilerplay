@@ -18,7 +18,7 @@ object CityRowQueries extends BaseQueries[CityRow]("cityRow", "city") {
     DatabaseField(title = "Last Update", prop = "lastUpdate", col = "last_update", typ = TimestampZonedType)
   )
   override protected val pkColumns = Seq("city_id")
-  override protected val searchColumns = Seq("city_id", "city", "country_id")
+  override protected val searchColumns = Seq("city_id", "city", "country_id", "last_update")
 
   def countAll(filters: Seq[Filter] = Nil) = onCountAll(filters)
   def getAll(filters: Seq[Filter] = Nil, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) = {
@@ -55,6 +55,13 @@ object CityRowQueries extends BaseQueries[CityRow]("cityRow", "city") {
   )
   final case class GetByCountryIdSeq(countryIdSeq: Seq[Int]) extends ColSeqQuery(column = "country_id", values = countryIdSeq)
 
+  final case class CountByLastUpdate(lastUpdate: ZonedDateTime) extends ColCount(column = "last_update", values = Seq(lastUpdate))
+  final case class GetByLastUpdate(lastUpdate: ZonedDateTime, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) extends SeqQuery(
+    whereClause = Some(quote("last_update") + "  = ?"), orderBy = ResultFieldHelper.orderClause(fields, orderBys: _*),
+    limit = limit, offset = offset, values = Seq(lastUpdate)
+  )
+  final case class GetByLastUpdateSeq(lastUpdateSeq: Seq[ZonedDateTime]) extends ColSeqQuery(column = "last_update", values = lastUpdateSeq)
+
   def insert(model: CityRow) = new Insert(model)
   def insertBatch(models: Seq[CityRow]) = new InsertBatch(models)
   def create(dataFields: Seq[DataField]) = new InsertFields(dataFields)
@@ -62,6 +69,7 @@ object CityRowQueries extends BaseQueries[CityRow]("cityRow", "city") {
   def removeByPrimaryKey(cityId: Int) = new RemoveByPrimaryKey(Seq[Any](cityId))
 
   def update(cityId: Int, fields: Seq[DataField]) = new UpdateFields(Seq[Any](cityId), fields)
+  def updateBulk(pks: Seq[Seq[Any]], fields: Seq[DataField]) = new UpdateFieldsBulk(pks, fields)
 
   override def fromRow(row: Row) = CityRow(
     cityId = IntegerType(row, "city_id"),

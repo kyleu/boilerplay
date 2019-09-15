@@ -3,7 +3,6 @@ package models.graphql.address
 
 import com.kyleu.projectile.graphql.{GraphQLContext, GraphQLSchemaHelper}
 import com.kyleu.projectile.graphql.GraphQLUtils._
-import com.kyleu.projectile.models.graphql.note.NoteSchema
 import models.address.{CityRow, CityRowResult}
 import sangria.execution.deferred.{Fetcher, HasId, Relation}
 import sangria.schema._
@@ -20,6 +19,8 @@ object CityRowSchema extends GraphQLSchemaHelper("cityRow") {
   val cityRowCitySeqArg = Argument("citys", ListInputType(StringType))
   val cityRowCountryIdArg = Argument("countryId", IntType)
   val cityRowCountryIdSeqArg = Argument("countryIds", ListInputType(IntType))
+  val cityRowLastUpdateArg = Argument("lastUpdate", zonedDateTimeType)
+  val cityRowLastUpdateSeqArg = Argument("lastUpdates", ListInputType(zonedDateTimeType))
 
   val cityRowByCountryIdRelation = Relation[CityRow, Int]("byCountryId", x => Seq(x.countryId))
   val cityRowByCountryIdFetcher = Fetcher.rel[GraphQLContext, CityRow, CityRow, Int](
@@ -29,14 +30,14 @@ object CityRowSchema extends GraphQLSchemaHelper("cityRow") {
   implicit lazy val cityRowType: sangria.schema.ObjectType[GraphQLContext, CityRow] = deriveObjectType(
     sangria.macros.derive.AddFields(
       Field(
-        name = "addressCityIdFkey",
+        name = "addresses",
         fieldType = ListType(AddressRowSchema.addressRowType),
         resolve = c => AddressRowSchema.addressRowByCityIdFetcher.deferRelSeq(
           AddressRowSchema.addressRowByCityIdRelation, c.value.cityId
         )
       ),
       Field(
-        name = "cityCountryIdFkeyRel",
+        name = "country",
         fieldType = CountryRowSchema.countryRowType,
         resolve = ctx => CountryRowSchema.countryRowByPrimaryKeyFetcher.defer(ctx.value.countryId)
       )
@@ -66,7 +67,13 @@ object CityRowSchema extends GraphQLSchemaHelper("cityRow") {
     }, cityRowCountryIdArg),
     unitField(name = "citiesByCountryIdSeq", desc = None, t = ListType(cityRowType), f = (c, td) => {
       c.ctx.getInstance[services.address.CityRowService].getByCountryIdSeq(c.ctx.creds, c.arg(cityRowCountryIdSeqArg))(td)
-    }, cityRowCountryIdSeqArg)
+    }, cityRowCountryIdSeqArg),
+    unitField(name = "citiesByLastUpdate", desc = None, t = ListType(cityRowType), f = (c, td) => {
+      c.ctx.getInstance[services.address.CityRowService].getByLastUpdate(c.ctx.creds, c.arg(cityRowLastUpdateArg))(td)
+    }, cityRowLastUpdateArg),
+    unitField(name = "citiesByLastUpdateSeq", desc = None, t = ListType(cityRowType), f = (c, td) => {
+      c.ctx.getInstance[services.address.CityRowService].getByLastUpdateSeq(c.ctx.creds, c.arg(cityRowLastUpdateSeqArg))(td)
+    }, cityRowLastUpdateSeqArg)
   )
 
   val cityRowMutationType = ObjectType(

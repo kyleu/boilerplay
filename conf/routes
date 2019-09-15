@@ -1,5 +1,7 @@
 GET         /                                        controllers.HomeController.home
 
+->          /admin/system                            system.Routes
+
 ### Projectile Features
 ## The following sections are features which, when uncommented, add functionality to the application
 ->          /components                              projectileComponents.Routes

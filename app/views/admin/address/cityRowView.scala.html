@@ -2,6 +2,7 @@
 @(cfg: com.kyleu.projectile.models.config.UiConfig, model: models.address.CityRow, notes: Seq[com.kyleu.projectile.models.note.Note], debug: Boolean)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, td: com.kyleu.projectile.util.tracing.TraceData
 )@com.kyleu.projectile.views.html.layout.page(title = s"City", cfg = cfg, icon = Some(models.template.Icons.cityRow)) {
+  @com.kyleu.projectile.services.augment.AugmentService.viewHeaders.augment(model, request.queryString, cfg)
   @com.kyleu.projectile.views.html.layout.card(None) {
     <div class="right"><a class="btn @cfg.user.buttonColor" href="@controllers.admin.address.routes.CityRowController.editForm(model.cityId)">Edit</a></div>
     <div class="right"><a class="btn-flat remove-link" onclick="return confirm('Are you sure you want to remove this City?')" href="@controllers.admin.address.routes.CityRowController.remove(model.cityId)">Remove</a></div>
@@ -29,9 +30,7 @@
       </tbody>
     </table>
   }
-
-  @com.kyleu.projectile.services.augment.AugmentService.views.augment(model, request.queryString, cfg)
-
+  @com.kyleu.projectile.services.augment.AugmentService.viewDetails.augment(model, request.queryString, cfg)
   @com.kyleu.projectile.views.html.admin.note.notes(cfg, notes, "CityRow", "City", model.cityId)
 
   <ul id="model-relations" class="collapsible" data-collapsible="expandable">
@@ -39,7 +38,10 @@
       <div class="collapsible-header">
         <i class="material-icons small">@models.template.Icons.addressRow</i>
         <span class="title">Addresses</span>&nbsp;by City Id
-        <span class="badge"><a href="@controllers.admin.address.routes.AddressRowController.byCityId(model.cityId)"><i class="material-icons">insert_link</i></a></span>
+        <span class="badge" style="display: none;">
+          <a class="bulk-edit-link" title="Bulk edit" href="@controllers.admin.address.routes.AddressRowController.byCityIdBulkForm(model.cityId)"><i class="material-icons" style="margin-right: 0;">edit</i></a>
+          <a class="view-relation-link" title="View these Addresses" href="@controllers.admin.address.routes.AddressRowController.byCityId(model.cityId)"><i class="material-icons" style="margin-right: 0;">insert_link</i></a>
+        </span>
       </div>
       <div class="collapsible-body"><span>Loading...</span></div>
     </li>

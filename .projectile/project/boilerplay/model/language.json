@@ -4,13 +4,28 @@
   "features" : [ "doobie", "datamodel", "auth", "graphql", "service", "slick", "controller", "notes", "json", "core" ],
   "ignored" : [ ],
   "overrides" : [ {
+    "k" : "className",
+    "v" : "LanguageRow"
+  }, {
+    "k" : "title",
+    "v" : "Language"
+  }, {
+    "k" : "plural",
+    "v" : "Languages"
+  }, {
     "k" : "language_id.type",
     "v" : "integer"
   }, {
-    "k" : "name.search",
+    "k" : "name.globalSearch",
     "v" : "true"
   }, {
-    "k" : "last_update.search",
-    "v" : "true"
+    "k" : "reference.filmOriginalLanguageIdFkey.propertyName",
+    "v" : "filmsByOriginal"
+  }, {
+    "k" : "reference.filmLanguageIdFkey.propertyName",
+    "v" : "films"
+  }, {
+    "k" : "defaultOrder",
+    "v" : "asc-name"
   } ]
 }

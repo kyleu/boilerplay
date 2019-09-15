@@ -94,5 +94,5 @@ final case class FilmRow(
     DataField("fulltext", Some(fulltext))
   )
 
-  def toSummary = DataSummary(model = "filmRow", pk = filmId.toString, title = s"title: $title, languageId: $languageId, originalLanguageId: ${originalLanguageId.map(_.toString).getOrElse("∅")}, rating: ${rating.map(_.toString).getOrElse("∅")}, lastUpdate: $lastUpdate, fulltext: $fulltext")
+  def toSummary = DataSummary(model = "filmRow", pk = filmId.toString, title = s"filmId: $filmId, title: $title, releaseYear: ${releaseYear.map(_.toString).getOrElse("∅")}, languageId: $languageId, originalLanguageId: ${originalLanguageId.map(_.toString).getOrElse("∅")}, rentalDuration: $rentalDuration, rentalRate: $rentalRate, length: ${length.map(_.toString).getOrElse("∅")}, rating: ${rating.map(_.toString).getOrElse("∅")}, lastUpdate: $lastUpdate, fulltext: $fulltext")
 }

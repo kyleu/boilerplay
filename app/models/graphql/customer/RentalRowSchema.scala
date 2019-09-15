@@ -3,7 +3,6 @@ package models.graphql.customer
 
 import com.kyleu.projectile.graphql.{GraphQLContext, GraphQLSchemaHelper}
 import com.kyleu.projectile.graphql.GraphQLUtils._
-import com.kyleu.projectile.models.graphql.note.NoteSchema
 import models.customer.{RentalRow, RentalRowResult}
 import models.graphql.payment.PaymentRowSchema
 import models.graphql.store.{InventoryRowSchema, StaffRowSchema}
@@ -47,24 +46,24 @@ object RentalRowSchema extends GraphQLSchemaHelper("rentalRow") {
   implicit lazy val rentalRowType: sangria.schema.ObjectType[GraphQLContext, RentalRow] = deriveObjectType(
     sangria.macros.derive.AddFields(
       Field(
-        name = "paymentRentalIdFkey",
+        name = "payments",
         fieldType = ListType(PaymentRowSchema.paymentRowType),
         resolve = c => PaymentRowSchema.paymentRowByRentalIdFetcher.deferRelSeq(
           PaymentRowSchema.paymentRowByRentalIdRelation, c.value.rentalId
         )
       ),
       Field(
-        name = "rentalStaffIdFkeyRel",
+        name = "staff",
         fieldType = StaffRowSchema.staffRowType,
         resolve = ctx => StaffRowSchema.staffRowByPrimaryKeyFetcher.defer(ctx.value.staffId)
       ),
       Field(
-        name = "rentalInventoryIdFkeyRel",
+        name = "inventory",
         fieldType = InventoryRowSchema.inventoryRowType,
         resolve = ctx => InventoryRowSchema.inventoryRowByPrimaryKeyFetcher.defer(ctx.value.inventoryId)
       ),
       Field(
-        name = "rentalCustomerIdFkeyRel",
+        name = "customer",
         fieldType = CustomerRowSchema.customerRowType,
         resolve = ctx => CustomerRowSchema.customerRowByPrimaryKeyFetcher.defer(ctx.value.customerId)
       )

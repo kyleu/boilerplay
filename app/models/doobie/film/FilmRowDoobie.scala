@@ -12,7 +12,7 @@ object FilmRowDoobie extends DoobieQueries[FilmRow]("film") {
   override val selectFragment = fr"""select "film_id", "title", "description", "release_year", "language_id", "original_language_id", "rental_duration", "rental_rate", "length", "replacement_cost", "rating", "last_update", "special_features", "fulltext" from "film""""
 
   override val columns = Seq("film_id", "title", "description", "release_year", "language_id", "original_language_id", "rental_duration", "rental_rate", "length", "replacement_cost", "rating", "last_update", "special_features", "fulltext")
-  override val searchColumns = Seq("film_id", "title", "language_id", "original_language_id", "rating", "last_update")
+  override val searchColumns = Seq("film_id", "title", "description", "release_year", "language_id", "original_language_id", "rental_duration", "rental_rate", "length", "rating", "last_update", "fulltext")
 
   override def searchFragment(q: String) = {
     fr""""film_id"::text = $q or "title"::text = $q or "description"::text = $q or "release_year"::text = $q or "language_id"::text = $q or "original_language_id"::text = $q or "rental_duration"::text = $q or "rental_rate"::text = $q or "length"::text = $q or "replacement_cost"::text = $q or "rating"::text = $q or "last_update"::text = $q or "special_features"::text = $q or "fulltext"::text = $q"""

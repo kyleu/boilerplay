@@ -5,9 +5,13 @@ GET         /                                                         controller
 GET         /autocomplete                                            controllers.admin.payment.PaymentRowController.autocomplete(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None)
 GET         /form                                                    controllers.admin.payment.PaymentRowController.createForm
 POST        /                                                         controllers.admin.payment.PaymentRowController.create
+POST        //bulk                                                    controllers.admin.payment.PaymentRowController.bulkEdit
 GET         /byStaffId/:staffId                                       controllers.admin.payment.PaymentRowController.byStaffId(staffId: Int, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None, embedded: Boolean ?= false)
+GET         /byStaffId/:staffId/bulk                                  controllers.admin.payment.PaymentRowController.byStaffIdBulkForm(staffId: Int)
 GET         /byRentalId/:rentalId                                     controllers.admin.payment.PaymentRowController.byRentalId(rentalId: Long, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None, embedded: Boolean ?= false)
+GET         /byRentalId/:rentalId/bulk                                controllers.admin.payment.PaymentRowController.byRentalIdBulkForm(rentalId: Long)
 GET         /byCustomerId/:customerId                                 controllers.admin.payment.PaymentRowController.byCustomerId(customerId: Int, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None, embedded: Boolean ?= false)
+GET         /byCustomerId/:customerId/bulk                            controllers.admin.payment.PaymentRowController.byCustomerIdBulkForm(customerId: Int)
 GET         /:paymentId                                               controllers.admin.payment.PaymentRowController.view(paymentId: Long, t: Option[String] ?= None)
 GET         /:paymentId/form                                          controllers.admin.payment.PaymentRowController.editForm(paymentId: Long)
 POST        /:paymentId                                               controllers.admin.payment.PaymentRowController.edit(paymentId: Long)

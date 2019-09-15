@@ -86,6 +86,7 @@ object RentalRowQueries extends BaseQueries[RentalRow]("rentalRow", "rental") {
   def removeByPrimaryKey(rentalId: Long) = new RemoveByPrimaryKey(Seq[Any](rentalId))
 
   def update(rentalId: Long, fields: Seq[DataField]) = new UpdateFields(Seq[Any](rentalId), fields)
+  def updateBulk(pks: Seq[Seq[Any]], fields: Seq[DataField]) = new UpdateFieldsBulk(pks, fields)
 
   override def fromRow(row: Row) = RentalRow(
     rentalId = LongType(row, "rental_id"),

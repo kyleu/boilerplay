@@ -120,11 +120,15 @@ class StoreRowService @javax.inject.Inject() (val db: JdbcDatabase, override val
   def insert(creds: Credentials, model: StoreRow)(implicit trace: TraceData) = checkPerm(creds, "edit") {
     traceF("insert")(td => db.executeF(StoreRowQueries.insert(model))(td).flatMap {
       case 1 => getByPrimaryKey(creds, model.storeId)(td)
-      case _ => throw new IllegalStateException("Unable to find newly-inserted Store.")
+      case _ => throw new IllegalStateException("Unable to find newly-inserted Store")
     })
   }
   def insertBatch(creds: Credentials, models: Seq[StoreRow])(implicit trace: TraceData) = checkPerm(creds, "edit") {
-    traceF("insertBatch")(td => db.executeF(StoreRowQueries.insertBatch(models))(td))
+    traceF("insertBatch")(td => if (models.isEmpty) {
+      Future.successful(0)
+    } else {
+      db.executeF(StoreRowQueries.insertBatch(models))(td)
+    })
   }
   def create(creds: Credentials, fields: Seq[DataField])(implicit trace: TraceData) = checkPerm(creds, "edit") {
     traceF("create")(td => db.executeF(StoreRowQueries.create(fields))(td).flatMap { _ =>
@@ -152,6 +156,12 @@ class StoreRowService @javax.inject.Inject() (val db: JdbcDatabase, override val
       }
       case None => throw new IllegalStateException(s"Cannot find StoreRow matching [$storeId]")
     })
+  }
+
+  def updateBulk(creds: Credentials, pks: Seq[Seq[Any]], fields: Seq[DataField])(implicit trace: TraceData) = checkPerm(creds, "edit") {
+    db.executeF(StoreRowQueries.updateBulk(pks, fields))(trace).map { x =>
+      s"Updated [${fields.size}] fields for [$x of ${pks.size}] Stores"
+    }
   }
 
   def csvFor(totalCount: Int, rows: Seq[StoreRow])(implicit trace: TraceData) = {

@@ -7,7 +7,6 @@ import com.kyleu.projectile.models.queries.{BaseQueries, ResultFieldHelper}
 import com.kyleu.projectile.models.result.data.DataField
 import com.kyleu.projectile.models.result.filter.Filter
 import com.kyleu.projectile.models.result.orderBy.OrderBy
-import java.time.ZonedDateTime
 import models.store.InventoryRow
 
 object InventoryRowQueries extends BaseQueries[InventoryRow]("inventoryRow", "inventory") {
@@ -62,6 +61,7 @@ object InventoryRowQueries extends BaseQueries[InventoryRow]("inventoryRow", "in
   def removeByPrimaryKey(inventoryId: Long) = new RemoveByPrimaryKey(Seq[Any](inventoryId))
 
   def update(inventoryId: Long, fields: Seq[DataField]) = new UpdateFields(Seq[Any](inventoryId), fields)
+  def updateBulk(pks: Seq[Seq[Any]], fields: Seq[DataField]) = new UpdateFieldsBulk(pks, fields)
 
   override def fromRow(row: Row) = InventoryRow(
     inventoryId = LongType(row, "inventory_id"),

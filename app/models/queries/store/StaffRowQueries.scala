@@ -7,7 +7,6 @@ import com.kyleu.projectile.models.queries.{BaseQueries, ResultFieldHelper}
 import com.kyleu.projectile.models.result.data.DataField
 import com.kyleu.projectile.models.result.filter.Filter
 import com.kyleu.projectile.models.result.orderBy.OrderBy
-import java.time.ZonedDateTime
 import models.store.StaffRow
 
 object StaffRowQueries extends BaseQueries[StaffRow]("staffRow", "staff") {
@@ -97,6 +96,7 @@ object StaffRowQueries extends BaseQueries[StaffRow]("staffRow", "staff") {
   def removeByPrimaryKey(staffId: Int) = new RemoveByPrimaryKey(Seq[Any](staffId))
 
   def update(staffId: Int, fields: Seq[DataField]) = new UpdateFields(Seq[Any](staffId), fields)
+  def updateBulk(pks: Seq[Seq[Any]], fields: Seq[DataField]) = new UpdateFieldsBulk(pks, fields)
 
   override def fromRow(row: Row) = StaffRow(
     staffId = IntegerType(row, "staff_id"),

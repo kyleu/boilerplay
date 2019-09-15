@@ -4,19 +4,43 @@
   "features" : [ "doobie", "datamodel", "auth", "graphql", "service", "slick", "controller", "notes", "json", "core" ],
   "ignored" : [ ],
   "overrides" : [ {
+    "k" : "className",
+    "v" : "CustomerRow"
+  }, {
+    "k" : "title",
+    "v" : "Customer"
+  }, {
+    "k" : "plural",
+    "v" : "Customers"
+  }, {
     "k" : "customer_id.type",
     "v" : "integer"
   }, {
-    "k" : "first_name.search",
+    "k" : "first_name.globalSearch",
     "v" : "true"
   }, {
-    "k" : "email.search",
+    "k" : "last_name.globalSearch",
+    "v" : "true"
+  }, {
+    "k" : "email.globalSearch",
+    "v" : "true"
+  }, {
+    "k" : "create_date.localSearch",
     "v" : "true"
   }, {
     "k" : "fk.customer_store_id_fkey.propertyName",
-    "v" : "customerStoreIdFkeyRel"
+    "v" : "store"
   }, {
     "k" : "fk.customer_address_id_fkey.propertyName",
-    "v" : "customerAddressIdFkeyRel"
+    "v" : "address"
+  }, {
+    "k" : "reference.rentalCustomerIdFkey.propertyName",
+    "v" : "rentals"
+  }, {
+    "k" : "reference.paymentCustomerIdFkey.propertyName",
+    "v" : "payments"
+  }, {
+    "k" : "defaultOrder",
+    "v" : "desc-last_update"
   } ]
 }

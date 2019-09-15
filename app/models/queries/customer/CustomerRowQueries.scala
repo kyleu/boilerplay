@@ -7,7 +7,7 @@ import com.kyleu.projectile.models.queries.{BaseQueries, ResultFieldHelper}
 import com.kyleu.projectile.models.result.data.DataField
 import com.kyleu.projectile.models.result.filter.Filter
 import com.kyleu.projectile.models.result.orderBy.OrderBy
-import java.time.{LocalDate, ZonedDateTime}
+import java.time.LocalDate
 import models.customer.CustomerRow
 
 object CustomerRowQueries extends BaseQueries[CustomerRow]("customerRow", "customer") {
@@ -24,7 +24,7 @@ object CustomerRowQueries extends BaseQueries[CustomerRow]("customerRow", "custo
     DatabaseField(title = "Active", prop = "active", col = "active", typ = LongType)
   )
   override protected val pkColumns = Seq("customer_id")
-  override protected val searchColumns = Seq("customer_id", "store_id", "first_name", "last_name", "email", "address_id")
+  override protected val searchColumns = Seq("customer_id", "store_id", "first_name", "last_name", "email", "address_id", "create_date")
 
   def countAll(filters: Seq[Filter] = Nil) = onCountAll(filters)
   def getAll(filters: Seq[Filter] = Nil, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) = {
@@ -46,6 +46,13 @@ object CustomerRowQueries extends BaseQueries[CustomerRow]("customerRow", "custo
     limit = limit, offset = offset, values = Seq(addressId)
   )
   final case class GetByAddressIdSeq(addressIdSeq: Seq[Int]) extends ColSeqQuery(column = "address_id", values = addressIdSeq)
+
+  final case class CountByCreateDate(createDate: LocalDate) extends ColCount(column = "create_date", values = Seq(createDate))
+  final case class GetByCreateDate(createDate: LocalDate, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) extends SeqQuery(
+    whereClause = Some(quote("create_date") + "  = ?"), orderBy = ResultFieldHelper.orderClause(fields, orderBys: _*),
+    limit = limit, offset = offset, values = Seq(createDate)
+  )
+  final case class GetByCreateDateSeq(createDateSeq: Seq[LocalDate]) extends ColSeqQuery(column = "create_date", values = createDateSeq)
 
   final case class CountByCustomerId(customerId: Int) extends ColCount(column = "customer_id", values = Seq(customerId))
   final case class GetByCustomerId(customerId: Int, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) extends SeqQuery(
@@ -89,6 +96,7 @@ object CustomerRowQueries extends BaseQueries[CustomerRow]("customerRow", "custo
   def removeByPrimaryKey(customerId: Int) = new RemoveByPrimaryKey(Seq[Any](customerId))
 
   def update(customerId: Int, fields: Seq[DataField]) = new UpdateFields(Seq[Any](customerId), fields)
+  def updateBulk(pks: Seq[Seq[Any]], fields: Seq[DataField]) = new UpdateFieldsBulk(pks, fields)
 
   override def fromRow(row: Row) = CustomerRow(
     customerId = IntegerType(row, "customer_id"),

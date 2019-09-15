@@ -4,31 +4,46 @@
   "features" : [ "doobie", "datamodel", "auth", "graphql", "service", "slick", "controller", "notes", "json", "core" ],
   "ignored" : [ ],
   "overrides" : [ {
+    "k" : "className",
+    "v" : "AddressRow"
+  }, {
+    "k" : "title",
+    "v" : "Address"
+  }, {
     "k" : "plural",
     "v" : "Addresses"
   }, {
     "k" : "address_id.type",
     "v" : "integer"
   }, {
-    "k" : "address.search",
+    "k" : "address.globalSearch",
     "v" : "true"
   }, {
-    "k" : "address2.search",
+    "k" : "address2.globalSearch",
     "v" : "true"
   }, {
-    "k" : "district.search",
+    "k" : "district.globalSearch",
     "v" : "true"
   }, {
-    "k" : "postal_code.search",
+    "k" : "postal_code.globalSearch",
     "v" : "true"
   }, {
-    "k" : "phone.search",
-    "v" : "true"
-  }, {
-    "k" : "last_update.search",
+    "k" : "phone.globalSearch",
     "v" : "true"
   }, {
     "k" : "fk.address_city_id_fkey.propertyName",
-    "v" : "addressCityIdFkeyRel"
+    "v" : "city"
+  }, {
+    "k" : "reference.storeAddressIdFkey.propertyName",
+    "v" : "stores"
+  }, {
+    "k" : "reference.staffAddressIdFkey.propertyName",
+    "v" : "staff"
+  }, {
+    "k" : "reference.customerAddressIdFkey.propertyName",
+    "v" : "customers"
+  }, {
+    "k" : "defaultOrder",
+    "v" : "desc-last_update"
   } ]
 }

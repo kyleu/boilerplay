@@ -3,7 +3,6 @@ package models.graphql.film
 
 import com.kyleu.projectile.graphql.{GraphQLContext, GraphQLSchemaHelper}
 import com.kyleu.projectile.graphql.GraphQLUtils._
-import com.kyleu.projectile.models.graphql.note.NoteSchema
 import models.film.{FilmRow, FilmRowResult}
 import models.graphql.customer.LanguageRowSchema
 import models.graphql.film.MpaaRatingTypeSchema.mpaaRatingTypeEnumType
@@ -21,14 +20,26 @@ object FilmRowSchema extends GraphQLSchemaHelper("filmRow") {
 
   val filmRowTitleArg = Argument("title", StringType)
   val filmRowTitleSeqArg = Argument("titles", ListInputType(StringType))
+  val filmRowDescriptionArg = Argument("description", StringType)
+  val filmRowDescriptionSeqArg = Argument("descriptions", ListInputType(StringType))
+  val filmRowReleaseYearArg = Argument("releaseYear", LongType)
+  val filmRowReleaseYearSeqArg = Argument("releaseYears", ListInputType(LongType))
   val filmRowLanguageIdArg = Argument("languageId", IntType)
   val filmRowLanguageIdSeqArg = Argument("languageIds", ListInputType(IntType))
   val filmRowOriginalLanguageIdArg = Argument("originalLanguageId", IntType)
   val filmRowOriginalLanguageIdSeqArg = Argument("originalLanguageIds", ListInputType(IntType))
+  val filmRowRentalDurationArg = Argument("rentalDuration", IntType)
+  val filmRowRentalDurationSeqArg = Argument("rentalDurations", ListInputType(IntType))
+  val filmRowRentalRateArg = Argument("rentalRate", BigDecimalType)
+  val filmRowRentalRateSeqArg = Argument("rentalRates", ListInputType(BigDecimalType))
+  val filmRowLengthArg = Argument("length", IntType)
+  val filmRowLengthSeqArg = Argument("lengths", ListInputType(IntType))
   val filmRowRatingArg = Argument("rating", mpaaRatingTypeEnumType)
   val filmRowRatingSeqArg = Argument("ratings", ListInputType(mpaaRatingTypeEnumType))
   val filmRowLastUpdateArg = Argument("lastUpdate", zonedDateTimeType)
   val filmRowLastUpdateSeqArg = Argument("lastUpdates", ListInputType(zonedDateTimeType))
+  val filmRowFulltextArg = Argument("fulltext", StringType)
+  val filmRowFulltextSeqArg = Argument("fulltexts", ListInputType(StringType))
 
   val filmRowByLanguageIdRelation = Relation[FilmRow, Int]("byLanguageId", x => Seq(x.languageId))
   val filmRowByLanguageIdFetcher = Fetcher.rel[GraphQLContext, FilmRow, FilmRow, Int](
@@ -43,33 +54,33 @@ object FilmRowSchema extends GraphQLSchemaHelper("filmRow") {
   implicit lazy val filmRowType: sangria.schema.ObjectType[GraphQLContext, FilmRow] = deriveObjectType(
     sangria.macros.derive.AddFields(
       Field(
-        name = "filmActorFilmIdFkey",
+        name = "actors",
         fieldType = ListType(FilmActorRowSchema.filmActorRowType),
         resolve = c => FilmActorRowSchema.filmActorRowByFilmIdFetcher.deferRelSeq(
           FilmActorRowSchema.filmActorRowByFilmIdRelation, c.value.filmId
         )
       ),
       Field(
-        name = "filmCategoryFilmIdFkey",
+        name = "categories",
         fieldType = ListType(FilmCategoryRowSchema.filmCategoryRowType),
         resolve = c => FilmCategoryRowSchema.filmCategoryRowByFilmIdFetcher.deferRelSeq(
           FilmCategoryRowSchema.filmCategoryRowByFilmIdRelation, c.value.filmId
         )
       ),
       Field(
-        name = "inventoryFilmIdFkey",
+        name = "inventories",
         fieldType = ListType(InventoryRowSchema.inventoryRowType),
         resolve = c => InventoryRowSchema.inventoryRowByFilmIdFetcher.deferRelSeq(
           InventoryRowSchema.inventoryRowByFilmIdRelation, c.value.filmId
         )
       ),
       Field(
-        name = "filmLanguageIdFkeyRel",
+        name = "language",
         fieldType = LanguageRowSchema.languageRowType,
         resolve = ctx => LanguageRowSchema.languageRowByPrimaryKeyFetcher.defer(ctx.value.languageId)
       ),
       Field(
-        name = "filmOriginalLanguageIdFkeyRel",
+        name = "originalLanguage",
         fieldType = OptionType(LanguageRowSchema.languageRowType),
         resolve = ctx => LanguageRowSchema.languageRowByPrimaryKeyFetcher.deferOpt(ctx.value.originalLanguageId)
       )
@@ -94,6 +105,18 @@ object FilmRowSchema extends GraphQLSchemaHelper("filmRow") {
     unitField(name = "filmsByTitleSeq", desc = None, t = ListType(filmRowType), f = (c, td) => {
       c.ctx.getInstance[services.film.FilmRowService].getByTitleSeq(c.ctx.creds, c.arg(filmRowTitleSeqArg))(td)
     }, filmRowTitleSeqArg),
+    unitField(name = "filmsByDescription", desc = None, t = ListType(filmRowType), f = (c, td) => {
+      c.ctx.getInstance[services.film.FilmRowService].getByDescription(c.ctx.creds, c.arg(filmRowDescriptionArg))(td)
+    }, filmRowDescriptionArg),
+    unitField(name = "filmsByDescriptionSeq", desc = None, t = ListType(filmRowType), f = (c, td) => {
+      c.ctx.getInstance[services.film.FilmRowService].getByDescriptionSeq(c.ctx.creds, c.arg(filmRowDescriptionSeqArg))(td)
+    }, filmRowDescriptionSeqArg),
+    unitField(name = "filmsByReleaseYear", desc = None, t = ListType(filmRowType), f = (c, td) => {
+      c.ctx.getInstance[services.film.FilmRowService].getByReleaseYear(c.ctx.creds, c.arg(filmRowReleaseYearArg))(td)
+    }, filmRowReleaseYearArg),
+    unitField(name = "filmsByReleaseYearSeq", desc = None, t = ListType(filmRowType), f = (c, td) => {
+      c.ctx.getInstance[services.film.FilmRowService].getByReleaseYearSeq(c.ctx.creds, c.arg(filmRowReleaseYearSeqArg))(td)
+    }, filmRowReleaseYearSeqArg),
     unitField(name = "filmsByLanguageId", desc = None, t = ListType(filmRowType), f = (c, td) => {
       c.ctx.getInstance[services.film.FilmRowService].getByLanguageId(c.ctx.creds, c.arg(filmRowLanguageIdArg))(td)
     }, filmRowLanguageIdArg),
@@ -106,6 +129,24 @@ object FilmRowSchema extends GraphQLSchemaHelper("filmRow") {
     unitField(name = "filmsByOriginalLanguageIdSeq", desc = None, t = ListType(filmRowType), f = (c, td) => {
       c.ctx.getInstance[services.film.FilmRowService].getByOriginalLanguageIdSeq(c.ctx.creds, c.arg(filmRowOriginalLanguageIdSeqArg))(td)
     }, filmRowOriginalLanguageIdSeqArg),
+    unitField(name = "filmsByRentalDuration", desc = None, t = ListType(filmRowType), f = (c, td) => {
+      c.ctx.getInstance[services.film.FilmRowService].getByRentalDuration(c.ctx.creds, c.arg(filmRowRentalDurationArg))(td)
+    }, filmRowRentalDurationArg),
+    unitField(name = "filmsByRentalDurationSeq", desc = None, t = ListType(filmRowType), f = (c, td) => {
+      c.ctx.getInstance[services.film.FilmRowService].getByRentalDurationSeq(c.ctx.creds, c.arg(filmRowRentalDurationSeqArg))(td)
+    }, filmRowRentalDurationSeqArg),
+    unitField(name = "filmsByRentalRate", desc = None, t = ListType(filmRowType), f = (c, td) => {
+      c.ctx.getInstance[services.film.FilmRowService].getByRentalRate(c.ctx.creds, c.arg(filmRowRentalRateArg))(td)
+    }, filmRowRentalRateArg),
+    unitField(name = "filmsByRentalRateSeq", desc = None, t = ListType(filmRowType), f = (c, td) => {
+      c.ctx.getInstance[services.film.FilmRowService].getByRentalRateSeq(c.ctx.creds, c.arg(filmRowRentalRateSeqArg))(td)
+    }, filmRowRentalRateSeqArg),
+    unitField(name = "filmsByLength", desc = None, t = ListType(filmRowType), f = (c, td) => {
+      c.ctx.getInstance[services.film.FilmRowService].getByLength(c.ctx.creds, c.arg(filmRowLengthArg))(td)
+    }, filmRowLengthArg),
+    unitField(name = "filmsByLengthSeq", desc = None, t = ListType(filmRowType), f = (c, td) => {
+      c.ctx.getInstance[services.film.FilmRowService].getByLengthSeq(c.ctx.creds, c.arg(filmRowLengthSeqArg))(td)
+    }, filmRowLengthSeqArg),
     unitField(name = "filmsByRating", desc = None, t = ListType(filmRowType), f = (c, td) => {
       c.ctx.getInstance[services.film.FilmRowService].getByRating(c.ctx.creds, c.arg(filmRowRatingArg))(td)
     }, filmRowRatingArg),
@@ -117,7 +158,13 @@ object FilmRowSchema extends GraphQLSchemaHelper("filmRow") {
     }, filmRowLastUpdateArg),
     unitField(name = "filmsByLastUpdateSeq", desc = None, t = ListType(filmRowType), f = (c, td) => {
       c.ctx.getInstance[services.film.FilmRowService].getByLastUpdateSeq(c.ctx.creds, c.arg(filmRowLastUpdateSeqArg))(td)
-    }, filmRowLastUpdateSeqArg)
+    }, filmRowLastUpdateSeqArg),
+    unitField(name = "filmsByFulltext", desc = None, t = ListType(filmRowType), f = (c, td) => {
+      c.ctx.getInstance[services.film.FilmRowService].getByFulltext(c.ctx.creds, c.arg(filmRowFulltextArg))(td)
+    }, filmRowFulltextArg),
+    unitField(name = "filmsByFulltextSeq", desc = None, t = ListType(filmRowType), f = (c, td) => {
+      c.ctx.getInstance[services.film.FilmRowService].getByFulltextSeq(c.ctx.creds, c.arg(filmRowFulltextSeqArg))(td)
+    }, filmRowFulltextSeqArg)
   )
 
   val filmRowMutationType = ObjectType(

@@ -120,11 +120,15 @@ class ActorRowService @javax.inject.Inject() (val db: JdbcDatabase, override val
   def insert(creds: Credentials, model: ActorRow)(implicit trace: TraceData) = checkPerm(creds, "edit") {
     traceF("insert")(td => db.executeF(ActorRowQueries.insert(model))(td).flatMap {
       case 1 => getByPrimaryKey(creds, model.actorId)(td)
-      case _ => throw new IllegalStateException("Unable to find newly-inserted Actor.")
+      case _ => throw new IllegalStateException("Unable to find newly-inserted Actor")
     })
   }
   def insertBatch(creds: Credentials, models: Seq[ActorRow])(implicit trace: TraceData) = checkPerm(creds, "edit") {
-    traceF("insertBatch")(td => db.executeF(ActorRowQueries.insertBatch(models))(td))
+    traceF("insertBatch")(td => if (models.isEmpty) {
+      Future.successful(0)
+    } else {
+      db.executeF(ActorRowQueries.insertBatch(models))(td)
+    })
   }
   def create(creds: Credentials, fields: Seq[DataField])(implicit trace: TraceData) = checkPerm(creds, "edit") {
     traceF("create")(td => db.executeF(ActorRowQueries.create(fields))(td).flatMap { _ =>

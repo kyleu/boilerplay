@@ -4,13 +4,25 @@
   "features" : [ "doobie", "datamodel", "auth", "graphql", "service", "slick", "controller", "notes", "json", "core" ],
   "ignored" : [ ],
   "overrides" : [ {
+    "k" : "className",
+    "v" : "CategoryRow"
+  }, {
+    "k" : "title",
+    "v" : "Category"
+  }, {
+    "k" : "plural",
+    "v" : "Categories"
+  }, {
     "k" : "category_id.type",
     "v" : "integer"
   }, {
-    "k" : "name.search",
+    "k" : "name.globalSearch",
     "v" : "true"
   }, {
-    "k" : "last_update.search",
-    "v" : "true"
+    "k" : "reference.filmCategoryCategoryIdFkey.propertyName",
+    "v" : "films"
+  }, {
+    "k" : "defaultOrder",
+    "v" : "desc-last_update"
   } ]
 }

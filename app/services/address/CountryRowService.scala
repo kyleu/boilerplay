@@ -104,11 +104,15 @@ class CountryRowService @javax.inject.Inject() (val db: JdbcDatabase, override v
   def insert(creds: Credentials, model: CountryRow)(implicit trace: TraceData) = checkPerm(creds, "edit") {
     traceF("insert")(td => db.executeF(CountryRowQueries.insert(model))(td).flatMap {
       case 1 => getByPrimaryKey(creds, model.countryId)(td)
-      case _ => throw new IllegalStateException("Unable to find newly-inserted Country.")
+      case _ => throw new IllegalStateException("Unable to find newly-inserted Country")
     })
   }
   def insertBatch(creds: Credentials, models: Seq[CountryRow])(implicit trace: TraceData) = checkPerm(creds, "edit") {
-    traceF("insertBatch")(td => db.executeF(CountryRowQueries.insertBatch(models))(td))
+    traceF("insertBatch")(td => if (models.isEmpty) {
+      Future.successful(0)
+    } else {
+      db.executeF(CountryRowQueries.insertBatch(models))(td)
+    })
   }
   def create(creds: Credentials, fields: Seq[DataField])(implicit trace: TraceData) = checkPerm(creds, "edit") {
     traceF("create")(td => db.executeF(CountryRowQueries.create(fields))(td).flatMap { _ =>

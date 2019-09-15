@@ -11,7 +11,7 @@ object CityRowDoobie extends DoobieQueries[CityRow]("city") {
   override val selectFragment = fr"""select "city_id", "city", "country_id", "last_update" from "city""""
 
   override val columns = Seq("city_id", "city", "country_id", "last_update")
-  override val searchColumns = Seq("city_id", "city", "country_id")
+  override val searchColumns = Seq("city_id", "city", "country_id", "last_update")
 
   override def searchFragment(q: String) = {
     fr""""city_id"::text = $q or "city"::text = $q or "country_id"::text = $q or "last_update"::text = $q"""

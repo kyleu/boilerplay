@@ -3,7 +3,6 @@ package models.graphql.address
 
 import com.kyleu.projectile.graphql.{GraphQLContext, GraphQLSchemaHelper}
 import com.kyleu.projectile.graphql.GraphQLUtils._
-import com.kyleu.projectile.models.graphql.note.NoteSchema
 import models.address.{CountryRow, CountryRowResult}
 import sangria.execution.deferred.{Fetcher, HasId}
 import sangria.schema._
@@ -24,7 +23,7 @@ object CountryRowSchema extends GraphQLSchemaHelper("countryRow") {
   implicit lazy val countryRowType: sangria.schema.ObjectType[GraphQLContext, CountryRow] = deriveObjectType(
     sangria.macros.derive.AddFields(
       Field(
-        name = "cityCountryIdFkey",
+        name = "cities",
         fieldType = ListType(CityRowSchema.cityRowType),
         resolve = c => CityRowSchema.cityRowByCountryIdFetcher.deferRelSeq(
           CityRowSchema.cityRowByCountryIdRelation, c.value.countryId

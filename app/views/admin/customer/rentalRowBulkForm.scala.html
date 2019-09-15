@@ -1,0 +1,56 @@
+@* Generated File *@
+@(cfg: com.kyleu.projectile.models.config.UiConfig, modelSeq: Seq[models.customer.RentalRow], act: Call, debug: Boolean)(
+    implicit flash: Flash
+)@com.kyleu.projectile.views.html.layout.page(title = "Bulk Edit", cfg = cfg, icon = Some(models.template.Icons.rentalRow)) {
+  <form id="form-edit-rentalRow" action="@act" method="post">
+    <input type="hidden" class="primaryKeys" name="primaryKeys" value="@modelSeq.map(m => m.rentalId).mkString("//")" />
+    @com.kyleu.projectile.views.html.layout.card(Some("Selected Rentals")) {
+      <div class="right"><button type="submit" class="btn @cfg.user.buttonColor">Save <span>@modelSeq.size</span> Rentals</button></div>
+      <div class="right"><a href="" onclick="window.history.go(-1);return false;" class="btn-flat cancel-link">Cancel</a></div>
+      <div class="clear"></div>
+      <table>
+        <thead>
+          <tr>
+            <th>Rental Date</th>
+            <th>Inventory Id</th>
+            <th>Customer Id</th>
+            <th>Return Date</th>
+            <th>Staff Id</th>
+          </tr>
+        </thead>
+        <tbody>
+          @modelSeq.map { model =>
+            @rentalRowDataRow(model, Some(Html(s"<td style='text-align: right;'><a class='remove-pk' data-pk='${model.rentalId}' href='' title='Remove from editing'><i class='material-icons'>close</i></a></td>")))
+          }
+        </tbody>
+      </table>
+    }
+    @com.kyleu.projectile.views.html.layout.card(None) {
+      <table>
+        <tbody>
+          @com.kyleu.projectile.views.html.components.form.zonedDateTimeField(selected = false, key = "rentalDate", title = "Rental Date", value = None, nullable = false)
+          @com.kyleu.projectile.views.html.components.form.autocompleteField(
+            selected = false, key = "inventoryId", title = "Inventory Id", value = None, nullable = false, dataType = "long",
+            call = controllers.admin.store.routes.InventoryRowController.autocomplete(), acType = ("inventoryRow", "Inventory"), icon = models.template.Icons.inventoryRow
+          )
+          @com.kyleu.projectile.views.html.components.form.autocompleteField(
+            selected = false, key = "customerId", title = "Customer Id", value = None, nullable = false, dataType = "integer",
+            call = controllers.admin.customer.routes.CustomerRowController.autocomplete(), acType = ("customerRow", "Customer"), icon = models.template.Icons.customerRow
+          )
+          @com.kyleu.projectile.views.html.components.form.zonedDateTimeField(selected = false, key = "returnDate", title = "Return Date", value = None, nullable = true)
+          @com.kyleu.projectile.views.html.components.form.autocompleteField(
+            selected = false, key = "staffId", title = "Staff Id", value = None, nullable = false, dataType = "integer",
+            call = controllers.admin.store.routes.StaffRowController.autocomplete(), acType = ("staffRow", "Staff"), icon = models.template.Icons.staffRow
+          )
+          @com.kyleu.projectile.views.html.components.form.zonedDateTimeField(selected = false, key = "lastUpdate", title = "Last Update", value = None, nullable = false)
+        </tbody>
+      </table>
+    }
+  </form>
+}
+@com.kyleu.projectile.views.html.components.includeScalaJs(debug)
+@com.kyleu.projectile.views.html.components.includeAutocomplete(debug)
+<script>
+  $(function() { new FormService('form-edit-rentalRow'); });
+  $(function() { new BulkEditService('form-edit-rentalRow'); });
+</script>

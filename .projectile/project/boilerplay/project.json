@@ -4,7 +4,7 @@
   "input" : "boilerplay-db",
   "description" : "...",
   "features" : [ "doobie", "audit", "datamodel", "wiki", "graphql", "openapi", "service", "slick", "controller", "scalajs", "notes", "core", "tests" ],
-  "flags" : [ "components" ],
+  "flags" : [ ],
   "paths" : {
     "wiki" : "doc/src/main/paradox"
   },

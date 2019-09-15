@@ -5,7 +5,7 @@ import com.kyleu.projectile.controllers.{BaseController, ServiceAuthController}
 import com.kyleu.projectile.models.module.Application
 import com.kyleu.projectile.models.result.RelationCount
 import com.kyleu.projectile.models.result.orderBy.OrderBy
-import com.kyleu.projectile.models.web.ReftreeUtils._
+import com.kyleu.projectile.models.web.ControllerUtils
 import com.kyleu.projectile.services.auth.PermissionService
 import com.kyleu.projectile.services.note.NoteService
 import com.kyleu.projectile.util.DateUtils
@@ -23,59 +23,27 @@ class StoreRowController @javax.inject.Inject() (
     customerRowS: CustomerRowService, staffRowS: StaffRowService, inventoryRowS: InventoryRowService
 )(implicit ec: ExecutionContext) extends ServiceAuthController(svc) {
   PermissionService.registerModel("store", "StoreRow", "Store", Some(models.template.Icons.storeRow), "view", "edit")
-
-  def createForm = withSession("create.form", ("store", "StoreRow", "edit")) { implicit request => implicit td =>
-    val cancel = controllers.admin.store.routes.StoreRowController.list()
-    val call = controllers.admin.store.routes.StoreRowController.create()
-    Future.successful(Ok(views.html.admin.store.storeRowForm(
-      app.cfg(u = Some(request.identity), "store", "store", "Create"), StoreRow.empty(), "New Store", cancel, call, isNew = true, debug = app.config.debug
-    )))
-  }
-
-  def create = withSession("create", ("store", "StoreRow", "edit")) { implicit request => implicit td =>
-    svc.create(request, modelForm(request.body)).map {
-      case Some(model) => Redirect(controllers.admin.store.routes.StoreRowController.view(model.storeId))
-      case None => Redirect(controllers.admin.store.routes.StoreRowController.list())
-    }
-  }
+  private[this] val defaultOrderBy = Some("storeId" -> false)
 
   def list(q: Option[String], orderBy: Option[String], orderAsc: Boolean, limit: Option[Int], offset: Option[Int], t: Option[String] = None) = {
     withSession("view", ("store", "StoreRow", "view")) { implicit request => implicit td =>
       val startMs = DateUtils.nowMillis
-      val orderBys = OrderBy.forVals(orderBy, orderAsc).toSeq
+      val orderBys = OrderBy.forVals(orderBy, orderAsc, defaultOrderBy).toSeq
       searchWithCount(q, orderBys, limit, offset).map(r => renderChoice(t) {
         case MimeTypes.HTML => r._2.toList match {
           case model :: Nil if q.nonEmpty => Redirect(controllers.admin.store.routes.StoreRowController.view(model.storeId))
-          case _ => Ok(views.html.admin.store.storeRowList(app.cfg(u = Some(request.identity), "store", "store"), Some(r._1), r._2, q, orderBy, orderAsc, limit.getOrElse(100), offset.getOrElse(0)))
+          case _ => Ok(views.html.admin.store.storeRowList(app.cfg(u = Some(request.identity), "store", "store"), Some(r._1), r._2, q, orderBys.headOption.map(_.col), orderBys.exists(_.dir.asBool), limit.getOrElse(100), offset.getOrElse(0)))
         }
         case MimeTypes.JSON => Ok(StoreRowResult.fromRecords(q, Nil, orderBys, limit, offset, startMs, r._1, r._2).asJson)
         case BaseController.MimeTypes.csv => csvResponse("StoreRow", svc.csvFor(r._1, r._2))
-        case BaseController.MimeTypes.png => Ok(renderToPng(v = r._2)).as(BaseController.MimeTypes.png)
-        case BaseController.MimeTypes.svg => Ok(renderToSvg(v = r._2)).as(BaseController.MimeTypes.svg)
       })
     }
   }
 
   def autocomplete(q: Option[String], orderBy: Option[String], orderAsc: Boolean, limit: Option[Int]) = {
     withSession("autocomplete", ("store", "StoreRow", "view")) { implicit request => implicit td =>
-      val orderBys = OrderBy.forVals(orderBy, orderAsc).toSeq
+      val orderBys = OrderBy.forVals(orderBy, orderAsc, defaultOrderBy).toSeq
       search(q, orderBys, limit, None).map(r => Ok(r.map(_.toSummary).asJson))
-    }
-  }
-
-  def byAddressId(addressId: Int, orderBy: Option[String], orderAsc: Boolean, limit: Option[Int], offset: Option[Int], t: Option[String] = None, embedded: Boolean = false) = {
-    withSession("get.by.addressId", ("store", "StoreRow", "view")) { implicit request => implicit td =>
-      val orderBys = OrderBy.forVals(orderBy, orderAsc).toSeq
-      svc.getByAddressId(request, addressId, orderBys, limit, offset).map(models => renderChoice(t) {
-        case MimeTypes.HTML =>
-          val cfg = app.cfg(Some(request.identity), "store", "store", "Address Id")
-          val list = views.html.admin.store.storeRowByAddressId(cfg, addressId, models, orderBy, orderAsc, limit.getOrElse(5), offset.getOrElse(0))
-          if (embedded) { Ok(list) } else { Ok(page(s"Stores by Address Id [$addressId]", cfg)(card(None)(list))) }
-        case MimeTypes.JSON => Ok(models.asJson)
-        case BaseController.MimeTypes.csv => csvResponse("StoreRow by addressId", svc.csvFor(0, models))
-        case BaseController.MimeTypes.png => Ok(renderToPng(v = models)).as(BaseController.MimeTypes.png)
-        case BaseController.MimeTypes.svg => Ok(renderToSvg(v = models)).as(BaseController.MimeTypes.svg)
-      })
     }
   }
 
@@ -87,8 +55,6 @@ class StoreRowController @javax.inject.Inject() (
       case Some(model) => renderChoice(t) {
         case MimeTypes.HTML => Ok(views.html.admin.store.storeRowView(app.cfg(u = Some(request.identity), "store", "store", model.storeId.toString), model, notes, app.config.debug))
         case MimeTypes.JSON => Ok(model.asJson)
-        case BaseController.MimeTypes.png => Ok(renderToPng(v = model)).as(BaseController.MimeTypes.png)
-        case BaseController.MimeTypes.svg => Ok(renderToSvg(v = model)).as(BaseController.MimeTypes.svg)
       }
       case None => NotFound(s"No StoreRow found with storeId [$storeId]")
     })
@@ -118,7 +84,50 @@ class StoreRowController @javax.inject.Inject() (
       case Accepts.Json() => Ok(io.circe.Json.obj("status" -> io.circe.Json.fromString("removed")))
     })
   }
+  def createForm = withSession("create.form", ("store", "StoreRow", "edit")) { implicit request => implicit td =>
+    val cancel = controllers.admin.store.routes.StoreRowController.list()
+    val call = controllers.admin.store.routes.StoreRowController.create()
+    Future.successful(Ok(views.html.admin.store.storeRowForm(
+      app.cfg(u = Some(request.identity), "store", "store", "Create"), StoreRow.empty(), "New Store", cancel, call, isNew = true, debug = app.config.debug
+    )))
+  }
 
+  def create = withSession("create", ("store", "StoreRow", "edit")) { implicit request => implicit td =>
+    svc.create(request, modelForm(request.body)).map {
+      case Some(model) => Redirect(controllers.admin.store.routes.StoreRowController.view(model.storeId))
+      case None => Redirect(controllers.admin.store.routes.StoreRowController.list())
+    }
+  }
+
+  def bulkEdit = withSession("bulk.edit", ("store", "StoreRow", "edit")) { implicit request => implicit td =>
+    val form = ControllerUtils.getForm(request.body)
+    val pks = form("primaryKeys").split("//").map(_.trim).filter(_.nonEmpty).map(_.split("---").map(_.trim).filter(_.nonEmpty).toList).toList
+    val changes = modelForm(request.body)
+    svc.updateBulk(request, pks, changes).map(msg => Ok("OK: " + msg))
+  }
+
+  def byAddressId(addressId: Int, orderBy: Option[String], orderAsc: Boolean, limit: Option[Int], offset: Option[Int], t: Option[String] = None, embedded: Boolean = false) = {
+    withSession("get.by.addressId", ("store", "StoreRow", "view")) { implicit request => implicit td =>
+      val orderBys = OrderBy.forVals(orderBy, orderAsc, defaultOrderBy).toSeq
+      svc.getByAddressId(request, addressId, orderBys, limit, offset).map(models => renderChoice(t) {
+        case MimeTypes.HTML =>
+          val cfg = app.cfg(Some(request.identity), "store", "store", "Address Id")
+          val list = views.html.admin.store.storeRowByAddressId(cfg, addressId, models, orderBy, orderAsc, limit.getOrElse(5), offset.getOrElse(0))
+          if (embedded) { Ok(list) } else { Ok(page(s"Stores by Address Id [$addressId]", cfg)(card(None)(list))) }
+        case MimeTypes.JSON => Ok(models.asJson)
+        case BaseController.MimeTypes.csv => csvResponse("StoreRow by addressId", svc.csvFor(0, models))
+      })
+    }
+  }
+
+  def byAddressIdBulkForm(addressId: Int) = {
+    withSession("get.by.addressId", ("store", "StoreRow", "edit")) { implicit request => implicit td =>
+      svc.getByAddressId(request, addressId).map { modelSeq =>
+        val act = controllers.admin.store.routes.StoreRowController.bulkEdit()
+        Ok(views.html.admin.store.storeRowBulkForm(app.cfg(Some(request.identity), "store", "store", "Bulk Edit"), modelSeq, act, debug = app.config.debug))
+      }
+    }
+  }
   def relationCounts(storeId: Int) = withSession("relation.counts", ("store", "StoreRow", "view")) { implicit request => implicit td =>
     val customerRowByStoreIdF = customerRowS.countByStoreId(request, storeId)
     val inventoryRowByStoreIdF = inventoryRowS.countByStoreId(request, storeId)

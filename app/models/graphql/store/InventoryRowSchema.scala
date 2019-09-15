@@ -3,7 +3,6 @@ package models.graphql.store
 
 import com.kyleu.projectile.graphql.{GraphQLContext, GraphQLSchemaHelper}
 import com.kyleu.projectile.graphql.GraphQLUtils._
-import com.kyleu.projectile.models.graphql.note.NoteSchema
 import models.graphql.customer.RentalRowSchema
 import models.graphql.film.FilmRowSchema
 import models.store.{InventoryRow, InventoryRowResult}
@@ -36,19 +35,19 @@ object InventoryRowSchema extends GraphQLSchemaHelper("inventoryRow") {
   implicit lazy val inventoryRowType: sangria.schema.ObjectType[GraphQLContext, InventoryRow] = deriveObjectType(
     sangria.macros.derive.AddFields(
       Field(
-        name = "rentalInventoryIdFkey",
+        name = "rentals",
         fieldType = ListType(RentalRowSchema.rentalRowType),
         resolve = c => RentalRowSchema.rentalRowByInventoryIdFetcher.deferRelSeq(
           RentalRowSchema.rentalRowByInventoryIdRelation, c.value.inventoryId
         )
       ),
       Field(
-        name = "inventoryFilmIdFkeyRel",
+        name = "film",
         fieldType = FilmRowSchema.filmRowType,
         resolve = ctx => FilmRowSchema.filmRowByPrimaryKeyFetcher.defer(ctx.value.filmId)
       ),
       Field(
-        name = "inventoryStoreIdFkeyRel",
+        name = "store",
         fieldType = StoreRowSchema.storeRowType,
         resolve = ctx => StoreRowSchema.storeRowByPrimaryKeyFetcher.defer(ctx.value.storeId)
       )

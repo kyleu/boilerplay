@@ -4,13 +4,31 @@
   "features" : [ "doobie", "datamodel", "auth", "graphql", "service", "slick", "controller", "notes", "json", "core" ],
   "ignored" : [ ],
   "overrides" : [ {
+    "k" : "className",
+    "v" : "StoreRow"
+  }, {
+    "k" : "title",
+    "v" : "Store"
+  }, {
+    "k" : "plural",
+    "v" : "Stores"
+  }, {
     "k" : "store_id.type",
     "v" : "integer"
   }, {
-    "k" : "address_id.search",
-    "v" : "true"
+    "k" : "fk.store_address_id_fkey.propertyName",
+    "v" : "address"
   }, {
-    "k" : "last_update.search",
-    "v" : "true"
+    "k" : "reference.staffStoreIdFkey.propertyName",
+    "v" : "staff"
+  }, {
+    "k" : "reference.inventoryStoreIdFkey.propertyName",
+    "v" : "inventories"
+  }, {
+    "k" : "reference.customerStoreIdFkey.propertyName",
+    "v" : "customers"
+  }, {
+    "k" : "defaultOrder",
+    "v" : "desc-store_id"
   } ]
 }

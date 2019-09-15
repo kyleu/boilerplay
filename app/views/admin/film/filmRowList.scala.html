@@ -11,10 +11,15 @@
     cols = Seq(
       "filmId" -> "Film Id",
       "title" -> "Title",
+      "releaseYear" -> "Release Year",
       "languageId" -> "Language Id",
       "originalLanguageId" -> "Original Language Id",
+      "rentalDuration" -> "Rental Duration",
+      "rentalRate" -> "Rental Rate",
+      "length" -> "Length",
       "rating" -> "Rating",
-      "lastUpdate" -> "Last Update"
+      "lastUpdate" -> "Last Update",
+      "fulltext" -> "Fulltext"
     ),
     totalCount = totalCount,
     rows = modelSeq.map(model => views.html.admin.film.filmRowDataRow(model, additional = aug._3.get(model).flatten)),

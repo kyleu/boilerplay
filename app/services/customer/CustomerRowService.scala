@@ -8,6 +8,7 @@ import com.kyleu.projectile.services.ModelServiceHelper
 import com.kyleu.projectile.services.database.JdbcDatabase
 import com.kyleu.projectile.util.{Credentials, CsvUtils}
 import com.kyleu.projectile.util.tracing.{TraceData, TracingService}
+import java.time.LocalDate
 import models.customer.CustomerRow
 import models.queries.customer.CustomerRowQueries
 import scala.concurrent.{ExecutionContext, Future}
@@ -63,6 +64,22 @@ class CustomerRowService @javax.inject.Inject() (val db: JdbcDatabase, override 
     } else {
       traceF("get.by.addressId.seq") { td =>
         db.queryF(CustomerRowQueries.GetByAddressIdSeq(addressIdSeq))(td)
+      }
+    }
+  }
+
+  def countByCreateDate(creds: Credentials, createDate: LocalDate)(implicit trace: TraceData) = checkPerm(creds, "view") {
+    traceF("count.by.createDate")(td => db.queryF(CustomerRowQueries.CountByCreateDate(createDate))(td))
+  }
+  def getByCreateDate(creds: Credentials, createDate: LocalDate, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData) = checkPerm(creds, "view") {
+    traceF("get.by.createDate")(td => db.queryF(CustomerRowQueries.GetByCreateDate(createDate, orderBys, limit, offset))(td))
+  }
+  def getByCreateDateSeq(creds: Credentials, createDateSeq: Seq[LocalDate])(implicit trace: TraceData) = checkPerm(creds, "view") {
+    if (createDateSeq.isEmpty) {
+      Future.successful(Nil)
+    } else {
+      traceF("get.by.createDate.seq") { td =>
+        db.queryF(CustomerRowQueries.GetByCreateDateSeq(createDateSeq))(td)
       }
     }
   }
@@ -151,11 +168,15 @@ class CustomerRowService @javax.inject.Inject() (val db: JdbcDatabase, override 
   def insert(creds: Credentials, model: CustomerRow)(implicit trace: TraceData) = checkPerm(creds, "edit") {
     traceF("insert")(td => db.executeF(CustomerRowQueries.insert(model))(td).flatMap {
       case 1 => getByPrimaryKey(creds, model.customerId)(td)
-      case _ => throw new IllegalStateException("Unable to find newly-inserted Customer.")
+      case _ => throw new IllegalStateException("Unable to find newly-inserted Customer")
     })
   }
   def insertBatch(creds: Credentials, models: Seq[CustomerRow])(implicit trace: TraceData) = checkPerm(creds, "edit") {
-    traceF("insertBatch")(td => db.executeF(CustomerRowQueries.insertBatch(models))(td))
+    traceF("insertBatch")(td => if (models.isEmpty) {
+      Future.successful(0)
+    } else {
+      db.executeF(CustomerRowQueries.insertBatch(models))(td)
+    })
   }
   def create(creds: Credentials, fields: Seq[DataField])(implicit trace: TraceData) = checkPerm(creds, "edit") {
     traceF("create")(td => db.executeF(CustomerRowQueries.create(fields))(td).flatMap { _ =>
@@ -183,6 +204,12 @@ class CustomerRowService @javax.inject.Inject() (val db: JdbcDatabase, override 
       }
       case None => throw new IllegalStateException(s"Cannot find CustomerRow matching [$customerId]")
     })
+  }
+
+  def updateBulk(creds: Credentials, pks: Seq[Seq[Any]], fields: Seq[DataField])(implicit trace: TraceData) = checkPerm(creds, "edit") {
+    db.executeF(CustomerRowQueries.updateBulk(pks, fields))(trace).map { x =>
+      s"Updated [${fields.size}] fields for [$x of ${pks.size}] Customers"
+    }
   }
 
   def csvFor(totalCount: Int, rows: Seq[CustomerRow])(implicit trace: TraceData) = {

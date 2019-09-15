@@ -4,13 +4,22 @@
   "features" : [ "doobie", "datamodel", "auth", "graphql", "service", "slick", "controller", "notes", "json", "core" ],
   "ignored" : [ ],
   "overrides" : [ {
-    "k" : "last_update.search",
-    "v" : "true"
+    "k" : "className",
+    "v" : "FilmActorRow"
+  }, {
+    "k" : "title",
+    "v" : "Film Actor"
+  }, {
+    "k" : "plural",
+    "v" : "Film Actors"
   }, {
     "k" : "fk.film_actor_film_id_fkey.propertyName",
-    "v" : "filmActorFilmIdFkeyRel"
+    "v" : "film"
   }, {
     "k" : "fk.film_actor_actor_id_fkey.propertyName",
-    "v" : "filmActorActorIdFkeyRel"
+    "v" : "actor"
+  }, {
+    "k" : "defaultOrder",
+    "v" : "desc-last_update"
   } ]
 }

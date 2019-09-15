@@ -59,5 +59,5 @@ final case class RentalRow(
     DataField("lastUpdate", Some(lastUpdate.toString))
   )
 
-  def toSummary = DataSummary(model = "rentalRow", pk = rentalId.toString, title = s"rentalDate: $rentalDate, inventoryId: $inventoryId, customerId: $customerId, returnDate: ${returnDate.map(_.toString).getOrElse("∅")}, staffId: $staffId")
+  def toSummary = DataSummary(model = "rentalRow", pk = rentalId.toString, title = s"rentalId: $rentalId, rentalDate: $rentalDate, inventoryId: $inventoryId, customerId: $customerId, returnDate: ${returnDate.map(_.toString).getOrElse("∅")}, staffId: $staffId")
 }

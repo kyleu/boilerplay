@@ -1,0 +1,53 @@
+@* Generated File *@
+@(cfg: com.kyleu.projectile.models.config.UiConfig, modelSeq: Seq[models.address.AddressRow], act: Call, debug: Boolean)(
+    implicit flash: Flash
+)@com.kyleu.projectile.views.html.layout.page(title = "Bulk Edit", cfg = cfg, icon = Some(models.template.Icons.addressRow)) {
+  <form id="form-edit-addressRow" action="@act" method="post">
+    <input type="hidden" class="primaryKeys" name="primaryKeys" value="@modelSeq.map(m => m.addressId).mkString("//")" />
+    @com.kyleu.projectile.views.html.layout.card(Some("Selected Addresses")) {
+      <div class="right"><button type="submit" class="btn @cfg.user.buttonColor">Save <span>@modelSeq.size</span> Addresses</button></div>
+      <div class="right"><a href="" onclick="window.history.go(-1);return false;" class="btn-flat cancel-link">Cancel</a></div>
+      <div class="clear"></div>
+      <table>
+        <thead>
+          <tr>
+            <th>Address</th>
+            <th>Address2</th>
+            <th>District</th>
+            <th>City Id</th>
+            <th>Postal Code</th>
+            <th>Phone</th>
+            <th>Last Update</th>
+          </tr>
+        </thead>
+        <tbody>
+          @modelSeq.map { model =>
+            @addressRowDataRow(model, Some(Html(s"<td style='text-align: right;'><a class='remove-pk' data-pk='${model.addressId}' href='' title='Remove from editing'><i class='material-icons'>close</i></a></td>")))
+          }
+        </tbody>
+      </table>
+    }
+    @com.kyleu.projectile.views.html.layout.card(None) {
+      <table>
+        <tbody>
+          @com.kyleu.projectile.views.html.components.form.textField(selected = false, key = "address", title = "Address", value = None, nullable = false)
+          @com.kyleu.projectile.views.html.components.form.textField(selected = false, key = "address2", title = "Address2", value = None, nullable = true)
+          @com.kyleu.projectile.views.html.components.form.textField(selected = false, key = "district", title = "District", value = None, nullable = false)
+          @com.kyleu.projectile.views.html.components.form.autocompleteField(
+            selected = false, key = "cityId", title = "City Id", value = None, nullable = false, dataType = "integer",
+            call = controllers.admin.address.routes.CityRowController.autocomplete(), acType = ("cityRow", "City"), icon = models.template.Icons.cityRow
+          )
+          @com.kyleu.projectile.views.html.components.form.textField(selected = false, key = "postalCode", title = "Postal Code", value = None, nullable = true)
+          @com.kyleu.projectile.views.html.components.form.textField(selected = false, key = "phone", title = "Phone", value = None, nullable = false)
+          @com.kyleu.projectile.views.html.components.form.zonedDateTimeField(selected = false, key = "lastUpdate", title = "Last Update", value = None, nullable = false)
+        </tbody>
+      </table>
+    }
+  </form>
+}
+@com.kyleu.projectile.views.html.components.includeScalaJs(debug)
+@com.kyleu.projectile.views.html.components.includeAutocomplete(debug)
+<script>
+  $(function() { new FormService('form-edit-addressRow'); });
+  $(function() { new BulkEditService('form-edit-addressRow'); });
+</script>

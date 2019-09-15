@@ -7,6 +7,9 @@
     @model.title
   </td>
   <td>
+    @model.releaseYear
+  </td>
+  <td>
     @model.languageId
     <a href="@controllers.admin.customer.routes.LanguageRowController.view(model.languageId)">
       <i class="material-icons small">@models.template.Icons.languageRow</i>
@@ -21,10 +24,22 @@
     }
   </td>
   <td>
+    @model.rentalDuration
+  </td>
+  <td>
+    @model.rentalRate
+  </td>
+  <td>
+    @model.length
+  </td>
+  <td>
     @model.rating
   </td>
   <td>
     @model.lastUpdate
+  </td>
+  <td>
+    @model.fulltext
   </td>
   @additional
 </tr>

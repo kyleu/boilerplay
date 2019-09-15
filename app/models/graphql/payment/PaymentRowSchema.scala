@@ -3,7 +3,6 @@ package models.graphql.payment
 
 import com.kyleu.projectile.graphql.{GraphQLContext, GraphQLSchemaHelper}
 import com.kyleu.projectile.graphql.GraphQLUtils._
-import com.kyleu.projectile.models.graphql.note.NoteSchema
 import models.graphql.customer.{CustomerRowSchema, RentalRowSchema}
 import models.graphql.store.StaffRowSchema
 import models.payment.{PaymentRow, PaymentRowResult}
@@ -45,17 +44,17 @@ object PaymentRowSchema extends GraphQLSchemaHelper("paymentRow") {
   implicit lazy val paymentRowType: sangria.schema.ObjectType[GraphQLContext, PaymentRow] = deriveObjectType(
     sangria.macros.derive.AddFields(
       Field(
-        name = "paymentStaffIdFkeyRel",
+        name = "staff",
         fieldType = StaffRowSchema.staffRowType,
         resolve = ctx => StaffRowSchema.staffRowByPrimaryKeyFetcher.defer(ctx.value.staffId)
       ),
       Field(
-        name = "paymentRentalIdFkeyRel",
+        name = "rental",
         fieldType = RentalRowSchema.rentalRowType,
         resolve = ctx => RentalRowSchema.rentalRowByPrimaryKeyFetcher.defer(ctx.value.rentalId)
       ),
       Field(
-        name = "paymentCustomerIdFkeyRel",
+        name = "customer",
         fieldType = CustomerRowSchema.customerRowType,
         resolve = ctx => CustomerRowSchema.customerRowByPrimaryKeyFetcher.defer(ctx.value.customerId)
       )

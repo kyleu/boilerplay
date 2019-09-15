@@ -3,7 +3,6 @@ package models.graphql.film
 
 import com.kyleu.projectile.graphql.{GraphQLContext, GraphQLSchemaHelper}
 import com.kyleu.projectile.graphql.GraphQLUtils._
-import com.kyleu.projectile.models.graphql.note.NoteSchema
 import models.film.{ActorRow, ActorRowResult}
 import sangria.execution.deferred.{Fetcher, HasId}
 import sangria.schema._
@@ -26,7 +25,7 @@ object ActorRowSchema extends GraphQLSchemaHelper("actorRow") {
   implicit lazy val actorRowType: sangria.schema.ObjectType[GraphQLContext, ActorRow] = deriveObjectType(
     sangria.macros.derive.AddFields(
       Field(
-        name = "filmActorActorIdFkey",
+        name = "films",
         fieldType = ListType(FilmActorRowSchema.filmActorRowType),
         resolve = c => FilmActorRowSchema.filmActorRowByActorIdFetcher.deferRelSeq(
           FilmActorRowSchema.filmActorRowByActorIdRelation, c.value.actorId

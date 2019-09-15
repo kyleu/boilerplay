@@ -52,6 +52,22 @@ class FilmRowService @javax.inject.Inject() (val db: JdbcDatabase, override val 
     traceF("search.exact")(td => db.queryF(FilmRowQueries.searchExact(q, orderBys, limit, offset))(td))
   }
 
+  def countByDescription(creds: Credentials, description: String)(implicit trace: TraceData) = checkPerm(creds, "view") {
+    traceF("count.by.description")(td => db.queryF(FilmRowQueries.CountByDescription(description))(td))
+  }
+  def getByDescription(creds: Credentials, description: String, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData) = checkPerm(creds, "view") {
+    traceF("get.by.description")(td => db.queryF(FilmRowQueries.GetByDescription(description, orderBys, limit, offset))(td))
+  }
+  def getByDescriptionSeq(creds: Credentials, descriptionSeq: Seq[String])(implicit trace: TraceData) = checkPerm(creds, "view") {
+    if (descriptionSeq.isEmpty) {
+      Future.successful(Nil)
+    } else {
+      traceF("get.by.description.seq") { td =>
+        db.queryF(FilmRowQueries.GetByDescriptionSeq(descriptionSeq))(td)
+      }
+    }
+  }
+
   def countByFilmId(creds: Credentials, filmId: Int)(implicit trace: TraceData) = checkPerm(creds, "view") {
     traceF("count.by.filmId")(td => db.queryF(FilmRowQueries.CountByFilmId(filmId))(td))
   }
@@ -64,6 +80,22 @@ class FilmRowService @javax.inject.Inject() (val db: JdbcDatabase, override val 
     } else {
       traceF("get.by.filmId.seq") { td =>
         db.queryF(FilmRowQueries.GetByFilmIdSeq(filmIdSeq))(td)
+      }
+    }
+  }
+
+  def countByFulltext(creds: Credentials, fulltext: String)(implicit trace: TraceData) = checkPerm(creds, "view") {
+    traceF("count.by.fulltext")(td => db.queryF(FilmRowQueries.CountByFulltext(fulltext))(td))
+  }
+  def getByFulltext(creds: Credentials, fulltext: String, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData) = checkPerm(creds, "view") {
+    traceF("get.by.fulltext")(td => db.queryF(FilmRowQueries.GetByFulltext(fulltext, orderBys, limit, offset))(td))
+  }
+  def getByFulltextSeq(creds: Credentials, fulltextSeq: Seq[String])(implicit trace: TraceData) = checkPerm(creds, "view") {
+    if (fulltextSeq.isEmpty) {
+      Future.successful(Nil)
+    } else {
+      traceF("get.by.fulltext.seq") { td =>
+        db.queryF(FilmRowQueries.GetByFulltextSeq(fulltextSeq))(td)
       }
     }
   }
@@ -100,6 +132,22 @@ class FilmRowService @javax.inject.Inject() (val db: JdbcDatabase, override val 
     }
   }
 
+  def countByLength(creds: Credentials, length: Int)(implicit trace: TraceData) = checkPerm(creds, "view") {
+    traceF("count.by.length")(td => db.queryF(FilmRowQueries.CountByLength(length))(td))
+  }
+  def getByLength(creds: Credentials, length: Int, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData) = checkPerm(creds, "view") {
+    traceF("get.by.length")(td => db.queryF(FilmRowQueries.GetByLength(length, orderBys, limit, offset))(td))
+  }
+  def getByLengthSeq(creds: Credentials, lengthSeq: Seq[Int])(implicit trace: TraceData) = checkPerm(creds, "view") {
+    if (lengthSeq.isEmpty) {
+      Future.successful(Nil)
+    } else {
+      traceF("get.by.length.seq") { td =>
+        db.queryF(FilmRowQueries.GetByLengthSeq(lengthSeq))(td)
+      }
+    }
+  }
+
   def countByOriginalLanguageId(creds: Credentials, originalLanguageId: Int)(implicit trace: TraceData) = checkPerm(creds, "view") {
     traceF("count.by.originalLanguageId")(td => db.queryF(FilmRowQueries.CountByOriginalLanguageId(originalLanguageId))(td))
   }
@@ -132,6 +180,54 @@ class FilmRowService @javax.inject.Inject() (val db: JdbcDatabase, override val 
     }
   }
 
+  def countByReleaseYear(creds: Credentials, releaseYear: Long)(implicit trace: TraceData) = checkPerm(creds, "view") {
+    traceF("count.by.releaseYear")(td => db.queryF(FilmRowQueries.CountByReleaseYear(releaseYear))(td))
+  }
+  def getByReleaseYear(creds: Credentials, releaseYear: Long, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData) = checkPerm(creds, "view") {
+    traceF("get.by.releaseYear")(td => db.queryF(FilmRowQueries.GetByReleaseYear(releaseYear, orderBys, limit, offset))(td))
+  }
+  def getByReleaseYearSeq(creds: Credentials, releaseYearSeq: Seq[Long])(implicit trace: TraceData) = checkPerm(creds, "view") {
+    if (releaseYearSeq.isEmpty) {
+      Future.successful(Nil)
+    } else {
+      traceF("get.by.releaseYear.seq") { td =>
+        db.queryF(FilmRowQueries.GetByReleaseYearSeq(releaseYearSeq))(td)
+      }
+    }
+  }
+
+  def countByRentalDuration(creds: Credentials, rentalDuration: Int)(implicit trace: TraceData) = checkPerm(creds, "view") {
+    traceF("count.by.rentalDuration")(td => db.queryF(FilmRowQueries.CountByRentalDuration(rentalDuration))(td))
+  }
+  def getByRentalDuration(creds: Credentials, rentalDuration: Int, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData) = checkPerm(creds, "view") {
+    traceF("get.by.rentalDuration")(td => db.queryF(FilmRowQueries.GetByRentalDuration(rentalDuration, orderBys, limit, offset))(td))
+  }
+  def getByRentalDurationSeq(creds: Credentials, rentalDurationSeq: Seq[Int])(implicit trace: TraceData) = checkPerm(creds, "view") {
+    if (rentalDurationSeq.isEmpty) {
+      Future.successful(Nil)
+    } else {
+      traceF("get.by.rentalDuration.seq") { td =>
+        db.queryF(FilmRowQueries.GetByRentalDurationSeq(rentalDurationSeq))(td)
+      }
+    }
+  }
+
+  def countByRentalRate(creds: Credentials, rentalRate: BigDecimal)(implicit trace: TraceData) = checkPerm(creds, "view") {
+    traceF("count.by.rentalRate")(td => db.queryF(FilmRowQueries.CountByRentalRate(rentalRate))(td))
+  }
+  def getByRentalRate(creds: Credentials, rentalRate: BigDecimal, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData) = checkPerm(creds, "view") {
+    traceF("get.by.rentalRate")(td => db.queryF(FilmRowQueries.GetByRentalRate(rentalRate, orderBys, limit, offset))(td))
+  }
+  def getByRentalRateSeq(creds: Credentials, rentalRateSeq: Seq[BigDecimal])(implicit trace: TraceData) = checkPerm(creds, "view") {
+    if (rentalRateSeq.isEmpty) {
+      Future.successful(Nil)
+    } else {
+      traceF("get.by.rentalRate.seq") { td =>
+        db.queryF(FilmRowQueries.GetByRentalRateSeq(rentalRateSeq))(td)
+      }
+    }
+  }
+
   def countByTitle(creds: Credentials, title: String)(implicit trace: TraceData) = checkPerm(creds, "view") {
     traceF("count.by.title")(td => db.queryF(FilmRowQueries.CountByTitle(title))(td))
   }
@@ -152,11 +248,15 @@ class FilmRowService @javax.inject.Inject() (val db: JdbcDatabase, override val 
   def insert(creds: Credentials, model: FilmRow)(implicit trace: TraceData) = checkPerm(creds, "edit") {
     traceF("insert")(td => db.executeF(FilmRowQueries.insert(model))(td).flatMap {
       case 1 => getByPrimaryKey(creds, model.filmId)(td)
-      case _ => throw new IllegalStateException("Unable to find newly-inserted Film.")
+      case _ => throw new IllegalStateException("Unable to find newly-inserted Film")
     })
   }
   def insertBatch(creds: Credentials, models: Seq[FilmRow])(implicit trace: TraceData) = checkPerm(creds, "edit") {
-    traceF("insertBatch")(td => db.executeF(FilmRowQueries.insertBatch(models))(td))
+    traceF("insertBatch")(td => if (models.isEmpty) {
+      Future.successful(0)
+    } else {
+      db.executeF(FilmRowQueries.insertBatch(models))(td)
+    })
   }
   def create(creds: Credentials, fields: Seq[DataField])(implicit trace: TraceData) = checkPerm(creds, "edit") {
     traceF("create")(td => db.executeF(FilmRowQueries.create(fields))(td).flatMap { _ =>
@@ -184,6 +284,12 @@ class FilmRowService @javax.inject.Inject() (val db: JdbcDatabase, override val 
       }
       case None => throw new IllegalStateException(s"Cannot find FilmRow matching [$filmId]")
     })
+  }
+
+  def updateBulk(creds: Credentials, pks: Seq[Seq[Any]], fields: Seq[DataField])(implicit trace: TraceData) = checkPerm(creds, "edit") {
+    db.executeF(FilmRowQueries.updateBulk(pks, fields))(trace).map { x =>
+      s"Updated [${fields.size}] fields for [$x of ${pks.size}] Films"
+    }
   }
 
   def csvFor(totalCount: Int, rows: Seq[FilmRow])(implicit trace: TraceData) = {

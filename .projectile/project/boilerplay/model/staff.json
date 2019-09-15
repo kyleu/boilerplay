@@ -4,34 +4,43 @@
   "features" : [ "doobie", "datamodel", "auth", "graphql", "service", "slick", "controller", "notes", "json", "core" ],
   "ignored" : [ ],
   "overrides" : [ {
+    "k" : "className",
+    "v" : "StaffRow"
+  }, {
+    "k" : "title",
+    "v" : "Staff"
+  }, {
     "k" : "plural",
     "v" : "Staff"
   }, {
     "k" : "staff_id.type",
     "v" : "integer"
   }, {
-    "k" : "first_name.search",
+    "k" : "first_name.globalSearch",
     "v" : "true"
   }, {
-    "k" : "last_name.search",
+    "k" : "last_name.globalSearch",
     "v" : "true"
   }, {
-    "k" : "address_id.search",
+    "k" : "email.globalSearch",
     "v" : "true"
   }, {
-    "k" : "email.search",
-    "v" : "true"
-  }, {
-    "k" : "store_id.search",
-    "v" : "true"
-  }, {
-    "k" : "username.search",
+    "k" : "username.globalSearch",
     "v" : "true"
   }, {
     "k" : "fk.staff_store_id_fkey.propertyName",
-    "v" : "staffStoreIdFkeyRel"
+    "v" : "store"
   }, {
     "k" : "fk.staff_address_id_fkey.propertyName",
-    "v" : "staffAddressIdFkeyRel"
+    "v" : "address"
+  }, {
+    "k" : "reference.rentalStaffIdFkey.propertyName",
+    "v" : "rentals"
+  }, {
+    "k" : "reference.paymentStaffIdFkey.propertyName",
+    "v" : "payments"
+  }, {
+    "k" : "defaultOrder",
+    "v" : "desc-last_update"
   } ]
 }

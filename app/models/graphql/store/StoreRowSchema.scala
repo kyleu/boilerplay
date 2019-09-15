@@ -3,7 +3,6 @@ package models.graphql.store
 
 import com.kyleu.projectile.graphql.{GraphQLContext, GraphQLSchemaHelper}
 import com.kyleu.projectile.graphql.GraphQLUtils._
-import com.kyleu.projectile.models.graphql.note.NoteSchema
 import models.graphql.address.AddressRowSchema
 import models.graphql.customer.CustomerRowSchema
 import models.store.{StoreRow, StoreRowResult}
@@ -33,28 +32,28 @@ object StoreRowSchema extends GraphQLSchemaHelper("storeRow") {
   implicit lazy val storeRowType: sangria.schema.ObjectType[GraphQLContext, StoreRow] = deriveObjectType(
     sangria.macros.derive.AddFields(
       Field(
-        name = "customerStoreIdFkey",
+        name = "customers",
         fieldType = ListType(CustomerRowSchema.customerRowType),
         resolve = c => CustomerRowSchema.customerRowByStoreIdFetcher.deferRelSeq(
           CustomerRowSchema.customerRowByStoreIdRelation, c.value.storeId
         )
       ),
       Field(
-        name = "inventoryStoreIdFkey",
+        name = "inventories",
         fieldType = ListType(InventoryRowSchema.inventoryRowType),
         resolve = c => InventoryRowSchema.inventoryRowByStoreIdFetcher.deferRelSeq(
           InventoryRowSchema.inventoryRowByStoreIdRelation, c.value.storeId
         )
       ),
       Field(
-        name = "staffStoreIdFkey",
+        name = "staff",
         fieldType = ListType(StaffRowSchema.staffRowType),
         resolve = c => StaffRowSchema.staffRowByStoreIdFetcher.deferRelSeq(
           StaffRowSchema.staffRowByStoreIdRelation, c.value.storeId
         )
       ),
       Field(
-        name = "storeAddressIdFkeyRel",
+        name = "address",
         fieldType = AddressRowSchema.addressRowType,
         resolve = ctx => AddressRowSchema.addressRowByPrimaryKeyFetcher.defer(ctx.value.addressId)
       )

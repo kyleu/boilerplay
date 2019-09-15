@@ -4,13 +4,34 @@
   "features" : [ "doobie", "datamodel", "auth", "graphql", "service", "slick", "controller", "notes", "json", "core" ],
   "ignored" : [ ],
   "overrides" : [ {
+    "k" : "className",
+    "v" : "CityRow"
+  }, {
+    "k" : "title",
+    "v" : "City"
+  }, {
+    "k" : "plural",
+    "v" : "Cities"
+  }, {
     "k" : "city_id.type",
     "v" : "integer"
   }, {
-    "k" : "city.search",
+    "k" : "city.globalSearch",
+    "v" : "true"
+  }, {
+    "k" : "last_update.summary",
+    "v" : "true"
+  }, {
+    "k" : "last_update.localSearch",
     "v" : "true"
   }, {
     "k" : "fk.city_country_id_fkey.propertyName",
-    "v" : "cityCountryIdFkeyRel"
+    "v" : "country"
+  }, {
+    "k" : "reference.addressCityIdFkey.propertyName",
+    "v" : "addresses"
+  }, {
+    "k" : "defaultOrder",
+    "v" : "desc-last_update"
   } ]
 }

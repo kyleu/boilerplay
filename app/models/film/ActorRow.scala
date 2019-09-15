@@ -44,5 +44,5 @@ final case class ActorRow(
     DataField("lastUpdate", Some(lastUpdate.toString))
   )
 
-  def toSummary = DataSummary(model = "actorRow", pk = actorId.toString, title = s"firstName: $firstName, lastName: $lastName, lastUpdate: $lastUpdate")
+  def toSummary = DataSummary(model = "actorRow", pk = actorId.toString, title = s"actorId: $actorId, firstName: $firstName, lastName: $lastName, lastUpdate: $lastUpdate")
 }

@@ -101,11 +101,15 @@ class FilmActorRowService @javax.inject.Inject() (val db: JdbcDatabase, override
   def insert(creds: Credentials, model: FilmActorRow)(implicit trace: TraceData) = checkPerm(creds, "edit") {
     traceF("insert")(td => db.executeF(FilmActorRowQueries.insert(model))(td).flatMap {
       case 1 => getByPrimaryKey(creds, model.actorId, model.filmId)(td)
-      case _ => throw new IllegalStateException("Unable to find newly-inserted Film Actor.")
+      case _ => throw new IllegalStateException("Unable to find newly-inserted Film Actor")
     })
   }
   def insertBatch(creds: Credentials, models: Seq[FilmActorRow])(implicit trace: TraceData) = checkPerm(creds, "edit") {
-    traceF("insertBatch")(td => db.executeF(FilmActorRowQueries.insertBatch(models))(td))
+    traceF("insertBatch")(td => if (models.isEmpty) {
+      Future.successful(0)
+    } else {
+      db.executeF(FilmActorRowQueries.insertBatch(models))(td)
+    })
   }
   def create(creds: Credentials, fields: Seq[DataField])(implicit trace: TraceData) = checkPerm(creds, "edit") {
     traceF("create")(td => db.executeF(FilmActorRowQueries.create(fields))(td).flatMap { _ =>
@@ -133,6 +137,12 @@ class FilmActorRowService @javax.inject.Inject() (val db: JdbcDatabase, override
       }
       case None => throw new IllegalStateException(s"Cannot find FilmActorRow matching [$actorId, $filmId]")
     })
+  }
+
+  def updateBulk(creds: Credentials, pks: Seq[Seq[Any]], fields: Seq[DataField])(implicit trace: TraceData) = checkPerm(creds, "edit") {
+    db.executeF(FilmActorRowQueries.updateBulk(pks, fields))(trace).map { x =>
+      s"Updated [${fields.size}] fields for [$x of ${pks.size}] Film Actors"
+    }
   }
 
   def csvFor(totalCount: Int, rows: Seq[FilmActorRow])(implicit trace: TraceData) = {

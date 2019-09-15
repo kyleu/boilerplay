@@ -11,7 +11,8 @@
     cols = Seq(
       "cityId" -> "City Id",
       "city" -> "City",
-      "countryId" -> "Country Id"
+      "countryId" -> "Country Id",
+      "lastUpdate" -> "Last Update"
     ),
     totalCount = totalCount,
     rows = modelSeq.map(model => views.html.admin.address.cityRowDataRow(model, additional = aug._3.get(model).flatten)),

@@ -3,7 +3,6 @@ package models.graphql.customer
 
 import com.kyleu.projectile.graphql.{GraphQLContext, GraphQLSchemaHelper}
 import com.kyleu.projectile.graphql.GraphQLUtils._
-import com.kyleu.projectile.models.graphql.note.NoteSchema
 import models.customer.{CustomerRow, CustomerRowResult}
 import models.graphql.address.AddressRowSchema
 import models.graphql.payment.PaymentRowSchema
@@ -29,6 +28,8 @@ object CustomerRowSchema extends GraphQLSchemaHelper("customerRow") {
   val customerRowEmailSeqArg = Argument("emails", ListInputType(StringType))
   val customerRowAddressIdArg = Argument("addressId", IntType)
   val customerRowAddressIdSeqArg = Argument("addressIds", ListInputType(IntType))
+  val customerRowCreateDateArg = Argument("createDate", localDateType)
+  val customerRowCreateDateSeqArg = Argument("createDates", ListInputType(localDateType))
 
   val customerRowByStoreIdRelation = Relation[CustomerRow, Int]("byStoreId", x => Seq(x.storeId))
   val customerRowByStoreIdFetcher = Fetcher.rel[GraphQLContext, CustomerRow, CustomerRow, Int](
@@ -43,26 +44,26 @@ object CustomerRowSchema extends GraphQLSchemaHelper("customerRow") {
   implicit lazy val customerRowType: sangria.schema.ObjectType[GraphQLContext, CustomerRow] = deriveObjectType(
     sangria.macros.derive.AddFields(
       Field(
-        name = "paymentCustomerIdFkey",
+        name = "payments",
         fieldType = ListType(PaymentRowSchema.paymentRowType),
         resolve = c => PaymentRowSchema.paymentRowByCustomerIdFetcher.deferRelSeq(
           PaymentRowSchema.paymentRowByCustomerIdRelation, c.value.customerId
         )
       ),
       Field(
-        name = "rentalCustomerIdFkey",
+        name = "rentals",
         fieldType = ListType(RentalRowSchema.rentalRowType),
         resolve = c => RentalRowSchema.rentalRowByCustomerIdFetcher.deferRelSeq(
           RentalRowSchema.rentalRowByCustomerIdRelation, c.value.customerId
         )
       ),
       Field(
-        name = "customerStoreIdFkeyRel",
+        name = "store",
         fieldType = StoreRowSchema.storeRowType,
         resolve = ctx => StoreRowSchema.storeRowByPrimaryKeyFetcher.defer(ctx.value.storeId)
       ),
       Field(
-        name = "customerAddressIdFkeyRel",
+        name = "address",
         fieldType = AddressRowSchema.addressRowType,
         resolve = ctx => AddressRowSchema.addressRowByPrimaryKeyFetcher.defer(ctx.value.addressId)
       )
@@ -110,7 +111,13 @@ object CustomerRowSchema extends GraphQLSchemaHelper("customerRow") {
     }, customerRowAddressIdArg),
     unitField(name = "customersByAddressIdSeq", desc = None, t = ListType(customerRowType), f = (c, td) => {
       c.ctx.getInstance[services.customer.CustomerRowService].getByAddressIdSeq(c.ctx.creds, c.arg(customerRowAddressIdSeqArg))(td)
-    }, customerRowAddressIdSeqArg)
+    }, customerRowAddressIdSeqArg),
+    unitField(name = "customersByCreateDate", desc = None, t = ListType(customerRowType), f = (c, td) => {
+      c.ctx.getInstance[services.customer.CustomerRowService].getByCreateDate(c.ctx.creds, c.arg(customerRowCreateDateArg))(td)
+    }, customerRowCreateDateArg),
+    unitField(name = "customersByCreateDateSeq", desc = None, t = ListType(customerRowType), f = (c, td) => {
+      c.ctx.getInstance[services.customer.CustomerRowService].getByCreateDateSeq(c.ctx.creds, c.arg(customerRowCreateDateSeqArg))(td)
+    }, customerRowCreateDateSeqArg)
   )
 
   val customerRowMutationType = ObjectType(

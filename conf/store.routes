@@ -5,8 +5,11 @@ GET         /inventoryRow                                             controller
 GET         /inventoryRow/autocomplete                                controllers.admin.store.InventoryRowController.autocomplete(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None)
 GET         /inventoryRow/form                                        controllers.admin.store.InventoryRowController.createForm
 POST        /inventoryRow                                             controllers.admin.store.InventoryRowController.create
+POST        /inventoryRow/bulk                                        controllers.admin.store.InventoryRowController.bulkEdit
 GET         /inventoryRow/byFilmId/:filmId                            controllers.admin.store.InventoryRowController.byFilmId(filmId: Int, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None, embedded: Boolean ?= false)
+GET         /inventoryRow/byFilmId/:filmId/bulk                       controllers.admin.store.InventoryRowController.byFilmIdBulkForm(filmId: Int)
 GET         /inventoryRow/byStoreId/:storeId                          controllers.admin.store.InventoryRowController.byStoreId(storeId: Int, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None, embedded: Boolean ?= false)
+GET         /inventoryRow/byStoreId/:storeId/bulk                     controllers.admin.store.InventoryRowController.byStoreIdBulkForm(storeId: Int)
 GET         /inventoryRow/:inventoryId                                controllers.admin.store.InventoryRowController.view(inventoryId: Long, t: Option[String] ?= None)
 GET         /inventoryRow/:inventoryId/counts                         controllers.admin.store.InventoryRowController.relationCounts(inventoryId: Long)
 GET         /inventoryRow/:inventoryId/form                           controllers.admin.store.InventoryRowController.editForm(inventoryId: Long)
@@ -18,8 +21,11 @@ GET         /staffRow                                                 controller
 GET         /staffRow/autocomplete                                    controllers.admin.store.StaffRowController.autocomplete(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None)
 GET         /staffRow/form                                            controllers.admin.store.StaffRowController.createForm
 POST        /staffRow                                                 controllers.admin.store.StaffRowController.create
+POST        /staffRow/bulk                                            controllers.admin.store.StaffRowController.bulkEdit
 GET         /staffRow/byStoreId/:storeId                              controllers.admin.store.StaffRowController.byStoreId(storeId: Int, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None, embedded: Boolean ?= false)
+GET         /staffRow/byStoreId/:storeId/bulk                         controllers.admin.store.StaffRowController.byStoreIdBulkForm(storeId: Int)
 GET         /staffRow/byAddressId/:addressId                          controllers.admin.store.StaffRowController.byAddressId(addressId: Int, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None, embedded: Boolean ?= false)
+GET         /staffRow/byAddressId/:addressId/bulk                     controllers.admin.store.StaffRowController.byAddressIdBulkForm(addressId: Int)
 GET         /staffRow/:staffId                                        controllers.admin.store.StaffRowController.view(staffId: Int, t: Option[String] ?= None)
 GET         /staffRow/:staffId/counts                                 controllers.admin.store.StaffRowController.relationCounts(staffId: Int)
 GET         /staffRow/:staffId/form                                   controllers.admin.store.StaffRowController.editForm(staffId: Int)
@@ -31,7 +37,9 @@ GET         /storeRow                                                 controller
 GET         /storeRow/autocomplete                                    controllers.admin.store.StoreRowController.autocomplete(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None)
 GET         /storeRow/form                                            controllers.admin.store.StoreRowController.createForm
 POST        /storeRow                                                 controllers.admin.store.StoreRowController.create
+POST        /storeRow/bulk                                            controllers.admin.store.StoreRowController.bulkEdit
 GET         /storeRow/byAddressId/:addressId                          controllers.admin.store.StoreRowController.byAddressId(addressId: Int, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None, embedded: Boolean ?= false)
+GET         /storeRow/byAddressId/:addressId/bulk                     controllers.admin.store.StoreRowController.byAddressIdBulkForm(addressId: Int)
 GET         /storeRow/:storeId                                        controllers.admin.store.StoreRowController.view(storeId: Int, t: Option[String] ?= None)
 GET         /storeRow/:storeId/counts                                 controllers.admin.store.StoreRowController.relationCounts(storeId: Int)
 GET         /storeRow/:storeId/form                                   controllers.admin.store.StoreRowController.editForm(storeId: Int)

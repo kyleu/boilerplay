@@ -104,11 +104,15 @@ class CategoryRowService @javax.inject.Inject() (val db: JdbcDatabase, override 
   def insert(creds: Credentials, model: CategoryRow)(implicit trace: TraceData) = checkPerm(creds, "edit") {
     traceF("insert")(td => db.executeF(CategoryRowQueries.insert(model))(td).flatMap {
       case 1 => getByPrimaryKey(creds, model.categoryId)(td)
-      case _ => throw new IllegalStateException("Unable to find newly-inserted Category.")
+      case _ => throw new IllegalStateException("Unable to find newly-inserted Category")
     })
   }
   def insertBatch(creds: Credentials, models: Seq[CategoryRow])(implicit trace: TraceData) = checkPerm(creds, "edit") {
-    traceF("insertBatch")(td => db.executeF(CategoryRowQueries.insertBatch(models))(td))
+    traceF("insertBatch")(td => if (models.isEmpty) {
+      Future.successful(0)
+    } else {
+      db.executeF(CategoryRowQueries.insertBatch(models))(td)
+    })
   }
   def create(creds: Credentials, fields: Seq[DataField])(implicit trace: TraceData) = checkPerm(creds, "edit") {
     traceF("create")(td => db.executeF(CategoryRowQueries.create(fields))(td).flatMap { _ =>

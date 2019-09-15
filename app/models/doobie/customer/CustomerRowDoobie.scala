@@ -11,7 +11,7 @@ object CustomerRowDoobie extends DoobieQueries[CustomerRow]("customer") {
   override val selectFragment = fr"""select "customer_id", "store_id", "first_name", "last_name", "email", "address_id", "activebool", "create_date", "last_update", "active" from "customer""""
 
   override val columns = Seq("customer_id", "store_id", "first_name", "last_name", "email", "address_id", "activebool", "create_date", "last_update", "active")
-  override val searchColumns = Seq("customer_id", "store_id", "first_name", "last_name", "email", "address_id")
+  override val searchColumns = Seq("customer_id", "store_id", "first_name", "last_name", "email", "address_id", "create_date")
 
   override def searchFragment(q: String) = {
     fr""""customer_id"::text = $q or "store_id"::text = $q or "first_name"::text = $q or "last_name"::text = $q or "email"::text = $q or "address_id"::text = $q or "activebool"::text = $q or "create_date"::text = $q or "last_update"::text = $q or "active"::text = $q"""

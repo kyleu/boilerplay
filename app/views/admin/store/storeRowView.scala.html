@@ -2,6 +2,7 @@
 @(cfg: com.kyleu.projectile.models.config.UiConfig, model: models.store.StoreRow, notes: Seq[com.kyleu.projectile.models.note.Note], debug: Boolean)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, td: com.kyleu.projectile.util.tracing.TraceData
 )@com.kyleu.projectile.views.html.layout.page(title = s"Store", cfg = cfg, icon = Some(models.template.Icons.storeRow)) {
+  @com.kyleu.projectile.services.augment.AugmentService.viewHeaders.augment(model, request.queryString, cfg)
   @com.kyleu.projectile.views.html.layout.card(None) {
     <div class="right"><a class="btn @cfg.user.buttonColor" href="@controllers.admin.store.routes.StoreRowController.editForm(model.storeId)">Edit</a></div>
     <div class="right"><a class="btn-flat remove-link" onclick="return confirm('Are you sure you want to remove this Store?')" href="@controllers.admin.store.routes.StoreRowController.remove(model.storeId)">Remove</a></div>
@@ -29,9 +30,7 @@
       </tbody>
     </table>
   }
-
-  @com.kyleu.projectile.services.augment.AugmentService.views.augment(model, request.queryString, cfg)
-
+  @com.kyleu.projectile.services.augment.AugmentService.viewDetails.augment(model, request.queryString, cfg)
   @com.kyleu.projectile.views.html.admin.note.notes(cfg, notes, "StoreRow", "Store", model.storeId)
 
   <ul id="model-relations" class="collapsible" data-collapsible="expandable">
@@ -39,7 +38,10 @@
       <div class="collapsible-header">
         <i class="material-icons small">@models.template.Icons.customerRow</i>
         <span class="title">Customers</span>&nbsp;by Store Id
-        <span class="badge"><a href="@controllers.admin.customer.routes.CustomerRowController.byStoreId(model.storeId)"><i class="material-icons">insert_link</i></a></span>
+        <span class="badge" style="display: none;">
+          <a class="bulk-edit-link" title="Bulk edit" href="@controllers.admin.customer.routes.CustomerRowController.byStoreIdBulkForm(model.storeId)"><i class="material-icons" style="margin-right: 0;">edit</i></a>
+          <a class="view-relation-link" title="View these Customers" href="@controllers.admin.customer.routes.CustomerRowController.byStoreId(model.storeId)"><i class="material-icons" style="margin-right: 0;">insert_link</i></a>
+        </span>
       </div>
       <div class="collapsible-body"><span>Loading...</span></div>
     </li>
@@ -47,7 +49,10 @@
       <div class="collapsible-header">
         <i class="material-icons small">@models.template.Icons.inventoryRow</i>
         <span class="title">Inventories</span>&nbsp;by Store Id
-        <span class="badge"><a href="@controllers.admin.store.routes.InventoryRowController.byStoreId(model.storeId)"><i class="material-icons">insert_link</i></a></span>
+        <span class="badge" style="display: none;">
+          <a class="bulk-edit-link" title="Bulk edit" href="@controllers.admin.store.routes.InventoryRowController.byStoreIdBulkForm(model.storeId)"><i class="material-icons" style="margin-right: 0;">edit</i></a>
+          <a class="view-relation-link" title="View these Inventories" href="@controllers.admin.store.routes.InventoryRowController.byStoreId(model.storeId)"><i class="material-icons" style="margin-right: 0;">insert_link</i></a>
+        </span>
       </div>
       <div class="collapsible-body"><span>Loading...</span></div>
     </li>
@@ -55,7 +60,10 @@
       <div class="collapsible-header">
         <i class="material-icons small">@models.template.Icons.staffRow</i>
         <span class="title">Staff</span>&nbsp;by Store Id
-        <span class="badge"><a href="@controllers.admin.store.routes.StaffRowController.byStoreId(model.storeId)"><i class="material-icons">insert_link</i></a></span>
+        <span class="badge" style="display: none;">
+          <a class="bulk-edit-link" title="Bulk edit" href="@controllers.admin.store.routes.StaffRowController.byStoreIdBulkForm(model.storeId)"><i class="material-icons" style="margin-right: 0;">edit</i></a>
+          <a class="view-relation-link" title="View these Staff" href="@controllers.admin.store.routes.StaffRowController.byStoreId(model.storeId)"><i class="material-icons" style="margin-right: 0;">insert_link</i></a>
+        </span>
       </div>
       <div class="collapsible-body"><span>Loading...</span></div>
     </li>

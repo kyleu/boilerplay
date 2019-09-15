@@ -69,6 +69,7 @@ object StoreRowQueries extends BaseQueries[StoreRow]("storeRow", "store") {
   def removeByPrimaryKey(storeId: Int) = new RemoveByPrimaryKey(Seq[Any](storeId))
 
   def update(storeId: Int, fields: Seq[DataField]) = new UpdateFields(Seq[Any](storeId), fields)
+  def updateBulk(pks: Seq[Seq[Any]], fields: Seq[DataField]) = new UpdateFieldsBulk(pks, fields)
 
   override def fromRow(row: Row) = StoreRow(
     storeId = IntegerType(row, "store_id"),

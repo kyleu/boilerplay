@@ -3,7 +3,6 @@ package models.graphql.customer
 
 import com.kyleu.projectile.graphql.{GraphQLContext, GraphQLSchemaHelper}
 import com.kyleu.projectile.graphql.GraphQLUtils._
-import com.kyleu.projectile.models.graphql.note.NoteSchema
 import models.customer.{LanguageRow, LanguageRowResult}
 import models.graphql.film.FilmRowSchema
 import sangria.execution.deferred.{Fetcher, HasId}
@@ -25,14 +24,14 @@ object LanguageRowSchema extends GraphQLSchemaHelper("languageRow") {
   implicit lazy val languageRowType: sangria.schema.ObjectType[GraphQLContext, LanguageRow] = deriveObjectType(
     sangria.macros.derive.AddFields(
       Field(
-        name = "filmLanguageIdFkey",
+        name = "films",
         fieldType = ListType(FilmRowSchema.filmRowType),
         resolve = c => FilmRowSchema.filmRowByLanguageIdFetcher.deferRelSeq(
           FilmRowSchema.filmRowByLanguageIdRelation, c.value.languageId
         )
       ),
       Field(
-        name = "filmOriginalLanguageIdFkey",
+        name = "filmsByOriginal",
         fieldType = ListType(FilmRowSchema.filmRowType),
         resolve = c => FilmRowSchema.filmRowByOriginalLanguageIdFetcher.deferRelSeq(
           FilmRowSchema.filmRowByOriginalLanguageIdRelation, Some(c.value.languageId)

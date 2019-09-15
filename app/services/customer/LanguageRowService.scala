@@ -104,11 +104,15 @@ class LanguageRowService @javax.inject.Inject() (val db: JdbcDatabase, override 
   def insert(creds: Credentials, model: LanguageRow)(implicit trace: TraceData) = checkPerm(creds, "edit") {
     traceF("insert")(td => db.executeF(LanguageRowQueries.insert(model))(td).flatMap {
       case 1 => getByPrimaryKey(creds, model.languageId)(td)
-      case _ => throw new IllegalStateException("Unable to find newly-inserted Language.")
+      case _ => throw new IllegalStateException("Unable to find newly-inserted Language")
     })
   }
   def insertBatch(creds: Credentials, models: Seq[LanguageRow])(implicit trace: TraceData) = checkPerm(creds, "edit") {
-    traceF("insertBatch")(td => db.executeF(LanguageRowQueries.insertBatch(models))(td))
+    traceF("insertBatch")(td => if (models.isEmpty) {
+      Future.successful(0)
+    } else {
+      db.executeF(LanguageRowQueries.insertBatch(models))(td)
+    })
   }
   def create(creds: Credentials, fields: Seq[DataField])(implicit trace: TraceData) = checkPerm(creds, "edit") {
     traceF("create")(td => db.executeF(LanguageRowQueries.create(fields))(td).flatMap { _ =>

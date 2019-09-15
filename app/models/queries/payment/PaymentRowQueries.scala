@@ -7,7 +7,6 @@ import com.kyleu.projectile.models.queries.{BaseQueries, ResultFieldHelper}
 import com.kyleu.projectile.models.result.data.DataField
 import com.kyleu.projectile.models.result.filter.Filter
 import com.kyleu.projectile.models.result.orderBy.OrderBy
-import java.time.ZonedDateTime
 import models.payment.PaymentRow
 
 object PaymentRowQueries extends BaseQueries[PaymentRow]("paymentRow", "payment") {
@@ -78,6 +77,7 @@ object PaymentRowQueries extends BaseQueries[PaymentRow]("paymentRow", "payment"
   def removeByPrimaryKey(paymentId: Long) = new RemoveByPrimaryKey(Seq[Any](paymentId))
 
   def update(paymentId: Long, fields: Seq[DataField]) = new UpdateFields(Seq[Any](paymentId), fields)
+  def updateBulk(pks: Seq[Seq[Any]], fields: Seq[DataField]) = new UpdateFieldsBulk(pks, fields)
 
   override def fromRow(row: Row) = PaymentRow(
     paymentId = LongType(row, "payment_id"),

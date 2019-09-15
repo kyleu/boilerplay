@@ -2,6 +2,7 @@
 @(cfg: com.kyleu.projectile.models.config.UiConfig, model: models.store.StaffRow, notes: Seq[com.kyleu.projectile.models.note.Note], debug: Boolean)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, td: com.kyleu.projectile.util.tracing.TraceData
 )@com.kyleu.projectile.views.html.layout.page(title = s"Staff", cfg = cfg, icon = Some(models.template.Icons.staffRow)) {
+  @com.kyleu.projectile.services.augment.AugmentService.viewHeaders.augment(model, request.queryString, cfg)
   @com.kyleu.projectile.views.html.layout.card(None) {
     <div class="right"><a class="btn @cfg.user.buttonColor" href="@controllers.admin.store.routes.StaffRowController.editForm(model.staffId)">Edit</a></div>
     <div class="right"><a class="btn-flat remove-link" onclick="return confirm('Are you sure you want to remove this Staff?')" href="@controllers.admin.store.routes.StaffRowController.remove(model.staffId)">Remove</a></div>
@@ -60,9 +61,7 @@
       </tbody>
     </table>
   }
-
-  @com.kyleu.projectile.services.augment.AugmentService.views.augment(model, request.queryString, cfg)
-
+  @com.kyleu.projectile.services.augment.AugmentService.viewDetails.augment(model, request.queryString, cfg)
   @com.kyleu.projectile.views.html.admin.note.notes(cfg, notes, "StaffRow", "Staff", model.staffId)
 
   <ul id="model-relations" class="collapsible" data-collapsible="expandable">
@@ -70,7 +69,10 @@
       <div class="collapsible-header">
         <i class="material-icons small">@models.template.Icons.paymentRow</i>
         <span class="title">Payments</span>&nbsp;by Staff Id
-        <span class="badge"><a href="@controllers.admin.payment.routes.PaymentRowController.byStaffId(model.staffId)"><i class="material-icons">insert_link</i></a></span>
+        <span class="badge" style="display: none;">
+          <a class="bulk-edit-link" title="Bulk edit" href="@controllers.admin.payment.routes.PaymentRowController.byStaffIdBulkForm(model.staffId)"><i class="material-icons" style="margin-right: 0;">edit</i></a>
+          <a class="view-relation-link" title="View these Payments" href="@controllers.admin.payment.routes.PaymentRowController.byStaffId(model.staffId)"><i class="material-icons" style="margin-right: 0;">insert_link</i></a>
+        </span>
       </div>
       <div class="collapsible-body"><span>Loading...</span></div>
     </li>
@@ -78,7 +80,10 @@
       <div class="collapsible-header">
         <i class="material-icons small">@models.template.Icons.rentalRow</i>
         <span class="title">Rentals</span>&nbsp;by Staff Id
-        <span class="badge"><a href="@controllers.admin.customer.routes.RentalRowController.byStaffId(model.staffId)"><i class="material-icons">insert_link</i></a></span>
+        <span class="badge" style="display: none;">
+          <a class="bulk-edit-link" title="Bulk edit" href="@controllers.admin.customer.routes.RentalRowController.byStaffIdBulkForm(model.staffId)"><i class="material-icons" style="margin-right: 0;">edit</i></a>
+          <a class="view-relation-link" title="View these Rentals" href="@controllers.admin.customer.routes.RentalRowController.byStaffId(model.staffId)"><i class="material-icons" style="margin-right: 0;">insert_link</i></a>
+        </span>
       </div>
       <div class="collapsible-body"><span>Loading...</span></div>
     </li>

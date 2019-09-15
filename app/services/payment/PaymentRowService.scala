@@ -135,11 +135,15 @@ class PaymentRowService @javax.inject.Inject() (val db: JdbcDatabase, override v
   def insert(creds: Credentials, model: PaymentRow)(implicit trace: TraceData) = checkPerm(creds, "edit") {
     traceF("insert")(td => db.executeF(PaymentRowQueries.insert(model))(td).flatMap {
       case 1 => getByPrimaryKey(creds, model.paymentId)(td)
-      case _ => throw new IllegalStateException("Unable to find newly-inserted Payment.")
+      case _ => throw new IllegalStateException("Unable to find newly-inserted Payment")
     })
   }
   def insertBatch(creds: Credentials, models: Seq[PaymentRow])(implicit trace: TraceData) = checkPerm(creds, "edit") {
-    traceF("insertBatch")(td => db.executeF(PaymentRowQueries.insertBatch(models))(td))
+    traceF("insertBatch")(td => if (models.isEmpty) {
+      Future.successful(0)
+    } else {
+      db.executeF(PaymentRowQueries.insertBatch(models))(td)
+    })
   }
   def create(creds: Credentials, fields: Seq[DataField])(implicit trace: TraceData) = checkPerm(creds, "edit") {
     traceF("create")(td => db.executeF(PaymentRowQueries.create(fields))(td).flatMap { _ =>
@@ -167,6 +171,12 @@ class PaymentRowService @javax.inject.Inject() (val db: JdbcDatabase, override v
       }
       case None => throw new IllegalStateException(s"Cannot find PaymentRow matching [$paymentId]")
     })
+  }
+
+  def updateBulk(creds: Credentials, pks: Seq[Seq[Any]], fields: Seq[DataField])(implicit trace: TraceData) = checkPerm(creds, "edit") {
+    db.executeF(PaymentRowQueries.updateBulk(pks, fields))(trace).map { x =>
+      s"Updated [${fields.size}] fields for [$x of ${pks.size}] Payments"
+    }
   }
 
   def csvFor(totalCount: Int, rows: Seq[PaymentRow])(implicit trace: TraceData) = {

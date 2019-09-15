@@ -4,19 +4,58 @@
   "features" : [ "doobie", "datamodel", "auth", "graphql", "service", "slick", "controller", "notes", "json", "core" ],
   "ignored" : [ ],
   "overrides" : [ {
-    "k" : "return_date.search",
+    "k" : "className",
+    "v" : "RentalRow"
+  }, {
+    "k" : "title",
+    "v" : "Rental"
+  }, {
+    "k" : "plural",
+    "v" : "Rentals"
+  }, {
+    "k" : "rental_date.globalSearch",
+    "v" : "false"
+  }, {
+    "k" : "rental_date.localSearch",
     "v" : "true"
   }, {
-    "k" : "staff_id.search",
+    "k" : "inventory_id.globalSearch",
+    "v" : "false"
+  }, {
+    "k" : "inventory_id.localSearch",
+    "v" : "true"
+  }, {
+    "k" : "customer_id.globalSearch",
+    "v" : "false"
+  }, {
+    "k" : "customer_id.localSearch",
+    "v" : "true"
+  }, {
+    "k" : "return_date.globalSearch",
+    "v" : "false"
+  }, {
+    "k" : "return_date.localSearch",
+    "v" : "true"
+  }, {
+    "k" : "staff_id.globalSearch",
+    "v" : "false"
+  }, {
+    "k" : "staff_id.localSearch",
     "v" : "true"
   }, {
     "k" : "fk.rental_staff_id_fkey.propertyName",
-    "v" : "rentalStaffIdFkeyRel"
+    "v" : "staff"
   }, {
     "k" : "fk.rental_inventory_id_fkey.propertyName",
-    "v" : "rentalInventoryIdFkeyRel"
+    "v" : "inventory"
   }, {
     "k" : "fk.rental_customer_id_fkey.propertyName",
-    "v" : "rentalCustomerIdFkeyRel"
+    "v" : "customer"
+  }, {
+    "k" : "reference.paymentRentalIdFkey.propertyName",
+    "v" : "payments"
+  }, {
+    "k" : "defaultOrder",
+    "v" : "none"
   } ]
 }

@@ -1,0 +1,47 @@
+@* Generated File *@
+@(cfg: com.kyleu.projectile.models.config.UiConfig, modelSeq: Seq[models.store.InventoryRow], act: Call, debug: Boolean)(
+    implicit flash: Flash
+)@com.kyleu.projectile.views.html.layout.page(title = "Bulk Edit", cfg = cfg, icon = Some(models.template.Icons.inventoryRow)) {
+  <form id="form-edit-inventoryRow" action="@act" method="post">
+    <input type="hidden" class="primaryKeys" name="primaryKeys" value="@modelSeq.map(m => m.inventoryId).mkString("//")" />
+    @com.kyleu.projectile.views.html.layout.card(Some("Selected Inventories")) {
+      <div class="right"><button type="submit" class="btn @cfg.user.buttonColor">Save <span>@modelSeq.size</span> Inventories</button></div>
+      <div class="right"><a href="" onclick="window.history.go(-1);return false;" class="btn-flat cancel-link">Cancel</a></div>
+      <div class="clear"></div>
+      <table>
+        <thead>
+          <tr>
+            <th>Film Id</th>
+            <th>Store Id</th>
+          </tr>
+        </thead>
+        <tbody>
+          @modelSeq.map { model =>
+            @inventoryRowDataRow(model, Some(Html(s"<td style='text-align: right;'><a class='remove-pk' data-pk='${model.inventoryId}' href='' title='Remove from editing'><i class='material-icons'>close</i></a></td>")))
+          }
+        </tbody>
+      </table>
+    }
+    @com.kyleu.projectile.views.html.layout.card(None) {
+      <table>
+        <tbody>
+          @com.kyleu.projectile.views.html.components.form.autocompleteField(
+            selected = false, key = "filmId", title = "Film Id", value = None, nullable = false, dataType = "integer",
+            call = controllers.admin.film.routes.FilmRowController.autocomplete(), acType = ("filmRow", "Film"), icon = models.template.Icons.filmRow
+          )
+          @com.kyleu.projectile.views.html.components.form.autocompleteField(
+            selected = false, key = "storeId", title = "Store Id", value = None, nullable = false, dataType = "integer",
+            call = controllers.admin.store.routes.StoreRowController.autocomplete(), acType = ("storeRow", "Store"), icon = models.template.Icons.storeRow
+          )
+          @com.kyleu.projectile.views.html.components.form.zonedDateTimeField(selected = false, key = "lastUpdate", title = "Last Update", value = None, nullable = false)
+        </tbody>
+      </table>
+    }
+  </form>
+}
+@com.kyleu.projectile.views.html.components.includeScalaJs(debug)
+@com.kyleu.projectile.views.html.components.includeAutocomplete(debug)
+<script>
+  $(function() { new FormService('form-edit-inventoryRow'); });
+  $(function() { new BulkEditService('form-edit-inventoryRow'); });
+</script>

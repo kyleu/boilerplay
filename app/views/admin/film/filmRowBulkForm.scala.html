@@ -1,0 +1,66 @@
+@* Generated File *@
+@(cfg: com.kyleu.projectile.models.config.UiConfig, modelSeq: Seq[models.film.FilmRow], act: Call, debug: Boolean)(
+    implicit flash: Flash
+)@com.kyleu.projectile.views.html.layout.page(title = "Bulk Edit", cfg = cfg, icon = Some(models.template.Icons.filmRow)) {
+  <form id="form-edit-filmRow" action="@act" method="post">
+    <input type="hidden" class="primaryKeys" name="primaryKeys" value="@modelSeq.map(m => m.filmId).mkString("//")" />
+    @com.kyleu.projectile.views.html.layout.card(Some("Selected Films")) {
+      <div class="right"><button type="submit" class="btn @cfg.user.buttonColor">Save <span>@modelSeq.size</span> Films</button></div>
+      <div class="right"><a href="" onclick="window.history.go(-1);return false;" class="btn-flat cancel-link">Cancel</a></div>
+      <div class="clear"></div>
+      <table>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Release Year</th>
+            <th>Language Id</th>
+            <th>Original Language Id</th>
+            <th>Rental Duration</th>
+            <th>Rental Rate</th>
+            <th>Length</th>
+            <th>Rating</th>
+            <th>Last Update</th>
+            <th>Fulltext</th>
+          </tr>
+        </thead>
+        <tbody>
+          @modelSeq.map { model =>
+            @filmRowDataRow(model, Some(Html(s"<td style='text-align: right;'><a class='remove-pk' data-pk='${model.filmId}' href='' title='Remove from editing'><i class='material-icons'>close</i></a></td>")))
+          }
+        </tbody>
+      </table>
+    }
+    @com.kyleu.projectile.views.html.layout.card(None) {
+      <table>
+        <tbody>
+          @com.kyleu.projectile.views.html.components.form.textField(selected = false, key = "title", title = "Title", value = None, nullable = false)
+          @com.kyleu.projectile.views.html.components.form.textField(selected = false, key = "description", title = "Description", value = None, nullable = true)
+          @com.kyleu.projectile.views.html.components.form.textField(selected = false, key = "releaseYear", title = "Release Year", value = None, nullable = true, dataType = "long")
+          @com.kyleu.projectile.views.html.components.form.autocompleteField(
+            selected = false, key = "languageId", title = "Language Id", value = None, nullable = false, dataType = "integer",
+            call = controllers.admin.customer.routes.LanguageRowController.autocomplete(), acType = ("languageRow", "Language"), icon = models.template.Icons.languageRow
+          )
+          @com.kyleu.projectile.views.html.components.form.autocompleteField(
+            selected = false, key = "originalLanguageId", title = "Original Language Id", value = None, nullable = true, dataType = "integer",
+            call = controllers.admin.customer.routes.LanguageRowController.autocomplete(), acType = ("languageRow", "Language"), icon = models.template.Icons.languageRow
+          )
+          @com.kyleu.projectile.views.html.components.form.textField(selected = false, key = "rentalDuration", title = "Rental Duration", value = None, nullable = false, dataType = "integer")
+          @com.kyleu.projectile.views.html.components.form.textField(selected = false, key = "rentalRate", title = "Rental Rate", value = None, nullable = false, dataType = "decimal")
+          @com.kyleu.projectile.views.html.components.form.textField(selected = false, key = "length", title = "Length", value = None, nullable = true, dataType = "integer")
+          @com.kyleu.projectile.views.html.components.form.textField(selected = false, key = "replacementCost", title = "Replacement Cost", value = None, nullable = false, dataType = "decimal")
+          @com.kyleu.projectile.views.html.components.form.selectField(selected = false, key = "rating", title = "Rating", value = None, nullable = true, options = Seq("G" -> "G", "PG" -> "PG", "PG13" -> "PG13", "R" -> "R", "NC17" -> "NC17"), dataType = "mpaa_rating")
+          @com.kyleu.projectile.views.html.components.form.zonedDateTimeField(selected = false, key = "lastUpdate", title = "Last Update", value = None, nullable = false)
+          @com.kyleu.projectile.views.html.components.form.collectionField(selected = false, key = "specialFeatures", title = "Special Features", value = None, nullable = true)
+          @com.kyleu.projectile.views.html.components.form.textField(selected = false, key = "fulltext", title = "Fulltext", value = None, nullable = false)
+        </tbody>
+      </table>
+    }
+  </form>
+}
+@com.kyleu.projectile.views.html.components.includeScalaJs(debug)
+@com.kyleu.projectile.views.html.components.includeAutocomplete(debug)
+@com.kyleu.projectile.views.html.components.includeTagEditor(debug)
+<script>
+  $(function() { new FormService('form-edit-filmRow'); });
+  $(function() { new BulkEditService('form-edit-filmRow'); });
+</script>

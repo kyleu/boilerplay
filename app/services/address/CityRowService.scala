@@ -8,6 +8,7 @@ import com.kyleu.projectile.services.ModelServiceHelper
 import com.kyleu.projectile.services.database.JdbcDatabase
 import com.kyleu.projectile.util.{Credentials, CsvUtils}
 import com.kyleu.projectile.util.tracing.{TraceData, TracingService}
+import java.time.ZonedDateTime
 import models.address.CityRow
 import models.queries.address.CityRowQueries
 import scala.concurrent.{ExecutionContext, Future}
@@ -99,15 +100,35 @@ class CityRowService @javax.inject.Inject() (val db: JdbcDatabase, override val 
     }
   }
 
+  def countByLastUpdate(creds: Credentials, lastUpdate: ZonedDateTime)(implicit trace: TraceData) = checkPerm(creds, "view") {
+    traceF("count.by.lastUpdate")(td => db.queryF(CityRowQueries.CountByLastUpdate(lastUpdate))(td))
+  }
+  def getByLastUpdate(creds: Credentials, lastUpdate: ZonedDateTime, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None)(implicit trace: TraceData) = checkPerm(creds, "view") {
+    traceF("get.by.lastUpdate")(td => db.queryF(CityRowQueries.GetByLastUpdate(lastUpdate, orderBys, limit, offset))(td))
+  }
+  def getByLastUpdateSeq(creds: Credentials, lastUpdateSeq: Seq[ZonedDateTime])(implicit trace: TraceData) = checkPerm(creds, "view") {
+    if (lastUpdateSeq.isEmpty) {
+      Future.successful(Nil)
+    } else {
+      traceF("get.by.lastUpdate.seq") { td =>
+        db.queryF(CityRowQueries.GetByLastUpdateSeq(lastUpdateSeq))(td)
+      }
+    }
+  }
+
   // Mutations
   def insert(creds: Credentials, model: CityRow)(implicit trace: TraceData) = checkPerm(creds, "edit") {
     traceF("insert")(td => db.executeF(CityRowQueries.insert(model))(td).flatMap {
       case 1 => getByPrimaryKey(creds, model.cityId)(td)
-      case _ => throw new IllegalStateException("Unable to find newly-inserted City.")
+      case _ => throw new IllegalStateException("Unable to find newly-inserted City")
     })
   }
   def insertBatch(creds: Credentials, models: Seq[CityRow])(implicit trace: TraceData) = checkPerm(creds, "edit") {
-    traceF("insertBatch")(td => db.executeF(CityRowQueries.insertBatch(models))(td))
+    traceF("insertBatch")(td => if (models.isEmpty) {
+      Future.successful(0)
+    } else {
+      db.executeF(CityRowQueries.insertBatch(models))(td)
+    })
   }
   def create(creds: Credentials, fields: Seq[DataField])(implicit trace: TraceData) = checkPerm(creds, "edit") {
     traceF("create")(td => db.executeF(CityRowQueries.create(fields))(td).flatMap { _ =>
@@ -135,6 +156,12 @@ class CityRowService @javax.inject.Inject() (val db: JdbcDatabase, override val 
       }
       case None => throw new IllegalStateException(s"Cannot find CityRow matching [$cityId]")
     })
+  }
+
+  def updateBulk(creds: Credentials, pks: Seq[Seq[Any]], fields: Seq[DataField])(implicit trace: TraceData) = checkPerm(creds, "edit") {
+    db.executeF(CityRowQueries.updateBulk(pks, fields))(trace).map { x =>
+      s"Updated [${fields.size}] fields for [$x of ${pks.size}] Cities"
+    }
   }
 
   def csvFor(totalCount: Int, rows: Seq[CityRow])(implicit trace: TraceData) = {

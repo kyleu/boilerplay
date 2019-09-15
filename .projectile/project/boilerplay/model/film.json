@@ -4,22 +4,70 @@
   "features" : [ "doobie", "datamodel", "auth", "graphql", "service", "slick", "controller", "notes", "json", "core" ],
   "ignored" : [ ],
   "overrides" : [ {
+    "k" : "className",
+    "v" : "FilmRow"
+  }, {
+    "k" : "title",
+    "v" : "Film"
+  }, {
+    "k" : "plural",
+    "v" : "Films"
+  }, {
     "k" : "film_id.type",
     "v" : "integer"
   }, {
-    "k" : "rating.search",
+    "k" : "title.globalSearch",
     "v" : "true"
   }, {
-    "k" : "last_update.search",
+    "k" : "description.localSearch",
     "v" : "true"
   }, {
-    "k" : "fulltext.search",
-    "v" : "false"
+    "k" : "release_year.summary",
+    "v" : "true"
+  }, {
+    "k" : "release_year.globalSearch",
+    "v" : "true"
+  }, {
+    "k" : "release_year.localSearch",
+    "v" : "true"
+  }, {
+    "k" : "rental_duration.summary",
+    "v" : "true"
+  }, {
+    "k" : "rental_duration.localSearch",
+    "v" : "true"
+  }, {
+    "k" : "rental_rate.summary",
+    "v" : "true"
+  }, {
+    "k" : "rental_rate.localSearch",
+    "v" : "true"
+  }, {
+    "k" : "length.summary",
+    "v" : "true"
+  }, {
+    "k" : "length.globalSearch",
+    "v" : "true"
+  }, {
+    "k" : "length.localSearch",
+    "v" : "true"
   }, {
     "k" : "fk.film_language_id_fkey.propertyName",
-    "v" : "filmLanguageIdFkeyRel"
+    "v" : "language"
   }, {
     "k" : "fk.film_original_language_id_fkey.propertyName",
-    "v" : "filmOriginalLanguageIdFkeyRel"
+    "v" : "originalLanguage"
+  }, {
+    "k" : "reference.filmCategoryFilmIdFkey.propertyName",
+    "v" : "categories"
+  }, {
+    "k" : "reference.filmActorFilmIdFkey.propertyName",
+    "v" : "actors"
+  }, {
+    "k" : "reference.inventoryFilmIdFkey.propertyName",
+    "v" : "inventories"
+  }, {
+    "k" : "defaultOrder",
+    "v" : "asc-title"
   } ]
 }

@@ -101,6 +101,7 @@ object AddressRowQueries extends BaseQueries[AddressRow]("addressRow", "address"
   def removeByPrimaryKey(addressId: Int) = new RemoveByPrimaryKey(Seq[Any](addressId))
 
   def update(addressId: Int, fields: Seq[DataField]) = new UpdateFields(Seq[Any](addressId), fields)
+  def updateBulk(pks: Seq[Seq[Any]], fields: Seq[DataField]) = new UpdateFieldsBulk(pks, fields)
 
   override def fromRow(row: Row) = AddressRow(
     addressId = IntegerType(row, "address_id"),

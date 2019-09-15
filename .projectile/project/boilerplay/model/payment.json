@@ -4,19 +4,46 @@
   "features" : [ "doobie", "datamodel", "auth", "graphql", "service", "slick", "controller", "notes", "json", "core" ],
   "ignored" : [ ],
   "overrides" : [ {
-    "k" : "rental_id.search",
+    "k" : "className",
+    "v" : "PaymentRow"
+  }, {
+    "k" : "title",
+    "v" : "Payment"
+  }, {
+    "k" : "plural",
+    "v" : "Payments"
+  }, {
+    "k" : "customer_id.globalSearch",
+    "v" : "false"
+  }, {
+    "k" : "customer_id.localSearch",
     "v" : "true"
   }, {
-    "k" : "amount.search",
+    "k" : "staff_id.globalSearch",
+    "v" : "false"
+  }, {
+    "k" : "staff_id.localSearch",
+    "v" : "true"
+  }, {
+    "k" : "rental_id.globalSearch",
+    "v" : "false"
+  }, {
+    "k" : "rental_id.localSearch",
+    "v" : "true"
+  }, {
+    "k" : "amount.localSearch",
     "v" : "true"
   }, {
     "k" : "fk.payment_staff_id_fkey.propertyName",
-    "v" : "paymentStaffIdFkeyRel"
+    "v" : "staff"
   }, {
     "k" : "fk.payment_rental_id_fkey.propertyName",
-    "v" : "paymentRentalIdFkeyRel"
+    "v" : "rental"
   }, {
     "k" : "fk.payment_customer_id_fkey.propertyName",
-    "v" : "paymentCustomerIdFkeyRel"
+    "v" : "customer"
+  }, {
+    "k" : "defaultOrder",
+    "v" : "desc-payment_date"
   } ]
 }

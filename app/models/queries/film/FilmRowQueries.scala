@@ -28,7 +28,7 @@ object FilmRowQueries extends BaseQueries[FilmRow]("filmRow", "film") {
     DatabaseField(title = "Fulltext", prop = "fulltext", col = "fulltext", typ = StringType)
   )
   override protected val pkColumns = Seq("film_id")
-  override protected val searchColumns = Seq("film_id", "title", "language_id", "original_language_id", "rating", "last_update")
+  override protected val searchColumns = Seq("film_id", "title", "description", "release_year", "language_id", "original_language_id", "rental_duration", "rental_rate", "length", "rating", "last_update", "fulltext")
 
   def countAll(filters: Seq[Filter] = Nil) = onCountAll(filters)
   def getAll(filters: Seq[Filter] = Nil, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) = {
@@ -44,12 +44,26 @@ object FilmRowQueries extends BaseQueries[FilmRow]("filmRow", "film") {
   def getByPrimaryKey(filmId: Int) = new GetByPrimaryKey(Seq(filmId))
   def getByPrimaryKeySeq(filmIdSeq: Seq[Int]) = new ColSeqQuery(column = "film_id", values = filmIdSeq)
 
+  final case class CountByDescription(description: String) extends ColCount(column = "description", values = Seq(description))
+  final case class GetByDescription(description: String, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) extends SeqQuery(
+    whereClause = Some(quote("description") + "  = ?"), orderBy = ResultFieldHelper.orderClause(fields, orderBys: _*),
+    limit = limit, offset = offset, values = Seq(description)
+  )
+  final case class GetByDescriptionSeq(descriptionSeq: Seq[String]) extends ColSeqQuery(column = "description", values = descriptionSeq)
+
   final case class CountByFilmId(filmId: Int) extends ColCount(column = "film_id", values = Seq(filmId))
   final case class GetByFilmId(filmId: Int, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) extends SeqQuery(
     whereClause = Some(quote("film_id") + "  = ?"), orderBy = ResultFieldHelper.orderClause(fields, orderBys: _*),
     limit = limit, offset = offset, values = Seq(filmId)
   )
   final case class GetByFilmIdSeq(filmIdSeq: Seq[Int]) extends ColSeqQuery(column = "film_id", values = filmIdSeq)
+
+  final case class CountByFulltext(fulltext: String) extends ColCount(column = "fulltext", values = Seq(fulltext))
+  final case class GetByFulltext(fulltext: String, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) extends SeqQuery(
+    whereClause = Some(quote("fulltext") + "  = ?"), orderBy = ResultFieldHelper.orderClause(fields, orderBys: _*),
+    limit = limit, offset = offset, values = Seq(fulltext)
+  )
+  final case class GetByFulltextSeq(fulltextSeq: Seq[String]) extends ColSeqQuery(column = "fulltext", values = fulltextSeq)
 
   final case class CountByLanguageId(languageId: Int) extends ColCount(column = "language_id", values = Seq(languageId))
   final case class GetByLanguageId(languageId: Int, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) extends SeqQuery(
@@ -65,6 +79,13 @@ object FilmRowQueries extends BaseQueries[FilmRow]("filmRow", "film") {
   )
   final case class GetByLastUpdateSeq(lastUpdateSeq: Seq[ZonedDateTime]) extends ColSeqQuery(column = "last_update", values = lastUpdateSeq)
 
+  final case class CountByLength(length: Int) extends ColCount(column = "length", values = Seq(length))
+  final case class GetByLength(length: Int, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) extends SeqQuery(
+    whereClause = Some(quote("length") + "  = ?"), orderBy = ResultFieldHelper.orderClause(fields, orderBys: _*),
+    limit = limit, offset = offset, values = Seq(length)
+  )
+  final case class GetByLengthSeq(lengthSeq: Seq[Int]) extends ColSeqQuery(column = "length", values = lengthSeq)
+
   final case class CountByOriginalLanguageId(originalLanguageId: Int) extends ColCount(column = "original_language_id", values = Seq(originalLanguageId))
   final case class GetByOriginalLanguageId(originalLanguageId: Int, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) extends SeqQuery(
     whereClause = Some(quote("original_language_id") + "  = ?"), orderBy = ResultFieldHelper.orderClause(fields, orderBys: _*),
@@ -78,6 +99,27 @@ object FilmRowQueries extends BaseQueries[FilmRow]("filmRow", "film") {
     limit = limit, offset = offset, values = Seq(rating)
   )
   final case class GetByRatingSeq(ratingSeq: Seq[MpaaRatingType]) extends ColSeqQuery(column = "rating", values = ratingSeq)
+
+  final case class CountByReleaseYear(releaseYear: Long) extends ColCount(column = "release_year", values = Seq(releaseYear))
+  final case class GetByReleaseYear(releaseYear: Long, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) extends SeqQuery(
+    whereClause = Some(quote("release_year") + "  = ?"), orderBy = ResultFieldHelper.orderClause(fields, orderBys: _*),
+    limit = limit, offset = offset, values = Seq(releaseYear)
+  )
+  final case class GetByReleaseYearSeq(releaseYearSeq: Seq[Long]) extends ColSeqQuery(column = "release_year", values = releaseYearSeq)
+
+  final case class CountByRentalDuration(rentalDuration: Int) extends ColCount(column = "rental_duration", values = Seq(rentalDuration))
+  final case class GetByRentalDuration(rentalDuration: Int, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) extends SeqQuery(
+    whereClause = Some(quote("rental_duration") + "  = ?"), orderBy = ResultFieldHelper.orderClause(fields, orderBys: _*),
+    limit = limit, offset = offset, values = Seq(rentalDuration)
+  )
+  final case class GetByRentalDurationSeq(rentalDurationSeq: Seq[Int]) extends ColSeqQuery(column = "rental_duration", values = rentalDurationSeq)
+
+  final case class CountByRentalRate(rentalRate: BigDecimal) extends ColCount(column = "rental_rate", values = Seq(rentalRate))
+  final case class GetByRentalRate(rentalRate: BigDecimal, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) extends SeqQuery(
+    whereClause = Some(quote("rental_rate") + "  = ?"), orderBy = ResultFieldHelper.orderClause(fields, orderBys: _*),
+    limit = limit, offset = offset, values = Seq(rentalRate)
+  )
+  final case class GetByRentalRateSeq(rentalRateSeq: Seq[BigDecimal]) extends ColSeqQuery(column = "rental_rate", values = rentalRateSeq)
 
   final case class CountByTitle(title: String) extends ColCount(column = "title", values = Seq(title))
   final case class GetByTitle(title: String, orderBys: Seq[OrderBy] = Nil, limit: Option[Int] = None, offset: Option[Int] = None) extends SeqQuery(
@@ -93,6 +135,7 @@ object FilmRowQueries extends BaseQueries[FilmRow]("filmRow", "film") {
   def removeByPrimaryKey(filmId: Int) = new RemoveByPrimaryKey(Seq[Any](filmId))
 
   def update(filmId: Int, fields: Seq[DataField]) = new UpdateFields(Seq[Any](filmId), fields)
+  def updateBulk(pks: Seq[Seq[Any]], fields: Seq[DataField]) = new UpdateFieldsBulk(pks, fields)
 
   override def fromRow(row: Row) = FilmRow(
     filmId = IntegerType(row, "film_id"),

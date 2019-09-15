@@ -74,5 +74,5 @@ final case class CustomerRow(
     DataField("active", active.map(_.toString))
   )
 
-  def toSummary = DataSummary(model = "customerRow", pk = customerId.toString, title = s"storeId: $storeId, firstName: $firstName, lastName: $lastName, email: ${email.map(_.toString).getOrElse("∅")}, addressId: $addressId")
+  def toSummary = DataSummary(model = "customerRow", pk = customerId.toString, title = s"customerId: $customerId, storeId: $storeId, firstName: $firstName, lastName: $lastName, email: ${email.map(_.toString).getOrElse("∅")}, addressId: $addressId")
 }

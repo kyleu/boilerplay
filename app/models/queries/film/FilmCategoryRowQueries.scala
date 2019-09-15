@@ -64,6 +64,7 @@ object FilmCategoryRowQueries extends BaseQueries[FilmCategoryRow]("filmCategory
   def removeByPrimaryKey(filmId: Int, categoryId: Int) = new RemoveByPrimaryKey(Seq[Any](filmId, categoryId))
 
   def update(filmId: Int, categoryId: Int, fields: Seq[DataField]) = new UpdateFields(Seq[Any](filmId, categoryId), fields)
+  def updateBulk(pks: Seq[Seq[Any]], fields: Seq[DataField]) = new UpdateFieldsBulk(pks, fields)
 
   override def fromRow(row: Row) = FilmCategoryRow(
     filmId = IntegerType(row, "film_id"),

@@ -39,5 +39,5 @@ final case class FilmCategoryRow(
     DataField("lastUpdate", Some(lastUpdate.toString))
   )
 
-  def toSummary = DataSummary(model = "filmCategoryRow", pk = filmId.toString + "/" + categoryId.toString, title = s"lastUpdate: $lastUpdate")
+  def toSummary = DataSummary(model = "filmCategoryRow", pk = filmId.toString + "/" + categoryId.toString, title = s"filmId: $filmId, categoryId: $categoryId, lastUpdate: $lastUpdate")
 }
