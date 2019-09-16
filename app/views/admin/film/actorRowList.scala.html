@@ -15,7 +15,7 @@
       "lastUpdate" -> "Last Update"
     ),
     totalCount = totalCount,
-    rows = modelSeq.map(model => views.html.admin.film.actorRowDataRow(model, additional = aug._3.get(model).flatten)),
+    rows = modelSeq.map(model => views.html.admin.film.actorRowDataRow(model, additional = aug._2.get(model).flatten)),
     orderBy = orderBy,
     orderAsc = orderAsc,
     calls = com.kyleu.projectile.models.web.ListCalls(
@@ -28,7 +28,7 @@
     limit = limit,
     offset = offset,
     q = q,
-    additionalHeader = aug._1,
-    additionalColumns = aug._2
+    additionalHeader = com.kyleu.projectile.services.augment.AugmentService.listHeaders.augment(cls = classOf[models.film.ActorRow], args = request.queryString, cfg = cfg),
+    additionalColumns = aug._1
   )
 }

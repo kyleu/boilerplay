@@ -16,7 +16,7 @@
     orderBy = orderBy,
     orderAsc = orderAsc,
     totalCount = None,
-    rows = modelSeq.map(model => views.html.admin.film.filmCategoryRowDataRow(model, additional = aug._3.get(model).flatten)),
+    rows = modelSeq.map(model => views.html.admin.film.filmCategoryRowDataRow(model, additional = aug._2.get(model).flatten)),
     calls = com.kyleu.projectile.models.web.ListCalls(
       orderBy = Some(controllers.admin.film.routes.FilmCategoryRowController.byFilmId(filmId, _, _, Some(limit), Some(0))),
       search = None,
@@ -26,8 +26,8 @@
     limit = limit,
     offset = offset,
     q = None,
-    additionalHeader = aug._1,
-    additionalColumns = aug._2,
+    additionalHeader = com.kyleu.projectile.services.augment.AugmentService.listHeaders.augment(cls = classOf[models.film.FilmCategoryRow], args = request.queryString, cfg = cfg),
+    additionalColumns = aug._1,
     fullUI = false
   )
 }

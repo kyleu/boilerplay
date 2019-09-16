@@ -19,7 +19,7 @@
     orderBy = orderBy,
     orderAsc = orderAsc,
     totalCount = None,
-    rows = modelSeq.map(model => views.html.admin.customer.customerRowDataRow(model, additional = aug._3.get(model).flatten)),
+    rows = modelSeq.map(model => views.html.admin.customer.customerRowDataRow(model, additional = aug._2.get(model).flatten)),
     calls = com.kyleu.projectile.models.web.ListCalls(
       orderBy = Some(controllers.admin.customer.routes.CustomerRowController.byAddressId(addressId, _, _, Some(limit), Some(0))),
       search = None,
@@ -29,8 +29,8 @@
     limit = limit,
     offset = offset,
     q = None,
-    additionalHeader = aug._1,
-    additionalColumns = aug._2,
+    additionalHeader = com.kyleu.projectile.services.augment.AugmentService.listHeaders.augment(cls = classOf[models.customer.CustomerRow], args = request.queryString, cfg = cfg),
+    additionalColumns = aug._1,
     fullUI = false
   )
 }
