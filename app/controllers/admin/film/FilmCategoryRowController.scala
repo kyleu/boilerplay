@@ -23,7 +23,7 @@ class FilmCategoryRowController @javax.inject.Inject() (
   private[this] val defaultOrderBy = Some("lastUpdate" -> false)
 
   def list(q: Option[String], orderBy: Option[String], orderAsc: Boolean, limit: Option[Int], offset: Option[Int], t: Option[String] = None) = {
-    withSession("view", ("film", "FilmCategoryRow", "view")) { implicit request => implicit td =>
+    withSession("list", ("film", "FilmCategoryRow", "view")) { implicit request => implicit td =>
       val startMs = DateUtils.nowMillis
       val orderBys = OrderBy.forVals(orderBy, orderAsc, defaultOrderBy).toSeq
       searchWithCount(q, orderBys, limit, offset).map(r => renderChoice(t) {

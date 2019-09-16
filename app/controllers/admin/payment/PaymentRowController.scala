@@ -23,7 +23,7 @@ class PaymentRowController @javax.inject.Inject() (
   private[this] val defaultOrderBy = Some("paymentDate" -> false)
 
   def list(q: Option[String], orderBy: Option[String], orderAsc: Boolean, limit: Option[Int], offset: Option[Int], t: Option[String] = None) = {
-    withSession("view", ("payment", "PaymentRow", "view")) { implicit request => implicit td =>
+    withSession("list", ("payment", "PaymentRow", "view")) { implicit request => implicit td =>
       val startMs = DateUtils.nowMillis
       val orderBys = OrderBy.forVals(orderBy, orderAsc, defaultOrderBy).toSeq
       searchWithCount(q, orderBys, limit, offset).map(r => renderChoice(t) {

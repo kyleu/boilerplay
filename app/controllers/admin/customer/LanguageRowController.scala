@@ -24,7 +24,7 @@ class LanguageRowController @javax.inject.Inject() (
   private[this] val defaultOrderBy = Some("name" -> true)
 
   def list(q: Option[String], orderBy: Option[String], orderAsc: Boolean, limit: Option[Int], offset: Option[Int], t: Option[String] = None) = {
-    withSession("view", ("customer", "LanguageRow", "view")) { implicit request => implicit td =>
+    withSession("list", ("customer", "LanguageRow", "view")) { implicit request => implicit td =>
       val startMs = DateUtils.nowMillis
       val orderBys = OrderBy.forVals(orderBy, orderAsc, defaultOrderBy).toSeq
       searchWithCount(q, orderBys, limit, offset).map(r => renderChoice(t) {
