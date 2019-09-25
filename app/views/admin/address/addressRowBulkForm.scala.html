@@ -1,6 +1,6 @@
 @* Generated File *@
 @(cfg: com.kyleu.projectile.models.config.UiConfig, modelSeq: Seq[models.address.AddressRow], act: Call, debug: Boolean)(
-    implicit flash: Flash
+    implicit request: Request[AnyContent], flash: Flash
 )@com.kyleu.projectile.views.html.layout.page(title = "Bulk Edit", cfg = cfg, icon = Some(models.template.Icons.addressRow)) {
   <form id="form-edit-addressRow" action="@act" method="post">
     <input type="hidden" class="primaryKeys" name="primaryKeys" value="@modelSeq.map(m => m.addressId).mkString("//")" />
@@ -30,16 +30,17 @@
     @com.kyleu.projectile.views.html.layout.card(None) {
       <table>
         <tbody>
-          @com.kyleu.projectile.views.html.components.form.textField(selected = false, key = "address", title = "Address", value = None, nullable = false)
-          @com.kyleu.projectile.views.html.components.form.textField(selected = false, key = "address2", title = "Address2", value = None, nullable = true)
-          @com.kyleu.projectile.views.html.components.form.textField(selected = false, key = "district", title = "District", value = None, nullable = false)
+          @com.kyleu.projectile.views.html.components.form.textField(selected = request.queryString.isDefinedAt("address"), key = "address", title = "Address", value = request.queryString.get("address").flatMap(_.headOption).orElse(None), nullable = false)
+          @com.kyleu.projectile.views.html.components.form.textField(selected = request.queryString.isDefinedAt("address2"), key = "address2", title = "Address2", value = request.queryString.get("address2").flatMap(_.headOption).orElse(None), nullable = true)
+          @com.kyleu.projectile.views.html.components.form.textField(selected = request.queryString.isDefinedAt("district"), key = "district", title = "District", value = request.queryString.get("district").flatMap(_.headOption).orElse(None), nullable = false)
           @com.kyleu.projectile.views.html.components.form.autocompleteField(
-            selected = false, key = "cityId", title = "City Id", value = None, nullable = false, dataType = "integer",
-            call = controllers.admin.address.routes.CityRowController.autocomplete(), acType = ("cityRow", "City"), icon = models.template.Icons.cityRow
+            selected = request.queryString.isDefinedAt("cityId"), key = "cityId", title = "City Id", value = request.queryString.get("cityId").flatMap(_.headOption).orElse(None), nullable = false, dataType = "integer",
+            call = controllers.admin.address.routes.CityRowController.autocomplete(), acType = ("cityRow", "City"), icon = models.template.Icons.cityRow,
+            inputType = "number"
           )
-          @com.kyleu.projectile.views.html.components.form.textField(selected = false, key = "postalCode", title = "Postal Code", value = None, nullable = true)
-          @com.kyleu.projectile.views.html.components.form.textField(selected = false, key = "phone", title = "Phone", value = None, nullable = false)
-          @com.kyleu.projectile.views.html.components.form.zonedDateTimeField(selected = false, key = "lastUpdate", title = "Last Update", value = None, nullable = false)
+          @com.kyleu.projectile.views.html.components.form.textField(selected = request.queryString.isDefinedAt("postalCode"), key = "postalCode", title = "Postal Code", value = request.queryString.get("postalCode").flatMap(_.headOption).orElse(None), nullable = true)
+          @com.kyleu.projectile.views.html.components.form.textField(selected = request.queryString.isDefinedAt("phone"), key = "phone", title = "Phone", value = request.queryString.get("phone").flatMap(_.headOption).orElse(None), nullable = false)
+          @com.kyleu.projectile.views.html.components.form.zonedDateTimeField(selected = request.queryString.isDefinedAt("lastUpdate"), key = "lastUpdate", title = "Last Update", value = request.queryString.get("lastUpdate").flatMap(_.headOption).map(s => com.kyleu.projectile.util.DateUtils.fromIsoStringZoned(s)).orElse(None), nullable = false)
         </tbody>
       </table>
     }

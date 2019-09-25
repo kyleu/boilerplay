@@ -1,6 +1,6 @@
 @* Generated File *@
 @(cfg: com.kyleu.projectile.models.config.UiConfig, modelSeq: Seq[models.film.FilmRow], act: Call, debug: Boolean)(
-    implicit flash: Flash
+    implicit request: Request[AnyContent], flash: Flash
 )@com.kyleu.projectile.views.html.layout.page(title = "Bulk Edit", cfg = cfg, icon = Some(models.template.Icons.filmRow)) {
   <form id="form-edit-filmRow" action="@act" method="post">
     <input type="hidden" class="primaryKeys" name="primaryKeys" value="@modelSeq.map(m => m.filmId).mkString("//")" />
@@ -33,25 +33,27 @@
     @com.kyleu.projectile.views.html.layout.card(None) {
       <table>
         <tbody>
-          @com.kyleu.projectile.views.html.components.form.textField(selected = false, key = "title", title = "Title", value = None, nullable = false)
-          @com.kyleu.projectile.views.html.components.form.textField(selected = false, key = "description", title = "Description", value = None, nullable = true)
-          @com.kyleu.projectile.views.html.components.form.textField(selected = false, key = "releaseYear", title = "Release Year", value = None, nullable = true, dataType = "long")
+          @com.kyleu.projectile.views.html.components.form.textField(selected = request.queryString.isDefinedAt("title"), key = "title", title = "Title", value = request.queryString.get("title").flatMap(_.headOption).orElse(None), nullable = false)
+          @com.kyleu.projectile.views.html.components.form.textField(selected = request.queryString.isDefinedAt("description"), key = "description", title = "Description", value = request.queryString.get("description").flatMap(_.headOption).orElse(None), nullable = true)
+          @com.kyleu.projectile.views.html.components.form.longField(selected = request.queryString.isDefinedAt("releaseYear"), key = "releaseYear", title = "Release Year", value = request.queryString.get("releaseYear").flatMap(_.headOption).map(s => s.toLong).orElse(None), nullable = true)
           @com.kyleu.projectile.views.html.components.form.autocompleteField(
-            selected = false, key = "languageId", title = "Language Id", value = None, nullable = false, dataType = "integer",
-            call = controllers.admin.customer.routes.LanguageRowController.autocomplete(), acType = ("languageRow", "Language"), icon = models.template.Icons.languageRow
+            selected = request.queryString.isDefinedAt("languageId"), key = "languageId", title = "Language Id", value = request.queryString.get("languageId").flatMap(_.headOption).orElse(None), nullable = false, dataType = "integer",
+            call = controllers.admin.customer.routes.LanguageRowController.autocomplete(), acType = ("languageRow", "Language"), icon = models.template.Icons.languageRow,
+            inputType = "number"
           )
           @com.kyleu.projectile.views.html.components.form.autocompleteField(
-            selected = false, key = "originalLanguageId", title = "Original Language Id", value = None, nullable = true, dataType = "integer",
-            call = controllers.admin.customer.routes.LanguageRowController.autocomplete(), acType = ("languageRow", "Language"), icon = models.template.Icons.languageRow
+            selected = request.queryString.isDefinedAt("originalLanguageId"), key = "originalLanguageId", title = "Original Language Id", value = request.queryString.get("originalLanguageId").flatMap(_.headOption).orElse(None), nullable = true, dataType = "integer",
+            call = controllers.admin.customer.routes.LanguageRowController.autocomplete(), acType = ("languageRow", "Language"), icon = models.template.Icons.languageRow,
+            inputType = "number"
           )
-          @com.kyleu.projectile.views.html.components.form.textField(selected = false, key = "rentalDuration", title = "Rental Duration", value = None, nullable = false, dataType = "integer")
-          @com.kyleu.projectile.views.html.components.form.textField(selected = false, key = "rentalRate", title = "Rental Rate", value = None, nullable = false, dataType = "decimal")
-          @com.kyleu.projectile.views.html.components.form.textField(selected = false, key = "length", title = "Length", value = None, nullable = true, dataType = "integer")
-          @com.kyleu.projectile.views.html.components.form.textField(selected = false, key = "replacementCost", title = "Replacement Cost", value = None, nullable = false, dataType = "decimal")
-          @com.kyleu.projectile.views.html.components.form.selectField(selected = false, key = "rating", title = "Rating", value = None, nullable = true, options = Seq("G" -> "G", "PG" -> "PG", "PG13" -> "PG13", "R" -> "R", "NC17" -> "NC17"), dataType = "mpaa_rating")
-          @com.kyleu.projectile.views.html.components.form.zonedDateTimeField(selected = false, key = "lastUpdate", title = "Last Update", value = None, nullable = false)
-          @com.kyleu.projectile.views.html.components.form.collectionField(selected = false, key = "specialFeatures", title = "Special Features", value = None, nullable = true)
-          @com.kyleu.projectile.views.html.components.form.textField(selected = false, key = "fulltext", title = "Fulltext", value = None, nullable = false)
+          @com.kyleu.projectile.views.html.components.form.intField(selected = request.queryString.isDefinedAt("rentalDuration"), key = "rentalDuration", title = "Rental Duration", value = request.queryString.get("rentalDuration").flatMap(_.headOption).map(s => s.toInt).orElse(None), nullable = false)
+          @com.kyleu.projectile.views.html.components.form.decimalField(selected = request.queryString.isDefinedAt("rentalRate"), key = "rentalRate", title = "Rental Rate", value = request.queryString.get("rentalRate").flatMap(_.headOption).map(s => BigDecimal(s)).orElse(None), nullable = false)
+          @com.kyleu.projectile.views.html.components.form.intField(selected = request.queryString.isDefinedAt("length"), key = "length", title = "Length", value = request.queryString.get("length").flatMap(_.headOption).map(s => s.toInt).orElse(None), nullable = true)
+          @com.kyleu.projectile.views.html.components.form.decimalField(selected = request.queryString.isDefinedAt("replacementCost"), key = "replacementCost", title = "Replacement Cost", value = request.queryString.get("replacementCost").flatMap(_.headOption).map(s => BigDecimal(s)).orElse(None), nullable = false)
+          @com.kyleu.projectile.views.html.components.form.selectField(selected = request.queryString.isDefinedAt("rating"), key = "rating", title = "Rating", value = request.queryString.get("rating").flatMap(_.headOption).orElse(None), nullable = true, options = Seq("G" -> "G", "PG" -> "PG", "PG13" -> "PG13", "R" -> "R", "NC17" -> "NC17"), dataType = "mpaa_rating")
+          @com.kyleu.projectile.views.html.components.form.zonedDateTimeField(selected = request.queryString.isDefinedAt("lastUpdate"), key = "lastUpdate", title = "Last Update", value = request.queryString.get("lastUpdate").flatMap(_.headOption).map(s => com.kyleu.projectile.util.DateUtils.fromIsoStringZoned(s)).orElse(None), nullable = false)
+          @com.kyleu.projectile.views.html.components.form.collectionField(selected = request.queryString.isDefinedAt("specialFeatures"), key = "specialFeatures", title = "Special Features", value = request.queryString.get("specialFeatures").flatMap(_.headOption).map(s => s.split(",").toList).orElse(None), nullable = true)
+          @com.kyleu.projectile.views.html.components.form.textField(selected = request.queryString.isDefinedAt("fulltext"), key = "fulltext", title = "Fulltext", value = request.queryString.get("fulltext").flatMap(_.headOption).orElse(None), nullable = false)
         </tbody>
       </table>
     }

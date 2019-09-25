@@ -9,22 +9,25 @@
       <div class="clear"></div>
       <table>
         <tbody>
-          @com.kyleu.projectile.views.html.components.form.textField(selected = isNew, key = "rentalId", title = "Rental Id", value = Some(model.rentalId.toString), nullable = false, dataType = "long")
-          @com.kyleu.projectile.views.html.components.form.zonedDateTimeField(selected = isNew, key = "rentalDate", title = "Rental Date", value = Some(model.rentalDate), nullable = false)
+          @com.kyleu.projectile.views.html.components.form.longField(selected = request.queryString.isDefinedAt("rentalId") || isNew, key = "rentalId", title = "Rental Id", value = request.queryString.get("rentalId").flatMap(_.headOption).map(s => s.toLong).orElse(Some(model.rentalId)), nullable = false, isPk = true)
+          @com.kyleu.projectile.views.html.components.form.zonedDateTimeField(selected = request.queryString.isDefinedAt("rentalDate") || isNew, key = "rentalDate", title = "Rental Date", value = request.queryString.get("rentalDate").flatMap(_.headOption).map(s => com.kyleu.projectile.util.DateUtils.fromIsoStringZoned(s)).orElse(Some(model.rentalDate)), nullable = false)
           @com.kyleu.projectile.views.html.components.form.autocompleteField(
-            selected = isNew, key = "inventoryId", title = "Inventory Id", value = Some(model.inventoryId.toString), nullable = false, dataType = "long",
-            call = controllers.admin.store.routes.InventoryRowController.autocomplete(), acType = ("inventoryRow", "Inventory"), icon = models.template.Icons.inventoryRow
+            selected = request.queryString.isDefinedAt("inventoryId") || isNew, key = "inventoryId", title = "Inventory Id", value = request.queryString.get("inventoryId").flatMap(_.headOption).orElse(if(isNew) { None } else { Some(model.inventoryId.toString) }), nullable = false, dataType = "long",
+            call = controllers.admin.store.routes.InventoryRowController.autocomplete(), acType = ("inventoryRow", "Inventory"), icon = models.template.Icons.inventoryRow,
+            inputType = "number"
           )
           @com.kyleu.projectile.views.html.components.form.autocompleteField(
-            selected = isNew, key = "customerId", title = "Customer Id", value = Some(model.customerId.toString), nullable = false, dataType = "integer",
-            call = controllers.admin.customer.routes.CustomerRowController.autocomplete(), acType = ("customerRow", "Customer"), icon = models.template.Icons.customerRow
+            selected = request.queryString.isDefinedAt("customerId") || isNew, key = "customerId", title = "Customer Id", value = request.queryString.get("customerId").flatMap(_.headOption).orElse(if(isNew) { None } else { Some(model.customerId.toString) }), nullable = false, dataType = "integer",
+            call = controllers.admin.customer.routes.CustomerRowController.autocomplete(), acType = ("customerRow", "Customer"), icon = models.template.Icons.customerRow,
+            inputType = "number"
           )
-          @com.kyleu.projectile.views.html.components.form.zonedDateTimeField(selected = false, key = "returnDate", title = "Return Date", value = model.returnDate, nullable = true)
+          @com.kyleu.projectile.views.html.components.form.zonedDateTimeField(selected = request.queryString.isDefinedAt("returnDate"), key = "returnDate", title = "Return Date", value = request.queryString.get("returnDate").flatMap(_.headOption).map(s => com.kyleu.projectile.util.DateUtils.fromIsoStringZoned(s)).orElse(model.returnDate), nullable = true)
           @com.kyleu.projectile.views.html.components.form.autocompleteField(
-            selected = isNew, key = "staffId", title = "Staff Id", value = Some(model.staffId.toString), nullable = false, dataType = "integer",
-            call = controllers.admin.store.routes.StaffRowController.autocomplete(), acType = ("staffRow", "Staff"), icon = models.template.Icons.staffRow
+            selected = request.queryString.isDefinedAt("staffId") || isNew, key = "staffId", title = "Staff Id", value = request.queryString.get("staffId").flatMap(_.headOption).orElse(if(isNew) { None } else { Some(model.staffId.toString) }), nullable = false, dataType = "integer",
+            call = controllers.admin.store.routes.StaffRowController.autocomplete(), acType = ("staffRow", "Staff"), icon = models.template.Icons.staffRow,
+            inputType = "number"
           )
-          @com.kyleu.projectile.views.html.components.form.zonedDateTimeField(selected = isNew, key = "lastUpdate", title = "Last Update", value = Some(model.lastUpdate), nullable = false)
+          @com.kyleu.projectile.views.html.components.form.zonedDateTimeField(selected = request.queryString.isDefinedAt("lastUpdate") || isNew, key = "lastUpdate", title = "Last Update", value = request.queryString.get("lastUpdate").flatMap(_.headOption).map(s => com.kyleu.projectile.util.DateUtils.fromIsoStringZoned(s)).orElse(Some(model.lastUpdate)), nullable = false)
         </tbody>
       </table>
     }

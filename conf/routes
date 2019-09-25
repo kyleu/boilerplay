@@ -37,6 +37,7 @@ GET        /                                        controllers.HomeController.h
 ->          /admin/film                              film.Routes
 ->          /admin/payment                           payment.Routes
 ->          /admin/store                             store.Routes
+->          /admin/test                              test.Routes
 # End model route files
 
 # Assets

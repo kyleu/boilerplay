@@ -1,6 +1,6 @@
 @* Generated File *@
 @(cfg: com.kyleu.projectile.models.config.UiConfig, modelSeq: Seq[models.payment.PaymentRow], act: Call, debug: Boolean)(
-    implicit flash: Flash
+    implicit request: Request[AnyContent], flash: Flash
 )@com.kyleu.projectile.views.html.layout.page(title = "Bulk Edit", cfg = cfg, icon = Some(models.template.Icons.paymentRow)) {
   <form id="form-edit-paymentRow" action="@act" method="post">
     <input type="hidden" class="primaryKeys" name="primaryKeys" value="@modelSeq.map(m => m.paymentId).mkString("//")" />
@@ -28,19 +28,22 @@
       <table>
         <tbody>
           @com.kyleu.projectile.views.html.components.form.autocompleteField(
-            selected = false, key = "customerId", title = "Customer Id", value = None, nullable = false, dataType = "integer",
-            call = controllers.admin.customer.routes.CustomerRowController.autocomplete(), acType = ("customerRow", "Customer"), icon = models.template.Icons.customerRow
+            selected = request.queryString.isDefinedAt("customerId"), key = "customerId", title = "Customer Id", value = request.queryString.get("customerId").flatMap(_.headOption).orElse(None), nullable = false, dataType = "integer",
+            call = controllers.admin.customer.routes.CustomerRowController.autocomplete(), acType = ("customerRow", "Customer"), icon = models.template.Icons.customerRow,
+            inputType = "number"
           )
           @com.kyleu.projectile.views.html.components.form.autocompleteField(
-            selected = false, key = "staffId", title = "Staff Id", value = None, nullable = false, dataType = "integer",
-            call = controllers.admin.store.routes.StaffRowController.autocomplete(), acType = ("staffRow", "Staff"), icon = models.template.Icons.staffRow
+            selected = request.queryString.isDefinedAt("staffId"), key = "staffId", title = "Staff Id", value = request.queryString.get("staffId").flatMap(_.headOption).orElse(None), nullable = false, dataType = "integer",
+            call = controllers.admin.store.routes.StaffRowController.autocomplete(), acType = ("staffRow", "Staff"), icon = models.template.Icons.staffRow,
+            inputType = "number"
           )
           @com.kyleu.projectile.views.html.components.form.autocompleteField(
-            selected = false, key = "rentalId", title = "Rental Id", value = None, nullable = false, dataType = "long",
-            call = controllers.admin.customer.routes.RentalRowController.autocomplete(), acType = ("rentalRow", "Rental"), icon = models.template.Icons.rentalRow
+            selected = request.queryString.isDefinedAt("rentalId"), key = "rentalId", title = "Rental Id", value = request.queryString.get("rentalId").flatMap(_.headOption).orElse(None), nullable = false, dataType = "long",
+            call = controllers.admin.customer.routes.RentalRowController.autocomplete(), acType = ("rentalRow", "Rental"), icon = models.template.Icons.rentalRow,
+            inputType = "number"
           )
-          @com.kyleu.projectile.views.html.components.form.textField(selected = false, key = "amount", title = "Amount", value = None, nullable = false, dataType = "decimal")
-          @com.kyleu.projectile.views.html.components.form.zonedDateTimeField(selected = false, key = "paymentDate", title = "Payment Date", value = None, nullable = false)
+          @com.kyleu.projectile.views.html.components.form.decimalField(selected = request.queryString.isDefinedAt("amount"), key = "amount", title = "Amount", value = request.queryString.get("amount").flatMap(_.headOption).map(s => BigDecimal(s)).orElse(None), nullable = false)
+          @com.kyleu.projectile.views.html.components.form.zonedDateTimeField(selected = request.queryString.isDefinedAt("paymentDate"), key = "paymentDate", title = "Payment Date", value = request.queryString.get("paymentDate").flatMap(_.headOption).map(s => com.kyleu.projectile.util.DateUtils.fromIsoStringZoned(s)).orElse(None), nullable = false)
         </tbody>
       </table>
     }

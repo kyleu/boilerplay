@@ -10,14 +10,16 @@
       <table>
         <tbody>
           @com.kyleu.projectile.views.html.components.form.autocompleteField(
-            selected = isNew, key = "actorId", title = "Actor Id", value = Some(model.actorId.toString), nullable = false, dataType = "integer",
-            call = controllers.admin.film.routes.ActorRowController.autocomplete(), acType = ("actorRow", "Actor"), icon = models.template.Icons.actorRow
+            selected = request.queryString.isDefinedAt("actorId") || isNew, key = "actorId", title = "Actor Id", value = request.queryString.get("actorId").flatMap(_.headOption).orElse(if(isNew) { None } else { Some(model.actorId.toString) }), nullable = false, isPk = true, dataType = "integer",
+            call = controllers.admin.film.routes.ActorRowController.autocomplete(), acType = ("actorRow", "Actor"), icon = models.template.Icons.actorRow,
+            inputType = "number"
           )
           @com.kyleu.projectile.views.html.components.form.autocompleteField(
-            selected = isNew, key = "filmId", title = "Film Id", value = Some(model.filmId.toString), nullable = false, dataType = "integer",
-            call = controllers.admin.film.routes.FilmRowController.autocomplete(), acType = ("filmRow", "Film"), icon = models.template.Icons.filmRow
+            selected = request.queryString.isDefinedAt("filmId") || isNew, key = "filmId", title = "Film Id", value = request.queryString.get("filmId").flatMap(_.headOption).orElse(if(isNew) { None } else { Some(model.filmId.toString) }), nullable = false, isPk = true, dataType = "integer",
+            call = controllers.admin.film.routes.FilmRowController.autocomplete(), acType = ("filmRow", "Film"), icon = models.template.Icons.filmRow,
+            inputType = "number"
           )
-          @com.kyleu.projectile.views.html.components.form.zonedDateTimeField(selected = isNew, key = "lastUpdate", title = "Last Update", value = Some(model.lastUpdate), nullable = false)
+          @com.kyleu.projectile.views.html.components.form.zonedDateTimeField(selected = request.queryString.isDefinedAt("lastUpdate") || isNew, key = "lastUpdate", title = "Last Update", value = request.queryString.get("lastUpdate").flatMap(_.headOption).map(s => com.kyleu.projectile.util.DateUtils.fromIsoStringZoned(s)).orElse(Some(model.lastUpdate)), nullable = false)
         </tbody>
       </table>
     }

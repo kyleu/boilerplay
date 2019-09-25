@@ -1,6 +1,6 @@
 @* Generated File *@
 @(cfg: com.kyleu.projectile.models.config.UiConfig, modelSeq: Seq[models.customer.RentalRow], act: Call, debug: Boolean)(
-    implicit flash: Flash
+    implicit request: Request[AnyContent], flash: Flash
 )@com.kyleu.projectile.views.html.layout.page(title = "Bulk Edit", cfg = cfg, icon = Some(models.template.Icons.rentalRow)) {
   <form id="form-edit-rentalRow" action="@act" method="post">
     <input type="hidden" class="primaryKeys" name="primaryKeys" value="@modelSeq.map(m => m.rentalId).mkString("//")" />
@@ -28,21 +28,24 @@
     @com.kyleu.projectile.views.html.layout.card(None) {
       <table>
         <tbody>
-          @com.kyleu.projectile.views.html.components.form.zonedDateTimeField(selected = false, key = "rentalDate", title = "Rental Date", value = None, nullable = false)
+          @com.kyleu.projectile.views.html.components.form.zonedDateTimeField(selected = request.queryString.isDefinedAt("rentalDate"), key = "rentalDate", title = "Rental Date", value = request.queryString.get("rentalDate").flatMap(_.headOption).map(s => com.kyleu.projectile.util.DateUtils.fromIsoStringZoned(s)).orElse(None), nullable = false)
           @com.kyleu.projectile.views.html.components.form.autocompleteField(
-            selected = false, key = "inventoryId", title = "Inventory Id", value = None, nullable = false, dataType = "long",
-            call = controllers.admin.store.routes.InventoryRowController.autocomplete(), acType = ("inventoryRow", "Inventory"), icon = models.template.Icons.inventoryRow
+            selected = request.queryString.isDefinedAt("inventoryId"), key = "inventoryId", title = "Inventory Id", value = request.queryString.get("inventoryId").flatMap(_.headOption).orElse(None), nullable = false, dataType = "long",
+            call = controllers.admin.store.routes.InventoryRowController.autocomplete(), acType = ("inventoryRow", "Inventory"), icon = models.template.Icons.inventoryRow,
+            inputType = "number"
           )
           @com.kyleu.projectile.views.html.components.form.autocompleteField(
-            selected = false, key = "customerId", title = "Customer Id", value = None, nullable = false, dataType = "integer",
-            call = controllers.admin.customer.routes.CustomerRowController.autocomplete(), acType = ("customerRow", "Customer"), icon = models.template.Icons.customerRow
+            selected = request.queryString.isDefinedAt("customerId"), key = "customerId", title = "Customer Id", value = request.queryString.get("customerId").flatMap(_.headOption).orElse(None), nullable = false, dataType = "integer",
+            call = controllers.admin.customer.routes.CustomerRowController.autocomplete(), acType = ("customerRow", "Customer"), icon = models.template.Icons.customerRow,
+            inputType = "number"
           )
-          @com.kyleu.projectile.views.html.components.form.zonedDateTimeField(selected = false, key = "returnDate", title = "Return Date", value = None, nullable = true)
+          @com.kyleu.projectile.views.html.components.form.zonedDateTimeField(selected = request.queryString.isDefinedAt("returnDate"), key = "returnDate", title = "Return Date", value = request.queryString.get("returnDate").flatMap(_.headOption).map(s => com.kyleu.projectile.util.DateUtils.fromIsoStringZoned(s)).orElse(None), nullable = true)
           @com.kyleu.projectile.views.html.components.form.autocompleteField(
-            selected = false, key = "staffId", title = "Staff Id", value = None, nullable = false, dataType = "integer",
-            call = controllers.admin.store.routes.StaffRowController.autocomplete(), acType = ("staffRow", "Staff"), icon = models.template.Icons.staffRow
+            selected = request.queryString.isDefinedAt("staffId"), key = "staffId", title = "Staff Id", value = request.queryString.get("staffId").flatMap(_.headOption).orElse(None), nullable = false, dataType = "integer",
+            call = controllers.admin.store.routes.StaffRowController.autocomplete(), acType = ("staffRow", "Staff"), icon = models.template.Icons.staffRow,
+            inputType = "number"
           )
-          @com.kyleu.projectile.views.html.components.form.zonedDateTimeField(selected = false, key = "lastUpdate", title = "Last Update", value = None, nullable = false)
+          @com.kyleu.projectile.views.html.components.form.zonedDateTimeField(selected = request.queryString.isDefinedAt("lastUpdate"), key = "lastUpdate", title = "Last Update", value = request.queryString.get("lastUpdate").flatMap(_.headOption).map(s => com.kyleu.projectile.util.DateUtils.fromIsoStringZoned(s)).orElse(None), nullable = false)
         </tbody>
       </table>
     }

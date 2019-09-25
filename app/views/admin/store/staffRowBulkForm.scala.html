@@ -1,6 +1,6 @@
 @* Generated File *@
 @(cfg: com.kyleu.projectile.models.config.UiConfig, modelSeq: Seq[models.store.StaffRow], act: Call, debug: Boolean)(
-    implicit flash: Flash
+    implicit request: Request[AnyContent], flash: Flash
 )@com.kyleu.projectile.views.html.layout.page(title = "Bulk Edit", cfg = cfg, icon = Some(models.template.Icons.staffRow)) {
   <form id="form-edit-staffRow" action="@act" method="post">
     <input type="hidden" class="primaryKeys" name="primaryKeys" value="@modelSeq.map(m => m.staffId).mkString("//")" />
@@ -29,22 +29,24 @@
     @com.kyleu.projectile.views.html.layout.card(None) {
       <table>
         <tbody>
-          @com.kyleu.projectile.views.html.components.form.textField(selected = false, key = "firstName", title = "First Name", value = None, nullable = false)
-          @com.kyleu.projectile.views.html.components.form.textField(selected = false, key = "lastName", title = "Last Name", value = None, nullable = false)
+          @com.kyleu.projectile.views.html.components.form.textField(selected = request.queryString.isDefinedAt("firstName"), key = "firstName", title = "First Name", value = request.queryString.get("firstName").flatMap(_.headOption).orElse(None), nullable = false)
+          @com.kyleu.projectile.views.html.components.form.textField(selected = request.queryString.isDefinedAt("lastName"), key = "lastName", title = "Last Name", value = request.queryString.get("lastName").flatMap(_.headOption).orElse(None), nullable = false)
           @com.kyleu.projectile.views.html.components.form.autocompleteField(
-            selected = false, key = "addressId", title = "Address Id", value = None, nullable = false, dataType = "integer",
-            call = controllers.admin.address.routes.AddressRowController.autocomplete(), acType = ("addressRow", "Address"), icon = models.template.Icons.addressRow
+            selected = request.queryString.isDefinedAt("addressId"), key = "addressId", title = "Address Id", value = request.queryString.get("addressId").flatMap(_.headOption).orElse(None), nullable = false, dataType = "integer",
+            call = controllers.admin.address.routes.AddressRowController.autocomplete(), acType = ("addressRow", "Address"), icon = models.template.Icons.addressRow,
+            inputType = "number"
           )
-          @com.kyleu.projectile.views.html.components.form.textField(selected = false, key = "email", title = "Email", value = None, nullable = true)
+          @com.kyleu.projectile.views.html.components.form.textField(selected = request.queryString.isDefinedAt("email"), key = "email", title = "Email", value = request.queryString.get("email").flatMap(_.headOption).orElse(None), nullable = true)
           @com.kyleu.projectile.views.html.components.form.autocompleteField(
-            selected = false, key = "storeId", title = "Store Id", value = None, nullable = false, dataType = "integer",
-            call = controllers.admin.store.routes.StoreRowController.autocomplete(), acType = ("storeRow", "Store"), icon = models.template.Icons.storeRow
+            selected = request.queryString.isDefinedAt("storeId"), key = "storeId", title = "Store Id", value = request.queryString.get("storeId").flatMap(_.headOption).orElse(None), nullable = false, dataType = "integer",
+            call = controllers.admin.store.routes.StoreRowController.autocomplete(), acType = ("storeRow", "Store"), icon = models.template.Icons.storeRow,
+            inputType = "number"
           )
-          @com.kyleu.projectile.views.html.components.form.booleanField(selected = false, key = "active", title = "Active", value = None, nullable = false)
-          @com.kyleu.projectile.views.html.components.form.textField(selected = false, key = "username", title = "Username", value = None, nullable = false)
-          @com.kyleu.projectile.views.html.components.form.textField(selected = false, key = "password", title = "Password", value = None, nullable = true)
-          @com.kyleu.projectile.views.html.components.form.zonedDateTimeField(selected = false, key = "lastUpdate", title = "Last Update", value = None, nullable = false)
-          @com.kyleu.projectile.views.html.components.form.textField(selected = false, key = "picture", title = "Picture", value = None, nullable = true, dataType = "byteArray")
+          @com.kyleu.projectile.views.html.components.form.booleanField(selected = request.queryString.isDefinedAt("active"), key = "active", title = "Active", value = request.queryString.get("active").flatMap(_.headOption).map(s => s == "true").orElse(None), nullable = false)
+          @com.kyleu.projectile.views.html.components.form.textField(selected = request.queryString.isDefinedAt("username"), key = "username", title = "Username", value = request.queryString.get("username").flatMap(_.headOption).orElse(None), nullable = false)
+          @com.kyleu.projectile.views.html.components.form.textField(selected = request.queryString.isDefinedAt("password"), key = "password", title = "Password", value = request.queryString.get("password").flatMap(_.headOption).orElse(None), nullable = true)
+          @com.kyleu.projectile.views.html.components.form.zonedDateTimeField(selected = request.queryString.isDefinedAt("lastUpdate"), key = "lastUpdate", title = "Last Update", value = request.queryString.get("lastUpdate").flatMap(_.headOption).map(s => com.kyleu.projectile.util.DateUtils.fromIsoStringZoned(s)).orElse(None), nullable = false)
+          @com.kyleu.projectile.views.html.components.form.byteArrayField(selected = request.queryString.isDefinedAt("picture"), key = "picture", title = "Picture", value = request.queryString.get("picture").flatMap(_.headOption).map(s => s.split(",").map(_.toInt.toByte)).orElse(None), nullable = true)
         </tbody>
       </table>
     }

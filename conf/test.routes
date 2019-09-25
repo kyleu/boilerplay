@@ -1,0 +1,2 @@
+# Generated File
+GET   /       controllers.admin.test.TestController.test()

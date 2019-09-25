@@ -9,9 +9,9 @@
       <div class="clear"></div>
       <table>
         <tbody>
-          @com.kyleu.projectile.views.html.components.form.textField(selected = isNew, key = "languageId", title = "Language Id", value = Some(model.languageId.toString), nullable = false, dataType = "integer")
-          @com.kyleu.projectile.views.html.components.form.textField(selected = isNew, key = "name", title = "Name", value = Some(model.name), nullable = false)
-          @com.kyleu.projectile.views.html.components.form.zonedDateTimeField(selected = isNew, key = "lastUpdate", title = "Last Update", value = Some(model.lastUpdate), nullable = false)
+          @com.kyleu.projectile.views.html.components.form.intField(selected = request.queryString.isDefinedAt("languageId") || isNew, key = "languageId", title = "Language Id", value = request.queryString.get("languageId").flatMap(_.headOption).map(s => s.toInt).orElse(Some(model.languageId)), nullable = false, isPk = true)
+          @com.kyleu.projectile.views.html.components.form.textField(selected = request.queryString.isDefinedAt("name") || isNew, key = "name", title = "Name", value = request.queryString.get("name").flatMap(_.headOption).orElse(Some(model.name)), nullable = false)
+          @com.kyleu.projectile.views.html.components.form.zonedDateTimeField(selected = request.queryString.isDefinedAt("lastUpdate") || isNew, key = "lastUpdate", title = "Last Update", value = request.queryString.get("lastUpdate").flatMap(_.headOption).map(s => com.kyleu.projectile.util.DateUtils.fromIsoStringZoned(s)).orElse(Some(model.lastUpdate)), nullable = false)
         </tbody>
       </table>
     }
