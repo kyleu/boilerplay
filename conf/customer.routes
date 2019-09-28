@@ -2,10 +2,11 @@
 
 # Customer Routes
 GET         /customerRow                                              controllers.admin.customer.CustomerRowController.list(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None)
-GET         /customerRow/autocomplete                                 controllers.admin.customer.CustomerRowController.autocomplete(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None)
-GET         /customerRow/form                                         controllers.admin.customer.CustomerRowController.createForm
+GET         /customerRow/autocomplete                                  controllers.admin.customer.CustomerRowController.autocomplete(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None)
+GET         /customerRow/form                                          controllers.admin.customer.CustomerRowController.createForm
 POST        /customerRow                                              controllers.admin.customer.CustomerRowController.create
-POST        /customerRow/bulk                                         controllers.admin.customer.CustomerRowController.bulkEdit
+GET         /customerRow/bulk                                          controllers.admin.customer.CustomerRowController.bulkEditForm
+POST        /customerRow/bulk                                          controllers.admin.customer.CustomerRowController.bulkEdit
 GET         /customerRow/byStoreId/:storeId                           controllers.admin.customer.CustomerRowController.byStoreId(storeId: Int, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None, embedded: Boolean ?= false)
 GET         /customerRow/byStoreId/:storeId/bulk                      controllers.admin.customer.CustomerRowController.byStoreIdBulkForm(storeId: Int)
 GET         /customerRow/byAddressId/:addressId                       controllers.admin.customer.CustomerRowController.byAddressId(addressId: Int, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None, embedded: Boolean ?= false)
@@ -18,9 +19,11 @@ GET         /customerRow/:customerId/remove                           controller
 
 # Language Routes
 GET         /languageRow                                              controllers.admin.customer.LanguageRowController.list(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None)
-GET         /languageRow/autocomplete                                 controllers.admin.customer.LanguageRowController.autocomplete(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None)
-GET         /languageRow/form                                         controllers.admin.customer.LanguageRowController.createForm
+GET         /languageRow/autocomplete                                  controllers.admin.customer.LanguageRowController.autocomplete(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None)
+GET         /languageRow/form                                          controllers.admin.customer.LanguageRowController.createForm
 POST        /languageRow                                              controllers.admin.customer.LanguageRowController.create
+GET         /languageRow/bulk                                          controllers.admin.customer.LanguageRowController.bulkEditForm
+POST        /languageRow/bulk                                          controllers.admin.customer.LanguageRowController.bulkEdit
 GET         /languageRow/:languageId                                  controllers.admin.customer.LanguageRowController.view(languageId: Int, t: Option[String] ?= None)
 GET         /languageRow/:languageId/counts                           controllers.admin.customer.LanguageRowController.relationCounts(languageId: Int)
 GET         /languageRow/:languageId/form                             controllers.admin.customer.LanguageRowController.editForm(languageId: Int)
@@ -29,10 +32,11 @@ GET         /languageRow/:languageId/remove                           controller
 
 # Rental Routes
 GET         /rentalRow                                                controllers.admin.customer.RentalRowController.list(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None)
-GET         /rentalRow/autocomplete                                   controllers.admin.customer.RentalRowController.autocomplete(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None)
-GET         /rentalRow/form                                           controllers.admin.customer.RentalRowController.createForm
+GET         /rentalRow/autocomplete                                    controllers.admin.customer.RentalRowController.autocomplete(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None)
+GET         /rentalRow/form                                            controllers.admin.customer.RentalRowController.createForm
 POST        /rentalRow                                                controllers.admin.customer.RentalRowController.create
-POST        /rentalRow/bulk                                           controllers.admin.customer.RentalRowController.bulkEdit
+GET         /rentalRow/bulk                                            controllers.admin.customer.RentalRowController.bulkEditForm
+POST        /rentalRow/bulk                                            controllers.admin.customer.RentalRowController.bulkEdit
 GET         /rentalRow/byStaffId/:staffId                             controllers.admin.customer.RentalRowController.byStaffId(staffId: Int, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None, embedded: Boolean ?= false)
 GET         /rentalRow/byStaffId/:staffId/bulk                        controllers.admin.customer.RentalRowController.byStaffIdBulkForm(staffId: Int)
 GET         /rentalRow/byInventoryId/:inventoryId                     controllers.admin.customer.RentalRowController.byInventoryId(inventoryId: Long, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None, embedded: Boolean ?= false)

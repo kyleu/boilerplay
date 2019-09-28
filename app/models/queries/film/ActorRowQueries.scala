@@ -69,6 +69,7 @@ object ActorRowQueries extends BaseQueries[ActorRow]("actorRow", "actor") {
   def removeByPrimaryKey(actorId: Int) = new RemoveByPrimaryKey(Seq[Any](actorId))
 
   def update(actorId: Int, fields: Seq[DataField]) = new UpdateFields(Seq[Any](actorId), fields)
+  def updateBulk(pks: Seq[Seq[Any]], fields: Seq[DataField]) = new UpdateFieldsBulk(pks, fields)
 
   override def fromRow(row: Row) = ActorRow(
     actorId = IntegerType(row, "actor_id"),

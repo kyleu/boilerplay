@@ -1,28 +1,28 @@
 @* Generated File *@
-@(cfg: com.kyleu.projectile.models.config.UiConfig, modelSeq: Seq[models.film.FilmCategoryRow], act: Call, debug: Boolean)(
+@(cfg: com.kyleu.projectile.models.config.UiConfig, modelSeq: Seq[models.address.CountryRow], act: Call, debug: Boolean)(
     implicit request: Request[AnyContent], flash: Flash
 )
 @add() = {
   <div class="right"><button type="submit" class="btn @cfg.user.buttonColor" form="pks">Add</button></div>
   <div class="right"><input id="new-pks" name="new-pks" type="text" placeholder="Primary keys" form="pks" /></div>
 }
-@com.kyleu.projectile.views.html.layout.page(title = "Bulk Edit", cfg = cfg, icon = Some(models.template.Icons.filmCategoryRow)) {
+@com.kyleu.projectile.views.html.layout.page(title = "Bulk Edit", cfg = cfg, icon = Some(models.template.Icons.countryRow)) {
   <form id="pks" onsubmit="bulk.addPk($('#new-pks').val());return false;"></form>
-  <form id="form-edit-filmCategoryRow" action="@act" method="post">
-    <input type="hidden" class="primaryKeys" name="primaryKeys" value="@modelSeq.map(m => m.filmId + "||" + m.categoryId).mkString("//")" />
-    @com.kyleu.projectile.views.html.layout.card(Some("Selected Film Categories"), right = Some(add())) {
+  <form id="form-edit-countryRow" action="@act" method="post">
+    <input type="hidden" class="primaryKeys" name="primaryKeys" value="@modelSeq.map(m => m.countryId).mkString("//")" />
+    @com.kyleu.projectile.views.html.layout.card(Some("Selected Countries"), right = Some(add())) {
       <table id="bulk-rows">
         <thead>
           <tr>
-            <th>Film Id</th>
-            <th>Category Id</th>
+            <th>Country Id</th>
+            <th>Country</th>
             <th>Last Update</th>
             <th></th>
           </tr>
         </thead>
         <tbody>
           @modelSeq.map { model =>
-            @filmCategoryRowDataRow(model, Some(Html(s"<td style='text-align: right;'><a class='remove-pk' data-pk='${model.filmId}---${model.categoryId}' href='' title='Remove from editing'><i class='material-icons'>close</i></a></td>")))
+            @countryRowDataRow(model, Some(Html(s"<td style='text-align: right;'><a class='remove-pk' data-pk='${model.countryId}' href='' title='Remove from editing'><i class='material-icons'>close</i></a></td>")))
           }
         </tbody>
       </table>
@@ -30,20 +30,20 @@
     @com.kyleu.projectile.views.html.layout.card(None) {
       <table>
         <tbody>
+          @com.kyleu.projectile.views.html.components.form.textField(selected = request.queryString.isDefinedAt("country"), key = "country", title = "Country", value = request.queryString.get("country").flatMap(_.headOption).orElse(None), nullable = false)
           @com.kyleu.projectile.views.html.components.form.zonedDateTimeField(selected = request.queryString.isDefinedAt("lastUpdate"), key = "lastUpdate", title = "Last Update", value = request.queryString.get("lastUpdate").flatMap(_.headOption).map(s => com.kyleu.projectile.util.DateUtils.fromIsoStringZoned(s)).orElse(None), nullable = false)
         </tbody>
       </table>
       <br />
-      <div class="right"><button type="submit" class="btn @cfg.user.buttonColor">Save <span>@modelSeq.size</span> Film Categories</button></div>
+      <div class="right"><button type="submit" class="btn @cfg.user.buttonColor">Save <span>@modelSeq.size</span> Countries</button></div>
       <div class="right"><a href="" onclick="window.history.go(-1);return false;" class="btn-flat cancel-link">Cancel</a></div>
       <div class="clear"></div>
     }
   </form>
 }
 @com.kyleu.projectile.views.html.components.includeScalaJs(debug)
-@com.kyleu.projectile.views.html.components.includeAutocomplete(debug)
 <script>
-  $(function() { new FormService('form-edit-filmCategoryRow'); });
+  $(function() { new FormService('form-edit-countryRow'); });
   var bulk;
-  $(function() { bulk = new BulkEditService('form-edit-filmCategoryRow', 3); });
+  $(function() { bulk = new BulkEditService('form-edit-countryRow', 3); });
 </script>

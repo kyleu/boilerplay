@@ -2,9 +2,11 @@
 
 # Actor Routes
 GET         /actorRow                                                 controllers.admin.film.ActorRowController.list(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None)
-GET         /actorRow/autocomplete                                    controllers.admin.film.ActorRowController.autocomplete(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None)
-GET         /actorRow/form                                            controllers.admin.film.ActorRowController.createForm
+GET         /actorRow/autocomplete                                     controllers.admin.film.ActorRowController.autocomplete(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None)
+GET         /actorRow/form                                             controllers.admin.film.ActorRowController.createForm
 POST        /actorRow                                                 controllers.admin.film.ActorRowController.create
+GET         /actorRow/bulk                                             controllers.admin.film.ActorRowController.bulkEditForm
+POST        /actorRow/bulk                                             controllers.admin.film.ActorRowController.bulkEdit
 GET         /actorRow/:actorId                                        controllers.admin.film.ActorRowController.view(actorId: Int, t: Option[String] ?= None)
 GET         /actorRow/:actorId/counts                                 controllers.admin.film.ActorRowController.relationCounts(actorId: Int)
 GET         /actorRow/:actorId/form                                   controllers.admin.film.ActorRowController.editForm(actorId: Int)
@@ -13,9 +15,11 @@ GET         /actorRow/:actorId/remove                                 controller
 
 # Category Routes
 GET         /categoryRow                                              controllers.admin.film.CategoryRowController.list(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None)
-GET         /categoryRow/autocomplete                                 controllers.admin.film.CategoryRowController.autocomplete(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None)
-GET         /categoryRow/form                                         controllers.admin.film.CategoryRowController.createForm
+GET         /categoryRow/autocomplete                                  controllers.admin.film.CategoryRowController.autocomplete(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None)
+GET         /categoryRow/form                                          controllers.admin.film.CategoryRowController.createForm
 POST        /categoryRow                                              controllers.admin.film.CategoryRowController.create
+GET         /categoryRow/bulk                                          controllers.admin.film.CategoryRowController.bulkEditForm
+POST        /categoryRow/bulk                                          controllers.admin.film.CategoryRowController.bulkEdit
 GET         /categoryRow/:categoryId                                  controllers.admin.film.CategoryRowController.view(categoryId: Int, t: Option[String] ?= None)
 GET         /categoryRow/:categoryId/counts                           controllers.admin.film.CategoryRowController.relationCounts(categoryId: Int)
 GET         /categoryRow/:categoryId/form                             controllers.admin.film.CategoryRowController.editForm(categoryId: Int)
@@ -24,10 +28,11 @@ GET         /categoryRow/:categoryId/remove                           controller
 
 # Film Routes
 GET         /filmRow                                                  controllers.admin.film.FilmRowController.list(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None)
-GET         /filmRow/autocomplete                                     controllers.admin.film.FilmRowController.autocomplete(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None)
-GET         /filmRow/form                                             controllers.admin.film.FilmRowController.createForm
+GET         /filmRow/autocomplete                                      controllers.admin.film.FilmRowController.autocomplete(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None)
+GET         /filmRow/form                                              controllers.admin.film.FilmRowController.createForm
 POST        /filmRow                                                  controllers.admin.film.FilmRowController.create
-POST        /filmRow/bulk                                             controllers.admin.film.FilmRowController.bulkEdit
+GET         /filmRow/bulk                                              controllers.admin.film.FilmRowController.bulkEditForm
+POST        /filmRow/bulk                                              controllers.admin.film.FilmRowController.bulkEdit
 GET         /filmRow/byLanguageId/:languageId                         controllers.admin.film.FilmRowController.byLanguageId(languageId: Int, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None, embedded: Boolean ?= false)
 GET         /filmRow/byLanguageId/:languageId/bulk                    controllers.admin.film.FilmRowController.byLanguageIdBulkForm(languageId: Int)
 GET         /filmRow/byOriginalLanguageId/:originalLanguageId         controllers.admin.film.FilmRowController.byOriginalLanguageId(originalLanguageId: Int, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None, embedded: Boolean ?= false)
@@ -40,10 +45,11 @@ GET         /filmRow/:filmId/remove                                   controller
 
 # Film Actor Routes
 GET         /filmActorRow                                             controllers.admin.film.FilmActorRowController.list(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None)
-GET         /filmActorRow/autocomplete                                controllers.admin.film.FilmActorRowController.autocomplete(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None)
-GET         /filmActorRow/form                                        controllers.admin.film.FilmActorRowController.createForm
+GET         /filmActorRow/autocomplete                                 controllers.admin.film.FilmActorRowController.autocomplete(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None)
+GET         /filmActorRow/form                                         controllers.admin.film.FilmActorRowController.createForm
 POST        /filmActorRow                                             controllers.admin.film.FilmActorRowController.create
-POST        /filmActorRow/bulk                                        controllers.admin.film.FilmActorRowController.bulkEdit
+GET         /filmActorRow/bulk                                         controllers.admin.film.FilmActorRowController.bulkEditForm
+POST        /filmActorRow/bulk                                         controllers.admin.film.FilmActorRowController.bulkEdit
 GET         /filmActorRow/byFilmId/:filmId                            controllers.admin.film.FilmActorRowController.byFilmId(filmId: Int, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None, embedded: Boolean ?= false)
 GET         /filmActorRow/byFilmId/:filmId/bulk                       controllers.admin.film.FilmActorRowController.byFilmIdBulkForm(filmId: Int)
 GET         /filmActorRow/byActorId/:actorId                          controllers.admin.film.FilmActorRowController.byActorId(actorId: Int, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None, embedded: Boolean ?= false)
@@ -55,10 +61,11 @@ GET         /filmActorRow/:actorId/:filmId/remove                     controller
 
 # Film Category Routes
 GET         /filmCategoryRow                                          controllers.admin.film.FilmCategoryRowController.list(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None)
-GET         /filmCategoryRow/autocomplete                             controllers.admin.film.FilmCategoryRowController.autocomplete(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None)
-GET         /filmCategoryRow/form                                     controllers.admin.film.FilmCategoryRowController.createForm
+GET         /filmCategoryRow/autocomplete                              controllers.admin.film.FilmCategoryRowController.autocomplete(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None)
+GET         /filmCategoryRow/form                                      controllers.admin.film.FilmCategoryRowController.createForm
 POST        /filmCategoryRow                                          controllers.admin.film.FilmCategoryRowController.create
-POST        /filmCategoryRow/bulk                                     controllers.admin.film.FilmCategoryRowController.bulkEdit
+GET         /filmCategoryRow/bulk                                      controllers.admin.film.FilmCategoryRowController.bulkEditForm
+POST        /filmCategoryRow/bulk                                      controllers.admin.film.FilmCategoryRowController.bulkEdit
 GET         /filmCategoryRow/byFilmId/:filmId                         controllers.admin.film.FilmCategoryRowController.byFilmId(filmId: Int, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None, embedded: Boolean ?= false)
 GET         /filmCategoryRow/byFilmId/:filmId/bulk                    controllers.admin.film.FilmCategoryRowController.byFilmIdBulkForm(filmId: Int)
 GET         /filmCategoryRow/byCategoryId/:categoryId                 controllers.admin.film.FilmCategoryRowController.byCategoryId(categoryId: Int, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None, embedded: Boolean ?= false)

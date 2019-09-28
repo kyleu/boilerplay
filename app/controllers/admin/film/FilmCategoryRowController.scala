@@ -7,17 +7,18 @@ import com.kyleu.projectile.models.result.orderBy.OrderBy
 import com.kyleu.projectile.models.web.ControllerUtils
 import com.kyleu.projectile.services.auth.PermissionService
 import com.kyleu.projectile.services.note.NoteService
-import com.kyleu.projectile.util.DateUtils
+import com.kyleu.projectile.util.{Credentials, DateUtils}
 import com.kyleu.projectile.util.JsonSerializers._
 import com.kyleu.projectile.views.html.layout.{card, page}
 import models.film.{FilmCategoryRow, FilmCategoryRowResult}
 import play.api.http.MimeTypes
 import scala.concurrent.{ExecutionContext, Future}
-import services.film.FilmCategoryRowService
+import services.film.{CategoryRowService, FilmCategoryRowService, FilmRowService}
 
 @javax.inject.Singleton
 class FilmCategoryRowController @javax.inject.Inject() (
-    override val app: Application, svc: FilmCategoryRowService, noteSvc: NoteService
+    override val app: Application, svc: FilmCategoryRowService, noteSvc: NoteService,
+    filmRowS: FilmRowService, categoryRowS: CategoryRowService
 )(implicit ec: ExecutionContext) extends ServiceAuthController(svc) {
   PermissionService.registerModel("film", "FilmCategoryRow", "Film Category", Some(models.template.Icons.filmCategoryRow), "view", "edit")
   private[this] val defaultOrderBy = Some("lastUpdate" -> false)
@@ -45,16 +46,19 @@ class FilmCategoryRowController @javax.inject.Inject() (
   }
 
   def view(filmId: Int, categoryId: Int, t: Option[String] = None) = withSession("view", ("film", "FilmCategoryRow", "view")) { implicit request => implicit td =>
-    val modelF = svc.getByPrimaryKey(request, filmId, categoryId)
-    val notesF = noteSvc.getFor(request, "FilmCategoryRow", filmId, categoryId)
+    val creds: Credentials = request
+    val modelF = svc.getByPrimaryKeyRequired(creds, filmId, categoryId)
+    val notesF = noteSvc.getFor(creds, "FilmCategoryRow", filmId, categoryId)
+    val filmIdF = modelF.flatMap(m => filmRowS.getByPrimaryKey(creds, m.filmId))
+    val categoryIdF = modelF.flatMap(m => categoryRowS.getByPrimaryKey(creds, m.categoryId))
 
-    notesF.flatMap(notes => modelF.map {
-      case Some(model) => renderChoice(t) {
-        case MimeTypes.HTML => Ok(views.html.admin.film.filmCategoryRowView(app.cfg(u = Some(request.identity), "film", "film_category", s"${model.filmId}, ${model.categoryId}"), model, notes, app.config.debug))
-        case MimeTypes.JSON => Ok(model.asJson)
-      }
-      case None => NotFound(s"No FilmCategoryRow found with filmId, categoryId [$filmId, $categoryId]")
-    })
+    filmIdF.flatMap(filmIdR => categoryIdF.flatMap(categoryIdR =>
+      notesF.flatMap(notes => modelF.map { model =>
+        renderChoice(t) {
+          case MimeTypes.HTML => Ok(views.html.admin.film.filmCategoryRowView(app.cfg(u = Some(request.identity), "film", "film_category", s"${model.filmId}, ${model.categoryId}"), model, notes, filmIdR, categoryIdR, app.config.debug))
+          case MimeTypes.JSON => Ok(model.asJson)
+        }
+      })))
   }
 
   def editForm(filmId: Int, categoryId: Int) = withSession("edit.form", ("film", "FilmCategoryRow", "edit")) { implicit request => implicit td =>
@@ -96,11 +100,16 @@ class FilmCategoryRowController @javax.inject.Inject() (
     }
   }
 
+  def bulkEditForm = withSession("bulk.edit.form", ("film", "FilmCategoryRow", "edit")) { implicit request => implicit td =>
+    val act = controllers.admin.film.routes.FilmCategoryRowController.bulkEdit()
+    Future.successful(Ok(views.html.admin.film.filmCategoryRowBulkForm(app.cfg(Some(request.identity), "film", "film_category", "Bulk Edit"), Nil, act, debug = app.config.debug)))
+  }
   def bulkEdit = withSession("bulk.edit", ("film", "FilmCategoryRow", "edit")) { implicit request => implicit td =>
     val form = ControllerUtils.getForm(request.body)
     val pks = form("primaryKeys").split("//").map(_.trim).filter(_.nonEmpty).map(_.split("---").map(_.trim).filter(_.nonEmpty).toList).toList
+    val typed = pks.map(pk => (pk.head.toInt, pk(1).toInt))
     val changes = modelForm(request.body)
-    svc.updateBulk(request, pks, changes).map(msg => Ok("OK: " + msg))
+    svc.updateBulk(request, typed, changes).map(msg => Ok("OK: " + msg))
   }
 
   def byFilmId(filmId: Int, orderBy: Option[String], orderAsc: Boolean, limit: Option[Int], offset: Option[Int], t: Option[String] = None, embedded: Boolean = false) = {

@@ -1,16 +1,20 @@
 @* Generated File *@
 @(cfg: com.kyleu.projectile.models.config.UiConfig, modelSeq: Seq[models.address.AddressRow], act: Call, debug: Boolean)(
     implicit request: Request[AnyContent], flash: Flash
-)@com.kyleu.projectile.views.html.layout.page(title = "Bulk Edit", cfg = cfg, icon = Some(models.template.Icons.addressRow)) {
+)
+@add() = {
+  <div class="right"><button type="submit" class="btn @cfg.user.buttonColor" form="pks">Add</button></div>
+  <div class="right"><input id="new-pks" name="new-pks" type="text" placeholder="Primary keys" form="pks" /></div>
+}
+@com.kyleu.projectile.views.html.layout.page(title = "Bulk Edit", cfg = cfg, icon = Some(models.template.Icons.addressRow)) {
+  <form id="pks" onsubmit="bulk.addPk($('#new-pks').val());return false;"></form>
   <form id="form-edit-addressRow" action="@act" method="post">
     <input type="hidden" class="primaryKeys" name="primaryKeys" value="@modelSeq.map(m => m.addressId).mkString("//")" />
-    @com.kyleu.projectile.views.html.layout.card(Some("Selected Addresses")) {
-      <div class="right"><button type="submit" class="btn @cfg.user.buttonColor">Save <span>@modelSeq.size</span> Addresses</button></div>
-      <div class="right"><a href="" onclick="window.history.go(-1);return false;" class="btn-flat cancel-link">Cancel</a></div>
-      <div class="clear"></div>
-      <table>
+    @com.kyleu.projectile.views.html.layout.card(Some("Selected Addresses"), right = Some(add())) {
+      <table id="bulk-rows">
         <thead>
           <tr>
+            <th>Address Id</th>
             <th>Address</th>
             <th>Address2</th>
             <th>District</th>
@@ -18,6 +22,7 @@
             <th>Postal Code</th>
             <th>Phone</th>
             <th>Last Update</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -43,6 +48,10 @@
           @com.kyleu.projectile.views.html.components.form.zonedDateTimeField(selected = request.queryString.isDefinedAt("lastUpdate"), key = "lastUpdate", title = "Last Update", value = request.queryString.get("lastUpdate").flatMap(_.headOption).map(s => com.kyleu.projectile.util.DateUtils.fromIsoStringZoned(s)).orElse(None), nullable = false)
         </tbody>
       </table>
+      <br />
+      <div class="right"><button type="submit" class="btn @cfg.user.buttonColor">Save <span>@modelSeq.size</span> Addresses</button></div>
+      <div class="right"><a href="" onclick="window.history.go(-1);return false;" class="btn-flat cancel-link">Cancel</a></div>
+      <div class="clear"></div>
     }
   </form>
 }
@@ -50,5 +59,6 @@
 @com.kyleu.projectile.views.html.components.includeAutocomplete(debug)
 <script>
   $(function() { new FormService('form-edit-addressRow'); });
-  $(function() { new BulkEditService('form-edit-addressRow'); });
+  var bulk;
+  $(function() { bulk = new BulkEditService('form-edit-addressRow', 8); });
 </script>

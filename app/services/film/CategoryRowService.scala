@@ -143,6 +143,12 @@ class CategoryRowService @javax.inject.Inject() (val db: JdbcDatabase, override 
     })
   }
 
+  def updateBulk(creds: Credentials, pks: Seq[Int], fields: Seq[DataField], conn: Option[Connection] = None)(implicit trace: TraceData) = checkPerm(creds, "edit") {
+    Future.sequence(pks.map(pk => update(creds, pk, fields, conn))).map { x =>
+      s"Updated [${fields.size}] fields for [${x.size} of ${pks.size}] CategoryRow"
+    }
+  }
+
   def csvFor(totalCount: Int, rows: Seq[CategoryRow])(implicit trace: TraceData) = {
     traceB("export.csv")(td => CsvUtils.csvFor(Some(key), totalCount, rows, CategoryRowQueries.fields)(td))
   }

@@ -29,6 +29,7 @@
     offset = offset,
     q = q,
     additionalHeader = com.kyleu.projectile.services.augment.AugmentService.listHeaders.augment(cls = classOf[models.address.CityRow], args = request.queryString, cfg = cfg),
+    additionalAction = Some(Html(s"<a href='${controllers.admin.address.routes.CityRowController.bulkEditForm()}' class='btn-flat'>Bulk Edit</a>")),
     additionalColumns = aug._1
   )
 }

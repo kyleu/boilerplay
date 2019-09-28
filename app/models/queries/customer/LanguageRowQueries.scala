@@ -61,6 +61,7 @@ object LanguageRowQueries extends BaseQueries[LanguageRow]("languageRow", "langu
   def removeByPrimaryKey(languageId: Int) = new RemoveByPrimaryKey(Seq[Any](languageId))
 
   def update(languageId: Int, fields: Seq[DataField]) = new UpdateFields(Seq[Any](languageId), fields)
+  def updateBulk(pks: Seq[Seq[Any]], fields: Seq[DataField]) = new UpdateFieldsBulk(pks, fields)
 
   override def fromRow(row: Row) = LanguageRow(
     languageId = IntegerType(row, "language_id"),

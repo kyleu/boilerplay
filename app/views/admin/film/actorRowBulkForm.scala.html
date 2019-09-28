@@ -1,0 +1,51 @@
+@* Generated File *@
+@(cfg: com.kyleu.projectile.models.config.UiConfig, modelSeq: Seq[models.film.ActorRow], act: Call, debug: Boolean)(
+    implicit request: Request[AnyContent], flash: Flash
+)
+@add() = {
+  <div class="right"><button type="submit" class="btn @cfg.user.buttonColor" form="pks">Add</button></div>
+  <div class="right"><input id="new-pks" name="new-pks" type="text" placeholder="Primary keys" form="pks" /></div>
+}
+@com.kyleu.projectile.views.html.layout.page(title = "Bulk Edit", cfg = cfg, icon = Some(models.template.Icons.actorRow)) {
+  <form id="pks" onsubmit="bulk.addPk($('#new-pks').val());return false;"></form>
+  <form id="form-edit-actorRow" action="@act" method="post">
+    <input type="hidden" class="primaryKeys" name="primaryKeys" value="@modelSeq.map(m => m.actorId).mkString("//")" />
+    @com.kyleu.projectile.views.html.layout.card(Some("Selected Actors"), right = Some(add())) {
+      <table id="bulk-rows">
+        <thead>
+          <tr>
+            <th>Actor Id</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Last Update</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @modelSeq.map { model =>
+            @actorRowDataRow(model, Some(Html(s"<td style='text-align: right;'><a class='remove-pk' data-pk='${model.actorId}' href='' title='Remove from editing'><i class='material-icons'>close</i></a></td>")))
+          }
+        </tbody>
+      </table>
+    }
+    @com.kyleu.projectile.views.html.layout.card(None) {
+      <table>
+        <tbody>
+          @com.kyleu.projectile.views.html.components.form.textField(selected = request.queryString.isDefinedAt("firstName"), key = "firstName", title = "First Name", value = request.queryString.get("firstName").flatMap(_.headOption).orElse(None), nullable = false)
+          @com.kyleu.projectile.views.html.components.form.textField(selected = request.queryString.isDefinedAt("lastName"), key = "lastName", title = "Last Name", value = request.queryString.get("lastName").flatMap(_.headOption).orElse(None), nullable = false)
+          @com.kyleu.projectile.views.html.components.form.zonedDateTimeField(selected = request.queryString.isDefinedAt("lastUpdate"), key = "lastUpdate", title = "Last Update", value = request.queryString.get("lastUpdate").flatMap(_.headOption).map(s => com.kyleu.projectile.util.DateUtils.fromIsoStringZoned(s)).orElse(None), nullable = false)
+        </tbody>
+      </table>
+      <br />
+      <div class="right"><button type="submit" class="btn @cfg.user.buttonColor">Save <span>@modelSeq.size</span> Actors</button></div>
+      <div class="right"><a href="" onclick="window.history.go(-1);return false;" class="btn-flat cancel-link">Cancel</a></div>
+      <div class="clear"></div>
+    }
+  </form>
+}
+@com.kyleu.projectile.views.html.components.includeScalaJs(debug)
+<script>
+  $(function() { new FormService('form-edit-actorRow'); });
+  var bulk;
+  $(function() { bulk = new BulkEditService('form-edit-actorRow', 4); });
+</script>

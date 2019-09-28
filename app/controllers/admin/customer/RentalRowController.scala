@@ -8,19 +8,20 @@ import com.kyleu.projectile.models.result.orderBy.OrderBy
 import com.kyleu.projectile.models.web.ControllerUtils
 import com.kyleu.projectile.services.auth.PermissionService
 import com.kyleu.projectile.services.note.NoteService
-import com.kyleu.projectile.util.DateUtils
+import com.kyleu.projectile.util.{Credentials, DateUtils}
 import com.kyleu.projectile.util.JsonSerializers._
 import com.kyleu.projectile.views.html.layout.{card, page}
 import models.customer.{RentalRow, RentalRowResult}
 import play.api.http.MimeTypes
 import scala.concurrent.{ExecutionContext, Future}
-import services.customer.RentalRowService
+import services.customer.{CustomerRowService, RentalRowService}
 import services.payment.PaymentRowService
+import services.store.{InventoryRowService, StaffRowService}
 
 @javax.inject.Singleton
 class RentalRowController @javax.inject.Inject() (
     override val app: Application, svc: RentalRowService, noteSvc: NoteService,
-    paymentRowS: PaymentRowService
+    paymentRowS: PaymentRowService, staffRowS: StaffRowService, inventoryRowS: InventoryRowService, customerRowS: CustomerRowService
 )(implicit ec: ExecutionContext) extends ServiceAuthController(svc) {
   PermissionService.registerModel("customer", "RentalRow", "Rental", Some(models.template.Icons.rentalRow), "view", "edit")
   private[this] val defaultOrderBy = None
@@ -48,16 +49,20 @@ class RentalRowController @javax.inject.Inject() (
   }
 
   def view(rentalId: Long, t: Option[String] = None) = withSession("view", ("customer", "RentalRow", "view")) { implicit request => implicit td =>
-    val modelF = svc.getByPrimaryKey(request, rentalId)
-    val notesF = noteSvc.getFor(request, "RentalRow", rentalId)
+    val creds: Credentials = request
+    val modelF = svc.getByPrimaryKeyRequired(creds, rentalId)
+    val notesF = noteSvc.getFor(creds, "RentalRow", rentalId)
+    val staffIdF = modelF.flatMap(m => staffRowS.getByPrimaryKey(creds, m.staffId))
+    val inventoryIdF = modelF.flatMap(m => inventoryRowS.getByPrimaryKey(creds, m.inventoryId))
+    val customerIdF = modelF.flatMap(m => customerRowS.getByPrimaryKey(creds, m.customerId))
 
-    notesF.flatMap(notes => modelF.map {
-      case Some(model) => renderChoice(t) {
-        case MimeTypes.HTML => Ok(views.html.admin.customer.rentalRowView(app.cfg(u = Some(request.identity), "customer", "rental", model.rentalId.toString), model, notes, app.config.debug))
-        case MimeTypes.JSON => Ok(model.asJson)
-      }
-      case None => NotFound(s"No RentalRow found with rentalId [$rentalId]")
-    })
+    staffIdF.flatMap(staffIdR => inventoryIdF.flatMap(inventoryIdR => customerIdF.flatMap(customerIdR =>
+      notesF.flatMap(notes => modelF.map { model =>
+        renderChoice(t) {
+          case MimeTypes.HTML => Ok(views.html.admin.customer.rentalRowView(app.cfg(u = Some(request.identity), "customer", "rental", model.rentalId.toString), model, notes, staffIdR, inventoryIdR, customerIdR, app.config.debug))
+          case MimeTypes.JSON => Ok(model.asJson)
+        }
+      }))))
   }
 
   def editForm(rentalId: Long) = withSession("edit.form", ("customer", "RentalRow", "edit")) { implicit request => implicit td =>
@@ -99,11 +104,16 @@ class RentalRowController @javax.inject.Inject() (
     }
   }
 
+  def bulkEditForm = withSession("bulk.edit.form", ("customer", "RentalRow", "edit")) { implicit request => implicit td =>
+    val act = controllers.admin.customer.routes.RentalRowController.bulkEdit()
+    Future.successful(Ok(views.html.admin.customer.rentalRowBulkForm(app.cfg(Some(request.identity), "customer", "rental", "Bulk Edit"), Nil, act, debug = app.config.debug)))
+  }
   def bulkEdit = withSession("bulk.edit", ("customer", "RentalRow", "edit")) { implicit request => implicit td =>
     val form = ControllerUtils.getForm(request.body)
     val pks = form("primaryKeys").split("//").map(_.trim).filter(_.nonEmpty).map(_.split("---").map(_.trim).filter(_.nonEmpty).toList).toList
+    val typed = pks.map(pk => pk.head.toLong)
     val changes = modelForm(request.body)
-    svc.updateBulk(request, pks, changes).map(msg => Ok("OK: " + msg))
+    svc.updateBulk(request, typed, changes).map(msg => Ok("OK: " + msg))
   }
 
   def byStaffId(staffId: Int, orderBy: Option[String], orderAsc: Boolean, limit: Option[Int], offset: Option[Int], t: Option[String] = None, embedded: Boolean = false) = {

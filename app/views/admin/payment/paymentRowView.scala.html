@@ -1,5 +1,13 @@
 @* Generated File *@
-@(cfg: com.kyleu.projectile.models.config.UiConfig, model: models.payment.PaymentRow, notes: Seq[com.kyleu.projectile.models.note.Note], debug: Boolean)(
+@(
+    cfg: com.kyleu.projectile.models.config.UiConfig,
+    model: models.payment.PaymentRow,
+    notes: Seq[com.kyleu.projectile.models.note.Note],
+    staffIdR: Option[models.store.StaffRow],
+    rentalIdR: Option[models.customer.RentalRow],
+    customerIdR: Option[models.customer.CustomerRow],
+    debug: Boolean
+)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, td: com.kyleu.projectile.util.tracing.TraceData
 )@com.kyleu.projectile.views.html.layout.page(title = s"Payment", cfg = cfg, icon = Some(models.template.Icons.paymentRow)) {
   @com.kyleu.projectile.services.augment.AugmentService.viewHeaders.augment(model, request.queryString, cfg)
@@ -9,36 +17,63 @@
     <table class="highlight responsive-table">
       <tbody>
         <tr>
-          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.paymentId.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Payment Id</div></th>
+          <th style="vertical-align: top;"><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.paymentId.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Payment Id</div></th>
           <td>@model.paymentId</td>
         </tr>
         <tr>
-          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.customerId.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Customer Id</div></th>
+          <th style="vertical-align: top;"><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.customerId.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Customer Id</div></th>
           <td>
-            @model.customerId
-            <a href="@controllers.admin.customer.routes.CustomerRowController.view(model.customerId)"><i class="material-icons small">@models.template.Icons.customerRow</i></a>
+            <div>
+              @model.customerId
+            </div>
+            <div class="card-panel grey lighten-5" style="padding: 12px; margin: 12px 0 0 0;">
+              <div>
+                <a href="@controllers.admin.customer.routes.CustomerRowController.view(model.customerId)">
+                  <i class="material-icons small">@models.template.Icons.customerRow</i> <strong>Customer</string>
+                </a>
+              </div>
+              @customerIdR.map(_.toSummary.title)
+            </div>
           </td>
         </tr>
         <tr>
-          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.staffId.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Staff Id</div></th>
+          <th style="vertical-align: top;"><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.staffId.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Staff Id</div></th>
           <td>
-            @model.staffId
-            <a href="@controllers.admin.store.routes.StaffRowController.view(model.staffId)"><i class="material-icons small">@models.template.Icons.staffRow</i></a>
+            <div>
+              @model.staffId
+            </div>
+            <div class="card-panel grey lighten-5" style="padding: 12px; margin: 12px 0 0 0;">
+              <div>
+                <a href="@controllers.admin.store.routes.StaffRowController.view(model.staffId)">
+                  <i class="material-icons small">@models.template.Icons.staffRow</i> <strong>Staff</string>
+                </a>
+              </div>
+              @staffIdR.map(_.toSummary.title)
+            </div>
           </td>
         </tr>
         <tr>
-          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.rentalId.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Rental Id</div></th>
+          <th style="vertical-align: top;"><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.rentalId.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Rental Id</div></th>
           <td>
-            @model.rentalId
-            <a href="@controllers.admin.customer.routes.RentalRowController.view(model.rentalId)"><i class="material-icons small">@models.template.Icons.rentalRow</i></a>
+            <div>
+              @model.rentalId
+            </div>
+            <div class="card-panel grey lighten-5" style="padding: 12px; margin: 12px 0 0 0;">
+              <div>
+                <a href="@controllers.admin.customer.routes.RentalRowController.view(model.rentalId)">
+                  <i class="material-icons small">@models.template.Icons.rentalRow</i> <strong>Rental</string>
+                </a>
+              </div>
+              @rentalIdR.map(_.toSummary.title)
+            </div>
           </td>
         </tr>
         <tr>
-          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.amount.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Amount</div></th>
+          <th style="vertical-align: top;"><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.amount.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Amount</div></th>
           <td>@model.amount</td>
         </tr>
         <tr>
-          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.paymentDate.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Payment Date</div></th>
+          <th style="vertical-align: top;"><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.paymentDate.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Payment Date</div></th>
           <td>@model.paymentDate</td>
         </tr>
       </tbody>

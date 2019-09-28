@@ -26,6 +26,9 @@ class FilmCategoryRowService @javax.inject.Inject() (val db: JdbcDatabase, overr
       traceF("get.by.primary.key.seq")(td => db.queryF(FilmCategoryRowQueries.getByPrimaryKeySeq(pkSeq), conn)(td))
     }
   }
+  def getByPrimaryKeyRequired(creds: Credentials, filmId: Int, categoryId: Int, conn: Option[Connection] = None)(implicit trace: TraceData) = getByPrimaryKey(creds, filmId, categoryId, conn).map { opt =>
+    opt.getOrElse(throw new IllegalStateException(s"Cannot load Film Category with filmId [$filmId}], categoryId [$categoryId}]"))
+  }
 
   override def countAll(creds: Credentials, filters: Seq[Filter] = Nil, conn: Option[Connection] = None)(implicit trace: TraceData) = checkPerm(creds, "view") {
     traceF("get.all.count")(td => db.queryF(FilmCategoryRowQueries.countAll(filters), conn)(td))
@@ -140,9 +143,9 @@ class FilmCategoryRowService @javax.inject.Inject() (val db: JdbcDatabase, overr
     })
   }
 
-  def updateBulk(creds: Credentials, pks: Seq[Seq[Any]], fields: Seq[DataField], conn: Option[Connection] = None)(implicit trace: TraceData) = checkPerm(creds, "edit") {
-    db.executeF(FilmCategoryRowQueries.updateBulk(pks, fields), conn)(trace).map { x =>
-      s"Updated [${fields.size}] fields for [$x of ${pks.size}] Film Categories"
+  def updateBulk(creds: Credentials, pks: Seq[(Int, Int)], fields: Seq[DataField], conn: Option[Connection] = None)(implicit trace: TraceData) = checkPerm(creds, "edit") {
+    Future.sequence(pks.map(pk => update(creds, pk._1, pk._2, fields, conn))).map { x =>
+      s"Updated [${fields.size}] fields for [${x.size} of ${pks.size}] FilmCategoryRow"
     }
   }
 

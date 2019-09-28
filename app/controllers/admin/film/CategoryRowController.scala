@@ -5,9 +5,10 @@ import com.kyleu.projectile.controllers.{BaseController, ServiceAuthController}
 import com.kyleu.projectile.models.module.Application
 import com.kyleu.projectile.models.result.RelationCount
 import com.kyleu.projectile.models.result.orderBy.OrderBy
+import com.kyleu.projectile.models.web.ControllerUtils
 import com.kyleu.projectile.services.auth.PermissionService
 import com.kyleu.projectile.services.note.NoteService
-import com.kyleu.projectile.util.DateUtils
+import com.kyleu.projectile.util.{Credentials, DateUtils}
 import com.kyleu.projectile.util.JsonSerializers._
 import models.film.{CategoryRow, CategoryRowResult}
 import play.api.http.MimeTypes
@@ -45,15 +46,15 @@ class CategoryRowController @javax.inject.Inject() (
   }
 
   def view(categoryId: Int, t: Option[String] = None) = withSession("view", ("film", "CategoryRow", "view")) { implicit request => implicit td =>
-    val modelF = svc.getByPrimaryKey(request, categoryId)
-    val notesF = noteSvc.getFor(request, "CategoryRow", categoryId)
+    val creds: Credentials = request
+    val modelF = svc.getByPrimaryKeyRequired(creds, categoryId)
+    val notesF = noteSvc.getFor(creds, "CategoryRow", categoryId)
 
-    notesF.flatMap(notes => modelF.map {
-      case Some(model) => renderChoice(t) {
+    notesF.flatMap(notes => modelF.map { model =>
+      renderChoice(t) {
         case MimeTypes.HTML => Ok(views.html.admin.film.categoryRowView(app.cfg(u = Some(request.identity), "film", "category", model.categoryId.toString), model, notes, app.config.debug))
         case MimeTypes.JSON => Ok(model.asJson)
       }
-      case None => NotFound(s"No CategoryRow found with categoryId [$categoryId]")
     })
   }
 
@@ -96,6 +97,17 @@ class CategoryRowController @javax.inject.Inject() (
     }
   }
 
+  def bulkEditForm = withSession("bulk.edit.form", ("film", "CategoryRow", "edit")) { implicit request => implicit td =>
+    val act = controllers.admin.film.routes.CategoryRowController.bulkEdit()
+    Future.successful(Ok(views.html.admin.film.categoryRowBulkForm(app.cfg(Some(request.identity), "film", "category", "Bulk Edit"), Nil, act, debug = app.config.debug)))
+  }
+  def bulkEdit = withSession("bulk.edit", ("film", "CategoryRow", "edit")) { implicit request => implicit td =>
+    val form = ControllerUtils.getForm(request.body)
+    val pks = form("primaryKeys").split("//").map(_.trim).filter(_.nonEmpty).map(_.split("---").map(_.trim).filter(_.nonEmpty).toList).toList
+    val typed = pks.map(pk => pk.head.toInt)
+    val changes = modelForm(request.body)
+    svc.updateBulk(request, typed, changes).map(msg => Ok("OK: " + msg))
+  }
   def relationCounts(categoryId: Int) = withSession("relation.counts", ("film", "CategoryRow", "view")) { implicit request => implicit td =>
     val filmCategoryRowByCategoryIdF = filmCategoryRowS.countByCategoryId(request, categoryId)
     for (filmCategoryRowByCategoryIdC <- filmCategoryRowByCategoryIdF) yield {

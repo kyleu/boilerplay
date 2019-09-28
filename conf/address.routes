@@ -2,10 +2,11 @@
 
 # Address Routes
 GET         /addressRow                                               controllers.admin.address.AddressRowController.list(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None)
-GET         /addressRow/autocomplete                                  controllers.admin.address.AddressRowController.autocomplete(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None)
-GET         /addressRow/form                                          controllers.admin.address.AddressRowController.createForm
+GET         /addressRow/autocomplete                                   controllers.admin.address.AddressRowController.autocomplete(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None)
+GET         /addressRow/form                                           controllers.admin.address.AddressRowController.createForm
 POST        /addressRow                                               controllers.admin.address.AddressRowController.create
-POST        /addressRow/bulk                                          controllers.admin.address.AddressRowController.bulkEdit
+GET         /addressRow/bulk                                           controllers.admin.address.AddressRowController.bulkEditForm
+POST        /addressRow/bulk                                           controllers.admin.address.AddressRowController.bulkEdit
 GET         /addressRow/byCityId/:cityId                              controllers.admin.address.AddressRowController.byCityId(cityId: Int, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None, embedded: Boolean ?= false)
 GET         /addressRow/byCityId/:cityId/bulk                         controllers.admin.address.AddressRowController.byCityIdBulkForm(cityId: Int)
 GET         /addressRow/:addressId                                    controllers.admin.address.AddressRowController.view(addressId: Int, t: Option[String] ?= None)
@@ -16,10 +17,11 @@ GET         /addressRow/:addressId/remove                             controller
 
 # City Routes
 GET         /cityRow                                                  controllers.admin.address.CityRowController.list(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None)
-GET         /cityRow/autocomplete                                     controllers.admin.address.CityRowController.autocomplete(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None)
-GET         /cityRow/form                                             controllers.admin.address.CityRowController.createForm
+GET         /cityRow/autocomplete                                      controllers.admin.address.CityRowController.autocomplete(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None)
+GET         /cityRow/form                                              controllers.admin.address.CityRowController.createForm
 POST        /cityRow                                                  controllers.admin.address.CityRowController.create
-POST        /cityRow/bulk                                             controllers.admin.address.CityRowController.bulkEdit
+GET         /cityRow/bulk                                              controllers.admin.address.CityRowController.bulkEditForm
+POST        /cityRow/bulk                                              controllers.admin.address.CityRowController.bulkEdit
 GET         /cityRow/byCountryId/:countryId                           controllers.admin.address.CityRowController.byCountryId(countryId: Int, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None, embedded: Boolean ?= false)
 GET         /cityRow/byCountryId/:countryId/bulk                      controllers.admin.address.CityRowController.byCountryIdBulkForm(countryId: Int)
 GET         /cityRow/:cityId                                          controllers.admin.address.CityRowController.view(cityId: Int, t: Option[String] ?= None)
@@ -30,9 +32,11 @@ GET         /cityRow/:cityId/remove                                   controller
 
 # Country Routes
 GET         /countryRow                                               controllers.admin.address.CountryRowController.list(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None, offset: Option[Int] ?= None, t: Option[String] ?= None)
-GET         /countryRow/autocomplete                                  controllers.admin.address.CountryRowController.autocomplete(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None)
-GET         /countryRow/form                                          controllers.admin.address.CountryRowController.createForm
+GET         /countryRow/autocomplete                                   controllers.admin.address.CountryRowController.autocomplete(q: Option[String] ?= None, orderBy: Option[String] ?= None, orderAsc: Boolean ?= true, limit: Option[Int] ?= None)
+GET         /countryRow/form                                           controllers.admin.address.CountryRowController.createForm
 POST        /countryRow                                               controllers.admin.address.CountryRowController.create
+GET         /countryRow/bulk                                           controllers.admin.address.CountryRowController.bulkEditForm
+POST        /countryRow/bulk                                           controllers.admin.address.CountryRowController.bulkEdit
 GET         /countryRow/:countryId                                    controllers.admin.address.CountryRowController.view(countryId: Int, t: Option[String] ?= None)
 GET         /countryRow/:countryId/counts                             controllers.admin.address.CountryRowController.relationCounts(countryId: Int)
 GET         /countryRow/:countryId/form                               controllers.admin.address.CountryRowController.editForm(countryId: Int)

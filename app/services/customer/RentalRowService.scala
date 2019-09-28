@@ -191,9 +191,9 @@ class RentalRowService @javax.inject.Inject() (val db: JdbcDatabase, override va
     })
   }
 
-  def updateBulk(creds: Credentials, pks: Seq[Seq[Any]], fields: Seq[DataField], conn: Option[Connection] = None)(implicit trace: TraceData) = checkPerm(creds, "edit") {
-    db.executeF(RentalRowQueries.updateBulk(pks, fields), conn)(trace).map { x =>
-      s"Updated [${fields.size}] fields for [$x of ${pks.size}] Rentals"
+  def updateBulk(creds: Credentials, pks: Seq[Long], fields: Seq[DataField], conn: Option[Connection] = None)(implicit trace: TraceData) = checkPerm(creds, "edit") {
+    Future.sequence(pks.map(pk => update(creds, pk, fields, conn))).map { x =>
+      s"Updated [${fields.size}] fields for [${x.size} of ${pks.size}] RentalRow"
     }
   }
 

@@ -61,6 +61,7 @@ object CategoryRowQueries extends BaseQueries[CategoryRow]("categoryRow", "categ
   def removeByPrimaryKey(categoryId: Int) = new RemoveByPrimaryKey(Seq[Any](categoryId))
 
   def update(categoryId: Int, fields: Seq[DataField]) = new UpdateFields(Seq[Any](categoryId), fields)
+  def updateBulk(pks: Seq[Seq[Any]], fields: Seq[DataField]) = new UpdateFieldsBulk(pks, fields)
 
   override def fromRow(row: Row) = CategoryRow(
     categoryId = IntegerType(row, "category_id"),

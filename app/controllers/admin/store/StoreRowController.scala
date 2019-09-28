@@ -8,19 +8,20 @@ import com.kyleu.projectile.models.result.orderBy.OrderBy
 import com.kyleu.projectile.models.web.ControllerUtils
 import com.kyleu.projectile.services.auth.PermissionService
 import com.kyleu.projectile.services.note.NoteService
-import com.kyleu.projectile.util.DateUtils
+import com.kyleu.projectile.util.{Credentials, DateUtils}
 import com.kyleu.projectile.util.JsonSerializers._
 import com.kyleu.projectile.views.html.layout.{card, page}
 import models.store.{StoreRow, StoreRowResult}
 import play.api.http.MimeTypes
 import scala.concurrent.{ExecutionContext, Future}
+import services.address.AddressRowService
 import services.customer.CustomerRowService
 import services.store.{InventoryRowService, StaffRowService, StoreRowService}
 
 @javax.inject.Singleton
 class StoreRowController @javax.inject.Inject() (
     override val app: Application, svc: StoreRowService, noteSvc: NoteService,
-    customerRowS: CustomerRowService, staffRowS: StaffRowService, inventoryRowS: InventoryRowService
+    customerRowS: CustomerRowService, staffRowS: StaffRowService, inventoryRowS: InventoryRowService, addressRowS: AddressRowService
 )(implicit ec: ExecutionContext) extends ServiceAuthController(svc) {
   PermissionService.registerModel("store", "StoreRow", "Store", Some(models.template.Icons.storeRow), "view", "edit")
   private[this] val defaultOrderBy = Some("storeId" -> false)
@@ -48,16 +49,18 @@ class StoreRowController @javax.inject.Inject() (
   }
 
   def view(storeId: Int, t: Option[String] = None) = withSession("view", ("store", "StoreRow", "view")) { implicit request => implicit td =>
-    val modelF = svc.getByPrimaryKey(request, storeId)
-    val notesF = noteSvc.getFor(request, "StoreRow", storeId)
+    val creds: Credentials = request
+    val modelF = svc.getByPrimaryKeyRequired(creds, storeId)
+    val notesF = noteSvc.getFor(creds, "StoreRow", storeId)
+    val addressIdF = modelF.flatMap(m => addressRowS.getByPrimaryKey(creds, m.addressId))
 
-    notesF.flatMap(notes => modelF.map {
-      case Some(model) => renderChoice(t) {
-        case MimeTypes.HTML => Ok(views.html.admin.store.storeRowView(app.cfg(u = Some(request.identity), "store", "store", model.storeId.toString), model, notes, app.config.debug))
-        case MimeTypes.JSON => Ok(model.asJson)
-      }
-      case None => NotFound(s"No StoreRow found with storeId [$storeId]")
-    })
+    addressIdF.flatMap(addressIdR =>
+      notesF.flatMap(notes => modelF.map { model =>
+        renderChoice(t) {
+          case MimeTypes.HTML => Ok(views.html.admin.store.storeRowView(app.cfg(u = Some(request.identity), "store", "store", model.storeId.toString), model, notes, addressIdR, app.config.debug))
+          case MimeTypes.JSON => Ok(model.asJson)
+        }
+      }))
   }
 
   def editForm(storeId: Int) = withSession("edit.form", ("store", "StoreRow", "edit")) { implicit request => implicit td =>
@@ -99,11 +102,16 @@ class StoreRowController @javax.inject.Inject() (
     }
   }
 
+  def bulkEditForm = withSession("bulk.edit.form", ("store", "StoreRow", "edit")) { implicit request => implicit td =>
+    val act = controllers.admin.store.routes.StoreRowController.bulkEdit()
+    Future.successful(Ok(views.html.admin.store.storeRowBulkForm(app.cfg(Some(request.identity), "store", "store", "Bulk Edit"), Nil, act, debug = app.config.debug)))
+  }
   def bulkEdit = withSession("bulk.edit", ("store", "StoreRow", "edit")) { implicit request => implicit td =>
     val form = ControllerUtils.getForm(request.body)
     val pks = form("primaryKeys").split("//").map(_.trim).filter(_.nonEmpty).map(_.split("---").map(_.trim).filter(_.nonEmpty).toList).toList
+    val typed = pks.map(pk => pk.head.toInt)
     val changes = modelForm(request.body)
-    svc.updateBulk(request, pks, changes).map(msg => Ok("OK: " + msg))
+    svc.updateBulk(request, typed, changes).map(msg => Ok("OK: " + msg))
   }
 
   def byAddressId(addressId: Int, orderBy: Option[String], orderAsc: Boolean, limit: Option[Int], offset: Option[Int], t: Option[String] = None, embedded: Boolean = false) = {

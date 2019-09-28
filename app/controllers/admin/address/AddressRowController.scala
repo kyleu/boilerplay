@@ -8,20 +8,20 @@ import com.kyleu.projectile.models.result.orderBy.OrderBy
 import com.kyleu.projectile.models.web.ControllerUtils
 import com.kyleu.projectile.services.auth.PermissionService
 import com.kyleu.projectile.services.note.NoteService
-import com.kyleu.projectile.util.DateUtils
+import com.kyleu.projectile.util.{Credentials, DateUtils}
 import com.kyleu.projectile.util.JsonSerializers._
 import com.kyleu.projectile.views.html.layout.{card, page}
 import models.address.{AddressRow, AddressRowResult}
 import play.api.http.MimeTypes
 import scala.concurrent.{ExecutionContext, Future}
-import services.address.AddressRowService
+import services.address.{AddressRowService, CityRowService}
 import services.customer.CustomerRowService
 import services.store.{StaffRowService, StoreRowService}
 
 @javax.inject.Singleton
 class AddressRowController @javax.inject.Inject() (
     override val app: Application, svc: AddressRowService, noteSvc: NoteService,
-    customerRowS: CustomerRowService, staffRowS: StaffRowService, storeRowS: StoreRowService
+    customerRowS: CustomerRowService, staffRowS: StaffRowService, storeRowS: StoreRowService, cityRowS: CityRowService
 )(implicit ec: ExecutionContext) extends ServiceAuthController(svc) {
   PermissionService.registerModel("address", "AddressRow", "Address", Some(models.template.Icons.addressRow), "view", "edit")
   private[this] val defaultOrderBy = Some("lastUpdate" -> false)
@@ -49,16 +49,18 @@ class AddressRowController @javax.inject.Inject() (
   }
 
   def view(addressId: Int, t: Option[String] = None) = withSession("view", ("address", "AddressRow", "view")) { implicit request => implicit td =>
-    val modelF = svc.getByPrimaryKey(request, addressId)
-    val notesF = noteSvc.getFor(request, "AddressRow", addressId)
+    val creds: Credentials = request
+    val modelF = svc.getByPrimaryKeyRequired(creds, addressId)
+    val notesF = noteSvc.getFor(creds, "AddressRow", addressId)
+    val cityIdF = modelF.flatMap(m => cityRowS.getByPrimaryKey(creds, m.cityId))
 
-    notesF.flatMap(notes => modelF.map {
-      case Some(model) => renderChoice(t) {
-        case MimeTypes.HTML => Ok(views.html.admin.address.addressRowView(app.cfg(u = Some(request.identity), "address", "address", model.addressId.toString), model, notes, app.config.debug))
-        case MimeTypes.JSON => Ok(model.asJson)
-      }
-      case None => NotFound(s"No AddressRow found with addressId [$addressId]")
-    })
+    cityIdF.flatMap(cityIdR =>
+      notesF.flatMap(notes => modelF.map { model =>
+        renderChoice(t) {
+          case MimeTypes.HTML => Ok(views.html.admin.address.addressRowView(app.cfg(u = Some(request.identity), "address", "address", model.addressId.toString), model, notes, cityIdR, app.config.debug))
+          case MimeTypes.JSON => Ok(model.asJson)
+        }
+      }))
   }
 
   def editForm(addressId: Int) = withSession("edit.form", ("address", "AddressRow", "edit")) { implicit request => implicit td =>
@@ -100,11 +102,16 @@ class AddressRowController @javax.inject.Inject() (
     }
   }
 
+  def bulkEditForm = withSession("bulk.edit.form", ("address", "AddressRow", "edit")) { implicit request => implicit td =>
+    val act = controllers.admin.address.routes.AddressRowController.bulkEdit()
+    Future.successful(Ok(views.html.admin.address.addressRowBulkForm(app.cfg(Some(request.identity), "address", "address", "Bulk Edit"), Nil, act, debug = app.config.debug)))
+  }
   def bulkEdit = withSession("bulk.edit", ("address", "AddressRow", "edit")) { implicit request => implicit td =>
     val form = ControllerUtils.getForm(request.body)
     val pks = form("primaryKeys").split("//").map(_.trim).filter(_.nonEmpty).map(_.split("---").map(_.trim).filter(_.nonEmpty).toList).toList
+    val typed = pks.map(pk => pk.head.toInt)
     val changes = modelForm(request.body)
-    svc.updateBulk(request, pks, changes).map(msg => Ok("OK: " + msg))
+    svc.updateBulk(request, typed, changes).map(msg => Ok("OK: " + msg))
   }
 
   def byCityId(cityId: Int, orderBy: Option[String], orderAsc: Boolean, limit: Option[Int], offset: Option[Int], t: Option[String] = None, embedded: Boolean = false) = {

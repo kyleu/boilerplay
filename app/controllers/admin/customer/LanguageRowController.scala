@@ -5,9 +5,10 @@ import com.kyleu.projectile.controllers.{BaseController, ServiceAuthController}
 import com.kyleu.projectile.models.module.Application
 import com.kyleu.projectile.models.result.RelationCount
 import com.kyleu.projectile.models.result.orderBy.OrderBy
+import com.kyleu.projectile.models.web.ControllerUtils
 import com.kyleu.projectile.services.auth.PermissionService
 import com.kyleu.projectile.services.note.NoteService
-import com.kyleu.projectile.util.DateUtils
+import com.kyleu.projectile.util.{Credentials, DateUtils}
 import com.kyleu.projectile.util.JsonSerializers._
 import models.customer.{LanguageRow, LanguageRowResult}
 import play.api.http.MimeTypes
@@ -46,15 +47,15 @@ class LanguageRowController @javax.inject.Inject() (
   }
 
   def view(languageId: Int, t: Option[String] = None) = withSession("view", ("customer", "LanguageRow", "view")) { implicit request => implicit td =>
-    val modelF = svc.getByPrimaryKey(request, languageId)
-    val notesF = noteSvc.getFor(request, "LanguageRow", languageId)
+    val creds: Credentials = request
+    val modelF = svc.getByPrimaryKeyRequired(creds, languageId)
+    val notesF = noteSvc.getFor(creds, "LanguageRow", languageId)
 
-    notesF.flatMap(notes => modelF.map {
-      case Some(model) => renderChoice(t) {
+    notesF.flatMap(notes => modelF.map { model =>
+      renderChoice(t) {
         case MimeTypes.HTML => Ok(views.html.admin.customer.languageRowView(app.cfg(u = Some(request.identity), "customer", "language", model.languageId.toString), model, notes, app.config.debug))
         case MimeTypes.JSON => Ok(model.asJson)
       }
-      case None => NotFound(s"No LanguageRow found with languageId [$languageId]")
     })
   }
 
@@ -97,6 +98,17 @@ class LanguageRowController @javax.inject.Inject() (
     }
   }
 
+  def bulkEditForm = withSession("bulk.edit.form", ("customer", "LanguageRow", "edit")) { implicit request => implicit td =>
+    val act = controllers.admin.customer.routes.LanguageRowController.bulkEdit()
+    Future.successful(Ok(views.html.admin.customer.languageRowBulkForm(app.cfg(Some(request.identity), "customer", "language", "Bulk Edit"), Nil, act, debug = app.config.debug)))
+  }
+  def bulkEdit = withSession("bulk.edit", ("customer", "LanguageRow", "edit")) { implicit request => implicit td =>
+    val form = ControllerUtils.getForm(request.body)
+    val pks = form("primaryKeys").split("//").map(_.trim).filter(_.nonEmpty).map(_.split("---").map(_.trim).filter(_.nonEmpty).toList).toList
+    val typed = pks.map(pk => pk.head.toInt)
+    val changes = modelForm(request.body)
+    svc.updateBulk(request, typed, changes).map(msg => Ok("OK: " + msg))
+  }
   def relationCounts(languageId: Int) = withSession("relation.counts", ("customer", "LanguageRow", "view")) { implicit request => implicit td =>
     val filmRowByLanguageIdF = filmRowS.countByLanguageId(request, languageId)
     val filmRowByOriginalLanguageIdF = filmRowS.countByOriginalLanguageId(request, languageId)

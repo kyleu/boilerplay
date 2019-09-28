@@ -1,5 +1,12 @@
 @* Generated File *@
-@(cfg: com.kyleu.projectile.models.config.UiConfig, model: models.customer.CustomerRow, notes: Seq[com.kyleu.projectile.models.note.Note], debug: Boolean)(
+@(
+    cfg: com.kyleu.projectile.models.config.UiConfig,
+    model: models.customer.CustomerRow,
+    notes: Seq[com.kyleu.projectile.models.note.Note],
+    storeIdR: Option[models.store.StoreRow],
+    addressIdR: Option[models.address.AddressRow],
+    debug: Boolean
+)(
     implicit request: Request[AnyContent], session: Session, flash: Flash, td: com.kyleu.projectile.util.tracing.TraceData
 )@com.kyleu.projectile.views.html.layout.page(title = s"Customer", cfg = cfg, icon = Some(models.template.Icons.customerRow)) {
   @com.kyleu.projectile.services.augment.AugmentService.viewHeaders.augment(model, request.queryString, cfg)
@@ -9,49 +16,67 @@
     <table class="highlight responsive-table">
       <tbody>
         <tr>
-          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.customerId.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Customer Id</div></th>
+          <th style="vertical-align: top;"><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.customerId.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Customer Id</div></th>
           <td>@model.customerId</td>
         </tr>
         <tr>
-          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.storeId.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Store Id</div></th>
+          <th style="vertical-align: top;"><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.storeId.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Store Id</div></th>
           <td>
-            @model.storeId
-            <a href="@controllers.admin.store.routes.StoreRowController.view(model.storeId)"><i class="material-icons small">@models.template.Icons.storeRow</i></a>
+            <div>
+              @model.storeId
+            </div>
+            <div class="card-panel grey lighten-5" style="padding: 12px; margin: 12px 0 0 0;">
+              <div>
+                <a href="@controllers.admin.store.routes.StoreRowController.view(model.storeId)">
+                  <i class="material-icons small">@models.template.Icons.storeRow</i> <strong>Store</string>
+                </a>
+              </div>
+              @storeIdR.map(_.toSummary.title)
+            </div>
           </td>
         </tr>
         <tr>
-          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.firstName.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">First Name</div></th>
+          <th style="vertical-align: top;"><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.firstName.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">First Name</div></th>
           <td>@model.firstName</td>
         </tr>
         <tr>
-          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.lastName.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Last Name</div></th>
+          <th style="vertical-align: top;"><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.lastName.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Last Name</div></th>
           <td>@model.lastName</td>
         </tr>
         <tr>
-          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.email.map(_.toString.replaceAllLiterally("'", ""))')" style="cursor: pointer;">Email</div></th>
+          <th style="vertical-align: top;"><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.email.map(_.toString.replaceAllLiterally("'", ""))')" style="cursor: pointer;">Email</div></th>
           <td>@model.email.getOrElse(com.kyleu.projectile.util.NullUtils.str)</td>
         </tr>
         <tr>
-          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.addressId.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Address Id</div></th>
+          <th style="vertical-align: top;"><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.addressId.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Address Id</div></th>
           <td>
-            @model.addressId
-            <a href="@controllers.admin.address.routes.AddressRowController.view(model.addressId)"><i class="material-icons small">@models.template.Icons.addressRow</i></a>
+            <div>
+              @model.addressId
+            </div>
+            <div class="card-panel grey lighten-5" style="padding: 12px; margin: 12px 0 0 0;">
+              <div>
+                <a href="@controllers.admin.address.routes.AddressRowController.view(model.addressId)">
+                  <i class="material-icons small">@models.template.Icons.addressRow</i> <strong>Address</string>
+                </a>
+              </div>
+              @addressIdR.map(_.toSummary.title)
+            </div>
           </td>
         </tr>
         <tr>
-          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.activebool.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Activebool</div></th>
+          <th style="vertical-align: top;"><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.activebool.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Activebool</div></th>
           <td>@com.kyleu.projectile.views.html.components.form.booleanDisplay(model.activebool)</td>
         </tr>
         <tr>
-          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.createDate.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Create Date</div></th>
+          <th style="vertical-align: top;"><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.createDate.toString.replaceAllLiterally("'", "")')" style="cursor: pointer;">Create Date</div></th>
           <td>@model.createDate</td>
         </tr>
         <tr>
-          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.lastUpdate.map(_.toString.replaceAllLiterally("'", ""))')" style="cursor: pointer;">Last Update</div></th>
+          <th style="vertical-align: top;"><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.lastUpdate.map(_.toString.replaceAllLiterally("'", ""))')" style="cursor: pointer;">Last Update</div></th>
           <td>@model.lastUpdate.getOrElse(com.kyleu.projectile.util.NullUtils.str)</td>
         </tr>
         <tr>
-          <th><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.active.map(_.toString.replaceAllLiterally("'", ""))')" style="cursor: pointer;">Active</div></th>
+          <th style="vertical-align: top;"><div title="Click to copy" onclick="ClipboardUtils.writeClipboard('@model.active.map(_.toString.replaceAllLiterally("'", ""))')" style="cursor: pointer;">Active</div></th>
           <td>@model.active.getOrElse(com.kyleu.projectile.util.NullUtils.str)</td>
         </tr>
       </tbody>

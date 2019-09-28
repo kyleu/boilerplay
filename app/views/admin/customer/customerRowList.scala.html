@@ -31,6 +31,7 @@
     offset = offset,
     q = q,
     additionalHeader = com.kyleu.projectile.services.augment.AugmentService.listHeaders.augment(cls = classOf[models.customer.CustomerRow], args = request.queryString, cfg = cfg),
+    additionalAction = Some(Html(s"<a href='${controllers.admin.customer.routes.CustomerRowController.bulkEditForm()}' class='btn-flat'>Bulk Edit</a>")),
     additionalColumns = aug._1
   )
 }

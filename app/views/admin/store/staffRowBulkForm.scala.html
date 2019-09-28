@@ -1,22 +1,27 @@
 @* Generated File *@
 @(cfg: com.kyleu.projectile.models.config.UiConfig, modelSeq: Seq[models.store.StaffRow], act: Call, debug: Boolean)(
     implicit request: Request[AnyContent], flash: Flash
-)@com.kyleu.projectile.views.html.layout.page(title = "Bulk Edit", cfg = cfg, icon = Some(models.template.Icons.staffRow)) {
+)
+@add() = {
+  <div class="right"><button type="submit" class="btn @cfg.user.buttonColor" form="pks">Add</button></div>
+  <div class="right"><input id="new-pks" name="new-pks" type="text" placeholder="Primary keys" form="pks" /></div>
+}
+@com.kyleu.projectile.views.html.layout.page(title = "Bulk Edit", cfg = cfg, icon = Some(models.template.Icons.staffRow)) {
+  <form id="pks" onsubmit="bulk.addPk($('#new-pks').val());return false;"></form>
   <form id="form-edit-staffRow" action="@act" method="post">
     <input type="hidden" class="primaryKeys" name="primaryKeys" value="@modelSeq.map(m => m.staffId).mkString("//")" />
-    @com.kyleu.projectile.views.html.layout.card(Some("Selected Staff")) {
-      <div class="right"><button type="submit" class="btn @cfg.user.buttonColor">Save <span>@modelSeq.size</span> Staff</button></div>
-      <div class="right"><a href="" onclick="window.history.go(-1);return false;" class="btn-flat cancel-link">Cancel</a></div>
-      <div class="clear"></div>
-      <table>
+    @com.kyleu.projectile.views.html.layout.card(Some("Selected Staff"), right = Some(add())) {
+      <table id="bulk-rows">
         <thead>
           <tr>
+            <th>Staff Id</th>
             <th>First Name</th>
             <th>Last Name</th>
             <th>Address Id</th>
             <th>Email</th>
             <th>Store Id</th>
             <th>Username</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -49,6 +54,10 @@
           @com.kyleu.projectile.views.html.components.form.byteArrayField(selected = request.queryString.isDefinedAt("picture"), key = "picture", title = "Picture", value = request.queryString.get("picture").flatMap(_.headOption).map(s => s.split(",").map(_.toInt.toByte)).orElse(None), nullable = true)
         </tbody>
       </table>
+      <br />
+      <div class="right"><button type="submit" class="btn @cfg.user.buttonColor">Save <span>@modelSeq.size</span> Staff</button></div>
+      <div class="right"><a href="" onclick="window.history.go(-1);return false;" class="btn-flat cancel-link">Cancel</a></div>
+      <div class="clear"></div>
     }
   </form>
 }
@@ -56,5 +65,6 @@
 @com.kyleu.projectile.views.html.components.includeAutocomplete(debug)
 <script>
   $(function() { new FormService('form-edit-staffRow'); });
-  $(function() { new BulkEditService('form-edit-staffRow'); });
+  var bulk;
+  $(function() { bulk = new BulkEditService('form-edit-staffRow', 7); });
 </script>

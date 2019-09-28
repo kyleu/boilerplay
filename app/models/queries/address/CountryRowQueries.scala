@@ -61,6 +61,7 @@ object CountryRowQueries extends BaseQueries[CountryRow]("countryRow", "country"
   def removeByPrimaryKey(countryId: Int) = new RemoveByPrimaryKey(Seq[Any](countryId))
 
   def update(countryId: Int, fields: Seq[DataField]) = new UpdateFields(Seq[Any](countryId), fields)
+  def updateBulk(pks: Seq[Seq[Any]], fields: Seq[DataField]) = new UpdateFieldsBulk(pks, fields)
 
   override def fromRow(row: Row) = CountryRow(
     countryId = IntegerType(row, "country_id"),

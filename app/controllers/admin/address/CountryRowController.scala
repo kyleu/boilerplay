@@ -5,9 +5,10 @@ import com.kyleu.projectile.controllers.{BaseController, ServiceAuthController}
 import com.kyleu.projectile.models.module.Application
 import com.kyleu.projectile.models.result.RelationCount
 import com.kyleu.projectile.models.result.orderBy.OrderBy
+import com.kyleu.projectile.models.web.ControllerUtils
 import com.kyleu.projectile.services.auth.PermissionService
 import com.kyleu.projectile.services.note.NoteService
-import com.kyleu.projectile.util.DateUtils
+import com.kyleu.projectile.util.{Credentials, DateUtils}
 import com.kyleu.projectile.util.JsonSerializers._
 import models.address.{CountryRow, CountryRowResult}
 import play.api.http.MimeTypes
@@ -45,15 +46,15 @@ class CountryRowController @javax.inject.Inject() (
   }
 
   def view(countryId: Int, t: Option[String] = None) = withSession("view", ("address", "CountryRow", "view")) { implicit request => implicit td =>
-    val modelF = svc.getByPrimaryKey(request, countryId)
-    val notesF = noteSvc.getFor(request, "CountryRow", countryId)
+    val creds: Credentials = request
+    val modelF = svc.getByPrimaryKeyRequired(creds, countryId)
+    val notesF = noteSvc.getFor(creds, "CountryRow", countryId)
 
-    notesF.flatMap(notes => modelF.map {
-      case Some(model) => renderChoice(t) {
+    notesF.flatMap(notes => modelF.map { model =>
+      renderChoice(t) {
         case MimeTypes.HTML => Ok(views.html.admin.address.countryRowView(app.cfg(u = Some(request.identity), "address", "country", model.countryId.toString), model, notes, app.config.debug))
         case MimeTypes.JSON => Ok(model.asJson)
       }
-      case None => NotFound(s"No CountryRow found with countryId [$countryId]")
     })
   }
 
@@ -96,6 +97,17 @@ class CountryRowController @javax.inject.Inject() (
     }
   }
 
+  def bulkEditForm = withSession("bulk.edit.form", ("address", "CountryRow", "edit")) { implicit request => implicit td =>
+    val act = controllers.admin.address.routes.CountryRowController.bulkEdit()
+    Future.successful(Ok(views.html.admin.address.countryRowBulkForm(app.cfg(Some(request.identity), "address", "country", "Bulk Edit"), Nil, act, debug = app.config.debug)))
+  }
+  def bulkEdit = withSession("bulk.edit", ("address", "CountryRow", "edit")) { implicit request => implicit td =>
+    val form = ControllerUtils.getForm(request.body)
+    val pks = form("primaryKeys").split("//").map(_.trim).filter(_.nonEmpty).map(_.split("---").map(_.trim).filter(_.nonEmpty).toList).toList
+    val typed = pks.map(pk => pk.head.toInt)
+    val changes = modelForm(request.body)
+    svc.updateBulk(request, typed, changes).map(msg => Ok("OK: " + msg))
+  }
   def relationCounts(countryId: Int) = withSession("relation.counts", ("address", "CountryRow", "view")) { implicit request => implicit td =>
     val cityRowByCountryIdF = cityRowS.countByCountryId(request, countryId)
     for (cityRowByCountryIdC <- cityRowByCountryIdF) yield {
