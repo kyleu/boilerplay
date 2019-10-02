@@ -15,13 +15,11 @@
           @com.kyleu.projectile.views.html.components.form.longField(selected = request.queryString.isDefinedAt("releaseYear"), key = "releaseYear", title = "Release Year", value = request.queryString.get("releaseYear").flatMap(_.headOption).map(s => s.toLong).orElse(model.releaseYear), nullable = true)
           @com.kyleu.projectile.views.html.components.form.autocompleteField(
             selected = request.queryString.isDefinedAt("languageId") || isNew, key = "languageId", title = "Language Id", value = request.queryString.get("languageId").flatMap(_.headOption).orElse(if(isNew) { None } else { Some(model.languageId.toString) }), nullable = false, dataType = "integer",
-            call = controllers.admin.customer.routes.LanguageRowController.autocomplete(), acType = ("languageRow", "Language"), icon = models.template.Icons.languageRow,
-            inputType = "number"
+            call = controllers.admin.customer.routes.LanguageRowController.autocomplete(), acType = ("languageRow", "Language"), icon = models.template.Icons.languageRow, inputType = "text"
           )
           @com.kyleu.projectile.views.html.components.form.autocompleteField(
             selected = request.queryString.isDefinedAt("originalLanguageId"), key = "originalLanguageId", title = "Original Language Id", value = request.queryString.get("originalLanguageId").flatMap(_.headOption).orElse(if(isNew) { None } else { model.originalLanguageId.map(_.toString) }), nullable = true, dataType = "integer",
-            call = controllers.admin.customer.routes.LanguageRowController.autocomplete(), acType = ("languageRow", "Language"), icon = models.template.Icons.languageRow,
-            inputType = "number"
+            call = controllers.admin.customer.routes.LanguageRowController.autocomplete(), acType = ("languageRow", "Language"), icon = models.template.Icons.languageRow, inputType = "text"
           )
           @com.kyleu.projectile.views.html.components.form.intField(selected = request.queryString.isDefinedAt("rentalDuration") || isNew, key = "rentalDuration", title = "Rental Duration", value = request.queryString.get("rentalDuration").flatMap(_.headOption).map(s => s.toInt).orElse(Some(model.rentalDuration)), nullable = false)
           @com.kyleu.projectile.views.html.components.form.decimalField(selected = request.queryString.isDefinedAt("rentalRate") || isNew, key = "rentalRate", title = "Rental Rate", value = request.queryString.get("rentalRate").flatMap(_.headOption).map(s => BigDecimal(s)).orElse(Some(model.rentalRate)), nullable = false)

@@ -30,14 +30,16 @@
             <div>
               @model.inventoryId
             </div>
-            <div class="card-panel grey lighten-5" style="padding: 12px; margin: 12px 0 0 0;">
-              <div>
-                <a href="@controllers.admin.store.routes.InventoryRowController.view(model.inventoryId)">
-                  <i class="material-icons small">@models.template.Icons.inventoryRow</i> <strong>Inventory</string>
-                </a>
+            @inventoryIdR.map { r =>
+              <div class="card-panel grey lighten-5" style="padding: 12px; margin: 12px 0 0 0;">
+                <div>
+                  <a href="@controllers.admin.store.routes.InventoryRowController.view(model.inventoryId)">
+                    <i class="material-icons small">@models.template.Icons.inventoryRow</i> <strong>Inventory</string>
+                  </a>
+                </div>
+                @com.kyleu.projectile.views.html.components.dataSummary(r.toSummary)
               </div>
-              @inventoryIdR.map(_.toSummary.title)
-            </div>
+            }
           </td>
         </tr>
         <tr>
@@ -46,14 +48,16 @@
             <div>
               @model.customerId
             </div>
-            <div class="card-panel grey lighten-5" style="padding: 12px; margin: 12px 0 0 0;">
-              <div>
-                <a href="@controllers.admin.customer.routes.CustomerRowController.view(model.customerId)">
-                  <i class="material-icons small">@models.template.Icons.customerRow</i> <strong>Customer</string>
-                </a>
+            @customerIdR.map { r =>
+              <div class="card-panel grey lighten-5" style="padding: 12px; margin: 12px 0 0 0;">
+                <div>
+                  <a href="@controllers.admin.customer.routes.CustomerRowController.view(model.customerId)">
+                    <i class="material-icons small">@models.template.Icons.customerRow</i> <strong>Customer</string>
+                  </a>
+                </div>
+                @com.kyleu.projectile.views.html.components.dataSummary(r.toSummary)
               </div>
-              @customerIdR.map(_.toSummary.title)
-            </div>
+            }
           </td>
         </tr>
         <tr>
@@ -66,14 +70,16 @@
             <div>
               @model.staffId
             </div>
-            <div class="card-panel grey lighten-5" style="padding: 12px; margin: 12px 0 0 0;">
-              <div>
-                <a href="@controllers.admin.store.routes.StaffRowController.view(model.staffId)">
-                  <i class="material-icons small">@models.template.Icons.staffRow</i> <strong>Staff</string>
-                </a>
+            @staffIdR.map { r =>
+              <div class="card-panel grey lighten-5" style="padding: 12px; margin: 12px 0 0 0;">
+                <div>
+                  <a href="@controllers.admin.store.routes.StaffRowController.view(model.staffId)">
+                    <i class="material-icons small">@models.template.Icons.staffRow</i> <strong>Staff</string>
+                  </a>
+                </div>
+                @com.kyleu.projectile.views.html.components.dataSummary(r.toSummary)
               </div>
-              @staffIdR.map(_.toSummary.title)
-            </div>
+            }
           </td>
         </tr>
         <tr>

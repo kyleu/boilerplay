@@ -39,5 +39,9 @@ final case class CountryRow(
     DataField("lastUpdate", Some(lastUpdate.toString))
   )
 
-  def toSummary = DataSummary(model = "countryRow", pk = countryId.toString, title = s"countryId: $countryId, country: $country, lastUpdate: $lastUpdate")
+  def toSummary = DataSummary(model = "countryRow", pk = countryId.toString, entries = Map(
+    "Country Id" -> Some(countryId.toString),
+    "Country" -> Some(country),
+    "Last Update" -> Some(lastUpdate.toString)
+  ))
 }

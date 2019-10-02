@@ -25,14 +25,16 @@
             <div>
               @model.filmId
             </div>
-            <div class="card-panel grey lighten-5" style="padding: 12px; margin: 12px 0 0 0;">
-              <div>
-                <a href="@controllers.admin.film.routes.FilmRowController.view(model.filmId)">
-                  <i class="material-icons small">@models.template.Icons.filmRow</i> <strong>Film</string>
-                </a>
+            @filmIdR.map { r =>
+              <div class="card-panel grey lighten-5" style="padding: 12px; margin: 12px 0 0 0;">
+                <div>
+                  <a href="@controllers.admin.film.routes.FilmRowController.view(model.filmId)">
+                    <i class="material-icons small">@models.template.Icons.filmRow</i> <strong>Film</string>
+                  </a>
+                </div>
+                @com.kyleu.projectile.views.html.components.dataSummary(r.toSummary)
               </div>
-              @filmIdR.map(_.toSummary.title)
-            </div>
+            }
           </td>
         </tr>
         <tr>
@@ -41,14 +43,16 @@
             <div>
               @model.storeId
             </div>
-            <div class="card-panel grey lighten-5" style="padding: 12px; margin: 12px 0 0 0;">
-              <div>
-                <a href="@controllers.admin.store.routes.StoreRowController.view(model.storeId)">
-                  <i class="material-icons small">@models.template.Icons.storeRow</i> <strong>Store</string>
-                </a>
+            @storeIdR.map { r =>
+              <div class="card-panel grey lighten-5" style="padding: 12px; margin: 12px 0 0 0;">
+                <div>
+                  <a href="@controllers.admin.store.routes.StoreRowController.view(model.storeId)">
+                    <i class="material-icons small">@models.template.Icons.storeRow</i> <strong>Store</string>
+                  </a>
+                </div>
+                @com.kyleu.projectile.views.html.components.dataSummary(r.toSummary)
               </div>
-              @storeIdR.map(_.toSummary.title)
-            </div>
+            }
           </td>
         </tr>
         <tr>

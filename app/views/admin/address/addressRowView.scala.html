@@ -36,14 +36,16 @@
             <div>
               @model.cityId
             </div>
-            <div class="card-panel grey lighten-5" style="padding: 12px; margin: 12px 0 0 0;">
-              <div>
-                <a href="@controllers.admin.address.routes.CityRowController.view(model.cityId)">
-                  <i class="material-icons small">@models.template.Icons.cityRow</i> <strong>City</string>
-                </a>
+            @cityIdR.map { r =>
+              <div class="card-panel grey lighten-5" style="padding: 12px; margin: 12px 0 0 0;">
+                <div>
+                  <a href="@controllers.admin.address.routes.CityRowController.view(model.cityId)">
+                    <i class="material-icons small">@models.template.Icons.cityRow</i> <strong>City</string>
+                  </a>
+                </div>
+                @com.kyleu.projectile.views.html.components.dataSummary(r.toSummary)
               </div>
-              @cityIdR.map(_.toSummary.title)
-            </div>
+            }
           </td>
         </tr>
         <tr>

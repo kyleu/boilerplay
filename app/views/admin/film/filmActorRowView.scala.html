@@ -21,14 +21,16 @@
             <div>
               @model.actorId
             </div>
-            <div class="card-panel grey lighten-5" style="padding: 12px; margin: 12px 0 0 0;">
-              <div>
-                <a href="@controllers.admin.film.routes.ActorRowController.view(model.actorId)">
-                  <i class="material-icons small">@models.template.Icons.actorRow</i> <strong>Actor</string>
-                </a>
+            @actorIdR.map { r =>
+              <div class="card-panel grey lighten-5" style="padding: 12px; margin: 12px 0 0 0;">
+                <div>
+                  <a href="@controllers.admin.film.routes.ActorRowController.view(model.actorId)">
+                    <i class="material-icons small">@models.template.Icons.actorRow</i> <strong>Actor</string>
+                  </a>
+                </div>
+                @com.kyleu.projectile.views.html.components.dataSummary(r.toSummary)
               </div>
-              @actorIdR.map(_.toSummary.title)
-            </div>
+            }
           </td>
         </tr>
         <tr>
@@ -37,14 +39,16 @@
             <div>
               @model.filmId
             </div>
-            <div class="card-panel grey lighten-5" style="padding: 12px; margin: 12px 0 0 0;">
-              <div>
-                <a href="@controllers.admin.film.routes.FilmRowController.view(model.filmId)">
-                  <i class="material-icons small">@models.template.Icons.filmRow</i> <strong>Film</string>
-                </a>
+            @filmIdR.map { r =>
+              <div class="card-panel grey lighten-5" style="padding: 12px; margin: 12px 0 0 0;">
+                <div>
+                  <a href="@controllers.admin.film.routes.FilmRowController.view(model.filmId)">
+                    <i class="material-icons small">@models.template.Icons.filmRow</i> <strong>Film</string>
+                  </a>
+                </div>
+                @com.kyleu.projectile.views.html.components.dataSummary(r.toSummary)
               </div>
-              @filmIdR.map(_.toSummary.title)
-            </div>
+            }
           </td>
         </tr>
         <tr>

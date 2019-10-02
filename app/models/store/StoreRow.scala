@@ -44,5 +44,10 @@ final case class StoreRow(
     DataField("lastUpdate", Some(lastUpdate.toString))
   )
 
-  def toSummary = DataSummary(model = "storeRow", pk = storeId.toString, title = s"storeId: $storeId, managerStaffId: $managerStaffId, addressId: $addressId, lastUpdate: $lastUpdate")
+  def toSummary = DataSummary(model = "storeRow", pk = storeId.toString, entries = Map(
+    "Store Id" -> Some(storeId.toString),
+    "Manager Staff Id" -> Some(managerStaffId.toString),
+    "Address Id" -> Some(addressId.toString),
+    "Last Update" -> Some(lastUpdate.toString)
+  ))
 }

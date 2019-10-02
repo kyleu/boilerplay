@@ -13,8 +13,7 @@
           @com.kyleu.projectile.views.html.components.form.intField(selected = request.queryString.isDefinedAt("managerStaffId") || isNew, key = "managerStaffId", title = "Manager Staff Id", value = request.queryString.get("managerStaffId").flatMap(_.headOption).map(s => s.toInt).orElse(Some(model.managerStaffId)), nullable = false)
           @com.kyleu.projectile.views.html.components.form.autocompleteField(
             selected = request.queryString.isDefinedAt("addressId") || isNew, key = "addressId", title = "Address Id", value = request.queryString.get("addressId").flatMap(_.headOption).orElse(if(isNew) { None } else { Some(model.addressId.toString) }), nullable = false, dataType = "integer",
-            call = controllers.admin.address.routes.AddressRowController.autocomplete(), acType = ("addressRow", "Address"), icon = models.template.Icons.addressRow,
-            inputType = "number"
+            call = controllers.admin.address.routes.AddressRowController.autocomplete(), acType = ("addressRow", "Address"), icon = models.template.Icons.addressRow, inputType = "text"
           )
           @com.kyleu.projectile.views.html.components.form.zonedDateTimeField(selected = request.queryString.isDefinedAt("lastUpdate") || isNew, key = "lastUpdate", title = "Last Update", value = request.queryString.get("lastUpdate").flatMap(_.headOption).map(s => com.kyleu.projectile.util.DateUtils.fromIsoStringZoned(s)).orElse(Some(model.lastUpdate)), nullable = false)
         </tbody>

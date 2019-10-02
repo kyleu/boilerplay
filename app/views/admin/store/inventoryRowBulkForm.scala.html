@@ -32,13 +32,11 @@
         <tbody>
           @com.kyleu.projectile.views.html.components.form.autocompleteField(
             selected = request.queryString.isDefinedAt("filmId"), key = "filmId", title = "Film Id", value = request.queryString.get("filmId").flatMap(_.headOption).orElse(None), nullable = false, dataType = "integer",
-            call = controllers.admin.film.routes.FilmRowController.autocomplete(), acType = ("filmRow", "Film"), icon = models.template.Icons.filmRow,
-            inputType = "number"
+            call = controllers.admin.film.routes.FilmRowController.autocomplete(), acType = ("filmRow", "Film"), icon = models.template.Icons.filmRow, inputType = "text"
           )
           @com.kyleu.projectile.views.html.components.form.autocompleteField(
             selected = request.queryString.isDefinedAt("storeId"), key = "storeId", title = "Store Id", value = request.queryString.get("storeId").flatMap(_.headOption).orElse(None), nullable = false, dataType = "integer",
-            call = controllers.admin.store.routes.StoreRowController.autocomplete(), acType = ("storeRow", "Store"), icon = models.template.Icons.storeRow,
-            inputType = "number"
+            call = controllers.admin.store.routes.StoreRowController.autocomplete(), acType = ("storeRow", "Store"), icon = models.template.Icons.storeRow, inputType = "text"
           )
           @com.kyleu.projectile.views.html.components.form.zonedDateTimeField(selected = request.queryString.isDefinedAt("lastUpdate"), key = "lastUpdate", title = "Last Update", value = request.queryString.get("lastUpdate").flatMap(_.headOption).map(s => com.kyleu.projectile.util.DateUtils.fromIsoStringZoned(s)).orElse(None), nullable = false)
         </tbody>

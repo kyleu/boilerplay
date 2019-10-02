@@ -12,13 +12,11 @@
           @com.kyleu.projectile.views.html.components.form.longField(selected = request.queryString.isDefinedAt("inventoryId") || isNew, key = "inventoryId", title = "Inventory Id", value = request.queryString.get("inventoryId").flatMap(_.headOption).map(s => s.toLong).orElse(Some(model.inventoryId)), nullable = false, isPk = true)
           @com.kyleu.projectile.views.html.components.form.autocompleteField(
             selected = request.queryString.isDefinedAt("filmId") || isNew, key = "filmId", title = "Film Id", value = request.queryString.get("filmId").flatMap(_.headOption).orElse(if(isNew) { None } else { Some(model.filmId.toString) }), nullable = false, dataType = "integer",
-            call = controllers.admin.film.routes.FilmRowController.autocomplete(), acType = ("filmRow", "Film"), icon = models.template.Icons.filmRow,
-            inputType = "number"
+            call = controllers.admin.film.routes.FilmRowController.autocomplete(), acType = ("filmRow", "Film"), icon = models.template.Icons.filmRow, inputType = "text"
           )
           @com.kyleu.projectile.views.html.components.form.autocompleteField(
             selected = request.queryString.isDefinedAt("storeId") || isNew, key = "storeId", title = "Store Id", value = request.queryString.get("storeId").flatMap(_.headOption).orElse(if(isNew) { None } else { Some(model.storeId.toString) }), nullable = false, dataType = "integer",
-            call = controllers.admin.store.routes.StoreRowController.autocomplete(), acType = ("storeRow", "Store"), icon = models.template.Icons.storeRow,
-            inputType = "number"
+            call = controllers.admin.store.routes.StoreRowController.autocomplete(), acType = ("storeRow", "Store"), icon = models.template.Icons.storeRow, inputType = "text"
           )
           @com.kyleu.projectile.views.html.components.form.zonedDateTimeField(selected = request.queryString.isDefinedAt("lastUpdate") || isNew, key = "lastUpdate", title = "Last Update", value = request.queryString.get("lastUpdate").flatMap(_.headOption).map(s => com.kyleu.projectile.util.DateUtils.fromIsoStringZoned(s)).orElse(Some(model.lastUpdate)), nullable = false)
         </tbody>

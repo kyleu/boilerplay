@@ -37,14 +37,16 @@
             <div>
               @model.languageId
             </div>
-            <div class="card-panel grey lighten-5" style="padding: 12px; margin: 12px 0 0 0;">
-              <div>
-                <a href="@controllers.admin.customer.routes.LanguageRowController.view(model.languageId)">
-                  <i class="material-icons small">@models.template.Icons.languageRow</i> <strong>Language</string>
-                </a>
+            @languageIdR.map { r =>
+              <div class="card-panel grey lighten-5" style="padding: 12px; margin: 12px 0 0 0;">
+                <div>
+                  <a href="@controllers.admin.customer.routes.LanguageRowController.view(model.languageId)">
+                    <i class="material-icons small">@models.template.Icons.languageRow</i> <strong>Language</string>
+                  </a>
+                </div>
+                @com.kyleu.projectile.views.html.components.dataSummary(r.toSummary)
               </div>
-              @languageIdR.map(_.toSummary.title)
-            </div>
+            }
           </td>
         </tr>
         <tr>
@@ -53,16 +55,18 @@
             <div>
               @model.originalLanguageId.getOrElse(com.kyleu.projectile.util.NullUtils.str)
             </div>
-            <div class="card-panel grey lighten-5" style="padding: 12px; margin: 12px 0 0 0;">
-              <div>
-                @model.originalLanguageId.map { v =>
-                  <a href="@controllers.admin.customer.routes.LanguageRowController.view(v)">
-                    <i class="material-icons small">@models.template.Icons.languageRow</i> <strong>Language</string>
-                  </a>
-                }
+            @originalLanguageIdR.map { r =>
+              <div class="card-panel grey lighten-5" style="padding: 12px; margin: 12px 0 0 0;">
+                <div>
+                  @model.originalLanguageId.map { v =>
+                    <a href="@controllers.admin.customer.routes.LanguageRowController.view(v)">
+                      <i class="material-icons small">@models.template.Icons.languageRow</i> <strong>Language</string>
+                    </a>
+                  }
+                </div>
+                @com.kyleu.projectile.views.html.components.dataSummary(r.toSummary)
               </div>
-              @originalLanguageIdR.map(_.toSummary.title)
-            </div>
+            }
           </td>
         </tr>
         <tr>

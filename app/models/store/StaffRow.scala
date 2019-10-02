@@ -79,5 +79,13 @@ final case class StaffRow(
     DataField("picture", picture.map(_.toString))
   )
 
-  def toSummary = DataSummary(model = "staffRow", pk = staffId.toString, title = s"staffId: $staffId, firstName: $firstName, lastName: $lastName, addressId: $addressId, email: ${email.map(_.toString).getOrElse("∅")}, storeId: $storeId, username: $username")
+  def toSummary = DataSummary(model = "staffRow", pk = staffId.toString, entries = Map(
+    "Staff Id" -> Some(staffId.toString),
+    "First Name" -> Some(firstName),
+    "Last Name" -> Some(lastName),
+    "Address Id" -> Some(addressId.toString),
+    "Email" -> email,
+    "Store Id" -> Some(storeId.toString),
+    "Username" -> Some(username)
+  ))
 }

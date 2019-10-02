@@ -34,8 +34,7 @@
           @com.kyleu.projectile.views.html.components.form.intField(selected = request.queryString.isDefinedAt("managerStaffId"), key = "managerStaffId", title = "Manager Staff Id", value = request.queryString.get("managerStaffId").flatMap(_.headOption).map(s => s.toInt).orElse(None), nullable = false)
           @com.kyleu.projectile.views.html.components.form.autocompleteField(
             selected = request.queryString.isDefinedAt("addressId"), key = "addressId", title = "Address Id", value = request.queryString.get("addressId").flatMap(_.headOption).orElse(None), nullable = false, dataType = "integer",
-            call = controllers.admin.address.routes.AddressRowController.autocomplete(), acType = ("addressRow", "Address"), icon = models.template.Icons.addressRow,
-            inputType = "number"
+            call = controllers.admin.address.routes.AddressRowController.autocomplete(), acType = ("addressRow", "Address"), icon = models.template.Icons.addressRow, inputType = "text"
           )
           @com.kyleu.projectile.views.html.components.form.zonedDateTimeField(selected = request.queryString.isDefinedAt("lastUpdate"), key = "lastUpdate", title = "Last Update", value = request.queryString.get("lastUpdate").flatMap(_.headOption).map(s => com.kyleu.projectile.util.DateUtils.fromIsoStringZoned(s)).orElse(None), nullable = false)
         </tbody>

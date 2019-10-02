@@ -38,14 +38,12 @@
           @com.kyleu.projectile.views.html.components.form.textField(selected = request.queryString.isDefinedAt("lastName"), key = "lastName", title = "Last Name", value = request.queryString.get("lastName").flatMap(_.headOption).orElse(None), nullable = false)
           @com.kyleu.projectile.views.html.components.form.autocompleteField(
             selected = request.queryString.isDefinedAt("addressId"), key = "addressId", title = "Address Id", value = request.queryString.get("addressId").flatMap(_.headOption).orElse(None), nullable = false, dataType = "integer",
-            call = controllers.admin.address.routes.AddressRowController.autocomplete(), acType = ("addressRow", "Address"), icon = models.template.Icons.addressRow,
-            inputType = "number"
+            call = controllers.admin.address.routes.AddressRowController.autocomplete(), acType = ("addressRow", "Address"), icon = models.template.Icons.addressRow, inputType = "text"
           )
           @com.kyleu.projectile.views.html.components.form.textField(selected = request.queryString.isDefinedAt("email"), key = "email", title = "Email", value = request.queryString.get("email").flatMap(_.headOption).orElse(None), nullable = true)
           @com.kyleu.projectile.views.html.components.form.autocompleteField(
             selected = request.queryString.isDefinedAt("storeId"), key = "storeId", title = "Store Id", value = request.queryString.get("storeId").flatMap(_.headOption).orElse(None), nullable = false, dataType = "integer",
-            call = controllers.admin.store.routes.StoreRowController.autocomplete(), acType = ("storeRow", "Store"), icon = models.template.Icons.storeRow,
-            inputType = "number"
+            call = controllers.admin.store.routes.StoreRowController.autocomplete(), acType = ("storeRow", "Store"), icon = models.template.Icons.storeRow, inputType = "text"
           )
           @com.kyleu.projectile.views.html.components.form.booleanField(selected = request.queryString.isDefinedAt("active"), key = "active", title = "Active", value = request.queryString.get("active").flatMap(_.headOption).map(s => s == "true").orElse(None), nullable = false)
           @com.kyleu.projectile.views.html.components.form.textField(selected = request.queryString.isDefinedAt("username"), key = "username", title = "Username", value = request.queryString.get("username").flatMap(_.headOption).orElse(None), nullable = false)

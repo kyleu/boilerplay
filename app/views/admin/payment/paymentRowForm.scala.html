@@ -12,18 +12,15 @@
           @com.kyleu.projectile.views.html.components.form.longField(selected = request.queryString.isDefinedAt("paymentId") || isNew, key = "paymentId", title = "Payment Id", value = request.queryString.get("paymentId").flatMap(_.headOption).map(s => s.toLong).orElse(Some(model.paymentId)), nullable = false, isPk = true)
           @com.kyleu.projectile.views.html.components.form.autocompleteField(
             selected = request.queryString.isDefinedAt("customerId") || isNew, key = "customerId", title = "Customer Id", value = request.queryString.get("customerId").flatMap(_.headOption).orElse(if(isNew) { None } else { Some(model.customerId.toString) }), nullable = false, dataType = "integer",
-            call = controllers.admin.customer.routes.CustomerRowController.autocomplete(), acType = ("customerRow", "Customer"), icon = models.template.Icons.customerRow,
-            inputType = "number"
+            call = controllers.admin.customer.routes.CustomerRowController.autocomplete(), acType = ("customerRow", "Customer"), icon = models.template.Icons.customerRow, inputType = "text"
           )
           @com.kyleu.projectile.views.html.components.form.autocompleteField(
             selected = request.queryString.isDefinedAt("staffId") || isNew, key = "staffId", title = "Staff Id", value = request.queryString.get("staffId").flatMap(_.headOption).orElse(if(isNew) { None } else { Some(model.staffId.toString) }), nullable = false, dataType = "integer",
-            call = controllers.admin.store.routes.StaffRowController.autocomplete(), acType = ("staffRow", "Staff"), icon = models.template.Icons.staffRow,
-            inputType = "number"
+            call = controllers.admin.store.routes.StaffRowController.autocomplete(), acType = ("staffRow", "Staff"), icon = models.template.Icons.staffRow, inputType = "text"
           )
           @com.kyleu.projectile.views.html.components.form.autocompleteField(
             selected = request.queryString.isDefinedAt("rentalId") || isNew, key = "rentalId", title = "Rental Id", value = request.queryString.get("rentalId").flatMap(_.headOption).orElse(if(isNew) { None } else { Some(model.rentalId.toString) }), nullable = false, dataType = "long",
-            call = controllers.admin.customer.routes.RentalRowController.autocomplete(), acType = ("rentalRow", "Rental"), icon = models.template.Icons.rentalRow,
-            inputType = "number"
+            call = controllers.admin.customer.routes.RentalRowController.autocomplete(), acType = ("rentalRow", "Rental"), icon = models.template.Icons.rentalRow, inputType = "text"
           )
           @com.kyleu.projectile.views.html.components.form.decimalField(selected = request.queryString.isDefinedAt("amount") || isNew, key = "amount", title = "Amount", value = request.queryString.get("amount").flatMap(_.headOption).map(s => BigDecimal(s)).orElse(Some(model.amount)), nullable = false)
           @com.kyleu.projectile.views.html.components.form.zonedDateTimeField(selected = request.queryString.isDefinedAt("paymentDate") || isNew, key = "paymentDate", title = "Payment Date", value = request.queryString.get("paymentDate").flatMap(_.headOption).map(s => com.kyleu.projectile.util.DateUtils.fromIsoStringZoned(s)).orElse(Some(model.paymentDate)), nullable = false)
