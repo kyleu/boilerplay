@@ -16,7 +16,7 @@ object LanguageRowQueries extends BaseQueries[LanguageRow]("languageRow", "langu
     DatabaseField(title = "Name", prop = "name", col = "name", typ = StringType),
     DatabaseField(title = "Last Update", prop = "lastUpdate", col = "last_update", typ = TimestampZonedType)
   )
-  override protected val pkColumns = Seq("language_id")
+  override val pkColumns = Seq("language_id")
   override protected val searchColumns = Seq("language_id", "name", "last_update")
 
   def countAll(filters: Seq[Filter] = Nil) = onCountAll(filters)

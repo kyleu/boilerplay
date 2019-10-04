@@ -16,7 +16,7 @@ object InventoryRowQueries extends BaseQueries[InventoryRow]("inventoryRow", "in
     DatabaseField(title = "Store Id", prop = "storeId", col = "store_id", typ = IntegerType),
     DatabaseField(title = "Last Update", prop = "lastUpdate", col = "last_update", typ = TimestampZonedType)
   )
-  override protected val pkColumns = Seq("inventory_id")
+  override val pkColumns = Seq("inventory_id")
   override protected val searchColumns = Seq("inventory_id", "film_id", "store_id")
 
   def countAll(filters: Seq[Filter] = Nil) = onCountAll(filters)

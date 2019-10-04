@@ -17,7 +17,7 @@ object StoreRowQueries extends BaseQueries[StoreRow]("storeRow", "store") {
     DatabaseField(title = "Address Id", prop = "addressId", col = "address_id", typ = IntegerType),
     DatabaseField(title = "Last Update", prop = "lastUpdate", col = "last_update", typ = TimestampZonedType)
   )
-  override protected val pkColumns = Seq("store_id")
+  override val pkColumns = Seq("store_id")
   override protected val searchColumns = Seq("store_id", "manager_staff_id", "address_id", "last_update")
 
   def countAll(filters: Seq[Filter] = Nil) = onCountAll(filters)

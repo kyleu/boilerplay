@@ -17,7 +17,7 @@ object CityRowQueries extends BaseQueries[CityRow]("cityRow", "city") {
     DatabaseField(title = "Country Id", prop = "countryId", col = "country_id", typ = IntegerType),
     DatabaseField(title = "Last Update", prop = "lastUpdate", col = "last_update", typ = TimestampZonedType)
   )
-  override protected val pkColumns = Seq("city_id")
+  override val pkColumns = Seq("city_id")
   override protected val searchColumns = Seq("city_id", "city", "country_id", "last_update")
 
   def countAll(filters: Seq[Filter] = Nil) = onCountAll(filters)

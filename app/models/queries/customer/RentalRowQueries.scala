@@ -20,7 +20,7 @@ object RentalRowQueries extends BaseQueries[RentalRow]("rentalRow", "rental") {
     DatabaseField(title = "Staff Id", prop = "staffId", col = "staff_id", typ = IntegerType),
     DatabaseField(title = "Last Update", prop = "lastUpdate", col = "last_update", typ = TimestampZonedType)
   )
-  override protected val pkColumns = Seq("rental_id")
+  override val pkColumns = Seq("rental_id")
   override protected val searchColumns = Seq("rental_id", "rental_date", "inventory_id", "customer_id", "return_date", "staff_id")
 
   def countAll(filters: Seq[Filter] = Nil) = onCountAll(filters)

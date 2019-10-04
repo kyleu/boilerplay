@@ -18,7 +18,7 @@ object PaymentRowQueries extends BaseQueries[PaymentRow]("paymentRow", "payment"
     DatabaseField(title = "Amount", prop = "amount", col = "amount", typ = BigDecimalType),
     DatabaseField(title = "Payment Date", prop = "paymentDate", col = "payment_date", typ = TimestampZonedType)
   )
-  override protected val pkColumns = Seq("payment_id")
+  override val pkColumns = Seq("payment_id")
   override protected val searchColumns = Seq("payment_id", "customer_id", "staff_id", "rental_id", "amount")
 
   def countAll(filters: Seq[Filter] = Nil) = onCountAll(filters)

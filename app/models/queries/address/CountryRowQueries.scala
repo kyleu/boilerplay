@@ -16,7 +16,7 @@ object CountryRowQueries extends BaseQueries[CountryRow]("countryRow", "country"
     DatabaseField(title = "Country", prop = "country", col = "country", typ = StringType),
     DatabaseField(title = "Last Update", prop = "lastUpdate", col = "last_update", typ = TimestampZonedType)
   )
-  override protected val pkColumns = Seq("country_id")
+  override val pkColumns = Seq("country_id")
   override protected val searchColumns = Seq("country_id", "country", "last_update")
 
   def countAll(filters: Seq[Filter] = Nil) = onCountAll(filters)

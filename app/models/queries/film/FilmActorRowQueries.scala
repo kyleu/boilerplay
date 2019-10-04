@@ -16,7 +16,7 @@ object FilmActorRowQueries extends BaseQueries[FilmActorRow]("filmActorRow", "fi
     DatabaseField(title = "Film Id", prop = "filmId", col = "film_id", typ = IntegerType),
     DatabaseField(title = "Last Update", prop = "lastUpdate", col = "last_update", typ = TimestampZonedType)
   )
-  override protected val pkColumns = Seq("actor_id", "film_id")
+  override val pkColumns = Seq("actor_id", "film_id")
   override protected val searchColumns = Seq("actor_id", "film_id", "last_update")
 
   def countAll(filters: Seq[Filter] = Nil) = onCountAll(filters)

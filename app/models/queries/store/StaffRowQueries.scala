@@ -23,7 +23,7 @@ object StaffRowQueries extends BaseQueries[StaffRow]("staffRow", "staff") {
     DatabaseField(title = "Last Update", prop = "lastUpdate", col = "last_update", typ = TimestampZonedType),
     DatabaseField(title = "Picture", prop = "picture", col = "picture", typ = ByteArrayType)
   )
-  override protected val pkColumns = Seq("staff_id")
+  override val pkColumns = Seq("staff_id")
   override protected val searchColumns = Seq("staff_id", "first_name", "last_name", "address_id", "email", "store_id", "username")
 
   def countAll(filters: Seq[Filter] = Nil) = onCountAll(filters)

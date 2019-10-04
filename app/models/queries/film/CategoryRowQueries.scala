@@ -16,7 +16,7 @@ object CategoryRowQueries extends BaseQueries[CategoryRow]("categoryRow", "categ
     DatabaseField(title = "Name", prop = "name", col = "name", typ = StringType),
     DatabaseField(title = "Last Update", prop = "lastUpdate", col = "last_update", typ = TimestampZonedType)
   )
-  override protected val pkColumns = Seq("category_id")
+  override val pkColumns = Seq("category_id")
   override protected val searchColumns = Seq("category_id", "name", "last_update")
 
   def countAll(filters: Seq[Filter] = Nil) = onCountAll(filters)

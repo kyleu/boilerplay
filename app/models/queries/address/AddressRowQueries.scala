@@ -21,7 +21,7 @@ object AddressRowQueries extends BaseQueries[AddressRow]("addressRow", "address"
     DatabaseField(title = "Phone", prop = "phone", col = "phone", typ = StringType),
     DatabaseField(title = "Last Update", prop = "lastUpdate", col = "last_update", typ = TimestampZonedType)
   )
-  override protected val pkColumns = Seq("address_id")
+  override val pkColumns = Seq("address_id")
   override protected val searchColumns = Seq("address_id", "address", "address2", "district", "city_id", "postal_code", "phone", "last_update")
 
   def countAll(filters: Seq[Filter] = Nil) = onCountAll(filters)

@@ -23,7 +23,7 @@ object CustomerRowQueries extends BaseQueries[CustomerRow]("customerRow", "custo
     DatabaseField(title = "Last Update", prop = "lastUpdate", col = "last_update", typ = TimestampZonedType),
     DatabaseField(title = "Active", prop = "active", col = "active", typ = LongType)
   )
-  override protected val pkColumns = Seq("customer_id")
+  override val pkColumns = Seq("customer_id")
   override protected val searchColumns = Seq("customer_id", "store_id", "first_name", "last_name", "email", "address_id", "create_date")
 
   def countAll(filters: Seq[Filter] = Nil) = onCountAll(filters)
