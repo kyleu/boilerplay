@@ -9,10 +9,10 @@ import services.audit.AuditCallbacks
 import models.graphql.Schema
 import models.search.SearchHelper
 import models.template.UserMenu
-import util.Version
 
 class ProjectileModule extends AdminModule {
-  def projectName = Version.projectName
+  def projectName = util.Version.projectName
+  override def projectVersion = util.Version.version
   def allowSignup = true
   def initialRole = "admin"
   def menuProvider = UserMenu
@@ -30,7 +30,7 @@ class ProjectileModule extends AdminModule {
     /* End injected startup code */
   }
 
-  override protected def appStatus(app: Application, injector: Injector) = AppStatus(name = projectName, version = Version.version)
+  override protected def appStatus(app: Application, injector: Injector) = AppStatus(name = projectName, version = util.Version.version)
   override protected def searchProvider = new SearchHelper()
   override protected def schema: GraphQLSchema = Schema
 }
